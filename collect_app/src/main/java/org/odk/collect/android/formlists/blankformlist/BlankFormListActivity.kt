@@ -14,6 +14,7 @@ import org.odk.collect.android.formmanagement.FormFillingIntentFactory
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.dialogs.ServerAuthDialogFragment
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
+import org.odk.collect.androidshared.ui.EdgeToEdge.setView
 import org.odk.collect.androidshared.ui.ObviousProgressBar
 import org.odk.collect.androidshared.ui.SnackbarUtils
 import org.odk.collect.androidshared.ui.SnackbarUtils.DURATION_SHORT
@@ -49,7 +50,7 @@ class BlankFormListActivity : LocalizedActivity(), OnFormItemClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DaggerUtils.getComponent(this).inject(this)
-        setContentView(R.layout.activity_blank_form_list)
+        setView(R.layout.activity_blank_form_list, false)
         title = getString(org.odk.collect.strings.R.string.enter_data)
         setSupportActionBar(findViewById(org.odk.collect.androidshared.R.id.toolbar))
 

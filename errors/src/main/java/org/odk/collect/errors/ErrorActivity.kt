@@ -7,6 +7,7 @@ import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import org.odk.collect.androidshared.ui.EdgeToEdge.setView
 import org.odk.collect.strings.localization.LocalizedActivity
 import org.odk.collect.strings.localization.getLocalizedString
 
@@ -18,7 +19,7 @@ class ErrorActivity : LocalizedActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_error)
+        setView(R.layout.activity_error, false)
         title = getLocalizedString(org.odk.collect.strings.R.string.errors)
         val toolbar = findViewById<View>(org.odk.collect.androidshared.R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
@@ -38,7 +39,7 @@ class ErrorActivity : LocalizedActivity() {
         val notificationId = intent.getIntExtra(EXTRA_NOTIFICATION_ID, -1)
         if (notificationId != -1) {
             val notificationManager =
-                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                getSystemService(NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.cancel(notificationId)
         }
     }
