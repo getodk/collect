@@ -10,13 +10,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import org.odk.collect.android.support.async.TestSchedulerTaskSpec.Companion.DATA_WRAPPED_SPEC
 import org.odk.collect.async.Cancellable
-import org.odk.collect.async.CoroutineTaskRunner
+import org.odk.collect.async.coroutines.CoroutineTaskRunner
 import org.odk.collect.async.NotificationInfo
 import org.odk.collect.async.Scheduler
 import org.odk.collect.async.SchedulerBuilder
 import org.odk.collect.async.TaskSpec
-import org.odk.collect.async.WorkManagerTaskSpecRunner
-import org.odk.collect.async.WorkManagerTaskSpecScheduler
+import org.odk.collect.async.workmanager.WorkManagerTaskSpecRunner
+import org.odk.collect.async.workmanager.WorkManagerTaskSpecScheduler
 import org.odk.collect.async.network.NetworkStateProvider
 import java.util.function.Consumer
 import java.util.function.Supplier

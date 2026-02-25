@@ -1,4 +1,4 @@
-package org.odk.collect.async
+package org.odk.collect.async.workmanager
 
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
@@ -11,6 +11,10 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
+import org.odk.collect.async.Scheduler
+import org.odk.collect.async.TaskSpec
+import org.odk.collect.async.TaskSpecScheduler
+import org.odk.collect.async.workmanager.TaskSpecWorker
 import java.util.concurrent.TimeUnit
 
 class WorkManagerTaskSpecScheduler(private val workManager: WorkManager) : TaskSpecScheduler {
@@ -23,9 +27,9 @@ class WorkManagerTaskSpecScheduler(private val workManager: WorkManager) : TaskS
     ) {
         val constraints = getConstraints(networkConstraint)
         val workManagerInputData = Data.Builder()
-            .putString(TaskSpecWorker.DATA_TASK_SPEC_CLASS, spec.javaClass.name)
+            .putString(TaskSpecWorker.Companion.DATA_TASK_SPEC_CLASS, spec.javaClass.name)
             .putBoolean(
-                TaskSpecWorker.DATA_CELLULAR_ONLY,
+                TaskSpecWorker.Companion.DATA_CELLULAR_ONLY,
                 networkConstraint == Scheduler.NetworkType.CELLULAR
             )
             .putAll(inputData)

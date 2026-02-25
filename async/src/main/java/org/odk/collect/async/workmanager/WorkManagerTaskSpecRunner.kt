@@ -1,9 +1,13 @@
-package org.odk.collect.async
+package org.odk.collect.async.workmanager
 
 import androidx.work.Data
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
+import org.odk.collect.async.NotificationInfo
+import org.odk.collect.async.TaskSpec
+import org.odk.collect.async.TaskSpecRunner
+import org.odk.collect.async.workmanager.TaskSpecWorker
 
 class WorkManagerTaskSpecRunner(private val workManager: WorkManager) :
     TaskSpecRunner {
@@ -14,15 +18,15 @@ class WorkManagerTaskSpecRunner(private val workManager: WorkManager) :
         notificationInfo: NotificationInfo
     ) {
         val workManagerInputData = Data.Builder()
-            .putString(TaskSpecWorker.DATA_TASK_SPEC_CLASS, taskSpec.javaClass.name)
-            .putBoolean(TaskSpecWorker.FOREGROUND, true)
-            .putString(TaskSpecWorker.FOREGROUND_NOTIFICATION_CHANNEL, notificationInfo.channel)
+            .putString(TaskSpecWorker.Companion.DATA_TASK_SPEC_CLASS, taskSpec.javaClass.name)
+            .putBoolean(TaskSpecWorker.Companion.FOREGROUND, true)
+            .putString(TaskSpecWorker.Companion.FOREGROUND_NOTIFICATION_CHANNEL, notificationInfo.channel)
             .putString(
-                TaskSpecWorker.FOREGROUND_NOTIFICATION_CHANNEL_NAME,
+                TaskSpecWorker.Companion.FOREGROUND_NOTIFICATION_CHANNEL_NAME,
                 notificationInfo.channelName
             )
-            .putInt(TaskSpecWorker.FOREGROUND_NOTIFICATION_TITLE, notificationInfo.title)
-            .putInt(TaskSpecWorker.FOREGROUND_NOTIFICATION_ID, notificationInfo.id)
+            .putInt(TaskSpecWorker.Companion.FOREGROUND_NOTIFICATION_TITLE, notificationInfo.title)
+            .putInt(TaskSpecWorker.Companion.FOREGROUND_NOTIFICATION_ID, notificationInfo.id)
             .putAll(inputData)
             .build()
 

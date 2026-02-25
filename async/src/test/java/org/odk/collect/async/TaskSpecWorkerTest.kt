@@ -14,6 +14,7 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.odk.collect.async.workmanager.TaskSpecWorker
 import java.util.concurrent.Executors
 import java.util.function.Supplier
 

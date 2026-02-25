@@ -1,10 +1,9 @@
-package org.odk.collect.async
+package org.odk.collect.async.workmanager
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
-import android.content.Context.NOTIFICATION_SERVICE
-import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
+import android.content.pm.ServiceInfo
 import android.os.Build
 import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
@@ -13,7 +12,11 @@ import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import org.odk.collect.analytics.Analytics
+import org.odk.collect.async.Scheduler
+import org.odk.collect.async.TaskSpec
 import org.odk.collect.async.network.ConnectivityProvider
+import org.odk.collect.async.run
+import org.odk.collect.icons.R
 
 class TaskSpecWorker(
     context: Context,
@@ -37,7 +40,7 @@ class TaskSpecWorker(
     override fun doWork(): Result {
         val cellularOnly = inputData.getBoolean(DATA_CELLULAR_ONLY, false)
         if (cellularOnly && connectivityProvider.currentNetwork != Scheduler.NetworkType.CELLULAR) {
-            Analytics.setUserProperty("SawMeteredNonCellular", "true")
+            Analytics.Companion.setUserProperty("SawMeteredNonCellular", "true")
             return Result.retry()
         }
 
@@ -85,17 +88,21 @@ class TaskSpecWorker(
         @StringRes notificationTitle: Int,
         notificationId: Int
     ): ForegroundInfo {
-        val intent = WorkManager.getInstance(context).createCancelPendingIntent(id)
+        val intent = WorkManager.Companion.getInstance(context).createCancelPendingIntent(id)
 
         val notification = NotificationCompat.Builder(applicationContext, notificationChannel)
-            .setSmallIcon(org.odk.collect.icons.R.drawable.ic_notification_small)
+            .setSmallIcon(R.drawable.ic_notification_small)
             .setContentTitle(context.getString(notificationTitle))
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .setContentIntent(intent)
             .build()
 
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            ForegroundInfo(notificationId, notification, FOREGROUND_SERVICE_TYPE_DATA_SYNC)
+            ForegroundInfo(
+                notificationId,
+                notification,
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
+            )
         } else {
             ForegroundInfo(notificationId, notification)
         }
@@ -111,7 +118,7 @@ class TaskSpecWorker(
             NotificationManager.IMPORTANCE_LOW
         )
 
-        (applicationContext.getSystemService(NOTIFICATION_SERVICE) as NotificationManager)
+        (applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
             .createNotificationChannel(notificationChannel)
     }
 

@@ -8,7 +8,7 @@ import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.Dispatchers
 import org.odk.collect.androidshared.utils.UniqueIdGenerator
-import org.odk.collect.async.CoroutineTaskRunner
+import org.odk.collect.async.coroutines.CoroutineTaskRunner
 import org.odk.collect.async.Scheduler
 import org.odk.collect.async.SchedulerBuilder
 import org.odk.collect.audiorecorder.mediarecorder.AACRecordingResource
