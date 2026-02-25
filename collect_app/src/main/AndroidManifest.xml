@@ -126,8 +126,7 @@ the specific language governing permissions and limitations under the License.
         <activity
             android:name="org.odk.collect.draw.DrawActivity"
             android:theme="@style/Theme.Collect"
-            tools:replace="android:theme"
-            android:screenOrientation="landscape" />
+            tools:replace="android:theme" />
         <activity android:name=".activities.InstanceChooserList" />
         <activity
             android:name=".formlists.blankformlist.BlankFormListActivity"
