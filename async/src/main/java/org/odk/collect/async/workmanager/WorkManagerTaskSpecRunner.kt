@@ -7,7 +7,6 @@ import androidx.work.WorkManager
 import org.odk.collect.async.NotificationInfo
 import org.odk.collect.async.TaskSpec
 import org.odk.collect.async.TaskSpecRunner
-import org.odk.collect.async.workmanager.TaskSpecWorker
 
 class WorkManagerTaskSpecRunner(private val workManager: WorkManager) :
     TaskSpecRunner {

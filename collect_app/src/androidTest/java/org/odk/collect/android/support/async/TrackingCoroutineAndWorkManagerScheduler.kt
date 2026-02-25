@@ -1,5 +1,6 @@
 package org.odk.collect.android.support.async
 
+import android.app.Application
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import androidx.work.BackoffPolicy
@@ -18,6 +19,7 @@ import org.odk.collect.async.TaskSpec
 import org.odk.collect.async.workmanager.WorkManagerTaskSpecRunner
 import org.odk.collect.async.workmanager.WorkManagerTaskSpecScheduler
 import org.odk.collect.async.network.NetworkStateProvider
+import org.odk.collect.async.services.ForegroundServiceTaskSpecRunner
 import java.util.function.Consumer
 import java.util.function.Supplier
 
@@ -28,10 +30,11 @@ class TrackingCoroutineAndWorkManagerScheduler(private val networkStateProvider:
     private val backgroundDispatcher = TrackingCoroutineDispatcher(Dispatchers.IO)
 
     init {
-        val workManager = WorkManager.getInstance(ApplicationProvider.getApplicationContext())
+        val application = ApplicationProvider.getApplicationContext<Application>()
+        val workManager = WorkManager.getInstance(application)
         wrappedScheduler = SchedulerBuilder.build(
             CoroutineTaskRunner(Dispatchers.Main, backgroundDispatcher),
-            WorkManagerTaskSpecRunner(workManager),
+            ForegroundServiceTaskSpecRunner(application),
             WorkManagerTaskSpecScheduler(workManager)
         )
     }

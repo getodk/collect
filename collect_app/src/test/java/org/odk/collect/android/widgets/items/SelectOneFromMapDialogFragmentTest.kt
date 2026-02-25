@@ -109,7 +109,7 @@ class SelectOneFromMapDialogFragmentTest {
                 }
             }
 
-            override fun providesScheduler(workManager: WorkManager?): Scheduler {
+            override fun providesScheduler(workManager: WorkManager?, application: Application): Scheduler {
                 return scheduler
             }
 

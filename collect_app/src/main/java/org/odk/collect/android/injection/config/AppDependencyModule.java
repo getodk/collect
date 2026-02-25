@@ -98,7 +98,7 @@ import org.odk.collect.androidshared.utils.UniqueIdGenerator;
 import org.odk.collect.async.coroutines.CoroutineTaskRunner;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.async.SchedulerBuilder;
-import org.odk.collect.async.workmanager.WorkManagerTaskSpecRunner;
+import org.odk.collect.async.services.ForegroundServiceTaskSpecRunner;
 import org.odk.collect.async.workmanager.WorkManagerTaskSpecScheduler;
 import org.odk.collect.async.network.ConnectivityProvider;
 import org.odk.collect.async.network.NetworkStateProvider;
@@ -281,10 +281,10 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public Scheduler providesScheduler(WorkManager workManager) {
+    public Scheduler providesScheduler(WorkManager workManager, Application application) {
         return SchedulerBuilder.build(
                 new CoroutineTaskRunner(),
-                new WorkManagerTaskSpecRunner(workManager),
+                new ForegroundServiceTaskSpecRunner(application),
                 new WorkManagerTaskSpecScheduler(workManager)
         );
     }

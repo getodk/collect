@@ -8,5 +8,11 @@
             android:name="androidx.work.impl.foreground.SystemForegroundService"
             android:foregroundServiceType="dataSync"
             tools:node="merge" />
+
+        <service
+            android:name="org.odk.collect.async.services.TaskSpecRunnerService"
+            android:foregroundServiceType="dataSync"
+            android:exported="false"
+            tools:node="merge"/>
     </application>
 </manifest>

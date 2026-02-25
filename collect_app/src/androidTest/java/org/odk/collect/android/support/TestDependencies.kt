@@ -62,7 +62,7 @@ open class TestDependencies @JvmOverloads constructor(
         }
     }
 
-    override fun providesScheduler(workManager: WorkManager): Scheduler {
+    override fun providesScheduler(workManager: WorkManager, application: Application): Scheduler {
         return scheduler
     }
 
