@@ -1,6 +1,5 @@
 package org.odk.collect.async
 
-import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import kotlinx.coroutines.Dispatchers
 import kotlin.coroutines.CoroutineContext
@@ -8,7 +7,7 @@ import kotlin.coroutines.CoroutineContext
 class CoroutineAndWorkManagerScheduler(
     foregroundContext: CoroutineContext,
     backgroundContext: CoroutineContext,
-    private val workManager: WorkManager
+    workManager: WorkManager
 ) : CoroutineScheduler(foregroundContext, backgroundContext) {
 
     constructor(workManager: WorkManager) : this(
@@ -48,25 +47,14 @@ class CoroutineAndWorkManagerScheduler(
     }
 
     override fun cancelDeferred(tag: String) {
-        workManager.cancelUniqueWork(tag)
+        taskSpecScheduler.cancel(tag)
     }
 
     override fun isDeferredRunning(tag: String): Boolean {
-        return isWorkManagerWorkRunning(tag)
+        return taskSpecScheduler.isRunning(tag)
     }
 
     override fun cancelAllDeferred() {
-        workManager.cancelAllWork()
-    }
-
-    private fun isWorkManagerWorkRunning(tag: String): Boolean {
-        val statuses = workManager.getWorkInfosByTag(tag)
-        for (workInfo in statuses.get()) {
-            if (workInfo.state == WorkInfo.State.RUNNING) {
-                return true
-            }
-        }
-
-        return false
+        taskSpecScheduler.cancelAll()
     }
 }

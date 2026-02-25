@@ -9,6 +9,7 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequest
 import androidx.work.PeriodicWorkRequest
+import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import java.util.concurrent.TimeUnit
 
@@ -60,6 +61,25 @@ class WorkManagerTaskSpecScheduler(private val workManager: WorkManager) : TaskS
 
             workManager.beginUniqueWork(tag, ExistingWorkPolicy.REPLACE, workRequest).enqueue()
         }
+    }
+
+    override fun isRunning(tag: String): Boolean {
+        val statuses = workManager.getWorkInfosByTag(tag)
+        for (workInfo in statuses.get()) {
+            if (workInfo.state == WorkInfo.State.RUNNING) {
+                return true
+            }
+        }
+
+        return false
+    }
+
+    override fun cancel(tag: String) {
+        workManager.cancelUniqueWork(tag)
+    }
+
+    override fun cancelAll() {
+        workManager.cancelAllWork()
     }
 
     private fun getConstraints(networkConstraint: Scheduler.NetworkType?): Constraints {

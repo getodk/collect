@@ -8,4 +8,8 @@ interface TaskSpecScheduler {
         networkConstraint: Scheduler.NetworkType? = null,
         repeatPeriod: Long? = null
     )
+
+    fun isRunning(tag: String): Boolean
+    fun cancel(tag: String)
+    fun cancelAll()
 }
