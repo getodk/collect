@@ -5,8 +5,8 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 
-class WorkManagerTaskSpecImmediateRunner(private val workManager: WorkManager) :
-    TaskSpecImmediateRunner {
+class WorkManagerTaskSpecRunner(private val workManager: WorkManager) :
+    TaskSpecRunner {
     override fun run(
         tag: String,
         taskSpec: TaskSpec,

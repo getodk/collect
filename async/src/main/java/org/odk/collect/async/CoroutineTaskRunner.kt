@@ -1,6 +1,7 @@
 package org.odk.collect.async
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Runnable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -12,8 +13,9 @@ import java.util.function.Consumer
 import java.util.function.Supplier
 import kotlin.coroutines.CoroutineContext
 
-class CoroutineTaskRunner(
-    private val foregroundContext: CoroutineContext, private val backgroundContext: CoroutineContext
+class CoroutineTaskRunner @JvmOverloads constructor(
+    private val foregroundContext: CoroutineContext = Dispatchers.Main,
+    private val backgroundContext: CoroutineContext = Dispatchers.IO
 ) : TaskRunner {
     override fun <T> immediate(
         background: Supplier<T>,
