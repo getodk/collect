@@ -1,4 +1,4 @@
-package org.odk.collect.android.experimental.timedgrid
+package org.odk.collect.experimental.timedgrid
 
 import org.javarosa.core.model.FormIndex
 import org.javarosa.core.model.GroupDef
@@ -10,15 +10,11 @@ import org.javarosa.core.model.data.IntegerData
 import org.javarosa.core.model.data.StringData
 import org.javarosa.core.model.instance.TreeReference
 import org.javarosa.form.api.FormEntryPrompt
-import org.odk.collect.android.activities.FormFillingActivity
-import org.odk.collect.android.formentry.FormEntryViewModel
-import org.odk.collect.android.widgets.StringWidget
-import org.odk.collect.experimental.timedgrid.TimedGridSummary
 
 class TimedGridSummaryAnswerCreator(
     val formEntryPrompt: FormEntryPrompt,
-    val formEntryViewModel: FormEntryViewModel,
-    val formFillingActivity: FormFillingActivity?
+    val formControllerFacade: FormControllerFacade,
+    val formAnswerRefresher: FormAnswerRefresher
 ) {
     companion object {
         val SUMMARY_QUESTION_APPEARANCE_REGEX = Regex("""timed-grid-answer\((.+),(.+)\)""")
@@ -27,7 +23,7 @@ class TimedGridSummaryAnswerCreator(
     fun answerSummaryQuestions(summary: TimedGridSummary) {
         val timedGridQuestionId = formEntryPrompt.index.reference.toString(false)
 
-        forEachFormQuestionDef(formEntryViewModel.formController.getFormDef()?.children) { questionIndex, questionDef ->
+        forEachFormQuestionDef(formControllerFacade.getFormElements()) { questionIndex, questionDef ->
             val summaryQuestionMatch =
                 SUMMARY_QUESTION_APPEARANCE_REGEX.find(questionDef.appearanceAttr ?: "")
 
@@ -37,21 +33,8 @@ class TimedGridSummaryAnswerCreator(
 
                 if (referencedQuestion == timedGridQuestionId) {
                     val answer = getSummaryAnswer(metadataName, summary)
-
-                    formEntryViewModel.formController.saveOneScreenAnswer(
-                        questionIndex,
-                        answer,
-                        false
-                    )
-
-                    formFillingActivity?.currentViewIfODKView?.widgets
-                        ?.filterIsInstance<StringWidget>()
-                        ?.find { widget -> widget.formEntryPrompt.index == questionIndex }
-                        ?.apply {
-                            setDisplayValueFromModel()
-                            widgetValueChanged()
-                            showAnswerContainer()
-                        }
+                    formControllerFacade.saveAnswer(questionIndex, answer)
+                    formAnswerRefresher.refreshAnswer(questionIndex)
                 }
             }
         }
@@ -86,4 +69,13 @@ class TimedGridSummaryAnswerCreator(
             else -> throw IllegalArgumentException("Unknown metadata name: $metadataName")
         }
     }
+}
+
+interface FormControllerFacade {
+    fun getFormElements(): List<IFormElement>?
+    fun saveAnswer(index: FormIndex, answer: IAnswerData)
+}
+
+interface FormAnswerRefresher {
+    fun refreshAnswer(index: FormIndex)
 }

@@ -8,6 +8,8 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import org.javarosa.core.model.FormIndex
+import org.javarosa.core.model.IFormElement
 import org.javarosa.core.model.data.IAnswerData
 import org.javarosa.core.model.data.MultipleItemsData
 import org.javarosa.core.model.data.helper.Selection
@@ -16,13 +18,17 @@ import org.odk.collect.android.activities.FormFillingActivity
 import org.odk.collect.android.formentry.FormEntryViewModel
 import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.widgets.QuestionWidget
+import org.odk.collect.android.widgets.StringWidget
 import org.odk.collect.android.widgets.items.ItemsWidgetUtils.loadItemsAndHandleErrors
 import org.odk.collect.experimental.timedgrid.FinishType
+import org.odk.collect.experimental.timedgrid.FormAnswerRefresher
+import org.odk.collect.experimental.timedgrid.FormControllerFacade
 import org.odk.collect.experimental.timedgrid.GridItem
 import org.odk.collect.experimental.timedgrid.NavigationAwareWidget
 import org.odk.collect.experimental.timedgrid.OngoingAssessmentWarningDialogFragment
 import org.odk.collect.experimental.timedgrid.TimedGridState
 import org.odk.collect.experimental.timedgrid.TimedGridSummary
+import org.odk.collect.experimental.timedgrid.TimedGridSummaryAnswerCreator
 import org.odk.collect.experimental.timedgrid.TimedGridViewModel
 import org.odk.collect.experimental.timedgrid.TimedGridWidgetConfiguration
 import org.odk.collect.experimental.timedgrid.Timer
@@ -50,8 +56,32 @@ class TimedGridWidget(
     private val summaryAnswerCreator =
         TimedGridSummaryAnswerCreator(
             formEntryPrompt,
-            formEntryViewModel,
-            context.takeIf { it is FormFillingActivity } as FormFillingActivity?
+            object : FormControllerFacade {
+                override fun getFormElements(): List<IFormElement>? {
+                    return formEntryViewModel.formController.getFormDef()?.children
+                }
+
+                override fun saveAnswer(index: FormIndex, answer: IAnswerData) {
+                    formEntryViewModel.formController.saveOneScreenAnswer(index, answer, false)
+                }
+            },
+            object : FormAnswerRefresher {
+                override fun refreshAnswer(index: FormIndex) {
+                    val activity = context as? FormFillingActivity ?: return
+                    val odkView = activity.currentViewIfODKView ?: return
+
+                    val widget = odkView.widgets
+                        .filterIsInstance<StringWidget>()
+                        .firstOrNull { it.formEntryPrompt.index == index }
+                        ?: return
+
+                    widget.apply {
+                        setDisplayValueFromModel()
+                        widgetValueChanged()
+                        showAnswerContainer()
+                    }
+                }
+            }
         )
 
     private val items = loadItemsAndHandleErrors(
