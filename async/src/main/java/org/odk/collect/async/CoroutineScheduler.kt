@@ -1,67 +1,62 @@
 package org.odk.collect.async
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.util.function.Consumer
 import java.util.function.Supplier
 import kotlin.coroutines.CoroutineContext
 
-open class CoroutineScheduler(private val foregroundContext: CoroutineContext, private val backgroundContext: CoroutineContext) : Scheduler {
+open class CoroutineScheduler(
+    foregroundContext: CoroutineContext,
+    backgroundContext: CoroutineContext
+) : Scheduler {
+
+    private val taskRunner = CoroutineTaskRunner(foregroundContext, backgroundContext)
 
     override fun <T> immediate(background: Supplier<T>, foreground: Consumer<T>) {
-        CoroutineScope(foregroundContext).launch {
-            val result = withContext(backgroundContext) { background.get() }
-            foreground.accept(result)
-        }
+        taskRunner.immediate(background, foreground)
     }
 
     override fun immediate(foreground: Boolean, delay: Long?, runnable: Runnable) {
-        val context = if (!foreground) {
-            backgroundContext
-        } else {
-            foregroundContext
-        }
-
-        CoroutineScope(context).launch {
-            if (delay != null) {
-                delay(delay)
-            }
-
-            runnable.run()
-        }
+        taskRunner.immediate(
+            runnable,
+            isForeground = foreground,
+            delay = delay,
+            repeatPeriod = null
+        )
     }
 
     override fun repeat(foreground: Runnable, repeatPeriod: Long): Cancellable {
-        val repeatScope = CoroutineScope(foregroundContext)
-
-        repeatScope.launch {
-            while (isActive) {
-                foreground.run()
-                delay(repeatPeriod)
-            }
-        }
-
-        return ScopeCancellable(repeatScope)
+        return taskRunner.immediate(
+            foreground,
+            isForeground = true,
+            delay = null,
+            repeatPeriod = repeatPeriod
+        )
     }
 
     override fun <T> flowOnBackground(flow: Flow<T>): Flow<T> {
-        return flow.flowOn(backgroundContext)
+        return taskRunner.flowOnBackground(flow)
     }
 
     override fun cancelAllDeferred() {
         throw UnsupportedOperationException()
     }
 
-    override fun networkDeferred(tag: String, spec: TaskSpec, inputData: Map<String, String>, networkConstraint: Scheduler.NetworkType?) {
+    override fun networkDeferred(
+        tag: String,
+        spec: TaskSpec,
+        inputData: Map<String, String>,
+        networkConstraint: Scheduler.NetworkType?
+    ) {
         throw UnsupportedOperationException()
     }
 
-    override fun networkDeferredRepeat(tag: String, spec: TaskSpec, repeatPeriod: Long, inputData: Map<String, String>) {
+    override fun networkDeferredRepeat(
+        tag: String,
+        spec: TaskSpec,
+        repeatPeriod: Long,
+        inputData: Map<String, String>
+    ) {
         throw UnsupportedOperationException()
     }
 
