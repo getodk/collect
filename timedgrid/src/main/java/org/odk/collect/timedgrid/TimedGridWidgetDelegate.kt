@@ -25,7 +25,7 @@ class TimedGridWidgetDelegate(
     private val widgetValueChanged: () -> Unit
 ) {
     private val viewModel = ViewModelProvider(context as ViewModelStoreOwner)[TimedGridViewModel::class.java]
-    private val timer: Timer = TimerProvider.get()
+    private val timer = PausableCountDownTimer()
 
     // Parsed prompt configuration (type, duration, etc.).
     private val config = TimedGridWidgetConfiguration.fromPrompt(

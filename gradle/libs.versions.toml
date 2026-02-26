@@ -12,7 +12,6 @@ glide = "5.0.5"
 camerax = "1.4.2" # Newer versions require minSdkVersion >= 23
 espresso = "3.7.0"
 kotlin = "2.2.20"
-junit = "1.3.0"
 
 [libraries]
 firebaseCrashlyticsGradle = { group = "com.google.firebase", name = "firebase-crashlytics-gradle", version = "3.0.6" }
@@ -118,7 +117,6 @@ okhttp3Mockwebserver = { group = "com.squareup.okhttp3", name = "mockwebserver",
 hamcrest = { group = "org.hamcrest", name = "hamcrest", version = "3.0" }
 robolectric = { group = "org.robolectric", name = "robolectric", version = "4.16" }
 uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version = "2.3.0" }
-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junit" }
 
 [plugins]
 androidApplication = { id = "com.android.application" }

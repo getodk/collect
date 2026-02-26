@@ -2,7 +2,7 @@ package org.odk.collect.timedgrid
 
 import android.os.CountDownTimer
 
-class PausableCountDownTimer : Timer {
+class PausableCountDownTimer {
     private var millisRemaining: Long = 0
     private lateinit var onTick: (millisUntilFinished: Long) -> Unit
     private lateinit var onFinish: () -> Unit
@@ -10,12 +10,12 @@ class PausableCountDownTimer : Timer {
     private var timer: CountDownTimer? = null
     private var isPaused: Boolean = true
 
-    override fun setUpListeners(onTick: (millisUntilFinished: Long) -> Unit, onFinish: () -> Unit) {
+    fun setUpListeners(onTick: (millisUntilFinished: Long) -> Unit, onFinish: () -> Unit) {
         this.onTick = onTick
         this.onFinish = onFinish
     }
 
-    override fun setUpDuration(millisRemaining: Long) {
+    fun setUpDuration(millisRemaining: Long) {
         this.millisRemaining = millisRemaining
     }
 
@@ -24,7 +24,7 @@ class PausableCountDownTimer : Timer {
      * @return This PausableCountDownTimer.
      */
     @Synchronized
-    override fun start(): Timer {
+    fun start(): PausableCountDownTimer {
         if (isPaused) {
             isPaused = false
             timer = object : CountDownTimer(millisRemaining, 1000) {
@@ -46,7 +46,7 @@ class PausableCountDownTimer : Timer {
      * Pauses the countdown.
      */
     @Synchronized
-    override fun pause() {
+    fun pause() {
         if (!isPaused) {
             timer?.cancel()
             timer = null
@@ -58,13 +58,13 @@ class PausableCountDownTimer : Timer {
      * Cancels the countdown and resets the timer.
      */
     @Synchronized
-    override fun cancel() {
+    fun cancel() {
         timer?.cancel()
         timer = null
         isPaused = true
     }
 
-    override fun getMillisRemaining(): Long {
+    fun getMillisRemaining(): Long {
         return millisRemaining
     }
 }
