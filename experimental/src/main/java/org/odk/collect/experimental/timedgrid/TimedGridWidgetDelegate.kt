@@ -276,6 +276,6 @@ class TimedGridWidgetDelegate(
 
     fun shouldBlockNavigation(): Boolean =
         state == TimedGridState.IN_PROGRESS ||
-                state == TimedGridState.PAUSED ||
-                state == TimedGridState.COMPLETED_NO_LAST_ITEM
+            state == TimedGridState.PAUSED ||
+            state == TimedGridState.COMPLETED_NO_LAST_ITEM
 }

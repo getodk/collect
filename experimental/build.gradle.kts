@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.kotlinAndroid)
 }
 
+apply(from = "../config/quality.gradle")
+
 android {
     namespace = "org.odk.collect.experimental"
 
