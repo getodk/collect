@@ -1,10 +1,9 @@
-package org.odk.collect.experimental.timedgrid
+package org.odk.collect.timedgrid
 
 import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import org.odk.collect.experimental.R
 
 class OngoingAssessmentWarningDialogFragment : DialogFragment() {
 

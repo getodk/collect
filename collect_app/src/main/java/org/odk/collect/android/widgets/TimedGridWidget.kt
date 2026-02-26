@@ -11,11 +11,11 @@ import org.odk.collect.android.activities.FormFillingActivity
 import org.odk.collect.android.formentry.FormEntryViewModel
 import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.widgets.items.ItemsWidgetUtils
-import org.odk.collect.experimental.timedgrid.FormAnswerRefresher
-import org.odk.collect.experimental.timedgrid.FormControllerFacade
-import org.odk.collect.experimental.timedgrid.NavigationAwareWidget
-import org.odk.collect.experimental.timedgrid.OngoingAssessmentWarningDialogFragment
-import org.odk.collect.experimental.timedgrid.TimedGridWidgetDelegate
+import org.odk.collect.timedgrid.FormAnswerRefresher
+import org.odk.collect.timedgrid.FormControllerFacade
+import org.odk.collect.timedgrid.NavigationAwareWidget
+import org.odk.collect.timedgrid.OngoingAssessmentWarningDialogFragment
+import org.odk.collect.timedgrid.TimedGridWidgetDelegate
 
 @SuppressLint("ViewConstructor")
 class TimedGridWidget(

@@ -1,4 +1,4 @@
-package org.odk.collect.experimental.timedgrid
+package org.odk.collect.timedgrid
 
 enum class FinishType(val code: Int) {
     /** User confirms and picks last attempted item manually */

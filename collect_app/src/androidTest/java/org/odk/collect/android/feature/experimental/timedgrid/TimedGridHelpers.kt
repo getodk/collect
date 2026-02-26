@@ -22,12 +22,12 @@ import java.util.function.Consumer
 
 object TimedGridHelpers {
     fun FormEntryPage.clickStartTestButton(): FormEntryPage {
-        onView(withId(org.odk.collect.experimental.R.id.button_start)).perform(scrollTo(), click())
+        onView(withId(org.odk.collect.timedgrid.R.id.button_start)).perform(scrollTo(), click())
         return this
     }
 
     fun FormEntryPage.clickPauseTestButton(): FormEntryPage {
-        onView(withId(org.odk.collect.experimental.R.id.button_timer)).perform(scrollTo(), click())
+        onView(withId(org.odk.collect.timedgrid.R.id.button_timer)).perform(scrollTo(), click())
         return this
     }
 
@@ -43,11 +43,11 @@ object TimedGridHelpers {
         while (!found) {
             try {
                 // Try to click Early Finish directly by ID
-                onView(withId(org.odk.collect.experimental.R.id.button_complete)).perform(scrollTo(), click())
+                onView(withId(org.odk.collect.timedgrid.R.id.button_complete)).perform(scrollTo(), click())
                 found = true
             } catch (e: Exception) {
                 // If not clickable yet, go to next page
-                onView(withId(org.odk.collect.experimental.R.id.button_next)).perform(scrollTo(), click())
+                onView(withId(org.odk.collect.timedgrid.R.id.button_next)).perform(scrollTo(), click())
             }
         }
         return this
@@ -106,7 +106,7 @@ object TimedGridHelpers {
     }
 
     fun FormEntryPage.clickFinishTestButton(): FormEntryPage {
-        onView(withId(org.odk.collect.experimental.R.id.button_finish)).perform(scrollTo(), click())
+        onView(withId(org.odk.collect.timedgrid.R.id.button_finish)).perform(scrollTo(), click())
         return this
     }
 
@@ -179,7 +179,7 @@ object TimedGridHelpers {
     }
 
     fun assertVisibleRows(count: Int) {
-        onView(withId(org.odk.collect.experimental.R.id.container_rows))
+        onView(withId(org.odk.collect.timedgrid.R.id.container_rows))
             .check(assertVisibleChildCount(count))
     }
 

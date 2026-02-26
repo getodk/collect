@@ -41,7 +41,7 @@ include ':web-page'
 include ':db'
 include ':open-rosa'
 include ':mobile-device-management'
-include ':experimental'
+include ':timedgrid'
 
 apply from: 'secrets.gradle'
 if (getSecrets().getProperty('MAPBOX_DOWNLOADS_TOKEN', '') != '') {

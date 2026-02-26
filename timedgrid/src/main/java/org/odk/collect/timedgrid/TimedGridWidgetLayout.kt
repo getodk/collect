@@ -1,4 +1,4 @@
-package org.odk.collect.experimental.timedgrid
+package org.odk.collect.timedgrid
 
 import android.content.res.ColorStateList
 import android.graphics.Paint
@@ -9,9 +9,8 @@ import androidx.core.content.ContextCompat
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.androidshared.system.ContextUtils.getThemeAttributeValue
-import org.odk.collect.experimental.R
-import org.odk.collect.experimental.databinding.TimedGridItemButtonBinding
-import org.odk.collect.experimental.databinding.TimedGridItemRowBinding
+import org.odk.collect.timedgrid.databinding.TimedGridItemButtonBinding
+import org.odk.collect.timedgrid.databinding.TimedGridItemRowBinding
 
 data class GridItem(val value: String, val text: String)
 

@@ -1,4 +1,4 @@
-package org.odk.collect.experimental.timedgrid
+package org.odk.collect.timedgrid
 
 import androidx.core.text.isDigitsOnly
 import org.javarosa.form.api.FormEntryPrompt

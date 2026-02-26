@@ -6,7 +6,7 @@ plugins {
 apply(from = "../config/quality.gradle")
 
 android {
-    namespace = "org.odk.collect.experimental"
+    namespace = "org.odk.collect.timedgrid"
 
     compileSdk = libs.versions.compileSdk.get().toInt()
 

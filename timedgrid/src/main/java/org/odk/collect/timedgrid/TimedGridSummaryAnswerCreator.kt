@@ -1,4 +1,4 @@
-package org.odk.collect.experimental.timedgrid
+package org.odk.collect.timedgrid
 
 import org.javarosa.core.model.FormIndex
 import org.javarosa.core.model.GroupDef

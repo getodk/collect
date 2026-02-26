@@ -87,10 +87,10 @@ import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton;
 import org.odk.collect.audioclips.PlaybackFailedException;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
-import org.odk.collect.experimental.timedgrid.NavigationAwareWidget;
 import org.odk.collect.permissions.PermissionListener;
 import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.settings.SettingsProvider;
+import org.odk.collect.timedgrid.NavigationAwareWidget;
 
 import java.io.File;
 import java.io.Serializable;

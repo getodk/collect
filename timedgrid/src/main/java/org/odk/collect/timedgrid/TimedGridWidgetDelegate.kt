@@ -1,4 +1,4 @@
-package org.odk.collect.experimental.timedgrid
+package org.odk.collect.timedgrid
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -79,7 +79,7 @@ class TimedGridWidgetDelegate(
             } else if (state == TimedGridState.PAUSED) {
                 val secondsRemaining = saved.millisRemaining.milliseconds.inWholeSeconds
                 val timeLeftText = context.getString(
-                    org.odk.collect.experimental.R.string.timed_grid_time_left,
+                    R.string.timed_grid_time_left,
                     secondsRemaining
                 )
                 renderer.updateTimer(timeLeftText)
@@ -122,7 +122,7 @@ class TimedGridWidgetDelegate(
     private fun onTimerTick(millisUntilFinished: Long) {
         val secondsRemaining = millisUntilFinished.milliseconds.inWholeSeconds
         val timeLeftText = context.getString(
-            org.odk.collect.experimental.R.string.timed_grid_time_left,
+            R.string.timed_grid_time_left,
             secondsRemaining
         )
         renderer.updateTimer(timeLeftText)
@@ -131,7 +131,7 @@ class TimedGridWidgetDelegate(
 
     private fun onTimerFinish() {
         val timeLeftText = context.getString(
-            org.odk.collect.experimental.R.string.timed_grid_time_left,
+            R.string.timed_grid_time_left,
             0
         )
         renderer.updateTimer(timeLeftText)
@@ -186,12 +186,12 @@ class TimedGridWidgetDelegate(
 
     private fun showConfirmFinishDialog(onConfirm: () -> Unit) {
         MaterialAlertDialogBuilder(context)
-            .setTitle(org.odk.collect.experimental.R.string.early_finish_title)
-            .setMessage(org.odk.collect.experimental.R.string.early_finish_message)
-            .setPositiveButton(org.odk.collect.experimental.R.string.end_test) { _, _ ->
+            .setTitle(R.string.early_finish_title)
+            .setMessage(R.string.early_finish_message)
+            .setPositiveButton(R.string.end_test) { _, _ ->
                 onConfirm()
             }
-            .setNegativeButton(org.odk.collect.experimental.R.string.continue_test, null)
+            .setNegativeButton(R.string.continue_test, null)
             .show()
     }
 

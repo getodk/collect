@@ -2,7 +2,7 @@ package org.odk.collect.android.feature.experimental.timedgrid
 
 import android.os.Handler
 import android.os.Looper
-import org.odk.collect.experimental.timedgrid.Timer
+import org.odk.collect.timedgrid.Timer
 
 class FakeTimer : Timer {
     private val handler = Handler(Looper.getMainLooper())

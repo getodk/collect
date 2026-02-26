@@ -1,9 +1,9 @@
-package org.odk.collect.experimental.timedgrid
+package org.odk.collect.timedgrid
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import org.odk.collect.experimental.databinding.TimedGridBinding
+import org.odk.collect.timedgrid.databinding.TimedGridBinding
 
 /**
  * Common renderer for timed grid modes that share the same UI and interaction pattern:

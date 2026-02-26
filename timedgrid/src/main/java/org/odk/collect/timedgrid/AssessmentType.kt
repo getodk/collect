@@ -1,4 +1,4 @@
-package org.odk.collect.experimental.timedgrid
+package org.odk.collect.timedgrid
 
 enum class AssessmentType(
     private val rendererFactory: () -> TimedGridRenderer

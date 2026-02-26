@@ -20,7 +20,7 @@ import org.odk.collect.android.feature.experimental.timedgrid.TimedGridHelpers.c
 import org.odk.collect.android.feature.experimental.timedgrid.TimedGridHelpers.selectTestAnswers
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain
-import org.odk.collect.experimental.timedgrid.TimerProvider
+import org.odk.collect.timedgrid.TimerProvider
 import kotlin.math.roundToInt
 
 @RunWith(AndroidJUnit4::class)
@@ -271,14 +271,14 @@ class TimedGridTest {
             .selectTestAnswers(tapped)
             .also {
                 // Capture time before
-                val timeBeforeText = TimedGridHelpers.getTextFromView(org.odk.collect.experimental.R.id.button_timer)
+                val timeBeforeText = TimedGridHelpers.getTextFromView(org.odk.collect.timedgrid.R.id.button_timer)
                 val timeBefore = TimedGridHelpers.extractTimeLeft(timeBeforeText)
 
-                it.clickOnId(org.odk.collect.experimental.R.id.button_timer)
+                it.clickOnId(org.odk.collect.timedgrid.R.id.button_timer)
                 timer.wait(2)
 
                 // Capture time after
-                val timeAfterText = TimedGridHelpers.getTextFromView(org.odk.collect.experimental.R.id.button_timer)
+                val timeAfterText = TimedGridHelpers.getTextFromView(org.odk.collect.timedgrid.R.id.button_timer)
                 val timeAfter = TimedGridHelpers.extractTimeLeft(timeAfterText)
 
                 // Assert that the time has decreased
@@ -545,7 +545,7 @@ class TimedGridTest {
             .selectTestAnswers(tapped)
             .also {
                 // Capture timer before rotation
-                val timeBeforeText = TimedGridHelpers.getTextFromView(org.odk.collect.experimental.R.id.button_timer)
+                val timeBeforeText = TimedGridHelpers.getTextFromView(org.odk.collect.timedgrid.R.id.button_timer)
                 val timeBefore = TimedGridHelpers.extractTimeLeft(timeBeforeText)
 
                 // Rotate device
@@ -553,7 +553,7 @@ class TimedGridTest {
                 timer.wait(5)
 
                 // Capture timer after rotation
-                val timeAfterText = TimedGridHelpers.getTextFromView(org.odk.collect.experimental.R.id.button_timer)
+                val timeAfterText = TimedGridHelpers.getTextFromView(org.odk.collect.timedgrid.R.id.button_timer)
                 val timeAfter = TimedGridHelpers.extractTimeLeft(timeAfterText)
 
                 // Assert timer is still running
