@@ -26,7 +26,6 @@ import androidx.lifecycle.LifecycleOwner;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.experimental.timedgrid.TimedGridWidget;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.PrinterWidgetViewModel;
 import org.odk.collect.android.formentry.questions.QuestionDetails;

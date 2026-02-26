@@ -1,4 +1,4 @@
-package org.odk.collect.android.experimental.timedgrid
+package org.odk.collect.android.widgets
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -10,15 +10,12 @@ import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.activities.FormFillingActivity
 import org.odk.collect.android.formentry.FormEntryViewModel
 import org.odk.collect.android.formentry.questions.QuestionDetails
-import org.odk.collect.android.widgets.QuestionWidget
-import org.odk.collect.android.widgets.StringWidget
-import org.odk.collect.android.widgets.items.ItemsWidgetUtils.loadItemsAndHandleErrors
+import org.odk.collect.android.widgets.items.ItemsWidgetUtils
 import org.odk.collect.experimental.timedgrid.FormAnswerRefresher
 import org.odk.collect.experimental.timedgrid.FormControllerFacade
 import org.odk.collect.experimental.timedgrid.NavigationAwareWidget
 import org.odk.collect.experimental.timedgrid.OngoingAssessmentWarningDialogFragment
 import org.odk.collect.experimental.timedgrid.TimedGridWidgetDelegate
-import kotlin.jvm.java
 
 @SuppressLint("ViewConstructor")
 class TimedGridWidget(
@@ -27,7 +24,7 @@ class TimedGridWidget(
     dependencies: Dependencies,
     formEntryViewModel: FormEntryViewModel
 ) : QuestionWidget(context, dependencies, questionDetails), NavigationAwareWidget {
-    private val items = loadItemsAndHandleErrors(
+    private val items = ItemsWidgetUtils.loadItemsAndHandleErrors(
         this, questionDetails.prompt, formEntryViewModel
     )
 
