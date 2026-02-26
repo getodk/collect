@@ -12,9 +12,9 @@ import org.javarosa.core.model.instance.TreeReference
 import org.javarosa.form.api.FormEntryPrompt
 
 class TimedGridSummaryAnswerCreator(
-    val formEntryPrompt: FormEntryPrompt,
-    val formControllerFacade: FormControllerFacade,
-    val formAnswerRefresher: FormAnswerRefresher
+    private val formEntryPrompt: FormEntryPrompt,
+    private val formControllerFacade: FormControllerFacade,
+    private val formAnswerRefresher: FormAnswerRefresher
 ) {
     companion object {
         val SUMMARY_QUESTION_APPEARANCE_REGEX = Regex("""timed-grid-answer\((.+),(.+)\)""")
