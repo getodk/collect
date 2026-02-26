@@ -1,4 +1,4 @@
-package org.odk.collect.async
+package org.odk.collect.async.workmanager
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
@@ -14,7 +14,7 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.odk.collect.async.workmanager.TaskSpecWorker
+import org.odk.collect.async.TaskSpec
 import java.util.concurrent.Executors
 import java.util.function.Supplier
 
