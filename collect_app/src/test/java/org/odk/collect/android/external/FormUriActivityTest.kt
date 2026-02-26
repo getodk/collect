@@ -135,7 +135,7 @@ class FormUriActivityTest {
                 return settingsProvider
             }
 
-            override fun providesScheduler(workManager: WorkManager?): Scheduler {
+            override fun providesScheduler(workManager: WorkManager?, application: Application): Scheduler {
                 return fakeScheduler
             }
 

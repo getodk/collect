@@ -3,7 +3,6 @@
 
     <application>
         <activity android:name="org.odk.collect.selfiecamera.CaptureSelfieActivity"
-            android:theme="@style/Theme.AppCompat"
-            android:screenOrientation="portrait"/>
+            android:theme="@style/Theme.AppCompat" />
     </application>
 </manifest>

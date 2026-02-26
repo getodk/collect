@@ -27,6 +27,7 @@ import org.odk.collect.android.mainmenu.MainMenuActivity
 import org.odk.collect.android.preferences.dialogs.DeleteProjectDialog
 import org.odk.collect.android.projects.ProjectDeleter
 import org.odk.collect.android.projects.ProjectsDataService
+import org.odk.collect.androidshared.ui.EdgeToEdge.setView
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.async.Scheduler
 import org.odk.collect.metadata.PropertyManager
@@ -76,7 +77,7 @@ class ProjectPreferencesActivity :
             .build()
 
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_preferences_layout)
+        setView(R.layout.activity_preferences_layout, false)
     }
 
     override fun onPause() {

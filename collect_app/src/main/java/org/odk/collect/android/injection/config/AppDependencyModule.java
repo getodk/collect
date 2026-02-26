@@ -95,8 +95,11 @@ import org.odk.collect.androidshared.system.IntentLauncherImpl;
 import org.odk.collect.androidshared.utils.ScreenUtils;
 import org.odk.collect.androidshared.utils.SettingsUniqueIdGenerator;
 import org.odk.collect.androidshared.utils.UniqueIdGenerator;
-import org.odk.collect.async.CoroutineAndWorkManagerScheduler;
+import org.odk.collect.async.coroutines.CoroutineTaskRunner;
 import org.odk.collect.async.Scheduler;
+import org.odk.collect.async.SchedulerBuilder;
+import org.odk.collect.async.services.ForegroundServiceTaskSpecRunner;
+import org.odk.collect.async.workmanager.WorkManagerTaskSpecScheduler;
 import org.odk.collect.async.network.ConnectivityProvider;
 import org.odk.collect.async.network.NetworkStateProvider;
 import org.odk.collect.audioclips.AudioPlayerFactory;
@@ -278,8 +281,12 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public Scheduler providesScheduler(WorkManager workManager) {
-        return new CoroutineAndWorkManagerScheduler(workManager);
+    public Scheduler providesScheduler(WorkManager workManager, Application application) {
+        return SchedulerBuilder.build(
+                new CoroutineTaskRunner(),
+                new ForegroundServiceTaskSpecRunner(application),
+                new WorkManagerTaskSpecScheduler(workManager)
+        );
     }
 
     @Provides

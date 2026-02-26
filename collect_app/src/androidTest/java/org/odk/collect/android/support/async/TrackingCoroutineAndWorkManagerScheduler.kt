@@ -1,5 +1,6 @@
 package org.odk.collect.android.support.async
 
+import android.app.Application
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import androidx.work.BackoffPolicy
@@ -8,26 +9,33 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Runnable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
-import org.odk.collect.android.support.async.AsyncWorkTracker
 import org.odk.collect.android.support.async.TestSchedulerTaskSpec.Companion.DATA_WRAPPED_SPEC
 import org.odk.collect.async.Cancellable
-import org.odk.collect.async.CoroutineAndWorkManagerScheduler
+import org.odk.collect.async.coroutines.CoroutineTaskRunner
 import org.odk.collect.async.NotificationInfo
 import org.odk.collect.async.Scheduler
+import org.odk.collect.async.SchedulerBuilder
 import org.odk.collect.async.TaskSpec
+import org.odk.collect.async.workmanager.WorkManagerTaskSpecScheduler
 import org.odk.collect.async.network.NetworkStateProvider
+import org.odk.collect.async.services.ForegroundServiceTaskSpecRunner
 import java.util.function.Consumer
 import java.util.function.Supplier
 
 class TrackingCoroutineAndWorkManagerScheduler(private val networkStateProvider: NetworkStateProvider) : Scheduler {
 
-    private val wrappedScheduler: CoroutineAndWorkManagerScheduler
+    private val wrappedScheduler: Scheduler
     private val deferredTasks: MutableList<DeferredTask> = ArrayList()
     private val backgroundDispatcher = TrackingCoroutineDispatcher(Dispatchers.IO)
 
     init {
-        val workManager = WorkManager.getInstance(ApplicationProvider.getApplicationContext())
-        wrappedScheduler = CoroutineAndWorkManagerScheduler(Dispatchers.Main, backgroundDispatcher, workManager)
+        val application = ApplicationProvider.getApplicationContext<Application>()
+        val workManager = WorkManager.getInstance(application)
+        wrappedScheduler = SchedulerBuilder.build(
+            CoroutineTaskRunner(Dispatchers.Main, backgroundDispatcher),
+            ForegroundServiceTaskSpecRunner(application),
+            WorkManagerTaskSpecScheduler(workManager)
+        )
     }
 
     override fun repeat(foreground: Runnable, repeatPeriod: Long): Cancellable {

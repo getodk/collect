@@ -99,7 +99,7 @@ class DeleteProjectDialogTest {
                 return projectDeleter
             }
 
-            override fun providesScheduler(workManager: WorkManager): Scheduler {
+            override fun providesScheduler(workManager: WorkManager, application: Application): Scheduler {
                 return scheduler
             }
         })

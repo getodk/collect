@@ -170,6 +170,11 @@ public class Collect extends Application implements
                 .application(this)
                 .dependencyModule(new AudioRecorderDependencyModule() {
                     @Override
+                    public @NotNull Scheduler providesScheduler(@NotNull Application application) {
+                        return applicationComponent.scheduler();
+                    }
+
+                    @Override
                     public @NotNull UniqueIdGenerator providesUniqueIdGenerator() {
                         return applicationComponent.uniqueIdGenerator();
                     }

@@ -20,6 +20,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_DESC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_DESC;
+import static org.odk.collect.androidshared.ui.EdgeToEdge.setView;
 import static org.odk.collect.lists.selects.MultiSelectViewModelKt.updateSelectAll;
 
 import android.content.Intent;
@@ -161,7 +162,21 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
         // set title
         setTitle(getString(org.odk.collect.strings.R.string.send_data));
         binding = InstanceUploaderListBinding.inflate(LayoutInflater.from(this));
-        setContentView(binding.getRoot());
+
+        setView(this, binding.getRoot(), false);
+        listView = findViewById(R.id.scrollable_container);
+        listView.setOnItemClickListener((AdapterView.OnItemClickListener) this);
+        listView.setEmptyView(findViewById(android.R.id.empty));
+        progressBar = findViewById(org.odk.collect.androidshared.R.id.progressBar);
+
+        // Use the nicer-looking drawable with Material Design insets.
+        listView.setDivider(ContextCompat.getDrawable(this, org.odk.collect.androidshared.R.drawable.list_item_divider));
+        listView.setDividerHeight(1);
+
+        setSupportActionBar(findViewById(org.odk.collect.androidshared.R.id.toolbar));
+
+        init();
+
         binding.uploadButton.setOnClickListener(v -> onUploadButtonsClicked());
         if (savedInstanceState != null) {
             showAllMode = savedInstanceState.getBoolean(SHOW_ALL_MODE);
@@ -189,24 +204,6 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
             // no items selected
             ToastUtils.showLongToast(org.odk.collect.strings.R.string.noselect_error);
         }
-    }
-
-    @Override
-    public void setContentView(View view) {
-        super.setContentView(view);
-
-        listView = findViewById(R.id.scrollable_container);
-        listView.setOnItemClickListener((AdapterView.OnItemClickListener) this);
-        listView.setEmptyView(findViewById(android.R.id.empty));
-        progressBar = findViewById(org.odk.collect.androidshared.R.id.progressBar);
-
-        // Use the nicer-looking drawable with Material Design insets.
-        listView.setDivider(ContextCompat.getDrawable(this, org.odk.collect.androidshared.R.drawable.list_item_divider));
-        listView.setDividerHeight(1);
-
-        setSupportActionBar(findViewById(org.odk.collect.androidshared.R.id.toolbar));
-
-        init();
     }
 
     void init() {

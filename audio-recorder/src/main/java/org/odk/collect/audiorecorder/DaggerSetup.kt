@@ -8,8 +8,9 @@ import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.Dispatchers
 import org.odk.collect.androidshared.utils.UniqueIdGenerator
-import org.odk.collect.async.CoroutineScheduler
+import org.odk.collect.async.coroutines.CoroutineTaskRunner
 import org.odk.collect.async.Scheduler
+import org.odk.collect.async.SchedulerBuilder
 import org.odk.collect.audiorecorder.mediarecorder.AACRecordingResource
 import org.odk.collect.audiorecorder.mediarecorder.AMRRecordingResource
 import org.odk.collect.audiorecorder.recorder.Output
@@ -71,7 +72,7 @@ open class AudioRecorderDependencyModule {
 
     @Provides
     open fun providesScheduler(application: Application): Scheduler {
-        return CoroutineScheduler(Dispatchers.Main, Dispatchers.IO)
+        throw UnsupportedOperationException("This should be overridden by dependent application")
     }
 
     @Provides
