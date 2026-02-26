@@ -16,7 +16,6 @@ import org.odk.collect.async.NotificationInfo
 import org.odk.collect.async.Scheduler
 import org.odk.collect.async.SchedulerBuilder
 import org.odk.collect.async.TaskSpec
-import org.odk.collect.async.workmanager.WorkManagerTaskSpecRunner
 import org.odk.collect.async.workmanager.WorkManagerTaskSpecScheduler
 import org.odk.collect.async.network.NetworkStateProvider
 import org.odk.collect.async.services.ForegroundServiceTaskSpecRunner

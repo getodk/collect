@@ -1,14 +1,6 @@
 package org.odk.collect.async.workmanager
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.content.Context
-import android.content.pm.ServiceInfo
-import android.os.Build
-import androidx.annotation.StringRes
-import androidx.core.app.NotificationCompat
-import androidx.work.ForegroundInfo
-import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import org.odk.collect.analytics.Analytics
@@ -16,7 +8,6 @@ import org.odk.collect.async.Scheduler
 import org.odk.collect.async.TaskSpec
 import org.odk.collect.async.network.ConnectivityProvider
 import org.odk.collect.async.run
-import org.odk.collect.icons.R
 
 class TaskSpecWorker(
     context: Context,
@@ -44,29 +35,11 @@ class TaskSpecWorker(
             return Result.retry()
         }
 
-        val isForeground = inputData.getBoolean(FOREGROUND, false)
-        if (isForeground) {
-            val notificationChannel = inputData.getString(FOREGROUND_NOTIFICATION_CHANNEL)!!
-            val notificationChannelName =
-                inputData.getString(FOREGROUND_NOTIFICATION_CHANNEL_NAME)!!
-            setupNotificationChannel(notificationChannel, notificationChannelName)
-
-            val notificationTitle = inputData.getInt(FOREGROUND_NOTIFICATION_TITLE, -1)
-            setForegroundAsync(
-                getForegroundInfo(
-                    applicationContext,
-                    notificationChannel,
-                    notificationTitle,
-                    inputData.getInt(FOREGROUND_NOTIFICATION_ID, -1)
-                )
-            )
-        }
-
         val result = taskSpec.run(
             applicationContext,
             stringInputData,
             runAttemptCount,
-            isForeground,
+            false,
             { isStopped }
         )
 
@@ -82,54 +55,8 @@ class TaskSpecWorker(
         isStopped = true
     }
 
-    private fun getForegroundInfo(
-        context: Context,
-        notificationChannel: String,
-        @StringRes notificationTitle: Int,
-        notificationId: Int
-    ): ForegroundInfo {
-        val intent = WorkManager.Companion.getInstance(context).createCancelPendingIntent(id)
-
-        val notification = NotificationCompat.Builder(applicationContext, notificationChannel)
-            .setSmallIcon(R.drawable.ic_notification_small)
-            .setContentTitle(context.getString(notificationTitle))
-            .setPriority(NotificationCompat.PRIORITY_LOW)
-            .setContentIntent(intent)
-            .build()
-
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            ForegroundInfo(
-                notificationId,
-                notification,
-                ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
-            )
-        } else {
-            ForegroundInfo(notificationId, notification)
-        }
-    }
-
-    private fun setupNotificationChannel(
-        notificationChannel: String,
-        notificationChannelName: String
-    ) {
-        val notificationChannel = NotificationChannel(
-            notificationChannel,
-            notificationChannelName,
-            NotificationManager.IMPORTANCE_LOW
-        )
-
-        (applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
-            .createNotificationChannel(notificationChannel)
-    }
-
     companion object {
         const val DATA_TASK_SPEC_CLASS = "taskSpecClass"
         const val DATA_CELLULAR_ONLY = "cellularOnly"
-
-        const val FOREGROUND = "foreground"
-        const val FOREGROUND_NOTIFICATION_CHANNEL = "notification_channel"
-        const val FOREGROUND_NOTIFICATION_CHANNEL_NAME = "notification_channel_name"
-        const val FOREGROUND_NOTIFICATION_TITLE = "notification_title"
-        const val FOREGROUND_NOTIFICATION_ID = "notification_id"
     }
 }
