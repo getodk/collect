@@ -35,6 +35,8 @@ class InstanceUploadViewModel(
     private val settingsProvider: SettingsProvider,
     private val instancesDataService: InstancesDataService,
     private val projectId: String,
+    val externalUsername: String?,
+    val externalPassword: String?,
     private val defaultSuccessMessage: String,
     initUploadingStatus: String
 ) : ViewModel() {
@@ -43,14 +45,16 @@ class InstanceUploadViewModel(
 
     private var completeDestinationUrl: String? = null
     private var referrer: String? = null
-    private var customUsername: String? = null
-    private var customPassword: String? = null
     private var deleteInstanceAfterSubmission: Boolean? = null
 
     private val _state = MutableLiveData<UploadState>(UploadState.Idle)
     val state: LiveData<UploadState> = _state
 
     private var uploadJob: Job? = null
+
+    init {
+        setTemporaryCredentials()
+    }
 
     fun upload(instanceIdsToUpload: List<Long>) {
         if (_state.value !is UploadState.Idle && _state.value !is UploadState.AuthRequired) {
@@ -129,23 +133,17 @@ class InstanceUploadViewModel(
         }
     }
 
-    fun setCustomCredentials(customUsername: String, customPassword: String) {
-        this.customUsername = customUsername
-        this.customPassword = customPassword
-        setTemporaryCredentials()
-    }
-
     fun setUploadingStatus(uploadingStatus: String) {
         this.uploadingStatus = uploadingStatus
     }
 
 
     private fun setTemporaryCredentials() {
-        if (customUsername != null && customPassword != null) {
+        if (externalUsername != null && externalPassword != null) {
             webCredentialsUtils.saveCredentials(
                 completeDestinationUrl!!,
-                customUsername!!,
-                customPassword!!
+                externalUsername,
+                externalPassword
             )
         } else {
             // In the case for anonymous logins, clear the previous credentials for that host
@@ -154,7 +152,7 @@ class InstanceUploadViewModel(
     }
 
     private fun clearTemporaryCredentials() {
-        if (customUsername != null && customPassword != null) {
+        if (externalUsername != null && externalPassword != null) {
             webCredentialsUtils.clearCredentials(completeDestinationUrl!!)
         }
     }
