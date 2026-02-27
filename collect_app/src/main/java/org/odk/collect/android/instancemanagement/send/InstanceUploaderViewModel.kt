@@ -35,8 +35,12 @@ class InstanceUploadViewModel(
     private val settingsProvider: SettingsProvider,
     private val instancesDataService: InstancesDataService,
     private val projectId: String,
-    private val defaultSuccessMessage: String
+    private val defaultSuccessMessage: String,
+    initUploadingStatus: String
 ) : ViewModel() {
+    var uploadingStatus: String = initUploadingStatus
+        private set
+
     private var completeDestinationUrl: String? = null
     private var referrer: String? = null
     private var customUsername: String? = null
@@ -130,6 +134,11 @@ class InstanceUploadViewModel(
         this.customPassword = customPassword
         setTemporaryCredentials()
     }
+
+    fun setUploadingStatus(uploadingStatus: String) {
+        this.uploadingStatus = uploadingStatus
+    }
+
 
     private fun setTemporaryCredentials() {
         if (customUsername != null && customPassword != null) {
