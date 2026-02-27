@@ -176,7 +176,7 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
         showDialog(PROGRESS_DIALOG);
 
         if (url != null) {
-            instanceUploaderViewModel.setCompleteDestinationUrl(url + OpenRosaConstants.SUBMISSION, getReferrerUri(), true);
+            instanceUploaderViewModel.setCompleteDestinationUrl(url + OpenRosaConstants.SUBMISSION, true);
 
             if (deleteInstanceAfterUpload != null) {
                 instanceUploaderViewModel.setDeleteInstanceAfterSubmission(deleteInstanceAfterUpload);
@@ -204,6 +204,7 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
                                     settingsProvider,
                                     instancesDataService,
                                     projectsDataService.requireCurrentProject().getUuid(),
+                                    getReferrerUri(),
                                     finalExternalUsername,
                                     finalExternalPassword,
                                     getString(org.odk.collect.strings.R.string.success),
