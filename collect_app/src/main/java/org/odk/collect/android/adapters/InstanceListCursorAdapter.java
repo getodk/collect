@@ -30,10 +30,15 @@ import org.odk.collect.forms.instances.Instance;
 
 public class InstanceListCursorAdapter extends SimpleCursorAdapter {
     private final boolean shouldCheckDisabled;
+    private OnItemClickListener onItemClickListener;
 
     public InstanceListCursorAdapter(Context context, int layout, Cursor c, String[] from, int[] to, boolean shouldCheckDisabled) {
         super(context, layout, c, from, to);
         this.shouldCheckDisabled = shouldCheckDisabled;
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
     @Override
@@ -45,6 +50,18 @@ public class InstanceListCursorAdapter extends SimpleCursorAdapter {
         );
 
         InstanceListItemView.setInstance(view, instance, shouldCheckDisabled);
+
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onItemClickListener.onItemClick(view, position);
+            }
+        });
+
         return view;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
     }
 }

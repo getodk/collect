@@ -24,7 +24,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,12 +37,11 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.InstanceListCursorAdapter;
 import org.odk.collect.android.application.CollectComposeThemeProvider;
 import org.odk.collect.android.dao.CursorLoaderFactory;
-import org.odk.collect.android.formentry.FormOpeningMode;
-import org.odk.collect.db.sqlite.DatabaseConnection;
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.entities.EntitiesRepositoryProvider;
 import org.odk.collect.android.external.FormUriActivity;
 import org.odk.collect.android.external.InstancesContract;
+import org.odk.collect.android.formentry.FormOpeningMode;
 import org.odk.collect.android.formlists.sorting.FormListSortingOption;
 import org.odk.collect.android.formmanagement.drafts.BulkFinalizationViewModel;
 import org.odk.collect.android.formmanagement.drafts.DraftsMenuProvider;
@@ -55,6 +53,7 @@ import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 import org.odk.collect.async.Scheduler;
+import org.odk.collect.db.sqlite.DatabaseConnection;
 import org.odk.collect.lists.EmptyListView;
 import org.odk.collect.material.MaterialProgressDialogFragment;
 import org.odk.collect.settings.SettingsProvider;
@@ -72,7 +71,7 @@ import javax.inject.Inject;
  * UI thread.
  */
 @Deprecated
-public class InstanceChooserList extends AppListActivity implements AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor>, CollectComposeThemeProvider {
+public class InstanceChooserList extends AppListActivity implements InstanceListCursorAdapter.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor>, CollectComposeThemeProvider {
     private static final String INSTANCE_LIST_ACTIVITY_SORTING_ORDER = "instanceListActivitySortingOrder";
     private static final String VIEW_SENT_FORM_SORTING_ORDER = "ViewSentFormSortingOrder";
 
@@ -180,7 +179,7 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
      * Stores the path of selected instance in the parent class and finishes.
      */
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    public void onItemClick(View view, int position) {
         if (MultiClickGuard.allowClick(getClass().getName())) {
             if (view.isEnabled()) {
                 Cursor c = (Cursor) listView.getAdapter().getItem(position);
@@ -220,8 +219,11 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
         int[] view = {R.id.form_title, R.id.form_subtitle2};
 
         boolean shouldCheckDisabled = !editMode;
-        listAdapter = new InstanceListCursorAdapter(
+
+        InstanceListCursorAdapter instanceListCursorAdapter = new InstanceListCursorAdapter(
                 this, R.layout.form_chooser_list_item, null, data, view, shouldCheckDisabled);
+        instanceListCursorAdapter.setOnItemClickListener(this);
+        listAdapter = instanceListCursorAdapter;
         listView.setAdapter(listAdapter);
     }
 
