@@ -156,13 +156,7 @@ class InstanceUploadViewModel(
             .sortedBy { it.finalizationDate }
 
     private fun uploadInstance(instance: Instance, deviceId: String): String {
-        val destinationUrl = instanceUploader.getUrlToSubmitTo(
-            instance,
-            deviceId,
-            completeDestinationUrl
-        )
-
-        val message = instanceUploader.uploadOneSubmission(instance, destinationUrl)
+        val message = instanceUploader.uploadOneSubmission(instance, deviceId, completeDestinationUrl)
             ?: defaultSuccessMessage
 
         return message
