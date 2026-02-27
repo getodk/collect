@@ -75,9 +75,10 @@ public class ServerInstanceUploader implements InstanceUploader {
      * Returns a custom success message if one is provided by the server.
      */
     @Override
-    public String uploadOneSubmission(Instance instance, String urlString) throws FormUploadException {
+    public String uploadOneSubmission(Instance instance, String deviceId, String overrideURL) throws FormUploadException {
         markSubmissionFailed(instance);
 
+        String urlString = getUrlToSubmitTo(instance, deviceId, overrideURL);
         Uri submissionUri = Uri.parse(urlString);
 
         long contentLength = 10000000L;
@@ -267,8 +268,7 @@ public class ServerInstanceUploader implements InstanceUploader {
      * URL configured at the app level.
      */
     @NonNull
-    @Override
-    public String getUrlToSubmitTo(Instance currentInstance, String deviceId, String overrideURL) {
+    private String getUrlToSubmitTo(Instance currentInstance, String deviceId, String overrideURL) {
         String urlString;
 
         if (overrideURL != null) {
