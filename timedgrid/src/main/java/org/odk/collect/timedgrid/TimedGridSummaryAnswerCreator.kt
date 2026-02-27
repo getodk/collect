@@ -17,7 +17,7 @@ class TimedGridSummaryAnswerCreator(
     private val formAnswerRefresher: FormAnswerRefresher
 ) {
     companion object {
-        val SUMMARY_QUESTION_APPEARANCE_REGEX = Regex("""timed-grid-answer\((.+),(.+)\)""")
+        val SUMMARY_QUESTION_APPEARANCE_REGEX = Regex("""x-timed-grid-answer\((.+),(.+)\)""")
     }
 
     fun answerSummaryQuestions(summary: TimedGridSummary) {

@@ -265,7 +265,7 @@ public class WidgetFactory {
                     questionWidget = new LabelWidget(activity, questionDetails, formEntryViewModel, dependencies);
                 } else if (appearance.contains(Appearances.IMAGE_MAP)) {
                     questionWidget = new SelectMultiImageMapWidget(activity, questionDetails, formEntryViewModel, dependencies);
-                } else if (appearance.startsWith(Appearances.TIMED_GRID)) {
+                } else if (appearance.startsWith(Appearances.X_TIMED_GRID)) {
                     questionWidget = new TimedGridWidget(activity, questionDetails, dependencies, formEntryViewModel);
                 } else {
                     questionWidget = new SelectMultiWidget(activity, questionDetails, formEntryViewModel, dependencies);
