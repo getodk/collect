@@ -35,6 +35,7 @@ class InstanceUploadViewModel(
     private val settingsProvider: SettingsProvider,
     private val instancesDataService: InstancesDataService,
     private val projectId: String,
+    private val referrer: String,
     val externalUsername: String?,
     val externalPassword: String?,
     private val defaultSuccessMessage: String,
@@ -44,7 +45,6 @@ class InstanceUploadViewModel(
         private set
 
     private var completeDestinationUrl: String? = null
-    private var referrer: String? = null
     private var deleteInstanceAfterSubmission: Boolean? = null
 
     private val _state = MutableLiveData<UploadState>(UploadState.Idle)
@@ -121,13 +121,8 @@ class InstanceUploadViewModel(
         this.deleteInstanceAfterSubmission = deleteInstanceAfterSubmission
     }
 
-    fun setCompleteDestinationUrl(
-        completeDestinationUrl: String,
-        referrer: String,
-        clearPreviousConfig: Boolean
-    ) {
+    fun setCompleteDestinationUrl(completeDestinationUrl: String, clearPreviousConfig: Boolean) {
         this.completeDestinationUrl = completeDestinationUrl
-        this.referrer = referrer
         if (clearPreviousConfig) {
             setTemporaryCredentials()
         }
