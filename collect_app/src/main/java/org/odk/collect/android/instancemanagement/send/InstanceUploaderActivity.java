@@ -152,7 +152,7 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
         String externalUsername = null;
         String externalPassword = null;
 
-        if (dataBundle != null && dataBundle.containsKey(ApplicationConstants.BundleKeys.URL)) {
+        if (dataBundle != null) {
             // TODO: I think this means redirection from a URL set through an extra is not supported
             url = dataBundle.getString(ApplicationConstants.BundleKeys.URL);
 
@@ -161,15 +161,9 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
                 url = url.substring(0, url.length() - 1);
             }
 
-            if (dataBundle.containsKey(ApplicationConstants.BundleKeys.USERNAME)
-                    && dataBundle.containsKey(ApplicationConstants.BundleKeys.PASSWORD)) {
-                externalUsername = dataBundle.getString(ApplicationConstants.BundleKeys.USERNAME);
-                externalPassword = dataBundle.getString(ApplicationConstants.BundleKeys.PASSWORD);
-            }
-
-            if (dataBundle.containsKey(ApplicationConstants.BundleKeys.DELETE_INSTANCE_AFTER_SUBMISSION)) {
-                deleteInstanceAfterUpload = dataBundle.getBoolean(ApplicationConstants.BundleKeys.DELETE_INSTANCE_AFTER_SUBMISSION);
-            }
+            externalUsername = dataBundle.getString(ApplicationConstants.BundleKeys.USERNAME);
+            externalPassword = dataBundle.getString(ApplicationConstants.BundleKeys.PASSWORD);
+            deleteInstanceAfterUpload = dataBundle.getBoolean(ApplicationConstants.BundleKeys.DELETE_INSTANCE_AFTER_SUBMISSION);
         }
 
         instancesToSend = ArrayUtils.toObject(selectedInstanceIDs);
