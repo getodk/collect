@@ -36,6 +36,7 @@ class InstanceUploadViewModel(
     private val instancesDataService: InstancesDataService,
     private val projectId: String,
     private val referrer: String,
+    private val externalDeleteAfterUpload: Boolean? = null,
     val externalUsername: String?,
     val externalPassword: String?,
     private val defaultSuccessMessage: String,
@@ -45,7 +46,6 @@ class InstanceUploadViewModel(
         private set
 
     private var completeDestinationUrl: String? = null
-    private var deleteInstanceAfterSubmission: Boolean? = null
 
     private val _state = MutableLiveData<UploadState>(UploadState.Idle)
     val state: LiveData<UploadState> = _state
@@ -117,10 +117,6 @@ class InstanceUploadViewModel(
         uploadJob?.cancel()
     }
 
-    fun setDeleteInstanceAfterSubmission(deleteInstanceAfterSubmission: Boolean) {
-        this.deleteInstanceAfterSubmission = deleteInstanceAfterSubmission
-    }
-
     fun setCompleteDestinationUrl(completeDestinationUrl: String, clearPreviousConfig: Boolean) {
         this.completeDestinationUrl = completeDestinationUrl
         if (clearPreviousConfig) {
@@ -169,7 +165,7 @@ class InstanceUploadViewModel(
     // specifies it.
     private fun deleteInstances(results: Map<String, String>) {
         val isFormAutoDeleteOptionEnabled =
-            deleteInstanceAfterSubmission
+            externalDeleteAfterUpload
                 ?: settingsProvider
                     .getUnprotectedSettings()
                     .getBoolean(ProjectKeys.KEY_DELETE_AFTER_SEND)

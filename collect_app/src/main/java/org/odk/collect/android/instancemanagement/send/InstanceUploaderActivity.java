@@ -78,9 +78,6 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
 
     // URL specified when authentication is requested or specified from intent extra as override
     private String url;
-
-    private Boolean deleteInstanceAfterUpload;
-
     private boolean isInstanceStateSaved;
 
     @Inject
@@ -151,6 +148,7 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
         // and whether instances should be deleted after submission by specifying intent extras.
         String externalUsername = null;
         String externalPassword = null;
+        Boolean externalDeleteAfterUpload = null;
 
         if (dataBundle != null) {
             // TODO: I think this means redirection from a URL set through an extra is not supported
@@ -163,7 +161,9 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
 
             externalUsername = dataBundle.getString(ApplicationConstants.BundleKeys.USERNAME);
             externalPassword = dataBundle.getString(ApplicationConstants.BundleKeys.PASSWORD);
-            deleteInstanceAfterUpload = dataBundle.getBoolean(ApplicationConstants.BundleKeys.DELETE_INSTANCE_AFTER_SUBMISSION);
+            if (dataBundle.containsKey(ApplicationConstants.BundleKeys.DELETE_INSTANCE_AFTER_SUBMISSION)) {
+                externalDeleteAfterUpload = dataBundle.getBoolean(ApplicationConstants.BundleKeys.DELETE_INSTANCE_AFTER_SUBMISSION);
+            }
         }
 
         instancesToSend = ArrayUtils.toObject(selectedInstanceIDs);
@@ -177,14 +177,11 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
 
         if (url != null) {
             instanceUploaderViewModel.setCompleteDestinationUrl(url + OpenRosaConstants.SUBMISSION, true);
-
-            if (deleteInstanceAfterUpload != null) {
-                instanceUploaderViewModel.setDeleteInstanceAfterSubmission(deleteInstanceAfterUpload);
-            }
         }
 
         String finalExternalUsername = externalUsername;
         String finalExternalPassword = externalPassword;
+        Boolean finalExternalDeleteAfterUpload = externalDeleteAfterUpload;
         instanceUploaderViewModel = new ViewModelProvider(
                 this,
                 new ViewModelProvider.Factory() {
@@ -205,6 +202,7 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
                                     instancesDataService,
                                     projectsDataService.requireCurrentProject().getUuid(),
                                     getReferrerUri(),
+                                    finalExternalDeleteAfterUpload,
                                     finalExternalUsername,
                                     finalExternalPassword,
                                     getString(org.odk.collect.strings.R.string.success),
