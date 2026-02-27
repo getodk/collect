@@ -395,14 +395,6 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
     @Override
     public void updatedCredentials() {
         showDialog(PROGRESS_DIALOG);
-
-        // In the case of credentials set via intent extras, the credentials are stored in the
-        // global WebCredentialsUtils but the task also needs to know what server to set to
-        // TODO: is this really needed here? When would the task not have gotten a server set in
-        // init already?
-        if (url != null) {
-            instanceUploaderViewModel.setCompleteDestinationUrl(url + OpenRosaConstants.SUBMISSION, getReferrerUri(), false);
-        }
         instanceUploaderViewModel.upload(Arrays.asList(instancesToSend));
     }
 
