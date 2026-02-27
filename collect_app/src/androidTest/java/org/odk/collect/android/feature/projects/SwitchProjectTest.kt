@@ -13,16 +13,20 @@ import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.ProjectSettingsPage
 import org.odk.collect.android.support.rules.CollectTestRule
+import org.odk.collect.android.support.rules.PageComposeRule
 import org.odk.collect.android.support.rules.TestRuleChain
 
 class SwitchProjectTest {
 
     val rule = CollectTestRule()
     val testDependencies = TestDependencies()
+    val pageComposeRule = PageComposeRule()
 
     @get:Rule
     var chain: RuleChain = TestRuleChain.chain(testDependencies)
         .around(GrantPermissionRule.grant(Manifest.permission.CAMERA))
+        .around(pageComposeRule.composeRule)
+        .around(pageComposeRule)
         .around(rule)
 
     @Test
