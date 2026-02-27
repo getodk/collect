@@ -69,12 +69,9 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
     private static final int AUTH_DIALOG = 2;
 
     private static final String AUTH_URI = "auth";
-    private static final String ALERT_MSG = "alertmsg";
     private static final String TO_SEND = "tosend";
 
     private ProgressDialog progressDialog;
-
-    private String alertMsg;
 
     // maintain a list of what we've yet to send, in case we're interrupted by auth requests
     private Long[] instancesToSend;
@@ -143,7 +140,8 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
                                     settingsProvider,
                                     instancesDataService,
                                     projectsDataService.requireCurrentProject().getUuid(),
-                                    getString(org.odk.collect.strings.R.string.success)
+                                    getString(org.odk.collect.strings.R.string.success),
+                                    getString(org.odk.collect.strings.R.string.please_wait)
                             );
                         }
                         throw new IllegalArgumentException("Unknown ViewModel class");
@@ -165,16 +163,10 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
     }
 
     private void init(Bundle savedInstanceState) {
-        alertMsg = getString(org.odk.collect.strings.R.string.please_wait);
-
         setTitle(getString(org.odk.collect.strings.R.string.send_data));
 
         // Get simple saved state
         if (savedInstanceState != null) {
-            if (savedInstanceState.containsKey(ALERT_MSG)) {
-                alertMsg = savedInstanceState.getString(ALERT_MSG);
-            }
-
             url = savedInstanceState.getString(AUTH_URI);
         }
 
@@ -266,7 +258,6 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
     protected void onSaveInstanceState(Bundle outState) {
         isInstanceStateSaved = true;
         super.onSaveInstanceState(outState);
-        outState.putString(ALERT_MSG, alertMsg);
         outState.putString(AUTH_URI, url);
         outState.putLongArray(TO_SEND, ArrayUtils.toPrimitive(instancesToSend));
 
@@ -300,8 +291,8 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
     }
 
     private void progressUpdate(int progress, int total) {
-        alertMsg = getString(org.odk.collect.strings.R.string.sending_items, String.valueOf(progress), String.valueOf(total));
-        progressDialog.setMessage(alertMsg);
+        instanceUploaderViewModel.setUploadingStatus(getString(org.odk.collect.strings.R.string.sending_items, String.valueOf(progress), String.valueOf(total)));
+        progressDialog.setMessage(instanceUploaderViewModel.getUploadingStatus());
     }
 
     @Override
@@ -319,7 +310,7 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
                             }
                         };
                 progressDialog.setTitle(getString(org.odk.collect.strings.R.string.uploading_data));
-                progressDialog.setMessage(alertMsg);
+                progressDialog.setMessage(instanceUploaderViewModel.getUploadingStatus());
                 progressDialog.setIndeterminate(true);
                 progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                 progressDialog.setCancelable(false);
