@@ -215,8 +215,6 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
         if (instancesToSend.length == 0) {
             Timber.e(new Error("onCreate: No instances to upload!"));
             // drop through -- everything will process through OK
-        } else {
-            Timber.i("onCreate: Beginning upload of %d instances!", instancesToSend.length);
         }
 
         showDialog(PROGRESS_DIALOG);
@@ -238,14 +236,6 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
         }
 
         instanceUploaderViewModel.upload(Arrays.asList(instancesToSend));
-    }
-
-    @Override
-    protected void onResume() {
-        if (instancesToSend != null) {
-            Timber.i("onResume: Resuming upload of %d instances!", instancesToSend.length);
-        }
-        super.onResume();
     }
 
     @Override
@@ -272,9 +262,6 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
     }
 
     private void uploadingComplete(Map<String, String> result) {
-        Timber.i("uploadingComplete: Processing results (%d) from upload of %d instances!",
-                result.size(), instancesToSend.length);
-
         try {
             dismissDialog(PROGRESS_DIALOG);
         } catch (Exception e) {
@@ -317,9 +304,6 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
                 progressDialog.setButton(getString(org.odk.collect.strings.R.string.cancel), loadingButtonListener);
                 return progressDialog;
             case AUTH_DIALOG:
-                Timber.i("onCreateDialog(AUTH_DIALOG): for upload of %d instances!",
-                        instancesToSend.length);
-
                 AuthDialogUtility authDialogUtility = new AuthDialogUtility();
                 if (username != null && password != null && url != null) {
                     authDialogUtility.setCustomUsername(username);
@@ -354,11 +338,7 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
 
             for (String uploadedInstance : uploadedInstances) {
                 Long removeMe = Long.valueOf(uploadedInstance);
-                boolean removed = workingSet.remove(removeMe);
-                if (removed) {
-                    Timber.i("%d was already attempted, removing from queue before restarting task",
-                            removeMe);
-                }
+                workingSet.remove(removeMe);
             }
         }
 
