@@ -135,6 +135,11 @@ abstract class Page<T : Page<T>> {
     }
 
     @JvmOverloads
+    fun assertText(stringID: Int, assertionFramework: AssertionFramework = AssertionFramework.ESPRESSO): T {
+        return assertText(getTranslatedString(stringID), assertionFramework)
+    }
+
+    @JvmOverloads
     fun assertText(text: String, assertionFramework: AssertionFramework = AssertionFramework.ESPRESSO): T {
         when (assertionFramework) {
             AssertionFramework.ESPRESSO -> EspressoAssertions.assertVisible(withText(text))
@@ -195,8 +200,9 @@ abstract class Page<T : Page<T>> {
         return this as T
     }
 
-    fun assertTextDoesNotExist(string: Int): T {
-        return assertTextDoesNotExist(getTranslatedString(string))
+    @JvmOverloads
+    fun assertTextDoesNotExist(string: Int, assertionFramework: AssertionFramework = AssertionFramework.ESPRESSO): T {
+        return assertTextDoesNotExist(getTranslatedString(string), assertionFramework)
     }
 
     @JvmOverloads

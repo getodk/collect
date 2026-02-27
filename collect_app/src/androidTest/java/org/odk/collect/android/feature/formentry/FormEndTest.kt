@@ -10,15 +10,22 @@ import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.ProjectSettingsPage
 import org.odk.collect.android.support.rules.CollectTestRule
+import org.odk.collect.android.support.rules.PageComposeRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
 import org.odk.collect.strings.R.string
+import org.odk.collect.testshared.AssertionFramework
 
 @RunWith(AndroidJUnit4::class)
 class FormEndTest {
+
     private val rule = CollectTestRule()
+    private val pageComposeRule = PageComposeRule()
 
     @get:Rule
-    val copyFormChain: RuleChain = chain().around(rule)
+    val copyFormChain: RuleChain = chain()
+        .around(pageComposeRule.composeRule)
+        .around(pageComposeRule)
+        .around(rule)
 
     @Test
     fun fillingForm_andPressingFinalize_finalizesForm() {
@@ -42,8 +49,8 @@ class FormEndTest {
             .assertNumberOfFinalizedForms(0)
 
             .clickDrafts(1)
-            .assertText(string.draft_no_errors)
-            .assertTextDoesNotExist(string.draft_errors)
+            .assertText(string.draft_no_errors, assertionFramework = AssertionFramework.COMPOSE)
+            .assertTextDoesNotExist(string.draft_errors, assertionFramework = AssertionFramework.COMPOSE)
     }
 
     @Test
@@ -58,8 +65,8 @@ class FormEndTest {
             .assertNumberOfFinalizedForms(0)
 
             .clickDrafts(1)
-            .assertText(string.draft_errors)
-            .assertTextDoesNotExist(string.draft_no_errors)
+            .assertText(string.draft_errors, assertionFramework = AssertionFramework.COMPOSE)
+            .assertTextDoesNotExist(string.draft_no_errors, assertionFramework = AssertionFramework.COMPOSE)
     }
 
     @Test
