@@ -2,7 +2,6 @@ package org.odk.collect.android.widgets
 
 import android.annotation.SuppressLint
 import android.content.Context
-import androidx.fragment.app.DialogFragment
 import org.javarosa.core.model.FormIndex
 import org.javarosa.core.model.IFormElement
 import org.javarosa.core.model.data.IAnswerData
@@ -14,7 +13,7 @@ import org.odk.collect.android.widgets.items.ItemsWidgetUtils
 import org.odk.collect.timedgrid.FormAnswerRefresher
 import org.odk.collect.timedgrid.FormControllerFacade
 import org.odk.collect.timedgrid.NavigationAwareWidget
-import org.odk.collect.timedgrid.OngoingAssessmentWarningDialogFragment
+import org.odk.collect.timedgrid.NavigationWarning
 import org.odk.collect.timedgrid.TimedGridWidgetDelegate
 
 @SuppressLint("ViewConstructor")
@@ -79,7 +78,5 @@ class TimedGridWidget(
         widgetDelegate.onDetachedFromWindow()
     }
 
-    override fun shouldBlockNavigation(): Boolean = widgetDelegate.shouldBlockNavigation()
-
-    override fun getWarningDialog(): Class<out DialogFragment> = OngoingAssessmentWarningDialogFragment::class.java
+    override fun shouldBlockNavigation(): NavigationWarning? = widgetDelegate.shouldBlockNavigation()
 }

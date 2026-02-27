@@ -179,6 +179,7 @@ import org.odk.collect.androidshared.system.PlayServicesChecker;
 import org.odk.collect.androidshared.system.ProcessRestoreDetector;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder;
+import org.odk.collect.androidshared.ui.DialogUtils;
 import org.odk.collect.androidshared.ui.SnackbarUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.async.Scheduler;
@@ -199,6 +200,7 @@ import org.odk.collect.qrcode.zxing.QRCodeCreatorImpl;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.strings.localization.LocalizedActivity;
+import org.odk.collect.timedgrid.NavigationWarning;
 
 import java.io.File;
 import java.util.HashMap;
@@ -388,8 +390,9 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
     private final OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
         @Override
         public void handleOnBackPressed() {
-            if (odkView != null && odkView.isNavigationBlocked()) {
-                DialogFragmentUtils.showIfNotShowing(odkView.getFirstNavigationBlockedWarningDialog().get(), getSupportFragmentManager());
+            NavigationWarning navigationWarning = odkView != null ? odkView.isNavigationBlocked() : null;
+            if (navigationWarning != null) {
+                DialogUtils.show(FormFillingActivity.this, navigationWarning.getTitleRes(), navigationWarning.getMessageRes());
             } else if (audioRecorder.isRecording() && !backgroundAudioViewModel.isBackgroundRecording()) {
                 // We want the user to stop recording before changing screens
                 DialogFragmentUtils.showIfNotShowing(RecordingWarningDialogFragment.class, getSupportFragmentManager());
@@ -500,8 +503,9 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
                     }
                 },
                 () -> {
-                    if (odkView != null && odkView.isNavigationBlocked()) {
-                        DialogFragmentUtils.showIfNotShowing(odkView.getFirstNavigationBlockedWarningDialog().get(), getSupportFragmentManager());
+                    NavigationWarning navigationWarning = odkView != null ? odkView.isNavigationBlocked() : null;
+                    if (navigationWarning != null) {
+                        DialogUtils.show(this, navigationWarning.getTitleRes(), navigationWarning.getMessageRes());
                         swipeHandler.setBeenSwiped(false);
                         return false;
                     }
@@ -1213,8 +1217,9 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
             return;
         }
 
-        if (odkView != null && odkView.isNavigationBlocked()) {
-            DialogFragmentUtils.showIfNotShowing(odkView.getFirstNavigationBlockedWarningDialog().get(), getSupportFragmentManager());
+        NavigationWarning navigationWarning = odkView != null ? odkView.isNavigationBlocked() : null;
+        if (navigationWarning != null) {
+            DialogUtils.show(this, navigationWarning.getTitleRes(), navigationWarning.getMessageRes());
             swipeHandler.setBeenSwiped(false);
             return;
         }

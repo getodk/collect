@@ -1,15 +1,16 @@
 package org.odk.collect.timedgrid
 
-import androidx.fragment.app.DialogFragment
+import androidx.annotation.StringRes
 
 interface NavigationAwareWidget {
-    /**
-     * Whenever the navigation should be stopped.
-     */
-    fun shouldBlockNavigation(): Boolean
 
     /**
-     * If navigation should be stopped (see #shouldBlockNavigation) this returns DialogFragment to present to user.
+     * Returns NavigationBlock if navigation should be blocked, or null if navigation is allowed.
      */
-    fun getWarningDialog(): Class<out DialogFragment>
+    fun shouldBlockNavigation(): NavigationWarning?
 }
+
+data class NavigationWarning(
+    @StringRes val titleRes: Int,
+    @StringRes val messageRes: Int
+)

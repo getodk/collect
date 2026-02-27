@@ -41,7 +41,6 @@ import androidx.activity.ComponentActivity;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
 
@@ -91,6 +90,7 @@ import org.odk.collect.permissions.PermissionListener;
 import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.timedgrid.NavigationAwareWidget;
+import org.odk.collect.timedgrid.NavigationWarning;
 
 import java.io.File;
 import java.io.Serializable;
@@ -99,7 +99,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -808,20 +808,14 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
         }
     }
 
-    public boolean isNavigationBlocked() {
-        return getFirstNavigationBlockingWidget().isPresent();
-    }
-
-    public Optional<Class<? extends DialogFragment>> getFirstNavigationBlockedWarningDialog() {
-        return getFirstNavigationBlockingWidget().map(NavigationAwareWidget::getWarningDialog);
-    }
-
-    private Optional<NavigationAwareWidget> getFirstNavigationBlockingWidget() {
-        return widgets
-                .stream()
+    @Nullable
+    public NavigationWarning isNavigationBlocked() {
+        return widgets.stream()
                 .filter(widget -> widget instanceof NavigationAwareWidget)
                 .map(widget -> (NavigationAwareWidget) widget)
-                .filter(NavigationAwareWidget::shouldBlockNavigation)
-                .findFirst();
+                .map(NavigationAwareWidget::shouldBlockNavigation)
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElse(null);
     }
 }

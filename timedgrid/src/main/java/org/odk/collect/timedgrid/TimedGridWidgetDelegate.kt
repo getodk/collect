@@ -274,8 +274,18 @@ class TimedGridWidgetDelegate(
         )
     }
 
-    fun shouldBlockNavigation(): Boolean =
-        state == TimedGridState.IN_PROGRESS ||
+    fun shouldBlockNavigation(): NavigationWarning? {
+        val shouldNavigationBeBlocked = state == TimedGridState.IN_PROGRESS ||
             state == TimedGridState.PAUSED ||
             state == TimedGridState.COMPLETED_NO_LAST_ITEM
+
+        return if (shouldNavigationBeBlocked) {
+            NavigationWarning(
+                titleRes = R.string.assessment,
+                messageRes = R.string.assessment_warning
+            )
+        } else {
+            null
+        }
+    }
 }
