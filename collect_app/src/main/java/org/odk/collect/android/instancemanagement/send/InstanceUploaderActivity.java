@@ -79,9 +79,6 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
     // URL specified when authentication is requested or specified from intent extra as override
     private String url;
 
-    // Set from intent extras
-    private String username;
-    private String password;
     private Boolean deleteInstanceAfterUpload;
 
     private boolean isInstanceStateSaved;
@@ -121,44 +118,6 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
         instancesRepository = instancesRepositoryProvider.create();
         formsRepository = formsRepositoryProvider.create();
 
-        instanceUploaderViewModel = new ViewModelProvider(
-                this,
-                new ViewModelProvider.Factory() {
-                    @NonNull
-                    @Override
-                    @SuppressWarnings("unchecked")
-                    public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                        if (modelClass.isAssignableFrom(InstanceUploadViewModel.class)) {
-                            return (T) new InstanceUploadViewModel(
-                                    Dispatchers.getIO(),
-                                    new ServerInstanceUploader(httpInterface, webCredentialsUtils, settingsProvider.getUnprotectedSettings(), instancesRepository),
-                                    new InstanceDeleter(instancesRepository, formsRepository),
-                                    webCredentialsUtils,
-                                    propertyManager,
-                                    instancesRepository,
-                                    formsRepository,
-                                    settingsProvider,
-                                    instancesDataService,
-                                    projectsDataService.requireCurrentProject().getUuid(),
-                                    getString(org.odk.collect.strings.R.string.success),
-                                    getString(org.odk.collect.strings.R.string.please_wait)
-                            );
-                        }
-                        throw new IllegalArgumentException("Unknown ViewModel class");
-                    }
-                }
-        ).get(InstanceUploadViewModel.class);
-
-        instanceUploaderViewModel.getState().observe(this, state -> {
-            if (state instanceof UploadState.AuthRequired) {
-                authRequest(((UploadState.AuthRequired) state).getServer(), ((UploadState.AuthRequired) state).getResults());
-            } else if (state instanceof UploadState.Progress) {
-                progressUpdate(((UploadState.Progress) state).getCurrent(), ((UploadState.Progress) state).getTotal());
-            } else if (state instanceof UploadState.Completed) {
-                uploadingComplete(((UploadState.Completed) state).getResults());
-            }
-        });
-
         init(savedInstanceState);
     }
 
@@ -190,6 +149,9 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
 
         // An external application can temporarily override destination URL, username, password
         // and whether instances should be deleted after submission by specifying intent extras.
+        String externalUsername = null;
+        String externalPassword = null;
+
         if (dataBundle != null && dataBundle.containsKey(ApplicationConstants.BundleKeys.URL)) {
             // TODO: I think this means redirection from a URL set through an extra is not supported
             url = dataBundle.getString(ApplicationConstants.BundleKeys.URL);
@@ -201,8 +163,8 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
 
             if (dataBundle.containsKey(ApplicationConstants.BundleKeys.USERNAME)
                     && dataBundle.containsKey(ApplicationConstants.BundleKeys.PASSWORD)) {
-                username = dataBundle.getString(ApplicationConstants.BundleKeys.USERNAME);
-                password = dataBundle.getString(ApplicationConstants.BundleKeys.PASSWORD);
+                externalUsername = dataBundle.getString(ApplicationConstants.BundleKeys.USERNAME);
+                externalPassword = dataBundle.getString(ApplicationConstants.BundleKeys.PASSWORD);
             }
 
             if (dataBundle.containsKey(ApplicationConstants.BundleKeys.DELETE_INSTANCE_AFTER_SUBMISSION)) {
@@ -225,15 +187,49 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
             if (deleteInstanceAfterUpload != null) {
                 instanceUploaderViewModel.setDeleteInstanceAfterSubmission(deleteInstanceAfterUpload);
             }
-
-            String host = Uri.parse(url).getHost();
-            if (host != null) {
-                // We do not need to clear the cookies since they are cleared before any request is made and the Credentials provider is used
-                if (password != null && username != null) {
-                    instanceUploaderViewModel.setCustomCredentials(username, password);
-                }
-            }
         }
+
+        String finalExternalUsername = externalUsername;
+        String finalExternalPassword = externalPassword;
+        instanceUploaderViewModel = new ViewModelProvider(
+                this,
+                new ViewModelProvider.Factory() {
+                    @NonNull
+                    @Override
+                    @SuppressWarnings("unchecked")
+                    public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                        if (modelClass.isAssignableFrom(InstanceUploadViewModel.class)) {
+                            return (T) new InstanceUploadViewModel(
+                                    Dispatchers.getIO(),
+                                    new ServerInstanceUploader(httpInterface, webCredentialsUtils, settingsProvider.getUnprotectedSettings(), instancesRepository),
+                                    new InstanceDeleter(instancesRepository, formsRepository),
+                                    webCredentialsUtils,
+                                    propertyManager,
+                                    instancesRepository,
+                                    formsRepository,
+                                    settingsProvider,
+                                    instancesDataService,
+                                    projectsDataService.requireCurrentProject().getUuid(),
+                                    finalExternalUsername,
+                                    finalExternalPassword,
+                                    getString(org.odk.collect.strings.R.string.success),
+                                    getString(org.odk.collect.strings.R.string.please_wait)
+                            );
+                        }
+                        throw new IllegalArgumentException("Unknown ViewModel class");
+                    }
+                }
+        ).get(InstanceUploadViewModel.class);
+
+        instanceUploaderViewModel.getState().observe(this, state -> {
+            if (state instanceof UploadState.AuthRequired) {
+                authRequest(((UploadState.AuthRequired) state).getServer(), ((UploadState.AuthRequired) state).getResults());
+            } else if (state instanceof UploadState.Progress) {
+                progressUpdate(((UploadState.Progress) state).getCurrent(), ((UploadState.Progress) state).getTotal());
+            } else if (state instanceof UploadState.Completed) {
+                uploadingComplete(((UploadState.Completed) state).getResults());
+            }
+        });
 
         instanceUploaderViewModel.upload(Arrays.asList(instancesToSend));
     }
@@ -253,11 +249,6 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
 
         if (url != null) {
             outState.putString(ApplicationConstants.BundleKeys.URL, url);
-
-            if (username != null && password != null) {
-                outState.putString(ApplicationConstants.BundleKeys.USERNAME, username);
-                outState.putString(ApplicationConstants.BundleKeys.PASSWORD, password);
-            }
         }
     }
 
@@ -305,11 +296,10 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
                 return progressDialog;
             case AUTH_DIALOG:
                 AuthDialogUtility authDialogUtility = new AuthDialogUtility();
-                if (username != null && password != null && url != null) {
-                    authDialogUtility.setCustomUsername(username);
-                    authDialogUtility.setCustomPassword(password);
+                if (instanceUploaderViewModel.getExternalUsername() != null && instanceUploaderViewModel.getExternalPassword() != null) {
+                    authDialogUtility.setCustomUsername(instanceUploaderViewModel.getExternalUsername());
+                    authDialogUtility.setCustomPassword(instanceUploaderViewModel.getExternalPassword());
                 }
-
                 return authDialogUtility.createDialog(this, this, this.url);
         }
 
