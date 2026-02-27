@@ -66,8 +66,9 @@ class InstanceUploadViewModelTest {
         val instanceUploader = object : InstanceUploader {
             override fun uploadOneSubmission(
                 instance: Instance,
-                urlString: String
-            ): String? {
+                deviceId: String?,
+                overrideURL: String?
+            ): String {
                 submittedInstances.add(instance.dbId)
                 instancesRepository.save(
                     Instance.Builder(instance)
@@ -76,14 +77,6 @@ class InstanceUploadViewModelTest {
                 )
                 viewModel.cancel()
                 return "Success"
-            }
-
-            override fun getUrlToSubmitTo(
-                instance: Instance,
-                deviceId: String?,
-                overrideURL: String?
-            ): String {
-                return ""
             }
         }
 
