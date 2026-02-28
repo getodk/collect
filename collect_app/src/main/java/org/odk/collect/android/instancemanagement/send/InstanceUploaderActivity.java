@@ -173,8 +173,6 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
             // drop through -- everything will process through OK
         }
 
-        showDialog(PROGRESS_DIALOG);
-
         if (url != null) {
             instanceUploaderViewModel.setCompleteDestinationUrl(url + OpenRosaConstants.SUBMISSION, true);
         }
@@ -224,6 +222,7 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
             }
         });
 
+        showDialog(PROGRESS_DIALOG);
         instanceUploaderViewModel.upload(Arrays.asList(instancesToSend));
     }
 
