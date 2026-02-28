@@ -36,16 +36,15 @@ class InstanceUploadViewModel(
     private val instancesDataService: InstancesDataService,
     private val projectId: String,
     private val referrer: String,
-    private val externalDeleteAfterUpload: Boolean? = null,
+    val externalUrl: String?,
     val externalUsername: String?,
     val externalPassword: String?,
+    private val externalDeleteAfterUpload: Boolean? = null,
     private val defaultSuccessMessage: String,
     initUploadingStatus: String
 ) : ViewModel() {
     var uploadingStatus: String = initUploadingStatus
         private set
-
-    private var completeDestinationUrl: String? = null
 
     private val _state = MutableLiveData<UploadState>(UploadState.Idle)
     val state: LiveData<UploadState> = _state
@@ -72,7 +71,7 @@ class InstanceUploadViewModel(
                     ensureActive()
                     _state.postValue(UploadState.Progress(index + 1, instancesToUpload.size))
 
-                    if (completeDestinationUrl != null) {
+                    if (externalUrl != null) {
                         Analytics.log(
                             AnalyticsEvents.INSTANCE_UPLOAD_CUSTOM_SERVER,
                             "label",
@@ -117,34 +116,24 @@ class InstanceUploadViewModel(
         uploadJob?.cancel()
     }
 
-    fun setCompleteDestinationUrl(completeDestinationUrl: String, clearPreviousConfig: Boolean) {
-        this.completeDestinationUrl = completeDestinationUrl
-        if (clearPreviousConfig) {
-            setTemporaryCredentials()
-        }
-    }
-
     fun setUploadingStatus(uploadingStatus: String) {
         this.uploadingStatus = uploadingStatus
     }
 
 
     private fun setTemporaryCredentials() {
-        if (externalUsername != null && externalPassword != null) {
+        if (externalUrl != null && externalUsername != null && externalPassword != null) {
             webCredentialsUtils.saveCredentials(
-                completeDestinationUrl!!,
+                externalUrl,
                 externalUsername,
                 externalPassword
             )
-        } else {
-            // In the case for anonymous logins, clear the previous credentials for that host
-            webCredentialsUtils.clearCredentials(completeDestinationUrl!!)
         }
     }
 
     private fun clearTemporaryCredentials() {
-        if (externalUsername != null && externalPassword != null) {
-            webCredentialsUtils.clearCredentials(completeDestinationUrl!!)
+        if (externalUrl != null) {
+            webCredentialsUtils.clearCredentials(externalUrl)
         }
     }
 
@@ -154,7 +143,7 @@ class InstanceUploadViewModel(
             .sortedBy { it.finalizationDate }
 
     private fun uploadInstance(instance: Instance, deviceId: String): String {
-        val message = instanceUploader.uploadOneSubmission(instance, deviceId, completeDestinationUrl)
+        val message = instanceUploader.uploadOneSubmission(instance, deviceId, externalUrl)
             ?: defaultSuccessMessage
 
         return message
