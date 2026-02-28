@@ -67,17 +67,12 @@ import timber.log.Timber;
 public class InstanceUploaderActivity extends LocalizedActivity implements AuthDialogUtility.AuthDialogUtilityResultListener {
     private static final int PROGRESS_DIALOG = 1;
     private static final int AUTH_DIALOG = 2;
-
-    private static final String AUTH_URI = "auth";
     private static final String TO_SEND = "tosend";
 
     private ProgressDialog progressDialog;
 
     // maintain a list of what we've yet to send, in case we're interrupted by auth requests
     private Long[] instancesToSend;
-
-    // URL specified when authentication is requested or specified from intent extra as override
-    private String url;
     private boolean isInstanceStateSaved;
 
     @Inject
@@ -120,12 +115,6 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
 
     private void init(Bundle savedInstanceState) {
         setTitle(getString(org.odk.collect.strings.R.string.send_data));
-
-        // Get simple saved state
-        if (savedInstanceState != null) {
-            url = savedInstanceState.getString(AUTH_URI);
-        }
-
         Bundle dataBundle;
 
         // If we are resuming, use the TO_SEND list of not-yet-sent submissions
@@ -146,19 +135,23 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
 
         // An external application can temporarily override destination URL, username, password
         // and whether instances should be deleted after submission by specifying intent extras.
+        String externalUrl = null;
         String externalUsername = null;
         String externalPassword = null;
         Boolean externalDeleteAfterUpload = null;
 
         if (dataBundle != null) {
             // TODO: I think this means redirection from a URL set through an extra is not supported
-            url = dataBundle.getString(ApplicationConstants.BundleKeys.URL);
+            externalUrl = dataBundle.getString(ApplicationConstants.BundleKeys.URL);
 
             // Remove trailing slashes (only necessary for the intent case but doesn't hurt on resume)
-            while (url != null && url.endsWith("/")) {
-                url = url.substring(0, url.length() - 1);
+            while (externalUrl != null && externalUrl.endsWith("/")) {
+                externalUrl = externalUrl.substring(0, externalUrl.length() - 1);
             }
 
+            if (externalUrl != null) {
+                externalUrl = externalUrl + OpenRosaConstants.SUBMISSION;
+            }
             externalUsername = dataBundle.getString(ApplicationConstants.BundleKeys.USERNAME);
             externalPassword = dataBundle.getString(ApplicationConstants.BundleKeys.PASSWORD);
             if (dataBundle.containsKey(ApplicationConstants.BundleKeys.DELETE_INSTANCE_AFTER_SUBMISSION)) {
@@ -173,10 +166,7 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
             // drop through -- everything will process through OK
         }
 
-        if (url != null) {
-            instanceUploaderViewModel.setCompleteDestinationUrl(url + OpenRosaConstants.SUBMISSION, true);
-        }
-
+        String finalExternalUrl = externalUrl;
         String finalExternalUsername = externalUsername;
         String finalExternalPassword = externalPassword;
         Boolean finalExternalDeleteAfterUpload = externalDeleteAfterUpload;
@@ -200,9 +190,10 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
                                     instancesDataService,
                                     projectsDataService.requireCurrentProject().getUuid(),
                                     getReferrerUri(),
-                                    finalExternalDeleteAfterUpload,
+                                    finalExternalUrl,
                                     finalExternalUsername,
                                     finalExternalPassword,
+                                    finalExternalDeleteAfterUpload,
                                     getString(org.odk.collect.strings.R.string.success),
                                     getString(org.odk.collect.strings.R.string.please_wait)
                             );
@@ -214,7 +205,7 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
 
         instanceUploaderViewModel.getState().observe(this, state -> {
             if (state instanceof UploadState.AuthRequired) {
-                authRequest(((UploadState.AuthRequired) state).getServer(), ((UploadState.AuthRequired) state).getResults());
+                authRequest(((UploadState.AuthRequired) state).getResults());
             } else if (state instanceof UploadState.Progress) {
                 progressUpdate(((UploadState.Progress) state).getCurrent(), ((UploadState.Progress) state).getTotal());
             } else if (state instanceof UploadState.Completed) {
@@ -236,12 +227,7 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
     protected void onSaveInstanceState(Bundle outState) {
         isInstanceStateSaved = true;
         super.onSaveInstanceState(outState);
-        outState.putString(AUTH_URI, url);
         outState.putLongArray(TO_SEND, ArrayUtils.toPrimitive(instancesToSend));
-
-        if (url != null) {
-            outState.putString(ApplicationConstants.BundleKeys.URL, url);
-        }
     }
 
     private void uploadingComplete(Map<String, String> result) {
@@ -292,7 +278,7 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
                     authDialogUtility.setCustomUsername(instanceUploaderViewModel.getExternalUsername());
                     authDialogUtility.setCustomPassword(instanceUploaderViewModel.getExternalPassword());
                 }
-                return authDialogUtility.createDialog(this, this, this.url);
+                return authDialogUtility.createDialog(this, this, instanceUploaderViewModel.getExternalUrl());
         }
 
         return null;
@@ -306,7 +292,7 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
      * of the latest submission attempt. The database provides generic status which could have come
      * from an unrelated submission attempt.
      */
-    private void authRequest(Uri url, Map<String, String> messagesByInstanceIdAttempted) {
+    private void authRequest(Map<String, String> messagesByInstanceIdAttempted) {
         if (progressDialog.isShowing()) {
             // should always be showing here
             progressDialog.dismiss();
@@ -330,8 +316,6 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
             updatedToSend[i] = workingSet.get(i);
         }
         instancesToSend = updatedToSend;
-
-        this.url = url.toString();
 
         /** Once credentials are provided in the dialog, {@link #updatedCredentials()} is called */
         showDialog(AUTH_DIALOG);
