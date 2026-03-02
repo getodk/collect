@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import org.javarosa.core.model.SelectChoice
 import org.javarosa.core.model.data.IAnswerData
 import org.javarosa.core.model.data.MultipleItemsData
 import org.javarosa.core.model.data.helper.Selection
@@ -19,12 +18,12 @@ import kotlin.time.Duration.Companion.milliseconds
 class TimedGridWidgetDelegate(
     private val context: Context,
     private val formEntryPrompt: FormEntryPrompt,
-    private val items: List<SelectChoice>,
     formControllerFacade: FormControllerFacade,
     formAnswerRefresher: FormAnswerRefresher,
     private val widgetValueChanged: () -> Unit
 ) {
     private val viewModel = ViewModelProvider(context as ViewModelStoreOwner)[TimedGridViewModel::class.java]
+    private val items = formControllerFacade.getItems()
     private val timer = PausableCountDownTimer()
 
     // Parsed prompt configuration (type, duration, etc.).
