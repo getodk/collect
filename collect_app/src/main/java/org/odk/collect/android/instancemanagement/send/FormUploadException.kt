@@ -11,7 +11,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.odk.collect.android.upload
+package org.odk.collect.android.instancemanagement.send
 
 import android.net.Uri
 import java.lang.Exception
@@ -41,7 +41,7 @@ open class FormUploadException : Exception {
  *
  * @param authRequestingServer The URI for the server that requested authentication. This URI may
  * not match the server specified in the app settings or the blank form because there could have
- * been a redirect. See also [org.odk.collect.android.tasks.InstanceUploaderTask.Outcome]
+ * been a redirect.
  */
 class FormUploadAuthRequestedException(
     message: String,

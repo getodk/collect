@@ -3,9 +3,8 @@ package org.odk.collect.android.instancemanagement
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.application.Collect
-import org.odk.collect.android.upload.FormUploadException
-import org.odk.collect.android.upload.InstanceServerUploader
-import org.odk.collect.android.upload.InstanceUploader
+import org.odk.collect.android.instancemanagement.send.FormUploadException
+import org.odk.collect.android.instancemanagement.send.ServerInstanceUploader
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstanceAutoDeleteChecker
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
@@ -36,12 +35,11 @@ class InstanceSubmitter(
 
         for (instance in toUpload.sortedBy { it.finalizationDate }) {
             try {
-                val destinationUrl = uploader.getUrlToSubmitTo(instance, deviceId, null, null)
-                uploader.uploadOneSubmission(instance, destinationUrl)
+                uploader.uploadOneSubmission(instance, deviceId, null)
                 result[instance] = null
 
                 deleteInstance(instance)
-                logUploadedForm(instance)
+                logUploadedForm(formsRepository, instance)
             } catch (e: FormUploadException) {
                 Timber.d(e)
                 result[instance] = e
@@ -50,8 +48,8 @@ class InstanceSubmitter(
         return result
     }
 
-    private fun setUpODKUploader(): InstanceUploader {
-        return InstanceServerUploader(
+    private fun setUpODKUploader(): ServerInstanceUploader {
+        return ServerInstanceUploader(
             httpInterface,
             WebCredentialsUtils(generalSettings),
             generalSettings,
@@ -73,8 +71,8 @@ class InstanceSubmitter(
         }
     }
 
-    private fun logUploadedForm(instance: Instance) {
-        val value = Collect.getFormIdentifierHash(instance.formId, instance.formVersion)
+    private fun logUploadedForm(formsRepository: FormsRepository, instance: Instance) {
+        val value = Collect.getFormIdentifierHash(formsRepository, instance.formId, instance.formVersion)
 
         Analytics.log(AnalyticsEvents.SUBMISSION, "HTTP auto", value)
     }

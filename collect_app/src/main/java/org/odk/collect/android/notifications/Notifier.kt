@@ -2,7 +2,7 @@ package org.odk.collect.android.notifications
 
 import org.odk.collect.android.formmanagement.ServerFormDetails
 import org.odk.collect.android.formmanagement.download.FormDownloadException
-import org.odk.collect.android.upload.FormUploadException
+import org.odk.collect.android.instancemanagement.send.FormUploadException
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.forms.instances.Instance
 

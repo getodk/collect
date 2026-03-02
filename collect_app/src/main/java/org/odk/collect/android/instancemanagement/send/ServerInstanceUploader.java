@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.upload;
+package org.odk.collect.android.instancemanagement.send;
 
 import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
 
@@ -47,21 +47,25 @@ import javax.net.ssl.HttpsURLConnection;
 
 import timber.log.Timber;
 
-public class InstanceServerUploader extends InstanceUploader {
+public class ServerInstanceUploader implements InstanceUploader {
     private static final String URL_PATH_SEP = "/";
+    public static final String FAIL = "Error: ";
 
     private final OpenRosaHttpInterface httpInterface;
     private final WebCredentialsUtils webCredentialsUtils;
     private final Settings generalSettings;
+    private final InstancesRepository instancesRepository;
     private final Map<Uri, Uri> uriRemap = new HashMap<>();
 
-    public InstanceServerUploader(OpenRosaHttpInterface httpInterface,
+    public ServerInstanceUploader(OpenRosaHttpInterface httpInterface,
                                   WebCredentialsUtils webCredentialsUtils,
-                                  Settings generalSettings, InstancesRepository instancesRepository) {
-        super(instancesRepository);
+                                  Settings generalSettings,
+                                  InstancesRepository instancesRepository
+    ) {
         this.httpInterface = httpInterface;
         this.webCredentialsUtils = webCredentialsUtils;
         this.generalSettings = generalSettings;
+        this.instancesRepository = instancesRepository;
     }
 
     /**
@@ -71,9 +75,10 @@ public class InstanceServerUploader extends InstanceUploader {
      * Returns a custom success message if one is provided by the server.
      */
     @Override
-    public String uploadOneSubmission(Instance instance, String urlString) throws FormUploadException {
+    public String uploadOneSubmission(Instance instance, String deviceId, String overrideURL) throws FormUploadException {
         markSubmissionFailed(instance);
 
+        String urlString = getUrlToSubmitTo(instance, deviceId, overrideURL);
         Uri submissionUri = Uri.parse(urlString);
 
         long contentLength = 10000000L;
@@ -262,9 +267,8 @@ public class InstanceServerUploader extends InstanceUploader {
      * (https://getodk.github.io/xforms-spec/#submission-attributes). Finally, default to the
      * URL configured at the app level.
      */
-    @Override
     @NonNull
-    public String getUrlToSubmitTo(Instance currentInstance, String deviceId, String overrideURL, String urlFromSettings) {
+    private String getUrlToSubmitTo(Instance currentInstance, String deviceId, String overrideURL) {
         String urlString;
 
         if (overrideURL != null) {
@@ -293,5 +297,21 @@ public class InstanceServerUploader extends InstanceUploader {
         }
 
         return serverBase + OpenRosaConstants.SUBMISSION;
+    }
+
+    private void markSubmissionFailed(Instance instance) {
+        instancesRepository
+                .save(new Instance.Builder(instance)
+                        .status(Instance.STATUS_SUBMISSION_FAILED)
+                        .build()
+                );
+    }
+
+    private void markSubmissionComplete(Instance instance) {
+        instancesRepository
+                .save(new Instance.Builder(instance)
+                        .status(Instance.STATUS_SUBMITTED)
+                        .build()
+                );
     }
 }

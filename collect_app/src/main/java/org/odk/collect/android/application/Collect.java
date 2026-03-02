@@ -35,7 +35,6 @@ import org.odk.collect.android.injection.config.CollectProjectsDependencyModule;
 import org.odk.collect.android.injection.config.CollectSelfieCameraDependencyModule;
 import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
 import org.odk.collect.android.utilities.CollectStrictMode;
-import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.androidshared.data.AppState;
 import org.odk.collect.androidshared.data.StateStore;
@@ -57,6 +56,7 @@ import org.odk.collect.entities.EntitiesDependencyComponentProvider;
 import org.odk.collect.entities.EntitiesDependencyModule;
 import org.odk.collect.entities.storage.EntitiesRepository;
 import org.odk.collect.forms.Form;
+import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.geo.DaggerGeoDependencyComponent;
 import org.odk.collect.geo.GeoDependencyComponent;
 import org.odk.collect.geo.GeoDependencyComponentProvider;
@@ -232,8 +232,8 @@ public class Collect extends Application implements
      * @param formVersion version of a form
      * @return md5 hash of the form title, a space, the form ID
      */
-    public static String getFormIdentifierHash(String formId, String formVersion) {
-        Form form = new FormsRepositoryProvider(Collect.getInstance()).create().getLatestByFormIdAndVersion(formId, formVersion);
+    public static String getFormIdentifierHash(FormsRepository formsRepository, String formId, String formVersion) {
+        Form form = formsRepository.getLatestByFormIdAndVersion(formId, formVersion);
 
         String formTitle = form != null ? form.getDisplayName() : "";
 
