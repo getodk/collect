@@ -4,6 +4,7 @@ import org.javarosa.core.model.FormIndex
 import org.javarosa.core.model.GroupDef
 import org.javarosa.core.model.IFormElement
 import org.javarosa.core.model.QuestionDef
+import org.javarosa.core.model.SelectChoice
 import org.javarosa.core.model.data.BooleanData
 import org.javarosa.core.model.data.IAnswerData
 import org.javarosa.core.model.data.IntegerData
@@ -73,6 +74,7 @@ class TimedGridSummaryAnswerCreator(
 
 interface FormControllerFacade {
     fun getFormElements(): List<IFormElement>?
+    fun getItems(): List<SelectChoice>
     fun saveAnswer(index: FormIndex, answer: IAnswerData)
 }
 

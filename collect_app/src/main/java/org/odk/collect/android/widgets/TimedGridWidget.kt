@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import org.javarosa.core.model.FormIndex
 import org.javarosa.core.model.IFormElement
+import org.javarosa.core.model.SelectChoice
 import org.javarosa.core.model.data.IAnswerData
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.activities.FormFillingActivity
@@ -23,17 +24,18 @@ class TimedGridWidget(
     dependencies: Dependencies,
     formEntryViewModel: FormEntryViewModel
 ) : QuestionWidget(context, dependencies, questionDetails), NavigationAwareWidget {
-    private val items = ItemsWidgetUtils.loadItemsAndHandleErrors(
-        this, questionDetails.prompt, formEntryViewModel
-    )
-
     private val widgetDelegate = TimedGridWidgetDelegate(
         context,
         questionDetails.prompt,
-        items,
         object : FormControllerFacade {
             override fun getFormElements(): List<IFormElement>? {
                 return formEntryViewModel.formController.getFormDef()?.children
+            }
+
+            override fun getItems(): List<SelectChoice> {
+                return ItemsWidgetUtils.loadItemsAndHandleErrors(
+                    this@TimedGridWidget, questionDetails.prompt, formEntryViewModel
+                )
             }
 
             override fun saveAnswer(index: FormIndex, answer: IAnswerData) {
