@@ -9,6 +9,7 @@ import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import org.odk.collect.android.instancemanagement.InstanceDeleter
 import org.odk.collect.android.instancemanagement.InstancesDataService
 import org.odk.collect.android.utilities.WebCredentialsUtils
@@ -18,6 +19,8 @@ import org.odk.collect.formstest.InMemFormsRepository
 import org.odk.collect.formstest.InMemInstancesRepository
 import org.odk.collect.metadata.PropertyManager
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.keys.ProjectKeys
+import org.odk.collect.shared.settings.InMemSettings
 
 @RunWith(AndroidJUnit4::class)
 class InstanceUploadViewModelTest {
@@ -83,7 +86,11 @@ class InstanceUploadViewModelTest {
         val instanceDeleter = mock<InstanceDeleter>()
         val webCredentialsUtils = mock<WebCredentialsUtils>()
         val propertyManager = mock<PropertyManager>()
-        val settingsProvider = mock<SettingsProvider>()
+        val settingsProvider = mock<SettingsProvider>().apply {
+            val unprotectedSetting = InMemSettings()
+            unprotectedSetting.save(ProjectKeys.KEY_DELETE_AFTER_SEND, true)
+            whenever(getUnprotectedSettings()).thenReturn(unprotectedSetting)
+        }
         val instancesDataService = mock<InstancesDataService>()
 
         val dispatcher = StandardTestDispatcher()
@@ -98,9 +105,14 @@ class InstanceUploadViewModelTest {
             settingsProvider,
             instancesDataService,
             "projectId",
-            "Success"
+            "",
+            null,
+            null,
+            null,
+            null,
+            "Success",
+            "Waiting"
         )
-        viewModel.setDeleteInstanceAfterSubmission(true)
         viewModel.upload(listOf(instance1.dbId, instance2.dbId, instance3.dbId))
         dispatcher.scheduler.advanceUntilIdle()
 
