@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/timed_grid_root_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_start"
+        style="@style/TimedGridStateButton"
+        android:text="@string/timed_grid_start"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_timer"
+        style="@style/TimedGridStateButton.Red"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_finish"
+        style="@style/TimedGridStateButton"
+        android:text="@string/timed_grid_test_complete"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/top_toolbar_barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="button_start,button_timer,button_finish" />
+
+    <LinearLayout
+        android:id="@+id/container_rows"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_extra_small"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/top_toolbar_barrier" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_prev"
+        style="@style/TimedGridStateButton"
+        android:layout_marginTop="@dimen/margin_extra_small"
+        android:text="@string/timed_grid_prev_page"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/container_rows" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_next"
+        style="@style/TimedGridStateButton"
+        android:layout_marginTop="@dimen/margin_extra_small"
+        android:text="@string/timed_grid_next_page"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/container_rows" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_complete"
+        style="@style/TimedGridStateButton.Red"
+        android:layout_marginTop="@dimen/margin_extra_small"
+        android:text="@string/timed_grid_early_finish"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/container_rows" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
