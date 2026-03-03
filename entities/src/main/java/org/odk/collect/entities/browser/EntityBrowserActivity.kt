@@ -2,10 +2,12 @@ package org.odk.collect.entities.browser
 
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
+import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import org.odk.collect.androidshared.ui.ComposeThemeProvider
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.async.Scheduler
 import org.odk.collect.entities.EntitiesDependencyComponentProvider
@@ -14,13 +16,16 @@ import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.strings.localization.LocalizedActivity
 import javax.inject.Inject
 
-class EntityBrowserActivity : LocalizedActivity() {
+class EntityBrowserActivity : LocalizedActivity(), ComposeThemeProvider {
 
     @Inject
     lateinit var scheduler: Scheduler
 
     @Inject
     lateinit var entitiesRepository: EntitiesRepository
+
+    @Inject
+    lateinit var composeThemeProvider: ComposeThemeProvider
 
     val viewModelFactory = viewModelFactory {
         addInitializer(EntitiesViewModel::class) {
@@ -49,4 +54,9 @@ class EntityBrowserActivity : LocalizedActivity() {
     }
 
     private fun getToolbar() = findViewById<Toolbar>(org.odk.collect.androidshared.R.id.toolbar)
+
+    @Composable
+    override fun Theme(content: @Composable (() -> Unit)) {
+        composeThemeProvider.Theme { content() }
+    }
 }
