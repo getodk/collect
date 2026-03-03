@@ -108,7 +108,7 @@ class TaskSpecRunnerService : Service() {
         const val EXTRA_NOTIFICATION_ID = "notificationId"
         const val EXTRA_NOTIFICATION_CHANNEL = "notificationChannel"
         const val EXTRA_NOTIFICATION_CHANNEL_NAME = "notificationChannelName"
-        const val EXTRA_NOTIFICATION_TITLE = "notificationChannelTitle"
+        const val EXTRA_NOTIFICATION_TITLE = "notificationTitle"
         const val EXTRA_SPEC_CLASS = "specClass"
         const val EXTRA_INPUT_DATA = "inputData"
     }
