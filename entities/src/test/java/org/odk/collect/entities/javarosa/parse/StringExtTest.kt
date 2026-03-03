@@ -36,4 +36,11 @@ class StringExtTest {
         val v4UUID = UUID.randomUUID().toString()
         assertThat(v4UUID.isV4UUID(), equalTo(true))
     }
+
+    @Test
+    fun `#isV4UUID is false for invalid UUID string`() {
+        val invalid = "not-a-uuid"
+        assertThat(invalid.isV4UUID(), equalTo(false))
+    }
+
 }
