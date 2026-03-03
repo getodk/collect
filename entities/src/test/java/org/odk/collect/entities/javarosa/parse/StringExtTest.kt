@@ -3,7 +3,6 @@ package org.odk.collect.entities.javarosa.parse
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
-import org.odk.collect.entities.javarosa.parse.StringExt.isV4UUID
 import java.util.UUID
 
 class StringExtTest {

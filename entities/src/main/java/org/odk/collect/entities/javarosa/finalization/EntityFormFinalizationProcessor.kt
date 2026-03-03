@@ -6,7 +6,7 @@ import org.javarosa.form.api.FormEntryFinalizationProcessor
 import org.javarosa.form.api.FormEntryModel
 import org.odk.collect.entities.javarosa.parse.EntityFormExtra
 import org.odk.collect.entities.javarosa.parse.SaveTo
-import org.odk.collect.entities.javarosa.parse.StringExt.isV4UUID
+import org.odk.collect.entities.javarosa.parse.isV4UUID
 import org.odk.collect.entities.javarosa.spec.EntityAction
 import org.odk.collect.entities.javarosa.spec.EntityFormParser
 
