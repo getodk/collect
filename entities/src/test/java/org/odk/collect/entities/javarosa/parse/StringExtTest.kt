@@ -9,9 +9,9 @@ class StringExtTest {
 
     @Test
     fun `#isV4UUID is false for version 1 UUIDs`() {
-        val v2UUID = "6b5ea8de-9565-11e8-9eb6-529269fb1459"
-        assertThat(UUID.fromString(v2UUID).version(), equalTo(1))
-        assertThat(v2UUID.isV4UUID(), equalTo(false))
+        val v1UUID = "6b5ea8de-9565-11e8-9eb6-529269fb1459"
+        assertThat(UUID.fromString(v1UUID).version(), equalTo(1))
+        assertThat(v1UUID.isV4UUID(), equalTo(false))
     }
 
     @Test
