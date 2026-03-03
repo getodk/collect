@@ -952,7 +952,7 @@ class EntitiesTest {
                                 t("join"),
                                 t(
                                     "meta",
-                                    entityNode("members", CREATE, optionalAction = false)
+                                    entityNode("members", CREATE)
                                 )
                             )
                         ),
