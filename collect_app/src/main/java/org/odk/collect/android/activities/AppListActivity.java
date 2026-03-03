@@ -122,14 +122,12 @@ public abstract class AppListActivity extends LocalizedActivity {
 
     @Override
     public void setContentView(View view) {
-        avoidEdgeToEdge(this);
         super.setContentView(view);
         init();
     }
 
     @Override
     public void setContentView(@LayoutRes int layoutResID) {
-        avoidEdgeToEdge(this);
         super.setContentView(layoutResID);
         init();
     }
