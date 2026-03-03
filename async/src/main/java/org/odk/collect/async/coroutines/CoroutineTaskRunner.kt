@@ -22,9 +22,7 @@ class CoroutineTaskRunner @JvmOverloads constructor(
 ) : TaskRunner {
     override fun <T> immediate(
         background: Supplier<T>,
-        foreground: Consumer<T>,
-        delay: Long?,
-        repeat: Long?
+        foreground: Consumer<T>
     ) {
         CoroutineScope(foregroundContext).launch {
             val result = withContext(backgroundContext) { background.get() }
