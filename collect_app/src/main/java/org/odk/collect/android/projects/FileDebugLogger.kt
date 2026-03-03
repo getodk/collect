@@ -3,12 +3,13 @@ package org.odk.collect.android.projects
 import org.odk.collect.android.BuildConfig
 import org.odk.collect.shared.DebugLogger
 import java.io.File
+import java.time.LocalDateTime
 
 class FileDebugLogger(private val file: File) : DebugLogger {
 
     override fun log(tag: String, message: String) {
         if (enabled) {
-            val line = "${System.currentTimeMillis()} $tag \"$message\"\n"
+            val line = "${LocalDateTime.now()} $tag \"$message\"\n"
             file.appendText(line)
         }
     }
