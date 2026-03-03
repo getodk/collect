@@ -6,8 +6,6 @@ import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.utilities.Appearances
 import kotlin.math.abs
 import kotlin.math.absoluteValue
-import kotlin.math.max
-import kotlin.math.min
 import kotlin.math.round
 import kotlin.math.roundToInt
 
@@ -26,7 +24,7 @@ data class RangeSliderState(
     val realValue
         get() = sliderValue?.let {
             val raw = rangeStart + it * (rangeEnd - rangeStart)
-            roundToStep(raw, rangeStart, rangeEnd, step)
+            roundToStep(raw, step)
         }
 
     val valueLabel
@@ -40,18 +38,10 @@ data class RangeSliderState(
     val endLabel
         get() = if (isDiscrete) rangeEnd.toInt().toString() else rangeEnd.toString()
 
-    private fun roundToStep(
-        value: Float,
-        rangeStart: Float,
-        rangeEnd: Float,
-        step: Float
-    ): Float {
-        val steps = ((value - rangeStart) / step).roundToInt()
-        val snapped = rangeStart + steps * step
-        return snapped.coerceIn(
-            min(rangeStart, rangeEnd),
-            max(rangeStart, rangeEnd)
-        )
+    fun roundToStep(value: Float, step: Float): Double {
+        val roundedValue = (value / step).roundToInt() * step
+        val precision = step.toString().substringAfter(".").length
+        return "%.${precision}f".format(roundedValue).toDouble()
     }
 
     companion object {

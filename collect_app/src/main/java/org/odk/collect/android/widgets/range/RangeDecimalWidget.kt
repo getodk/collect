@@ -65,7 +65,7 @@ class RangeDecimalWidget(
 
     override fun getAnswer(): IAnswerData? {
         return rangeSliderState.realValue?.let {
-            DecimalData(it.toDouble())
+            DecimalData(it)
         }
     }
 
