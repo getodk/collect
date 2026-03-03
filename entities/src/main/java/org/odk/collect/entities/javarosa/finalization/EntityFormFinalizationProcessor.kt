@@ -29,8 +29,8 @@ class EntityFormFinalizationProcessor : FormEntryFinalizationProcessor {
                 if (action == EntityAction.CREATE || action == EntityAction.UPDATE) {
                     val entity = createEntity(
                         dataset,
-                        EntityFormParser.parseId(element),
-                        EntityFormParser.parseLabel(element),
+                        id,
+                        label,
                         element.ref,
                         saveTos,
                         action,
