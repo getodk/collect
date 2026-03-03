@@ -8,7 +8,7 @@ class FileDebugLogger(private val file: File) : DebugLogger {
 
     override fun log(tag: String, message: String) {
         if (enabled) {
-            val line = "${System.currentTimeMillis()} $tag \"$message\""
+            val line = "${System.currentTimeMillis()} $tag \"$message\"\n"
             file.appendText(line)
         }
     }
