@@ -36,10 +36,10 @@ class CoroutineTaskRunner @JvmOverloads constructor(
         delay: Long?,
         repeatPeriod: Long?
     ): Cancellable {
-        val context = if (!isForeground) {
-            backgroundContext
-        } else {
+        val context = if (isForeground) {
             foregroundContext
+        } else {
+            backgroundContext
         }
 
         val coroutineScope = CoroutineScope(context)
