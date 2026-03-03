@@ -42,5 +42,4 @@ class StringExtTest {
         val invalid = "not-a-uuid"
         assertThat(invalid.isV4UUID(), equalTo(false))
     }
-
 }
