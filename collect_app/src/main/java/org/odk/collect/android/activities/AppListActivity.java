@@ -16,8 +16,6 @@
 
 package org.odk.collect.android.activities;
 
-import static org.odk.collect.androidshared.ui.EdgeToEdge.avoidEdgeToEdge;
-
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Menu;
