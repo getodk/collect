@@ -29,8 +29,8 @@ import androidx.lifecycle.ViewModelProvider;
 import org.odk.collect.android.activities.FormFillingActivity;
 import org.odk.collect.android.fragments.dialogs.SimpleDialog;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.instancemanagement.InstanceDeleter;
 import org.odk.collect.android.instancemanagement.InstancesDataService;
+import org.odk.collect.android.instancemanagement.InstanceUploadResult;
 import org.odk.collect.android.projects.ProjectsDataService;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ArrayUtils;
@@ -40,19 +40,15 @@ import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.views.DayNightProgressDialog;
-import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.instances.InstancesRepository;
-import org.odk.collect.metadata.PropertyManager;
 import org.odk.collect.openrosa.http.OpenRosaConstants;
-import org.odk.collect.openrosa.http.OpenRosaHttpInterface;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.strings.localization.LocalizedActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Map;
-import java.util.Set;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -76,13 +72,7 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
     private boolean isInstanceStateSaved;
 
     @Inject
-    OpenRosaHttpInterface httpInterface;
-
-    @Inject
     WebCredentialsUtils webCredentialsUtils;
-
-    @Inject
-    PropertyManager propertyManager;
 
     @Inject
     InstancesDataService instancesDataService;
@@ -96,7 +86,6 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
 
     @Inject
     FormsRepositoryProvider formsRepositoryProvider;
-    private FormsRepository formsRepository;
 
     @Inject
     SettingsProvider settingsProvider;
@@ -108,7 +97,6 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
         super.onCreate(savedInstanceState);
         DaggerUtils.getComponent(this).inject(this);
         instancesRepository = instancesRepositoryProvider.create();
-        formsRepository = formsRepositoryProvider.create();
 
         init(savedInstanceState);
     }
@@ -180,13 +168,8 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
                         if (modelClass.isAssignableFrom(InstanceUploadViewModel.class)) {
                             return (T) new InstanceUploadViewModel(
                                     Dispatchers.getIO(),
-                                    new ServerInstanceUploader(httpInterface, webCredentialsUtils, settingsProvider.getUnprotectedSettings(), instancesRepository),
-                                    new InstanceDeleter(instancesRepository, formsRepository),
                                     webCredentialsUtils,
-                                    propertyManager,
                                     instancesRepository,
-                                    formsRepository,
-                                    settingsProvider,
                                     instancesDataService,
                                     projectsDataService.requireCurrentProject().getUuid(),
                                     getReferrerUri(),
@@ -205,11 +188,11 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
 
         instanceUploaderViewModel.getState().observe(this, state -> {
             if (state instanceof UploadState.AuthRequired) {
-                authRequest(((UploadState.AuthRequired) state).getResults());
+                authRequest(((UploadState.AuthRequired) state).getUploadResults());
             } else if (state instanceof UploadState.Progress) {
                 progressUpdate(((UploadState.Progress) state).getCurrent(), ((UploadState.Progress) state).getTotal());
             } else if (state instanceof UploadState.Completed) {
-                uploadingComplete(((UploadState.Completed) state).getResults());
+                uploadingComplete(((UploadState.Completed) state).getUploadResults());
             }
         });
 
@@ -230,7 +213,7 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
         outState.putLongArray(TO_SEND, ArrayUtils.toPrimitive(instancesToSend));
     }
 
-    private void uploadingComplete(Map<String, String> result) {
+    private void uploadingComplete(List<InstanceUploadResult> uploadResults) {
         try {
             dismissDialog(PROGRESS_DIALOG);
         } catch (Exception e) {
@@ -239,7 +222,7 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
 
         // If the activity is paused or in the process of pausing, don't show the dialog
         if (!isInstanceStateSaved) {
-            createUploadInstancesResultDialog(InstanceUploaderUtils.getUploadResultMessage(instancesRepository, this, result));
+            createUploadInstancesResultDialog(InstanceUploaderUtils.getUploadResultMessage(this, uploadResults));
         } else {
             // Clean up
             finish();
@@ -292,7 +275,7 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
      * of the latest submission attempt. The database provides generic status which could have come
      * from an unrelated submission attempt.
      */
-    private void authRequest(Map<String, String> messagesByInstanceIdAttempted) {
+    private void authRequest(List<InstanceUploadResult> uploadResults) {
         if (progressDialog.isShowing()) {
             // should always be showing here
             progressDialog.dismiss();
@@ -301,11 +284,10 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
         // Remove sent instances from instances to send
         ArrayList<Long> workingSet = new ArrayList<>();
         Collections.addAll(workingSet, instancesToSend);
-        if (messagesByInstanceIdAttempted != null) {
-            Set<String> uploadedInstances = messagesByInstanceIdAttempted.keySet();
 
-            for (String uploadedInstance : uploadedInstances) {
-                Long removeMe = Long.valueOf(uploadedInstance);
+        for (InstanceUploadResult uploadResult : uploadResults) {
+            if (uploadResult instanceof InstanceUploadResult.Success) {
+                Long removeMe = uploadResult.getInstance().getDbId();
                 workingSet.remove(removeMe);
             }
         }

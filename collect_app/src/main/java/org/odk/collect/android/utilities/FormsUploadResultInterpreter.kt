@@ -1,28 +1,27 @@
 package org.odk.collect.android.utilities
 
 import android.content.Context
-import org.odk.collect.android.instancemanagement.send.FormUploadException
+import org.odk.collect.android.instancemanagement.InstanceUploadResult
 import org.odk.collect.android.instancemanagement.userVisibleInstanceName
 import org.odk.collect.errors.ErrorItem
-import org.odk.collect.forms.instances.Instance
 import org.odk.collect.strings.localization.getLocalizedString
 
 object FormsUploadResultInterpreter {
-    fun getFailures(result: Map<Instance, FormUploadException?>, context: Context) = result.filter {
-        it.value != null
+    fun getFailures(uploadResults: List<InstanceUploadResult>, context: Context) = uploadResults.filter {
+        it is InstanceUploadResult.Error
     }.map {
         ErrorItem(
-            it.key.userVisibleInstanceName(context.resources),
-            context.getLocalizedString(org.odk.collect.strings.R.string.form_details, it.key.formId ?: "", it.key.formVersion ?: ""),
-            it.value?.message ?: ""
+            it.instance.userVisibleInstanceName(context.resources),
+            context.getLocalizedString(org.odk.collect.strings.R.string.form_details, it.instance.formId ?: "", it.instance.formVersion ?: ""),
+            (it as InstanceUploadResult.Error).exception.message
         )
     }
 
-    fun getNumberOfFailures(result: Map<Instance, FormUploadException?>) = result.count {
-        it.value != null
+    fun getNumberOfFailures(uploadResults: List<InstanceUploadResult>) = uploadResults.count {
+        it is InstanceUploadResult.Error
     }
 
-    fun allFormsUploadedSuccessfully(result: Map<Instance, FormUploadException?>) = result.values.all {
-        it == null
+    fun allFormsUploadedSuccessfully(uploadResults: List<InstanceUploadResult>) = uploadResults.all {
+        it is InstanceUploadResult.Success
     }
 }
