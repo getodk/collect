@@ -24,7 +24,7 @@ object EdgeToEdge {
     }
 
     @JvmStatic
-    fun Activity.avoidEdgeToEdge() {
+    private fun Activity.avoidEdgeToEdge() {
         ViewCompat.setOnApplyWindowInsetsListener(window.decorView.findViewById(android.R.id.content)) { v, windowInsets ->
             val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.updateLayoutParams<ViewGroup.MarginLayoutParams> {
