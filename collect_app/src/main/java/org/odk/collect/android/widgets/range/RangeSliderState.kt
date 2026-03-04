@@ -4,16 +4,14 @@ import org.javarosa.core.model.Constants.DATATYPE_INTEGER
 import org.javarosa.core.model.RangeQuestion
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.utilities.Appearances
-import kotlin.math.abs
-import kotlin.math.absoluteValue
-import kotlin.math.round
-import kotlin.math.roundToInt
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 data class RangeSliderState(
-    val sliderValue: Float?,
-    val rangeStart: Float,
-    val rangeEnd: Float,
-    val step: Float,
+    val sliderValue: BigDecimal?,
+    val rangeStart: BigDecimal,
+    val rangeEnd: BigDecimal,
+    val step: BigDecimal,
     val numOfSteps: Int,
     val isDiscrete: Boolean,
     val isHorizontal: Boolean,
@@ -38,34 +36,35 @@ data class RangeSliderState(
     val endLabel
         get() = if (isDiscrete) rangeEnd.toInt().toString() else rangeEnd.toString()
 
-    fun roundToStep(value: Float, step: Float): Double {
-        val roundedValue = (value / step).roundToInt() * step
-        val precision = step.toString().substringAfter(".").length
-        return "%.${precision}f".format(roundedValue).toDouble()
+    private fun roundToStep(value: BigDecimal, step: BigDecimal): BigDecimal {
+        return value
+            .divide(step, 0, RoundingMode.HALF_UP)
+            .multiply(step)
     }
 
     companion object {
         fun fromPrompt(prompt: FormEntryPrompt): RangeSliderState {
             val rangeQuestion = prompt.question as RangeQuestion
-            val start = rangeQuestion.rangeStart.toFloat()
-            val end = rangeQuestion.rangeEnd.toFloat()
-            val step = rangeQuestion.rangeStep.toFloat().absoluteValue
+            val start = rangeQuestion.rangeStart
+            val end = rangeQuestion.rangeEnd
+            val step = rangeQuestion.rangeStep.abs()
             val sanitizedAppearance = Appearances.getSanitizedAppearanceHint(prompt)
             val isHorizontal = !sanitizedAppearance.contains(Appearances.VERTICAL)
             val isDiscrete = prompt.dataType == DATATYPE_INTEGER
-            val isValid = step != 0f &&
-                start != end &&
-                abs(end - start) >= abs(step) &&
-                isDivisible(end - start, step)
+            val isValid = step.compareTo(BigDecimal.ZERO) != 0 &&
+                start.compareTo(end) != 0 &&
+                (end - start).abs() >= step &&
+                (end - start).remainder(step).compareTo(BigDecimal.ZERO) == 0
             val isEnabled = !prompt.isReadOnly && isValid
 
-            var sliderValue: Float? = null
+            var sliderValue: BigDecimal? = null
             var numOfSteps = 0
             var numOfTicks = 0
 
             if (isValid) {
-                sliderValue = toSliderValue(prompt.answerValue?.value?.toString()?.toFloatOrNull(), start, end)
-                numOfSteps = ((end - start).absoluteValue / step).toInt().coerceAtLeast(1) - 1
+                val value = prompt.answerValue?.value?.toString()?.toBigDecimalOrNull()
+                sliderValue = toSliderValue(value, start, end, step)
+                numOfSteps = ((end - start).abs().divide(step, 0, RoundingMode.HALF_UP).toInt()) - 1
                 numOfTicks = if (sanitizedAppearance.contains(Appearances.NO_TICKS)) {
                     0
                 } else {
@@ -87,18 +86,22 @@ data class RangeSliderState(
             )
         }
 
-        private fun toSliderValue(value: Float?, start: Float, end: Float): Float? {
-            if (value == null || start == end) return null
+        private fun toSliderValue(
+            value: BigDecimal?,
+            start: BigDecimal,
+            end: BigDecimal,
+            step: BigDecimal
+        ): BigDecimal? {
+            if (value == null || start.compareTo(end) == 0) return null
 
-            val sliderValue = (value - start) / (end - start)
-            return if (sliderValue in 0f..1f) sliderValue else null
-        }
+            var normalized = (value - start).divide(end - start, 10, RoundingMode.HALF_UP)
+            val stepFraction = step.divide(end - start, 10, RoundingMode.HALF_UP)
+            normalized = normalized
+                .divide(stepFraction, 0, RoundingMode.HALF_UP)
+                .multiply(stepFraction)
+                .stripTrailingZeros()
 
-        private fun isDivisible(totalRange: Float, step: Float): Boolean {
-            val quotient = totalRange / step
-            val nearestInteger = round(quotient)
-            val epsilon = 1e-6f
-            return abs(quotient - nearestInteger) < epsilon
+            return normalized.takeIf { it >= BigDecimal.ZERO && it <= BigDecimal.ONE }
         }
     }
 }

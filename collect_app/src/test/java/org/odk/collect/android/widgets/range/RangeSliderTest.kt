@@ -19,6 +19,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.androidtest.onAllNodesWithContentDescription
 import org.odk.collect.androidtest.onNodeWithContentDescription
+import java.math.BigDecimal
 
 @RunWith(AndroidJUnit4::class)
 class RangeSliderTest {
@@ -27,7 +28,7 @@ class RangeSliderTest {
 
     @Test
     fun `start, end and current value labels are correctly displayed`() {
-        setContent(value = 0.5F)
+        setContent(value = 0.5.toBigDecimal())
 
         composeTestRule
             .onNodeWithContentDescription(org.odk.collect.strings.R.string.slider_start_label)
@@ -47,7 +48,7 @@ class RangeSliderTest {
 
     @Test
     fun `displays thumb when there is answer`() {
-        setContent(value = 0.5F)
+        setContent(value = 0.5.toBigDecimal())
 
         composeTestRule
             .onNodeWithContentDescription(org.odk.collect.strings.R.string.slider_thumb)
@@ -223,7 +224,7 @@ class RangeSliderTest {
     }
 
     private fun setContent(
-        value: Float? = null,
+        value: BigDecimal? = null,
         valueLabel: String = "5",
         steps: Int = 10,
         ticks: Int = 0,

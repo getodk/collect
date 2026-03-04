@@ -50,7 +50,7 @@ class RangeDecimalWidget(
                         requestDisallowInterceptTouchEvent(it)
                     },
                     onValueChange = {
-                        rangeSliderState = rangeSliderState.copy(sliderValue = it)
+                        rangeSliderState = rangeSliderState.copy(sliderValue = it.toBigDecimal())
                     },
                     onValueChangeFinished = {
                         widgetValueChanged()
@@ -65,7 +65,7 @@ class RangeDecimalWidget(
 
     override fun getAnswer(): IAnswerData? {
         return rangeSliderState.realValue?.let {
-            DecimalData(it)
+            DecimalData(it.toDouble())
         }
     }
 

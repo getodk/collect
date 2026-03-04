@@ -3,10 +3,11 @@ package org.odk.collect.android.widgets.range
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import java.math.BigDecimal
 
 @Composable
 fun RangeSlider(
-    value: Float?,
+    value: BigDecimal?,
     valueLabel: String,
     steps: Int,
     ticks: Int,
@@ -29,7 +30,7 @@ fun RangeSlider(
     Surface {
         if (horizontal) {
             HorizontalRangeSlider(
-                value = value,
+                value = value?.toFloat(),
                 valueLabel = valueLabel,
                 steps = steps,
                 ticks = ticks,
@@ -42,7 +43,7 @@ fun RangeSlider(
             )
         } else {
             VerticalRangeSlider(
-                value = value,
+                value = value?.toFloat(),
                 valueLabel = valueLabel,
                 steps = steps,
                 ticks = ticks,

@@ -50,7 +50,7 @@ class RangeIntegerWidget(
                         requestDisallowInterceptTouchEvent(it)
                     },
                     onValueChange = {
-                        rangeSliderState = rangeSliderState.copy(sliderValue = it)
+                        rangeSliderState = rangeSliderState.copy(sliderValue = it.toBigDecimal())
                     },
                     onValueChangeFinished = {
                         widgetValueChanged()
