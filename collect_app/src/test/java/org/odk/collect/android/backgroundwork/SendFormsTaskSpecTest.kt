@@ -49,7 +49,7 @@ class SendFormsTaskSpecTest {
 
     @Test
     fun `returns false if sending instances fails`() {
-        whenever(instancesDataService.sendInstances(projectId)).doReturn(false)
+        whenever(instancesDataService.sendInstances(projectId, false)).doReturn(false)
 
         val inputData = mapOf(TaskData.DATA_PROJECT_ID to projectId)
         val spec = SendFormsTaskSpec()
@@ -59,7 +59,7 @@ class SendFormsTaskSpecTest {
 
     @Test
     fun `returns true if sending instances succeeds`() {
-        whenever(instancesDataService.sendInstances(projectId)).doReturn(true)
+        whenever(instancesDataService.sendInstances(projectId, false)).doReturn(true)
 
         val inputData = mapOf(TaskData.DATA_PROJECT_ID to projectId)
         val spec = SendFormsTaskSpec()

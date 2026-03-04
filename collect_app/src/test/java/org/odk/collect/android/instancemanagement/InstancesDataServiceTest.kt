@@ -87,13 +87,13 @@ class InstancesDataServiceTest {
 
     @Test
     fun `sendInstances() returns true when there are no instances to send`() {
-        val result = instancesDataService.sendInstances(projectId)
+        val result = instancesDataService.sendInstances(projectId, false)
         assertThat(result, equalTo(true))
     }
 
     @Test
     fun `sendInstances() does not notify when there are no instances to send`() {
-        instancesDataService.sendInstances(projectId)
+        instancesDataService.sendInstances(projectId, false)
         verifyNoInteractions(notifier)
     }
 
@@ -115,7 +115,7 @@ class InstancesDataServiceTest {
                 )
             )
 
-        val result = instancesDataService.sendInstances(projectId)
+        val result = instancesDataService.sendInstances(projectId, false)
         assertThat(result, equalTo(false))
     }
 

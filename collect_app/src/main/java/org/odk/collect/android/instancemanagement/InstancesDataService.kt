@@ -211,7 +211,7 @@ class InstancesDataService(
         }
     }
 
-    fun sendInstances(projectId: String, formAutoSend: Boolean = false): Boolean {
+    fun sendInstances(projectId: String, formAutoSend: Boolean): Boolean {
         val projectDependencyModule = projectDependencyModuleFactory.create(projectId)
 
         return projectDependencyModule.instancesLock.withLock { acquiredLock: Boolean ->
