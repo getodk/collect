@@ -41,7 +41,7 @@ fun HorizontalRangeSlider(
                 .fillMaxWidth()
                 .semantics { contentDescription = sliderContentDescription }
                 .pointerInteropFilter { event ->
-                    if (event.action == MotionEvent.ACTION_DOWN) {
+                    if (enabled && event.action == MotionEvent.ACTION_DOWN) {
                         onValueChanging(true)
                         if (value == null) {
                             onValueChange(0f)

@@ -189,6 +189,24 @@ class RangeSliderTest {
     }
 
     @Test
+    fun `does not call onValueChange when horizontal slider start is not enabled`() {
+        var newValue: Float? = null
+
+        setContent(
+            value = null,
+            horizontal = true,
+            enabled = false,
+            onValueChange = { newValue = it }
+        )
+
+        composeTestRule
+            .onNodeWithContentDescription(org.odk.collect.strings.R.string.horizontal_slider)
+            .performTouchInput { click() }
+
+        assertThat(newValue, equalTo(null))
+    }
+
+    @Test
     fun `calls onValueChange callback with minimum when vertical slider start is clicked`() {
         var newValue: Float? = null
 
@@ -221,6 +239,25 @@ class RangeSliderTest {
             .performTouchInput { click() }
 
         assertEquals(0.5f, newValue!!, 0.046f)
+    }
+
+    @Test
+    fun `does not call onValueChange when vertical slider start is not enabled`() {
+        var newValue: Float? = null
+
+        setContent(
+            value = null,
+            horizontal = false,
+            enabled = false,
+            onValueChange = { newValue = it }
+        )
+
+        composeTestRule
+            .onNodeWithContentDescription(org.odk.collect.strings.R.string.vertical_slider)
+            .performClick()
+            .performTouchInput { click() }
+
+        assertThat(newValue, equalTo(null))
     }
 
     private fun setContent(
