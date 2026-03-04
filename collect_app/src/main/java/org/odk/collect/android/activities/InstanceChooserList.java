@@ -18,6 +18,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_DESC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_DESC;
+import static org.odk.collect.androidshared.ui.EdgeToEdge.setView;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -106,7 +107,7 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.form_chooser_list);
+        setView(this, R.layout.form_chooser_list, false);
         DaggerUtils.getComponent(this).inject(this);
 
         String formMode = getIntent().getStringExtra(FormOpeningMode.FORM_MODE_KEY);

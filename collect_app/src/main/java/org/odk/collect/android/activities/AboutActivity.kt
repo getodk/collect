@@ -28,6 +28,7 @@ import org.odk.collect.android.adapters.AboutItemClickListener
 import org.odk.collect.android.adapters.AboutListAdapter
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.androidshared.system.IntentLauncher
+import org.odk.collect.androidshared.ui.EdgeToEdge.setView
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard.allowClick
 import org.odk.collect.strings.localization.LocalizedActivity
 import org.odk.collect.webpage.WebPageService
@@ -45,7 +46,7 @@ class AboutActivity : LocalizedActivity(), AboutItemClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.about_layout)
+        setView(R.layout.about_layout, false)
         DaggerUtils.getComponent(this).inject(this)
         initToolbar()
 

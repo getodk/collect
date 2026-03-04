@@ -21,12 +21,14 @@ import org.odk.collect.android.projects.QrCodeProjectCreatorDialog
 import org.odk.collect.android.version.VersionInformation
 import org.odk.collect.androidshared.system.ContextUtils.getThemeAttributeValue
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
+import org.odk.collect.androidshared.ui.EdgeToEdge.setView
 import org.odk.collect.async.Scheduler
 import org.odk.collect.material.MaterialProgressDialogFragment
 import org.odk.collect.mobiledevicemanagement.MDMConfigObserver
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.strings.R
 import org.odk.collect.strings.localization.LocalizedActivity
 import javax.inject.Inject
 
@@ -63,7 +65,7 @@ class FirstLaunchActivity : LocalizedActivity(), CollectComposeThemeProvider {
         DaggerUtils.getComponent(this).inject(this)
 
         FirstLaunchLayoutBinding.inflate(layoutInflater).apply {
-            setContentView(this.root)
+            setView(this.root, false)
 
             MaterialProgressDialogFragment.showOn(
                 this@FirstLaunchActivity,
@@ -71,7 +73,7 @@ class FirstLaunchActivity : LocalizedActivity(), CollectComposeThemeProvider {
                 supportFragmentManager
             ) {
                 MaterialProgressDialogFragment().also { dialog ->
-                    dialog.message = getString(org.odk.collect.strings.R.string.loading)
+                    dialog.message = getString(R.string.loading)
                 }
             }
 
@@ -109,16 +111,21 @@ class FirstLaunchActivity : LocalizedActivity(), CollectComposeThemeProvider {
 
             appName.text = String.format(
                 "%s %s",
-                getString(org.odk.collect.strings.R.string.collect_app_name),
+                getString(R.string.collect_app_name),
                 versionInformation.versionToDisplay
             )
 
             dontHaveServer.apply {
                 text = SpannableStringBuilder()
-                    .append(getString(org.odk.collect.strings.R.string.dont_have_project))
+                    .append(getString(R.string.dont_have_project))
                     .append(" ")
-                    .color(getThemeAttributeValue(context, androidx.appcompat.R.attr.colorPrimary)) {
-                        append(getString(org.odk.collect.strings.R.string.try_demo))
+                    .color(
+                        getThemeAttributeValue(
+                            context,
+                            androidx.appcompat.R.attr.colorPrimary
+                        )
+                    ) {
+                        append(getString(R.string.try_demo))
                     }
 
                 setOnClickListener {

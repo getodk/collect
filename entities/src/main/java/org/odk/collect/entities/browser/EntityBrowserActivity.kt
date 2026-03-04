@@ -6,6 +6,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import org.odk.collect.androidshared.ui.EdgeToEdge.setView
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.async.Scheduler
 import org.odk.collect.entities.EntitiesDependencyComponentProvider
@@ -30,7 +31,12 @@ class EntityBrowserActivity : LocalizedActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         supportFragmentManager.fragmentFactory = FragmentFactoryBuilder()
-            .forClass(EntityListsFragment::class) { EntityListsFragment(viewModelFactory, ::getToolbar) }
+            .forClass(EntityListsFragment::class) {
+                EntityListsFragment(
+                    viewModelFactory,
+                    ::getToolbar
+                )
+            }
             .forClass(EntitiesFragment::class) { EntitiesFragment(viewModelFactory) }
             .build()
 
@@ -38,7 +44,7 @@ class EntityBrowserActivity : LocalizedActivity() {
         (applicationContext as EntitiesDependencyComponentProvider)
             .entitiesDependencyComponent.inject(this)
 
-        setContentView(R.layout.entities_layout)
+        setView(R.layout.entities_layout, false)
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host) as NavHostFragment

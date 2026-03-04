@@ -25,6 +25,7 @@ import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
+import org.odk.collect.androidshared.ui.EdgeToEdge.setView
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.async.Scheduler
 import org.odk.collect.geo.selection.SelectionMapFragment
@@ -80,7 +81,7 @@ class FormMapActivity : LocalizedActivity() {
             .build()
 
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.form_map_activity)
+        setView(R.layout.form_map_activity, false)
 
         supportFragmentManager.setFragmentResultListener(
             SelectionMapFragment.REQUEST_SELECT_ITEM,
@@ -88,9 +89,23 @@ class FormMapActivity : LocalizedActivity() {
         ) { _: String?, result: Bundle ->
             if (result.containsKey(SelectionMapFragment.RESULT_SELECTED_ITEM)) {
                 val instanceId = result.getLong(SelectionMapFragment.RESULT_SELECTED_ITEM)
-                startActivity(FormFillingIntentFactory.editDraftFormIntent(this, projectsDataService.requireCurrentProject().uuid, instanceId))
+                startActivity(
+                    FormFillingIntentFactory.editDraftFormIntent(
+                        this,
+                        projectsDataService.requireCurrentProject().uuid,
+                        instanceId
+                    )
+                )
             } else if (result.containsKey(SelectionMapFragment.RESULT_CREATE_NEW_ITEM)) {
-                startActivity(FormFillingIntentFactory.newFormIntent(this, FormsContract.getUri(projectsDataService.requireCurrentProject().uuid, formId)))
+                startActivity(
+                    FormFillingIntentFactory.newFormIntent(
+                        this,
+                        FormsContract.getUri(
+                            projectsDataService.requireCurrentProject().uuid,
+                            formId
+                        )
+                    )
+                )
             }
         }
     }

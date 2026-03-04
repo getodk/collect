@@ -14,6 +14,8 @@
 
 package org.odk.collect.android.activities;
 
+import static org.odk.collect.androidshared.ui.EdgeToEdge.setView;
+
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -135,7 +137,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         super.onCreate(savedInstanceState);
         DaggerUtils.getComponent(this).inject(this);
 
-        setContentView(R.layout.form_download_list);
+        setView(this, R.layout.form_download_list, false);
         setTitle(getString(org.odk.collect.strings.R.string.get_forms));
 
         viewModel = new ViewModelProvider(this, new FormDownloadListViewModel.Factory())

@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import org.odk.collect.androidshared.ui.EdgeToEdge.setView
 import org.odk.collect.androidshared.ui.ToastUtils.showLongToast
 import org.odk.collect.externalapp.ExternalAppUtils
 import org.odk.collect.permissions.PermissionsChecker
@@ -48,7 +49,7 @@ class CaptureSelfieActivity : LocalizedActivity() {
 
         val insetsController = WindowCompat.getInsetsController(window, window.decorView)
         insetsController.hide(WindowInsetsCompat.Type.statusBars())
-        setContentView(R.layout.activity_capture_selfie)
+        setView(R.layout.activity_capture_selfie, false)
 
         val previewView = findViewById<View>(R.id.preview)
 

@@ -12,6 +12,7 @@ import org.odk.collect.android.application.CollectComposeThemeProvider
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.ProjectSettingsDialog
 import org.odk.collect.android.utilities.ThemeUtils
+import org.odk.collect.androidshared.ui.EdgeToEdge.setView
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.crashhandler.CrashHandler
 import org.odk.collect.mobiledevicemanagement.MDMConfigObserver
@@ -89,7 +90,7 @@ class MainMenuActivity : LocalizedActivity(), CollectComposeThemeProvider {
                 .build()
 
             super.onCreate(savedInstanceState)
-            setContentView(R.layout.main_menu_activity)
+            setView(R.layout.main_menu_activity, false)
             lifecycle.addObserver(mdmConfigObserver)
         }
     }

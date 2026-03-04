@@ -1,7 +1,7 @@
 [versions]
 compileSdk = "36"
 minSdk = "26"
-targetSdk = "35"
+targetSdk = "36"
 lifecycle = "2.10.0"
 navigation = "2.9.7"
 work = "2.11.1"

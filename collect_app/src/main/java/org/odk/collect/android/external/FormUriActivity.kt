@@ -28,6 +28,7 @@ import org.odk.collect.android.utilities.ContentUriHelper
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.utilities.SavepointsRepositoryProvider
+import org.odk.collect.androidshared.ui.EdgeToEdge.setView
 import org.odk.collect.async.Scheduler
 import org.odk.collect.forms.savepoints.Savepoint
 import org.odk.collect.projects.ProjectsRepository
@@ -102,7 +103,7 @@ class FormUriActivity : LocalizedActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DaggerUtils.getComponent(this).inject(this)
-        setContentView(R.layout.circular_progress_indicator)
+        setView(R.layout.circular_progress_indicator, false)
 
         if (savedInstanceState?.getBoolean(FORM_FILLING_ALREADY_STARTED) == true) {
             return

@@ -11,6 +11,7 @@ import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.utilities.FileProvider
 import org.odk.collect.androidshared.system.IntentLauncher
+import org.odk.collect.androidshared.ui.EdgeToEdge.setView
 import org.odk.collect.androidshared.ui.ListFragmentStateAdapter
 import org.odk.collect.androidshared.utils.AppBarUtils.setupAppBarLayout
 import org.odk.collect.async.Scheduler
@@ -58,8 +59,11 @@ class QRCodeTabsActivity : LocalizedActivity(), CollectComposeThemeProvider {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DaggerUtils.getComponent(this).inject(this)
-        setContentView(R.layout.tabs_layout)
-        setupAppBarLayout(this, getString(org.odk.collect.strings.R.string.reconfigure_with_qr_code_settings_title))
+        setView(R.layout.tabs_layout, false)
+        setupAppBarLayout(
+            this,
+            getString(org.odk.collect.strings.R.string.reconfigure_with_qr_code_settings_title)
+        )
 
         activityResultDelegate = QRCodeActivityResultDelegate(
             this,
