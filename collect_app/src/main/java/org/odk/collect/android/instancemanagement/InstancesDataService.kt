@@ -19,8 +19,6 @@ import org.odk.collect.androidshared.data.AppState
 import org.odk.collect.androidshared.data.DataService
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.instances.Instance
-import org.odk.collect.metadata.PropertyManager
-import org.odk.collect.openrosa.http.OpenRosaHttpInterface
 import org.odk.collect.projects.ProjectDependencyFactory
 import java.io.File
 
@@ -29,8 +27,7 @@ class InstancesDataService(
     private val instanceSubmitScheduler: InstanceSubmitScheduler,
     private val projectDependencyModuleFactory: ProjectDependencyFactory<ProjectDependencyModule>,
     private val notifier: Notifier,
-    private val propertyManager: PropertyManager,
-    private val httpInterface: OpenRosaHttpInterface,
+    private val instanceSubmitter: InstanceSubmitter,
     onUpdate: () -> Unit
 ) : DataService(appState, onUpdate) {
 
@@ -213,16 +210,7 @@ class InstancesDataService(
     }
 
     fun sendInstances(projectId: String, formAutoSend: Boolean = false): Boolean {
-        val projectDependencyModule =
-            projectDependencyModuleFactory.create(projectId)
-
-        val instanceSubmitter = InstanceSubmitter(
-            projectDependencyModule.formsRepository,
-            projectDependencyModule.generalSettings,
-            propertyManager,
-            httpInterface,
-            projectDependencyModule.instancesRepository
-        )
+        val projectDependencyModule = projectDependencyModuleFactory.create(projectId)
 
         return projectDependencyModule.instancesLock.withLock { acquiredLock: Boolean ->
             if (acquiredLock) {
@@ -233,7 +221,7 @@ class InstancesDataService(
                 )
 
                 if (toUpload.isNotEmpty()) {
-                    val results = instanceSubmitter.submitInstances(toUpload)
+                    val results = instanceSubmitter.submitInstances(projectId, toUpload)
                     notifier.onSubmission(results, projectDependencyModule.projectId)
                     update(projectId)
 
