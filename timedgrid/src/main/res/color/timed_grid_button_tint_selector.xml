@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+    RULE 1: SUMMARY MODE - SELECTED
+    Condition: Disabled AND Selected.
+    Visual: Yellow background.
+    -->
+    <item android:color="@color/timedGridButtonYellowSummary"
+        android:state_enabled="false"
+        android:state_selected="true" />
+
+    <!--
+    RULE 2: SUMMARY / PRE-TEST MODE - NOT SELECTED
+    Condition: Disabled (and not caught by Rule 1).
+    Visual: Gray background.
+    -->
+    <item android:color="@color/timedGridButtonGray"
+        android:state_enabled="false" />
+
+    <!--
+    RULE 3: ACTIVE MODE - SELECTED
+    Condition: Enabled AND Selected.
+    Visual: Orange background.
+    -->
+    <item android:color="@color/timedGridButtonOrangeSelected"
+        android:state_selected="true" />
+
+    <!--
+    RULE 4: ACTIVE MODE - NOT SELECTED (DEFAULT)
+    Condition: Enabled (and not caught by Rule 3).
+    Visual: Blue background.
+    -->
+    <item android:color="@color/timedGridButtonBlueDefault" />
+
+</selector>
