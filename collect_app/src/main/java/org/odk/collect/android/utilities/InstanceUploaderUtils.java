@@ -21,12 +21,10 @@ import android.content.res.Resources;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.instancemanagement.InstanceExtKt;
+import org.odk.collect.android.instancemanagement.InstanceUploadResult;
 import org.odk.collect.forms.instances.Instance;
-import org.odk.collect.forms.instances.InstancesRepository;
 
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.List;
 
 import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
 
@@ -45,14 +43,11 @@ public final class InstanceUploaderUtils {
      *
      * Instance name 2 - result
      */
-    public static String getUploadResultMessage(InstancesRepository instancesRepository, Context context, Map<String, String> result) {
-        Set<String> keys = result.keySet();
-        Iterator<String> it = keys.iterator();
+    public static String getUploadResultMessage(Context context, List<InstanceUploadResult> uploadResults) {
         StringBuilder message = new StringBuilder();
 
-        while (it.hasNext()) {
-            Instance instance = instancesRepository.get(Long.valueOf(it.next()));
-            message.append(getUploadResultMessageForInstances(instance, context.getResources(), result));
+        for (InstanceUploadResult uploadResult : uploadResults) {
+            message.append(getUploadResultMessageForInstances(uploadResult.getInstance(), context.getResources(), uploadResult));
         }
 
         if (message.length() == 0) {
@@ -62,11 +57,15 @@ public final class InstanceUploaderUtils {
         return message.toString().trim();
     }
 
-    private static String getUploadResultMessageForInstances(Instance instance, Resources resources, Map<String, String> resultMessagesByInstanceId) {
+    private static String getUploadResultMessageForInstances(Instance instance, Resources resources, InstanceUploadResult uploadResult) {
         StringBuilder uploadResultMessage = new StringBuilder();
         if (instance != null) {
             String name = InstanceExtKt.userVisibleInstanceName(instance, resources);
-            String text = localizeDefaultAggregateSuccessfulText(resultMessagesByInstanceId.get(instance.getDbId().toString()));
+            String text = localizeDefaultAggregateSuccessfulText(
+                    uploadResult instanceof InstanceUploadResult.Success
+                            ? ((InstanceUploadResult.Success) uploadResult).getMessage()
+                            : ((InstanceUploadResult.Error) uploadResult).getException().getMessage()
+            );
             uploadResultMessage
                     .append(name)
                     .append(" - ")

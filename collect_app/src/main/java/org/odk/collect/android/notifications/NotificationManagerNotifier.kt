@@ -6,7 +6,7 @@ import android.app.NotificationManager
 import android.content.Context
 import org.odk.collect.android.formmanagement.ServerFormDetails
 import org.odk.collect.android.formmanagement.download.FormDownloadException
-import org.odk.collect.android.instancemanagement.send.FormUploadException
+import org.odk.collect.android.instancemanagement.InstanceUploadResult
 import org.odk.collect.android.notifications.builders.FormUpdatesAvailableNotificationBuilder
 import org.odk.collect.android.notifications.builders.FormUpdatesDownloadedNotificationBuilder
 import org.odk.collect.android.notifications.builders.FormsSubmissionNotificationBuilder
@@ -94,14 +94,14 @@ class NotificationManagerNotifier(
         )
     }
 
-    override fun onSubmission(result: Map<Instance, FormUploadException?>, projectId: String) {
+    override fun onSubmission(uploadResults: List<InstanceUploadResult>, projectId: String) {
         val notificationId = uniqueIdGenerator.getInt(AUTO_SEND_RESULT_NOTIFICATION_IDENTIFIER)
 
         notificationManager.notify(
             notificationId,
             FormsSubmissionNotificationBuilder.build(
                 application,
-                result,
+                uploadResults,
                 getProjectName(projectId),
                 notificationId
             )

@@ -4,22 +4,21 @@ import android.app.Application
 import android.app.Notification
 import androidx.core.app.NotificationCompat
 import org.odk.collect.android.R
-import org.odk.collect.android.instancemanagement.send.FormUploadException
+import org.odk.collect.android.instancemanagement.InstanceUploadResult
 import org.odk.collect.android.notifications.NotificationManagerNotifier
 import org.odk.collect.android.notifications.NotificationUtils
 import org.odk.collect.android.utilities.FormsUploadResultInterpreter
-import org.odk.collect.forms.instances.Instance
 import org.odk.collect.strings.localization.getLocalizedString
 
 object FormsSubmissionNotificationBuilder {
 
     fun build(
         application: Application,
-        result: Map<Instance, FormUploadException?>,
+        uploadResults: List<InstanceUploadResult>,
         projectName: String,
         notificationId: Int
     ): Notification {
-        val allFormsUploadedSuccessfully = FormsUploadResultInterpreter.allFormsUploadedSuccessfully(result)
+        val allFormsUploadedSuccessfully = FormsUploadResultInterpreter.allFormsUploadedSuccessfully(uploadResults)
 
         return NotificationCompat.Builder(
             application,
@@ -32,13 +31,13 @@ object FormsSubmissionNotificationBuilder {
                 )
             )
             setContentTitle(getTitle(application, allFormsUploadedSuccessfully))
-            setContentText(getMessage(application, allFormsUploadedSuccessfully, result))
+            setContentText(getMessage(application, allFormsUploadedSuccessfully, uploadResults))
             setSubText(projectName)
             setSmallIcon(org.odk.collect.icons.R.drawable.ic_notification_small)
             setAutoCancel(true)
 
             if (!allFormsUploadedSuccessfully) {
-                val errorItems = FormsUploadResultInterpreter.getFailures(result, application)
+                val errorItems = FormsUploadResultInterpreter.getFailures(uploadResults, application)
 
                 addAction(
                     R.drawable.ic_outline_info_small,
@@ -57,14 +56,14 @@ object FormsSubmissionNotificationBuilder {
         }
     }
 
-    private fun getMessage(application: Application, allFormsUploadedSuccessfully: Boolean, result: Map<Instance, FormUploadException?>): String {
+    private fun getMessage(application: Application, allFormsUploadedSuccessfully: Boolean, uploadResults: List<InstanceUploadResult>): String {
         return if (allFormsUploadedSuccessfully) {
             application.getLocalizedString(org.odk.collect.strings.R.string.all_uploads_succeeded)
         } else {
             application.getLocalizedString(
                 org.odk.collect.strings.R.string.some_uploads_failed,
-                FormsUploadResultInterpreter.getNumberOfFailures(result),
-                result.size
+                FormsUploadResultInterpreter.getNumberOfFailures(uploadResults),
+                uploadResults.size
             )
         }
     }

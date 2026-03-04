@@ -1,6 +1,7 @@
 package org.odk.collect.android.instancemanagement
 
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.runBlocking
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.application.Collect
@@ -209,6 +210,29 @@ class InstancesDataService(
         }
     }
 
+    suspend fun sendInstances(
+        projectId: String,
+        instances: List<Instance>,
+        referrer: String,
+        overrideURL: String?,
+        cancelAfterAuthException: Boolean,
+        externalDeleteAfterUpload: Boolean?,
+        defaultSuccessMessage: String,
+        onProgress: (current: Int, total: Int) -> Unit = { _, _ -> }
+    ): List<InstanceUploadResult> {
+        return instanceSubmitter.submitInstances(
+            projectId,
+            instances,
+            referrer,
+            overrideURL,
+            false,
+            cancelAfterAuthException,
+            externalDeleteAfterUpload,
+            defaultSuccessMessage,
+            onProgress
+        )
+    }
+
     fun sendInstances(projectId: String, formAutoSend: Boolean): Boolean {
         val projectDependencyModule = projectDependencyModuleFactory.create(projectId)
 
@@ -221,11 +245,13 @@ class InstancesDataService(
                 )
 
                 if (toUpload.isNotEmpty()) {
-                    val results = instanceSubmitter.submitInstances(projectId, toUpload)
-                    notifier.onSubmission(results, projectDependencyModule.projectId)
+                    val uploadResults = runBlocking {
+                        instanceSubmitter.submitInstances(projectId, toUpload)
+                    }
+                    notifier.onSubmission(uploadResults, projectDependencyModule.projectId)
                     update(projectId)
 
-                    FormsUploadResultInterpreter.allFormsUploadedSuccessfully(results)
+                    FormsUploadResultInterpreter.allFormsUploadedSuccessfully(uploadResults)
                 } else {
                     true
                 }
