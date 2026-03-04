@@ -5,6 +5,7 @@ import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.instancemanagement.send.FormUploadException
 import org.odk.collect.android.instancemanagement.send.ServerInstanceUploader
+import org.odk.collect.android.projects.ProjectDependencyModule
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstanceAutoDeleteChecker
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
@@ -15,30 +16,34 @@ import org.odk.collect.forms.instances.InstancesRepository
 import org.odk.collect.metadata.PropertyManager
 import org.odk.collect.metadata.PropertyManager.Companion.PROPMGR_DEVICE_ID
 import org.odk.collect.openrosa.http.OpenRosaHttpInterface
+import org.odk.collect.projects.ProjectDependencyFactory
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.settings.Settings
 import timber.log.Timber
 
 class InstanceSubmitter(
-    private val formsRepository: FormsRepository,
-    private val generalSettings: Settings,
+    private val projectDependencyModuleFactory: ProjectDependencyFactory<ProjectDependencyModule>,
     private val propertyManager: PropertyManager,
-    private val httpInterface: OpenRosaHttpInterface,
-    private val instancesRepository: InstancesRepository
+    private val httpInterface: OpenRosaHttpInterface
 ) {
 
-    fun submitInstances(toUpload: List<Instance>): Map<Instance, FormUploadException?> {
+    fun submitInstances(projectId: String, toUpload: List<Instance>): Map<Instance, FormUploadException?> {
+        val projectDependencyModule = projectDependencyModuleFactory.create(projectId)
+        val formsRepository = projectDependencyModule.formsRepository
+        val instancesRepository = projectDependencyModule.instancesRepository
+        val generalSettings = projectDependencyModule.generalSettings
+
         val result = mutableMapOf<Instance, FormUploadException?>()
         val deviceId = propertyManager.getSingularProperty(PROPMGR_DEVICE_ID)
 
-        val uploader = setUpODKUploader()
+        val uploader = setUpODKUploader(instancesRepository, generalSettings)
 
         for (instance in toUpload.sortedBy { it.finalizationDate }) {
             try {
                 uploader.uploadOneSubmission(instance, deviceId, null)
                 result[instance] = null
 
-                deleteInstance(instance)
+                deleteInstance(instance, formsRepository, generalSettings)
                 logUploadedForm(formsRepository, instance)
             } catch (e: FormUploadException) {
                 Timber.d(e)
@@ -48,7 +53,7 @@ class InstanceSubmitter(
         return result
     }
 
-    private fun setUpODKUploader(): ServerInstanceUploader {
+    private fun setUpODKUploader(instancesRepository: InstancesRepository, generalSettings: Settings): ServerInstanceUploader {
         return ServerInstanceUploader(
             httpInterface,
             WebCredentialsUtils(generalSettings),
@@ -57,7 +62,7 @@ class InstanceSubmitter(
         )
     }
 
-    private fun deleteInstance(instance: Instance) {
+    private fun deleteInstance(instance: Instance, formsRepository: FormsRepository, generalSettings: Settings) {
         // If the submission was successful, delete the instance if either the app-level
         // delete preference is set or the form definition requests auto-deletion.
         // TODO: this could take some time so might be better to do in a separate process,
