@@ -34,7 +34,8 @@ class FormEntryMenuProvider(
     private val backgroundLocationViewModel: BackgroundLocationViewModel,
     private val backgroundAudioViewModel: BackgroundAudioViewModel,
     private val settingsProvider: SettingsProvider,
-    private val formEntryMenuClickListener: FormEntryMenuClickListener
+    private val formEntryMenuClickListener: FormEntryMenuClickListener,
+    private val beforeMenuItemClick: () -> Boolean
 ) : MenuProvider {
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.form_menu, menu)
@@ -93,6 +94,10 @@ class FormEntryMenuProvider(
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         if (!allowClick(javaClass.name)) {
+            return true
+        }
+
+        if (!beforeMenuItemClick()) {
             return true
         }
 

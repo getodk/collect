@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+     ##############################################
+     # Timed Grid Test
+     ##############################################
+    -->
+    <string name="last_attempted_item">Last Attempted Item</string>
+    <string name="confirm_last_attempted_item">Do you want to confirm the last attempted item?</string>
+
+    <string name="test_ended_early_title">Test Ended Early</string>
+    <string name="test_ended_early_message">
+    You have reached the limit of %d consecutive wrong answers.
+    </string>
+
+    <!-- Warning shown when user reaches the consecutive mistakes limit in non-strict mode -->
+    <string name="consecutive_mistakes_title">Consecutive Mistakes</string>
+    <string name="consecutive_mistakes_message">
+    You have made %d consecutive mistakes. Do you want to end the test or continue?
+    </string>
+
+    <!-- Buttons for the choice dialog -->
+    <string name="end_test">End Test</string>
+    <string name="continue_test">Continue</string>
+
+    <!-- Confirmation that user wants to stop the end -->
+    <string name="early_finish_title">Early Finish</string>
+    <string name="early_finish_message">Do you want to end the test now?</string>
+
+    <string name="timed_grid_start">Start</string>
+    <string name="timed_grid_time_left">Time Left: %d</string>
+    <string name="timed_grid_test_complete">Test Complete</string>
+    <string name="timed_grid_prev_page">Prev Page</string>
+    <string name="timed_grid_next_page">Next Page</string>
+    <string name="timed_grid_early_finish">Early Finish</string>
+    <string name="timed_grid_row_number">(%d)</string>
+
+    <string name="assessment">Assessment…</string>
+    <string name="assessment_warning">You must finish assessment before leaving this screen.</string>
+</resources>
