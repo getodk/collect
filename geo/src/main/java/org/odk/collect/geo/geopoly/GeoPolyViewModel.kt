@@ -111,7 +111,6 @@ class GeoPolyViewModel(
     fun stopRecording() {
         disableInput()
         recording?.cancel()
-        locationTracker.stop()
     }
 
     fun setRecordingMode(mode: RecordingMode) {
@@ -128,6 +127,7 @@ class GeoPolyViewModel(
 
     public override fun onCleared() {
         stopRecording()
+        locationTracker.stop()
     }
 
     data class GeoPoly(val points: List<MapPoint>, val isValid: Boolean)
