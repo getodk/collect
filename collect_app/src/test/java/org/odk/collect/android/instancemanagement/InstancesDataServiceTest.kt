@@ -59,14 +59,15 @@ class InstancesDataServiceTest {
     private val httpInterface = mock<OpenRosaHttpInterface>()
     private val notifier = mock<Notifier>()
 
+    private val instanceSubmitter = InstanceSubmitter(projectsDependencyModuleFactory, mock(), httpInterface)
+
     private val instancesDataService =
         InstancesDataService(
             AppState(),
             mock(),
             projectsDependencyModuleFactory,
             notifier,
-            mock(),
-            httpInterface,
+            instanceSubmitter,
             mock()
         )
 
