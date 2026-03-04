@@ -80,7 +80,8 @@ class InstanceUploadViewModel(
                     }
 
                     try {
-                        results[instance.dbId.toString()] = uploadInstance(instance, deviceId)
+                        results[instance.dbId.toString()] = instanceUploader.uploadOneSubmission(instance, deviceId, externalUrl)
+                            ?: defaultSuccessMessage
 
                         Analytics.log(
                             SUBMISSION,
@@ -141,13 +142,6 @@ class InstanceUploadViewModel(
         instanceIds
             .mapNotNull { instancesRepository.get(it) }
             .sortedBy { it.finalizationDate }
-
-    private fun uploadInstance(instance: Instance, deviceId: String): String {
-        val message = instanceUploader.uploadOneSubmission(instance, deviceId, externalUrl)
-            ?: defaultSuccessMessage
-
-        return message
-    }
 
     // Delete instances that were successfully sent and that need to be deleted
     // either because app-level auto-delete is enabled or because the form
