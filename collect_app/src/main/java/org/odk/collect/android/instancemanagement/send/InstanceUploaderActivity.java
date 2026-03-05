@@ -29,6 +29,7 @@ import androidx.lifecycle.ViewModelProvider;
 import org.odk.collect.android.activities.FormFillingActivity;
 import org.odk.collect.android.fragments.dialogs.SimpleDialog;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.instancemanagement.InstanceUploadResultKt;
 import org.odk.collect.android.instancemanagement.InstancesDataService;
 import org.odk.collect.android.instancemanagement.InstanceUploadResult;
 import org.odk.collect.android.projects.ProjectsDataService;
@@ -36,7 +37,6 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ArrayUtils;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
-import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.views.DayNightProgressDialog;
@@ -222,7 +222,7 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
 
         // If the activity is paused or in the process of pausing, don't show the dialog
         if (!isInstanceStateSaved) {
-            createUploadInstancesResultDialog(InstanceUploaderUtils.getUploadResultMessage(this, uploadResults));
+            createUploadInstancesResultDialog(InstanceUploadResultKt.toMessage(uploadResults, getResources()));
         } else {
             // Clean up
             finish();
