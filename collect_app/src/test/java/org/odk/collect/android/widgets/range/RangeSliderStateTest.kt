@@ -47,7 +47,7 @@ class RangeSliderStateTest {
 
         val state = RangeSliderState.fromPrompt(prompt)
 
-        assertThat(state.sliderValue, equalTo(0.7.toBigDecimal()))
+        assertThat(state.sliderValue!!.stripTrailingZeros(), equalTo(0.7.toBigDecimal()))
         assertThat(state.realValue, equalTo(7.0.toBigDecimal()))
     }
 
@@ -62,7 +62,7 @@ class RangeSliderStateTest {
 
         val state = RangeSliderState.fromPrompt(prompt)
 
-        assertThat(state.sliderValue, equalTo(0.3.toBigDecimal()))
+        assertThat(state.sliderValue!!.stripTrailingZeros(), equalTo(0.3.toBigDecimal()))
         assertThat(state.realValue, equalTo(7.0.toBigDecimal()))
     }
 

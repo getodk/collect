@@ -22,7 +22,7 @@ data class RangeSliderState(
     val realValue
         get() = sliderValue?.let {
             val raw = rangeStart + it * (rangeEnd - rangeStart)
-            roundToStep(raw, step)
+            roundToStep(raw, rangeStart, step)
         }
 
     val valueLabel
@@ -35,12 +35,6 @@ data class RangeSliderState(
 
     val endLabel
         get() = if (isDiscrete) rangeEnd.toInt().toString() else rangeEnd.toString()
-
-    private fun roundToStep(value: BigDecimal, step: BigDecimal): BigDecimal {
-        return value
-            .divide(step, 0, RoundingMode.HALF_UP)
-            .multiply(step)
-    }
 
     companion object {
         fun fromPrompt(prompt: FormEntryPrompt): RangeSliderState {
@@ -94,14 +88,16 @@ data class RangeSliderState(
         ): BigDecimal? {
             if (value == null || start.compareTo(end) == 0) return null
 
-            var normalized = (value - start).divide(end - start, 10, RoundingMode.HALF_UP)
-            val stepFraction = step.divide(end - start, 10, RoundingMode.HALF_UP)
-            normalized = normalized
-                .divide(stepFraction, 0, RoundingMode.HALF_UP)
-                .multiply(stepFraction)
-                .stripTrailingZeros()
+            val nearestStepValue = roundToStep(value, start, step)
+            val stepWithinRange = (nearestStepValue - start).abs()
+            val range = (end - start).abs()
+            val fractionOfRange = stepWithinRange.divide(range, 10, RoundingMode.HALF_UP)
+            return fractionOfRange.takeIf { it >= BigDecimal.ZERO && it <= BigDecimal.ONE }
+        }
 
-            return normalized.takeIf { it >= BigDecimal.ZERO && it <= BigDecimal.ONE }
+        private fun roundToStep(value: BigDecimal, start: BigDecimal, step: BigDecimal): BigDecimal {
+            val steps = (value - start).divide(step, 0, RoundingMode.HALF_UP)
+            return start + steps.multiply(step)
         }
     }
 }
