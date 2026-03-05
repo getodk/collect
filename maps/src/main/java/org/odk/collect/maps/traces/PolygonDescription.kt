@@ -1,6 +1,8 @@
-package org.odk.collect.maps
+package org.odk.collect.maps.traces
 
 import androidx.core.graphics.ColorUtils
+import org.odk.collect.maps.MapConsts
+import org.odk.collect.maps.MapPoint
 
 data class PolygonDescription(
     override val points: List<MapPoint> = emptyList(),

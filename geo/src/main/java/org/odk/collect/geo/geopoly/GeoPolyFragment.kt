@@ -32,12 +32,13 @@ import org.odk.collect.geo.geopoint.LocationAccuracy.Improving
 import org.odk.collect.geo.geopoint.LocationAccuracy.Unacceptable
 import org.odk.collect.geo.geopoly.GeoPolySettingsDialogFragment.SettingsDialogCallback
 import org.odk.collect.location.tracker.LocationTracker
-import org.odk.collect.maps.LineDescription
+import org.odk.collect.maps.traces.LineDescription
 import org.odk.collect.maps.MapConsts
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.maps.MapPoint
-import org.odk.collect.maps.PolygonDescription
+import org.odk.collect.maps.circles.CircleDescription
+import org.odk.collect.maps.traces.PolygonDescription
 import org.odk.collect.maps.layers.OfflineMapLayersPickerBottomSheetDialogFragment
 import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.maps.markers.MarkerDescription
@@ -253,12 +254,15 @@ class GeoPolyFragment @JvmOverloads constructor(
         )
 
         var locationMarkerId: Int? = null
+        var accuracyHaloId: Int? = null
         viewModel.currentLocation.observe(viewLifecycleOwner) { location ->
             binding.zoom.isEnabled = location != null
 
             if (location != null) {
+                val locationMapPoint = location.toMapPoint()
+
                 val markerDescription = MarkerDescription(
-                    location.toMapPoint(),
+                    locationMapPoint,
                     false,
                     MapFragment.IconAnchor.CENTER,
                     MarkerIconDescription.DrawableResource(org.odk.collect.maps.R.drawable.ic_crosshairs)
@@ -268,6 +272,14 @@ class GeoPolyFragment @JvmOverloads constructor(
                     locationMarkerId = map.addMarker(markerDescription)
                 } else {
                     map.updateMarker(locationMarkerId, markerDescription)
+                }
+
+                val circleDescription = CircleDescription(location.toMapPoint(), location.accuracy)
+
+                if (accuracyHaloId == null) {
+                    accuracyHaloId = map.addCircle(circleDescription)
+                } else {
+                    map.updateCircle(accuracyHaloId, circleDescription)
                 }
 
                 val shouldFollowLocation =
