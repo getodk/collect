@@ -10,6 +10,8 @@ import androidx.compose.ui.platform.ComposeView
 import org.javarosa.core.model.data.DecimalData
 import org.javarosa.core.model.data.IAnswerData
 import org.javarosa.form.api.FormEntryPrompt
+import org.odk.collect.analytics.Analytics
+import org.odk.collect.android.analytics.AnalyticsEvents.RANGE_DECIMAL_WIDGET
 import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.widgets.QuestionWidget
 import org.odk.collect.androidshared.ui.ComposeThemeProvider.Companion.setContextThemedContent
@@ -30,6 +32,7 @@ class RangeDecimalWidget(
 
     init {
         render()
+        Analytics.log(RANGE_DECIMAL_WIDGET, "form")
     }
 
     override fun onCreateWidgetView(context: Context, prompt: FormEntryPrompt, answerFontSize: Int): View {

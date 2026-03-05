@@ -115,4 +115,9 @@ object AnalyticsEvents {
      * Tracks how often shortcuts for forms are added
      */
     const val ADD_SHORTCUT = "AddShortcut"
+
+    /**
+     * Tracks how often the range decimal widget is used
+     */
+    const val RANGE_DECIMAL_WIDGET = "RangeDecimalWidget"
 }
