@@ -279,6 +279,10 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
 
     @Override public int addMarker(MarkerDescription markerDescription) {
         int featureId = nextFeatureId++;
+        return addMarker(featureId, markerDescription);
+    }
+
+    private int addMarker(int featureId, MarkerDescription markerDescription) {
         features.put(featureId, new MarkerFeature(getActivity(), markerDescription, map));
         return featureId;
     }
@@ -716,6 +720,12 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
                 return (T) new MapViewModel(settingsProvider.getUnprotectedSettings(), settingsProvider.getMetaSettings());
             }
         }).get(MapViewModel.class);
+    }
+
+    @Override
+    public void updateMarker(int featureId, @NotNull MarkerDescription markerDescription) {
+        features.get(featureId).dispose();
+        addMarker(featureId, markerDescription);
     }
 
     /**

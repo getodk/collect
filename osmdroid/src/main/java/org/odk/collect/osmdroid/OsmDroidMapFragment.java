@@ -303,6 +303,10 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
     @Override
     public int addMarker(MarkerDescription markerDescription) {
         int featureId = nextFeatureId++;
+        return addMarker(featureId, markerDescription);
+    }
+
+    private int addMarker(int featureId, MarkerDescription markerDescription) {
         features.put(featureId, new MarkerFeature(map, markerDescription));
         return featureId;
     }
@@ -720,6 +724,12 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
     @Override
     public MapViewModel getMapViewModel() {
         return mapViewModel;
+    }
+
+    @Override
+    public void updateMarker(int featureId, @NotNull MarkerDescription markerDescription) {
+        features.get(featureId).dispose();
+        addMarker(featureId, markerDescription);
     }
 
     /**

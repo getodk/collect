@@ -40,6 +40,8 @@ import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.PolygonDescription
 import org.odk.collect.maps.layers.OfflineMapLayersPickerBottomSheetDialogFragment
 import org.odk.collect.maps.layers.ReferenceLayerRepository
+import org.odk.collect.maps.markers.MarkerDescription
+import org.odk.collect.maps.markers.MarkerIconDescription
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.strings.R.string
 import org.odk.collect.webpage.WebPageService
@@ -250,12 +252,29 @@ class GeoPolyFragment @JvmOverloads constructor(
             displayDismissButton = true
         )
 
+        var locationMarkerId: Int? = null
         viewModel.currentLocation.observe(viewLifecycleOwner) { location ->
             binding.zoom.isEnabled = location != null
-            val shouldFollowLocation =
-                viewModel.inputActive && viewModel.recordingMode != GeoPolyViewModel.RecordingMode.PLACEMENT
-            if (!map.hasCenter() || shouldFollowLocation) {
-                map.setCenter(location?.toMapPoint(), false)
+
+            if (location != null) {
+                val markerDescription = MarkerDescription(
+                    location.toMapPoint(),
+                    false,
+                    MapFragment.IconAnchor.CENTER,
+                    MarkerIconDescription.DrawableResource(org.odk.collect.maps.R.drawable.ic_crosshairs)
+                )
+
+                if (locationMarkerId == null) {
+                    locationMarkerId = map.addMarker(markerDescription)
+                } else {
+                    map.updateMarker(locationMarkerId, markerDescription)
+                }
+
+                val shouldFollowLocation =
+                    viewModel.inputActive && viewModel.recordingMode != GeoPolyViewModel.RecordingMode.PLACEMENT
+                if (!map.hasCenter() || shouldFollowLocation) {
+                    map.setCenter(location.toMapPoint(), false)
+                }
             }
         }
 
