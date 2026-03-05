@@ -94,6 +94,19 @@ class GeoPolyFragmentTest {
     }
 
     @Test
+    fun marksCurrentLocation() {
+        fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment({ OnBackPressedDispatcher() })
+        }
+
+        locationTracker.currentLocation = Location(2.0, 2.0)
+        assertThat(mapFragment.getMarkers(), equalTo(listOf(MapPoint(2.0, 2.0))))
+
+        locationTracker.currentLocation = Location(3.0, 2.0)
+        assertThat(mapFragment.getMarkers(), equalTo(listOf(MapPoint(3.0, 2.0))))
+    }
+
+    @Test
     fun recordButton_should_beHiddenForAutomaticMode() {
         fragmentLauncherRule.launchInContainer {
             GeoPolyFragment({ OnBackPressedDispatcher() })
