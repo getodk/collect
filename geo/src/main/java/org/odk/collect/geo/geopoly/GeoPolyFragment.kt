@@ -274,7 +274,11 @@ class GeoPolyFragment @JvmOverloads constructor(
                     map.updateMarker(locationMarkerId, markerDescription)
                 }
 
-                val circleDescription = CircleDescription(location.toMapPoint(), location.accuracy)
+                val circleDescription = CircleDescription(
+                    location.toMapPoint(),
+                    location.accuracy,
+                    MapConsts.DEFAULT_STROKE_COLOR
+                )
 
                 if (accuracyHaloId == null) {
                     accuracyHaloId = map.addCircle(circleDescription)

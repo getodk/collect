@@ -8,6 +8,8 @@ import com.google.android.gms.maps.model.Polyline
 import org.odk.collect.googlemaps.GoogleMapFragment
 import org.odk.collect.googlemaps.MapPointExt.toLatLng
 import org.odk.collect.maps.circles.CircleDescription
+import org.odk.collect.maps.circles.getFillColor
+import org.odk.collect.maps.circles.getStrokeColor
 
 class CircleFeature(circleDescription: CircleDescription, map: GoogleMap) :
     GoogleMapFragment.MapFeature {
@@ -16,6 +18,9 @@ class CircleFeature(circleDescription: CircleDescription, map: GoogleMap) :
         CircleOptions()
             .center(circleDescription.center.toLatLng())
             .radius(circleDescription.radius.toDouble())
+            .strokeColor(circleDescription.getStrokeColor())
+            .fillColor(circleDescription.getFillColor())
+            .strokeWidth(1f)
     )
 
     override fun ownsMarker(marker: Marker?): Boolean {
