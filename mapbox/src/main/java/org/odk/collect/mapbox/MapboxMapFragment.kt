@@ -36,6 +36,7 @@ import com.mapbox.maps.plugin.LocationPuck2D
 import com.mapbox.maps.plugin.animation.MapAnimationOptions.Companion.mapAnimationOptions
 import com.mapbox.maps.plugin.animation.flyTo
 import com.mapbox.maps.plugin.annotation.annotations
+import com.mapbox.maps.plugin.annotation.generated.PointAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationManager
@@ -300,6 +301,18 @@ class MapboxMapFragment :
         return addMarkers(listOf(markerDescription)).first()
     }
 
+    override fun updateMarker(
+        featureId: Int,
+        markerDescription: MarkerDescription
+    ) {
+        features[featureId]?.dispose()
+        val markers = listOf(markerDescription)
+        val pointAnnotations =
+            MapUtils.createPointAnnotations(requireContext(), pointAnnotationManager, markers)
+
+        addMarker(featureId, markers[0], pointAnnotations[0])
+    }
+
     override fun addMarkers(markers: List<MarkerDescription>): List<Int> {
         val pointAnnotations =
             MapUtils.createPointAnnotations(requireContext(), pointAnnotationManager, markers)
@@ -309,21 +322,30 @@ class MapboxMapFragment :
             .zip(pointAnnotations.asSequence())
             .forEach { (marker, pointAnnotation) ->
                 val featureId = nextFeatureId++
-                val markerFeature = MarkerFeature(
-                    requireContext(),
-                    pointAnnotationManager,
-                    pointAnnotation,
-                    featureId,
-                    featureClickListener,
-                    featureDragEndListener,
-                    marker.point
-                )
-
                 featureIds.add(featureId)
-                features[featureId] = markerFeature
+
+                addMarker(featureId, marker, pointAnnotation)
             }
 
         return featureIds
+    }
+
+    private fun addMarker(
+        featureId: Int,
+        marker: MarkerDescription,
+        pointAnnotation: PointAnnotation
+    ) {
+        val markerFeature = MarkerFeature(
+            requireContext(),
+            pointAnnotationManager,
+            pointAnnotation,
+            featureId,
+            featureClickListener,
+            featureDragEndListener,
+            marker.point
+        )
+
+        features[featureId] = markerFeature
     }
 
     override fun setMarkerIcon(featureId: Int, markerIconDescription: MarkerIconDescription) {

@@ -77,6 +77,7 @@ interface MapFragment {
      * Returns a positive integer, the featureId for the newly added shape.
      */
     fun addMarker(markerDescription: MarkerDescription): Int
+    fun updateMarker(featureId: Int, markerDescription: MarkerDescription)
 
     fun addMarkers(markers: List<MarkerDescription>): List<Int>
 
