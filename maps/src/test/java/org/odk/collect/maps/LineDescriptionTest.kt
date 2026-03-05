@@ -5,6 +5,7 @@ import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.odk.collect.maps.traces.LineDescription
 
 @RunWith(AndroidJUnit4::class)
 class LineDescriptionTest {

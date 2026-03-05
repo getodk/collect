@@ -1,18 +1,18 @@
 package org.odk.collect.geo.support
 
 import androidx.fragment.app.Fragment
-import org.odk.collect.maps.LineDescription
+import org.odk.collect.maps.traces.LineDescription
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragment.FeatureListener
 import org.odk.collect.maps.MapFragment.PointListener
 import org.odk.collect.maps.MapFragment.ReadyListener
 import org.odk.collect.maps.MapPoint
-import org.odk.collect.maps.PolygonDescription
+import org.odk.collect.maps.circles.CircleDescription
+import org.odk.collect.maps.traces.PolygonDescription
 import org.odk.collect.maps.markers.MarkerDescription
 import org.odk.collect.maps.markers.MarkerIconDescription
 import kotlin.random.Random
 class FakeMapFragment(private val ready: Boolean = false) : Fragment(), MapFragment {
-
     private var clickListener: PointListener? = null
     private var gpsLocationListener: PointListener? = null
     private var locationProvider: String? = null
@@ -28,6 +28,8 @@ class FakeMapFragment(private val ready: Boolean = false) : Fragment(), MapFragm
     private val markerIcons = mutableMapOf<Int, MarkerIconDescription?>()
     private val polyLines = mutableMapOf<Int, LineDescription>()
     private val polygons = mutableMapOf<Int, PolygonDescription>()
+
+    private val circles = mutableMapOf<Int, CircleDescription>()
     private var hasCenter = false
     private val featureIds = mutableListOf<Int>()
     private var zoomLevelSetByUser: Float? = null
@@ -158,6 +160,23 @@ class FakeMapFragment(private val ready: Boolean = false) : Fragment(), MapFragm
         polygonDescription: PolygonDescription
     ) {
         polygons[featureId] = polygonDescription
+    }
+
+    override fun addCircle(circleDescription: CircleDescription): Int {
+        val featureId = generateFeatureId()
+        circles[featureId] = circleDescription
+        return featureId
+    }
+
+    override fun updateCircle(
+        featureId: Int,
+        circleDescription: CircleDescription
+    ) {
+        circles[featureId] = circleDescription
+    }
+
+    fun getCircles(): List<CircleDescription> {
+        return circles.values.toList()
     }
 
     override fun getPolyPoints(featureId: Int): List<MapPoint> {

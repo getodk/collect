@@ -3,10 +3,11 @@ package org.odk.collect.android.support
 import android.os.Handler
 import android.os.Looper
 import androidx.fragment.app.Fragment
-import org.odk.collect.maps.LineDescription
+import org.odk.collect.maps.traces.LineDescription
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapPoint
-import org.odk.collect.maps.PolygonDescription
+import org.odk.collect.maps.circles.CircleDescription
+import org.odk.collect.maps.traces.PolygonDescription
 import org.odk.collect.maps.markers.MarkerDescription
 import org.odk.collect.maps.markers.MarkerIconDescription
 
@@ -50,6 +51,13 @@ class FakeClickableMapFragment : Fragment(), MapFragment {
         return id
     }
 
+    override fun updateMarker(
+        featureId: Int,
+        markerDescription: MarkerDescription
+    ) {
+
+    }
+
     override fun addMarkers(markers: List<MarkerDescription>): List<Int> {
         return markers.map {
             addMarker(it)
@@ -73,6 +81,16 @@ class FakeClickableMapFragment : Fragment(), MapFragment {
     }
 
     override fun updatePolygon(featureId: Int, polygonDescription: PolygonDescription) {}
+    override fun addCircle(circleDescription: CircleDescription): Int {
+        return -1
+    }
+
+    override fun updateCircle(
+        featureId: Int,
+        circleDescription: CircleDescription
+    ) {
+
+    }
 
     override fun getPolyPoints(featureId: Int): MutableList<MapPoint> {
         return mutableListOf()
