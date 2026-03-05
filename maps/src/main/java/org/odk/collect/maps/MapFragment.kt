@@ -82,6 +82,7 @@ interface MapFragment {
     fun addMarkers(markers: List<MarkerDescription>): List<Int>
 
     /** Sets the icon for a marker.  */
+    @Deprecated(message = "Use #updateMarker instead")
     fun setMarkerIcon(featureId: Int, markerIconDescription: MarkerIconDescription)
 
     /** Gets the location of an existing marker.  */
