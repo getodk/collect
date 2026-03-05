@@ -16,7 +16,7 @@ package org.odk.collect.osmdroid;
 
 import static androidx.core.graphics.drawable.BitmapDrawableKt.toDrawable;
 import static androidx.core.graphics.drawable.DrawableKt.toBitmap;
-import static org.odk.collect.maps.TraceDescriptionKt.getMarkersForPoints;
+import static org.odk.collect.maps.traces.TraceDescriptionKt.getMarkersForPoints;
 import static org.odk.collect.maps.markers.MarkerIconCreator.toBitmap;
 
 import android.content.BroadcastReceiver;
@@ -46,13 +46,14 @@ import com.google.android.gms.location.LocationListener;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.androidshared.system.ContextUtils;
 import org.odk.collect.location.LocationClient;
-import org.odk.collect.maps.LineDescription;
+import org.odk.collect.maps.circles.CircleDescription;
+import org.odk.collect.maps.traces.LineDescription;
 import org.odk.collect.maps.MapConfigurator;
 import org.odk.collect.maps.MapFragment;
 import org.odk.collect.maps.MapPoint;
 import org.odk.collect.maps.MapViewModel;
 import org.odk.collect.maps.MapViewModelMapFragment;
-import org.odk.collect.maps.PolygonDescription;
+import org.odk.collect.maps.traces.PolygonDescription;
 import org.odk.collect.maps.Zoom;
 import org.odk.collect.maps.ZoomObserver;
 import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils;
@@ -730,6 +731,16 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
     public void updateMarker(int featureId, @NotNull MarkerDescription markerDescription) {
         features.get(featureId).dispose();
         addMarker(featureId, markerDescription);
+    }
+
+    @Override
+    public int addCircle(@NotNull CircleDescription circleDescription) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void updateCircle(int featureId, @NotNull CircleDescription circleDescription) {
+        throw new UnsupportedOperationException();
     }
 
     /**

@@ -21,6 +21,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.odk.collect.androidshared.ui.DisplayString
 import org.odk.collect.androidshared.ui.SnackbarUtils
@@ -30,6 +31,7 @@ import org.odk.collect.async.Scheduler
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.geo.DaggerGeoDependencyComponent
 import org.odk.collect.geo.GeoDependencyModule
+import org.odk.collect.geo.GeoUtils.toMapPoint
 import org.odk.collect.geo.R
 import org.odk.collect.geo.geopoly.GeoPolyFragment.Companion.INTERVAL_OPTIONS
 import org.odk.collect.geo.geopoly.GeoPolyFragment.OutputMode
@@ -54,6 +56,7 @@ import org.odk.collect.testshared.FragmentResultRecorder
 import org.odk.collect.testshared.Interactions
 import org.odk.collect.webpage.WebPageService
 import org.robolectric.Shadows
+import kotlin.math.acos
 
 @RunWith(AndroidJUnit4::class)
 class GeoPolyFragmentTest {
@@ -99,11 +102,27 @@ class GeoPolyFragmentTest {
             GeoPolyFragment({ OnBackPressedDispatcher() })
         }
 
-        locationTracker.currentLocation = Location(2.0, 2.0)
-        assertThat(mapFragment.getMarkers(), equalTo(listOf(MapPoint(2.0, 2.0))))
+        locationTracker.currentLocation = Location(2.0, 2.0, accuracy = 5.2f)
+        assertThat(
+            mapFragment.getMarkers(),
+            equalTo(listOf(locationTracker.currentLocation!!.toMapPoint()))
+        )
+        mapFragment.getCircles().let {
+            assertThat(it.size, equalTo(1))
+            assertThat(it[0].center, equalTo(locationTracker.currentLocation!!.toMapPoint()))
+            assertThat(it[0].radius, equalTo(5.2f))
+        }
 
-        locationTracker.currentLocation = Location(3.0, 2.0)
-        assertThat(mapFragment.getMarkers(), equalTo(listOf(MapPoint(3.0, 2.0))))
+        locationTracker.currentLocation = Location(3.0, 2.0, accuracy = 2.1f)
+        assertThat(
+            mapFragment.getMarkers(),
+            equalTo(listOf(locationTracker.currentLocation!!.toMapPoint()))
+        )
+        mapFragment.getCircles().let {
+            assertThat(it.size, equalTo(1))
+            assertThat(it[0].center, equalTo(locationTracker.currentLocation!!.toMapPoint()))
+            assertThat(it[0].radius, equalTo(2.1f))
+        }
     }
 
     @Test

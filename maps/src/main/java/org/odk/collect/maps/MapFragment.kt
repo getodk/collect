@@ -1,7 +1,10 @@
 package org.odk.collect.maps
 
+import org.odk.collect.maps.circles.CircleDescription
+import org.odk.collect.maps.traces.LineDescription
 import org.odk.collect.maps.markers.MarkerDescription
 import org.odk.collect.maps.markers.MarkerIconDescription
+import org.odk.collect.maps.traces.PolygonDescription
 
 /**
  * Interface for a Fragment that renders a map view.  The plan is to have one
@@ -102,6 +105,9 @@ interface MapFragment {
      */
     fun addPolygon(polygonDescription: PolygonDescription): Int
     fun updatePolygon(featureId: Int, polygonDescription: PolygonDescription)
+
+    fun addCircle(circleDescription: CircleDescription): Int
+    fun updateCircle(featureId: Int, circleDescription: CircleDescription)
 
     /**
      * Returns the vertices of the polyline or polygon specified by featureId, or an

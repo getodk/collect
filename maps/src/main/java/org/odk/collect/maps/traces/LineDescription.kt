@@ -1,4 +1,7 @@
-package org.odk.collect.maps
+package org.odk.collect.maps.traces
+
+import org.odk.collect.maps.MapConsts
+import org.odk.collect.maps.MapPoint
 
 data class LineDescription(
     override val points: List<MapPoint> = emptyList(),

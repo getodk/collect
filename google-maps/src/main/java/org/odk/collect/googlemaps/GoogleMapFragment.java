@@ -14,7 +14,8 @@
 
 package org.odk.collect.googlemaps;
 
-import static org.odk.collect.maps.TraceDescriptionKt.getMarkersForPoints;
+import static org.odk.collect.googlemaps.MapPointExt.toLatLng;
+import static org.odk.collect.maps.traces.TraceDescriptionKt.getMarkersForPoints;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -55,21 +56,23 @@ import org.jetbrains.annotations.NotNull;
 import org.odk.collect.androidshared.system.ContextUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.googlemaps.GoogleMapConfigurator.GoogleMapTypeOption;
+import org.odk.collect.googlemaps.circles.CircleFeature;
 import org.odk.collect.googlemaps.scaleview.MapScaleView;
 import org.odk.collect.location.LocationClient;
-import org.odk.collect.maps.LineDescription;
 import org.odk.collect.maps.MapConfigurator;
 import org.odk.collect.maps.MapFragment;
 import org.odk.collect.maps.MapPoint;
 import org.odk.collect.maps.MapViewModel;
 import org.odk.collect.maps.MapViewModelMapFragment;
-import org.odk.collect.maps.PolygonDescription;
 import org.odk.collect.maps.Zoom;
 import org.odk.collect.maps.ZoomObserver;
+import org.odk.collect.maps.circles.CircleDescription;
 import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils;
 import org.odk.collect.maps.layers.ReferenceLayerRepository;
 import org.odk.collect.maps.markers.MarkerDescription;
 import org.odk.collect.maps.markers.MarkerIconDescription;
+import org.odk.collect.maps.traces.LineDescription;
+import org.odk.collect.maps.traces.PolygonDescription;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.ProjectKeys;
 
@@ -526,9 +529,7 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
         return new MapPoint(position.latitude, position.longitude, alt, sd);
     }
 
-    private static @NonNull LatLng toLatLng(@NonNull MapPoint point) {
-        return new LatLng(point.latitude, point.longitude);
-    }
+
 
     /** Updates the map to reflect the value of referenceLayerFile. */
     private void loadReferenceOverlay() {
@@ -728,13 +729,30 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
         addMarker(featureId, markerDescription);
     }
 
+    @Override
+    public int addCircle(@NotNull CircleDescription circleDescription) {
+        int featureId = nextFeatureId++;
+        addCircle(featureId, circleDescription);
+        return featureId;
+    }
+
+    private void addCircle(int featureId, @NotNull CircleDescription circleDescription) {
+        features.put(featureId, new CircleFeature(circleDescription, map));
+    }
+
+    @Override
+    public void updateCircle(int featureId, @NotNull CircleDescription circleDescription) {
+        features.get(featureId).dispose();
+        addCircle(featureId, circleDescription);
+    }
+
     /**
      * A MapFeature is a physical feature on a map, such as a point, a road,
      * a building, a region, etc.  It is presented to the user as one editable
      * object, though its appearance may be constructed from multiple overlays
      * (e.g. geometric elements, handles for manipulation, etc.).
      */
-    interface MapFeature {
+    public interface MapFeature {
         /** Returns true if the given marker belongs to this feature. */
         boolean ownsMarker(Marker marker);
 
