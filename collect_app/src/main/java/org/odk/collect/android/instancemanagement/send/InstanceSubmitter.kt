@@ -7,11 +7,10 @@ import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.instancemanagement.InstanceDeleter
 import org.odk.collect.android.projects.ProjectDependencyModule
-import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstanceAutoDeleteChecker
-import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.forms.FormsRepository
 import org.odk.collect.forms.instances.Instance
+import org.odk.collect.forms.instances.InstancesRepository
 import org.odk.collect.metadata.PropertyManager
 import org.odk.collect.metadata.PropertyManager.Companion.PROPMGR_DEVICE_ID
 import org.odk.collect.projects.ProjectDependencyFactory
@@ -38,6 +37,7 @@ class InstanceSubmitter(
     ): List<InstanceUploadResult> = coroutineScope {
         val projectDependencyModule = projectDependencyFactory.create(projectId)
         val formsRepository = projectDependencyModule.formsRepository
+        val instancesRepository = projectDependencyModule.instancesRepository
         val generalSettings = projectDependencyModule.generalSettings
 
         val uploadResults = mutableListOf<InstanceUploadResult>()
@@ -52,7 +52,7 @@ class InstanceSubmitter(
                 val resultMessage = instanceUploader.uploadOneSubmission(projectId, instance, deviceId, overrideURL)
                 uploadResults.add(InstanceUploadResult.Success(instance, resultMessage ?: defaultSuccessMessage))
 
-                deleteInstance(instance, formsRepository, generalSettings, externalDeleteAfterUpload)
+                deleteInstance(instance, formsRepository, instancesRepository, generalSettings, externalDeleteAfterUpload)
                 logOverrideURL(referrer, overrideURL)
                 logUploadedForm(formsRepository, instance, autoSend)
             } catch (e: FormUploadException) {
@@ -68,7 +68,13 @@ class InstanceSubmitter(
         uploadResults
     }
 
-    private fun deleteInstance(instance: Instance, formsRepository: FormsRepository, generalSettings: Settings, externalDeleteAfterUpload: Boolean?) {
+    private fun deleteInstance(
+        instance: Instance,
+        formsRepository: FormsRepository,
+        instancesRepository: InstancesRepository,
+        generalSettings: Settings,
+        externalDeleteAfterUpload: Boolean?
+    ) {
         // If the submission was successful, delete the instance if either the app-level
         // delete preference is set or the form definition requests auto-deletion.
         // TODO: this could take some time so might be better to do in a separate process,
@@ -78,8 +84,8 @@ class InstanceSubmitter(
 
         if (InstanceAutoDeleteChecker.shouldInstanceBeDeleted(formsRepository, isFormAutoDeleteOptionEnabled, instance)) {
             InstanceDeleter(
-                InstancesRepositoryProvider(Collect.getInstance()).create(),
-                FormsRepositoryProvider(Collect.getInstance()).create()
+                instancesRepository,
+                formsRepository
             ).delete(instance.dbId)
         }
     }
