@@ -25,6 +25,9 @@ import org.odk.collect.entities.javarosa.finalization.EntitiesExtra
 import org.odk.collect.entities.javarosa.finalization.EntityFormFinalizationProcessor
 import org.odk.collect.entities.javarosa.finalization.FormEntity
 import org.odk.collect.entities.javarosa.parse.EntityXFormParserFactory
+import org.odk.collect.entities.javarosa.spec.EntityAction.CREATE
+import org.odk.collect.entities.javarosa.support.EntityXFormsElement.entityNode
+import org.odk.collect.entities.javarosa.support.EntityXFormsElement.withSaveTo
 import java.sql.Date
 
 class EntityFormFinalizationProcessorTest {
@@ -84,21 +87,16 @@ class EntityFormFinalizationProcessorTest {
                             t(
                                 "data id=\"create-entity-form\"",
                                 t("name"),
-                                t(
-                                    "meta",
-                                    t(
-                                        "entity dataset=\"people\" create=\"1\" id=\"\"",
-                                        t("label")
-                                    )
-                                )
+                                t("age"),
+                                t("meta", entityNode("people", CREATE))
                             )
                         ),
-                        bind("/data/name").type("string")
-                            .withAttribute("entities", "saveto", "name")
+                        bind("/data/name").type("string"),
+                        bind("/data/age").type("string")
+                            .withSaveTo("age")
                             .relevant("false()"),
                         bind("/data/meta/entity/@id").type("string"),
-                        bind("/data/meta/entity/label").type("string")
-                            .calculate("/data/name"),
+                        bind("/data/meta/entity/label").type("string").calculate("/data/name"),
                         setvalue("odk-instance-first-load", "/data/meta/entity/@id", "uuid()")
                     )
                 ),
@@ -107,6 +105,8 @@ class EntityFormFinalizationProcessorTest {
                 )
             )
         )
+
+        scenario.answer("/data/name", "Johannes")
 
         val processor = EntityFormFinalizationProcessor()
         val model = scenario.formEntryController.model
@@ -133,17 +133,11 @@ class EntityFormFinalizationProcessorTest {
                             t(
                                 "data id=\"create-entity-form\"",
                                 t("birthday"),
-                                t(
-                                    "meta",
-                                    t(
-                                        "entity dataset=\"people\" create=\"1\" id=\"\"",
-                                        t("label")
-                                    )
-                                )
+                                t("meta", entityNode("people", CREATE))
                             )
                         ),
                         bind("/data/birthday").type("date")
-                            .withAttribute("entities", "saveto", "birthday"),
+                            .withSaveTo("birthday"),
                         bind("/data/meta/entity/@id").type("string"),
                         bind("/data/meta/entity/label").type("string")
                             .calculate("/data/birthday"),
@@ -185,36 +179,34 @@ class EntityFormFinalizationProcessorTest {
                         mainInstance(
                             t(
                                 "data id=\"create-entity-form\"",
+                                t("name"),
                                 t(
                                     "group",
-                                    t("name")
+                                    t("age")
                                 ),
-                                t(
-                                    "meta",
-                                    t(
-                                        "entity dataset=\"people\" create=\"1\" id=\"\"",
-                                        t("label")
-                                    )
-                                )
+                                t("meta", entityNode("people", CREATE))
                             )
                         ),
+                        bind("/data/name"),
                         bind("/data/group").relevant("false()"),
-                        bind("/data/group/name").type("string")
-                            .withAttribute("entities", "saveto", "name"),
+                        bind("/data/group/age").type("string")
+                            .withSaveTo("age"),
                         bind("/data/meta/entity/@id").type("string"),
-                        bind("/data/meta/entity/label").type("string")
-                            .calculate("/data/group/name"),
+                        bind("/data/meta/entity/label").type("string").calculate("/data/name"),
                         setvalue("odk-instance-first-load", "/data/meta/entity/@id", "uuid()")
                     )
                 ),
                 body(
+                    input("/data/name"),
                     group(
                         "/data/group",
-                        input("/data/group/name")
+                        input("/data/group/age")
                     )
                 )
             )
         )
+
+        scenario.answer("/data/name", "Thomas")
 
         val processor = EntityFormFinalizationProcessor()
         val model = scenario.formEntryController.model
@@ -243,18 +235,12 @@ class EntityFormFinalizationProcessorTest {
                                     "group",
                                     t("name")
                                 ),
-                                t(
-                                    "meta",
-                                    t(
-                                        "entity dataset=\"people\" create=\"1\" id=\"\"",
-                                        t("label")
-                                    )
-                                )
+                                t("meta", entityNode("people", CREATE))
                             )
                         ),
                         bind("/data/group"),
                         bind("/data/group/name").type("string")
-                            .withAttribute("entities", "saveto", "name"),
+                            .withSaveTo("name"),
                         bind("/data/meta/entity/@id").type("string"),
                         bind("/data/meta/entity/label").type("string")
                             .calculate("/data/group/name"),

@@ -90,6 +90,7 @@ class InstancesDataService(
         val formsRepository = projectDependencyModule.formsRepository
         val savepointsRepository = projectDependencyModule.savepointsRepository
         val entitiesRepository = projectDependencyModule.entitiesRepository
+        val debugLogger = projectDependencyModule.debugLogger
 
         val projectRootDir = File(projectDependencyModule.rootDir)
 
@@ -142,7 +143,8 @@ class InstancesDataService(
                         val finalizedInstance = FormEntryUseCases.finalizeDraft(
                             formController,
                             instancesRepository,
-                            entitiesRepository
+                            entitiesRepository,
+                            debugLogger
                         )
 
                         if (finalizedInstance == null) {

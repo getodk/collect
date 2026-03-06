@@ -40,6 +40,7 @@ import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.forms.savepoints.SavepointsRepository;
 import org.odk.collect.material.MaterialProgressDialogFragment;
+import org.odk.collect.shared.DebugLogger;
 import org.odk.collect.shared.strings.Md5;
 import org.odk.collect.utilities.Result;
 
@@ -92,12 +93,14 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
     private Instance instance;
     private final Cancellable formSessionObserver;
     private InstancesDataService instancesDataService;
+    private DebugLogger debugLogger;
 
     public FormSaveViewModel(SavedStateHandle stateHandle, Supplier<Long> clock, FormSaver formSaver,
                              MediaUtils mediaUtils, Scheduler scheduler, AudioRecorder audioRecorder,
                              ProjectsDataService projectsDataService, LiveData<FormSession> formSession,
                              EntitiesRepository entitiesRepository, InstancesRepository instancesRepository,
-                             SavepointsRepository savepointsRepository, InstancesDataService instancesDataService
+                             SavepointsRepository savepointsRepository, InstancesDataService instancesDataService,
+                             DebugLogger debugLogger
     ) {
         this.stateHandle = stateHandle;
         this.clock = clock;
@@ -110,6 +113,7 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
         this.instancesRepository = instancesRepository;
         this.savepointsRepository = savepointsRepository;
         this.instancesDataService = instancesDataService;
+        this.debugLogger = debugLogger;
 
         if (stateHandle.get(ORIGINAL_FILES) != null) {
             originalFiles = stateHandle.get(ORIGINAL_FILES);
@@ -257,7 +261,7 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
                 handleTaskResult(saveToDiskResult, saveRequest);
                 clearMediaFiles();
             }
-        }, new ArrayList<>(originalFiles.values()), projectsDataService.requireCurrentProject().getUuid(), entitiesRepository, instancesRepository).execute();
+        }, new ArrayList<>(originalFiles.values()), projectsDataService.requireCurrentProject().getUuid(), entitiesRepository, instancesRepository, debugLogger).execute();
     }
 
     private void handleTaskResult(SaveToDiskResult taskResult, SaveRequest saveRequest) {
@@ -526,9 +530,10 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
         private final String currentProjectId;
         private final EntitiesRepository entitiesRepository;
         private final InstancesRepository instancesRepository;
+        private final DebugLogger debugLogger;
 
         SaveTask(SaveRequest saveRequest, FormSaver formSaver, FormController formController, MediaUtils mediaUtils,
-                 Listener listener, ArrayList<String> tempFiles, String currentProjectId, EntitiesRepository entitiesRepository, InstancesRepository instancesRepository) {
+                 Listener listener, ArrayList<String> tempFiles, String currentProjectId, EntitiesRepository entitiesRepository, InstancesRepository instancesRepository, DebugLogger debugLogger) {
             this.saveRequest = saveRequest;
             this.formSaver = formSaver;
             this.listener = listener;
@@ -538,6 +543,7 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
             this.currentProjectId = currentProjectId;
             this.entitiesRepository = entitiesRepository;
             this.instancesRepository = instancesRepository;
+            this.debugLogger = debugLogger;
         }
 
         @Override
@@ -546,7 +552,7 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
                     mediaUtils, saveRequest.shouldFinalize,
                     saveRequest.viewExiting, saveRequest.updatedSaveName,
                     this::publishProgress, tempFiles,
-                    currentProjectId, entitiesRepository, instancesRepository);
+                    currentProjectId, entitiesRepository, instancesRepository, debugLogger);
         }
 
         @Override

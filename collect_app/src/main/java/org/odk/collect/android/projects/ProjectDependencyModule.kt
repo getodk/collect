@@ -9,6 +9,8 @@ import org.odk.collect.forms.FormsRepository
 import org.odk.collect.forms.instances.InstancesRepository
 import org.odk.collect.forms.savepoints.SavepointsRepository
 import org.odk.collect.projects.ProjectDependencyFactory
+import org.odk.collect.projects.projectDependency
+import org.odk.collect.shared.DebugLogger
 import org.odk.collect.shared.settings.Settings
 
 /**
@@ -25,19 +27,21 @@ data class ProjectDependencyModule(
     private val formSourceFactory: ProjectDependencyFactory<FormSource>,
     private val savepointsRepositoryFactory: ProjectDependencyFactory<SavepointsRepository>,
     private val entitiesRepositoryFactory: ProjectDependencyFactory<EntitiesRepository>,
-    private val entitySourceFactory: ProjectDependencyFactory<EntitySource>
+    private val entitySourceFactory: ProjectDependencyFactory<EntitySource>,
+    private val debugLoggerFactory: ProjectDependencyFactory<DebugLogger>
 ) {
-    val generalSettings by lazy { settingsFactory.create(projectId) }
-    val formsRepository by lazy { formsRepositoryFactory.create(projectId) }
-    val instancesRepository by lazy { instancesRepositoryProvider.create(projectId) }
-    val formSource by lazy { formSourceFactory.create(projectId) }
-    val formsLock by lazy { changeLockFactory.create(projectId).formsLock }
-    val instancesLock by lazy { changeLockFactory.create(projectId).instancesLock }
-    val formsDir by lazy { storagePathsFactory.create(projectId).formsDir }
-    val cacheDir by lazy { storagePathsFactory.create(projectId).cacheDir }
-    val entitiesRepository by lazy { entitiesRepositoryFactory.create(projectId) }
-    val savepointsRepository by lazy { savepointsRepositoryFactory.create(projectId) }
-    val rootDir by lazy { storagePathsFactory.create(projectId).rootDir }
-    val instancesDir by lazy { storagePathsFactory.create(projectId).instancesDir }
-    val entitySource by lazy { entitySourceFactory.create(projectId) }
+    val generalSettings by projectDependency(projectId, settingsFactory)
+    val formsRepository by projectDependency(projectId, formsRepositoryFactory)
+    val instancesRepository by projectDependency(projectId, instancesRepositoryProvider)
+    val formSource by projectDependency(projectId, formSourceFactory)
+    val formsLock by projectDependency(projectId, changeLockFactory) { it.formsLock }
+    val instancesLock by projectDependency(projectId, changeLockFactory) { it.instancesLock }
+    val formsDir by projectDependency(projectId, storagePathsFactory) { it.formsDir }
+    val cacheDir by projectDependency(projectId, storagePathsFactory) { it.cacheDir }
+    val entitiesRepository by projectDependency(projectId, entitiesRepositoryFactory)
+    val savepointsRepository by projectDependency(projectId, savepointsRepositoryFactory)
+    val rootDir by projectDependency(projectId, storagePathsFactory) { it.rootDir }
+    val instancesDir by projectDependency(projectId, storagePathsFactory) { it.instancesDir }
+    val entitySource by projectDependency(projectId, entitySourceFactory)
+    val debugLogger by projectDependency(projectId, debugLoggerFactory)
 }

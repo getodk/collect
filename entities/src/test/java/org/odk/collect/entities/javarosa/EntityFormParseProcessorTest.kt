@@ -21,6 +21,7 @@ import org.junit.Test
 import org.odk.collect.entities.javarosa.parse.EntityFormExtra
 import org.odk.collect.entities.javarosa.parse.EntityFormParseProcessor
 import org.odk.collect.entities.javarosa.spec.UnrecognizedEntityVersionException
+import org.odk.collect.entities.javarosa.support.EntityXFormsElement.withSaveTo
 import java.io.ByteArrayInputStream
 import java.io.InputStreamReader
 
@@ -66,7 +67,7 @@ class EntityFormParseProcessorTest {
                             )
                         )
                     ),
-                    bind("/data/name").type("string").withAttribute("entities", "saveto", "name")
+                    bind("/data/name").type("string").withSaveTo("name")
                 )
             ),
             body(
@@ -105,7 +106,7 @@ class EntityFormParseProcessorTest {
                             )
                         )
                     ),
-                    bind("/data/name").type("string").withAttribute("entities", "saveto", "name")
+                    bind("/data/name").type("string").withSaveTo("name")
                 )
             ),
             body(
@@ -136,7 +137,7 @@ class EntityFormParseProcessorTest {
                             )
                         )
                     ),
-                    bind("/data/name").type("string").withAttribute("entities", "saveto", "name")
+                    bind("/data/name").type("string").withSaveTo("name")
                 )
             ),
             body(
@@ -169,7 +170,7 @@ class EntityFormParseProcessorTest {
                             )
                         )
                     ),
-                    bind("/data/name").type("string").withAttribute("entities", "saveto", "name")
+                    bind("/data/name").type("string").withSaveTo("name")
                 )
             ),
             body(
