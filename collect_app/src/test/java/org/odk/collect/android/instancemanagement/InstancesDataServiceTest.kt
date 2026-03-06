@@ -11,6 +11,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.instancemanagement.send.InstanceSubmitter
+import org.odk.collect.android.instancemanagement.send.OpenRosaServerInstanceUploader
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.projects.ProjectDependencyModule
 import org.odk.collect.android.utilities.ChangeLocks
@@ -61,8 +62,9 @@ class InstancesDataServiceTest {
     private val httpInterface = mock<OpenRosaHttpInterface>()
     private val notifier = mock<Notifier>()
 
+    private val instanceUploader = OpenRosaServerInstanceUploader(projectsDependencyModuleFactory, httpInterface)
     private val instanceSubmitter =
-        InstanceSubmitter(projectsDependencyModuleFactory, mock(), httpInterface)
+        InstanceSubmitter(instanceUploader, projectsDependencyModuleFactory, mock())
 
     private val instancesDataService =
         InstancesDataService(

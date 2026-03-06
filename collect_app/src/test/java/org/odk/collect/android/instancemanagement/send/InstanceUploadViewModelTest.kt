@@ -3,23 +3,23 @@ package org.odk.collect.android.instancemanagement.send
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.test.StandardTestDispatcher
 import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
-import org.mockito.kotlin.eq
-import org.mockito.kotlin.verify
-import org.mockito.kotlin.whenever
+import org.odk.collect.android.instancemanagement.CachingProjectDependencyModuleFactory
 import org.odk.collect.android.instancemanagement.InstanceDeleter
 import org.odk.collect.android.instancemanagement.InstancesDataService
-import org.odk.collect.android.utilities.WebCredentialsUtils
+import org.odk.collect.android.projects.ProjectDependencyModule
+import org.odk.collect.android.utilities.ChangeLocks
+import org.odk.collect.androidshared.data.AppState
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.formstest.FormFixtures
 import org.odk.collect.formstest.InMemFormsRepository
 import org.odk.collect.formstest.InMemInstancesRepository
-import org.odk.collect.metadata.PropertyManager
-import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
+import org.odk.collect.shared.locks.BooleanChangeLock
 import org.odk.collect.shared.settings.InMemSettings
 
 @RunWith(AndroidJUnit4::class)
@@ -29,7 +29,6 @@ class InstanceUploadViewModelTest {
     @Test
     fun `submitted instance is deleted even when upload is cancelled`() {
         val form = FormFixtures.form("1")
-
         val formsRepository = InMemFormsRepository().apply {
             save(form)
         }
@@ -50,24 +49,35 @@ class InstanceUploadViewModelTest {
             .finalizationDate(2)
             .build()
 
-        val instance3 = Instance.Builder()
-            .dbId(3)
-            .formId(form.formId)
-            .formVersion(form.version)
-            .status(Instance.STATUS_COMPLETE)
-            .finalizationDate(3)
-            .build()
-
         val instancesRepository = InMemInstancesRepository().apply {
             save(instance1)
             save(instance2)
-            save(instance3)
+        }
+
+        val projectsDependencyModuleFactory = CachingProjectDependencyModuleFactory { projectId ->
+            ProjectDependencyModule(
+                projectId,
+                {
+                    InMemSettings().also {
+                        it.save(ProjectKeys.KEY_DELETE_AFTER_SEND, true)
+                    }
+                },
+                { formsRepository },
+                { instancesRepository },
+                mock(),
+                { ChangeLocks(BooleanChangeLock(), BooleanChangeLock()) },
+                mock(),
+                mock(),
+                mock(),
+                mock()
+            )
         }
 
         val submittedInstances = mutableListOf<Long>()
 
         val instanceUploader = object : InstanceUploader {
             override fun uploadOneSubmission(
+                projectId: String,
                 instance: Instance,
                 deviceId: String?,
                 overrideURL: String?
@@ -83,26 +93,27 @@ class InstanceUploadViewModelTest {
             }
         }
 
+        val instancesSubmitter = InstanceSubmitter(
+            instanceUploader,
+            projectsDependencyModuleFactory,
+            mock()
+        )
+        val instancesDataService = InstancesDataService(
+            AppState(),
+            mock(),
+            projectsDependencyModuleFactory,
+            mock(),
+            instancesSubmitter
+        ) {}
+
         val instanceDeleter = mock<InstanceDeleter>()
-        val webCredentialsUtils = mock<WebCredentialsUtils>()
-        val propertyManager = mock<PropertyManager>()
-        val settingsProvider = mock<SettingsProvider>().apply {
-            val unprotectedSetting = InMemSettings()
-            unprotectedSetting.save(ProjectKeys.KEY_DELETE_AFTER_SEND, true)
-            whenever(getUnprotectedSettings()).thenReturn(unprotectedSetting)
-        }
-        val instancesDataService = mock<InstancesDataService>()
+        val a = instancesRepository.all
 
         val dispatcher = StandardTestDispatcher()
         viewModel = InstanceUploadViewModel(
             dispatcher,
-            instanceUploader,
-            instanceDeleter,
-            webCredentialsUtils,
-            propertyManager,
+            mock(),
             instancesRepository,
-            formsRepository,
-            settingsProvider,
             instancesDataService,
             "projectId",
             "",
@@ -113,10 +124,11 @@ class InstanceUploadViewModelTest {
             "Success",
             "Waiting"
         )
-        viewModel.upload(listOf(instance1.dbId, instance2.dbId, instance3.dbId))
+        viewModel.upload(listOf(instance1.dbId, instance2.dbId))
         dispatcher.scheduler.advanceUntilIdle()
 
         assertThat(submittedInstances.containsAll(listOf(instance1.dbId)), equalTo(true))
-        verify(instanceDeleter).delete(eq(arrayOf(instance1.dbId)))
+        assertThat(instancesRepository.get(instance1.dbId)!!.deletedDate, notNullValue())
+        assertThat(instancesRepository.get(instance2.dbId)!!.deletedDate, equalTo(null))
     }
 }
