@@ -8,8 +8,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.odk.collect.androidshared.system.ContextUtils.getThemeAttributeValue
-import org.odk.collect.geo.R
+import org.odk.collect.androidshared.system.ContextExt.getThemeAttributeValue
 
 @RunWith(AndroidJUnit4::class)
 class AccuracyProgressViewTest {

@@ -2,6 +2,9 @@ package org.odk.collect.android.mainmenu
 
 import android.os.Build
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+import androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.android.R
@@ -67,7 +70,7 @@ class MainMenuActivity : LocalizedActivity(), CollectComposeThemeProvider {
         val viewModelProvider = ViewModelProvider(this, viewModelFactory)
         currentProjectViewModel = viewModelProvider[CurrentProjectViewModel::class.java]
 
-        ThemeUtils(this).setDarkModeForCurrentProject()
+        setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM)
 
         if (!currentProjectViewModel.hasCurrentProject()) {
             super.onCreate(null)
