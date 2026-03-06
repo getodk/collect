@@ -22,6 +22,9 @@
 -keep class org.javarosa.core.model.instance.geojson.GeojsonFeature { *; }
 -keep class org.javarosa.core.model.instance.geojson.GeojsonGeometry { *; }
 
+# Make sure TaskSpecs are kept as they are instantiated via reflection
+-keep public class * implements org.odk.collect.async.TaskSpec { *; }
+
 -dontobfuscate
 
 # recommended okhttp rules
