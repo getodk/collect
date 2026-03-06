@@ -48,6 +48,7 @@ dependencies {
     api(libs.androidMaterial)
     implementation(libs.androidxFragmentKtx)
     implementation(libs.kotlinStdlib)
+    implementation(libs.androidxCoreKtx)
 
     debugImplementation(project(":fragments-test"))
 

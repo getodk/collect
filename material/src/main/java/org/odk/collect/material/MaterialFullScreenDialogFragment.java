@@ -1,5 +1,7 @@
 package org.odk.collect.material;
 
+import static org.odk.collect.androidshared.ui.EdgeToEdge.addSystemBarInsetMargins;
+
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +11,7 @@ import androidx.activity.ComponentDialog;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.WindowCompat;
 import androidx.fragment.app.DialogFragment;
 
 /**
@@ -46,6 +49,8 @@ public abstract class MaterialFullScreenDialogFragment extends DialogFragment {
                     onBackPressed();
                 }
             });
+
+            WindowCompat.enableEdgeToEdge(dialog.getWindow());
         }
     }
 
@@ -56,6 +61,8 @@ public abstract class MaterialFullScreenDialogFragment extends DialogFragment {
                 onCloseClicked();
             });
         }
+
+        addSystemBarInsetMargins(view);
     }
 
     protected abstract void onCloseClicked();

@@ -1,7 +1,6 @@
 package org.odk.collect.androidshared.ui
 
 import android.app.Activity
-import android.content.res.Configuration
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
@@ -27,7 +26,13 @@ object EdgeToEdge {
 
     @JvmStatic
     private fun Activity.avoidEdgeToEdge() {
-        ViewCompat.setOnApplyWindowInsetsListener(window.decorView.findViewById(android.R.id.content)) { v, windowInsets ->
+        val contentView = window.decorView.findViewById<View>(android.R.id.content)
+        contentView.addSystemBarInsetMargins()
+    }
+
+    @JvmStatic
+    fun View.addSystemBarInsetMargins() {
+        ViewCompat.setOnApplyWindowInsetsListener(this) { v, windowInsets ->
             val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 topMargin = insets.top
