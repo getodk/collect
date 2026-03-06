@@ -48,7 +48,7 @@ class BarcodeWidgetTest : QuestionWidgetTest<BarcodeWidget, StringData>() {
             waitingForDataRegistry,
             cameraUtils
         ).also {
-            composeRule.activity.setContentView(it)
+            widgetInComposeActivity(composeRule, it)
             activity = composeRule.activity
         }
     }
