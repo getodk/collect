@@ -1,7 +1,7 @@
 package org.odk.collect.android.utilities
 
 import android.content.Context
-import org.odk.collect.android.instancemanagement.InstanceUploadResult
+import org.odk.collect.android.instancemanagement.send.InstanceUploadResult
 import org.odk.collect.android.instancemanagement.userVisibleInstanceName
 import org.odk.collect.errors.ErrorItem
 import org.odk.collect.strings.localization.getLocalizedString

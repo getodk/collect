@@ -22,7 +22,7 @@ import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationVi
 import org.odk.collect.android.formentry.saving.DiskFormSaver
 import org.odk.collect.android.formentry.saving.FormSaveViewModel
 import org.odk.collect.android.instancemanagement.InstancesDataService
-import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider
+import org.odk.collect.android.instancemanagement.send.autosend.AutoSendSettingsProvider
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.android.utilities.FormsRepositoryProvider

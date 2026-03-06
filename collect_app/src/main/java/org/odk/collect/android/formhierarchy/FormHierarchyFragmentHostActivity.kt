@@ -12,7 +12,7 @@ import org.odk.collect.android.formentry.FormSessionRepository
 import org.odk.collect.android.formentry.repeats.DeleteRepeatDialogFragment
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.instancemanagement.InstancesDataService
-import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider
+import org.odk.collect.android.instancemanagement.send.autosend.AutoSendSettingsProvider
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.android.utilities.FormsRepositoryProvider

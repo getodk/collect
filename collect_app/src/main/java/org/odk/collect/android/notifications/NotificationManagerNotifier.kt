@@ -6,7 +6,7 @@ import android.app.NotificationManager
 import android.content.Context
 import org.odk.collect.android.formmanagement.ServerFormDetails
 import org.odk.collect.android.formmanagement.download.FormDownloadException
-import org.odk.collect.android.instancemanagement.InstanceUploadResult
+import org.odk.collect.android.instancemanagement.send.InstanceUploadResult
 import org.odk.collect.android.notifications.builders.FormUpdatesAvailableNotificationBuilder
 import org.odk.collect.android.notifications.builders.FormUpdatesDownloadedNotificationBuilder
 import org.odk.collect.android.notifications.builders.FormsSubmissionNotificationBuilder
@@ -14,7 +14,6 @@ import org.odk.collect.android.notifications.builders.FormsSyncFailedNotificatio
 import org.odk.collect.android.notifications.builders.FormsSyncStoppedNotificationBuilder
 import org.odk.collect.androidshared.utils.UniqueIdGenerator
 import org.odk.collect.forms.FormSourceException
-import org.odk.collect.forms.instances.Instance
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.MetaKeys

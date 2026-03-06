@@ -8,9 +8,11 @@ import org.odk.collect.android.application.Collect
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler
 import org.odk.collect.android.formentry.FormEntryUseCases
 import org.odk.collect.android.formmanagement.CollectFormEntryControllerFactory
-import org.odk.collect.android.instancemanagement.autosend.FormAutoSendMode
-import org.odk.collect.android.instancemanagement.autosend.InstanceAutoSendFetcher
-import org.odk.collect.android.instancemanagement.autosend.getAutoSendMode
+import org.odk.collect.android.instancemanagement.send.autosend.FormAutoSendMode
+import org.odk.collect.android.instancemanagement.send.autosend.InstanceAutoSendFetcher
+import org.odk.collect.android.instancemanagement.send.autosend.getAutoSendMode
+import org.odk.collect.android.instancemanagement.send.InstanceSubmitter
+import org.odk.collect.android.instancemanagement.send.InstanceUploadResult
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.projects.ProjectDependencyModule
 import org.odk.collect.android.state.DataKeys

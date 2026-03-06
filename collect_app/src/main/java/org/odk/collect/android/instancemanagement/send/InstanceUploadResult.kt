@@ -1,8 +1,9 @@
-package org.odk.collect.android.instancemanagement
+package org.odk.collect.android.instancemanagement.send
 
 import android.content.res.Resources
-import org.odk.collect.android.instancemanagement.send.FormUploadException
+import org.odk.collect.android.instancemanagement.userVisibleInstanceName
 import org.odk.collect.forms.instances.Instance
+import org.odk.collect.strings.R
 
 sealed class InstanceUploadResult {
     abstract val instance: Instance
@@ -16,7 +17,7 @@ private const val DEFAULT_SUCCESSFUL_TEXT = "full submission upload was successf
 
 fun List<InstanceUploadResult>.toMessage(resources: Resources): String {
     if (isEmpty()) {
-        return resources.getString(org.odk.collect.strings.R.string.no_forms_uploaded)
+        return resources.getString(R.string.no_forms_uploaded)
     }
 
     return joinToString(separator = "\n\n") { uploadResult ->
@@ -27,7 +28,7 @@ fun List<InstanceUploadResult>.toMessage(resources: Resources): String {
             is InstanceUploadResult.Error -> uploadResult.exception.message
         }?.let {
             if (it == DEFAULT_SUCCESSFUL_TEXT) {
-                resources.getString(org.odk.collect.strings.R.string.success)
+                resources.getString(R.string.success)
             } else {
                 it
             }

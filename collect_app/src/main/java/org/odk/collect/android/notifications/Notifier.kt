@@ -2,9 +2,8 @@ package org.odk.collect.android.notifications
 
 import org.odk.collect.android.formmanagement.ServerFormDetails
 import org.odk.collect.android.formmanagement.download.FormDownloadException
-import org.odk.collect.android.instancemanagement.InstanceUploadResult
+import org.odk.collect.android.instancemanagement.send.InstanceUploadResult
 import org.odk.collect.forms.FormSourceException
-import org.odk.collect.forms.instances.Instance
 
 interface Notifier {
     fun onUpdatesAvailable(updates: List<ServerFormDetails>, projectId: String)

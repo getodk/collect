@@ -9,7 +9,6 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.odk.collect.android.instancemanagement.InstancesDataService
-import org.odk.collect.android.instancemanagement.InstanceUploadResult
 import org.odk.collect.android.utilities.WebCredentialsUtils
 import org.odk.collect.forms.instances.InstancesRepository
 
