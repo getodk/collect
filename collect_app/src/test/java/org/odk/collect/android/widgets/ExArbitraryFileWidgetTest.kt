@@ -69,7 +69,7 @@ class ExArbitraryFileWidgetTest : FileWidgetTest<ExArbitraryFileWidget>() {
             FakeWaitingForDataRegistry(),
             fileRequester
         ).also {
-            composeRule.activity.setContentView(it)
+            widgetInComposeActivity(composeRule, it)
             activity = composeRule.activity
         }
     }

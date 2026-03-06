@@ -66,7 +66,7 @@ class ArbitraryFileWidgetTest : FileWidgetTest<ArbitraryFileWidget>() {
             questionMediaManager,
             FakeWaitingForDataRegistry()
         ).also {
-            composeRule.activity.setContentView(it)
+            widgetInComposeActivity(composeRule, it)
             activity = composeRule.activity
         }
     }
