@@ -1,6 +1,7 @@
 package org.odk.collect.androidshared.ui
 
 import android.app.Activity
+import android.content.res.Configuration
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
@@ -41,8 +42,20 @@ object EdgeToEdge {
 
     private fun Activity.handleEdgeToEdge(edgeToEdge: Boolean) {
         WindowCompat.enableEdgeToEdge(window)
+        WindowCompat.getInsetsController(window, window.decorView).let {
+            val darkTheme = isDarkTheme()
+            it.isAppearanceLightStatusBars = !darkTheme
+            it.isAppearanceLightNavigationBars = !darkTheme
+        }
+
+
         if (!edgeToEdge) {
             avoidEdgeToEdge()
         }
+    }
+
+    private fun Activity.isDarkTheme(): Boolean {
+        val uiMode: Int = this.resources.configuration.uiMode
+        return (uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
     }
 }
