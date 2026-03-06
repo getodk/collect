@@ -735,12 +735,12 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
 
     @Override
     public int addCircle(@NotNull CircleDescription circleDescription) {
-        throw new UnsupportedOperationException();
+        return -1;
     }
 
     @Override
     public void updateCircle(int featureId, @NotNull CircleDescription circleDescription) {
-        throw new UnsupportedOperationException();
+
     }
 
     /**
