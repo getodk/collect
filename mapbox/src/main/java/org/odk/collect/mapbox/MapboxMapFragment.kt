@@ -442,14 +442,14 @@ class MapboxMapFragment :
     }
 
     override fun addCircle(circleDescription: CircleDescription): Int {
-        TODO("Not yet implemented")
+        return -1
     }
 
     override fun updateCircle(
         featureId: Int,
         circleDescription: CircleDescription
     ) {
-        TODO("Not yet implemented")
+
     }
 
     override fun getPolyPoints(featureId: Int): List<MapPoint> {
