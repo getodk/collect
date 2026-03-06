@@ -41,7 +41,7 @@ class SendFormsTaskSpec : TaskSpec {
             val projectId = inputData[TaskData.DATA_PROJECT_ID]
             val formAutoSend = inputData[TaskData.DATA_FORM_AUTO_SEND] != null
             if (projectId != null) {
-                instancesDataService.sendInstances(projectId, formAutoSend)
+                instancesDataService.autoSendInstances(projectId, formAutoSend)
             } else {
                 throw IllegalArgumentException("No project ID provided!")
             }
