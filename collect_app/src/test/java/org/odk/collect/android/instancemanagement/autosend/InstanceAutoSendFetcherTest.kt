@@ -5,6 +5,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.contains
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.odk.collect.android.instancemanagement.send.autosend.InstanceAutoSendFetcher
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.formstest.FormUtils.buildForm
 import org.odk.collect.formstest.InMemFormsRepository

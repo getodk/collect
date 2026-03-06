@@ -7,6 +7,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.odk.collect.android.instancemanagement.send.InstanceUploadResult
+import org.odk.collect.android.instancemanagement.send.toMessage
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.formstest.InMemInstancesRepository
 

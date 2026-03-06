@@ -1,13 +1,11 @@
-package org.odk.collect.android.instancemanagement
+package org.odk.collect.android.instancemanagement.send
 
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.ensureActive
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.application.Collect
-import org.odk.collect.android.instancemanagement.send.FormUploadAuthRequestedException
-import org.odk.collect.android.instancemanagement.send.FormUploadException
-import org.odk.collect.android.instancemanagement.send.InstanceUploader
+import org.odk.collect.android.instancemanagement.InstanceDeleter
 import org.odk.collect.android.projects.ProjectDependencyModule
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstanceAutoDeleteChecker

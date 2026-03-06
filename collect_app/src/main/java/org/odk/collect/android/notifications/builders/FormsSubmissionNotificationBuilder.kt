@@ -4,7 +4,7 @@ import android.app.Application
 import android.app.Notification
 import androidx.core.app.NotificationCompat
 import org.odk.collect.android.R
-import org.odk.collect.android.instancemanagement.InstanceUploadResult
+import org.odk.collect.android.instancemanagement.send.InstanceUploadResult
 import org.odk.collect.android.notifications.NotificationManagerNotifier
 import org.odk.collect.android.notifications.NotificationUtils
 import org.odk.collect.android.utilities.FormsUploadResultInterpreter

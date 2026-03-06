@@ -4,7 +4,7 @@ import org.apache.commons.io.FileUtils.copyFileToDirectory
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.formmanagement.download.FormDownloadException
 import org.odk.collect.android.formmanagement.download.FormDownloader
-import org.odk.collect.android.instancemanagement.autosend.getLastUpdated
+import org.odk.collect.android.instancemanagement.send.autosend.getLastUpdated
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.android.utilities.FormUtils
 import org.odk.collect.async.OngoingWorkListener

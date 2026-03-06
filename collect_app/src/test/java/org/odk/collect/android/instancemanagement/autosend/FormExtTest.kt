@@ -3,6 +3,9 @@ package org.odk.collect.android.instancemanagement.autosend
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
+import org.odk.collect.android.instancemanagement.send.autosend.FormAutoSendMode
+import org.odk.collect.android.instancemanagement.send.autosend.getAutoSendMode
+import org.odk.collect.android.instancemanagement.send.autosend.shouldFormBeSentAutomatically
 import org.odk.collect.formstest.FormFixtures
 
 class FormExtTest {
