@@ -8,27 +8,23 @@ import org.odk.collect.android.application.Collect
 import org.odk.collect.android.instancemanagement.send.FormUploadAuthRequestedException
 import org.odk.collect.android.instancemanagement.send.FormUploadException
 import org.odk.collect.android.instancemanagement.send.InstanceUploader
-import org.odk.collect.android.instancemanagement.send.OpenRosaServerInstanceUploader
 import org.odk.collect.android.projects.ProjectDependencyModule
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstanceAutoDeleteChecker
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
-import org.odk.collect.android.utilities.WebCredentialsUtils
 import org.odk.collect.forms.FormsRepository
 import org.odk.collect.forms.instances.Instance
-import org.odk.collect.forms.instances.InstancesRepository
 import org.odk.collect.metadata.PropertyManager
 import org.odk.collect.metadata.PropertyManager.Companion.PROPMGR_DEVICE_ID
-import org.odk.collect.openrosa.http.OpenRosaHttpInterface
 import org.odk.collect.projects.ProjectDependencyFactory
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.settings.Settings
 import timber.log.Timber
 
 class InstanceSubmitter(
-    private val projectDependencyModuleFactory: ProjectDependencyFactory<ProjectDependencyModule>,
-    private val propertyManager: PropertyManager,
-    private val httpInterface: OpenRosaHttpInterface
+    private val instanceUploader: InstanceUploader,
+    private val projectDependencyFactory: ProjectDependencyFactory<ProjectDependencyModule>,
+    private val propertyManager: PropertyManager
 ) {
 
     suspend fun submitInstances(
@@ -42,14 +38,12 @@ class InstanceSubmitter(
         defaultSuccessMessage: String? = null,
         onProgress: (current: Int, total: Int) -> Unit = { _, _ -> }
     ): List<InstanceUploadResult> = coroutineScope {
-        val projectDependencyModule = projectDependencyModuleFactory.create(projectId)
+        val projectDependencyModule = projectDependencyFactory.create(projectId)
         val formsRepository = projectDependencyModule.formsRepository
-        val instancesRepository = projectDependencyModule.instancesRepository
         val generalSettings = projectDependencyModule.generalSettings
 
         val uploadResults = mutableListOf<InstanceUploadResult>()
         val deviceId = propertyManager.getSingularProperty(PROPMGR_DEVICE_ID)
-        val uploader = setUpODKUploader(instancesRepository, generalSettings)
 
         val sortedInstances = toUpload.sortedBy { it.finalizationDate }
         for ((index, instance) in sortedInstances.withIndex()) {
@@ -57,7 +51,7 @@ class InstanceSubmitter(
             onProgress( index + 1, sortedInstances.size)
 
             try {
-                val resultMessage = uploader.uploadOneSubmission(instance, deviceId, overrideURL)
+                val resultMessage = instanceUploader.uploadOneSubmission(projectId, instance, deviceId, overrideURL)
                 uploadResults.add(InstanceUploadResult.Success(instance, resultMessage ?: defaultSuccessMessage))
 
                 deleteInstance(instance, formsRepository, generalSettings, externalDeleteAfterUpload)
@@ -74,15 +68,6 @@ class InstanceSubmitter(
         }
 
         uploadResults
-    }
-
-    private fun setUpODKUploader(instancesRepository: InstancesRepository, generalSettings: Settings): InstanceUploader {
-        return OpenRosaServerInstanceUploader(
-            httpInterface,
-            WebCredentialsUtils(generalSettings),
-            generalSettings,
-            instancesRepository
-        )
     }
 
     private fun deleteInstance(instance: Instance, formsRepository: FormsRepository, generalSettings: Settings, externalDeleteAfterUpload: Boolean?) {
