@@ -7,7 +7,8 @@ import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.instancemanagement.send.FormUploadAuthRequestedException
 import org.odk.collect.android.instancemanagement.send.FormUploadException
-import org.odk.collect.android.instancemanagement.send.ServerInstanceUploader
+import org.odk.collect.android.instancemanagement.send.InstanceUploader
+import org.odk.collect.android.instancemanagement.send.OpenRosaServerInstanceUploader
 import org.odk.collect.android.projects.ProjectDependencyModule
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstanceAutoDeleteChecker
@@ -75,8 +76,8 @@ class InstanceSubmitter(
         uploadResults
     }
 
-    private fun setUpODKUploader(instancesRepository: InstancesRepository, generalSettings: Settings): ServerInstanceUploader {
-        return ServerInstanceUploader(
+    private fun setUpODKUploader(instancesRepository: InstancesRepository, generalSettings: Settings): InstanceUploader {
+        return OpenRosaServerInstanceUploader(
             httpInterface,
             WebCredentialsUtils(generalSettings),
             generalSettings,
