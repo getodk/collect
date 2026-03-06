@@ -18,9 +18,9 @@ class RangeSliderStateTest {
 
     @Test
     fun `sets sliderValue to null when answer is out of range`() {
-        mockQuestion(0F, 10F, 1F)
+        mockQuestion(1F, 10F, 1F)
 
-        val prompt = promptBuilder.withAnswer(IntegerData(15)).build()
+        val prompt = promptBuilder.withAnswer(IntegerData(0)).build()
         val state = RangeSliderState.fromPrompt(prompt)
 
         assertThat(state.sliderValue, equalTo(null))
