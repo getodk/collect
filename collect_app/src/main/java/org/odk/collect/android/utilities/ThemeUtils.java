@@ -14,17 +14,14 @@
 
 package org.odk.collect.android.utilities;
 
-import static android.content.res.Configuration.UI_MODE_NIGHT_MASK;
-import static android.content.res.Configuration.UI_MODE_NIGHT_YES;
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
-import static org.odk.collect.androidshared.system.ContextUtils.getThemeAttributeValue;
+import static org.odk.collect.androidshared.system.ContextExt.getThemeAttributeValue;
+import static org.odk.collect.androidshared.system.ContextExt.isDarkTheme;
 
 import android.content.Context;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.StyleRes;
-import androidx.appcompat.app.AppCompatDelegate;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -34,8 +31,8 @@ import javax.inject.Inject;
 
 /**
  * @deprecated Use
- * {@link org.odk.collect.androidshared.system.ContextUtils#getThemeAttributeValue(Context, int)}
- * intead.
+ * {@link org.odk.collect.androidshared.system.ContextExt#getThemeAttributeValue(Context, int)}
+ * instead.
  */
 @Deprecated
 public final class ThemeUtils {
@@ -52,7 +49,7 @@ public final class ThemeUtils {
 
     @DrawableRes
     public int getDivider() {
-        return isDarkTheme() ? android.R.drawable.divider_horizontal_dark : android.R.drawable.divider_horizontal_bright;
+        return isDarkTheme(context) ? android.R.drawable.divider_horizontal_dark : android.R.drawable.divider_horizontal_bright;
     }
 
     public boolean isSpinnerDatePickerDialogTheme(int theme) {
@@ -62,32 +59,23 @@ public final class ThemeUtils {
 
     @StyleRes
     public int getCalendarDatePickerDialogTheme() {
-        return isDarkTheme()
+        return isDarkTheme(context)
                 ? R.style.Theme_Collect_Dark_Calendar_DatePicker_Dialog
                 : R.style.Theme_Collect_Light_Calendar_DatePicker_Dialog;
     }
 
     @StyleRes
     public int getSpinnerDatePickerDialogTheme() {
-        return isDarkTheme() ?
+        return isDarkTheme(context) ?
                 R.style.Theme_Collect_Dark_Spinner_DatePicker_Dialog :
                 R.style.Theme_Collect_Light_Spinner_DatePicker_Dialog;
     }
 
     @StyleRes
     public int getSpinnerTimePickerDialogTheme() {
-        return isDarkTheme() ?
+        return isDarkTheme(context) ?
                 R.style.Theme_Collect_Dark_Spinner_TimePicker_Dialog :
                 R.style.Theme_Collect_Light_Spinner_TimePicker_Dialog;
-    }
-
-    public boolean isDarkTheme() {
-        int uiMode = context.getResources().getConfiguration().uiMode;
-        return (uiMode & UI_MODE_NIGHT_MASK) == UI_MODE_NIGHT_YES;
-    }
-
-    public void setDarkModeForCurrentProject() {
-        AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
     }
 
     /**

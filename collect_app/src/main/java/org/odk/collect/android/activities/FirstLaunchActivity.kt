@@ -19,7 +19,7 @@ import org.odk.collect.android.projects.ManualProjectCreatorDialog
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.projects.QrCodeProjectCreatorDialog
 import org.odk.collect.android.version.VersionInformation
-import org.odk.collect.androidshared.system.ContextUtils.getThemeAttributeValue
+import org.odk.collect.androidshared.system.ContextExt.getThemeAttributeValue
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.androidshared.ui.EdgeToEdge.setView
 import org.odk.collect.async.Scheduler

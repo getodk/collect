@@ -52,7 +52,7 @@ import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.androidshared.system.ContextUtils;
+import org.odk.collect.androidshared.system.ContextExt;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.googlemaps.GoogleMapConfigurator.GoogleMapTypeOption;
 import org.odk.collect.googlemaps.scaleview.MapScaleView;
@@ -612,7 +612,7 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
             );
         }
         if (accuracyCircle == null) {
-            int stroke = ContextUtils.getThemeAttributeValue(requireContext(), androidx.appcompat.R.attr.colorPrimary);
+            int stroke = ContextExt.getThemeAttributeValue(requireContext(), androidx.appcompat.R.attr.colorPrimary);
             int fill = getResources().getColor(org.odk.collect.androidshared.R.color.color_primary_low_emphasis);
             accuracyCircle = map.addCircle(new CircleOptions()
                 .center(loc)

@@ -44,7 +44,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.gms.location.LocationListener;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.androidshared.system.ContextUtils;
+import org.odk.collect.androidshared.system.ContextExt;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.maps.LineDescription;
 import org.odk.collect.maps.MapConfigurator;
@@ -1090,7 +1090,7 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
 
             paint = new Paint();
             paint.setAntiAlias(true);
-            paint.setColor(ContextUtils.getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnSurface));
+            paint.setColor(ContextExt.getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnSurface));
             paint.setTextSize(FONT_SIZE_DP *
                     context.getResources().getDisplayMetrics().density);
             paint.setTextAlign(Paint.Align.RIGHT);

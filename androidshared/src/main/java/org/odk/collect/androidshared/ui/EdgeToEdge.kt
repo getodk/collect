@@ -9,6 +9,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
+import org.odk.collect.androidshared.system.ContextExt.isDarkTheme
 
 object EdgeToEdge {
 
@@ -52,10 +53,5 @@ object EdgeToEdge {
         if (!edgeToEdge) {
             avoidEdgeToEdge()
         }
-    }
-
-    private fun Activity.isDarkTheme(): Boolean {
-        val uiMode: Int = this.resources.configuration.uiMode
-        return (uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
     }
 }

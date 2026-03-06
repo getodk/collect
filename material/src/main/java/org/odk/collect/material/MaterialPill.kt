@@ -13,7 +13,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.content.withStyledAttributes
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
-import org.odk.collect.androidshared.system.ContextUtils.getThemeAttributeValue
+import org.odk.collect.androidshared.system.ContextExt.getThemeAttributeValue
 import org.odk.collect.material.databinding.PillBinding
 
 /**

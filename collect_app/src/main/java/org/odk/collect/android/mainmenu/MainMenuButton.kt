@@ -11,7 +11,7 @@ import com.google.android.material.badge.BadgeUtils
 import com.google.android.material.badge.ExperimentalBadgeUtils
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.MainMenuButtonBinding
-import org.odk.collect.androidshared.system.ContextUtils.getThemeAttributeValue
+import org.odk.collect.androidshared.system.ContextExt.getThemeAttributeValue
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 
 class MainMenuButton(context: Context, attrs: AttributeSet?) : FrameLayout(context, attrs) {
