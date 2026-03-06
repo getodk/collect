@@ -15,18 +15,18 @@ import java.net.URI
 import java.net.URLEncoder
 import androidx.core.net.toUri
 import org.odk.collect.android.application.Collect
+import org.odk.collect.android.projects.ProjectDependencyModule
 import org.odk.collect.android.utilities.ResponseMessageParser
 import org.odk.collect.openrosa.http.CaseInsensitiveHeaders
 import org.odk.collect.openrosa.http.HttpHeadResult
+import org.odk.collect.projects.ProjectDependencyFactory
 import org.odk.collect.strings.localization.getLocalizedString
 import java.net.URLDecoder
 import javax.net.ssl.HttpsURLConnection
 
 class OpenRosaServerInstanceUploader(
-    private val httpInterface: OpenRosaHttpInterface,
-    private val webCredentialsUtils: WebCredentialsUtils,
-    private val generalSettings: Settings,
-    private val instancesRepository: InstancesRepository
+    private val projectDependencyFactory: ProjectDependencyFactory<ProjectDependencyModule>,
+    private val httpInterface: OpenRosaHttpInterface
 ) : InstanceUploader {
     private val uriRemap = mutableMapOf<Uri, Uri>()
 
@@ -37,13 +37,19 @@ class OpenRosaServerInstanceUploader(
      * Returns a custom success message if one is provided by the server.
      */
     override fun uploadOneSubmission(
+        projectId: String,
         instance: Instance,
         deviceId: String?,
         overrideURL: String?
     ): String? {
-        markSubmissionFailed(instance)
+        val projectDependencyModule = projectDependencyFactory.create(projectId)
+        val unprotectedSettings = projectDependencyModule.generalSettings
+        val instancesRepository = projectDependencyModule.instancesRepository
+        val webCredentialsUtils = WebCredentialsUtils(unprotectedSettings)
 
-        val urlString = getUrlToSubmitTo(instance, deviceId, overrideURL)
+        markSubmissionFailed(instance, instancesRepository)
+
+        val urlString = getUrlToSubmitTo(instance, deviceId, overrideURL, unprotectedSettings)
         var submissionUri = urlString.toUri()
 
         var contentLength = 10_000_000L
@@ -196,7 +202,7 @@ class OpenRosaServerInstanceUploader(
             throw FormUploadException(e.message ?: e.toString())
         }
 
-        markSubmissionComplete(instance)
+        markSubmissionComplete(instance, instancesRepository)
 
         return if (messageParser.isValid) {
             messageParser.messageResponse
@@ -234,11 +240,11 @@ class OpenRosaServerInstanceUploader(
      * (https://getodk.github.io/xforms-spec/#submission-attributes). Finally, default to the
      * URL configured at the app level.
      */
-    private fun getUrlToSubmitTo(currentInstance: Instance, deviceId: String?, overrideURL: String?): String {
+    private fun getUrlToSubmitTo(currentInstance: Instance, deviceId: String?, overrideURL: String?, unprotectedSettings: Settings): String {
         val urlString = when {
             overrideURL != null -> overrideURL
             currentInstance.submissionUri != null -> currentInstance.submissionUri!!.trim()
-            else -> getServerSubmissionURL()
+            else -> getServerSubmissionURL(unprotectedSettings)
         }
 
         return try {
@@ -249,8 +255,8 @@ class OpenRosaServerInstanceUploader(
         }
     }
 
-    private fun getServerSubmissionURL(): String {
-        var serverBase = generalSettings.getString(ProjectKeys.KEY_SERVER_URL)!!
+    private fun getServerSubmissionURL(unprotectedSettings: Settings): String {
+        var serverBase = unprotectedSettings.getString(ProjectKeys.KEY_SERVER_URL)!!
 
         if (serverBase.endsWith(URL_PATH_SEP)) {
             serverBase = serverBase.substring(0, serverBase.length - 1)
@@ -259,7 +265,7 @@ class OpenRosaServerInstanceUploader(
         return serverBase + OpenRosaConstants.SUBMISSION
     }
 
-    private fun markSubmissionFailed(instance: Instance) {
+    private fun markSubmissionFailed(instance: Instance, instancesRepository: InstancesRepository) {
         instancesRepository.save(
             Instance.Builder(instance)
                 .status(Instance.STATUS_SUBMISSION_FAILED)
@@ -267,7 +273,7 @@ class OpenRosaServerInstanceUploader(
         )
     }
 
-    private fun markSubmissionComplete(instance: Instance) {
+    private fun markSubmissionComplete(instance: Instance, instancesRepository: InstancesRepository) {
         instancesRepository.save(
             Instance.Builder(instance)
                 .status(Instance.STATUS_SUBMITTED)
