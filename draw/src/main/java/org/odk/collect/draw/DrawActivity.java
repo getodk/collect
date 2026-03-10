@@ -288,8 +288,12 @@ public class DrawActivity extends LocalizedActivity {
         QuitDrawingDialog.show(
                 this,
                 this::cancelAndClose,
-                () -> drawViewModel.save(drawView)
+                this::saveImage
         );
+    }
+
+    private void saveImage() {
+        drawViewModel.save(drawView.getBackgroundBitmap(), drawView.getPath(), drawView.getPaint());
     }
 
     private void clear(View view) {
@@ -302,7 +306,7 @@ public class DrawActivity extends LocalizedActivity {
     private void close(View view) {
         if (view.getVisibility() == View.VISIBLE) {
             fabActions.performClick();
-            drawViewModel.save(drawView);
+            saveImage();
         }
     }
 

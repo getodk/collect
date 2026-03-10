@@ -25,6 +25,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import org.odk.collect.androidshared.bitmap.ImageFileUtils
+import org.odk.collect.draw.CanvasExt.drawPath
 import java.io.File
 import javax.inject.Inject
 
@@ -35,12 +36,13 @@ class DrawView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
             .drawDependencyComponent.inject(this)
     }
 
-    private lateinit var bitmap: Bitmap
+    lateinit var backgroundBitmap: Bitmap
+        private set
 
     @Inject
     lateinit var imagePath: String
 
-    private val paint = Paint().apply {
+    val paint = Paint().apply {
         isAntiAlias = true
         isDither = true
         style = Paint.Style.STROKE
@@ -49,24 +51,19 @@ class DrawView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
     }
 
     private var canvas = Canvas()
-    private var currentPath = Path()
+    val path = Path()
+
     private var offscreenPath = Path()
     private var valueX = 0f
     private var valueY = 0f
 
-    val bitmapHeight: Int
-        get() = bitmap.height
-
-    val bitmapWidth: Int
-        get() = bitmap.width
-
     // Centered horizontally
     private val bitmapLeft: Int
-        get() = (width - bitmap.width) / 2
+        get() = (width - backgroundBitmap.width) / 2
 
     // Centered vertically
     private val bitmapTop: Int
-        get() = (height - bitmap.height) / 2
+        get() = (height - backgroundBitmap.height) / 2
 
     private var isSignature = false
 
@@ -76,7 +73,7 @@ class DrawView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
     }
 
     override fun onDraw(canvas: Canvas) {
-        drawOnCanvas(canvas, bitmapLeft.toFloat(), bitmapTop.toFloat())
+        canvas.drawPath(backgroundBitmap, path, paint, bitmapLeft.toFloat(), bitmapTop.toFloat())
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -114,15 +111,9 @@ class DrawView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
         paint.color = color
     }
 
-    fun drawOnCanvas(canvas: Canvas, left: Float, top: Float) {
-        canvas.drawColor(0xFFAAAAAA.toInt())
-        canvas.drawBitmap(bitmap, left, top, Paint(Paint.DITHER_FLAG))
-        canvas.drawPath(currentPath, paint)
-    }
-
     private fun touchStart(x: Float, y: Float) {
-        currentPath.reset()
-        currentPath.moveTo(x, y)
+        path.reset()
+        path.moveTo(x, y)
         offscreenPath.reset()
         offscreenPath.moveTo(x - bitmapLeft, y - bitmapTop)
         valueX = x
@@ -130,7 +121,7 @@ class DrawView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
     }
 
     private fun touchMove(x: Float, y: Float) {
-        currentPath.quadTo(valueX, valueY, (x + valueX) / 2, (y + valueY) / 2)
+        path.quadTo(valueX, valueY, (x + valueX) / 2, (y + valueY) / 2)
         offscreenPath.quadTo(
             valueX - bitmapLeft,
             valueY - bitmapTop,
@@ -142,17 +133,17 @@ class DrawView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
     }
 
     private fun touchUp() {
-        if (currentPath.isEmpty) {
+        if (path.isEmpty) {
             canvas.drawPoint(valueX, valueY, paint)
         } else {
-            currentPath.lineTo(valueX, valueY)
+            path.lineTo(valueX, valueY)
             offscreenPath.lineTo(valueX - bitmapLeft, valueY - bitmapTop)
 
             // commit the path to our offscreen
             canvas.drawPath(offscreenPath, paint)
         }
         // kill this so we don't double draw
-        currentPath.reset()
+        path.reset()
     }
 
     private fun drawLine() {
@@ -171,12 +162,13 @@ class DrawView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
     private fun resetImage(w: Int, h: Int) {
         val backgroundBitmapFile = File(imagePath)
         if (backgroundBitmapFile.exists()) {
-            bitmap = ImageFileUtils.getBitmapScaledToDisplay(backgroundBitmapFile, h, w, true)!!
-                .copy(Bitmap.Config.ARGB_8888, true)
-            canvas = Canvas(bitmap)
+            backgroundBitmap =
+                ImageFileUtils.getBitmapScaledToDisplay(backgroundBitmapFile, h, w, true)!!
+                    .copy(Bitmap.Config.ARGB_8888, true)
+            canvas = Canvas(backgroundBitmap)
         } else {
-            bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
-            canvas = Canvas(bitmap)
+            backgroundBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+            canvas = Canvas(backgroundBitmap)
             canvas.drawColor(Color.WHITE)
             if (isSignature) {
                 drawLine()
