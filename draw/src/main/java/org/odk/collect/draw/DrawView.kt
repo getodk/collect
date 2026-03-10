@@ -36,13 +36,12 @@ class DrawView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
             .drawDependencyComponent.inject(this)
     }
 
-    lateinit var backgroundBitmap: Bitmap
-        private set
+    private lateinit var bitmap: Bitmap
 
     @Inject
     lateinit var imagePath: String
 
-    val paint = Paint().apply {
+    private val paint = Paint().apply {
         isAntiAlias = true
         isDither = true
         style = Paint.Style.STROKE
@@ -51,7 +50,7 @@ class DrawView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
     }
 
     private var canvas = Canvas()
-    val path = Path()
+    private val path = Path()
 
     private var offscreenPath = Path()
     private var valueX = 0f
@@ -59,11 +58,11 @@ class DrawView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
 
     // Centered horizontally
     private val bitmapLeft: Int
-        get() = (width - backgroundBitmap.width) / 2
+        get() = (width - bitmap.width) / 2
 
     // Centered vertically
     private val bitmapTop: Int
-        get() = (height - backgroundBitmap.height) / 2
+        get() = (height - bitmap.height) / 2
 
     private var isSignature = false
 
@@ -73,7 +72,7 @@ class DrawView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
     }
 
     override fun onDraw(canvas: Canvas) {
-        canvas.drawPath(backgroundBitmap, path, paint, bitmapLeft.toFloat(), bitmapTop.toFloat())
+        canvas.drawPath(bitmap, path, paint, bitmapLeft.toFloat(), bitmapTop.toFloat())
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -109,6 +108,10 @@ class DrawView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
 
     fun setColor(color: Int) {
         paint.color = color
+    }
+
+    fun getBitmap(): Bitmap {
+        return bitmap
     }
 
     private fun touchStart(x: Float, y: Float) {
@@ -162,13 +165,13 @@ class DrawView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
     private fun resetImage(w: Int, h: Int) {
         val backgroundBitmapFile = File(imagePath)
         if (backgroundBitmapFile.exists()) {
-            backgroundBitmap =
+            bitmap =
                 ImageFileUtils.getBitmapScaledToDisplay(backgroundBitmapFile, h, w, true)!!
                     .copy(Bitmap.Config.ARGB_8888, true)
-            canvas = Canvas(backgroundBitmap)
+            canvas = Canvas(bitmap)
         } else {
-            backgroundBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
-            canvas = Canvas(backgroundBitmap)
+            bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+            canvas = Canvas(bitmap)
             canvas.drawColor(Color.WHITE)
             if (isSignature) {
                 drawLine()

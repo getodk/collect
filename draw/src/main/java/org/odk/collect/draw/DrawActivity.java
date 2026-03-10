@@ -293,7 +293,7 @@ public class DrawActivity extends LocalizedActivity {
     }
 
     private void saveImage() {
-        drawViewModel.save(drawView.getBackgroundBitmap(), drawView.getPath(), drawView.getPaint());
+        drawViewModel.save(drawView.getBitmap());
     }
 
     private void clear(View view) {

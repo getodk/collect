@@ -1,10 +1,6 @@
 package org.odk.collect.draw
 
 import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Paint
-import android.graphics.Paint.DITHER_FLAG
-import android.graphics.Path
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import org.odk.collect.async.Scheduler
@@ -12,8 +8,6 @@ import timber.log.Timber
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
-import androidx.core.graphics.createBitmap
-import org.odk.collect.draw.CanvasExt.drawPath
 
 internal class DrawViewModel(
     private val output: File,
@@ -23,11 +17,11 @@ internal class DrawViewModel(
     private val _saveResult = MutableLiveData<Boolean>()
     val saveResult = _saveResult
 
-    fun save(background: Bitmap, path: Path, paint: Paint) {
+    fun save(background: Bitmap) {
         scheduler.immediate(
             background = {
                 try {
-                    saveImage(background, path, paint)
+                    saveImage(background)
                     true
                 } catch (e: FileNotFoundException) {
                     false
@@ -39,11 +33,8 @@ internal class DrawViewModel(
         )
     }
 
-    private fun saveImage(background: Bitmap, path: Path, paint: Paint) {
+    private fun saveImage(bitmap: Bitmap) {
         val fos = FileOutputStream(output)
-        val bitmap = createBitmap(background.width, background.height)
-        val canvas = Canvas(bitmap)
-        canvas.drawPath(background, path, paint)
         bitmap.compress(Bitmap.CompressFormat.JPEG, 70, fos)
 
         try {
