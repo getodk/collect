@@ -27,7 +27,6 @@ import android.view.View
 import org.odk.collect.androidshared.bitmap.ImageFileUtils
 import org.odk.collect.draw.CanvasExt.drawPath
 import java.io.File
-import javax.inject.Inject
 
 class DrawView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
 
@@ -37,9 +36,7 @@ class DrawView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
     }
 
     private lateinit var bitmap: Bitmap
-
-    @Inject
-    lateinit var imagePath: String
+    private lateinit var imagePath: String
 
     private val paint = Paint().apply {
         isAntiAlias = true
@@ -97,8 +94,9 @@ class DrawView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
         return true
     }
 
-    fun setupView(isSignature: Boolean) {
+    fun setupView(isSignature: Boolean, imagePath: String) {
         this.isSignature = isSignature
+        this.imagePath = imagePath
     }
 
     fun reset() {

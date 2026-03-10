@@ -14,8 +14,4 @@ class CollectDrawDependencyModule(
     override fun providesSettingsProvider(): SettingsProvider {
         return applicationComponent.settingsProvider()
     }
-
-    override fun providesImagePath(): String {
-        return applicationComponent.storagePathProvider().getTmpImageFilePath()
-    }
 }

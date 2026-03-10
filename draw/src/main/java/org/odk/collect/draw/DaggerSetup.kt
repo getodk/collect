@@ -30,9 +30,4 @@ open class DrawDependencyModule {
     open fun providesSettingsProvider(): SettingsProvider {
         throw UnsupportedOperationException("This should be overridden by dependent application")
     }
-
-    @Provides
-    open fun providesImagePath(): String {
-        throw UnsupportedOperationException("This should be overridden by dependent application")
-    }
 }

@@ -43,10 +43,6 @@ internal class DrawActivityTest {
                 override fun providesSettingsProvider(): SettingsProvider {
                     return InMemSettingsProvider()
                 }
-
-                override fun providesImagePath(): String {
-                    return TempFiles.createTempFile().absolutePath
-                }
             }
         )
     }
@@ -54,8 +50,9 @@ internal class DrawActivityTest {
     @Test
     fun `discarding changes closes the activity with canceled result`() {
         val intent = Intent(getApplicationContext(), DrawActivity::class.java)
-
+        intent.putExtra(DrawActivity.IMAGE_PATH, TempFiles.createTempFile().absolutePath)
         intent.putExtra(DrawActivity.SCREEN_ORIENTATION, 0)
+
         val scenario = launcherRule.launchForResult<DrawActivity>(intent)
 
         Espresso.pressBack()
@@ -67,8 +64,9 @@ internal class DrawActivityTest {
     @Test
     fun `choosing to keep editing does not close the activity`() {
         val intent = Intent(getApplicationContext(), DrawActivity::class.java)
-
+        intent.putExtra(DrawActivity.IMAGE_PATH, TempFiles.createTempFile().absolutePath)
         intent.putExtra(DrawActivity.SCREEN_ORIENTATION, 0)
+
         val scenario = launcherRule.launchForResult<DrawActivity>(intent)
 
         Espresso.pressBack()
@@ -79,8 +77,9 @@ internal class DrawActivityTest {
     @Test
     fun `saving changes closes the activity with ok result`() {
         val intent = Intent(getApplicationContext(), DrawActivity::class.java)
-
+        intent.putExtra(DrawActivity.IMAGE_PATH, TempFiles.createTempFile().absolutePath)
         intent.putExtra(DrawActivity.SCREEN_ORIENTATION, 0)
+
         val scenario = launcherRule.launchForResult<DrawActivity>(intent)
 
         Espresso.pressBack()

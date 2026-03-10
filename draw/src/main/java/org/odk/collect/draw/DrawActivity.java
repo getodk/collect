@@ -66,6 +66,7 @@ public class DrawActivity extends LocalizedActivity {
     public static final String OPTION_DRAW = "draw";
     public static final String REF_IMAGE = "refImage";
     public static final String SCREEN_ORIENTATION = "screenOrientation";
+    public static final String IMAGE_PATH = "imagePath";
     public static final String EXTRA_OUTPUT = android.provider.MediaStore.EXTRA_OUTPUT;
     // restore
 
@@ -172,7 +173,7 @@ public class DrawActivity extends LocalizedActivity {
         fabSetColor.setOnClickListener(this::setColor);
 
         Bundle extras = getIntent().getExtras();
-        String imagePath = drawView.getImagePath();
+        String imagePath = extras.getString(IMAGE_PATH);
 
         boolean portrait = extras.getInt(SCREEN_ORIENTATION) == 1;
         setOrientation(portrait);
@@ -205,7 +206,7 @@ public class DrawActivity extends LocalizedActivity {
         // original)
         // output -- where the output should be written
 
-        drawView.setupView(OPTION_SIGNATURE.equals(loadOption));
+        drawView.setupView(OPTION_SIGNATURE.equals(loadOption), imagePath);
 
         viewModel.getPenColor().observe(this, penColor -> {
             if (OPTION_SIGNATURE.equals(loadOption) && viewModel.isDefaultValue()) {
