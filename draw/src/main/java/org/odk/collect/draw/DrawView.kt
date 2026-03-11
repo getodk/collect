@@ -72,7 +72,7 @@ class DrawView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-        resetImage(w, h)
+        setImage(w, h)
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -107,7 +107,7 @@ class DrawView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
 
     fun reset() {
         val metrics = resources.displayMetrics
-        resetImage(metrics.widthPixels, metrics.heightPixels)
+        setImage(metrics.widthPixels, metrics.heightPixels)
     }
 
     fun setColor(color: Int) {
@@ -168,7 +168,11 @@ class DrawView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
         paint.color = originalColor
     }
 
-    private fun resetImage(w: Int, h: Int) {
+    private fun setImage(w: Int, h: Int) {
+        if (::bitmap.isInitialized) {
+            return
+        }
+
         val backgroundBitmapFile = File(imagePath)
         if (backgroundBitmapFile.exists()) {
             bitmap = ImageFileUtils.getBitmapScaledToDisplay(backgroundBitmapFile, h, w, true)!!
