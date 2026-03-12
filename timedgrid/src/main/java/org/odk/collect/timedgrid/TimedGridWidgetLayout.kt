@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import org.odk.collect.androidshared.system.ContextUtils.getThemeAttributeValue
+import org.odk.collect.androidshared.system.ContextExt.getThemeAttributeValue
 import org.odk.collect.timedgrid.databinding.TimedGridItemButtonBinding
 import org.odk.collect.timedgrid.databinding.TimedGridItemRowBinding
 
