@@ -1,7 +1,5 @@
 package org.odk.collect.android.instancemanagement.send
 
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.ensureActive
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.application.Collect
@@ -24,7 +22,7 @@ class InstanceSubmitter(
     private val propertyManager: PropertyManager
 ) {
 
-    suspend fun submitInstances(
+    fun submitInstances(
         projectId: String,
         toUpload: List<Instance>,
         referrer: String = "",
@@ -33,8 +31,9 @@ class InstanceSubmitter(
         cancelAfterAuthException: Boolean = false,
         externalDeleteAfterUpload: Boolean? = null,
         defaultSuccessMessage: String? = null,
+        ensureActive: () -> Unit = {},
         onProgress: (current: Int, total: Int) -> Unit = { _, _ -> }
-    ): List<InstanceUploadResult> = coroutineScope {
+    ): List<InstanceUploadResult> {
         val projectDependencyModule = projectDependencyFactory.create(projectId)
         val formsRepository = projectDependencyModule.formsRepository
         val instancesRepository = projectDependencyModule.instancesRepository
@@ -65,7 +64,7 @@ class InstanceSubmitter(
             }
         }
 
-        uploadResults
+        return uploadResults
     }
 
     private fun deleteInstance(

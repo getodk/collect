@@ -1,7 +1,6 @@
 package org.odk.collect.android.instancemanagement
 
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.runBlocking
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.application.Collect
@@ -214,7 +213,7 @@ class InstancesDataService(
         }
     }
 
-    suspend fun sendInstances(
+    fun sendInstances(
         projectId: String,
         instances: List<Instance>,
         referrer: String,
@@ -222,6 +221,7 @@ class InstancesDataService(
         cancelAfterAuthException: Boolean,
         externalDeleteAfterUpload: Boolean?,
         defaultSuccessMessage: String,
+        ensureActive: () -> Unit,
         onProgress: (current: Int, total: Int) -> Unit = { _, _ -> }
     ): List<InstanceUploadResult> {
         return instanceSubmitter.submitInstances(
@@ -233,6 +233,7 @@ class InstancesDataService(
             cancelAfterAuthException,
             externalDeleteAfterUpload,
             defaultSuccessMessage,
+            ensureActive,
             onProgress
         )
     }
@@ -249,9 +250,7 @@ class InstancesDataService(
                 )
 
                 if (toUpload.isNotEmpty()) {
-                    val uploadResults = runBlocking {
-                        instanceSubmitter.submitInstances(projectId, toUpload)
-                    }
+                    val uploadResults = instanceSubmitter.submitInstances(projectId, toUpload)
                     notifier.onSubmission(uploadResults, projectDependencyModule.projectId)
                     update(projectId)
 

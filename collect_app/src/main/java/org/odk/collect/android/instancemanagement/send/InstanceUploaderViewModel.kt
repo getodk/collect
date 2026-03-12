@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import org.odk.collect.android.instancemanagement.InstancesDataService
 import org.odk.collect.android.utilities.WebCredentialsUtils
@@ -53,7 +54,8 @@ class InstanceUploadViewModel(
                 externalUrl,
                 true,
                 externalDeleteAfterUpload,
-                defaultSuccessMessage
+                defaultSuccessMessage,
+                { coroutineContext.ensureActive() }
             ) { current, total ->
                 _state.postValue(UploadState.Progress(current, total))
             }
