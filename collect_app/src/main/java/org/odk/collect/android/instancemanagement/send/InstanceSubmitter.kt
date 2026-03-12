@@ -2,6 +2,7 @@ package org.odk.collect.android.instancemanagement.send
 
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.analytics.AnalyticsEvents
+import org.odk.collect.android.analytics.AnalyticsUtils
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.instancemanagement.InstanceDeleter
 import org.odk.collect.android.projects.ProjectDependencyModule
@@ -53,7 +54,7 @@ class InstanceSubmitter(
 
                 deleteInstance(instance, formsRepository, instancesRepository, generalSettings, externalDeleteAfterUpload)
                 logOverrideURL(referrer, overrideURL)
-                logUploadedForm(formsRepository, instance, autoSend)
+                logUploadedForm(instance, autoSend)
             } catch (e: FormUploadException) {
                 Timber.d(e)
                 uploadResults.add(InstanceUploadResult.Error(instance, e))
@@ -99,11 +100,11 @@ class InstanceSubmitter(
         }
     }
 
-    private fun logUploadedForm(formsRepository: FormsRepository, instance: Instance, autoSend: Boolean) {
-        Analytics.log(
+    private fun logUploadedForm(instance: Instance, autoSend: Boolean) {
+        AnalyticsUtils.logFormEvent(
             AnalyticsEvents.SUBMISSION,
-            if (autoSend) "HTTP auto" else "HTTP",
-            Collect.getFormIdentifierHash(formsRepository, instance.formId, instance.formVersion)
+            instance.formId,
+            if (autoSend) "HTTP auto" else "HTTP"
         )
     }
 }
