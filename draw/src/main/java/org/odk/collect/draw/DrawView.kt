@@ -72,7 +72,10 @@ class DrawView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-        setImage(w, h)
+
+        if (!::bitmap.isInitialized) {
+            resetImage(w, h)
+        }
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -107,7 +110,7 @@ class DrawView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
 
     fun reset() {
         val metrics = resources.displayMetrics
-        setImage(metrics.widthPixels, metrics.heightPixels)
+        resetImage(metrics.widthPixels, metrics.heightPixels)
     }
 
     fun setColor(color: Int) {
@@ -168,18 +171,14 @@ class DrawView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
         paint.color = originalColor
     }
 
-    private fun setImage(w: Int, h: Int) {
-        if (::bitmap.isInitialized) {
-            return
-        }
-
+    private fun resetImage(width: Int, height: Int) {
         val backgroundBitmapFile = File(imagePath)
         if (backgroundBitmapFile.exists()) {
-            bitmap = ImageFileUtils.getBitmapScaledToDisplay(backgroundBitmapFile, h, w, true)!!
+            bitmap = ImageFileUtils.getBitmapScaledToDisplay(backgroundBitmapFile, height, width, true)!!
                 .copy(Bitmap.Config.ARGB_8888, true)
             canvas = Canvas(bitmap)
         } else {
-            bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+            bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
             canvas = Canvas(bitmap)
             canvas.drawColor(Color.WHITE)
             if (isSignature) {
