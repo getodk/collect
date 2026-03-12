@@ -17,6 +17,11 @@ import org.odk.collect.timedgrid.NavigationAwareWidget
 import org.odk.collect.timedgrid.NavigationWarning
 import org.odk.collect.timedgrid.TimedGridWidgetDelegate
 
+/**
+ * The timed grid widget is experimental and may be modified or removed without notice. If you are
+ * interested in this functionality, please describe your use case at https://forum.getodk.org
+*/
+
 @SuppressLint("ViewConstructor")
 class TimedGridWidget(
     context: Context,
