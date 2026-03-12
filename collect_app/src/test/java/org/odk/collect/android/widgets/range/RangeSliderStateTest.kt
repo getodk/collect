@@ -5,6 +5,7 @@ import org.hamcrest.Matchers.equalTo
 import org.javarosa.core.model.Constants.DATATYPE_DECIMAL
 import org.javarosa.core.model.Constants.DATATYPE_INTEGER
 import org.javarosa.core.model.RangeQuestion
+import org.javarosa.core.model.SelectChoice
 import org.javarosa.core.model.data.IntegerData
 import org.junit.Test
 import org.mockito.Mockito.mock
@@ -407,6 +408,40 @@ class RangeSliderStateTest {
     }
 
     @Test
+    fun `returns empty list for labels when no choices are available`() {
+        mockQuestion(0F, 10F, 1F)
+
+        val prompt = promptBuilder
+            .withDataType(DATATYPE_INTEGER)
+            .build()
+
+        val state = RangeSliderState.fromPrompt(prompt)
+        assertThat(state.labels.isEmpty(), equalTo(true))
+    }
+
+    @Test
+    fun `returns labels when choices are available`() {
+        mockQuestion(0F, 5F, 1F)
+
+        val prompt = promptBuilder
+            .withSelectChoices(
+                listOf(
+                    SelectChoice("0", "a"),
+                    SelectChoice("1", "b"),
+                    SelectChoice("2", "c"),
+                    SelectChoice("3", "d"),
+                    SelectChoice("4", "e"),
+                    SelectChoice("5", "f")
+                )
+            )
+            .withDataType(DATATYPE_INTEGER)
+            .build()
+
+        val state = RangeSliderState.fromPrompt(prompt)
+        assertThat(state.labels, equalTo(listOf("a", "b", "c", "d", "e", "f")))
+    }
+
+    @Test
     fun `realValue rounds correctly to nearest step for ascending range with integer step`() {
         val state = RangeSliderState(
             sliderValue = 0.34.toBigDecimal(),
@@ -414,6 +449,7 @@ class RangeSliderStateTest {
             rangeEnd = 10.toBigDecimal(),
             step = 1.toBigDecimal(),
             numOfSteps = 9,
+            labels = emptyList(),
             isDiscrete = true,
             isHorizontal = true,
             isValid = true,
@@ -432,6 +468,7 @@ class RangeSliderStateTest {
             rangeEnd = 0.toBigDecimal(),
             step = 1.toBigDecimal(),
             numOfSteps = 9,
+            labels = emptyList(),
             isDiscrete = true,
             isHorizontal = true,
             isValid = true,
@@ -450,6 +487,7 @@ class RangeSliderStateTest {
             rangeEnd = 10.toBigDecimal(),
             step = 0.1.toBigDecimal(),
             numOfSteps = 89,
+            labels = emptyList(),
             isDiscrete = true,
             isHorizontal = true,
             isValid = true,
@@ -468,6 +506,7 @@ class RangeSliderStateTest {
             rangeEnd = 1.toBigDecimal(),
             step = 0.1.toBigDecimal(),
             numOfSteps = 89,
+            labels = emptyList(),
             isDiscrete = true,
             isHorizontal = true,
             isValid = true,

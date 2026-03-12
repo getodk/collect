@@ -13,6 +13,7 @@ data class RangeSliderState(
     val rangeEnd: BigDecimal,
     val step: BigDecimal,
     val numOfSteps: Int,
+    val labels: List<String>,
     val isDiscrete: Boolean,
     val isHorizontal: Boolean,
     val isValid: Boolean,
@@ -42,6 +43,7 @@ data class RangeSliderState(
             val start = rangeQuestion.rangeStart
             val end = rangeQuestion.rangeEnd
             val step = rangeQuestion.rangeStep.abs()
+            val labels = getLabels(prompt)
             val sanitizedAppearance = Appearances.getSanitizedAppearanceHint(prompt)
             val isHorizontal = !sanitizedAppearance.contains(Appearances.VERTICAL)
             val isDiscrete = prompt.dataType == DATATYPE_INTEGER
@@ -72,6 +74,7 @@ data class RangeSliderState(
                 rangeEnd = end,
                 step = step,
                 numOfSteps = numOfSteps,
+                labels = labels,
                 isDiscrete = isDiscrete,
                 isHorizontal = isHorizontal,
                 isValid = isValid,
@@ -103,6 +106,12 @@ data class RangeSliderState(
         private fun roundToStep(value: BigDecimal, start: BigDecimal, step: BigDecimal): BigDecimal {
             val steps = (value - start).divide(step, 0, RoundingMode.HALF_UP)
             return start + steps.multiply(step)
+        }
+
+        private fun getLabels(prompt: FormEntryPrompt): List<String> {
+            return prompt.selectChoices
+                ?.map { prompt.getSelectChoiceText(it) }
+                ?: emptyList()
         }
     }
 }
