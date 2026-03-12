@@ -2,7 +2,6 @@ package org.odk.collect.android.widgets.range
 
 import android.view.View.OnLongClickListener
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.hamcrest.MatcherAssert
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers
 import org.hamcrest.Matchers.equalTo
@@ -79,14 +78,6 @@ class RangePickerDecimalWidgetTest {
     }
 
     @Test
-    fun `setNumberPickerValue updates answer`() {
-        val widget = createWidget(QuestionWidgetHelpers.promptWithQuestionDefAndAnswer(rangeQuestion, null))
-        widget.setNumberPickerValue(4)
-
-        MatcherAssert.assertThat(widget.answer!!.displayText, Matchers.equalTo("3.5"))
-    }
-
-    @Test
     fun `clicking widget for long calls longClickListener`() {
         val listener = mock<OnLongClickListener>()
         val widget = createWidget(QuestionWidgetHelpers.promptWithQuestionDefAndAnswer(rangeQuestion, null))
@@ -97,16 +88,6 @@ class RangePickerDecimalWidgetTest {
 
         verify(listener).onLongClick(widget.binding.widgetButton)
         verify(listener).onLongClick(widget.binding.widgetAnswerText)
-    }
-
-    @Test
-    fun setData_callsValueChangeListener() {
-        val widget = createWidget(QuestionWidgetHelpers.promptWithQuestionDefAndAnswer(rangeQuestion, null))
-        val valueChangedListener = QuestionWidgetHelpers.mockValueChangedListener(widget)
-        widget.setValueChangedListener(valueChangedListener)
-        widget.setNumberPickerValue(3)
-
-        verify(valueChangedListener).widgetValueChanged(widget)
     }
 
     private fun createWidget(prompt: FormEntryPrompt): RangePickerDecimalWidget {

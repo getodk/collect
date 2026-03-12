@@ -3,7 +3,6 @@ package org.odk.collect.android.widgets.utilities;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -26,12 +25,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.databinding.RangePickerWidgetAnswerBinding;
-import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
-import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
-import org.odk.collect.android.support.WidgetTestActivity;
 import org.odk.collect.android.views.TrackingTouchSlider;
-import org.odk.collect.testshared.RobolectricHelpers;
 import org.robolectric.shadows.ShadowToast;
 
 import java.math.BigDecimal;
@@ -240,16 +235,5 @@ public class RangeWidgetUtilsTest {
         when(rangeQuestion.getRangeStep()).thenReturn(new BigDecimal(2));
         RangeWidgetUtils.setUpRangePickerWidget(widgetTestActivity(), binding, promptWithReadOnlyAndQuestionDef(rangeQuestion));
         assertFalse(binding.widgetButton.isEnabled());
-    }
-
-    @Test
-    public void clickingPickerButton_showsNumberPickerDialog() {
-        WidgetTestActivity activity = CollectHelpers.createThemedActivity(WidgetTestActivity.class);
-        RangeWidgetUtils.showNumberPickerDialog(activity, new String[]{"1", "2", "3"}, 0, 0);
-        RobolectricHelpers.runLooper();
-        NumberPickerDialog numberPickerDialog = (NumberPickerDialog) activity.getSupportFragmentManager()
-                .findFragmentByTag(NumberPickerDialog.NUMBER_PICKER_DIALOG_TAG);
-
-        assertNotNull(numberPickerDialog);
     }
 }

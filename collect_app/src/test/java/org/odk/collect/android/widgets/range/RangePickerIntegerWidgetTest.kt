@@ -77,14 +77,6 @@ class RangePickerIntegerWidgetTest {
     }
 
     @Test
-    fun `setNumberPickerValue updates answer`() {
-        val widget = createWidget(QuestionWidgetHelpers.promptWithQuestionDefAndAnswer(rangeQuestion, null))
-        widget.setNumberPickerValue(4)
-
-        assertThat(widget.answer!!.displayText, equalTo("5"))
-    }
-
-    @Test
     fun `clicking widget for long calls longClickListener`() {
         val listener = mock<OnLongClickListener>()
         val widget = createWidget(QuestionWidgetHelpers.promptWithQuestionDefAndAnswer(rangeQuestion, null))
@@ -95,16 +87,6 @@ class RangePickerIntegerWidgetTest {
 
         verify(listener).onLongClick(widget.binding.widgetButton)
         verify(listener).onLongClick(widget.binding.widgetAnswerText)
-    }
-
-    @Test
-    fun setData_callsValueChangeListener() {
-        val widget = createWidget(QuestionWidgetHelpers.promptWithQuestionDefAndAnswer(rangeQuestion, null))
-        val valueChangedListener = QuestionWidgetHelpers.mockValueChangedListener(widget)
-        widget.setValueChangedListener(valueChangedListener)
-        widget.setNumberPickerValue(3)
-
-        verify(valueChangedListener).widgetValueChanged(widget)
     }
 
     private fun createWidget(prompt: FormEntryPrompt): RangePickerIntegerWidget {
