@@ -54,8 +54,6 @@ import org.odk.collect.draw.DrawDependencyComponentProvider;
 import org.odk.collect.entities.DaggerEntitiesDependencyComponent;
 import org.odk.collect.entities.EntitiesDependencyComponent;
 import org.odk.collect.entities.EntitiesDependencyComponentProvider;
-import org.odk.collect.forms.Form;
-import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.geo.DaggerGeoDependencyComponent;
 import org.odk.collect.geo.GeoDependencyComponent;
 import org.odk.collect.geo.GeoDependencyComponentProvider;
@@ -84,10 +82,8 @@ import org.odk.collect.shared.injection.ObjectProvider;
 import org.odk.collect.shared.injection.ObjectProviderHost;
 import org.odk.collect.shared.injection.SupplierObjectProvider;
 import org.odk.collect.shared.settings.Settings;
-import org.odk.collect.shared.strings.Md5;
 import org.odk.collect.strings.localization.LocalizedApplication;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.util.Locale;
 
@@ -227,22 +223,6 @@ public class Collect extends Application implements
     public void setComponent(AppDependencyComponent applicationComponent) {
         this.applicationComponent = applicationComponent;
         applicationComponent.inject(this);
-    }
-
-    /**
-     * Gets a unique, privacy-preserving identifier for a form based on its id and version.
-     *
-     * @param formId      id of a form
-     * @param formVersion version of a form
-     * @return md5 hash of the form title, a space, the form ID
-     */
-    public static String getFormIdentifierHash(FormsRepository formsRepository, String formId, String formVersion) {
-        Form form = formsRepository.getLatestByFormIdAndVersion(formId, formVersion);
-
-        String formTitle = form != null ? form.getDisplayName() : "";
-
-        String formIdentifier = formTitle + " " + formId;
-        return Md5.getMd5Hash(new ByteArrayInputStream(formIdentifier.getBytes()));
     }
 
     // https://issuetracker.google.com/issues/154855417
