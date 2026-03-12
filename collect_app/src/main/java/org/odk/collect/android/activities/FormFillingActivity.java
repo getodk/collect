@@ -170,8 +170,6 @@ import org.odk.collect.android.widgets.datetime.pickers.CustomDatePickerDialog;
 import org.odk.collect.android.widgets.datetime.pickers.CustomTimePickerDialog;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.items.SelectOneFromMapDialogFragment;
-import org.odk.collect.android.widgets.range.RangePickerDecimalWidget;
-import org.odk.collect.android.widgets.range.RangePickerIntegerWidget;
 import org.odk.collect.android.widgets.utilities.ExternalAppRecordingRequester;
 import org.odk.collect.android.widgets.utilities.FormControllerWaitingForDataRegistry;
 import org.odk.collect.android.widgets.utilities.GeoPolyDialogFragment;
@@ -225,7 +223,7 @@ import timber.log.Timber;
  */
 public class FormFillingActivity extends LocalizedActivity implements CollectComposeThemeProvider, AnimationListener,
         FormLoaderListener, AdvanceToNextListener, SwipeHandler.OnSwipeListener,
-        SavepointListener, NumberPickerDialog.NumberPickerListener,
+        SavepointListener,
         RankingWidgetDialog.RankingListener, SaveFormIndexTask.SaveFormIndexListener,
         WidgetValueChangedListener, FormLoadingDialogFragment.FormLoadingDialogFragmentListener,
         AudioControllerView.SwipableParent, FormIndexAnimationHandler.Listener,
@@ -451,6 +449,7 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
                 .forClass(BackgroundAudioPermissionDialogFragment.class, () -> new BackgroundAudioPermissionDialogFragment(viewModelFactory))
                 .forClass(SelectOneFromMapDialogFragment.class, () -> new SelectOneFromMapDialogFragment(viewModelFactory))
                 .forClass(GeoPolyDialogFragment.class, () -> new GeoPolyDialogFragment(viewModelFactory))
+                .forClass(NumberPickerDialog.class, () -> new NumberPickerDialog(viewModelFactory))
                 .build());
 
         getSupportFragmentManager().setFragmentResultListener(REQUEST_DELETE_REPEAT, this, (requestKey, result) -> deleteGroup());
@@ -2093,23 +2092,6 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
     public void onSaveFormIndexError(String errorMessage) {
         if (errorMessage != null && errorMessage.trim().length() > 0) {
             showLongToast(getString(org.odk.collect.strings.R.string.save_point_error, errorMessage));
-        }
-    }
-
-    @Override
-    public void onNumberPickerValueSelected(int widgetId, int value) {
-        if (currentView != null) {
-            for (QuestionWidget qw : ((ODKView) currentView).getWidgets()) {
-                if (qw instanceof RangePickerIntegerWidget && widgetId == qw.getId()) {
-                    ((RangePickerIntegerWidget) qw).setNumberPickerValue(value);
-                    widgetValueChanged(qw);
-                    return;
-                } else if (qw instanceof RangePickerDecimalWidget && widgetId == qw.getId()) {
-                    ((RangePickerDecimalWidget) qw).setNumberPickerValue(value);
-                    widgetValueChanged(qw);
-                    return;
-                }
-            }
         }
     }
 

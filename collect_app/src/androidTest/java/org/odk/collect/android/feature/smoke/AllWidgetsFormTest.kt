@@ -37,7 +37,11 @@ class AllWidgetsFormTest {
             .swipeToNextQuestion("Range integer widget")
             .swipeToNextQuestion("Range decimal widget")
             .swipeToNextQuestion("Range vertical integer widget")
+
             .swipeToNextQuestion("Range picker integer widget")
+            .clickOnText("Select value")
+            .pressBack(FormEntryPage("All widgets"))
+
             .swipeToNextQuestion("Range rating integer widget")
 
             .swipeToNextQuestion("Image widget")

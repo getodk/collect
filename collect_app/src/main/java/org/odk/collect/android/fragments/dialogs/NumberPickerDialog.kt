@@ -16,25 +16,24 @@
 package org.odk.collect.android.fragments.dialogs
 
 import android.app.Dialog
-import android.content.Context
 import android.os.Bundle
 import android.widget.NumberPicker
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import org.javarosa.core.model.FormIndex
+import org.javarosa.core.model.data.IntegerData
+import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.R
+import org.odk.collect.android.formentry.FormEntryViewModel
 
-class NumberPickerDialog : DialogFragment() {
-    interface NumberPickerListener {
-        fun onNumberPickerValueSelected(widgetId: Int, value: Int)
-    }
+class NumberPickerDialog(private val viewModelFactory: ViewModelProvider.Factory) :
+    DialogFragment() {
 
-    private var listener: NumberPickerListener? = null
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is NumberPickerListener) {
-            listener = context
-        }
+    private val formEntryViewModel: FormEntryViewModel by activityViewModels { viewModelFactory }
+    private val prompt: FormEntryPrompt by lazy {
+        formEntryViewModel.getQuestionPrompt(requireArguments().getSerializable(ARG_FORM_INDEX) as FormIndex)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -54,9 +53,9 @@ class NumberPickerDialog : DialogFragment() {
             .setTitle(org.odk.collect.strings.R.string.number_picker_title)
             .setView(view)
             .setPositiveButton(org.odk.collect.strings.R.string.ok) { _, _ ->
-                listener?.onNumberPickerValueSelected(
-                    requireArguments().getInt(WIDGET_ID),
-                    numberPicker.value
+                formEntryViewModel.answerQuestion(
+                    prompt.index,
+                    IntegerData(numbers[numberPicker.value].toInt())
                 )
             }
             .setNegativeButton(org.odk.collect.strings.R.string.cancel) { _, _ -> }
@@ -64,24 +63,9 @@ class NumberPickerDialog : DialogFragment() {
     }
 
     companion object {
-        const val NUMBER_PICKER_DIALOG_TAG = "numberPickerDialogTag"
-        const val WIDGET_ID = "widgetId"
         const val DISPLAYED_VALUES = "displayedValues"
         const val PROGRESS = "progress"
 
-        @JvmStatic
-        fun newInstance(
-            widgetId: Int,
-            displayedValues: Array<String>,
-            progress: Int
-        ): NumberPickerDialog {
-            return NumberPickerDialog().apply {
-                arguments = Bundle().apply {
-                    putInt(WIDGET_ID, widgetId)
-                    putInt(PROGRESS, progress)
-                    putSerializable(DISPLAYED_VALUES, displayedValues)
-                }
-            }
-        }
+        const val ARG_FORM_INDEX = "formIndex"
     }
 }

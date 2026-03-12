@@ -1,19 +1,27 @@
 package org.odk.collect.android.widgets.range;
 
+import static org.odk.collect.android.fragments.dialogs.NumberPickerDialog.ARG_FORM_INDEX;
+import static org.odk.collect.android.fragments.dialogs.NumberPickerDialog.DISPLAYED_VALUES;
+import static org.odk.collect.android.fragments.dialogs.NumberPickerDialog.PROGRESS;
+
 import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.View;
+
+import androidx.fragment.app.FragmentActivity;
 
 import org.javarosa.core.model.RangeQuestion;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.IntegerData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.activities.FormFillingActivity;
 import org.odk.collect.android.databinding.RangePickerWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.utilities.RangeWidgetUtils;
+import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 
 import java.math.BigDecimal;
 
@@ -44,8 +52,13 @@ public class RangePickerIntegerWidget extends QuestionWidget {
         RangeWidgetUtils.setUpRangePickerWidget(context, binding, prompt);
 
         progress = RangePickerWidgetUtils.getProgressFromPrompt(prompt, displayedValuesForNumberPicker);
-        binding.widgetButton.setOnClickListener(v -> RangeWidgetUtils.showNumberPickerDialog(
-                (FormFillingActivity) getContext(), displayedValuesForNumberPicker, getId(), progress));
+        binding.widgetButton.setOnClickListener(v -> {
+            Bundle args = new Bundle();
+            args.putSerializable(ARG_FORM_INDEX, prompt.getIndex());
+            args.putInt(PROGRESS, progress);
+            args.putSerializable(DISPLAYED_VALUES, displayedValuesForNumberPicker);
+            DialogFragmentUtils.showIfNotShowing(NumberPickerDialog.class, args, ((FragmentActivity) context).getSupportFragmentManager());
+        });
 
         return binding.getRoot();
     }
@@ -80,13 +93,5 @@ public class RangePickerIntegerWidget extends QuestionWidget {
         progress = 0;
         binding.widgetAnswerText.setText(getContext().getString(org.odk.collect.strings.R.string.no_value_selected));
         binding.widgetButton.setText(getContext().getString(org.odk.collect.strings.R.string.select_value));
-    }
-
-    public void setNumberPickerValue(int value) {
-        progress = value;
-
-        binding.widgetAnswerText.setText(displayedValuesForNumberPicker[value]);
-        binding.widgetButton.setText(org.odk.collect.strings.R.string.edit_value);
-        widgetValueChanged();
     }
 }
