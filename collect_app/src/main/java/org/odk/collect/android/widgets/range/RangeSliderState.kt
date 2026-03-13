@@ -39,6 +39,8 @@ data class RangeSliderState(
         get() = if (isDiscrete) rangeEnd.toInt().toString() else rangeEnd.toString()
 
     companion object {
+        private const val FRACTION_SCALE = 10
+
         fun fromPrompt(prompt: FormEntryPrompt): RangeSliderState {
             val rangeQuestion = prompt.question as RangeQuestion
             val start = rangeQuestion.rangeStart
@@ -51,21 +53,31 @@ data class RangeSliderState(
             val sanitizedAppearance = Appearances.getSanitizedAppearanceHint(prompt)
             val isHorizontal = !sanitizedAppearance.contains(Appearances.VERTICAL)
             val isDiscrete = prompt.dataType == DATATYPE_INTEGER
+
             val isValid = step.compareTo(BigDecimal.ZERO) != 0 &&
                 start.compareTo(end) != 0 &&
                 range >= step &&
-                (end - start).remainder(step).compareTo(BigDecimal.ZERO) == 0
+                range.remainder(step).compareTo(BigDecimal.ZERO) == 0
+
             val isEnabled = !prompt.isReadOnly && isValid
 
-            var sliderValue: BigDecimal? = null
-            var numOfSteps = 0
-            var numOfTicks = 0
-
-            if (isValid) {
+            val sliderValue = if (isValid) {
                 val value = prompt.answerValue?.value?.toString()?.toBigDecimalOrNull()
-                sliderValue = toSliderValue(value, start, end, step, range)
-                numOfSteps = (range.divide(step, 0, RoundingMode.HALF_UP).toInt()) - 1
-                numOfTicks = calculateNumOfTicks(sanitizedAppearance, range, tickInterval, step, numOfSteps)
+                toSliderValue(value, start, end, step, range)
+            } else {
+                null
+            }
+
+            val numOfSteps = if (isValid) {
+                range.divide(step, 0, RoundingMode.HALF_UP).toInt() - 1
+            } else {
+                0
+            }
+
+            val numOfTicks = if (isValid) {
+                calculateNumOfTicks(sanitizedAppearance, range, tickInterval, step, numOfSteps)
+            } else {
+                0
             }
 
             return RangeSliderState(
@@ -100,7 +112,7 @@ data class RangeSliderState(
 
             val nearestStepValue = roundToStep(value, start, step)
             val stepWithinRange = (nearestStepValue - start).abs()
-            val fractionOfRange = stepWithinRange.divide(range, 10, RoundingMode.HALF_UP)
+            val fractionOfRange = stepWithinRange.divide(range, FRACTION_SCALE, RoundingMode.HALF_UP)
             return fractionOfRange.takeIf { it >= BigDecimal.ZERO && it <= BigDecimal.ONE }
         }
 
@@ -111,8 +123,8 @@ data class RangeSliderState(
 
         private fun getLabels(prompt: FormEntryPrompt): List<String> {
             return prompt.selectChoices
-                ?.map { prompt.getSelectChoiceText(it) }
-                ?: emptyList()
+                ?.map(prompt::getSelectChoiceText)
+                .orEmpty()
         }
 
         private fun calculateNumOfTicks(
