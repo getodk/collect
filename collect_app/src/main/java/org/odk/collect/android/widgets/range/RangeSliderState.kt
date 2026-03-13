@@ -9,6 +9,7 @@ import java.math.RoundingMode
 
 data class RangeSliderState(
     val sliderValue: BigDecimal?,
+    val placeholder: BigDecimal?,
     val rangeStart: BigDecimal,
     val rangeEnd: BigDecimal,
     val step: BigDecimal,
@@ -43,6 +44,7 @@ data class RangeSliderState(
             val start = rangeQuestion.rangeStart
             val end = rangeQuestion.rangeEnd
             val step = rangeQuestion.rangeStep.abs()
+            val placeholder = rangeQuestion.placeholder?.takeIf { it in start.min(end)..start.max(end) }
             val labels = getLabels(prompt)
             val sanitizedAppearance = Appearances.getSanitizedAppearanceHint(prompt)
             val isHorizontal = !sanitizedAppearance.contains(Appearances.VERTICAL)
@@ -70,6 +72,7 @@ data class RangeSliderState(
 
             return RangeSliderState(
                 sliderValue = sliderValue,
+                placeholder = placeholder,
                 rangeStart = start,
                 rangeEnd = end,
                 step = step,
