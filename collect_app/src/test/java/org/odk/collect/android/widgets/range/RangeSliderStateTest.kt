@@ -366,7 +366,7 @@ class RangeSliderStateTest {
     }
 
     @Test
-    fun `calculates numOfTicks correctly`() {
+    fun `calculates numOfTicks correctly when there is no tickInterval set`() {
         mockQuestion(0F, 10F, 1F)
 
         val prompt = promptBuilder
@@ -442,9 +442,34 @@ class RangeSliderStateTest {
     }
 
     @Test
+    fun `returns correct value for valid placeholder`() {
+        mockQuestion(0F, 10F, 1F, placeholder = 4F)
+
+        val prompt = promptBuilder
+            .withDataType(DATATYPE_INTEGER)
+            .build()
+
+        val state = RangeSliderState.fromPrompt(prompt)
+        assertThat(state.placeholder, equalTo(4.0.toBigDecimal()))
+    }
+
+    @Test
+    fun `returns null for invalid placeholder`() {
+        mockQuestion(0F, 10F, 1F, placeholder = 11F)
+
+        val prompt = promptBuilder
+            .withDataType(DATATYPE_INTEGER)
+            .build()
+
+        val state = RangeSliderState.fromPrompt(prompt)
+        assertThat(state.placeholder, equalTo(null))
+    }
+
+    @Test
     fun `realValue rounds correctly to nearest step for ascending range with integer step`() {
         val state = RangeSliderState(
             sliderValue = 0.34.toBigDecimal(),
+            placeholder = null,
             rangeStart = 0.toBigDecimal(),
             rangeEnd = 10.toBigDecimal(),
             step = 1.toBigDecimal(),
@@ -464,6 +489,7 @@ class RangeSliderStateTest {
     fun `realValue rounds correctly to nearest step for descending range with integer step`() {
         val state = RangeSliderState(
             sliderValue = 0.34.toBigDecimal(),
+            placeholder = null,
             rangeStart = 10.toBigDecimal(),
             rangeEnd = 0.toBigDecimal(),
             step = 1.toBigDecimal(),
@@ -483,6 +509,7 @@ class RangeSliderStateTest {
     fun `realValue rounds correctly to nearest step for ascending range with decimal step`() {
         val state = RangeSliderState(
             sliderValue = 0.14444445.toBigDecimal(),
+            placeholder = null,
             rangeStart = 1.toBigDecimal(),
             rangeEnd = 10.toBigDecimal(),
             step = 0.1.toBigDecimal(),
@@ -502,6 +529,7 @@ class RangeSliderStateTest {
     fun `realValue rounds correctly to nearest step for descending range with decimal step`() {
         val state = RangeSliderState(
             sliderValue = 0.14444445.toBigDecimal(),
+            placeholder = null,
             rangeStart = 10.toBigDecimal(),
             rangeEnd = 1.toBigDecimal(),
             step = 0.1.toBigDecimal(),
@@ -517,9 +545,11 @@ class RangeSliderStateTest {
         assertThat(state.realValue, equalTo(8.7.toBigDecimal()))
     }
 
-    private fun mockQuestion(rangeStart: Float, rangeEnd: Float, rangeStep: Float) {
+    private fun mockQuestion(rangeStart: Float, rangeEnd: Float, rangeStep: Float, tickInterval: Float? = null, placeholder: Float? = null) {
         whenever(question.rangeStart).thenReturn(rangeStart.toBigDecimal())
         whenever(question.rangeEnd).thenReturn(rangeEnd.toBigDecimal())
         whenever(question.rangeStep).thenReturn(rangeStep.toBigDecimal())
+        whenever(question.tickInterval).thenReturn(tickInterval?.toBigDecimal())
+        whenever(question.placeholder).thenReturn(placeholder?.toBigDecimal())
     }
 }
