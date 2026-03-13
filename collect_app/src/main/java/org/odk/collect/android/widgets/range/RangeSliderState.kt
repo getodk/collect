@@ -43,7 +43,9 @@ data class RangeSliderState(
             val rangeQuestion = prompt.question as RangeQuestion
             val start = rangeQuestion.rangeStart
             val end = rangeQuestion.rangeEnd
+            val range = (end - start).abs()
             val step = rangeQuestion.rangeStep.abs()
+            val tickInterval = rangeQuestion.tickInterval
             val placeholder = rangeQuestion.placeholder?.takeIf { it in start.min(end)..start.max(end) }
             val labels = getLabels(prompt)
             val sanitizedAppearance = Appearances.getSanitizedAppearanceHint(prompt)
@@ -51,7 +53,7 @@ data class RangeSliderState(
             val isDiscrete = prompt.dataType == DATATYPE_INTEGER
             val isValid = step.compareTo(BigDecimal.ZERO) != 0 &&
                 start.compareTo(end) != 0 &&
-                (end - start).abs() >= step &&
+                range >= step &&
                 (end - start).remainder(step).compareTo(BigDecimal.ZERO) == 0
             val isEnabled = !prompt.isReadOnly && isValid
 
@@ -61,13 +63,9 @@ data class RangeSliderState(
 
             if (isValid) {
                 val value = prompt.answerValue?.value?.toString()?.toBigDecimalOrNull()
-                sliderValue = toSliderValue(value, start, end, step)
-                numOfSteps = ((end - start).abs().divide(step, 0, RoundingMode.HALF_UP).toInt()) - 1
-                numOfTicks = if (sanitizedAppearance.contains(Appearances.NO_TICKS)) {
-                    0
-                } else {
-                    numOfSteps + 2
-                }
+                sliderValue = toSliderValue(value, start, end, step, range)
+                numOfSteps = (range.divide(step, 0, RoundingMode.HALF_UP).toInt()) - 1
+                numOfTicks = calculateNumOfTicks(sanitizedAppearance, range, tickInterval, step, numOfSteps)
             }
 
             return RangeSliderState(
@@ -90,7 +88,8 @@ data class RangeSliderState(
             value: BigDecimal?,
             start: BigDecimal,
             end: BigDecimal,
-            step: BigDecimal
+            step: BigDecimal,
+            range: BigDecimal
         ): BigDecimal? {
             if (value == null ||
                 start.compareTo(end) == 0 ||
@@ -101,7 +100,6 @@ data class RangeSliderState(
 
             val nearestStepValue = roundToStep(value, start, step)
             val stepWithinRange = (nearestStepValue - start).abs()
-            val range = (end - start).abs()
             val fractionOfRange = stepWithinRange.divide(range, 10, RoundingMode.HALF_UP)
             return fractionOfRange.takeIf { it >= BigDecimal.ZERO && it <= BigDecimal.ONE }
         }
@@ -115,6 +113,30 @@ data class RangeSliderState(
             return prompt.selectChoices
                 ?.map { prompt.getSelectChoiceText(it) }
                 ?: emptyList()
+        }
+
+        private fun calculateNumOfTicks(
+            appearance: String,
+            range: BigDecimal,
+            tickInterval: BigDecimal?,
+            step: BigDecimal,
+            numOfSteps: Int
+        ): Int {
+            if (appearance.contains(Appearances.NO_TICKS)) {
+                return 0
+            }
+
+            val isTickIntervalValid = tickInterval != null &&
+                tickInterval > BigDecimal.ZERO &&
+                tickInterval.remainder(step).compareTo(BigDecimal.ZERO) == 0 &&
+                tickInterval <= range &&
+                range.remainder(tickInterval).compareTo(BigDecimal.ZERO) == 0
+
+            return if (isTickIntervalValid) {
+                range.divide(tickInterval, 0, RoundingMode.UNNECESSARY).toInt() + 1
+            } else {
+                numOfSteps + 2
+            }
         }
     }
 }
