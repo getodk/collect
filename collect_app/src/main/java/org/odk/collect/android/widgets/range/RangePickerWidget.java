@@ -1,5 +1,6 @@
 package org.odk.collect.android.widgets.range;
 
+import static org.odk.collect.android.fragments.dialogs.RangePickerDialogFragment.ARG_DECIMAL;
 import static org.odk.collect.android.fragments.dialogs.RangePickerDialogFragment.ARG_FORM_INDEX;
 import static org.odk.collect.android.fragments.dialogs.RangePickerDialogFragment.ARG_VALUES;
 import static org.odk.collect.android.fragments.dialogs.RangePickerDialogFragment.ARG_SELECTED;
@@ -14,7 +15,6 @@ import androidx.fragment.app.FragmentActivity;
 
 import org.javarosa.core.model.RangeQuestion;
 import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.data.IntegerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.databinding.RangePickerWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
@@ -25,7 +25,9 @@ import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 
 import java.math.BigDecimal;
 
-public class RangePickerIntegerWidget extends QuestionWidget {
+public class RangePickerWidget extends QuestionWidget {
+
+    private final boolean decimal;
     RangePickerWidgetAnswerBinding binding;
     private String[] displayedValuesForNumberPicker;
 
@@ -35,8 +37,13 @@ public class RangePickerIntegerWidget extends QuestionWidget {
 
     private int progress;
 
-    public RangePickerIntegerWidget(Context context, QuestionDetails questionDetails, Dependencies dependencies) {
+    private IAnswerData answer;
+
+    public RangePickerWidget(Context context, QuestionDetails questionDetails, Dependencies dependencies, boolean decimal) {
         super(context, dependencies, questionDetails);
+        this.decimal = decimal;
+
+        answer = questionDetails.getPrompt().getAnswerValue();
         render();
     }
 
@@ -57,6 +64,7 @@ public class RangePickerIntegerWidget extends QuestionWidget {
             args.putSerializable(ARG_FORM_INDEX, prompt.getIndex());
             args.putInt(ARG_SELECTED, progress);
             args.putSerializable(ARG_VALUES, displayedValuesForNumberPicker);
+            args.putBoolean(ARG_DECIMAL, decimal);
             DialogFragmentUtils.showIfNotShowing(RangePickerDialogFragment.class, args, ((FragmentActivity) context).getSupportFragmentManager());
         });
 
@@ -71,9 +79,7 @@ public class RangePickerIntegerWidget extends QuestionWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        return binding.widgetAnswerText.getText().toString().equals(getContext().getString(org.odk.collect.strings.R.string.no_value_selected))
-                ? null
-                : new IntegerData(Integer.parseInt(binding.widgetAnswerText.getText().toString()));
+        return answer;
     }
 
     @Override
@@ -90,6 +96,7 @@ public class RangePickerIntegerWidget extends QuestionWidget {
     }
 
     private void setUpNullValue() {
+        answer = null;
         progress = 0;
         binding.widgetAnswerText.setText(getContext().getString(org.odk.collect.strings.R.string.no_value_selected));
         binding.widgetButton.setText(getContext().getString(org.odk.collect.strings.R.string.select_value));

@@ -54,8 +54,7 @@ import org.odk.collect.android.widgets.items.SelectOneMinimalWidget;
 import org.odk.collect.android.widgets.items.SelectOneWidget;
 import org.odk.collect.android.widgets.range.RangeDecimalWidget;
 import org.odk.collect.android.widgets.range.RangeIntegerWidget;
-import org.odk.collect.android.widgets.range.RangePickerDecimalWidget;
-import org.odk.collect.android.widgets.range.RangePickerIntegerWidget;
+import org.odk.collect.android.widgets.range.RangePickerWidget;
 import org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester;
 import org.odk.collect.android.widgets.utilities.AudioRecorderRecordingStatusHandler;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
@@ -285,14 +284,14 @@ public class WidgetFactory {
                     switch (prompt.getDataType()) {
                         case Constants.DATATYPE_INTEGER:
                             if (prompt.getAppearanceHint() != null && prompt.getAppearanceHint().contains(PICKER_APPEARANCE)) {
-                                questionWidget = new RangePickerIntegerWidget(activity, questionDetails, dependencies);
+                                questionWidget = new RangePickerWidget(activity, questionDetails, dependencies, false);
                             } else {
                                 questionWidget = new RangeIntegerWidget(activity, questionDetails, dependencies);
                             }
                             break;
                         case Constants.DATATYPE_DECIMAL:
                             if (prompt.getAppearanceHint() != null && prompt.getAppearanceHint().contains(PICKER_APPEARANCE)) {
-                                questionWidget = new RangePickerDecimalWidget(activity, questionDetails, dependencies);
+                                questionWidget = new RangePickerWidget(activity, questionDetails, dependencies, true);
                             } else {
                                 questionWidget = new RangeDecimalWidget(activity, questionDetails, dependencies);
                             }

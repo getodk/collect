@@ -6,7 +6,8 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.nullValue
 import org.javarosa.core.model.RangeQuestion
-import org.javarosa.core.model.data.StringData
+import org.javarosa.core.model.data.DecimalData
+import org.javarosa.core.model.data.IntegerData
 import org.javarosa.form.api.FormEntryPrompt
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -18,11 +19,17 @@ import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetDepen
 import java.math.BigDecimal
 
 @RunWith(AndroidJUnit4::class)
-class RangePickerIntegerWidgetTest {
-    private val rangeQuestion = RangeQuestion().also {
+class RangePickerWidgetTest {
+    private val integerRangeQuestion = RangeQuestion().also {
         it.rangeStart = BigDecimal(1)
         it.rangeEnd = BigDecimal(10)
         it.rangeStep = BigDecimal(1)
+    }
+
+    private val decimalRangeQuestion = RangeQuestion().also {
+        it.rangeStart = BigDecimal(1.5)
+        it.rangeEnd = BigDecimal(5.5)
+        it.rangeStep = BigDecimal(0.5)
     }
 
     @Test
@@ -30,8 +37,9 @@ class RangePickerIntegerWidgetTest {
         assertThat(
             createWidget(
                 QuestionWidgetHelpers.promptWithReadOnlyAndQuestionDef(
-                    rangeQuestion
-                )
+                    integerRangeQuestion
+                ),
+                false
             ).answer,
             nullValue()
         )
@@ -42,11 +50,26 @@ class RangePickerIntegerWidgetTest {
         assertThat(
             createWidget(
                 QuestionWidgetHelpers.promptWithQuestionDefAndAnswer(
-                    rangeQuestion,
-                    StringData("4")
-                )
+                    integerRangeQuestion,
+                    IntegerData(4)
+                ),
+                false
             ).answer!!.value,
             equalTo(4)
+        )
+    }
+
+    @Test
+    fun `answer returns decimal answer when decimal is true and prompt has answer`() {
+        assertThat(
+            createWidget(
+                QuestionWidgetHelpers.promptWithQuestionDefAndAnswer(
+                    decimalRangeQuestion,
+                    DecimalData(4.0)
+                ),
+                true
+            ).answer!!.value,
+            equalTo(4.0)
         )
     }
 
@@ -54,9 +77,10 @@ class RangePickerIntegerWidgetTest {
     fun `clearAnswer clears widget answer`() {
         val widget = createWidget(
             QuestionWidgetHelpers.promptWithQuestionDefAndAnswer(
-                rangeQuestion,
-                StringData("4")
-            )
+                integerRangeQuestion,
+                IntegerData(4)
+            ),
+            false
         )
         widget.clearAnswer()
 
@@ -69,7 +93,10 @@ class RangePickerIntegerWidgetTest {
 
     @Test
     fun `clearAnswer calls valueChangeListener`() {
-        val widget = createWidget(QuestionWidgetHelpers.promptWithQuestionDefAndAnswer(rangeQuestion, null))
+        val widget = createWidget(
+            QuestionWidgetHelpers.promptWithQuestionDefAndAnswer(integerRangeQuestion, null),
+            false
+        )
         val valueChangedListener = QuestionWidgetHelpers.mockValueChangedListener(widget)
         widget.clearAnswer()
 
@@ -79,7 +106,10 @@ class RangePickerIntegerWidgetTest {
     @Test
     fun `clicking widget for long calls longClickListener`() {
         val listener = mock<OnLongClickListener>()
-        val widget = createWidget(QuestionWidgetHelpers.promptWithQuestionDefAndAnswer(rangeQuestion, null))
+        val widget = createWidget(
+            QuestionWidgetHelpers.promptWithQuestionDefAndAnswer(integerRangeQuestion, null),
+            false
+        )
 
         widget.setOnLongClickListener(listener)
         widget.binding.widgetButton.performLongClick()
@@ -89,11 +119,12 @@ class RangePickerIntegerWidgetTest {
         verify(listener).onLongClick(widget.binding.widgetAnswerText)
     }
 
-    private fun createWidget(prompt: FormEntryPrompt): RangePickerIntegerWidget {
-        return RangePickerIntegerWidget(
+    private fun createWidget(prompt: FormEntryPrompt, decimal: Boolean): RangePickerWidget {
+        return RangePickerWidget(
             QuestionWidgetHelpers.widgetTestActivity(),
             QuestionDetails(prompt),
-            widgetDependencies()
+            widgetDependencies(),
+            decimal
         )
     }
 }
