@@ -48,7 +48,6 @@ data class RangeSliderState(
             val range = (end - start).abs()
             val step = rangeQuestion.rangeStep.abs()
             val tickInterval = rangeQuestion.tickInterval
-            val placeholder = rangeQuestion.placeholder?.takeIf { it in start.min(end)..start.max(end) }
             val labels = getLabels(prompt)
             val sanitizedAppearance = Appearances.getSanitizedAppearanceHint(prompt)
             val isHorizontal = !sanitizedAppearance.contains(Appearances.VERTICAL)
@@ -63,6 +62,13 @@ data class RangeSliderState(
 
             val sliderValue = if (isValid) {
                 val value = prompt.answerValue?.value?.toString()?.toBigDecimalOrNull()
+                toSliderValue(value, start, end, step, range)
+            } else {
+                null
+            }
+
+            val placeholder = if (isValid) {
+                val value = rangeQuestion.placeholder?.takeIf { it in start.min(end)..start.max(end) }
                 toSliderValue(value, start, end, step, range)
             } else {
                 null

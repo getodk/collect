@@ -474,7 +474,7 @@ class RangeSliderStateTest {
             .build()
 
         val state = RangeSliderState.fromPrompt(prompt)
-        assertThat(state.placeholder, equalTo(4.0.toBigDecimal()))
+        assertThat(state.placeholder!!.stripTrailingZeros(), equalTo(0.4.toBigDecimal()))
     }
 
     @Test
