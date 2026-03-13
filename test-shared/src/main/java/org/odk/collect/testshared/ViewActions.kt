@@ -102,4 +102,22 @@ object ViewActions {
             }
         }
     }
+
+    fun setNumber(number: String): ViewAction {
+        return object : ViewAction {
+            override fun getConstraints(): Matcher<View?>? {
+                return ViewMatchers.isAssignableFrom(NumberPicker::class.java)
+            }
+
+            override fun getDescription(): String {
+                return ""
+            }
+
+            override fun perform(uiController: UiController, view: View) {
+                val numberPicker = view as NumberPicker
+                val index = numberPicker.displayedValues.indexOfFirst { it == number }
+                numberPicker.value = index
+            }
+        }
+    }
 }

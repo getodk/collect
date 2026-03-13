@@ -28,7 +28,7 @@ import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.R
 import org.odk.collect.android.formentry.FormEntryViewModel
 
-class NumberPickerDialog(private val viewModelFactory: ViewModelProvider.Factory) :
+class RangePickerDialogFragment(private val viewModelFactory: ViewModelProvider.Factory) :
     DialogFragment() {
 
     private val formEntryViewModel: FormEntryViewModel by activityViewModels { viewModelFactory }
@@ -39,14 +39,14 @@ class NumberPickerDialog(private val viewModelFactory: ViewModelProvider.Factory
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val view = layoutInflater.inflate(R.layout.number_picker_dialog, null)
 
-        val numbers = requireArguments().getSerializable(DISPLAYED_VALUES) as Array<String>
+        val numbers = requireArguments().getSerializable(ARG_VALUES) as Array<String>
 
         val numberPicker = view.findViewById<NumberPicker>(R.id.number_picker).apply {
             maxValue = numbers.size - 1
             minValue = 0
             wrapSelectorWheel = false
             displayedValues = numbers
-            value = requireArguments().getInt(PROGRESS)
+            value = requireArguments().getInt(ARG_SELECTED)
         }
 
         return MaterialAlertDialogBuilder(requireActivity())
@@ -63,9 +63,8 @@ class NumberPickerDialog(private val viewModelFactory: ViewModelProvider.Factory
     }
 
     companion object {
-        const val DISPLAYED_VALUES = "displayedValues"
-        const val PROGRESS = "progress"
-
+        const val ARG_VALUES = "values"
+        const val ARG_SELECTED = "selected"
         const val ARG_FORM_INDEX = "formIndex"
     }
 }

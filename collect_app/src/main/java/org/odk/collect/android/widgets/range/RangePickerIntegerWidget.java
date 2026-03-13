@@ -1,8 +1,8 @@
 package org.odk.collect.android.widgets.range;
 
-import static org.odk.collect.android.fragments.dialogs.NumberPickerDialog.ARG_FORM_INDEX;
-import static org.odk.collect.android.fragments.dialogs.NumberPickerDialog.DISPLAYED_VALUES;
-import static org.odk.collect.android.fragments.dialogs.NumberPickerDialog.PROGRESS;
+import static org.odk.collect.android.fragments.dialogs.RangePickerDialogFragment.ARG_FORM_INDEX;
+import static org.odk.collect.android.fragments.dialogs.RangePickerDialogFragment.ARG_VALUES;
+import static org.odk.collect.android.fragments.dialogs.RangePickerDialogFragment.ARG_SELECTED;
 
 import android.app.Activity;
 import android.content.Context;
@@ -18,7 +18,7 @@ import org.javarosa.core.model.data.IntegerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.databinding.RangePickerWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
+import org.odk.collect.android.fragments.dialogs.RangePickerDialogFragment;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.utilities.RangeWidgetUtils;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
@@ -55,9 +55,9 @@ public class RangePickerIntegerWidget extends QuestionWidget {
         binding.widgetButton.setOnClickListener(v -> {
             Bundle args = new Bundle();
             args.putSerializable(ARG_FORM_INDEX, prompt.getIndex());
-            args.putInt(PROGRESS, progress);
-            args.putSerializable(DISPLAYED_VALUES, displayedValuesForNumberPicker);
-            DialogFragmentUtils.showIfNotShowing(NumberPickerDialog.class, args, ((FragmentActivity) context).getSupportFragmentManager());
+            args.putInt(ARG_SELECTED, progress);
+            args.putSerializable(ARG_VALUES, displayedValuesForNumberPicker);
+            DialogFragmentUtils.showIfNotShowing(RangePickerDialogFragment.class, args, ((FragmentActivity) context).getSupportFragmentManager());
         });
 
         return binding.getRoot();
