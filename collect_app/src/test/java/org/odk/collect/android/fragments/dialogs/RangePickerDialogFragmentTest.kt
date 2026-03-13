@@ -11,6 +11,7 @@ import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.javarosa.core.model.data.DecimalData
 import org.javarosa.core.model.data.IntegerData
 import org.junit.Rule
 import org.junit.Test
@@ -20,7 +21,10 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.odk.collect.android.R
 import org.odk.collect.android.formentry.FormEntryViewModel
+import org.odk.collect.android.fragments.dialogs.RangePickerDialogFragment.Companion.ARG_DECIMAL
 import org.odk.collect.android.fragments.dialogs.RangePickerDialogFragment.Companion.ARG_FORM_INDEX
+import org.odk.collect.android.fragments.dialogs.RangePickerDialogFragment.Companion.ARG_SELECTED
+import org.odk.collect.android.fragments.dialogs.RangePickerDialogFragment.Companion.ARG_VALUES
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
@@ -61,8 +65,8 @@ class RangePickerDialogFragmentTest {
             RangePickerDialogFragment::class.java,
             bundleOf(
                 ARG_FORM_INDEX to prompt.index,
-                RangePickerDialogFragment.ARG_VALUES to arrayOf("1", "2", "3"),
-                RangePickerDialogFragment.ARG_SELECTED to 0
+                ARG_VALUES to arrayOf("1", "2", "3"),
+                ARG_SELECTED to 0
             )
         )
 
@@ -73,13 +77,31 @@ class RangePickerDialogFragmentTest {
     }
 
     @Test
+    fun `answers with DecimalData when DECIMAL arg is true`() {
+        launcherRule.launch(
+            RangePickerDialogFragment::class.java,
+            bundleOf(
+                ARG_FORM_INDEX to prompt.index,
+                ARG_VALUES to arrayOf("1.0", "2.0", "3.0"),
+                ARG_SELECTED to 0,
+                ARG_DECIMAL to true
+            )
+        )
+
+        onView(withId(R.id.number_picker)).inRoot(isDialog()).perform(setNumber("3.0"))
+        onView(withText(string.ok)).perform(click())
+
+        verify(formEntryViewModel).answerQuestion(prompt.index, DecimalData(3.0))
+    }
+
+    @Test
     fun `selects value based on VALUE arg`() {
         launcherRule.launch(
             RangePickerDialogFragment::class.java,
             bundleOf(
                 ARG_FORM_INDEX to prompt.index,
-                RangePickerDialogFragment.ARG_VALUES to arrayOf("1", "2", "3"),
-                RangePickerDialogFragment.ARG_SELECTED to 1
+                ARG_VALUES to arrayOf("1", "2", "3"),
+                ARG_SELECTED to 1
             )
         )
 

@@ -1,8 +1,9 @@
 package org.odk.collect.android.widgets.range;
 
+import static org.odk.collect.android.fragments.dialogs.RangePickerDialogFragment.ARG_DECIMAL;
 import static org.odk.collect.android.fragments.dialogs.RangePickerDialogFragment.ARG_FORM_INDEX;
-import static org.odk.collect.android.fragments.dialogs.RangePickerDialogFragment.ARG_VALUES;
 import static org.odk.collect.android.fragments.dialogs.RangePickerDialogFragment.ARG_SELECTED;
+import static org.odk.collect.android.fragments.dialogs.RangePickerDialogFragment.ARG_VALUES;
 
 import android.app.Activity;
 import android.content.Context;
@@ -56,6 +57,7 @@ public class RangePickerDecimalWidget extends QuestionWidget {
             args.putSerializable(ARG_FORM_INDEX, prompt.getIndex());
             args.putInt(ARG_SELECTED, progress);
             args.putSerializable(ARG_VALUES, displayedValuesForNumberPicker);
+            args.putBoolean(ARG_DECIMAL, true);
             DialogFragmentUtils.showIfNotShowing(RangePickerDialogFragment.class, args, ((FragmentActivity) context).getSupportFragmentManager());
         });
 

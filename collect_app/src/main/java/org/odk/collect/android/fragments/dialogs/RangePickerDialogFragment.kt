@@ -23,6 +23,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.javarosa.core.model.FormIndex
+import org.javarosa.core.model.data.DecimalData
 import org.javarosa.core.model.data.IntegerData
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.R
@@ -40,23 +41,29 @@ class RangePickerDialogFragment(private val viewModelFactory: ViewModelProvider.
         val view = layoutInflater.inflate(R.layout.number_picker_dialog, null)
 
         val numbers = requireArguments().getSerializable(ARG_VALUES) as Array<String>
+        val selected = requireArguments().getInt(ARG_SELECTED)
+        val decimal = requireArguments().getBoolean(ARG_DECIMAL)
 
         val numberPicker = view.findViewById<NumberPicker>(R.id.number_picker).apply {
             maxValue = numbers.size - 1
             minValue = 0
             wrapSelectorWheel = false
             displayedValues = numbers
-            value = requireArguments().getInt(ARG_SELECTED)
+            value = selected
         }
 
         return MaterialAlertDialogBuilder(requireActivity())
             .setTitle(org.odk.collect.strings.R.string.number_picker_title)
             .setView(view)
             .setPositiveButton(org.odk.collect.strings.R.string.ok) { _, _ ->
-                formEntryViewModel.answerQuestion(
-                    prompt.index,
-                    IntegerData(numbers[numberPicker.value].toInt())
-                )
+                val value = numbers[numberPicker.value]
+                val answerData = if (decimal) {
+                    DecimalData(value.toDouble())
+                } else {
+                    IntegerData(value.toInt())
+                }
+
+                formEntryViewModel.answerQuestion(prompt.index, answerData)
             }
             .setNegativeButton(org.odk.collect.strings.R.string.cancel) { _, _ -> }
             .create()
@@ -66,5 +73,6 @@ class RangePickerDialogFragment(private val viewModelFactory: ViewModelProvider.
         const val ARG_VALUES = "values"
         const val ARG_SELECTED = "selected"
         const val ARG_FORM_INDEX = "formIndex"
+        const val ARG_DECIMAL = "decimal"
     }
 }
