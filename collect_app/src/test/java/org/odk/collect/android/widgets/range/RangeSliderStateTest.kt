@@ -366,7 +366,7 @@ class RangeSliderStateTest {
     }
 
     @Test
-    fun `calculates numOfTicks correctly when there is no tickInterval set`() {
+    fun `returns numOfTicks based on possible steps if tickInterval is not set`() {
         mockQuestion(0F, 10F, 1F)
 
         val prompt = promptBuilder
@@ -380,6 +380,30 @@ class RangeSliderStateTest {
 
         val newState = RangeSliderState.fromPrompt(prompt)
         assertThat(newState.numOfTicks, equalTo(6))
+    }
+
+    @Test
+    fun `returns numOfTicks based on tickInterval if it is set and valid`() {
+        mockQuestion(0F, 10F, 1F, tickInterval = 2F)
+
+        val prompt = promptBuilder
+            .withDataType(DATATYPE_INTEGER)
+            .build()
+
+        val state = RangeSliderState.fromPrompt(prompt)
+        assertThat(state.numOfTicks, equalTo(6))
+    }
+
+    @Test
+    fun `returns numOfTicks based on possible steps if tickInterval is set but invalid`() {
+        mockQuestion(0F, 10F, 1F, tickInterval = 3F)
+
+        val prompt = promptBuilder
+            .withDataType(DATATYPE_INTEGER)
+            .build()
+
+        val state = RangeSliderState.fromPrompt(prompt)
+        assertThat(state.numOfTicks, equalTo(11))
     }
 
     @Test
