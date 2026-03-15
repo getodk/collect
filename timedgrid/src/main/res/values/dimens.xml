@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="corner_radius_extra_extra_small">4dp</dimen>
+    <dimen name="corner_radius_extra_small">8dp</dimen>
+</resources>
