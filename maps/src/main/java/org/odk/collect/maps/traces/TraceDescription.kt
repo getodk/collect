@@ -1,5 +1,8 @@
-package org.odk.collect.maps
+package org.odk.collect.maps.traces
 
+import org.odk.collect.maps.MapConsts
+import org.odk.collect.maps.MapFragment
+import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.markers.MarkerDescription
 import org.odk.collect.maps.markers.MarkerIconDescription.TracePoint
 

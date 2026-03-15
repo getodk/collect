@@ -16,7 +16,7 @@ package org.odk.collect.osmdroid;
 
 import static androidx.core.graphics.drawable.BitmapDrawableKt.toDrawable;
 import static androidx.core.graphics.drawable.DrawableKt.toBitmap;
-import static org.odk.collect.maps.TraceDescriptionKt.getMarkersForPoints;
+import static org.odk.collect.maps.traces.TraceDescriptionKt.getMarkersForPoints;
 import static org.odk.collect.maps.markers.MarkerIconCreator.toBitmap;
 
 import android.content.BroadcastReceiver;
@@ -46,13 +46,14 @@ import com.google.android.gms.location.LocationListener;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.androidshared.system.ContextExt;
 import org.odk.collect.location.LocationClient;
-import org.odk.collect.maps.LineDescription;
+import org.odk.collect.maps.circles.CircleDescription;
+import org.odk.collect.maps.traces.LineDescription;
 import org.odk.collect.maps.MapConfigurator;
 import org.odk.collect.maps.MapFragment;
 import org.odk.collect.maps.MapPoint;
 import org.odk.collect.maps.MapViewModel;
 import org.odk.collect.maps.MapViewModelMapFragment;
-import org.odk.collect.maps.PolygonDescription;
+import org.odk.collect.maps.traces.PolygonDescription;
 import org.odk.collect.maps.Zoom;
 import org.odk.collect.maps.ZoomObserver;
 import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils;
@@ -303,6 +304,10 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
     @Override
     public int addMarker(MarkerDescription markerDescription) {
         int featureId = nextFeatureId++;
+        return addMarker(featureId, markerDescription);
+    }
+
+    private int addMarker(int featureId, MarkerDescription markerDescription) {
         features.put(featureId, new MarkerFeature(map, markerDescription));
         return featureId;
     }
@@ -427,11 +432,6 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
     }
 
     @Override
-    public void runOnGpsLocationReady(@NonNull ReadyListener listener) {
-        myLocationOverlay.runOnFirstFix(() -> getActivity().runOnUiThread(() -> listener.onReady(this)));
-    }
-
-    @Override
     public void setGpsLocationEnabled(boolean enable) {
         if (enable != clientWantsLocationUpdates) {
             clientWantsLocationUpdates = enable;
@@ -443,13 +443,6 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
     public @Nullable
     MapPoint getGpsLocation() {
         return fromLocation(myLocationOverlay);
-    }
-
-    @Override
-    public @Nullable
-    String getLocationProvider() {
-        Location fix = myLocationOverlay.getLastFix();
-        return fix != null ? fix.getProvider() : null;
     }
 
     @Override
@@ -732,6 +725,22 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
     @Override
     public MapViewModel getMapViewModel() {
         return mapViewModel;
+    }
+
+    @Override
+    public void updateMarker(int featureId, @NotNull MarkerDescription markerDescription) {
+        features.get(featureId).dispose();
+        addMarker(featureId, markerDescription);
+    }
+
+    @Override
+    public int addCircle(@NotNull CircleDescription circleDescription) {
+        return -1;
+    }
+
+    @Override
+    public void updateCircle(int featureId, @NotNull CircleDescription circleDescription) {
+
     }
 
     /**

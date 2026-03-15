@@ -14,8 +14,8 @@ import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationOptions
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapPoint
-import org.odk.collect.maps.PolygonDescription
-import org.odk.collect.maps.getMarkersForPoints
+import org.odk.collect.maps.traces.PolygonDescription
+import org.odk.collect.maps.traces.getMarkersForPoints
 
 internal class DynamicPolygonFeature(
     private val context: Context,

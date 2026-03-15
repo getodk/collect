@@ -1,7 +1,10 @@
 package org.odk.collect.maps
 
+import org.odk.collect.maps.circles.CircleDescription
+import org.odk.collect.maps.traces.LineDescription
 import org.odk.collect.maps.markers.MarkerDescription
 import org.odk.collect.maps.markers.MarkerIconDescription
+import org.odk.collect.maps.traces.PolygonDescription
 
 /**
  * Interface for a Fragment that renders a map view.  The plan is to have one
@@ -77,10 +80,12 @@ interface MapFragment {
      * Returns a positive integer, the featureId for the newly added shape.
      */
     fun addMarker(markerDescription: MarkerDescription): Int
+    fun updateMarker(featureId: Int, markerDescription: MarkerDescription)
 
     fun addMarkers(markers: List<MarkerDescription>): List<Int>
 
     /** Sets the icon for a marker.  */
+    @Deprecated(message = "Use #updateMarker instead")
     fun setMarkerIcon(featureId: Int, markerIconDescription: MarkerIconDescription)
 
     /** Gets the location of an existing marker.  */
@@ -100,6 +105,9 @@ interface MapFragment {
      */
     fun addPolygon(polygonDescription: PolygonDescription): Int
     fun updatePolygon(featureId: Int, polygonDescription: PolygonDescription)
+
+    fun addCircle(circleDescription: CircleDescription): Int
+    fun updateCircle(featureId: Int, circleDescription: CircleDescription)
 
     /**
      * Returns the vertices of the polyline or polygon specified by featureId, or an
@@ -134,21 +142,6 @@ interface MapFragment {
     /** Gets the last GPS location fix, or null if there hasn't been one.  */
     @Deprecated(message = "Location should be handled outside of MapFragment")
     fun getGpsLocation(): MapPoint?
-
-    /** Gets the provider of the last fix, or null if there hasn't been one.  */
-    @Deprecated(message = "Location should be handled outside of MapFragment")
-    fun getLocationProvider(): String?
-
-    /**
-     * Queues a callback to be invoked on the UI thread as soon as a GPS fix is
-     * available.  If there already is a location fix, the callback is invoked
-     * immediately; otherwise, when a fix is obtained, it will be invoked once.
-     * To begin searching for a GPS fix, call setGpsLocationEnabled(true).
-     * Activities that set callbacks should call setGpsLocationEnabled(false)
-     * in their onStop() or onDestroy() methods, to prevent invalid callbacks.
-     */
-    @Deprecated(message = "Location should be handled outside of MapFragment")
-    fun runOnGpsLocationReady(listener: ReadyListener)
 
     /**
      * Sets or clears the callback for GPS location updates.  This callback

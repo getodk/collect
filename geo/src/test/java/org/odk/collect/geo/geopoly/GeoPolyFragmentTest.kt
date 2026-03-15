@@ -2,7 +2,6 @@ package org.odk.collect.geo.geopoly
 
 import android.app.Application
 import androidx.activity.OnBackPressedDispatcher
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
@@ -22,9 +21,9 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.odk.collect.androidshared.ui.DisplayString
-import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.SnackbarUtils
 import org.odk.collect.androidshared.utils.opaque
 import org.odk.collect.androidtest.FragmentScenarioExtensions.setFragmentResultListener
@@ -32,6 +31,7 @@ import org.odk.collect.async.Scheduler
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.geo.DaggerGeoDependencyComponent
 import org.odk.collect.geo.GeoDependencyModule
+import org.odk.collect.geo.GeoUtils.toMapPoint
 import org.odk.collect.geo.R
 import org.odk.collect.geo.geopoly.GeoPolyFragment.Companion.INTERVAL_OPTIONS
 import org.odk.collect.geo.geopoly.GeoPolyFragment.OutputMode
@@ -56,6 +56,7 @@ import org.odk.collect.testshared.FragmentResultRecorder
 import org.odk.collect.testshared.Interactions
 import org.odk.collect.webpage.WebPageService
 import org.robolectric.Shadows
+import kotlin.math.acos
 
 @RunWith(AndroidJUnit4::class)
 class GeoPolyFragmentTest {
@@ -75,39 +76,7 @@ class GeoPolyFragmentTest {
             Shadows.shadowOf(application)
         shadowApplication.grantPermissions("android.permission.ACCESS_FINE_LOCATION")
         shadowApplication.grantPermissions("android.permission.ACCESS_COARSE_LOCATION")
-        val application = ApplicationProvider.getApplicationContext<RobolectricApplication>()
-        application.geoDependencyComponent = DaggerGeoDependencyComponent.builder()
-            .application(application)
-            .geoDependencyModule(object : GeoDependencyModule() {
-                override fun providesMapFragmentFactory(): MapFragmentFactory {
-                    return object : MapFragmentFactory {
-                        override fun createMapFragment(): MapFragment {
-                            return mapFragment
-                        }
-                    }
-                }
-
-                override fun providesLocationTracker(application: Application): LocationTracker {
-                    return locationTracker
-                }
-
-                override fun providesReferenceLayerRepository(): ReferenceLayerRepository {
-                    return mock()
-                }
-
-                override fun providesScheduler(): Scheduler {
-                    return scheduler
-                }
-
-                override fun providesSettingsProvider(): SettingsProvider {
-                    return InMemSettingsProvider()
-                }
-
-                override fun providesWebPageService(): WebPageService {
-                    return mock()
-                }
-            })
-            .build()
+        overrideDependencies(mapFragment)
 
         SnackbarUtils.alertStore.enabled = true
     }
@@ -118,14 +87,42 @@ class GeoPolyFragmentTest {
     }
 
     @Test
-    fun testLocationTrackerLifecycle() {
-        val scenario = fragmentLauncherRule.launchInContainer {
+    fun zoomsToCurrentLocation() {
+        fragmentLauncherRule.launchInContainer {
             GeoPolyFragment({ OnBackPressedDispatcher() })
         }
 
-        // Stopping the activity should stop the location tracker
-        scenario.moveToState(Lifecycle.State.DESTROYED)
-        assertThat(locationTracker.isStarted, equalTo(false))
+        locationTracker.currentLocation = Location(2.0, 2.0)
+        assertThat(mapFragment.getCenter(), equalTo(MapPoint(2.0, 2.0)))
+    }
+
+    @Test
+    fun marksCurrentLocation() {
+        fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment({ OnBackPressedDispatcher() })
+        }
+
+        locationTracker.currentLocation = Location(2.0, 2.0, accuracy = 5.2f)
+        assertThat(
+            mapFragment.getMarkers(),
+            equalTo(listOf(locationTracker.currentLocation!!.toMapPoint()))
+        )
+        mapFragment.getCircles().let {
+            assertThat(it.size, equalTo(1))
+            assertThat(it[0].center, equalTo(locationTracker.currentLocation!!.toMapPoint()))
+            assertThat(it[0].radius, equalTo(5.2f))
+        }
+
+        locationTracker.currentLocation = Location(3.0, 2.0, accuracy = 2.1f)
+        assertThat(
+            mapFragment.getMarkers(),
+            equalTo(listOf(locationTracker.currentLocation!!.toMapPoint()))
+        )
+        mapFragment.getCircles().let {
+            assertThat(it.size, equalTo(1))
+            assertThat(it[0].center, equalTo(locationTracker.currentLocation!!.toMapPoint()))
+            assertThat(it[0].radius, equalTo(2.1f))
+        }
     }
 
     @Test
@@ -231,6 +228,22 @@ class GeoPolyFragmentTest {
         assertVisible(
             withText(
                 application.getString(string.collection_status_paused, 1)
+            )
+        )
+    }
+
+    @Test
+    fun recordingPointsAutomatically_usesCurrentLocationWhenThereIsOne() {
+        fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment({ OnBackPressedDispatcher() })
+        }
+
+        locationTracker.currentLocation = Location(1.0, 1.0)
+        startInput(R.id.automatic_mode)
+        scheduler.runForeground(0)
+        assertVisible(
+            withText(
+                application.getString(string.collection_status_auto_seconds_accuracy, 1, 20, 10)
             )
         )
     }
@@ -487,7 +500,7 @@ class GeoPolyFragmentTest {
         fragmentLauncherRule.launchInContainer { GeoPolyFragment({ OnBackPressedDispatcher() }) }
 
         startInput(R.id.manual_mode)
-        mapFragment.setLocation(MapPoint(1.0, 1.0))
+        locationTracker.currentLocation = Location(1.0, 1.0)
         onView(withId(R.id.record_button)).perform(click())
         onView(withId(R.id.record_button)).perform(click())
         assertThat(mapFragment.getPolyLines()[0].points.size, equalTo(1))
@@ -575,38 +588,6 @@ class GeoPolyFragmentTest {
         }
 
         assertThat(mapFragment.isPolyDraggable(0), equalTo(false))
-    }
-
-    @Test
-    fun passingRetainMockAccuracyExtra_updatesMapFragmentState() {
-        fragmentLauncherRule.launchInContainer {
-            GeoPolyFragment(
-                { OnBackPressedDispatcher() },
-                OutputMode.GEOTRACE,
-                false,
-                true,
-                emptyList()
-            )
-        }
-
-        assertThat(mapFragment.isRetainMockAccuracy(), equalTo(true))
-
-        fragmentLauncherRule.launchInContainer(
-            GeoPolyFragment::class.java,
-            factory = FragmentFactoryBuilder()
-                .forClass(GeoPolyFragment::class) {
-                    GeoPolyFragment(
-                        { OnBackPressedDispatcher() },
-                        OutputMode.GEOTRACE,
-                        false,
-                        false,
-                        emptyList()
-                    )
-                }
-                .build()
-        )
-
-        assertThat(mapFragment.isRetainMockAccuracy(), equalTo(false))
     }
 
     @Test
@@ -957,6 +938,82 @@ class GeoPolyFragmentTest {
             result.second.getString(GeoPolyFragment.RESULT_GEOPOLY_CHANGE),
             equalTo("1.0 1.0 1.0 1.0;2.0 2.0 1.0 1.0")
         )
+    }
+
+    @Test
+    fun clickingZoom_zoomsToCurrentLocation() {
+        fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment({ OnBackPressedDispatcher() })
+        }
+
+        locationTracker.currentLocation = Location(5.0, 5.0)
+        Interactions.clickOn(withContentDescription(string.show_my_location))
+        assertThat(mapFragment.getCenter(), equalTo(MapPoint(5.0, 5.0)))
+    }
+
+    @Test
+    fun whenAutomaticallyRecordingLocation_mapCenterUpdates() {
+        fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment({ OnBackPressedDispatcher() })
+        }
+
+        startInput(R.id.automatic_mode)
+        locationTracker.currentLocation = Location(5.0, 5.0)
+        assertThat(mapFragment.getCenter(), equalTo(MapPoint(5.0, 5.0)))
+
+        locationTracker.currentLocation = Location(1.0, 1.0)
+        assertThat(mapFragment.getCenter(), equalTo(MapPoint(1.0, 1.0)))
+    }
+
+    @Test
+    fun whenNotRecordingLocation_mapCenterDoesNoUpdate() {
+        fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment({ OnBackPressedDispatcher() })
+        }
+
+        startInput(R.id.automatic_mode)
+        locationTracker.currentLocation = Location(5.0, 5.0)
+        assertThat(mapFragment.getCenter(), equalTo(MapPoint(5.0, 5.0)))
+
+        Interactions.clickOn(withContentDescription(string.pause_location_recording))
+        locationTracker.currentLocation = Location(1.0, 1.0)
+        assertThat(mapFragment.getCenter(), equalTo(MapPoint(5.0, 5.0)))
+    }
+
+    private fun overrideDependencies(mapFragment: MapFragment) {
+        val application = ApplicationProvider.getApplicationContext<RobolectricApplication>()
+        application.geoDependencyComponent = DaggerGeoDependencyComponent.builder()
+            .application(application)
+            .geoDependencyModule(object : GeoDependencyModule() {
+                override fun providesMapFragmentFactory(): MapFragmentFactory {
+                    return object : MapFragmentFactory {
+                        override fun createMapFragment(): MapFragment {
+                            return mapFragment
+                        }
+                    }
+                }
+
+                override fun providesLocationTracker(application: Application): LocationTracker {
+                    return locationTracker
+                }
+
+                override fun providesReferenceLayerRepository(): ReferenceLayerRepository {
+                    return mock()
+                }
+
+                override fun providesScheduler(): Scheduler {
+                    return scheduler
+                }
+
+                override fun providesSettingsProvider(): SettingsProvider {
+                    return InMemSettingsProvider()
+                }
+
+                override fun providesWebPageService(): WebPageService {
+                    return mock()
+                }
+            })
+            .build()
     }
 
     companion object {
