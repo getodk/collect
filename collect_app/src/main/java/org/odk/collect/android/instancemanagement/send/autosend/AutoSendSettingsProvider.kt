@@ -1,4 +1,4 @@
-package org.odk.collect.android.instancemanagement.autosend
+package org.odk.collect.android.instancemanagement.send.autosend
 
 import android.app.Application
 import org.odk.collect.async.Scheduler

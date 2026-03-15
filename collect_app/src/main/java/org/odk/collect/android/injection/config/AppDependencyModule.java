@@ -53,8 +53,11 @@ import org.odk.collect.android.formmanagement.FormsDataService;
 import org.odk.collect.android.formmanagement.OpenRosaClientProvider;
 import org.odk.collect.android.geo.MapConfiguratorProvider;
 import org.odk.collect.android.geo.MapFragmentFactoryImpl;
+import org.odk.collect.android.instancemanagement.send.InstanceSubmitter;
 import org.odk.collect.android.instancemanagement.InstancesDataService;
-import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider;
+import org.odk.collect.android.instancemanagement.send.autosend.AutoSendSettingsProvider;
+import org.odk.collect.android.instancemanagement.send.InstanceUploader;
+import org.odk.collect.android.instancemanagement.send.OpenRosaServerInstanceUploader;
 import org.odk.collect.android.instancemanagement.send.ReadyToSendViewModel;
 import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
 import org.odk.collect.android.mainmenu.MainMenuViewModelFactory;
@@ -427,7 +430,9 @@ public class AppDependencyModule {
             return null;
         };
 
-        return new InstancesDataService(getState(application), instanceSubmitScheduler, projectsDependencyProviderFactory, notifier, propertyManager, httpInterface, onUpdate);
+        InstanceUploader instanceUploader = new OpenRosaServerInstanceUploader(projectsDependencyProviderFactory, httpInterface);
+        InstanceSubmitter instanceSubmitter = new InstanceSubmitter(instanceUploader, projectsDependencyProviderFactory, propertyManager);
+        return new InstancesDataService(getState(application), instanceSubmitScheduler, projectsDependencyProviderFactory, notifier, instanceSubmitter, onUpdate);
     }
 
     @Provides

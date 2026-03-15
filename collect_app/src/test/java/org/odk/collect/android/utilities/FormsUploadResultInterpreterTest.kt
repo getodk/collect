@@ -7,8 +7,8 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.odk.collect.android.R
-import org.odk.collect.android.upload.FormUploadException
+import org.odk.collect.android.instancemanagement.send.InstanceUploadResult
+import org.odk.collect.android.instancemanagement.send.FormUploadException
 import org.odk.collect.forms.instances.Instance
 
 @RunWith(AndroidJUnit4::class)
@@ -30,14 +30,14 @@ class FormsUploadResultInterpreterTest {
         .instanceFilePath("filepath2")
         .build()
 
-    private var resultWithoutErrors = mapOf<Instance, FormUploadException?>(
-        instance1 to null,
-        instance2 to null
+    private var resultWithoutErrors = listOf<InstanceUploadResult>(
+        InstanceUploadResult.Success(instance1, null),
+        InstanceUploadResult.Success(instance2, null)
     )
 
-    private var resultWithOneError = mapOf<Instance, FormUploadException?>(
-        instance1 to null,
-        instance2 to FormUploadException("Something went wrong!")
+    private var resultWithOneError = listOf<InstanceUploadResult>(
+        InstanceUploadResult.Success(instance1, null),
+        InstanceUploadResult.Error(instance2, FormUploadException("Something went wrong!"))
     )
 
     @Test

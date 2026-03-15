@@ -10,6 +10,8 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
+import org.odk.collect.android.instancemanagement.send.InstanceSubmitter
+import org.odk.collect.android.instancemanagement.send.OpenRosaServerInstanceUploader
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.projects.ProjectDependencyModule
 import org.odk.collect.android.utilities.ChangeLocks
@@ -60,14 +62,17 @@ class InstancesDataServiceTest {
     private val httpInterface = mock<OpenRosaHttpInterface>()
     private val notifier = mock<Notifier>()
 
+    private val instanceUploader = OpenRosaServerInstanceUploader(projectsDependencyModuleFactory, httpInterface)
+    private val instanceSubmitter =
+        InstanceSubmitter(instanceUploader, projectsDependencyModuleFactory, mock())
+
     private val instancesDataService =
         InstancesDataService(
             AppState(),
             mock(),
             projectsDependencyModuleFactory,
             notifier,
-            mock(),
-            httpInterface,
+            instanceSubmitter,
             mock()
         )
 
@@ -85,19 +90,19 @@ class InstancesDataServiceTest {
     }
 
     @Test
-    fun `sendInstances() returns true when there are no instances to send`() {
-        val result = instancesDataService.sendInstances(projectId)
+    fun `autoSendInstances() returns true when there are no instances to send`() {
+        val result = instancesDataService.autoSendInstances(projectId, false)
         assertThat(result, equalTo(true))
     }
 
     @Test
-    fun `sendInstances() does not notify when there are no instances to send`() {
-        instancesDataService.sendInstances(projectId)
+    fun `autoSendInstances() does not notify when there are no instances to send`() {
+        instancesDataService.autoSendInstances(projectId, false)
         verifyNoInteractions(notifier)
     }
 
     @Test
-    fun `sendInstances() returns false when an instance fails to send`() {
+    fun `autoSendInstances() returns false when an instance fails to send`() {
         val formsRepository = projectDependencyModule.formsRepository
         val form = formsRepository.save(FormFixtures.form())
 
@@ -114,7 +119,7 @@ class InstancesDataServiceTest {
                 )
             )
 
-        val result = instancesDataService.sendInstances(projectId)
+        val result = instancesDataService.autoSendInstances(projectId, false)
         assertThat(result, equalTo(false))
     }
 
