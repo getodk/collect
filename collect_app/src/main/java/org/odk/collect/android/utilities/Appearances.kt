@@ -93,6 +93,11 @@ object Appearances {
     const val MULTILINE = "multiline"
     const val VERTICAL = "vertical"
     const val NO_TICKS = "no-ticks"
+
+    /**
+     * The timed grid widget is experimental and may be modified or removed without notice. If you are
+     * interested in this functionality, please describe your use case at https://forum.getodk.org
+     */
     const val X_TIMED_GRID = "x-timed-grid"
 
     // Get appearance hint and clean it up so it is lower case, without the search function and never null.
