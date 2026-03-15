@@ -2,9 +2,12 @@ package org.odk.collect.android.widgets.range
 
 import android.view.MotionEvent
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
@@ -16,12 +19,16 @@ import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.dp
+import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HorizontalRangeSlider(
     value: Float?,
     valueLabel: String,
+    placeholder: Float?,
     steps: Int,
     ticks: Int,
     enabled: Boolean,
@@ -36,30 +43,47 @@ fun HorizontalRangeSlider(
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         ValueLabel(valueLabel)
 
-        Slider(
-            modifier = Modifier
-                .fillMaxWidth()
-                .semantics { contentDescription = sliderContentDescription }
-                .pointerInteropFilter { event ->
-                    if (enabled && event.action == MotionEvent.ACTION_DOWN) {
-                        onValueChanging(true)
-                        if (value == null) {
-                            onValueChange(0f)
+        BoxWithConstraints {
+            Slider(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .semantics { contentDescription = sliderContentDescription }
+                    .pointerInteropFilter { event ->
+                        if (enabled && event.action == MotionEvent.ACTION_DOWN) {
+                            onValueChanging(true)
+                            if (value == null) {
+                                onValueChange(0f)
+                            }
                         }
-                    }
-                    false
+                        false
+                    },
+                value = value ?: 0f,
+                steps = steps,
+                onValueChange = onValueChange,
+                onValueChangeFinished = {
+                    onValueChanging(false)
+                    onValueChangeFinished()
                 },
-            value = value ?: 0f,
-            steps = steps,
-            onValueChange = onValueChange,
-            onValueChangeFinished = {
-                onValueChanging(false)
-                onValueChangeFinished()
-            },
-            thumb = { Thumb(value) },
-            track = { Track(it, ticks) },
-            enabled = enabled
-        )
+                thumb = {},
+                track = { Track(it, ticks) },
+                enabled = enabled
+            )
+
+            val thumbValue = value ?: placeholder
+            if (thumbValue != null) {
+                Box(
+                    modifier = Modifier
+                        .offset {
+                            val thumbWidthPx = THUMB_WIDTH.dp.toPx()
+                            val trackWidth = this@BoxWithConstraints.constraints.maxWidth - thumbWidthPx
+                            val thumbOffsetPx = trackWidth * thumbValue
+                            IntOffset(thumbOffsetPx.roundToInt(), 0)
+                        }
+                        .pointerInteropFilter { false }
+                        .align(Alignment.CenterStart)
+                ) { Thumb(value = thumbValue) }
+            }
+        }
 
         HorizontalEdgeLabels(startLabel, endLabel)
     }

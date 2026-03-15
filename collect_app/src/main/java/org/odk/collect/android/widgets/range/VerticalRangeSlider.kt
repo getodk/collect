@@ -2,16 +2,20 @@ package org.odk.collect.android.widgets.range
 
 import android.view.MotionEvent
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
@@ -23,15 +27,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import org.odk.collect.androidshared.R.dimen
+import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VerticalRangeSlider(
     value: Float?,
+    placeholder: Float?,
     steps: Int,
     enabled: Boolean,
     valueLabel: String,
@@ -48,48 +55,52 @@ fun VerticalRangeSlider(
         ConstraintLayout(Modifier.fillMaxWidth()) {
             val (valueLabelRef, sliderRef, edgeLabelsRef) = createRefs()
 
-            Slider(
+            BoxWithConstraints(
                 modifier = Modifier
-                    .semantics { contentDescription = sliderContentDescription }
-                    .constrainAs(sliderRef) { centerHorizontallyTo(parent) }
                     .height(330.dp)
-                    .pointerInteropFilter { event ->
-                        if (enabled && event.action == MotionEvent.ACTION_DOWN) {
-                            onValueChanging(true)
-                            if (value == null) {
-                                onValueChange(0f)
+                    .constrainAs(sliderRef) { centerHorizontallyTo(parent) }
+            ) {
+                Slider(
+                    modifier = Modifier
+                        .semantics { contentDescription = sliderContentDescription }
+                        .rotateVertically()
+                        .pointerInteropFilter { event ->
+                            if (enabled && event.action == MotionEvent.ACTION_DOWN) {
+                                onValueChanging(true)
+                                if (value == null) {
+                                    onValueChange(0f)
+                                }
                             }
-                        }
-                        false
-                    }
-                    .graphicsLayer {
-                        rotationZ = 270f
-                        transformOrigin = TransformOrigin(0f, 0f)
-                    }
-                    .layout { measurable, constraints ->
-                        val placeable = measurable.measure(
-                            Constraints(
-                                minWidth = constraints.minHeight,
-                                maxWidth = constraints.maxHeight,
-                                minHeight = constraints.minWidth,
-                                maxHeight = constraints.maxHeight,
-                            )
-                        )
-                        layout(placeable.height, placeable.width) {
-                            placeable.place(-placeable.width, 0)
-                        }
+                            false
+                        },
+                    value = value ?: 0f,
+                    steps = steps,
+                    onValueChange = onValueChange,
+                    onValueChangeFinished = {
+                        onValueChanging(false)
+                        onValueChangeFinished()
                     },
-                value = value ?: 0f,
-                steps = steps,
-                onValueChange = onValueChange,
-                onValueChangeFinished = {
-                    onValueChanging(false)
-                    onValueChangeFinished()
-                },
-                thumb = { Thumb(value) },
-                track = { Track(it, ticks) },
-                enabled = enabled
-            )
+                    thumb = {},
+                    track = { Track(it, ticks) },
+                    enabled = enabled
+                )
+
+                val thumbValue = value ?: placeholder
+                if (thumbValue != null) {
+                    Box(
+                        modifier = Modifier
+                            .offset {
+                                val thumbHeightPx = THUMB_WIDTH.dp.toPx()
+                                val trackHeight = this@BoxWithConstraints.constraints.maxHeight - thumbHeightPx
+                                val thumbOffsetPx = trackHeight * (1 - thumbValue)
+                                IntOffset(0, thumbOffsetPx.roundToInt())
+                            }
+                            .rotateVertically()
+                            .pointerInteropFilter { false }
+                            .align(Alignment.TopCenter)
+                    ) { Thumb(value = thumbValue) }
+                }
+            }
 
             val margin = dimensionResource(id = dimen.margin_standard)
 
@@ -129,3 +140,22 @@ private fun VerticalEdgeLabels(
         Text(text = labelStart, style = MaterialTheme.typography.headlineSmall)
     }
 }
+
+private fun Modifier.rotateVertically() = this
+    .graphicsLayer {
+        rotationZ = 270f
+        transformOrigin = TransformOrigin(0f, 0f)
+    }
+    .layout { measurable, constraints ->
+        val placeable = measurable.measure(
+            Constraints(
+                minWidth = constraints.minHeight,
+                maxWidth = constraints.maxHeight,
+                minHeight = constraints.minWidth,
+                maxHeight = constraints.maxHeight,
+            )
+        )
+        layout(placeable.height, placeable.width) {
+            placeable.place(-placeable.width, 0)
+        }
+    }

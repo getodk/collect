@@ -38,6 +38,7 @@ class RangeIntegerWidget(
                 RangeSlider(
                     value = rangeSliderState.sliderValue,
                     valueLabel = rangeSliderState.valueLabel,
+                    placeholder = rangeSliderState.placeholder,
                     steps = rangeSliderState.numOfSteps,
                     ticks = rangeSliderState.numOfTicks,
                     enabled = rangeSliderState.isEnabled,

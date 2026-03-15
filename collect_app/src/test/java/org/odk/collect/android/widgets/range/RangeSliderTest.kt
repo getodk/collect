@@ -263,6 +263,7 @@ class RangeSliderTest {
     private fun setContent(
         value: BigDecimal? = null,
         valueLabel: String = "5",
+        placeholder: BigDecimal? = null,
         steps: Int = 10,
         ticks: Int = 0,
         enabled: Boolean = true,
@@ -277,6 +278,7 @@ class RangeSliderTest {
             RangeSlider(
                 value = value,
                 valueLabel = valueLabel,
+                placeholder = placeholder,
                 steps = steps,
                 ticks = ticks,
                 enabled = enabled,

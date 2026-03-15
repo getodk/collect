@@ -9,6 +9,7 @@ import java.math.BigDecimal
 fun RangeSlider(
     value: BigDecimal?,
     valueLabel: String,
+    placeholder: BigDecimal?,
     steps: Int,
     ticks: Int,
     enabled: Boolean,
@@ -32,6 +33,7 @@ fun RangeSlider(
             HorizontalRangeSlider(
                 value = value?.toFloat(),
                 valueLabel = valueLabel,
+                placeholder = placeholder?.toFloat(),
                 steps = steps,
                 ticks = ticks,
                 enabled = enabled,
@@ -45,6 +47,7 @@ fun RangeSlider(
             VerticalRangeSlider(
                 value = value?.toFloat(),
                 valueLabel = valueLabel,
+                placeholder = placeholder?.toFloat(),
                 steps = steps,
                 ticks = ticks,
                 enabled = enabled,
