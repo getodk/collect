@@ -7,20 +7,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.fragment.app.FragmentActivity;
-
 import org.javarosa.core.model.RangeQuestion;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.databinding.RangePickerWidgetAnswerBinding;
 import org.odk.collect.android.databinding.RangeWidgetHorizontalBinding;
 import org.odk.collect.android.databinding.RangeWidgetVerticalBinding;
-import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
-import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.android.views.TrackingTouchSlider;
+import org.odk.collect.androidshared.ui.ToastUtils;
 
 import java.math.BigDecimal;
-
-import timber.log.Timber;
 
 public class RangeWidgetUtils {
     private static final String VERTICAL_APPEARANCE = "vertical";
@@ -178,15 +173,6 @@ public class RangeWidgetUtils {
         }
 
         return actualValue;
-    }
-
-    public static void showNumberPickerDialog(FragmentActivity activity, String[] displayedValuesForNumberPicker, int id, int progress) {
-        NumberPickerDialog dialog = NumberPickerDialog.newInstance(id, displayedValuesForNumberPicker, progress);
-        try {
-            dialog.show(activity.getSupportFragmentManager(), NumberPickerDialog.NUMBER_PICKER_DIALOG_TAG);
-        } catch (ClassCastException e) {
-            Timber.i(e);
-        }
     }
 
     public static int getNumberPickerProgress(RangePickerWidgetAnswerBinding binding, BigDecimal rangeStart, BigDecimal rangeStep,
