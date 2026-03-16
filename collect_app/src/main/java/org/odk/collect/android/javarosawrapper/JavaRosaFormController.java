@@ -1010,25 +1010,6 @@ public class JavaRosaFormController implements FormController {
                 getSubmissionDataReference());
     }
 
-    /**
-     * Traverse the submission looking for the first matching tag in depth-first order.
-     */
-    private TreeElement findDepthFirst(TreeElement parent, String name) {
-        int len = parent.getNumChildren();
-        for (int i = 0; i < len; ++i) {
-            TreeElement e = parent.getChildAt(i);
-            if (name.equals(e.getName())) {
-                return e;
-            } else if (e.getNumChildren() != 0) {
-                TreeElement v = findDepthFirst(e, name);
-                if (v != null) {
-                    return v;
-                }
-            }
-        }
-        return null;
-    }
-
     public InstanceMetadata getSubmissionMetadata() {
         FormDef formDef = formEntryController.getModel().getForm();
         TreeElement rootElement = formDef.getInstance().getRoot();
@@ -1047,8 +1028,7 @@ public class JavaRosaFormController implements FormController {
             }
         }
 
-        // and find the depth-first meta block in this...
-        TreeElement e = findDepthFirst(trueSubmissionElement, "meta");
+        TreeElement e = trueSubmissionElement.getFirstChild("meta");
 
         String instanceId = null;
         String instanceName = null;
