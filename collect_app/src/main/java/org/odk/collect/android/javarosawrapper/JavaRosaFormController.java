@@ -1013,38 +1013,38 @@ public class JavaRosaFormController implements FormController {
     public InstanceMetadata getSubmissionMetadata() {
         FormDef formDef = formEntryController.getModel().getForm();
         TreeElement rootElement = formDef.getInstance().getRoot();
-        TreeElement e = rootElement.getFirstChild("meta");
+        TreeElement meta = rootElement.getFirstChild("meta");
 
         String instanceId = null;
         String instanceName = null;
         AuditConfig auditConfig = null;
 
-        if (e != null) {
-            List<TreeElement> v;
+        if (meta != null) {
+            List<TreeElement> metaElements;
 
             // instance id...
-            v = e.getChildrenWithName(INSTANCE_ID);
-            if (v.size() == 1) {
-                IAnswerData sa = v.get(0).getValue();
+            metaElements = meta.getChildrenWithName(INSTANCE_ID);
+            if (metaElements.size() == 1) {
+                IAnswerData sa = metaElements.get(0).getValue();
                 if (sa != null) {
                     instanceId = sa.getDisplayText();
                 }
             }
 
             // instance name...
-            v = e.getChildrenWithName(INSTANCE_NAME);
-            if (v.size() == 1) {
-                IAnswerData sa = v.get(0).getValue();
+            metaElements = meta.getChildrenWithName(INSTANCE_NAME);
+            if (metaElements.size() == 1) {
+                IAnswerData sa = metaElements.get(0).getValue();
                 if (sa != null) {
                     instanceName = sa.getDisplayText();
                 }
             }
 
             // timing element...
-            v = e.getChildrenWithName(AUDIT);
-            if (v.size() == 1) {
+            metaElements = meta.getChildrenWithName(AUDIT);
+            if (metaElements.size() == 1) {
 
-                TreeElement auditElement = v.get(0);
+                TreeElement auditElement = metaElements.get(0);
 
                 String locationPriority = auditElement.getBindAttributeValue(XML_OPENDATAKIT_NAMESPACE, "location-priority");
                 String locationMinInterval = auditElement.getBindAttributeValue(XML_OPENDATAKIT_NAMESPACE, "location-min-interval");
