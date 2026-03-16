@@ -9,6 +9,7 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
+import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -21,7 +22,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.odk.collect.androidshared.ui.DisplayString
 import org.odk.collect.androidshared.ui.SnackbarUtils
@@ -33,8 +33,12 @@ import org.odk.collect.geo.DaggerGeoDependencyComponent
 import org.odk.collect.geo.GeoDependencyModule
 import org.odk.collect.geo.GeoUtils.toMapPoint
 import org.odk.collect.geo.R
+import org.odk.collect.geo.geopoint.AccuracyStatusView
+import org.odk.collect.geo.geopoint.LocationAccuracy
 import org.odk.collect.geo.geopoly.GeoPolyFragment.Companion.INTERVAL_OPTIONS
 import org.odk.collect.geo.geopoly.GeoPolyFragment.OutputMode
+import org.odk.collect.geo.support.AccuracyStatusViewMatcher
+import org.odk.collect.geo.support.AccuracyStatusViewMatcher.Companion.hasAccuracy
 import org.odk.collect.geo.support.FakeLocationTracker
 import org.odk.collect.geo.support.FakeMapFragment
 import org.odk.collect.geo.support.RobolectricApplication
@@ -56,7 +60,6 @@ import org.odk.collect.testshared.FragmentResultRecorder
 import org.odk.collect.testshared.Interactions
 import org.odk.collect.webpage.WebPageService
 import org.robolectric.Shadows
-import kotlin.math.acos
 
 @RunWith(AndroidJUnit4::class)
 class GeoPolyFragmentTest {
@@ -123,6 +126,17 @@ class GeoPolyFragmentTest {
             assertThat(it[0].center, equalTo(locationTracker.currentLocation!!.toMapPoint()))
             assertThat(it[0].radius, equalTo(2.1f))
         }
+    }
+
+    @Test
+    fun showsCurrentLocationAccuracy() {
+        fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment({ OnBackPressedDispatcher() })
+        }
+
+        locationTracker.currentLocation = Location(2.0, 2.0, accuracy = 3.1f)
+        val accuracy = LocationAccuracy.Improving(3.1f)
+        onView(isAssignableFrom(AccuracyStatusView::class.java)).check(matches(hasAccuracy(accuracy)))
     }
 
     @Test
