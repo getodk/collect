@@ -2,6 +2,7 @@ package org.odk.collect.geo.geopoly
 
 import android.app.Application
 import androidx.activity.OnBackPressedDispatcher
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
@@ -37,7 +38,6 @@ import org.odk.collect.geo.geopoint.AccuracyStatusView
 import org.odk.collect.geo.geopoint.LocationAccuracy
 import org.odk.collect.geo.geopoly.GeoPolyFragment.Companion.INTERVAL_OPTIONS
 import org.odk.collect.geo.geopoly.GeoPolyFragment.OutputMode
-import org.odk.collect.geo.support.AccuracyStatusViewMatcher
 import org.odk.collect.geo.support.AccuracyStatusViewMatcher.Companion.hasAccuracy
 import org.odk.collect.geo.support.FakeLocationTracker
 import org.odk.collect.geo.support.FakeMapFragment
@@ -198,6 +198,22 @@ class GeoPolyFragmentTest {
                 application.getString(string.collection_status_auto_seconds_accuracy, 2, 20, 10)
             )
         )
+    }
+
+    @Test
+    fun recordingPointsAutomatically_updatesAccuracyBasedOnThreshold() {
+        fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment({ OnBackPressedDispatcher() })
+        }
+
+        val unacceptable = LocationAccuracy.Unacceptable(11.0f)
+        locationTracker.currentLocation = Location(1.0, 1.0, accuracy = unacceptable.value)
+        startInput(R.id.automatic_mode)
+        onView(isAssignableFrom(AccuracyStatusView::class.java)).check(matches(hasAccuracy(unacceptable)))
+
+        val improving = LocationAccuracy.Improving(9.0f)
+        locationTracker.currentLocation = Location(1.0, 1.0, accuracy = improving.value)
+        onView(isAssignableFrom(AccuracyStatusView::class.java)).check(matches(hasAccuracy(improving)))
     }
 
     @Test

@@ -32,7 +32,8 @@ class GeoPolyViewModel(
     var recordingMode: RecordingMode = RecordingMode.PLACEMENT
         private set
 
-    var inputActive: Boolean = false
+    private val _inputActive = MutableStateFlow(false)
+    var inputActive: StateFlow<Boolean> = _inputActive
         private set
 
     private val _points = MutableStateFlow(
@@ -62,7 +63,7 @@ class GeoPolyViewModel(
             GeoPoly(it.first ?: emptyList(), it.second == null)
         }
 
-    val currentLocation = locationTracker.getLocation().asLiveData()
+    val currentLocation = locationTracker.getLocation()
 
     private var accuracyThreshold: Int = 0
     private var recording: Cancellable? = null
@@ -118,11 +119,11 @@ class GeoPolyViewModel(
     }
 
     fun enableInput() {
-        inputActive = true
+        _inputActive.value = true
     }
 
     fun disableInput() {
-        inputActive = false
+        _inputActive.value = false
     }
 
     public override fun onCleared() {

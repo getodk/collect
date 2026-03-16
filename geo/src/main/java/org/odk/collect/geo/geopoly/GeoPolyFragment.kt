@@ -15,6 +15,8 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.flow.combine
+import org.odk.collect.androidshared.livedata.LiveDataExt.combine
 import org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing
 import org.odk.collect.androidshared.ui.DisplayString
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
@@ -31,6 +33,7 @@ import org.odk.collect.geo.databinding.GeopolyLayoutBinding
 import org.odk.collect.geo.geopoint.LocationAccuracy.Improving
 import org.odk.collect.geo.geopoint.LocationAccuracy.Unacceptable
 import org.odk.collect.geo.geopoly.GeoPolySettingsDialogFragment.SettingsDialogCallback
+import org.odk.collect.location.Location
 import org.odk.collect.location.tracker.LocationTracker
 import org.odk.collect.maps.traces.LineDescription
 import org.odk.collect.maps.MapConsts
@@ -255,46 +258,52 @@ class GeoPolyFragment @JvmOverloads constructor(
 
         var locationMarkerId: Int? = null
         var accuracyHaloId: Int? = null
-        viewModel.currentLocation.observe(viewLifecycleOwner) { location ->
-            binding.zoom.isEnabled = location != null
+        viewModel.currentLocation.asLiveData()
+            .combine(viewModel.inputActive.asLiveData())
+            .observe(viewLifecycleOwner) { (location, inputActive) ->
+                binding.zoom.isEnabled = location != null
 
-            if (location != null) {
-                val locationMapPoint = location.toMapPoint()
+                if (location != null) {
+                    val locationMapPoint = location.toMapPoint()
 
-                val markerDescription = MarkerDescription(
-                    locationMapPoint,
-                    false,
-                    MapFragment.IconAnchor.CENTER,
-                    MarkerIconDescription.DrawableResource(org.odk.collect.maps.R.drawable.ic_crosshairs)
-                )
+                    val markerDescription = MarkerDescription(
+                        locationMapPoint,
+                        false,
+                        MapFragment.IconAnchor.CENTER,
+                        MarkerIconDescription.DrawableResource(org.odk.collect.maps.R.drawable.ic_crosshairs)
+                    )
 
-                if (locationMarkerId == null) {
-                    locationMarkerId = map.addMarker(markerDescription)
-                } else {
-                    map.updateMarker(locationMarkerId, markerDescription)
+                    if (locationMarkerId == null) {
+                        locationMarkerId = map.addMarker(markerDescription)
+                    } else {
+                        map.updateMarker(locationMarkerId, markerDescription)
+                    }
+
+                    val circleDescription = CircleDescription(
+                        location.toMapPoint(),
+                        location.accuracy,
+                        MapConsts.DEFAULT_STROKE_COLOR
+                    )
+
+                    if (accuracyHaloId == null) {
+                        accuracyHaloId = map.addCircle(circleDescription)
+                    } else {
+                        map.updateCircle(accuracyHaloId, circleDescription)
+                    }
+
+                    val shouldFollowLocation =
+                        (inputActive ?: false) && viewModel.recordingMode != GeoPolyViewModel.RecordingMode.PLACEMENT
+                    if (!map.hasCenter() || shouldFollowLocation) {
+                        map.setCenter(location.toMapPoint(), false)
+                    }
+
+                    binding.locationStatus.accuracy = if (isLocationAcceptable(location)) {
+                            Improving(location.accuracy)
+                        } else {
+                            Unacceptable(location.accuracy)
+                        }
                 }
-
-                val circleDescription = CircleDescription(
-                    location.toMapPoint(),
-                    location.accuracy,
-                    MapConsts.DEFAULT_STROKE_COLOR
-                )
-
-                if (accuracyHaloId == null) {
-                    accuracyHaloId = map.addCircle(circleDescription)
-                } else {
-                    map.updateCircle(accuracyHaloId, circleDescription)
-                }
-
-                val shouldFollowLocation =
-                    viewModel.inputActive && viewModel.recordingMode != GeoPolyViewModel.RecordingMode.PLACEMENT
-                if (!map.hasCenter() || shouldFollowLocation) {
-                    map.setCenter(location.toMapPoint(), false)
-                }
-
-                binding.locationStatus.accuracy = Improving(location.accuracy)
             }
-        }
 
         viewModel.invalidMessage.observe(viewLifecycleOwner) {
             val isValid = it == null
@@ -459,16 +468,17 @@ class GeoPolyFragment @JvmOverloads constructor(
     }
 
     private fun onClick(point: MapPoint) {
-        if (viewModel.inputActive && viewModel.recordingMode == GeoPolyViewModel.RecordingMode.PLACEMENT) {
+        if (viewModel.inputActive.value && viewModel.recordingMode == GeoPolyViewModel.RecordingMode.PLACEMENT) {
             viewModel.add(point)
         }
     }
 
-    private fun isLocationAcceptable(point: MapPoint): Boolean {
+    private fun isLocationAcceptable(location: Location): Boolean {
         if (!this.isAccuracyThresholdActive) {
             return true
         }
-        return point.accuracy <= ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex]
+
+        return location.accuracy <= ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex]
     }
 
     private val isAccuracyThresholdActive: Boolean
@@ -495,14 +505,14 @@ class GeoPolyFragment @JvmOverloads constructor(
         val numPoints = viewModel.points.value.size
 
         // Visibility state
-        binding.play.isVisible = !viewModel.inputActive
-        binding.pause.isVisible = viewModel.inputActive
+        binding.play.isVisible = !viewModel.inputActive.value
+        binding.pause.isVisible = viewModel.inputActive.value
         binding.recordButton.isVisible =
-            viewModel.inputActive && viewModel.recordingMode == GeoPolyViewModel.RecordingMode.MANUAL
+            viewModel.inputActive.value && viewModel.recordingMode == GeoPolyViewModel.RecordingMode.MANUAL
 
         // Enabled state
         binding.backspace.isEnabled = numPoints > 0
-        binding.clear.isEnabled = !viewModel.inputActive && numPoints > 0
+        binding.clear.isEnabled = !viewModel.inputActive.value && numPoints > 0
 
         if (readOnly) {
             binding.play.isEnabled = false
@@ -516,7 +526,7 @@ class GeoPolyFragment @JvmOverloads constructor(
         val minutes = seconds / 60
         val meters: Int = ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex]
 
-        binding.collectionStatus.text = if (!viewModel.inputActive) {
+        binding.collectionStatus.text = if (!viewModel.inputActive.value) {
             getString(org.odk.collect.strings.R.string.collection_status_paused, numPoints)
         } else {
             if (viewModel.recordingMode == GeoPolyViewModel.RecordingMode.PLACEMENT) {
