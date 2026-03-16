@@ -1013,22 +1013,7 @@ public class JavaRosaFormController implements FormController {
     public InstanceMetadata getSubmissionMetadata() {
         FormDef formDef = formEntryController.getModel().getForm();
         TreeElement rootElement = formDef.getInstance().getRoot();
-
-        TreeElement trueSubmissionElement;
-        // Determine the information about the submission...
-        SubmissionProfile p = formDef.getSubmissionProfile();
-        if (p == null || p.getRef() == null) {
-            trueSubmissionElement = rootElement;
-        } else {
-            IDataReference ref = p.getRef();
-            trueSubmissionElement = formDef.getInstance().resolveReference(ref);
-            // resolveReference returns null if the reference is to the root element...
-            if (trueSubmissionElement == null) {
-                trueSubmissionElement = rootElement;
-            }
-        }
-
-        TreeElement e = trueSubmissionElement.getFirstChild("meta");
+        TreeElement e = rootElement.getFirstChild("meta");
 
         String instanceId = null;
         String instanceName = null;
