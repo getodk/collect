@@ -291,6 +291,8 @@ class GeoPolyFragment @JvmOverloads constructor(
                 if (!map.hasCenter() || shouldFollowLocation) {
                     map.setCenter(location.toMapPoint(), false)
                 }
+
+                binding.locationStatus.accuracy = Improving(location.accuracy)
             }
         }
 
@@ -491,7 +493,6 @@ class GeoPolyFragment @JvmOverloads constructor(
         val binding = GeopolyLayoutBinding.bind(requireView())
 
         val numPoints = viewModel.points.value.size
-        val location = viewModel.currentLocation.value?.toMapPoint()
 
         // Visibility state
         binding.play.isVisible = !viewModel.inputActive
@@ -509,22 +510,11 @@ class GeoPolyFragment @JvmOverloads constructor(
             binding.clear.isEnabled = false
         }
 
-        // Settings dialog
-
         // GPS status
         val usingThreshold = this.isAccuracyThresholdActive
-        val acceptable = location != null && isLocationAcceptable(location)
         val seconds: Int = INTERVAL_OPTIONS[intervalIndex]
         val minutes = seconds / 60
         val meters: Int = ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex]
-
-        if (location != null) {
-            if (usingThreshold && !acceptable) {
-                binding.locationStatus.accuracy = Unacceptable(location.accuracy.toFloat())
-            } else {
-                binding.locationStatus.accuracy = Improving(location.accuracy.toFloat())
-            }
-        }
 
         binding.collectionStatus.text = if (!viewModel.inputActive) {
             getString(org.odk.collect.strings.R.string.collection_status_paused, numPoints)
