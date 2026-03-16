@@ -43,7 +43,7 @@ object InfoDialog {
 
         val info = ComposeView(context).apply {
             setContextThemedContent {
-                InfoContent(viewModel, fromSnackbar) { dialog?.dismiss() }
+                InfoContent(viewModel.recordingMode, fromSnackbar) { dialog?.dismiss() }
             }
         }
 
@@ -55,11 +55,11 @@ object InfoDialog {
 
 @Composable
 fun InfoContent(
-    viewModel: GeoPolyViewModel,
+    recordingMode: GeoPolyViewModel.RecordingMode,
     fromSnackbar: Boolean,
     onDone: () -> Unit
 ) {
-    val items = when (viewModel.recordingMode) {
+    val items = when (recordingMode) {
         GeoPolyViewModel.RecordingMode.PLACEMENT -> {
             if (fromSnackbar) {
                 listOf(
