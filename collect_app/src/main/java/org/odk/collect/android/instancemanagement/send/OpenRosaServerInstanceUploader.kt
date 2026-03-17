@@ -14,6 +14,9 @@ import java.io.UnsupportedEncodingException
 import java.net.URI
 import java.net.URLEncoder
 import androidx.core.net.toUri
+import org.odk.collect.analytics.Analytics
+import org.odk.collect.android.analytics.AnalyticsEvents
+import org.odk.collect.android.analytics.AnalyticsUtils
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.projects.ProjectDependencyModule
 import org.odk.collect.android.utilities.ResponseMessageParser
@@ -40,7 +43,8 @@ class OpenRosaServerInstanceUploader(
         projectId: String,
         instance: Instance,
         deviceId: String?,
-        overrideURL: String?
+        overrideURL: String?,
+        referrer: String
     ): String? {
         val projectDependencyModule = projectDependencyFactory.create(projectId)
         val unprotectedSettings = projectDependencyModule.generalSettings
@@ -203,6 +207,8 @@ class OpenRosaServerInstanceUploader(
         }
 
         markSubmissionComplete(instance, instancesRepository)
+        logOverrideURL(referrer, overrideURL)
+        logUploadedForm(submissionUri)
 
         return if (messageParser.isValid) {
             messageParser.messageResponse
@@ -278,6 +284,26 @@ class OpenRosaServerInstanceUploader(
             Instance.Builder(instance)
                 .status(Instance.STATUS_SUBMITTED)
                 .build()
+        )
+    }
+
+    private fun logOverrideURL(referrer: String, overrideURL: String?) {
+        if (overrideURL != null) {
+            Analytics.log(
+                AnalyticsEvents.INSTANCE_UPLOAD_CUSTOM_SERVER,
+                "label",
+                referrer
+            )
+        }
+    }
+
+    private fun logUploadedForm(submissionUri: Uri) {
+        val isHttps = "https".equals(submissionUri.scheme, ignoreCase = true)
+
+        Analytics.log(
+            AnalyticsEvents.SUBMISSION,
+            "label",
+            if (isHttps) "HTTPS" else "HTTP",
         )
     }
 

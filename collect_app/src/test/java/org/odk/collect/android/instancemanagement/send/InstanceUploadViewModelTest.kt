@@ -80,7 +80,8 @@ class InstanceUploadViewModelTest {
                 projectId: String,
                 instance: Instance,
                 deviceId: String?,
-                overrideURL: String?
+                overrideURL: String?,
+                referrer: String
             ): String {
                 submittedInstances.add(instance.dbId)
                 instancesRepository.save(
