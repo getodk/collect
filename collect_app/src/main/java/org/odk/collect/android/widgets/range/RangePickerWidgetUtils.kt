@@ -1,5 +1,7 @@
 package org.odk.collect.android.widgets.range
 
+import org.javarosa.core.model.Constants.DATATYPE_INTEGER
+import org.javarosa.core.model.RangeQuestion
 import org.javarosa.form.api.FormEntryPrompt
 import java.math.BigDecimal
 
@@ -32,6 +34,16 @@ object RangePickerWidgetUtils {
         }
 
         return displayedValuesForNumberPicker.toTypedArray()
+    }
+
+    @JvmStatic
+    fun getNumbersFromRangeAsc(formEntryPrompt: FormEntryPrompt): Array<String> {
+        val rangeQuestion = formEntryPrompt.question as RangeQuestion
+        val rangeStart = rangeQuestion.rangeStart
+        val rangeEnd = rangeQuestion.rangeEnd
+        val rangeStep = rangeQuestion.rangeStep.abs()
+
+        return getNumbersFromRangeAsc(rangeStart, rangeStep, rangeEnd, formEntryPrompt.dataType == DATATYPE_INTEGER)
     }
 
     @JvmStatic

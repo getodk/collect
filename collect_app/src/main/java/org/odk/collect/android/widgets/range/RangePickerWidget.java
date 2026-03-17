@@ -2,8 +2,8 @@ package org.odk.collect.android.widgets.range;
 
 import static org.odk.collect.android.fragments.dialogs.RangePickerDialogFragment.ARG_DECIMAL;
 import static org.odk.collect.android.fragments.dialogs.RangePickerDialogFragment.ARG_FORM_INDEX;
-import static org.odk.collect.android.fragments.dialogs.RangePickerDialogFragment.ARG_VALUES;
 import static org.odk.collect.android.fragments.dialogs.RangePickerDialogFragment.ARG_SELECTED;
+import static org.odk.collect.android.fragments.dialogs.RangePickerDialogFragment.ARG_VALUES;
 
 import android.app.Activity;
 import android.content.Context;
@@ -13,7 +13,6 @@ import android.view.View;
 
 import androidx.fragment.app.FragmentActivity;
 
-import org.javarosa.core.model.RangeQuestion;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.databinding.RangePickerWidgetAnswerBinding;
@@ -23,17 +22,10 @@ import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.utilities.RangeWidgetUtils;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 
-import java.math.BigDecimal;
-
 public class RangePickerWidget extends QuestionWidget {
 
     private final boolean decimal;
     RangePickerWidgetAnswerBinding binding;
-    private String[] displayedValuesForNumberPicker;
-
-    private BigDecimal rangeStart;
-    private BigDecimal rangeEnd;
-    private BigDecimal rangeStep;
 
     private int progress;
 
@@ -53,8 +45,7 @@ public class RangePickerWidget extends QuestionWidget {
 
         binding.widgetAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
-        setUpWidgetParameters();
-        displayedValuesForNumberPicker = RangePickerWidgetUtils.getNumbersFromRangeAsc(rangeStart, rangeStep, rangeEnd, !decimal);
+        String[] displayedValuesForNumberPicker = RangePickerWidgetUtils.getNumbersFromRangeAsc(prompt);
         RangeWidgetUtils.setUpRangePickerWidget(context, binding, prompt);
 
         progress = RangePickerWidgetUtils.getProgressFromPrompt(prompt, displayedValuesForNumberPicker);
@@ -85,13 +76,6 @@ public class RangePickerWidget extends QuestionWidget {
     public void clearAnswer() {
         setUpNullValue();
         widgetValueChanged();
-    }
-
-    private void setUpWidgetParameters() {
-        RangeQuestion rangeQuestion = (RangeQuestion) getFormEntryPrompt().getQuestion();
-        rangeStart = rangeQuestion.getRangeStart();
-        rangeEnd = rangeQuestion.getRangeEnd();
-        rangeStep = rangeQuestion.getRangeStep().abs();
     }
 
     private void setUpNullValue() {
