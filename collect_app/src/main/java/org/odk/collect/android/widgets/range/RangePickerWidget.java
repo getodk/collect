@@ -54,8 +54,7 @@ public class RangePickerWidget extends QuestionWidget {
         binding.widgetAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
         setUpWidgetParameters();
-        displayedValuesForNumberPicker = RangePickerWidgetUtils.getNumbersFromRangeAsc(
-                rangeStart, rangeStep, rangeEnd, true);
+        displayedValuesForNumberPicker = RangePickerWidgetUtils.getNumbersFromRangeAsc(rangeStart, rangeStep, rangeEnd, !decimal);
         RangeWidgetUtils.setUpRangePickerWidget(context, binding, prompt);
 
         progress = RangePickerWidgetUtils.getProgressFromPrompt(prompt, displayedValuesForNumberPicker);
