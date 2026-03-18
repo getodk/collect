@@ -23,8 +23,6 @@ import androidx.compose.ui.unit.dp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Track(sliderState: SliderState, ticks: Int) {
-    val sliderTickContentDescription = stringResource(org.odk.collect.strings.R.string.slider_tick)
-
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -49,17 +47,23 @@ fun Track(sliderState: SliderState, ticks: Int) {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            repeat(ticks) {
-                Box(
-                    modifier = Modifier
-                        .size(5.dp)
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.onPrimary)
-                        .semantics {
-                            contentDescription = sliderTickContentDescription
-                        }
-                )
-            }
+            repeat(ticks) { Tick() }
         }
     }
+}
+
+@Composable
+private fun Tick() {
+    val sliderTickContentDescription = stringResource(org.odk.collect.strings.R.string.slider_tick)
+    val tickWidth = 4.dp
+
+    Box(
+        modifier = Modifier
+            .size(tickWidth)
+            .clip(CircleShape)
+            .background(MaterialTheme.colorScheme.onPrimary)
+            .semantics {
+                contentDescription = sliderTickContentDescription
+            }
+    )
 }
