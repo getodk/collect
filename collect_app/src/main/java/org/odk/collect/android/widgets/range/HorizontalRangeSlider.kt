@@ -8,14 +8,17 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInteropFilter
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -34,6 +37,7 @@ fun HorizontalRangeSlider(
     enabled: Boolean,
     startLabel: String,
     endLabel: String,
+    labels: List<String>,
     onValueChanging: (Boolean) -> Unit,
     onValueChange: (Float) -> Unit,
     onValueChangeFinished: () -> Unit
@@ -75,9 +79,9 @@ fun HorizontalRangeSlider(
                     modifier = Modifier
                         .offset {
                             val thumbWidthPx = THUMB_WIDTH.dp.toPx()
-                            val trackWidth = this@BoxWithConstraints.constraints.maxWidth - thumbWidthPx
-                            val thumbOffsetPx = trackWidth * thumbValue
-                            IntOffset(thumbOffsetPx.roundToInt(), 0)
+                            val trackWidth = constraints.maxWidth - thumbWidthPx
+                            val xOffset = trackWidth * thumbValue
+                            IntOffset(xOffset.roundToInt(), 0)
                         }
                         .pointerInteropFilter { false }
                         .align(Alignment.CenterStart)
@@ -86,6 +90,7 @@ fun HorizontalRangeSlider(
         }
 
         HorizontalEdgeLabels(startLabel, endLabel)
+        HorizontalStepLabels(labels)
     }
 }
 
@@ -98,19 +103,45 @@ private fun HorizontalEdgeLabels(labelStart: String, labelEnd: String) {
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(
-            text = labelStart,
+        Label(
             modifier = Modifier.semantics {
                 contentDescription = sliderStartLabelContentDescription
             },
-            style = MaterialTheme.typography.titleLarge
+            text = labelStart,
         )
-        Text(
-            text = labelEnd,
+        Label(
             modifier = Modifier.semantics {
                 contentDescription = sliderEndLabelContentDescription
             },
-            style = MaterialTheme.typography.titleLarge
+            text = labelEnd,
         )
+    }
+}
+
+@Composable
+private fun HorizontalStepLabels(labels: List<String>) {
+    BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
+        val totalSteps = labels.size - 1
+
+        labels.forEachIndexed { index, label ->
+            var textWidth by mutableIntStateOf(0)
+
+            val modifier = when (index) {
+                0 -> Modifier.align(Alignment.TopStart)
+                totalSteps -> Modifier.align(Alignment.TopEnd)
+                else -> Modifier
+                    .onGloballyPositioned { textWidth = it.size.width }
+                    .offset {
+                        val fraction = index.toFloat() / totalSteps
+                        val xOffset = constraints.maxWidth * fraction - textWidth / 2
+                        IntOffset(xOffset.roundToInt(), 0)
+                    }
+            }
+
+            Label(
+                modifier = modifier.widthIn(max = maxWidth / 5),
+                text = label
+            )
+        }
     }
 }

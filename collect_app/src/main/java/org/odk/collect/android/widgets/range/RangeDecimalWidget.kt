@@ -49,6 +49,7 @@ class RangeDecimalWidget(
                     horizontal = rangeSliderState.isHorizontal,
                     startLabel = rangeSliderState.startLabel,
                     endLabel = rangeSliderState.endLabel,
+                    labels = rangeSliderState.labels,
                     onValueChanging = {
                         shouldSuppressFlingGesture = it
                         requestDisallowInterceptTouchEvent(it)

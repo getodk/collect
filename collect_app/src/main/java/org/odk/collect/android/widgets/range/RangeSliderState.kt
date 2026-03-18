@@ -48,7 +48,6 @@ data class RangeSliderState(
             val range = (end - start).abs()
             val step = rangeQuestion.rangeStep.abs()
             val tickInterval = rangeQuestion.tickInterval
-            val labels = getLabels(prompt)
             val sanitizedAppearance = Appearances.getSanitizedAppearanceHint(prompt)
             val isHorizontal = !sanitizedAppearance.contains(Appearances.VERTICAL)
             val isDiscrete = prompt.dataType == DATATYPE_INTEGER
@@ -57,6 +56,12 @@ data class RangeSliderState(
                 start.compareTo(end) != 0 &&
                 range >= step &&
                 range.remainder(step).compareTo(BigDecimal.ZERO) == 0
+
+            val labels = if (isValid) {
+                getLabels(prompt, start, end, step)
+            } else {
+                emptyList()
+            }
 
             val isEnabled = !prompt.isReadOnly && isValid
 
@@ -127,10 +132,23 @@ data class RangeSliderState(
             return start + steps.multiply(step)
         }
 
-        private fun getLabels(prompt: FormEntryPrompt): List<String> {
-            return prompt.selectChoices
-                ?.map(prompt::getSelectChoiceText)
-                .orEmpty()
+        private fun getLabels(prompt: FormEntryPrompt, start: BigDecimal, end: BigDecimal, step: BigDecimal): List<String> {
+            val choices = prompt.selectChoices ?: return emptyList()
+
+            val labelMap = choices.associate { choice ->
+                choice.value.toBigDecimalOrNull() to prompt.getSelectChoiceText(choice)
+            }
+
+            val labels = mutableListOf<String>()
+            var current = start
+            val direction = if (end >= start) BigDecimal.ONE else -BigDecimal.ONE
+
+            while (if (direction > BigDecimal.ZERO) current <= end else current >= end) {
+                labels.add(labelMap[current] ?: "")
+                current += step * direction
+            }
+
+            return labels
         }
 
         private fun calculateNumOfTicks(

@@ -5,22 +5,23 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.layout.layout
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -34,6 +35,8 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import org.odk.collect.androidshared.R.dimen
 import kotlin.math.roundToInt
 
+private const val SLIDER_HEIGHT = 330
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VerticalRangeSlider(
@@ -44,6 +47,7 @@ fun VerticalRangeSlider(
     valueLabel: String,
     startLabel: String,
     endLabel: String,
+    labels: List<String>,
     ticks: Int,
     onValueChanging: (Boolean) -> Unit,
     onValueChangeFinished: () -> Unit,
@@ -53,11 +57,11 @@ fun VerticalRangeSlider(
 
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
         ConstraintLayout(Modifier.fillMaxWidth()) {
-            val (valueLabelRef, sliderRef, edgeLabelsRef) = createRefs()
+            val (valueLabelRef, sliderRef, edgeLabelsRef, stepLabelsRef) = createRefs()
 
             BoxWithConstraints(
                 modifier = Modifier
-                    .height(330.dp)
+                    .height(SLIDER_HEIGHT.dp)
                     .constrainAs(sliderRef) { centerHorizontallyTo(parent) }
             ) {
                 Slider(
@@ -91,9 +95,9 @@ fun VerticalRangeSlider(
                         modifier = Modifier
                             .offset {
                                 val thumbHeightPx = THUMB_WIDTH.dp.toPx()
-                                val trackHeight = this@BoxWithConstraints.constraints.maxHeight - thumbHeightPx
-                                val thumbOffsetPx = trackHeight * (1 - thumbValue)
-                                IntOffset(0, thumbOffsetPx.roundToInt())
+                                val trackHeight = constraints.maxHeight - thumbHeightPx
+                                val yOffset = trackHeight * (1 - thumbValue)
+                                IntOffset(0, yOffset.roundToInt())
                             }
                             .rotateVertically()
                             .pointerInteropFilter { false }
@@ -115,12 +119,22 @@ fun VerticalRangeSlider(
             VerticalEdgeLabels(
                 startLabel,
                 endLabel,
-                modifier = Modifier.constrainAs(edgeLabelsRef) {
-                    start.linkTo(sliderRef.end, margin = margin)
-                    top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
-                    height = androidx.constraintlayout.compose.Dimension.fillToConstraints
-                }
+                modifier = Modifier
+                    .height(SLIDER_HEIGHT.dp)
+                    .constrainAs(edgeLabelsRef) {
+                        start.linkTo(sliderRef.end, margin = margin)
+                        centerVerticallyTo(sliderRef)
+                    }
+            )
+
+            VerticalStepLabels(
+                labels,
+                modifier = Modifier
+                    .height(SLIDER_HEIGHT.dp)
+                    .constrainAs(stepLabelsRef) {
+                        start.linkTo(edgeLabelsRef.end, margin = margin)
+                        centerVerticallyTo(sliderRef)
+                    }
             )
         }
     }
@@ -132,12 +146,54 @@ private fun VerticalEdgeLabels(
     labelEnd: String,
     modifier: Modifier = Modifier
 ) {
+    val sliderStartLabelContentDescription = stringResource(org.odk.collect.strings.R.string.slider_start_label)
+    val sliderEndLabelContentDescription = stringResource(org.odk.collect.strings.R.string.slider_end_label)
+
     Column(
-        modifier = modifier.fillMaxHeight(),
+        modifier = modifier,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(text = labelEnd, style = MaterialTheme.typography.headlineSmall)
-        Text(text = labelStart, style = MaterialTheme.typography.headlineSmall)
+        Label(
+            modifier = Modifier.semantics {
+                contentDescription = sliderEndLabelContentDescription
+            },
+            text = labelEnd,
+        )
+        Label(
+            modifier = Modifier.semantics {
+                contentDescription = sliderStartLabelContentDescription
+            },
+            text = labelStart,
+        )
+    }
+}
+
+@Composable
+private fun VerticalStepLabels(labels: List<String>, modifier: Modifier = Modifier) {
+    BoxWithConstraints(modifier = modifier) {
+        val totalSteps = labels.size - 1
+
+        labels.forEachIndexed { index, label ->
+            val fraction = if (totalSteps > 0) index.toFloat() / totalSteps else 0f
+            var textHeight by mutableIntStateOf(0)
+
+            val modifier = when (index) {
+                0 -> Modifier.align(Alignment.BottomStart)
+                totalSteps -> Modifier.align(Alignment.TopStart)
+                else -> Modifier
+                    .align(Alignment.TopStart)
+                    .onGloballyPositioned { textHeight = it.size.height }
+                    .offset {
+                        val yOffset = constraints.maxHeight * (1 - fraction) - textHeight / 2
+                        IntOffset(0, yOffset.roundToInt())
+                    }
+            }
+
+            Label(
+                modifier = modifier,
+                text = label
+            )
+        }
     }
 }
 
