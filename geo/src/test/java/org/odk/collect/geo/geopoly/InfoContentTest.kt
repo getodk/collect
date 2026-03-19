@@ -26,12 +26,8 @@ class InfoContentTest {
 
     @Test
     fun `shows dialog content from snackbar in PLACEMENT mode`() {
-        val viewModel = mock<GeoPolyViewModel>().apply {
-            whenever(recordingMode).thenReturn(GeoPolyViewModel.RecordingMode.PLACEMENT)
-        }
-
         composeTestRule.setContent {
-            InfoContent(viewModel, fromSnackbar = true) {}
+            InfoContent(GeoPolyViewModel.RecordingMode.PLACEMENT, fromSnackbar = true) {}
         }
 
         assertInfo(
@@ -46,12 +42,8 @@ class InfoContentTest {
 
     @Test
     fun `shows dialog content from info button in PLACEMENT mode`() {
-        val viewModel = mock<GeoPolyViewModel>().apply {
-            whenever(recordingMode).thenReturn(GeoPolyViewModel.RecordingMode.PLACEMENT)
-        }
-
         composeTestRule.setContent {
-            InfoContent(viewModel, fromSnackbar = false) {}
+            InfoContent(GeoPolyViewModel.RecordingMode.PLACEMENT, fromSnackbar = false) {}
         }
 
         assertInfo(
@@ -66,12 +58,8 @@ class InfoContentTest {
 
     @Test
     fun `shows dialog content from snackbar in MANUAL mode`() {
-        val viewModel = mock<GeoPolyViewModel>().apply {
-            whenever(recordingMode).thenReturn(GeoPolyViewModel.RecordingMode.MANUAL)
-        }
-
         composeTestRule.setContent {
-            InfoContent(viewModel, fromSnackbar = true) {}
+            InfoContent(GeoPolyViewModel.RecordingMode.MANUAL, fromSnackbar = true) {}
         }
 
         assertInfo(
@@ -85,12 +73,8 @@ class InfoContentTest {
 
     @Test
     fun `shows dialog content from info button in MANUAL mode`() {
-        val viewModel = mock<GeoPolyViewModel>().apply {
-            whenever(recordingMode).thenReturn(GeoPolyViewModel.RecordingMode.MANUAL)
-        }
-
         composeTestRule.setContent {
-            InfoContent(viewModel, fromSnackbar = false) {}
+            InfoContent(GeoPolyViewModel.RecordingMode.MANUAL, fromSnackbar = false) {}
         }
 
         assertInfo(
@@ -104,12 +88,8 @@ class InfoContentTest {
 
     @Test
     fun `shows dialog content from snackbar in AUTOMATIC mode`() {
-        val viewModel = mock<GeoPolyViewModel>().apply {
-            whenever(recordingMode).thenReturn(GeoPolyViewModel.RecordingMode.AUTOMATIC)
-        }
-
         composeTestRule.setContent {
-            InfoContent(viewModel, fromSnackbar = true) {}
+            InfoContent(GeoPolyViewModel.RecordingMode.AUTOMATIC, fromSnackbar = true) {}
         }
 
         assertInfo(
@@ -123,12 +103,8 @@ class InfoContentTest {
 
     @Test
     fun `shows dialog content from info button in AUTOMATIC mode`() {
-        val viewModel = mock<GeoPolyViewModel>().apply {
-            whenever(recordingMode).thenReturn(GeoPolyViewModel.RecordingMode.AUTOMATIC)
-        }
-
         composeTestRule.setContent {
-            InfoContent(viewModel, fromSnackbar = false) {}
+            InfoContent(GeoPolyViewModel.RecordingMode.AUTOMATIC, fromSnackbar = false) {}
         }
 
         assertInfo(
@@ -142,14 +118,10 @@ class InfoContentTest {
 
     @Test
     fun `calls onDone when Done button is clicked`() {
-        val viewModel = mock<GeoPolyViewModel>().apply {
-            whenever(recordingMode).thenReturn(GeoPolyViewModel.RecordingMode.PLACEMENT)
-        }
-
         var onDoneCalled = false
 
         composeTestRule.setContent {
-            InfoContent(viewModel, false) { onDoneCalled = true }
+            InfoContent(GeoPolyViewModel.RecordingMode.PLACEMENT, false) { onDoneCalled = true }
         }
 
         composeTestRule

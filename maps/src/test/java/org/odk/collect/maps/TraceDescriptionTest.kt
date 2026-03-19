@@ -8,6 +8,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.maps.markers.MarkerDescription
 import org.odk.collect.maps.markers.MarkerIconDescription
+import org.odk.collect.maps.traces.TraceDescription
+import org.odk.collect.maps.traces.getMarkersForPoints
 
 @RunWith(AndroidJUnit4::class)
 class TraceDescriptionTest {

@@ -9,7 +9,7 @@ import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationOptions
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapPoint
-import org.odk.collect.maps.PolygonDescription
+import org.odk.collect.maps.traces.PolygonDescription
 
 class StaticPolygonFeature(
     private val polygonAnnotationManager: PolygonAnnotationManager,
