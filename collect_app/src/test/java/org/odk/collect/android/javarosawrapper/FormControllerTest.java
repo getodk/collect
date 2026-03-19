@@ -121,6 +121,11 @@ public class FormControllerTest {
         assertThat(formController.getAuditEventLogger(), notNullValue());
     }
 
+    @Test
+    public void getSubmissionMetadata_usesTopLevelMeta_whenMultipleMetaSectionsExist() throws Exception {
+        FormController formController = createFormController(MULTIPLE_META_SECTIONS);
+        assertThat(formController.getSubmissionMetadata().instanceName, is(notNullValue()));
+    }
 
     //region indexIsInFieldList
     @Test
@@ -149,6 +154,7 @@ public class FormControllerTest {
         ByteArrayInputStream inputStream = new ByteArrayInputStream(xform.getBytes());
         final FormEntryModel fem = new FormEntryModel(XFormUtils.getFormFromInputStream(inputStream));
         final FormEntryController formEntryController = new FormEntryController(fem);
+        formEntryController.getModel().getForm().initialize(true, null);
         return new JavaRosaFormController(Files.createTempDir(), formEntryController, File.createTempFile("instance", ""));
     }
 
@@ -287,6 +293,42 @@ public class FormControllerTest {
             "    </h:head>\n" +
             "    <h:body>\n" +
             "        <group ref=\"/data/group\" appearance=\"fake fieLd-list fake\">\n" +
+            "          <input ref=\"/data/group/question\">\n" +
+            "            <label>Question</label>\n" +
+            "          </input>\n" +
+            "        </group>\n" +
+            "    </h:body>\n" +
+            "</h:html>\n";
+
+    private static final String MULTIPLE_META_SECTIONS = "<?xml version=\"1.0\"?>\n" +
+            "<h:html xmlns=\"http://www.w3.org/2002/xforms\" xmlns:h=\"http://www.w3.org/1999/xhtml\" xmlns:entities=\"http://www.opendatakit.org/xforms/entities\" xmlns:jr=\"http://openrosa.org/javarosa\">\n" +
+            "    <h:head>\n" +
+            "        <h:title>Multiple meta sections</h:title>\n" +
+            "        <model entities:entities-version=\"2024.1.0\">\n" +
+            "            <instance>\n" +
+            "                <data id=\"multiple-meta-sections\">\n" +
+            "                    <group>\n" +
+            "                        <question>xxx</question>\n" +
+            "                        <meta>\n" +
+            "                           <entity dataset=\"entity_test\" create=\"1\" id=\"\">\n" +
+            "                               <label/>\n" +
+            "                           </entity>\n" +
+            "                        </meta>\n" +
+            "                    </group>\n" +
+            "                    <meta>\n" +
+            "                       <instanceName/>\n" +
+            "                   </meta>\n" +
+            "                </data>\n" +
+            "            </instance>\n" +
+            "            <bind nodeset=\"/data/group/question\" type=\"int\"/>\n" +
+            "            <bind nodeset=\"/data/group/meta/entity/@id\" readonly=\"true()\" type=\"string\"/>\n" +
+            "            <setvalue ref=\"/data/group/meta/entity/@id\" event=\"odk-instance-first-load\" value=\"uuid()\"/>\n" +
+            "            <bind nodeset=\"/data/group/meta/entity/label\" calculate=\"/data/group/question\" readonly=\"true()\" type=\"string\"/>\n" +
+            "            <bind nodeset=\"/data/meta/instanceName\" type=\"string\" calculate=\"uuid()\"/>\n" +
+            "        </model>\n" +
+            "    </h:head>\n" +
+            "    <h:body>\n" +
+            "        <group ref=\"/data/group\">\n" +
             "          <input ref=\"/data/group/question\">\n" +
             "            <label>Question</label>\n" +
             "          </input>\n" +
