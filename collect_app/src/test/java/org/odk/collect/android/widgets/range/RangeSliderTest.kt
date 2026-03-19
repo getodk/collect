@@ -8,6 +8,7 @@ import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.click
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -28,7 +29,7 @@ class RangeSliderTest {
 
     @Test
     fun `start, end and current value labels are correctly displayed`() {
-        setContent(value = 0.5.toBigDecimal())
+        setContent(value = 0.5.toBigDecimal(), valueLabel = "5")
 
         composeTestRule
             .onNodeWithContentDescription(org.odk.collect.strings.R.string.slider_start_label)
@@ -47,6 +48,23 @@ class RangeSliderTest {
     }
 
     @Test
+    fun `step labels are correctly displayed`() {
+        setContent(labels = listOf("Bad", "", "", "", "Good", "", "", "", "", "Vey Good"))
+
+        composeTestRule
+            .onNodeWithText("Bad")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Good")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Vey Good")
+            .assertIsDisplayed()
+    }
+
+    @Test
     fun `displays thumb when there is answer`() {
         setContent(value = 0.5.toBigDecimal())
 
@@ -56,12 +74,21 @@ class RangeSliderTest {
     }
 
     @Test
-    fun `does not display thumb when there is no answer`() {
+    fun `does not display thumb when there is no answer and no placeholder`() {
         setContent(value = null)
 
         composeTestRule
             .onNodeWithContentDescription(org.odk.collect.strings.R.string.slider_thumb)
             .assertIsNotDisplayed()
+    }
+
+    @Test
+    fun `displays thumb when there is no answer but there is a placeholder`() {
+        setContent(value = null, placeholder = 0.5.toBigDecimal())
+
+        composeTestRule
+            .onNodeWithContentDescription(org.odk.collect.strings.R.string.slider_thumb)
+            .assertIsDisplayed()
     }
 
     @Test
@@ -262,7 +289,8 @@ class RangeSliderTest {
 
     private fun setContent(
         value: BigDecimal? = null,
-        valueLabel: String = "5",
+        valueLabel: String = "",
+        placeholder: BigDecimal? = null,
         steps: Int = 10,
         ticks: Int = 0,
         enabled: Boolean = true,
@@ -270,6 +298,7 @@ class RangeSliderTest {
         horizontal: Boolean = true,
         startLabel: String = "0",
         endLabel: String = "10",
+        labels: List<String> = emptyList(),
         onValueChange: (Float) -> Unit = {},
         onRangeInvalid: () -> Unit = {}
     ) {
@@ -277,6 +306,7 @@ class RangeSliderTest {
             RangeSlider(
                 value = value,
                 valueLabel = valueLabel,
+                placeholder = placeholder,
                 steps = steps,
                 ticks = ticks,
                 enabled = enabled,
@@ -284,6 +314,7 @@ class RangeSliderTest {
                 horizontal = horizontal,
                 startLabel = startLabel,
                 endLabel = endLabel,
+                labels = labels,
                 onValueChange = onValueChange,
                 onValueChangeFinished = {},
                 onValueChanging = {},
