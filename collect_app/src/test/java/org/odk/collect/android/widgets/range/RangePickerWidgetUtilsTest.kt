@@ -2,83 +2,117 @@ package org.odk.collect.android.widgets.range
 
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
+import org.javarosa.core.model.Constants
+import org.javarosa.core.model.DataType
+import org.javarosa.core.model.RangeQuestion
 import org.javarosa.core.model.data.IntegerData
 import org.javarosa.form.api.FormEntryPrompt
 import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
+import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import java.math.BigDecimal
 
 class RangePickerWidgetUtilsTest {
 
     @Test
     fun `list of numbers should contain only rangeStart when range has equal start and end`() {
-        val rangeStart = BigDecimal(5.0)
-        val rangeEnd = BigDecimal(5.0)
-        val rangeStep = BigDecimal(1.0)
+        val rangeQuestion = RangeQuestion()
+        rangeQuestion.rangeStart = BigDecimal(5.0)
+        rangeQuestion.rangeEnd = BigDecimal(5.0)
+        rangeQuestion.rangeStep = BigDecimal(1.0)
+        val prompt = MockFormEntryPromptBuilder()
+            .withQuestion(rangeQuestion)
+            .withDataType(Constants.DATATYPE_DECIMAL)
+            .build()
 
         assertThat(
-            RangePickerWidgetUtils.getNumbersFromRangeAsc(rangeStart, rangeStep, rangeEnd, false),
+            RangePickerWidgetUtils.getNumbersFromRangeAsc(prompt),
             equalTo(arrayOf("5.0"))
         )
     }
 
     @Test
     fun `list of numbers should contain only rangeStart when step is bigger than range`() {
-        val rangeStart = BigDecimal(-5)
-        val rangeEnd = BigDecimal(5)
-        val rangeStep = BigDecimal(100)
+        val rangeQuestion = RangeQuestion()
+        rangeQuestion.rangeStart = BigDecimal(-5)
+        rangeQuestion.rangeEnd = BigDecimal(5)
+        rangeQuestion.rangeStep = BigDecimal(100)
+        val prompt = MockFormEntryPromptBuilder()
+            .withQuestion(rangeQuestion)
+            .withDataType(Constants.DATATYPE_INTEGER)
+            .build()
 
         assertThat(
-            RangePickerWidgetUtils.getNumbersFromRangeAsc(rangeStart, rangeStep, rangeEnd, true),
+            RangePickerWidgetUtils.getNumbersFromRangeAsc(prompt),
             equalTo(arrayOf("-5"))
         )
     }
 
     @Test
     fun `list of numbers should contain numbers in ascending order when range is increasing`() {
-        val rangeStart = BigDecimal(-5.0)
-        val rangeEnd = BigDecimal(5.0)
-        val rangeStep = BigDecimal(1.5)
+        val rangeQuestion = RangeQuestion()
+        rangeQuestion.rangeStart = BigDecimal(-5.0)
+        rangeQuestion.rangeEnd = BigDecimal(5.0)
+        rangeQuestion.rangeStep = BigDecimal(1.5)
+        val prompt = MockFormEntryPromptBuilder()
+            .withQuestion(rangeQuestion)
+            .withDataType(Constants.DATATYPE_DECIMAL)
+            .build()
 
         assertThat(
-            RangePickerWidgetUtils.getNumbersFromRangeAsc(rangeStart, rangeStep, rangeEnd, false),
+            RangePickerWidgetUtils.getNumbersFromRangeAsc(prompt),
             equalTo(arrayOf("-5.0", "-3.5", "-2.0", "-0.5", "1.0", "2.5", "4.0"))
         )
     }
 
     @Test
     fun `list of numbers should contain numbers in ascending order when range is decreasing`() {
-        val rangeStart = BigDecimal(5)
-        val rangeEnd = BigDecimal(-5)
-        val rangeStep = BigDecimal(1)
+        val rangeQuestion = RangeQuestion()
+        rangeQuestion.rangeStart = BigDecimal(5)
+        rangeQuestion.rangeEnd = BigDecimal(-5)
+        rangeQuestion.rangeStep = BigDecimal(1)
+        val prompt = MockFormEntryPromptBuilder()
+            .withQuestion(rangeQuestion)
+            .withDataType(Constants.DATATYPE_INTEGER)
+            .build()
 
         assertThat(
-            RangePickerWidgetUtils.getNumbersFromRangeAsc(rangeStart, rangeStep, rangeEnd, true),
+            RangePickerWidgetUtils.getNumbersFromRangeAsc(prompt),
             equalTo(arrayOf("-5", "-4", "-3", "-2", "-1", "0", "1", "2", "3", "4", "5"))
         )
     }
 
     @Test
     fun `list of numbers should contain numbers in ascending order when range is decreasing and step is a negative number`() {
-        val rangeStart = BigDecimal(5.0)
-        val rangeEnd = BigDecimal(-5.0)
-        val rangeStep = BigDecimal(-1.5)
+        val rangeQuestion = RangeQuestion()
+        rangeQuestion.rangeStart = BigDecimal(5.0)
+        rangeQuestion.rangeEnd = BigDecimal(-5.0)
+        rangeQuestion.rangeStep = BigDecimal(-1.5)
+        val prompt = MockFormEntryPromptBuilder()
+            .withQuestion(rangeQuestion)
+            .withDataType(Constants.DATATYPE_DECIMAL)
+            .build()
 
         assertThat(
-            RangePickerWidgetUtils.getNumbersFromRangeAsc(rangeStart, rangeStep, rangeEnd, false),
+            RangePickerWidgetUtils.getNumbersFromRangeAsc(prompt),
             equalTo(arrayOf("-5.0", "-3.5", "-2.0", "-0.5", "1.0", "2.5", "4.0"))
         )
     }
 
     @Test
     fun `list of numbers should contain numbers in ascending order when step is bigger than 1`() {
-        val rangeStart = BigDecimal(-5)
-        val rangeEnd = BigDecimal(5)
-        val rangeStep = BigDecimal(2)
+        val rangeQuestion = RangeQuestion()
+        rangeQuestion.rangeStart = BigDecimal(-5)
+        rangeQuestion.rangeEnd = BigDecimal(5)
+        rangeQuestion.rangeStep = BigDecimal(2)
+        val prompt = MockFormEntryPromptBuilder()
+            .withQuestion(rangeQuestion)
+            .withDataType(Constants.DATATYPE_INTEGER)
+            .build()
 
         assertThat(
-            RangePickerWidgetUtils.getNumbersFromRangeAsc(rangeStart, rangeStep, rangeEnd, true),
+            RangePickerWidgetUtils.getNumbersFromRangeAsc(prompt),
             equalTo(arrayOf("-5", "-3", "-1", "1", "3", "5"))
         )
     }
