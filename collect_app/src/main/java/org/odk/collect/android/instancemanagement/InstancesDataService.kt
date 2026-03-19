@@ -7,9 +7,11 @@ import org.odk.collect.android.application.Collect
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler
 import org.odk.collect.android.formentry.FormEntryUseCases
 import org.odk.collect.android.formmanagement.CollectFormEntryControllerFactory
-import org.odk.collect.android.instancemanagement.autosend.FormAutoSendMode
-import org.odk.collect.android.instancemanagement.autosend.InstanceAutoSendFetcher
-import org.odk.collect.android.instancemanagement.autosend.getAutoSendMode
+import org.odk.collect.android.instancemanagement.send.autosend.FormAutoSendMode
+import org.odk.collect.android.instancemanagement.send.autosend.InstanceAutoSendFetcher
+import org.odk.collect.android.instancemanagement.send.autosend.getAutoSendMode
+import org.odk.collect.android.instancemanagement.send.InstanceSubmitter
+import org.odk.collect.android.instancemanagement.send.InstanceUploadResult
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.projects.ProjectDependencyModule
 import org.odk.collect.android.state.DataKeys
@@ -19,8 +21,6 @@ import org.odk.collect.androidshared.data.AppState
 import org.odk.collect.androidshared.data.DataService
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.instances.Instance
-import org.odk.collect.metadata.PropertyManager
-import org.odk.collect.openrosa.http.OpenRosaHttpInterface
 import org.odk.collect.projects.ProjectDependencyFactory
 import java.io.File
 
@@ -29,8 +29,7 @@ class InstancesDataService(
     private val instanceSubmitScheduler: InstanceSubmitScheduler,
     private val projectDependencyModuleFactory: ProjectDependencyFactory<ProjectDependencyModule>,
     private val notifier: Notifier,
-    private val propertyManager: PropertyManager,
-    private val httpInterface: OpenRosaHttpInterface,
+    private val instanceSubmitter: InstanceSubmitter,
     onUpdate: () -> Unit
 ) : DataService(appState, onUpdate) {
 
@@ -214,17 +213,32 @@ class InstancesDataService(
         }
     }
 
-    fun sendInstances(projectId: String, formAutoSend: Boolean = false): Boolean {
-        val projectDependencyModule =
-            projectDependencyModuleFactory.create(projectId)
-
-        val instanceSubmitter = InstanceSubmitter(
-            projectDependencyModule.formsRepository,
-            projectDependencyModule.generalSettings,
-            propertyManager,
-            httpInterface,
-            projectDependencyModule.instancesRepository
+    fun sendInstances(
+        projectId: String,
+        instances: List<Instance>,
+        referrer: String,
+        overrideURL: String?,
+        cancelAfterAuthException: Boolean,
+        externalDeleteAfterUpload: Boolean?,
+        defaultSuccessMessage: String,
+        ensureActive: () -> Unit,
+        onProgress: (current: Int, total: Int) -> Unit = { _, _ -> }
+    ): List<InstanceUploadResult> {
+        return instanceSubmitter.submitInstances(
+            projectId,
+            instances,
+            referrer,
+            overrideURL,
+            cancelAfterAuthException,
+            externalDeleteAfterUpload,
+            defaultSuccessMessage,
+            ensureActive,
+            onProgress
         )
+    }
+
+    fun autoSendInstances(projectId: String, formAutoSend: Boolean): Boolean {
+        val projectDependencyModule = projectDependencyModuleFactory.create(projectId)
 
         return projectDependencyModule.instancesLock.withLock { acquiredLock: Boolean ->
             if (acquiredLock) {
@@ -235,11 +249,11 @@ class InstancesDataService(
                 )
 
                 if (toUpload.isNotEmpty()) {
-                    val results = instanceSubmitter.submitInstances(toUpload)
-                    notifier.onSubmission(results, projectDependencyModule.projectId)
+                    val uploadResults = instanceSubmitter.submitInstances(projectId, toUpload)
+                    notifier.onSubmission(uploadResults, projectDependencyModule.projectId)
                     update(projectId)
 
-                    FormsUploadResultInterpreter.allFormsUploadedSuccessfully(results)
+                    FormsUploadResultInterpreter.allFormsUploadedSuccessfully(uploadResults)
                 } else {
                     true
                 }

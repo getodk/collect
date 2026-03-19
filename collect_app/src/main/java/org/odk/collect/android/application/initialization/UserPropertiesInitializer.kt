@@ -2,7 +2,7 @@ package org.odk.collect.android.application.initialization
 
 import android.content.Context
 import org.odk.collect.analytics.Analytics
-import org.odk.collect.android.instancemanagement.autosend.shouldFormBeSentAutomatically
+import org.odk.collect.android.instancemanagement.send.autosend.shouldFormBeSentAutomatically
 import org.odk.collect.android.preferences.Defaults
 import org.odk.collect.async.Scheduler
 import org.odk.collect.forms.FormsRepository
