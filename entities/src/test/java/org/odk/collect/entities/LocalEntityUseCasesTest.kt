@@ -50,6 +50,19 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
+    fun `#updateLocalEntitiesFromForm does not save a new entity on create if the label is blank`() {
+        entitiesRepository.addList("things")
+
+        val formEntity =
+            FormEntity(EntityAction.CREATE, "things", "id", " ", listOf("property" to "value"))
+        val formEntities = EntitiesExtra(listOf(formEntity))
+        LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
+
+        val entities = entitiesRepository.query("things")
+        assertThat(entities.size, equalTo(0))
+    }
+
+    @Test
     fun `#updateLocalEntitiesFromForm does not save a new entity on create if the list doesn't already exist`() {
         val formEntity =
             FormEntity(EntityAction.CREATE, "things", "id", "label", listOf("property" to "value"))
