@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingVertical="@dimen/margin_small"
-    android:paddingHorizontal="@dimen/margin_standard">
+    android:paddingVertical="@dimen/margin_small">
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/primary_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_standard"
         android:textAppearance="?textAppearanceTitleLarge"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -20,9 +20,8 @@
         android:id="@+id/answer_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_standard"
-        app:layout_constraintStart_toStartOf="@id/primary_text"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/primary_text"
         app:layout_constraintTop_toBottomOf="@id/primary_text" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
