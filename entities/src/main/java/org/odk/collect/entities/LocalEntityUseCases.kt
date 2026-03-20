@@ -27,17 +27,19 @@ object LocalEntityUseCases {
             val label = formEntity.label
             when (formEntity.action) {
                 EntityAction.CREATE -> {
-                    val list = entitiesRepository.getList(formEntity.dataset)
-                    if (list != null && !list.needsApproval) {
-                        val entity = Entity.New(
-                            id,
-                            label,
-                            1,
-                            formEntity.properties,
-                            branchId = UUID.randomUUID().toString()
-                        )
+                    if (label.isNotBlank()) {
+                        val list = entitiesRepository.getList(formEntity.dataset)
+                        if (list != null && !list.needsApproval) {
+                            val entity = Entity.New(
+                                id,
+                                label,
+                                1,
+                                formEntity.properties,
+                                branchId = UUID.randomUUID().toString()
+                            )
 
-                        entitiesRepository.save(formEntity.dataset, entity)
+                            entitiesRepository.save(formEntity.dataset, entity)
+                        }
                     }
                 }
 

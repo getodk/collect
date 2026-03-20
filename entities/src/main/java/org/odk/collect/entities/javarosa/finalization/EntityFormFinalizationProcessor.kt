@@ -79,7 +79,7 @@ class EntityFormFinalizationProcessor : FormEntryFinalizationProcessor {
             }
         }
 
-        return if (id.isV4UUID() && label.isNotBlank()) {
+        return if (id.isV4UUID()) {
             FormEntity(action, dataset, id, label, fields)
         } else {
             null
