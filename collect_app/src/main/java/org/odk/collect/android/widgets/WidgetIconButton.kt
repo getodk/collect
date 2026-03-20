@@ -20,6 +20,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.odk.collect.androidshared.R.dimen
+import org.odk.collect.androidshared.ui.compose.marginSmall
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 
 @Composable
@@ -59,7 +60,7 @@ fun WidgetIconButton(
                 onLongClick = onLongClick,
                 onClickLabel = text
             )
-            .padding(vertical = dimensionResource(id = dimen.margin_small)),
+            .padding(vertical = marginSmall()),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {

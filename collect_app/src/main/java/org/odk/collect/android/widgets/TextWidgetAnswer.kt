@@ -20,6 +20,7 @@ import androidx.compose.ui.text.fromHtml
 import androidx.compose.ui.unit.sp
 import org.odk.collect.android.utilities.HtmlUtils
 import org.odk.collect.androidshared.R.dimen
+import org.odk.collect.androidshared.ui.compose.marginSmall
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 
 @Composable
@@ -57,7 +58,7 @@ fun TextWidgetAnswer(
     ) {
         if (icon != null) {
             Icon(
-                modifier = Modifier.padding(end = dimensionResource(id = dimen.margin_small)),
+                modifier = Modifier.padding(end = marginSmall()),
                 imageVector = icon,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurface.copy(
