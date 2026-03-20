@@ -50,6 +50,19 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
+    fun `#updateLocalEntitiesFromForm does not save a new entity on create if the label is blank`() {
+        entitiesRepository.addList("things")
+
+        val formEntity =
+            FormEntity(EntityAction.CREATE, "things", "id", " ", listOf("property" to "value"))
+        val formEntities = EntitiesExtra(listOf(formEntity))
+        LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
+
+        val entities = entitiesRepository.query("things")
+        assertThat(entities.size, equalTo(0))
+    }
+
+    @Test
     fun `#updateLocalEntitiesFromForm does not save a new entity on create if the list doesn't already exist`() {
         val formEntity =
             FormEntity(EntityAction.CREATE, "things", "id", "label", listOf("property" to "value"))
@@ -100,6 +113,30 @@ class LocalEntityUseCasesTest {
         LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
         val entities = entitiesRepository.query("things")
         assertThat(entities.size, equalTo(1))
+        assertThat(entities[0].properties.size, equalTo(1))
+        assertThat(entities[0].properties[0], equalTo("prop" to "value 2"))
+    }
+
+    @Test
+    fun `#updateLocalEntitiesFromForm updates properties and does not change label on update if label is blank`() {
+        entitiesRepository.save(
+            "things",
+            Entity.New(
+                "id",
+                "label",
+                version = 1,
+                properties = listOf("prop" to "value")
+            )
+        )
+
+        val formEntity =
+            FormEntity(EntityAction.UPDATE, "things", "id", " ", listOf("prop" to "value 2"))
+        val formEntities = EntitiesExtra(listOf(formEntity))
+
+        LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
+        val entities = entitiesRepository.query("things")
+        assertThat(entities.size, equalTo(1))
+        assertThat(entities[0].label, equalTo("label"))
         assertThat(entities[0].properties.size, equalTo(1))
         assertThat(entities[0].properties[0], equalTo("prop" to "value 2"))
     }
