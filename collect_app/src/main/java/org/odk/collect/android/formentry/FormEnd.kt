@@ -55,8 +55,10 @@ fun FormEnd(
         if (finalizeEnabled) {
             val (icon, title, message) = getWarning(
                 isEditableAfterFinalization,
-                shouldBeSentAutomatically
+                shouldBeSentAutomatically,
+                saveAsDraftEnabled
             )
+
             EditWarning(icon = icon, title = title, message = message)
         }
 
@@ -123,18 +125,11 @@ fun FormEnd(
     }
 }
 
-object EditWarningSemantics {
-    const val TAG = "EditWarning"
-    val iconProperty = SemanticsPropertyKey<Int>("icon")
-    val titleProperty = SemanticsPropertyKey<Int>("title")
-    val messageProperty = SemanticsPropertyKey<Int>("message")
-}
-
 @Composable
 private fun EditWarning(
     @DrawableRes icon: Int,
     @StringRes title: Int,
-    @StringRes message: Int
+    @StringRes message: Int?
 ) {
     Card(
         modifier = Modifier
@@ -159,11 +154,13 @@ private fun EditWarning(
                     style = MaterialTheme.typography.titleMedium
                 )
 
-                Text(
-                    text = stringResource(message),
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.padding(top = marginSmall())
-                )
+                if (message != null) {
+                    Text(
+                        text = stringResource(message),
+                        style = MaterialTheme.typography.bodyLarge,
+                        modifier = Modifier.padding(top = marginSmall())
+                    )
+                }
             }
         }
     }
@@ -171,8 +168,9 @@ private fun EditWarning(
 
 private fun getWarning(
     isEditableAfterFinalization: Boolean,
-    shouldBeSentAutomatically: Boolean
-): Triple<Int, Int, Int> {
+    shouldBeSentAutomatically: Boolean,
+    saveAsDraftEnabled: Boolean
+): Triple<Int, Int, Int?> {
     return if (isEditableAfterFinalization) {
         if (shouldBeSentAutomatically) {
             Triple(
@@ -188,20 +186,34 @@ private fun getWarning(
             )
         }
     } else {
+        val icon = R.drawable.ic_edit_off_24
+        val message = if (saveAsDraftEnabled) {
+            string.form_editing_disabled_hint
+        } else {
+            null
+        }
+
         if (shouldBeSentAutomatically) {
             Triple(
-                R.drawable.ic_edit_off_24,
+                icon,
                 string.form_editing_disabled_after_sending,
-                string.form_editing_disabled_hint
+                message
             )
         } else {
             Triple(
-                R.drawable.ic_edit_off_24,
+                icon,
                 string.form_editing_disabled_after_finalizing,
-                string.form_editing_disabled_hint
+                message
             )
         }
     }
+}
+
+object EditWarningSemantics {
+    const val TAG = "EditWarning"
+    val iconProperty = SemanticsPropertyKey<Int>("icon")
+    val titleProperty = SemanticsPropertyKey<Int>("title")
+    val messageProperty = SemanticsPropertyKey<Int?>("message")
 }
 
 @Preview

@@ -193,6 +193,25 @@ class FormEndTest {
     }
 
     @Test
+    fun `does show warning message when form is not editable and save as draft is disabled`() {
+        composeTestRule.setContent {
+            FormEnd(
+                formTitle = "blah",
+                isEditableAfterFinalization = false,
+                shouldBeSentAutomatically = false,
+                saveAsDraftEnabled = false,
+                finalizeEnabled = true
+            )
+        }
+
+        composeTestRule
+            .onNodeWithTag(EditWarningSemantics.TAG)
+            .assert(hasIcon(drawable.ic_edit_off_24))
+            .assert(hasTitle(string.form_editing_disabled_after_finalizing))
+            .assert(hasMessage(null))
+    }
+
+    @Test
     fun `shows warning when form is not editable after sending`() {
         composeTestRule.setContent {
             FormEnd(
@@ -248,6 +267,23 @@ class FormEndTest {
             .assert(hasTitle(string.form_editing_enabled_after_sending))
             .assert(hasMessage(string.form_editing_enabled_after_sending_hint))
     }
+
+    @Test
+    fun `does not show warning if finalize is disabled`() {
+        composeTestRule.setContent {
+            FormEnd(
+                formTitle = "blah",
+                isEditableAfterFinalization = true,
+                shouldBeSentAutomatically = true,
+                saveAsDraftEnabled = true,
+                finalizeEnabled = false
+            )
+        }
+
+        composeTestRule
+            .onNodeWithTag(EditWarningSemantics.TAG)
+            .assertIsNotDisplayed()
+    }
 }
 
 private fun hasIcon(@DrawableRes icon: Int): SemanticsMatcher {
@@ -258,6 +294,6 @@ private fun hasTitle(@StringRes title: Int): SemanticsMatcher {
     return SemanticsMatcher.expectValue(EditWarningSemantics.titleProperty, title)
 }
 
-private fun hasMessage(@StringRes message: Int): SemanticsMatcher {
+private fun hasMessage(@StringRes message: Int?): SemanticsMatcher {
     return SemanticsMatcher.expectValue(EditWarningSemantics.messageProperty, message)
 }
