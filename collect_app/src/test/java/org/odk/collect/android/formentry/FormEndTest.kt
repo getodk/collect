@@ -1,9 +1,14 @@
 package org.odk.collect.android.formentry
 
 import android.app.Application
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
+import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ApplicationProvider
@@ -13,6 +18,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
+import org.odk.collect.android.R.drawable
 import org.odk.collect.strings.R.string
 
 @RunWith(AndroidJUnit4::class)
@@ -180,11 +186,21 @@ class FormEndTest {
         }
 
         composeTestRule
-            .onNodeWithText(application.getString(string.form_editing_disabled_after_finalizing))
-            .assertIsDisplayed()
-
-        composeTestRule
-            .onNodeWithText(application.getString(string.form_editing_disabled_hint))
-            .assertIsDisplayed()
+            .onNodeWithTag(EditWarningSemantics.TAG)
+            .assert(hasIcon(drawable.ic_edit_off_24))
+            .assert(hasTitle(string.form_editing_disabled_after_finalizing))
+            .assert(hasMessage(string.form_editing_disabled_hint))
     }
+}
+
+private fun hasIcon(@DrawableRes icon: Int): SemanticsMatcher {
+    return SemanticsMatcher.expectValue(EditWarningSemantics.iconProperty, icon)
+}
+
+private fun hasTitle(@StringRes title: Int): SemanticsMatcher {
+    return SemanticsMatcher.expectValue(EditWarningSemantics.titleProperty, title)
+}
+
+private fun hasMessage(@StringRes message: Int): SemanticsMatcher {
+    return SemanticsMatcher.expectValue(EditWarningSemantics.messageProperty, message)
 }

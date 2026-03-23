@@ -1,13 +1,13 @@
 package org.odk.collect.android.formentry
 
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
@@ -17,14 +17,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.SemanticsPropertyKey
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.odk.collect.android.R
 import org.odk.collect.android.application.CollectTheme
 import org.odk.collect.androidshared.ui.compose.marginExtraSmall
+import org.odk.collect.androidshared.ui.compose.marginSmall
 import org.odk.collect.androidshared.ui.compose.marginStandard
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 import org.odk.collect.strings.R.string
@@ -51,11 +54,7 @@ fun FormEnd(
 
         if (finalizeEnabled) {
             val (icon, title, message) = getWarning()
-            EditWarning(
-                icon = painterResource(icon),
-                title = stringResource(title),
-                message = stringResource(message)
-            )
+            EditWarning(icon = icon, title = title, message = message)
         }
 
         Row(
@@ -121,44 +120,58 @@ fun FormEnd(
     }
 }
 
-private fun getWarning(): Triple<Int, Int, Int> {
-    return Triple(
-        R.drawable.ic_edit_24,
-        string.form_editing_disabled_after_finalizing,
-        string.form_editing_disabled_hint
-    )
+object EditWarningSemantics {
+    const val TAG = "EditWarning"
+    val iconProperty = SemanticsPropertyKey<Int>("icon")
+    val titleProperty = SemanticsPropertyKey<Int>("title")
+    val messageProperty = SemanticsPropertyKey<Int>("message")
 }
 
 @Composable
 private fun EditWarning(
-    icon: Painter,
-    title: String,
-    message: String
+    @DrawableRes icon: Int,
+    @StringRes title: Int,
+    @StringRes message: Int
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = marginStandard())
+            .testTag(EditWarningSemantics.TAG)
+            .semantics {
+                set(EditWarningSemantics.iconProperty, icon)
+                set(EditWarningSemantics.titleProperty, title)
+                set(EditWarningSemantics.messageProperty, message)
+            }
     ) {
         Row(modifier = Modifier.padding(marginStandard())) {
             Icon(
-                painter = icon,
+                painter = painterResource(icon),
                 contentDescription = null
             )
 
             Column(modifier = Modifier.padding(start = marginStandard())) {
                 Text(
-                    text = title,
+                    text = stringResource(title),
                     style = MaterialTheme.typography.titleMedium
                 )
 
                 Text(
-                    text = message,
-                    style = MaterialTheme.typography.bodyLarge
+                    text = stringResource(message),
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(top = marginSmall())
                 )
             }
         }
     }
+}
+
+private fun getWarning(): Triple<Int, Int, Int> {
+    return Triple(
+        R.drawable.ic_edit_off_24,
+        string.form_editing_disabled_after_finalizing,
+        string.form_editing_disabled_hint
+    )
 }
 
 @Preview
