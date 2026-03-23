@@ -10,6 +10,11 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import org.odk.collect.android.R
 import org.odk.collect.androidshared.ui.ComposeThemeProvider
 
@@ -41,7 +46,13 @@ fun CollectTheme(content: @Composable () -> Unit) {
     val typography = Typography(
         bodyMedium = MaterialTheme.typography.bodyMedium,
         bodyLarge = MaterialTheme.typography.bodyLarge,
-        titleLarge = MaterialTheme.typography.titleLarge,
+        titleMedium = MaterialTheme.typography.titleMedium,
+        titleLarge = MaterialTheme.typography.titleLarge.copy(
+            fontSize = 20.sp,
+            lineHeight = 24.sp,
+            fontFamily = FontFamily.SansSerif,
+            fontWeight = FontWeight.Medium
+        ),
     )
 
     val shapes = Shapes(
