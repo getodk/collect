@@ -19,15 +19,13 @@ import org.odk.collect.android.support.rules.TestRuleChain
 
 @RunWith(AndroidJUnit4::class)
 class SavePointTest {
+
     private val recentAppsRule = RecentAppsRule()
-    private val pageComposeRule = PageComposeRule()
     private val rule = FormEntryActivityTestRule()
 
     @get:Rule
     val ruleChain: RuleChain = TestRuleChain.chain()
         .around(recentAppsRule)
-        .around(pageComposeRule)
-        .around(pageComposeRule.composeRule)
         .around(rule)
 
     @Test

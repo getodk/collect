@@ -11,13 +11,11 @@ import org.odk.collect.android.support.rules.TestRuleChain.chain
 
 @RunWith(AndroidJUnit4::class)
 class SaveIncompleteTest {
-    private val pageComposeRule = PageComposeRule()
+
     var rule = CollectTestRule()
 
     @get:Rule
     var chain: RuleChain = chain()
-        .around(pageComposeRule)
-        .around(pageComposeRule.composeRule)
         .around(rule)
 
     @Test

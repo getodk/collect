@@ -22,7 +22,7 @@ import java.io.File
 
 @RunWith(AndroidJUnit4::class)
 class EditSavedFormTest {
-    private val pageComposeRule = PageComposeRule()
+
     private val rule = CollectTestRule()
 
     val testDependencies: TestDependencies = TestDependencies()
@@ -31,8 +31,6 @@ class EditSavedFormTest {
     @get:Rule
     var copyFormChain: RuleChain = chain(testDependencies)
         .around(recentAppsRule)
-        .around(pageComposeRule)
-        .around(pageComposeRule.composeRule)
         .around(rule)
 
     @Test

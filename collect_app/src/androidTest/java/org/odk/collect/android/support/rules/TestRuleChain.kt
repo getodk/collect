@@ -15,6 +15,7 @@ object TestRuleChain {
     fun chain(testDependencies: TestDependencies = TestDependencies()): RuleChain {
         val asyncWorkTrackerIdlingResource = AsyncWorkTrackerIdlingResource()
         val countingTaskExecutorIdlingResource = CountingTaskExecutorIdlingResource()
+        val pageComposeRule = PageComposeRule()
 
         return RuleChain
             .outerRule(RetryOnDeviceErrorRule())
@@ -28,6 +29,8 @@ object TestRuleChain {
                     listOf(asyncWorkTrackerIdlingResource, countingTaskExecutorIdlingResource)
                 )
             )
+            .around(pageComposeRule.composeRule)
+            .around(pageComposeRule)
     }
 
     private fun createGrantPermissionRule() =
