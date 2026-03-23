@@ -53,7 +53,10 @@ fun FormEnd(
         )
 
         if (finalizeEnabled) {
-            val (icon, title, message) = getWarning()
+            val (icon, title, message) = getWarning(
+                isEditableAfterFinalization,
+                shouldBeSentAutomatically
+            )
             EditWarning(icon = icon, title = title, message = message)
         }
 
@@ -166,12 +169,39 @@ private fun EditWarning(
     }
 }
 
-private fun getWarning(): Triple<Int, Int, Int> {
-    return Triple(
-        R.drawable.ic_edit_off_24,
-        string.form_editing_disabled_after_finalizing,
-        string.form_editing_disabled_hint
-    )
+private fun getWarning(
+    isEditableAfterFinalization: Boolean,
+    shouldBeSentAutomatically: Boolean
+): Triple<Int, Int, Int> {
+    return if (isEditableAfterFinalization) {
+        if (shouldBeSentAutomatically) {
+            Triple(
+                R.drawable.ic_edit_24,
+                string.form_editing_enabled_after_sending,
+                string.form_editing_enabled_after_sending_hint
+            )
+        } else {
+            Triple(
+                R.drawable.ic_edit_24,
+                string.form_editing_enabled_after_finalizing,
+                string.form_editing_enabled_after_finalizing_hint
+            )
+        }
+    } else {
+        if (shouldBeSentAutomatically) {
+            Triple(
+                R.drawable.ic_edit_off_24,
+                string.form_editing_disabled_after_sending,
+                string.form_editing_disabled_hint
+            )
+        } else {
+            Triple(
+                R.drawable.ic_edit_off_24,
+                string.form_editing_disabled_after_finalizing,
+                string.form_editing_disabled_hint
+            )
+        }
+    }
 }
 
 @Preview

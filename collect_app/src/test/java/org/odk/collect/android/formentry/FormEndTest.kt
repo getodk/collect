@@ -191,6 +191,63 @@ class FormEndTest {
             .assert(hasTitle(string.form_editing_disabled_after_finalizing))
             .assert(hasMessage(string.form_editing_disabled_hint))
     }
+
+    @Test
+    fun `shows warning when form is not editable after sending`() {
+        composeTestRule.setContent {
+            FormEnd(
+                formTitle = "blah",
+                isEditableAfterFinalization = false,
+                shouldBeSentAutomatically = true,
+                saveAsDraftEnabled = true,
+                finalizeEnabled = true
+            )
+        }
+
+        composeTestRule
+            .onNodeWithTag(EditWarningSemantics.TAG)
+            .assert(hasIcon(drawable.ic_edit_off_24))
+            .assert(hasTitle(string.form_editing_disabled_after_sending))
+            .assert(hasMessage(string.form_editing_disabled_hint))
+    }
+
+    @Test
+    fun `shows warning when form is editable`() {
+        composeTestRule.setContent {
+            FormEnd(
+                formTitle = "blah",
+                isEditableAfterFinalization = true,
+                shouldBeSentAutomatically = false,
+                saveAsDraftEnabled = true,
+                finalizeEnabled = true
+            )
+        }
+
+        composeTestRule
+            .onNodeWithTag(EditWarningSemantics.TAG)
+            .assert(hasIcon(drawable.ic_edit_24))
+            .assert(hasTitle(string.form_editing_enabled_after_finalizing))
+            .assert(hasMessage(string.form_editing_enabled_after_finalizing_hint))
+    }
+
+    @Test
+    fun `shows warning when form is editable after sending`() {
+        composeTestRule.setContent {
+            FormEnd(
+                formTitle = "blah",
+                isEditableAfterFinalization = true,
+                shouldBeSentAutomatically = true,
+                saveAsDraftEnabled = true,
+                finalizeEnabled = true
+            )
+        }
+
+        composeTestRule
+            .onNodeWithTag(EditWarningSemantics.TAG)
+            .assert(hasIcon(drawable.ic_edit_24))
+            .assert(hasTitle(string.form_editing_enabled_after_sending))
+            .assert(hasMessage(string.form_editing_enabled_after_sending_hint))
+    }
 }
 
 private fun hasIcon(@DrawableRes icon: Int): SemanticsMatcher {
