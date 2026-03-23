@@ -166,4 +166,25 @@ class FormEndTest {
             .onNodeWithText(application.getString(string.send))
             .assertIsDisplayed()
     }
+
+    @Test
+    fun `shows warning when form is not editable`() {
+        composeTestRule.setContent {
+            FormEnd(
+                formTitle = "blah",
+                isEditableAfterFinalization = false,
+                shouldBeSentAutomatically = false,
+                saveAsDraftEnabled = true,
+                finalizeEnabled = true
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(application.getString(string.form_editing_disabled_after_finalizing))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText(application.getString(string.form_editing_disabled_hint))
+            .assertIsDisplayed()
+    }
 }
