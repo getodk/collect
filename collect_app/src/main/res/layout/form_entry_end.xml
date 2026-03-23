@@ -9,124 +9,14 @@ the specific language governing permissions and limitations under the License.
 -->
 
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/scroll_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
     android:orientation="vertical">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/compose_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/margin_standard">
-
-        <TextView
-            android:id="@+id/description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:lineSpacingMultiplier="1.2"
-            android:textColor="?colorOnSurface"
-            android:textSize="21sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/form_edits_warning"
-            app:layout_constraintStart_toStartOf="@id/buttons_container"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed"
-            tools:text="You are at the end of All widgets" />
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/form_edits_warning"
-            style="@style/Widget.Material3.CardView.Filled"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_large"
-            app:cardBackgroundColor="?colorSurfaceContainerHighest"
-            app:layout_constraintBottom_toTopOf="@+id/buttons_container"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/description"
-            app:layout_constraintWidth_max="@dimen/max_content_width">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="@dimen/margin_standard"
-                android:paddingVertical="@dimen/margin_large">
-
-                <ImageView
-                    android:id="@+id/form_edits_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_edit_24"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:tint="?colorPrimary" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/form_edits_warning_title"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_standard"
-                    android:textAppearance="?textAppearanceTitleMedium"
-                    android:textColor="?colorOnSurface"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/form_edits_icon"
-                    app:layout_constraintTop_toTopOf="@id/form_edits_icon"
-                    tools:text="@string/form_editing_disabled_after_finalizing" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/form_edits_warning_message"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_standard"
-                    android:textAppearance="?textAppearanceBodyLarge"
-                    android:textColor="?colorOnSurface"
-                    app:layout_constraintStart_toStartOf="@id/form_edits_warning_title"
-                    app:layout_constraintEnd_toEndOf="@id/form_edits_warning_title"
-                    app:layout_constraintTop_toBottomOf="@id/form_edits_warning_title"
-                    tools:text="@string/form_editing_disabled_hint" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <LinearLayout
-            android:id="@+id/buttons_container"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="64dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/form_edits_warning"
-            app:layout_constraintWidth_max="@dimen/max_content_width">
-
-            <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
-                android:id="@+id/save_as_draft"
-                style="?materialButtonOutlinedIconStyle"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="@string/save_as_draft"
-                app:icon="@drawable/ic_save_menu_24"
-                app:iconGravity="textStart"
-                app:screenName="@string/form_end_screen" />
-
-            <Space
-                android:id="@+id/divider"
-                android:layout_width="@dimen/margin_standard"
-                android:layout_height="match_parent" />
-
-            <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
-                android:id="@+id/finalize"
-                style="?materialButtonIconStyle"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="@string/finalize"
-                app:icon="@drawable/ic_send_24"
-                app:iconGravity="textStart"
-                app:screenName="@string/form_end_screen" />
-        </LinearLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_height="wrap_content"/>
 </androidx.core.widget.NestedScrollView>

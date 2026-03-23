@@ -2,12 +2,10 @@ package org.odk.collect.android.support.pages;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import org.odk.collect.android.R;
+import org.odk.collect.testshared.AssertionFramework;
 
 public class FormEndPage extends Page<FormEndPage> {
 
@@ -19,7 +17,7 @@ public class FormEndPage extends Page<FormEndPage> {
 
     @Override
     public FormEndPage assertOnPage() {
-        onView(withText(getTranslatedString(org.odk.collect.strings.R.string.save_enter_data_description, formName))).check(matches(isDisplayed()));
+        assertText(org.odk.collect.strings.R.string.save_enter_data_description, AssertionFramework.COMPOSE, formName);
         return this;
     }
 
@@ -38,7 +36,7 @@ public class FormEndPage extends Page<FormEndPage> {
     }
 
     public <D extends Page<D>> D clickFinalize(D destination) {
-        return clickOnString(org.odk.collect.strings.R.string.finalize, destination);
+        return clickOnString(org.odk.collect.strings.R.string.finalize, destination, AssertionFramework.COMPOSE);
     }
 
     public MainMenuPage clickFinalize() {

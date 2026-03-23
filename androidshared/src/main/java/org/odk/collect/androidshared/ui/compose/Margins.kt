@@ -14,3 +14,8 @@ fun marginStandard(): Dp {
 fun marginSmall(): Dp {
     return dimensionResource(id = dimen.margin_small)
 }
+
+@Composable
+fun marginExtraSmall(): Dp {
+    return dimensionResource(id = dimen.margin_extra_small)
+}

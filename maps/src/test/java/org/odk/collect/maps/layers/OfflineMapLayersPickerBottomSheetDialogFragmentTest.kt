@@ -42,7 +42,7 @@ import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.TempFiles
 import org.odk.collect.strings.R.string
 import org.odk.collect.testshared.FakeScheduler
-import org.odk.collect.testshared.Interactions
+import org.odk.collect.testshared.EspressoInteractions
 import org.odk.collect.testshared.RecyclerViewMatcher
 import org.odk.collect.testshared.ViewMatchers.atPositionInRecyclerView
 import org.odk.collect.testshared.WaitFor
@@ -77,7 +77,7 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
 
         scenario.onFragment {
             assertThat(it.isVisible, equalTo(true))
-            Interactions.clickOn(withText(string.cancel))
+            EspressoInteractions.clickOn(withText(string.cancel))
             assertThat(it.isVisible, equalTo(false))
         }
     }
@@ -92,7 +92,7 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
 
         scheduler.flush()
 
-        Interactions.clickOn(withText(string.cancel))
+        EspressoInteractions.clickOn(withText(string.cancel))
         assertThat(
             settingsProvider.getUnprotectedSettings().contains(ProjectKeys.KEY_REFERENCE_LAYER),
             equalTo(false)
@@ -114,7 +114,7 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
 
         scenario.onFragment {
             assertThat(it.isVisible, equalTo(true))
-            Interactions.clickOn(withText(string.save))
+            EspressoInteractions.clickOn(withText(string.save))
             assertThat(it.isVisible, equalTo(false))
         }
     }
@@ -138,7 +138,7 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
 
         scheduler.flush()
 
-        Interactions.clickOn(withText(string.save))
+        EspressoInteractions.clickOn(withText(string.save))
         assertThat(
             settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_REFERENCE_LAYER),
             equalTo(null)
@@ -154,8 +154,8 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
 
         scheduler.flush()
 
-        Interactions.clickOn(withText("layer1${MbtilesFile.FILE_EXTENSION}"))
-        Interactions.clickOn(withText(string.save))
+        EspressoInteractions.clickOn(withText("layer1${MbtilesFile.FILE_EXTENSION}"))
+        EspressoInteractions.clickOn(withText(string.save))
         assertThat(
             settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_REFERENCE_LAYER),
             equalTo(file.absolutePath)
@@ -249,7 +249,7 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
 
         scheduler.flush()
 
-        Interactions.clickOn(withText(string.get_help_with_offline_layers))
+        EspressoInteractions.clickOn(withText(string.get_help_with_offline_layers))
 
         verify(webPageService).openWebPage(
             any(),
@@ -304,7 +304,7 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
 
         scheduler.flush()
 
-        Interactions.clickOn(withText("layer1${MbtilesFile.FILE_EXTENSION}"))
+        EspressoInteractions.clickOn(withText("layer1${MbtilesFile.FILE_EXTENSION}"))
         WaitFor.waitFor {
             onView(atPositionInRecyclerView(R.id.layers, 0, R.id.radio_button))
                 .check(matches(not(isChecked())))
@@ -313,7 +313,7 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
                 .check(matches(isChecked()))
         }
 
-        Interactions.clickOn(withText(string.none))
+        EspressoInteractions.clickOn(withText(string.none))
         WaitFor.waitFor {
             onView(atPositionInRecyclerView(R.id.layers, 0, R.id.radio_button))
                 .check(matches(isChecked()))
@@ -333,7 +333,7 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
 
         scheduler.flush()
 
-        Interactions.clickOn(withText("layer1${MbtilesFile.FILE_EXTENSION}"))
+        EspressoInteractions.clickOn(withText("layer1${MbtilesFile.FILE_EXTENSION}"))
         scenario.recreate()
         scheduler.flush()
         onView(atPositionInRecyclerView(R.id.layers, 0, R.id.radio_button))
@@ -348,7 +348,7 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
         val scenario = launchFragment()
 
         testRegistry.addUris(Uri.parse("blah"))
-        Interactions.clickOn(withText(string.add_layer))
+        EspressoInteractions.clickOn(withText(string.add_layer))
 
         scenario.onFragment {
             assertThat(
@@ -362,7 +362,7 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
     fun `clicking the 'add layer' and selecting nothing does not display the confirmation dialog`() {
         val scenario = launchFragment()
 
-        Interactions.clickOn(withText(string.add_layer))
+        EspressoInteractions.clickOn(withText(string.add_layer))
 
         scenario.onFragment {
             assertThat(
@@ -383,7 +383,7 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
 
         testRegistry.addUris(file1.toUri(), file2.toUri())
 
-        Interactions.clickOn(withText(string.add_layer))
+        EspressoInteractions.clickOn(withText(string.add_layer))
         scheduler.flush()
         onView(withId(R.id.add_layer_button)).inRoot(isDialog()).perform(scrollTo(), click())
 
@@ -407,7 +407,7 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
 
         testRegistry.addUris(file1.toUri(), file2.toUri())
 
-        Interactions.clickOn(withText(string.add_layer))
+        EspressoInteractions.clickOn(withText(string.add_layer))
         scheduler.flush()
         onView(withId(R.id.add_layer_button)).inRoot(isDialog()).perform(scrollTo(), click())
         scheduler.flush()
@@ -654,7 +654,7 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
         val scenario = launchFragment()
 
         testRegistry.addUris(Uri.parse("blah"))
-        Interactions.clickOn(withText(string.add_layer))
+        EspressoInteractions.clickOn(withText(string.add_layer))
 
         scenario.onFragment {
             assertThat(

@@ -22,7 +22,7 @@ import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.strings.R.string
 import org.odk.collect.testshared.EspressoAssertions
-import org.odk.collect.testshared.Interactions
+import org.odk.collect.testshared.EspressoInteractions
 import org.odk.collect.testshared.ViewActions
 
 @RunWith(AndroidJUnit4::class)
@@ -255,7 +255,7 @@ class BuddhistDatePickerDialogTest {
         val scenario = launchFragment(2010, 5, 12)
         scenario.onFragment {
             assertThat(it.dialog, notNullValue())
-            Interactions.clickOn(withText(string.ok), isDialog())
+            EspressoInteractions.clickOn(withText(string.ok), isDialog())
             assertThat(it.dialog, nullValue())
         }
     }
@@ -265,7 +265,7 @@ class BuddhistDatePickerDialogTest {
         val scenario = launchFragment(2010, 5, 12)
         scenario.onFragment {
             assertThat(it.dialog, notNullValue())
-            Interactions.clickOn(withText(string.cancel), isDialog())
+            EspressoInteractions.clickOn(withText(string.cancel), isDialog())
             assertThat(it.dialog, nullValue())
         }
     }

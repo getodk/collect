@@ -27,7 +27,7 @@ import org.odk.collect.shared.TempFiles
 import org.odk.collect.strings.R
 import org.odk.collect.strings.localization.getLocalizedQuantityString
 import org.odk.collect.testshared.FakeScheduler
-import org.odk.collect.testshared.Interactions
+import org.odk.collect.testshared.EspressoInteractions
 import org.odk.collect.testshared.RecyclerViewMatcher
 import org.odk.collect.testshared.RecyclerViewMatcher.Companion.withRecyclerView
 import org.odk.collect.testshared.RobolectricHelpers
@@ -55,7 +55,7 @@ class OfflineMapLayersImporterDialogFragmentTest {
         launchFragment().onFragment {
             scheduler.flush()
             assertThat(it.isVisible, equalTo(true))
-            Interactions.clickOn(withText(R.string.cancel))
+            EspressoInteractions.clickOn(withText(R.string.cancel))
             assertThat(it.isVisible, equalTo(false))
         }
     }
@@ -66,7 +66,7 @@ class OfflineMapLayersImporterDialogFragmentTest {
             scheduler.flush()
             assertThat(it.isVisible, equalTo(true))
             it.viewModel.loadLayersToImport(emptyList(), it.requireContext())
-            Interactions.clickOn(withId(org.odk.collect.maps.R.id.add_layer_button))
+            EspressoInteractions.clickOn(withId(org.odk.collect.maps.R.id.add_layer_button))
             scheduler.flush()
             RobolectricHelpers.runLooper()
             assertThat(it.isVisible, equalTo(false))
@@ -129,12 +129,12 @@ class OfflineMapLayersImporterDialogFragmentTest {
         launchFragment()
         scheduler.flush()
 
-        Interactions.clickOn(withId(org.odk.collect.maps.R.id.current_project_option))
+        EspressoInteractions.clickOn(withId(org.odk.collect.maps.R.id.current_project_option))
 
         onView(withId(org.odk.collect.maps.R.id.all_projects_option)).check(matches(not(isChecked())))
         onView(withId(org.odk.collect.maps.R.id.current_project_option)).check(matches(isChecked()))
 
-        Interactions.clickOn(withId(org.odk.collect.maps.R.id.all_projects_option))
+        EspressoInteractions.clickOn(withId(org.odk.collect.maps.R.id.all_projects_option))
 
         onView(withId(org.odk.collect.maps.R.id.all_projects_option)).check(matches(isChecked()))
         onView(withId(org.odk.collect.maps.R.id.current_project_option)).check(matches(not(isChecked())))
@@ -145,7 +145,7 @@ class OfflineMapLayersImporterDialogFragmentTest {
         val scenario = launchFragment()
         scheduler.flush()
 
-        Interactions.clickOn(withId(org.odk.collect.maps.R.id.current_project_option))
+        EspressoInteractions.clickOn(withId(org.odk.collect.maps.R.id.current_project_option))
 
         scenario.recreate()
 
@@ -268,7 +268,7 @@ class OfflineMapLayersImporterDialogFragmentTest {
 
         scheduler.flush()
 
-        Interactions.clickOn(withId(org.odk.collect.maps.R.id.add_layer_button))
+        EspressoInteractions.clickOn(withId(org.odk.collect.maps.R.id.add_layer_button))
         scheduler.flush()
 
         assertThat(referenceLayerRepository.projectLayers.size, equalTo(0))
@@ -291,8 +291,8 @@ class OfflineMapLayersImporterDialogFragmentTest {
 
         scheduler.flush()
 
-        Interactions.clickOn(withId(org.odk.collect.maps.R.id.current_project_option))
-        Interactions.clickOn(withId(org.odk.collect.maps.R.id.add_layer_button))
+        EspressoInteractions.clickOn(withId(org.odk.collect.maps.R.id.current_project_option))
+        EspressoInteractions.clickOn(withId(org.odk.collect.maps.R.id.add_layer_button))
         scheduler.flush()
 
         assertThat(referenceLayerRepository.sharedLayers.size, equalTo(0))

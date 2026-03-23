@@ -63,8 +63,9 @@ import org.odk.collect.strings.localization.getLocalizedQuantityString
 import org.odk.collect.strings.localization.getLocalizedString
 import org.odk.collect.testshared.AssertionFramework
 import org.odk.collect.testshared.ComposeAssertions
+import org.odk.collect.testshared.ComposeInteractions
 import org.odk.collect.testshared.EspressoAssertions
-import org.odk.collect.testshared.Interactions
+import org.odk.collect.testshared.EspressoInteractions
 import org.odk.collect.testshared.RecyclerViewMatcher
 import org.odk.collect.testshared.WaitFor.tryAgainOnFail
 import org.odk.collect.testshared.WaitFor.waitFor
@@ -128,6 +129,15 @@ abstract class Page<T : Page<T>> {
 
     fun assertText(stringID: Int, vararg formatArgs: Any): T {
         assertText(getTranslatedString(stringID, *formatArgs))
+        return this as T
+    }
+
+    fun assertText(
+        stringID: Int,
+        assertionFramework: AssertionFramework = AssertionFramework.ESPRESSO,
+        vararg formatArgs: Any
+    ): T {
+        assertText(getTranslatedString(stringID, *formatArgs), assertionFramework)
         return this as T
     }
 
@@ -269,9 +279,24 @@ abstract class Page<T : Page<T>> {
         return checkIsToastWithMessageDisplayed(getTranslatedString(id, *formatArgs))
     }
 
-    fun <D : Page<D>> clickOnString(stringID: Int, destination: D): D {
-        Interactions.clickOn(withText(getTranslatedString(stringID))) {
-            destination.assertOnPage()
+    @JvmOverloads
+    fun <D : Page<D>> clickOnString(
+        stringID: Int,
+        destination: D,
+        assertionFramework: AssertionFramework = AssertionFramework.ESPRESSO
+    ): D {
+        when (assertionFramework) {
+            AssertionFramework.ESPRESSO -> {
+                EspressoInteractions.clickOn(withText(getTranslatedString(stringID))) {
+                    destination.assertOnPage()
+                }
+            }
+
+            AssertionFramework.COMPOSE -> {
+                ComposeInteractions.clickOn(composeRule!!, hasText(getTranslatedString(stringID))) {
+                    destination.assertOnPage()
+                }
+            }
         }
 
         return destination
@@ -293,7 +318,7 @@ abstract class Page<T : Page<T>> {
     }
 
     fun clickOnText(text: String): T {
-        Interactions.clickOn(
+        EspressoInteractions.clickOn(
             allOf(
                 withText(text),
                 withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)
@@ -303,7 +328,7 @@ abstract class Page<T : Page<T>> {
     }
 
     fun clickOnId(id: Int): T {
-        Interactions.clickOn(withId(id))
+        EspressoInteractions.clickOn(withId(id))
         return this as T
     }
 
@@ -315,20 +340,20 @@ abstract class Page<T : Page<T>> {
     fun clickOKOnDialog(): T {
         closeSoftKeyboard() // Make sure to avoid issues with keyboard being up
         waitForDialogToSettle()
-        Interactions.clickOn(withId(android.R.id.button1), root = isDialog())
+        EspressoInteractions.clickOn(withId(android.R.id.button1), root = isDialog())
         return this as T
     }
 
     fun <D : Page<D>?> clickOKOnDialog(destination: D): D {
         closeSoftKeyboard() // Make sure to avoid issues with keyboard being up
         waitForDialogToSettle()
-        Interactions.clickOn(withId(android.R.id.button1), root = isDialog())
+        EspressoInteractions.clickOn(withId(android.R.id.button1), root = isDialog())
         return destination!!.assertOnPage()
     }
 
     fun clickOnTextInDialog(text: String): T {
         waitForDialogToSettle()
-        Interactions.clickOn(withText(text), root = isDialog())
+        EspressoInteractions.clickOn(withText(text), root = isDialog())
         return this as T
     }
 
@@ -356,7 +381,7 @@ abstract class Page<T : Page<T>> {
     }
 
     fun clickOnAreaWithIndex(clazz: String?, index: Int): T {
-        Interactions.clickOn(withIndex(withClassName(endsWith(clazz)), index))
+        EspressoInteractions.clickOn(withIndex(withClassName(endsWith(clazz)), index))
         return this as T
     }
 
@@ -545,7 +570,7 @@ abstract class Page<T : Page<T>> {
     }
 
     fun clickOnContentDescription(string: Int): T {
-        Interactions.clickOn(withContentDescription(string))
+        EspressoInteractions.clickOn(withContentDescription(string))
         return this as T
     }
 
@@ -569,7 +594,7 @@ abstract class Page<T : Page<T>> {
     }
 
     fun closeSnackbar(): T {
-        Interactions.clickOn(withContentDescription(org.odk.collect.strings.R.string.close_snackbar))
+        EspressoInteractions.clickOn(withContentDescription(org.odk.collect.strings.R.string.close_snackbar))
         return this as T
     }
 
@@ -578,7 +603,7 @@ abstract class Page<T : Page<T>> {
     }
 
     fun clickOptionsIcon(expectedOptionString: String): T {
-        Interactions.clickOn(OVERFLOW_BUTTON_MATCHER) {
+        EspressoInteractions.clickOn(OVERFLOW_BUTTON_MATCHER) {
             assertText(expectedOptionString)
         }
 
@@ -623,7 +648,7 @@ abstract class Page<T : Page<T>> {
     }
 
     fun clickOnTextInPopup(text: Int): T {
-        Interactions.clickOn(withText(text), root = isPlatformPopup())
+        EspressoInteractions.clickOn(withText(text), root = isPlatformPopup())
         return this as T
     }
 
