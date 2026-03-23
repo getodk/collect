@@ -50,9 +50,8 @@ fun FormEnd(
         )
 
         if (finalizeEnabled) {
-            val (icon, title, message) = getWarning(
-            )
-            EditWarning(icon = icon, title = title, message = message)
+            val (icon, title, message) = getWarning()
+            EditWarning(icon = painterResource(icon), title = title, message = message)
         }
 
         Row(
@@ -118,9 +117,8 @@ fun FormEnd(
     }
 }
 
-@Composable
-private fun getWarning(): Triple<Painter, String, String> {
-    return Triple(painterResource(id = R.drawable.ic_edit_24), "", "")
+private fun getWarning(): Triple<Int, String, String> {
+    return Triple(R.drawable.ic_edit_24, "", "")
 }
 
 @Composable

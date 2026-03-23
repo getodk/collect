@@ -22,7 +22,7 @@ public class FormEndPage extends Page<FormEndPage> {
     }
 
     public <D extends Page<D>> D clickSaveAsDraft(D destination) {
-        return clickOnString(org.odk.collect.strings.R.string.save_as_draft, destination);
+        return clickOnString(org.odk.collect.strings.R.string.save_as_draft, destination, AssertionFramework.COMPOSE);
     }
 
     public MainMenuPage clickSaveAsDraft() {
