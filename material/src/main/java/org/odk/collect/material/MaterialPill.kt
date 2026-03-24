@@ -103,8 +103,8 @@ open class MaterialPill(context: Context, attrs: AttributeSet?) :
                 text = text,
                 icon = icon,
                 backgroundColor = backgroundColor,
-                textColor = iconTint,
-                iconColor = textColor
+                textColor = textColor,
+                iconColor = iconTint
             )
         }
     }
