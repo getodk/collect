@@ -16,7 +16,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 
 /**
@@ -35,6 +37,9 @@ fun Pill(
 ) {
     Box(
         modifier = modifier
+            .semantics(mergeDescendants = false) {
+                contentDescription = text
+            }
             .clip(MaterialTheme.shapes.small)
             .background(backgroundColor)
             .padding(
@@ -49,7 +54,7 @@ fun Pill(
                 Icon(
                     modifier = Modifier.size(dimensionResource(org.odk.collect.androidshared.R.dimen.margin_standard)),
                     painter = painterResource(icon),
-                    contentDescription = stringResource(org.odk.collect.strings.R.string.turn_off_flashlight),
+                    contentDescription = null,
                     tint = iconColor
                 )
             }
