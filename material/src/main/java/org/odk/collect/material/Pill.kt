@@ -2,7 +2,6 @@ package org.odk.collect.material
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -17,7 +16,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 
@@ -35,7 +33,8 @@ fun Pill(
     textColor: Color = MaterialTheme.colorScheme.onPrimaryContainer,
     iconColor: Color = MaterialTheme.colorScheme.onPrimaryContainer
 ) {
-    Box(
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .semantics(mergeDescendants = false) {
                 contentDescription = text
@@ -49,21 +48,19 @@ fun Pill(
                 )
             )
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(
-                modifier = Modifier.size(dimensionResource(org.odk.collect.androidshared.R.dimen.margin_standard)),
-                painter = painterResource(icon),
-                contentDescription = null,
-                tint = iconColor
-            )
+        Icon(
+            modifier = Modifier.size(dimensionResource(org.odk.collect.androidshared.R.dimen.margin_standard)),
+            painter = painterResource(icon),
+            contentDescription = null,
+            tint = iconColor
+        )
 
-            Text(
-                modifier = Modifier.padding(start = dimensionResource(org.odk.collect.androidshared.R.dimen.margin_extra_small)),
-                text = text,
-                style = MaterialTheme.typography.labelLarge,
-                color = textColor
-            )
-        }
+        Text(
+            modifier = Modifier.padding(start = dimensionResource(org.odk.collect.androidshared.R.dimen.margin_extra_small)),
+            text = text,
+            style = MaterialTheme.typography.labelLarge,
+            color = textColor
+        )
     }
 }
 
