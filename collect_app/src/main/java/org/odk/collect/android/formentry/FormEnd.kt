@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -59,7 +60,12 @@ fun FormEnd(
                 saveAsDraftEnabled
             )
 
-            EditWarning(icon = icon, title = title, message = message)
+            EditWarning(
+                icon = icon,
+                title = title,
+                message = message,
+                errorBackground = !isEditableAfterFinalization
+            )
         }
 
         Row(
@@ -129,8 +135,18 @@ fun FormEnd(
 private fun EditWarning(
     @DrawableRes icon: Int,
     @StringRes title: Int,
-    @StringRes message: Int?
+    @StringRes message: Int?,
+    errorBackground: Boolean
 ) {
+    val cardColors = if (errorBackground) {
+        CardDefaults.cardColors().copy(
+            containerColor = MaterialTheme.colorScheme.errorContainer,
+            contentColor = MaterialTheme.colorScheme.onErrorContainer
+        )
+    } else {
+        CardDefaults.cardColors()
+    }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -140,7 +156,9 @@ private fun EditWarning(
                 set(EditWarningSemantics.iconProperty, icon)
                 set(EditWarningSemantics.titleProperty, title)
                 set(EditWarningSemantics.messageProperty, message)
-            }
+                set(EditWarningSemantics.errorBackgroundProperty, errorBackground)
+            },
+        colors = cardColors
     ) {
         Row(modifier = Modifier.padding(marginStandard())) {
             Icon(
@@ -214,6 +232,7 @@ object EditWarningSemantics {
     val iconProperty = SemanticsPropertyKey<Int>("icon")
     val titleProperty = SemanticsPropertyKey<Int>("title")
     val messageProperty = SemanticsPropertyKey<Int?>("message")
+    val errorBackgroundProperty = SemanticsPropertyKey<Boolean>("errorBackground")
 }
 
 @Preview

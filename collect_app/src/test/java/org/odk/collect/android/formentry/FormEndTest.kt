@@ -3,6 +3,7 @@ package org.odk.collect.android.formentry
 import android.app.Application
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
@@ -190,10 +191,11 @@ class FormEndTest {
             .assert(hasIcon(drawable.ic_edit_off_24))
             .assert(hasTitle(string.form_editing_disabled_after_finalizing))
             .assert(hasMessage(string.form_editing_disabled_hint))
+            .assert(hasErrorBackground(true))
     }
 
     @Test
-    fun `does show warning message when form is not editable and save as draft is disabled`() {
+    fun `does not show warning message when form is not editable and save as draft is disabled`() {
         composeTestRule.setContent {
             FormEnd(
                 formTitle = "blah",
@@ -209,6 +211,7 @@ class FormEndTest {
             .assert(hasIcon(drawable.ic_edit_off_24))
             .assert(hasTitle(string.form_editing_disabled_after_finalizing))
             .assert(hasMessage(null))
+            .assert(hasErrorBackground(true))
     }
 
     @Test
@@ -228,6 +231,7 @@ class FormEndTest {
             .assert(hasIcon(drawable.ic_edit_off_24))
             .assert(hasTitle(string.form_editing_disabled_after_sending))
             .assert(hasMessage(string.form_editing_disabled_hint))
+            .assert(hasErrorBackground(true))
     }
 
     @Test
@@ -247,6 +251,7 @@ class FormEndTest {
             .assert(hasIcon(drawable.ic_edit_24))
             .assert(hasTitle(string.form_editing_enabled_after_finalizing))
             .assert(hasMessage(string.form_editing_enabled_after_finalizing_hint))
+            .assert(hasErrorBackground(false))
     }
 
     @Test
@@ -266,6 +271,7 @@ class FormEndTest {
             .assert(hasIcon(drawable.ic_edit_24))
             .assert(hasTitle(string.form_editing_enabled_after_sending))
             .assert(hasMessage(string.form_editing_enabled_after_sending_hint))
+            .assert(hasErrorBackground(false))
     }
 
     @Test
@@ -296,4 +302,11 @@ private fun hasTitle(@StringRes title: Int): SemanticsMatcher {
 
 private fun hasMessage(@StringRes message: Int?): SemanticsMatcher {
     return SemanticsMatcher.expectValue(EditWarningSemantics.messageProperty, message)
+}
+
+private fun hasErrorBackground(errorBackground: Boolean): SemanticsMatcher {
+    return SemanticsMatcher.expectValue(
+        EditWarningSemantics.errorBackgroundProperty,
+        errorBackground
+    )
 }
