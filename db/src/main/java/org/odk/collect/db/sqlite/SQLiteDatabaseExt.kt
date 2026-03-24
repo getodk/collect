@@ -67,7 +67,7 @@ object SQLiteDatabaseExt {
         this.execSQL("""ALTER TABLE "$oldTable" RENAME TO "$newTable";""")
     }
 
-    fun SQLiteDatabase.copyTableContent(oldTable: String, newTable: String, columns: String) {
-        this.execSQL("""INSERT INTO "$newTable" SELECT $columns FROM "$oldTable";""")
+    fun SQLiteDatabase.copyTableContent(oldTable: String, newTable: String, columns: List<String>) {
+        this.execSQL("""INSERT INTO "$newTable" SELECT ${columns.joinToString { "\"$it\"" }} FROM "$oldTable";""")
     }
 }

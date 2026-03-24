@@ -309,23 +309,13 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String, private val c
     }
 
     private fun updatePropertyColumns(list: String, entity: Entity) {
-        var columnNames = databaseConnection.withConnection {
+        val columnNames = databaseConnection.withConnection {
             readableDatabase.getColumnNames(quote(list))
         }
 
         val expectedColumns = entity.properties
             .map { EntitiesTable.getPropertyColumn(it.first) }
             .distinctBy { it.lowercase() }
-
-        val newColumns = expectedColumns
-            .filterNot { columnName ->
-                columnNames.any {
-                    it.equals(
-                        columnName,
-                        ignoreCase = true
-                    )
-                }
-            }
 
         val removedColumns = columnNames
             .filter { it.startsWith(EntitiesTable.COLUMN_PROPERTY_PREFIX, ignoreCase = true) }
@@ -338,14 +328,17 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String, private val c
                 }
             }
 
-        if (newColumns.isNotEmpty()) {
-            addPropertyColumns(list, newColumns)
-        }
+        val newColumns = expectedColumns
+            .filterNot { columnName ->
+                columnNames.any {
+                    it.equals(
+                        columnName,
+                        ignoreCase = true
+                    )
+                }
+            }
 
         if (removedColumns.isNotEmpty()) {
-            columnNames = databaseConnection.withConnection {
-                readableDatabase.getColumnNames(quote(list))
-            }
             val remainingColumns = columnNames - removedColumns.toSet()
 
             val tempTable = "${list}_temp"
@@ -357,12 +350,15 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String, private val c
                 }
             )
 
-            val columnList = remainingColumns.joinToString { "\"$it\"" }
             databaseConnection.resetTransaction {
-                copyTableContent(list, tempTable, columnList)
+                copyTableContent(list, tempTable, remainingColumns)
                 dropTable(list)
                 renameTable(tempTable, list)
             }
+        }
+
+        if (newColumns.isNotEmpty()) {
+            addPropertyColumns(list, newColumns)
         }
     }
 
