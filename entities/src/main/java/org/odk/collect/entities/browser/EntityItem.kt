@@ -1,6 +1,8 @@
 package org.odk.collect.entities.browser
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -8,70 +10,51 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.Visibility
+import androidx.compose.ui.unit.dp
 import org.odk.collect.entities.storage.Entity
 import org.odk.collect.material.Pill
 
 @Composable
 fun EntityItem(modifier: Modifier = Modifier, entity: Entity.Saved) {
-    ConstraintLayout(modifier = modifier.fillMaxWidth()) {
-        val (offlinePill, label, id, properties) = createRefs()
+    val marginStandard =
+        dimensionResource(org.odk.collect.androidshared.R.dimen.margin_standard)
 
-        val marginStandard =
-            dimensionResource(org.odk.collect.androidshared.R.dimen.margin_standard)
+    Column(
+        modifier
+            .fillMaxWidth()
+            .padding(marginStandard)
+    ) {
         val marginSmall = dimensionResource(org.odk.collect.androidshared.R.dimen.margin_small)
         val marginExtraSmall =
             dimensionResource(org.odk.collect.androidshared.R.dimen.margin_extra_small)
 
-        val guidelineStart = createGuidelineFromStart(marginStandard)
-
         val offline = entity.state == Entity.State.OFFLINE
-        Pill(
-            modifier = Modifier
-                .constrainAs(offlinePill) {
-                    top.linkTo(parent.top, margin = marginStandard)
-                    start.linkTo(guidelineStart)
-                    visibility = if (offline) Visibility.Visible else Visibility.Gone
-                },
-            text = stringResource(org.odk.collect.strings.R.string.offline),
-            icon = org.odk.collect.icons.R.drawable.ic_baseline_wifi_off_24,
-            backgroundColor = MaterialTheme.colorScheme.surfaceContainerLowest
-        )
+        if (offline) {
+            Pill(
+                text = stringResource(org.odk.collect.strings.R.string.offline),
+                icon = org.odk.collect.icons.R.drawable.ic_baseline_wifi_off_24,
+                backgroundColor = MaterialTheme.colorScheme.surfaceContainerLowest
+            )
+        }
 
         Text(
-            modifier = Modifier
-                .constrainAs(label) {
-                    top.linkTo(
-                        offlinePill.bottom,
-                        margin = marginSmall,
-                        goneMargin = marginStandard
-                    )
-                    start.linkTo(guidelineStart)
-                },
             text = entity.label ?: "",
-            style = MaterialTheme.typography.titleMedium
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(top = if (offline) marginSmall else 0.dp)
         )
 
         Text(
-            modifier = Modifier.constrainAs(id) {
-                top.linkTo(label.bottom, margin = marginExtraSmall)
-                start.linkTo(guidelineStart)
-            },
             text = "${entity.id} (${entity.version})",
-            style = MaterialTheme.typography.labelMedium
+            style = MaterialTheme.typography.labelMedium,
+            modifier = Modifier.padding(top = marginExtraSmall)
         )
 
         Text(
-            modifier = Modifier.constrainAs(properties) {
-                top.linkTo(id.bottom, margin = marginExtraSmall)
-                start.linkTo(guidelineStart)
-                bottom.linkTo(parent.bottom, margin = marginStandard)
-            },
             text = entity.properties
                 .sortedBy { it.first }
                 .joinToString(separator = "\n") { "${it.first}: ${it.second}" },
-            style = MaterialTheme.typography.bodyMedium
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier.padding(top = marginExtraSmall)
         )
     }
 }
