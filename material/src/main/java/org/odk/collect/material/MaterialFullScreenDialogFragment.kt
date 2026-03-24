@@ -7,9 +7,8 @@ import android.view.WindowManager
 import androidx.activity.ComponentDialog
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.Toolbar
-import androidx.core.view.WindowCompat
 import androidx.fragment.app.DialogFragment
-import org.odk.collect.androidshared.ui.EdgeToEdge.addSystemBarInsetMargins
+import org.odk.collect.androidshared.ui.EdgeToEdge.handleEdgeToEdge
 
 /**
  * Provides an implementation of Material's "Full Screen Dialog"
@@ -43,7 +42,7 @@ abstract class MaterialFullScreenDialogFragment : DialogFragment() {
                 }
             })
 
-            WindowCompat.enableEdgeToEdge(this)
+            handleEdgeToEdge(requireContext())
         }
     }
 
@@ -53,8 +52,6 @@ abstract class MaterialFullScreenDialogFragment : DialogFragment() {
                 onCloseClicked()
             }
         }
-
-        view.addSystemBarInsetMargins()
     }
 
     protected abstract fun onCloseClicked()
