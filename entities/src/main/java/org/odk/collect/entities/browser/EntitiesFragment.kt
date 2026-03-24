@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.getValue
@@ -34,11 +35,9 @@ class EntitiesFragment(private val viewModelFactory: ViewModelProvider.Factory) 
             Surface {
                 val entities by entitiesViewModel.getEntities(list).observeAsState(emptyList())
                 LazyColumn {
-                    entities.forEach {
-                        item {
-                            EntityItem(entity = it)
-                            HorizontalDivider()
-                        }
+                    items(entities) {
+                        EntityItem(entity = it)
+                        HorizontalDivider()
                     }
                 }
             }
