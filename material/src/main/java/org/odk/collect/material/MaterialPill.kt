@@ -20,11 +20,7 @@ import org.odk.collect.material.databinding.PillBinding
 open class MaterialPill(context: Context, attrs: AttributeSet?) :
     FrameLayout(context, attrs) {
 
-    var text: String = ""
-        set(value) {
-            field = value
-            render()
-        }
+    private var text: String = ""
 
     @DrawableRes
     private var icon: Int? = null
