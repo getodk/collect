@@ -127,13 +127,19 @@ class InMemEntitiesRepository(private val clock: () -> Long = { 0 }) : EntitiesR
         val properties = listProperties.getOrPut(list) {
             mutableSetOf()
         }
-        properties.addAll(
-            entity
-                .properties
-                .map { it.first }
-                .distinctBy { it.lowercase() }
-                .filterNot { properties.any { property -> property.equals(it, ignoreCase = true) } }
-        )
+
+        val expectedProperties = entity
+            .properties
+            .map { it.first }
+            .distinctBy { it.lowercase() }
+
+        val newProperties = expectedProperties
+            .filterNot { properties.any { property -> property.equals(it, ignoreCase = true) } }
+        properties.addAll(newProperties)
+
+        val removedProperties = properties
+            .filter { property -> expectedProperties.none { it.equals(property, ignoreCase = true) } }
+        properties.removeAll(removedProperties.toSet())
     }
 
     private fun mergeProperties(

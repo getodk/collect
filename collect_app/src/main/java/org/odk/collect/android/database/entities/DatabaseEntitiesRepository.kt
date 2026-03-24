@@ -306,13 +306,15 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String, private val c
     }
 
     private fun updatePropertyColumns(list: String, entity: Entity) {
-        val columnNames = databaseConnection.withConnection {
+        var columnNames = databaseConnection.withConnection {
             readableDatabase.getColumnNames(quote(list))
         }
 
-        val missingColumns = entity.properties
+        val expectedColumns = entity.properties
             .map { EntitiesTable.getPropertyColumn(it.first) }
             .distinctBy { it.lowercase() }
+
+        val newColumns = expectedColumns
             .filterNot { columnName ->
                 columnNames.any {
                     it.equals(
@@ -322,15 +324,53 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String, private val c
                 }
             }
 
-        if (missingColumns.isNotEmpty()) {
-            databaseConnection.resetTransaction {
-                missingColumns.forEach {
-                    execSQL(
-                        """
-                        ALTER TABLE "$list" ADD "$it" text NOT NULL DEFAULT "";
-                        """.trimIndent()
+        val removedColumns = columnNames
+            .filter { it.startsWith(EntitiesTable.COLUMN_PROPERTY_PREFIX, ignoreCase = true) }
+            .filterNot { columnName ->
+                expectedColumns.any {
+                    it.equals(
+                        columnName,
+                        ignoreCase = true
                     )
                 }
+            }
+
+        if (newColumns.isNotEmpty()) {
+            addPropertyColumns(list, newColumns)
+        }
+
+        if (removedColumns.isNotEmpty()) {
+            columnNames = databaseConnection.withConnection {
+                readableDatabase.getColumnNames(quote(list))
+            }
+            val remainingColumns = columnNames - removedColumns.toSet()
+
+            val tempTable = "${list}_temp"
+            createList(tempTable)
+            addPropertyColumns(
+                tempTable,
+                remainingColumns.filter {
+                    it.startsWith(EntitiesTable.COLUMN_PROPERTY_PREFIX, ignoreCase = true)
+                }
+            )
+
+            val columnList = remainingColumns.joinToString { "\"$it\"" }
+            databaseConnection.resetTransaction {
+                execSQL("""INSERT INTO "$tempTable" SELECT $columnList FROM "$list";""")
+                execSQL("""DROP TABLE "$list";""")
+                execSQL("""ALTER TABLE "$tempTable" RENAME TO "$list";""")
+            }
+        }
+    }
+
+    private fun addPropertyColumns(list: String, columns: List<String>) {
+        databaseConnection.withConnection {
+            columns.forEach {
+                writableDatabase.execSQL(
+                    """
+                    ALTER TABLE "$list" ADD "$it" text NOT NULL DEFAULT "";
+                    """.trimIndent()
+                )
             }
         }
     }
