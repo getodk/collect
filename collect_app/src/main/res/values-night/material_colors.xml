@@ -8,8 +8,8 @@
 
     <color name="colorError">#ba1a1a</color>
     <!-- <color name="colorOnError">#ffffff</color> -->
-    <color name="colorErrorContainer">#ffb4ab</color>
-    <color name="colorOnErrorContainer">#690005</color>
+    <color name="colorErrorContainer">@color/colorErrorContainerDark</color>
+    <color name="colorOnErrorContainer">@color/colorOnErrorContainerDark</color>
 
     <color name="colorSurface">@color/colorSurfaceDark</color>
     <color name="colorSurfaceVariant">#40484c</color>

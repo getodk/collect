@@ -30,7 +30,9 @@ fun CollectTheme(content: @Composable () -> Unit) {
         onSurface = colorResource(R.color.colorOnSurfaceLight),
         primaryContainer = colorResource(R.color.colorPrimaryContainerLight),
         onPrimaryContainer = colorResource(R.color.colorOnPrimaryContainerLight),
-        surfaceContainerHighest = colorResource(R.color.colorSurfaceContainerHighestLight)
+        surfaceContainerHighest = colorResource(R.color.colorSurfaceContainerHighestLight),
+        errorContainer = colorResource(R.color.colorErrorContainerLight),
+        onErrorContainer = colorResource(R.color.colorOnErrorContainerLight)
     )
 
     val darkColors = darkColorScheme(
@@ -40,7 +42,9 @@ fun CollectTheme(content: @Composable () -> Unit) {
         onSurface = colorResource(R.color.colorOnSurfaceDark),
         primaryContainer = colorResource(R.color.colorPrimaryContainerDark),
         onPrimaryContainer = colorResource(R.color.colorOnPrimaryContainerDark),
-        surfaceContainerHighest = colorResource(R.color.colorSurfaceContainerHighestDark)
+        surfaceContainerHighest = colorResource(R.color.colorSurfaceContainerHighestDark),
+        errorContainer = colorResource(R.color.colorErrorContainerDark),
+        onErrorContainer = colorResource(R.color.colorOnErrorContainerDark)
     )
 
     val colorScheme = if (isSystemInDarkTheme()) darkColors else lightColors
