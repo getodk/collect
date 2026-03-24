@@ -17,6 +17,7 @@ import org.odk.collect.material.databinding.PillBinding
 /**
  * [android.view.View] wrapper for [Pill]
  */
+@Deprecated("Use org.odk.collect.material.Pill instead")
 open class MaterialPill(context: Context, attrs: AttributeSet?) :
     FrameLayout(context, attrs) {
 
