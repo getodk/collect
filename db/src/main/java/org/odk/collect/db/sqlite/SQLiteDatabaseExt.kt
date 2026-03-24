@@ -47,15 +47,27 @@ object SQLiteDatabaseExt {
         if (default != null) {
             this.execSQL(
                 """
-                ALTER TABLE $table ADD $column $type DEFAULT $default;
+                ALTER TABLE "$table" ADD "$column" $type DEFAULT $default;
                 """.trimIndent()
             )
         } else {
             this.execSQL(
                 """
-                ALTER TABLE $table ADD $column $type;
+                ALTER TABLE "$table" ADD "$column" $type;
                 """.trimIndent()
             )
         }
+    }
+
+    fun SQLiteDatabase.dropTable(table: String) {
+        this.execSQL("""DROP TABLE "$table";""")
+    }
+
+    fun SQLiteDatabase.renameTable(oldTable: String, newTable: String) {
+        this.execSQL("""ALTER TABLE "$oldTable" RENAME TO "$newTable";""")
+    }
+
+    fun SQLiteDatabase.copyTableContent(oldTable: String, newTable: String, columns: String) {
+        this.execSQL("""INSERT INTO "$newTable" SELECT $columns FROM "$oldTable";""")
     }
 }
