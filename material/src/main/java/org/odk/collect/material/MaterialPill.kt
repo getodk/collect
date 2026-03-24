@@ -99,13 +99,15 @@ open class MaterialPill(context: Context, attrs: AttributeSet?) :
             val textColor =
                 textColor?.let { Color(it) } ?: MaterialTheme.colorScheme.onPrimaryContainer
 
-            Pill(
-                text = text,
-                icon = icon,
-                backgroundColor = backgroundColor,
-                textColor = textColor,
-                iconColor = iconTint
-            )
+            icon?.let {
+                Pill(
+                    text = text,
+                    icon = it,
+                    backgroundColor = backgroundColor,
+                    textColor = textColor,
+                    iconColor = iconTint
+                )
+            }
         }
     }
 }

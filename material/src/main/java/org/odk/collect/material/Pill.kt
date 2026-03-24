@@ -30,7 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 fun Pill(
     modifier: Modifier = Modifier,
     text: String,
-    @DrawableRes icon: Int? = null,
+    @DrawableRes icon: Int,
     backgroundColor: Color = MaterialTheme.colorScheme.primaryContainer,
     textColor: Color = MaterialTheme.colorScheme.onPrimaryContainer,
     iconColor: Color = MaterialTheme.colorScheme.onPrimaryContainer
@@ -50,14 +50,12 @@ fun Pill(
             )
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            if (icon != null) {
-                Icon(
-                    modifier = Modifier.size(dimensionResource(org.odk.collect.androidshared.R.dimen.margin_standard)),
-                    painter = painterResource(icon),
-                    contentDescription = null,
-                    tint = iconColor
-                )
-            }
+            Icon(
+                modifier = Modifier.size(dimensionResource(org.odk.collect.androidshared.R.dimen.margin_standard)),
+                painter = painterResource(icon),
+                contentDescription = null,
+                tint = iconColor
+            )
 
             Text(
                 modifier = Modifier.padding(start = dimensionResource(org.odk.collect.androidshared.R.dimen.margin_extra_small)),
