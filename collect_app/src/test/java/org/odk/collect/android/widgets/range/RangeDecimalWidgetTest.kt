@@ -132,6 +132,7 @@ class RangeDecimalWidgetTest : QuestionWidgetTest<RangeDecimalWidget, DecimalDat
 
     override fun usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         formEntryPrompt = MockFormEntryPromptBuilder(formEntryPrompt)
+            .withAnswer(DecimalData(5.0))
             .withReadOnly(true)
             .build()
         createWidget()

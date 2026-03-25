@@ -132,6 +132,7 @@ class RangeIntegerWidgetTest : QuestionWidgetTest<RangeIntegerWidget, IntegerDat
 
     override fun usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         formEntryPrompt = MockFormEntryPromptBuilder(formEntryPrompt)
+            .withAnswer(IntegerData(5))
             .withReadOnly(true)
             .build()
         createWidget()

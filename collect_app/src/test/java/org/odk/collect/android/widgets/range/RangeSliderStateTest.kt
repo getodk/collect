@@ -19,7 +19,7 @@ class RangeSliderStateTest {
 
     @Test
     fun `sets sliderValue to null when answer is out of range`() {
-        mockQuestion(1F, 10F, 1F)
+        mockIntQuestion(1, 10, 1)
 
         val prompt = promptBuilder.withAnswer(IntegerData(0)).build()
         val state = RangeSliderState.fromPrompt(prompt)
@@ -29,7 +29,7 @@ class RangeSliderStateTest {
 
     @Test
     fun `sets sliderValue to null when range is invalid`() {
-        mockQuestion(0F, 10F, 15F)
+        mockIntQuestion(0, 10, 15)
 
         val prompt = promptBuilder.withAnswer(IntegerData(5)).build()
         val state = RangeSliderState.fromPrompt(prompt)
@@ -39,7 +39,7 @@ class RangeSliderStateTest {
 
     @Test
     fun `maps real value correctly for ascending range`() {
-        mockQuestion(0F, 10F, 1F)
+        mockIntQuestion(0, 10, 1)
 
         val prompt = promptBuilder
             .withAnswer(IntegerData(7))
@@ -49,12 +49,12 @@ class RangeSliderStateTest {
         val state = RangeSliderState.fromPrompt(prompt)
 
         assertThat(state.sliderValue!!.stripTrailingZeros(), equalTo(0.7.toBigDecimal()))
-        assertThat(state.realValue, equalTo(7.0.toBigDecimal()))
+        assertThat(state.realValue, equalTo(7.toBigDecimal()))
     }
 
     @Test
     fun `maps real value correctly for descending range`() {
-        mockQuestion(10F, 0F, 1F)
+        mockIntQuestion(10, 0, 1)
 
         val prompt = promptBuilder
             .withAnswer(IntegerData(7))
@@ -64,12 +64,12 @@ class RangeSliderStateTest {
         val state = RangeSliderState.fromPrompt(prompt)
 
         assertThat(state.sliderValue!!.stripTrailingZeros(), equalTo(0.3.toBigDecimal()))
-        assertThat(state.realValue, equalTo(7.0.toBigDecimal()))
+        assertThat(state.realValue, equalTo(7.toBigDecimal()))
     }
 
     @Test
     fun `returns null for realValue when sliderValue is null`() {
-        mockQuestion(0F, 10F, 1F)
+        mockIntQuestion(0, 10, 1)
 
         val prompt = promptBuilder
             .withAnswer(null)
@@ -83,7 +83,7 @@ class RangeSliderStateTest {
 
     @Test
     fun `sets ranges correctly for ascending range`() {
-        mockQuestion(0F, 10F, 1F)
+        mockIntQuestion(0, 10, 1)
 
         val prompt = promptBuilder
             .withDataType(DATATYPE_INTEGER)
@@ -91,16 +91,16 @@ class RangeSliderStateTest {
 
         val state = RangeSliderState.fromPrompt(prompt)
 
-        assertThat(state.rangeStart, equalTo(0.0.toBigDecimal()))
+        assertThat(state.rangeStart, equalTo(0.toBigDecimal()))
         assertThat(state.startLabel, equalTo("0"))
 
-        assertThat(state.rangeEnd, equalTo(10.0.toBigDecimal()))
+        assertThat(state.rangeEnd, equalTo(10.toBigDecimal()))
         assertThat(state.endLabel, equalTo("10"))
     }
 
     @Test
     fun `sets ranges correctly for descending range`() {
-        mockQuestion(10F, 0F, 1F)
+        mockIntQuestion(10, 0, 1)
 
         val prompt = promptBuilder
             .withDataType(DATATYPE_INTEGER)
@@ -108,16 +108,16 @@ class RangeSliderStateTest {
 
         val state = RangeSliderState.fromPrompt(prompt)
 
-        assertThat(state.rangeStart, equalTo(10.0.toBigDecimal()))
+        assertThat(state.rangeStart, equalTo(10.toBigDecimal()))
         assertThat(state.startLabel, equalTo("10"))
 
-        assertThat(state.rangeEnd, equalTo(0.0.toBigDecimal()))
+        assertThat(state.rangeEnd, equalTo(0.toBigDecimal()))
         assertThat(state.endLabel, equalTo("0"))
     }
 
     @Test
     fun `formats ranges correctly for decimal data`() {
-        mockQuestion(0.5F, 10.5F, 0.5F)
+        mockDecimalQuestion(0.5F, 10.5F, 0.5F)
 
         val prompt = promptBuilder
             .withDataType(DATATYPE_DECIMAL)
@@ -131,7 +131,7 @@ class RangeSliderStateTest {
 
     @Test
     fun `calculates numOfSteps correctly for integer data`() {
-        mockQuestion(0F, 10F, 1F)
+        mockIntQuestion(0, 10, 1)
 
         val prompt = promptBuilder
             .withDataType(DATATYPE_INTEGER)
@@ -148,7 +148,7 @@ class RangeSliderStateTest {
 
     @Test
     fun `calculates numOfSteps correctly for decimal data`() {
-        mockQuestion(0F, 1F, 0.2F)
+        mockDecimalQuestion(0F, 1F, 0.2F)
 
         val prompt = promptBuilder
             .withDataType(DATATYPE_DECIMAL)
@@ -161,7 +161,7 @@ class RangeSliderStateTest {
 
     @Test
     fun `treats negative step as positive`() {
-        mockQuestion(0F, 10F, -1F)
+        mockIntQuestion(0, 10, -1)
 
         val prompt = promptBuilder
             .withDataType(DATATYPE_INTEGER)
@@ -175,7 +175,7 @@ class RangeSliderStateTest {
 
     @Test
     fun `returns empty valueLabel when realValue is null`() {
-        mockQuestion(0F, 10F, 1F)
+        mockIntQuestion(0, 10, 1)
 
         val prompt = promptBuilder
             .withAnswer(null)
@@ -189,7 +189,7 @@ class RangeSliderStateTest {
 
     @Test
     fun `formats valueLabel as integer for discrete data`() {
-        mockQuestion(0F, 10F, 1F)
+        mockIntQuestion(0, 10, 1)
 
         val prompt = promptBuilder
             .withAnswer(IntegerData(5))
@@ -203,7 +203,7 @@ class RangeSliderStateTest {
 
     @Test
     fun `formats valueLabel as decimal for non-discrete data`() {
-        mockQuestion(0F, 10F, 1F)
+        mockDecimalQuestion(0F, 10F, 1F)
 
         val prompt = promptBuilder
             .withAnswer(IntegerData(5))
@@ -217,7 +217,7 @@ class RangeSliderStateTest {
 
     @Test
     fun `returns true for isDiscrete when dataType is integer`() {
-        mockQuestion(0F, 10F, 1F)
+        mockIntQuestion(0, 10, 1)
 
         val prompt = promptBuilder
             .withDataType(DATATYPE_INTEGER)
@@ -229,7 +229,7 @@ class RangeSliderStateTest {
 
     @Test
     fun `returns false for isDiscrete when dataType is decimal`() {
-        mockQuestion(0F, 10F, 1F)
+        mockDecimalQuestion(0F, 10F, 1F)
 
         val prompt = promptBuilder
             .withDataType(DATATYPE_DECIMAL)
@@ -241,7 +241,7 @@ class RangeSliderStateTest {
 
     @Test
     fun `returns true for isEnabled when prompt is not readOnly`() {
-        mockQuestion(0F, 10F, 1F)
+        mockIntQuestion(0, 10, 1)
 
         val prompt = promptBuilder
             .withDataType(DATATYPE_INTEGER)
@@ -254,7 +254,7 @@ class RangeSliderStateTest {
 
     @Test
     fun `returns false for isEnabled when prompt is readOnly`() {
-        mockQuestion(0F, 10F, 1F)
+        mockIntQuestion(0, 10, 1)
 
         val prompt = promptBuilder
             .withDataType(DATATYPE_INTEGER)
@@ -268,7 +268,7 @@ class RangeSliderStateTest {
 
     @Test
     fun `returns false for isEnabled when range is invalid`() {
-        mockQuestion(0F, 10F, 3F)
+        mockIntQuestion(0, 10, 3)
 
         val prompt = promptBuilder
             .withDataType(DATATYPE_INTEGER)
@@ -282,7 +282,7 @@ class RangeSliderStateTest {
 
     @Test
     fun `returns true for isValid when range is valid`() {
-        mockQuestion(0F, 10F, 1F)
+        mockIntQuestion(0, 10, 1)
 
         val prompt = promptBuilder
             .withDataType(DATATYPE_INTEGER)
@@ -294,7 +294,7 @@ class RangeSliderStateTest {
 
     @Test
     fun `returns false for isValid when rangeStart equals rangeEnd`() {
-        mockQuestion(0F, 0F, 1F)
+        mockIntQuestion(0, 0, 1)
 
         val prompt = promptBuilder
             .withDataType(DATATYPE_INTEGER)
@@ -306,7 +306,7 @@ class RangeSliderStateTest {
 
     @Test
     fun `returns false for isValid when step does not evenly divide range`() {
-        mockQuestion(0F, 10F, 3F)
+        mockIntQuestion(0, 10, 3)
 
         val prompt = promptBuilder
             .withDataType(DATATYPE_INTEGER)
@@ -318,7 +318,7 @@ class RangeSliderStateTest {
 
     @Test
     fun `returns false for isValid when step is 0`() {
-        mockQuestion(0F, 10F, 0F)
+        mockIntQuestion(0, 10, 0)
 
         val prompt = promptBuilder
             .withDataType(DATATYPE_INTEGER)
@@ -330,7 +330,7 @@ class RangeSliderStateTest {
 
     @Test
     fun `returns false for isValid when step is greater than range`() {
-        mockQuestion(0F, 10F, 100000000F)
+        mockIntQuestion(0, 10, 100000000)
 
         val prompt = promptBuilder
             .withDataType(DATATYPE_INTEGER)
@@ -342,7 +342,7 @@ class RangeSliderStateTest {
 
     @Test
     fun `returns true for isHorizontal when vertical appearance is not used`() {
-        mockQuestion(0F, 10F, 1F)
+        mockIntQuestion(0, 10, 1)
 
         val prompt = promptBuilder
             .withDataType(DATATYPE_INTEGER)
@@ -354,7 +354,7 @@ class RangeSliderStateTest {
 
     @Test
     fun `returns false for isHorizontal when vertical appearance is used`() {
-        mockQuestion(0F, 10F, 1F)
+        mockIntQuestion(0, 10, 1)
 
         val prompt = promptBuilder
             .withDataType(DATATYPE_INTEGER)
@@ -367,7 +367,7 @@ class RangeSliderStateTest {
 
     @Test
     fun `returns numOfTicks based on possible steps if tickInterval is not set`() {
-        mockQuestion(0F, 10F, 1F)
+        mockIntQuestion(0, 10, 1)
 
         val prompt = promptBuilder
             .withDataType(DATATYPE_INTEGER)
@@ -384,7 +384,7 @@ class RangeSliderStateTest {
 
     @Test
     fun `returns numOfTicks based on tickInterval if it is set and valid`() {
-        mockQuestion(0F, 10F, 1F, tickInterval = 2F)
+        mockIntQuestion(0, 10, 1, tickInterval = 2)
 
         val prompt = promptBuilder
             .withDataType(DATATYPE_INTEGER)
@@ -396,7 +396,7 @@ class RangeSliderStateTest {
 
     @Test
     fun `returns numOfTicks based on possible steps if tickInterval is set but invalid`() {
-        mockQuestion(0F, 10F, 1F, tickInterval = 3F)
+        mockIntQuestion(0, 10, 1, tickInterval = 3)
 
         val prompt = promptBuilder
             .withDataType(DATATYPE_INTEGER)
@@ -408,7 +408,7 @@ class RangeSliderStateTest {
 
     @Test
     fun `returns 0 for numOfTicks when no-ticks appearance is used`() {
-        mockQuestion(0F, 10F, 1F)
+        mockIntQuestion(0, 10, 1)
 
         val prompt = promptBuilder
             .withDataType(DATATYPE_INTEGER)
@@ -421,7 +421,7 @@ class RangeSliderStateTest {
 
     @Test
     fun `returns 0 for numOfTicks when range is invalid`() {
-        mockQuestion(0F, 10F, 50F)
+        mockIntQuestion(0, 10, 50)
 
         val prompt = promptBuilder
             .withDataType(DATATYPE_INTEGER)
@@ -432,42 +432,42 @@ class RangeSliderStateTest {
     }
 
     @Test
-    fun `returns empty list for labels when no choices are available`() {
-        mockQuestion(0F, 10F, 1F)
+    fun `returns list of empty labels when no choices are available`() {
+        mockIntQuestion(0, 5, 1)
 
         val prompt = promptBuilder
             .withDataType(DATATYPE_INTEGER)
             .build()
 
         val state = RangeSliderState.fromPrompt(prompt)
-        assertThat(state.labels.isEmpty(), equalTo(true))
+        assertThat(state.labels, equalTo(listOf("", "", "", "", "", "")))
     }
 
     @Test
     fun `returns labels when choices are available`() {
-        mockQuestion(0F, 5F, 1F)
+        mockIntQuestion(0, 5, 1)
 
         val prompt = promptBuilder
             .withSelectChoices(
                 listOf(
-                    SelectChoice("0", "a"),
-                    SelectChoice("1", "b"),
-                    SelectChoice("2", "c"),
-                    SelectChoice("3", "d"),
-                    SelectChoice("4", "e"),
-                    SelectChoice("5", "f")
+                    SelectChoice("0", "0"),
+                    SelectChoice("1", "1"),
+                    SelectChoice("2", "2"),
+                    SelectChoice("3", "3"),
+                    SelectChoice("4", "4"),
+                    SelectChoice("5", "5")
                 )
             )
             .withDataType(DATATYPE_INTEGER)
             .build()
 
         val state = RangeSliderState.fromPrompt(prompt)
-        assertThat(state.labels, equalTo(listOf("a", "b", "c", "d", "e", "f")))
+        assertThat(state.labels, equalTo(listOf("0", "1", "2", "3", "4", "5")))
     }
 
     @Test
     fun `returns correct value for valid placeholder`() {
-        mockQuestion(0F, 10F, 1F, placeholder = 4F)
+        mockIntQuestion(0, 10, 1, placeholder = 4)
 
         val prompt = promptBuilder
             .withDataType(DATATYPE_INTEGER)
@@ -479,7 +479,7 @@ class RangeSliderStateTest {
 
     @Test
     fun `returns null for invalid placeholder`() {
-        mockQuestion(0F, 10F, 1F, placeholder = 11F)
+        mockIntQuestion(0, 10, 1, placeholder = 11)
 
         val prompt = promptBuilder
             .withDataType(DATATYPE_INTEGER)
@@ -569,7 +569,15 @@ class RangeSliderStateTest {
         assertThat(state.realValue, equalTo(8.7.toBigDecimal()))
     }
 
-    private fun mockQuestion(rangeStart: Float, rangeEnd: Float, rangeStep: Float, tickInterval: Float? = null, placeholder: Float? = null) {
+    private fun mockIntQuestion(rangeStart: Int, rangeEnd: Int, rangeStep: Int, tickInterval: Int? = null, placeholder: Int? = null) {
+        whenever(question.rangeStart).thenReturn(rangeStart.toBigDecimal())
+        whenever(question.rangeEnd).thenReturn(rangeEnd.toBigDecimal())
+        whenever(question.rangeStep).thenReturn(rangeStep.toBigDecimal())
+        whenever(question.tickInterval).thenReturn(tickInterval?.toBigDecimal())
+        whenever(question.placeholder).thenReturn(placeholder?.toBigDecimal())
+    }
+
+    private fun mockDecimalQuestion(rangeStart: Float, rangeEnd: Float, rangeStep: Float, tickInterval: Float? = null, placeholder: Float? = null) {
         whenever(question.rangeStart).thenReturn(rangeStart.toBigDecimal())
         whenever(question.rangeEnd).thenReturn(rangeEnd.toBigDecimal())
         whenever(question.rangeStep).thenReturn(rangeStep.toBigDecimal())
