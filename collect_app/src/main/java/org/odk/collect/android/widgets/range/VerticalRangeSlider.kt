@@ -174,6 +174,8 @@ private fun VerticalStepLabels(labels: List<String>, modifier: Modifier = Modifi
         val totalSteps = labels.size - 1
 
         labels.forEachIndexed { index, label ->
+            if (label.isBlank()) return@forEachIndexed
+
             val fraction = if (totalSteps > 0) index.toFloat() / totalSteps else 0f
             var textHeight by mutableIntStateOf(0)
 

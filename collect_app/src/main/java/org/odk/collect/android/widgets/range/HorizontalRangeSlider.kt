@@ -124,6 +124,8 @@ private fun HorizontalStepLabels(labels: List<String>) {
         val totalSteps = labels.size - 1
 
         labels.forEachIndexed { index, label ->
+            if (label.isBlank()) return@forEachIndexed
+
             var textWidth by mutableIntStateOf(0)
 
             val modifier = when (index) {
