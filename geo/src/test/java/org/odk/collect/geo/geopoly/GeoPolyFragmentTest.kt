@@ -97,6 +97,7 @@ class GeoPolyFragmentTest {
 
         locationTracker.currentLocation = Location(2.0, 2.0)
         assertThat(mapFragment.getCenter(), equalTo(MapPoint(2.0, 2.0)))
+        assertThat(mapFragment.getZoom(), not(equalTo(0.0)))
     }
 
     @Test

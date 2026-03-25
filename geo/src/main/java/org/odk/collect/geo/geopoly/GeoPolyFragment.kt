@@ -291,17 +291,21 @@ class GeoPolyFragment @JvmOverloads constructor(
                         map.updateCircle(accuracyHaloId, circleDescription)
                     }
 
+                    if (!map.hasCenter()) {
+                        map.zoomToCurrentLocation(location.toMapPoint())
+                    }
+
                     val shouldFollowLocation =
                         (inputActive ?: false) && viewModel.recordingMode != GeoPolyViewModel.RecordingMode.PLACEMENT
-                    if (!map.hasCenter() || shouldFollowLocation) {
+                    if (shouldFollowLocation) {
                         map.setCenter(location.toMapPoint(), false)
                     }
 
                     binding.locationStatus.accuracy = if (isLocationAcceptable(location)) {
-                            Improving(location.accuracy)
-                        } else {
-                            Unacceptable(location.accuracy)
-                        }
+                        Improving(location.accuracy)
+                    } else {
+                        Unacceptable(location.accuracy)
+                    }
                 }
             }
 
