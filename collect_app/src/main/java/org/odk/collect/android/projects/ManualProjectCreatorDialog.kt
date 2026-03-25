@@ -101,7 +101,7 @@ class ManualProjectCreatorDialog :
     }
 
     private fun setUpToolbar() {
-        toolbar.setTitle(org.odk.collect.strings.R.string.add_project)
+        getToolbar().setTitle(org.odk.collect.strings.R.string.add_project)
     }
 
     private fun handleAddingNewProject() {

@@ -1,8 +1,10 @@
 package org.odk.collect.androidshared.ui
 
 import android.app.Activity
+import android.content.Context
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import androidx.annotation.LayoutRes
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
@@ -14,24 +16,35 @@ object EdgeToEdge {
 
     @JvmStatic
     fun Activity.setView(@LayoutRes layout: Int, edgeToEdge: Boolean) {
-        handleEdgeToEdge(edgeToEdge)
+        window.handleEdgeToEdge(this, edgeToEdge)
         setContentView(layout)
     }
 
     @JvmStatic
     fun Activity.setView(view: View, edgeToEdge: Boolean) {
-        handleEdgeToEdge(edgeToEdge)
+        window.handleEdgeToEdge(this, edgeToEdge)
         setContentView(view)
     }
 
-    @JvmStatic
-    private fun Activity.avoidEdgeToEdge() {
-        val contentView = window.decorView.findViewById<View>(android.R.id.content)
+    fun Window.handleEdgeToEdge(context: Context, edgeToEdge: Boolean = false) {
+        WindowCompat.enableEdgeToEdge(this)
+        WindowCompat.getInsetsController(this, this.decorView).let {
+            val darkTheme = context.isDarkTheme()
+            it.isAppearanceLightStatusBars = !darkTheme
+            it.isAppearanceLightNavigationBars = !darkTheme
+        }
+
+        if (!edgeToEdge) {
+            avoidEdgeToEdge()
+        }
+    }
+
+    private fun Window.avoidEdgeToEdge() {
+        val contentView = decorView.findViewById<View>(android.R.id.content)
         contentView.addSystemBarInsetMargins()
     }
 
-    @JvmStatic
-    fun View.addSystemBarInsetMargins() {
+    private fun View.addSystemBarInsetMargins() {
         ViewCompat.setOnApplyWindowInsetsListener(this) { v, windowInsets ->
             val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.updateLayoutParams<ViewGroup.MarginLayoutParams> {
@@ -43,20 +56,6 @@ object EdgeToEdge {
             }
 
             WindowInsetsCompat.CONSUMED
-        }
-    }
-
-    private fun Activity.handleEdgeToEdge(edgeToEdge: Boolean) {
-        WindowCompat.enableEdgeToEdge(window)
-        WindowCompat.getInsetsController(window, window.decorView).let {
-            val darkTheme = isDarkTheme()
-            it.isAppearanceLightStatusBars = !darkTheme
-            it.isAppearanceLightNavigationBars = !darkTheme
-        }
-
-
-        if (!edgeToEdge) {
-            avoidEdgeToEdge()
         }
     }
 }
