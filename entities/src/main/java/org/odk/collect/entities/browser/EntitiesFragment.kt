@@ -11,6 +11,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -31,7 +32,7 @@ class EntitiesFragment(private val viewModelFactory: ViewModelProvider.Factory) 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val composeView = view as ComposeView
         val list = EntitiesFragmentArgs.fromBundle(requireArguments()).list
-        composeView.setContextThemedContent {
+        composeView.setContextThemedContent(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed) {
             Surface {
                 val entities by entitiesViewModel.getEntities(list).observeAsState(emptyList())
                 LazyColumn {
