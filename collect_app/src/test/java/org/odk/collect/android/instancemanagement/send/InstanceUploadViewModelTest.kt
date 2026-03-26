@@ -9,7 +9,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
 import org.odk.collect.android.instancemanagement.CachingProjectDependencyModuleFactory
-import org.odk.collect.android.instancemanagement.InstanceDeleter
 import org.odk.collect.android.instancemanagement.InstancesDataService
 import org.odk.collect.android.projects.ProjectDependencyModule
 import org.odk.collect.android.utilities.ChangeLocks
@@ -106,9 +105,6 @@ class InstanceUploadViewModelTest {
             mock(),
             instancesSubmitter
         ) {}
-
-        val instanceDeleter = mock<InstanceDeleter>()
-        val a = instancesRepository.all
 
         val dispatcher = StandardTestDispatcher()
         viewModel = InstanceUploadViewModel(
