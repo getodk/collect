@@ -15,7 +15,6 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.flow.combine
 import org.odk.collect.androidshared.livedata.LiveDataExt.combine
 import org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing
 import org.odk.collect.androidshared.ui.DisplayString
@@ -40,12 +39,10 @@ import org.odk.collect.maps.MapConsts
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.maps.MapPoint
-import org.odk.collect.maps.circles.CircleDescription
+import org.odk.collect.maps.circles.CurrentLocationDelegate
 import org.odk.collect.maps.traces.PolygonDescription
 import org.odk.collect.maps.layers.OfflineMapLayersPickerBottomSheetDialogFragment
 import org.odk.collect.maps.layers.ReferenceLayerRepository
-import org.odk.collect.maps.markers.MarkerDescription
-import org.odk.collect.maps.markers.MarkerIconDescription
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.strings.R.string
 import org.odk.collect.webpage.WebPageService
@@ -111,6 +108,8 @@ class GeoPolyFragment @JvmOverloads constructor(
             }
         }
     }
+
+    private val currentLocationDelegate = CurrentLocationDelegate()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -228,7 +227,7 @@ class GeoPolyFragment @JvmOverloads constructor(
         }
 
         binding.zoom.setOnClickListener {
-            map.zoomToCurrentLocation(viewModel.currentLocation.value?.toMapPoint())
+            currentLocationDelegate.zoomToCurrentLocation(map)
         }
 
         originalPoly = inputPolygon
@@ -256,50 +255,15 @@ class GeoPolyFragment @JvmOverloads constructor(
             displayDismissButton = true
         )
 
-        var locationMarkerId: Int? = null
-        var accuracyHaloId: Int? = null
         viewModel.currentLocation.asLiveData()
             .combine(viewModel.inputActive.asLiveData())
             .observe(viewLifecycleOwner) { (location, inputActive) ->
                 binding.zoom.isEnabled = location != null
 
                 if (location != null) {
-                    val locationMapPoint = location.toMapPoint()
-
-                    val markerDescription = MarkerDescription(
-                        locationMapPoint,
-                        false,
-                        MapFragment.IconAnchor.CENTER,
-                        MarkerIconDescription.DrawableResource(org.odk.collect.maps.R.drawable.ic_crosshairs)
-                    )
-
-                    if (locationMarkerId == null) {
-                        locationMarkerId = map.addMarker(markerDescription)
-                    } else {
-                        map.updateMarker(locationMarkerId, markerDescription)
-                    }
-
-                    val circleDescription = CircleDescription(
-                        location.toMapPoint(),
-                        location.accuracy,
-                        MapConsts.DEFAULT_STROKE_COLOR
-                    )
-
-                    if (accuracyHaloId == null) {
-                        accuracyHaloId = map.addCircle(circleDescription)
-                    } else {
-                        map.updateCircle(accuracyHaloId, circleDescription)
-                    }
-
-                    if (!map.hasCenter()) {
-                        map.zoomToCurrentLocation(location.toMapPoint())
-                    }
-
                     val shouldFollowLocation =
                         (inputActive ?: false) && viewModel.recordingMode != GeoPolyViewModel.RecordingMode.PLACEMENT
-                    if (shouldFollowLocation) {
-                        map.setCenter(location.toMapPoint(), false)
-                    }
+                    currentLocationDelegate.update(map, location.toMapPoint(), shouldFollowLocation)
 
                     binding.locationStatus.accuracy = if (isLocationAcceptable(location)) {
                         Improving(location.accuracy)
