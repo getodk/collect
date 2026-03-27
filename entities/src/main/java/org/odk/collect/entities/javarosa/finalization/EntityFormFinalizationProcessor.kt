@@ -55,7 +55,7 @@ class EntityFormFinalizationProcessor : FormEntryFinalizationProcessor {
     private fun createEntity(
         dataset: String,
         id: String?,
-        label: String?,
+        label: String,
         elementRef: TreeReference,
         saveTos: List<SaveTo>,
         action: EntityAction,
@@ -79,7 +79,7 @@ class EntityFormFinalizationProcessor : FormEntryFinalizationProcessor {
             }
         }
 
-        return if (id.isV4UUID() && !label.isNullOrBlank()) {
+        return if (id.isV4UUID() && (action == EntityAction.UPDATE || label.isNotBlank())) {
             FormEntity(action, dataset, id, label, fields)
         } else {
             null

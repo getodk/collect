@@ -42,4 +42,14 @@ class EntityFormParserTest {
         val label = parseLabel(entityElement)
         assertThat(label, equalTo("0"))
     }
+
+    @Test
+    fun `parse label when label is null, returns an empty string`() {
+        val labelElement = TreeElement(ELEMENT_LABEL)
+        val entityElement = TreeElement(ELEMENT_ENTITY)
+        entityElement.addChild(labelElement)
+
+        val label = parseLabel(entityElement)
+        assertThat(label, equalTo(""))
+    }
 }

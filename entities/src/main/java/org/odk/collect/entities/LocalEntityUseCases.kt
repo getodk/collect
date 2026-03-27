@@ -51,7 +51,7 @@ object LocalEntityUseCases {
                         entitiesRepository.save(
                             formEntity.dataset,
                             existing.copy(
-                                label = label,
+                                label = label.ifBlank { existing.label },
                                 properties = formEntity.properties,
                                 version = existing.version + 1
                             )
