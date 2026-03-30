@@ -1,6 +1,7 @@
 package org.odk.collect.android.fragments.dialogs;
 
 import androidx.test.core.app.ApplicationProvider;
+import androidx.test.espresso.Espresso;
 
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.helper.Selection;
@@ -30,11 +31,11 @@ public class SelectMultiMinimalDialogTest extends SelectMinimalDialogTest {
         dialogFragment.show(fragmentManager, "TAG");
         RobolectricHelpers.runLooper();
 
-        dialogFragment.onBackPressed();
+        Espresso.pressBack();
         verify(listener, times(0)).updateSelectedItems(anyList());
         dialogFragment.show(fragmentManager, "TAG");
         dialogFragment.adapter.clearAnswer();
-        dialogFragment.onBackPressed();
+        Espresso.pressBack();
         verify(listener, times(1)).updateSelectedItems(anyList());
     }
 
