@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import androidx.activity.ComponentDialog;
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
@@ -28,6 +30,17 @@ public class IdentifyUserPromptDialogFragment extends MaterialFullScreenDialogFr
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        ((ComponentDialog) requireDialog()).getOnBackPressedDispatcher().addCallback(
+                getViewLifecycleOwner(),
+                new OnBackPressedCallback(true) {
+                    @Override
+                    public void handleOnBackPressed() {
+                        dismiss();
+                        viewModel.promptDismissed();
+                    }
+                }
+        );
 
         Toolbar toolbar = getToolbar();
         toolbar.setTitle(viewModel.getFormTitle());
@@ -76,12 +89,6 @@ public class IdentifyUserPromptDialogFragment extends MaterialFullScreenDialogFr
 
     @Override
     protected void onCloseClicked() {
-        dismiss();
-        viewModel.promptDismissed();
-    }
-
-    @Override
-    protected void onBackPressed() {
         dismiss();
         viewModel.promptDismissed();
     }

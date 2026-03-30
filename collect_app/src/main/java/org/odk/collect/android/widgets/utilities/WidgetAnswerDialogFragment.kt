@@ -68,10 +68,6 @@ abstract class WidgetAnswerDialogFragment<T : Fragment>(
         return null
     }
 
-    override fun onBackPressed() {
-        dismiss()
-    }
-
     override fun onCloseClicked() {
         // No toolbar so not relevant
     }
