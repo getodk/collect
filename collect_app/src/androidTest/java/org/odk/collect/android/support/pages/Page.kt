@@ -5,6 +5,8 @@ import android.app.Application
 import android.content.pm.ActivityInfo
 import android.view.View
 import androidx.annotation.StringRes
+import androidx.compose.ui.test.hasContentDescription
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ApplicationProvider
@@ -209,7 +211,10 @@ abstract class Page<T : Page<T>> {
     fun assertTextDoesNotExist(text: String, assertionFramework: AssertionFramework = AssertionFramework.ESPRESSO): T {
         when (assertionFramework) {
             AssertionFramework.ESPRESSO -> EspressoAssertions.assertNotVisible(withText(text))
-            AssertionFramework.COMPOSE -> ComposeAssertions.assertNotVisible(composeRule!!, text)
+            AssertionFramework.COMPOSE -> ComposeAssertions.assertNotVisible(
+                composeRule!!,
+                hasText(text)
+            )
         }
 
         return this as T
@@ -493,13 +498,49 @@ abstract class Page<T : Page<T>> {
         assertToolbarTitle(getTranslatedString(title))
     }
 
-    fun assertContentDescriptionDisplayed(string: Int): T {
-        onView(withContentDescription(string)).check(matches(isDisplayed()))
+    @JvmOverloads
+    fun assertContentDescriptionDisplayed(
+        string: Int,
+        assertionFramework: AssertionFramework = AssertionFramework.ESPRESSO
+    ): T {
+        val translatedString = getTranslatedString(string)
+
+        when (assertionFramework) {
+            AssertionFramework.ESPRESSO -> {
+                EspressoAssertions.assertVisible(withContentDescription(translatedString))
+            }
+
+            AssertionFramework.COMPOSE -> {
+                ComposeAssertions.assertVisible(
+                    composeRule!!,
+                    hasContentDescription(translatedString)
+                )
+            }
+        }
+
         return this as T
     }
 
-    fun assertContentDescriptionNotDisplayed(string: Int): T {
-        onView(withContentDescription(string)).check(matches(not(isDisplayed())))
+    @JvmOverloads
+    fun assertContentDescriptionNotDisplayed(
+        string: Int,
+        assertionFramework: AssertionFramework = AssertionFramework.ESPRESSO
+    ): T {
+        val translatedString = getTranslatedString(string)
+
+        when (assertionFramework) {
+            AssertionFramework.ESPRESSO -> {
+                EspressoAssertions.assertNotVisible(withContentDescription(translatedString))
+            }
+
+            AssertionFramework.COMPOSE -> {
+                ComposeAssertions.assertNotVisible(
+                    composeRule!!,
+                    hasContentDescription(translatedString)
+                )
+            }
+        }
+
         return this as T
     }
 

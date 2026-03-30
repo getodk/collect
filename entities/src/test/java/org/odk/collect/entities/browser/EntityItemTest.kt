@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -45,7 +46,7 @@ class EntityItemTest {
         }
 
         composeTestRule
-            .onNodeWithText(context.getString(org.odk.collect.strings.R.string.offline))
+            .onNodeWithContentDescription(context.getString(org.odk.collect.strings.R.string.offline))
             .assertIsDisplayed()
     }
 
@@ -58,7 +59,7 @@ class EntityItemTest {
         }
 
         composeTestRule
-            .onNodeWithText(context.getString(org.odk.collect.strings.R.string.offline))
+            .onNodeWithContentDescription(context.getString(org.odk.collect.strings.R.string.offline))
             .assertIsNotDisplayed()
     }
 

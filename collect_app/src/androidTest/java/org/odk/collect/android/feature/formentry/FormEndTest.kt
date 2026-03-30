@@ -49,8 +49,8 @@ class FormEndTest {
             .assertNumberOfFinalizedForms(0)
 
             .clickDrafts(1)
-            .assertText(string.draft_no_errors, assertionFramework = AssertionFramework.COMPOSE)
-            .assertTextDoesNotExist(string.draft_errors, assertionFramework = AssertionFramework.COMPOSE)
+            .assertContentDescriptionDisplayed(string.draft_no_errors, assertionFramework = AssertionFramework.COMPOSE)
+            .assertContentDescriptionNotDisplayed(string.draft_errors, assertionFramework = AssertionFramework.COMPOSE)
     }
 
     @Test
@@ -65,8 +65,8 @@ class FormEndTest {
             .assertNumberOfFinalizedForms(0)
 
             .clickDrafts(1)
-            .assertText(string.draft_errors, assertionFramework = AssertionFramework.COMPOSE)
-            .assertTextDoesNotExist(string.draft_no_errors, assertionFramework = AssertionFramework.COMPOSE)
+            .assertContentDescriptionDisplayed(string.draft_errors, assertionFramework = AssertionFramework.COMPOSE)
+            .assertContentDescriptionNotDisplayed(string.draft_no_errors, assertionFramework = AssertionFramework.COMPOSE)
     }
 
     @Test
