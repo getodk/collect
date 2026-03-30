@@ -40,13 +40,13 @@ class ErrorsPillTest {
 
     private fun assertErrorsPill() {
         assertThat(errorsPill.visibility, equalTo(View.VISIBLE))
-        assertThat(Shadows.shadowOf(errorsPill.binding.icon.drawable).createdFromResId, equalTo(org.odk.collect.icons.R.drawable.ic_baseline_rule_24))
-        assertThat(errorsPill.binding.text.text, equalTo(context.getString(org.odk.collect.strings.R.string.draft_errors)))
+        assertThat(errorsPill.getIcon(), equalTo(org.odk.collect.icons.R.drawable.ic_baseline_rule_24))
+        assertThat(errorsPill.getText(), equalTo(context.getString(org.odk.collect.strings.R.string.draft_errors)))
     }
 
     private fun assertNoErrorsPill() {
         assertThat(errorsPill.visibility, equalTo(View.VISIBLE))
-        assertThat(Shadows.shadowOf(errorsPill.binding.icon.drawable).createdFromResId, equalTo(org.odk.collect.icons.R.drawable.ic_baseline_check_24))
-        assertThat(errorsPill.binding.text.text, equalTo(context.getString(org.odk.collect.strings.R.string.draft_no_errors)))
+        assertThat(errorsPill.getIcon(), equalTo(org.odk.collect.icons.R.drawable.ic_baseline_check_24))
+        assertThat(errorsPill.getText(), equalTo(context.getString(org.odk.collect.strings.R.string.draft_no_errors)))
     }
 }

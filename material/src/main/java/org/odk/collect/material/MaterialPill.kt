@@ -82,6 +82,14 @@ open class MaterialPill(context: Context, attrs: AttributeSet?) :
         render()
     }
 
+    fun getIcon(): Int? {
+        return icon
+    }
+
+    fun getText(): String {
+        return text
+    }
+
     private fun getDefaultBackgroundColor(context: Context) = getThemeAttributeValue(
         context,
         com.google.android.material.R.attr.colorPrimaryContainer
