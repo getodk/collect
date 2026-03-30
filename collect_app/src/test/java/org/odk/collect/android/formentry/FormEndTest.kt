@@ -3,11 +3,11 @@ package org.odk.collect.android.formentry
 import android.app.Application
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
+import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
@@ -189,9 +189,15 @@ class FormEndTest {
 
         composeTestRule
             .onNodeWithTag(EditWarningSemantics.TAG)
+            .assert(
+                hasContentDescription(
+                    warningContentDescription(
+                        string.form_editing_disabled_after_finalizing,
+                        string.form_editing_disabled_hint
+                    )
+                )
+            )
             .assert(hasIcon(drawable.ic_edit_off_24))
-            .assert(hasTitle(string.form_editing_disabled_after_finalizing))
-            .assert(hasMessage(string.form_editing_disabled_hint))
             .assert(hasErrorBackground(true))
     }
 
@@ -209,9 +215,10 @@ class FormEndTest {
 
         composeTestRule
             .onNodeWithTag(EditWarningSemantics.TAG)
+            .assert(
+                hasContentDescription(application.getString(string.form_editing_disabled_after_finalizing))
+            )
             .assert(hasIcon(drawable.ic_edit_off_24))
-            .assert(hasTitle(string.form_editing_disabled_after_finalizing))
-            .assert(hasMessage(null))
             .assert(hasErrorBackground(true))
     }
 
@@ -229,9 +236,15 @@ class FormEndTest {
 
         composeTestRule
             .onNodeWithTag(EditWarningSemantics.TAG)
+            .assert(
+                hasContentDescription(
+                    warningContentDescription(
+                        string.form_editing_disabled_after_sending,
+                        string.form_editing_disabled_hint
+                    )
+                )
+            )
             .assert(hasIcon(drawable.ic_edit_off_24))
-            .assert(hasTitle(string.form_editing_disabled_after_sending))
-            .assert(hasMessage(string.form_editing_disabled_hint))
             .assert(hasErrorBackground(true))
     }
 
@@ -249,9 +262,15 @@ class FormEndTest {
 
         composeTestRule
             .onNodeWithTag(EditWarningSemantics.TAG)
+            .assert(
+                hasContentDescription(
+                    warningContentDescription(
+                        string.form_editing_enabled_after_finalizing,
+                        string.form_editing_enabled_after_finalizing_hint
+                    )
+                )
+            )
             .assert(hasIcon(drawable.ic_edit_24))
-            .assert(hasTitle(string.form_editing_enabled_after_finalizing))
-            .assert(hasMessage(string.form_editing_enabled_after_finalizing_hint))
             .assert(hasErrorBackground(false))
     }
 
@@ -269,9 +288,15 @@ class FormEndTest {
 
         composeTestRule
             .onNodeWithTag(EditWarningSemantics.TAG)
+            .assert(
+                hasContentDescription(
+                    warningContentDescription(
+                        string.form_editing_enabled_after_sending,
+                        string.form_editing_enabled_after_sending_hint
+                    )
+                )
+            )
             .assert(hasIcon(drawable.ic_edit_24))
-            .assert(hasTitle(string.form_editing_enabled_after_sending))
-            .assert(hasMessage(string.form_editing_enabled_after_sending_hint))
             .assert(hasErrorBackground(false))
     }
 
@@ -291,18 +316,14 @@ class FormEndTest {
             .onNodeWithTag(EditWarningSemantics.TAG)
             .assertIsNotDisplayed()
     }
+
+    private fun warningContentDescription(title: Int, message: Int): String {
+        return "${application.getString(title)}: ${application.getString(message)}"
+    }
 }
 
 private fun hasIcon(@DrawableRes icon: Int): SemanticsMatcher {
     return SemanticsMatcher.expectValue(EditWarningSemantics.iconProperty, icon)
-}
-
-private fun hasTitle(@StringRes title: Int): SemanticsMatcher {
-    return SemanticsMatcher.expectValue(EditWarningSemantics.titleProperty, title)
-}
-
-private fun hasMessage(@StringRes message: Int?): SemanticsMatcher {
-    return SemanticsMatcher.expectValue(EditWarningSemantics.messageProperty, message)
 }
 
 private fun hasErrorBackground(errorBackground: Boolean): SemanticsMatcher {

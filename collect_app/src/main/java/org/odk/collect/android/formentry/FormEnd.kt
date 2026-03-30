@@ -22,6 +22,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.SemanticsPropertyKey
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -138,6 +139,9 @@ private fun EditWarning(
     @StringRes message: Int?,
     errorBackground: Boolean
 ) {
+    val titleText = stringResource(title)
+    val messageText = message?.let { stringResource(message) }
+
     val cardColors = if (errorBackground) {
         CardDefaults.cardColors().copy(
             containerColor = MaterialTheme.colorScheme.errorContainer,
@@ -153,9 +157,13 @@ private fun EditWarning(
             .padding(top = marginStandard())
             .testTag(EditWarningSemantics.TAG)
             .semantics {
+                contentDescription = if (messageText != null) {
+                    "$titleText: $messageText"
+                } else {
+                    titleText
+                }
+
                 set(EditWarningSemantics.iconProperty, icon)
-                set(EditWarningSemantics.titleProperty, title)
-                set(EditWarningSemantics.messageProperty, message)
                 set(EditWarningSemantics.errorBackgroundProperty, errorBackground)
             },
         colors = cardColors
@@ -168,13 +176,13 @@ private fun EditWarning(
 
             Column(modifier = Modifier.padding(start = marginStandard())) {
                 Text(
-                    text = stringResource(title),
+                    text = titleText,
                     style = MaterialTheme.typography.titleMedium
                 )
 
-                if (message != null) {
+                if (messageText != null) {
                     Text(
-                        text = stringResource(message),
+                        text = messageText,
                         style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier.padding(top = marginSmall())
                     )
@@ -230,8 +238,6 @@ private fun getWarning(
 object EditWarningSemantics {
     const val TAG = "EditWarning"
     val iconProperty = SemanticsPropertyKey<Int>("icon")
-    val titleProperty = SemanticsPropertyKey<Int>("title")
-    val messageProperty = SemanticsPropertyKey<Int?>("message")
     val errorBackgroundProperty = SemanticsPropertyKey<Boolean>("errorBackground")
 }
 
