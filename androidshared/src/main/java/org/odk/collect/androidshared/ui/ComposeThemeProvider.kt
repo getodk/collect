@@ -2,6 +2,7 @@ package org.odk.collect.androidshared.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 
 /**
  * Interface that allows a [android.content.Context] (such as an [android.app.Activity]) to
@@ -29,12 +30,26 @@ interface ComposeThemeProvider {
     fun Theme(content: @Composable () -> Unit)
 
     companion object {
-        fun ComposeView.setContextThemedContent(content: @Composable () -> Unit) {
+        fun ComposeView.setContextThemedContent(
+            viewCompositionStrategy: ViewCompositionStrategy,
+            content: @Composable () -> Unit
+        ) {
+            setViewCompositionStrategy(viewCompositionStrategy)
             setContent {
-                (context as ComposeThemeProvider).Theme {
+                val themeProvider = context as? ComposeThemeProvider
+                if (themeProvider != null) {
+                    themeProvider.Theme {
+                        content()
+                    }
+                } else {
                     content()
                 }
             }
+        }
+
+        @Deprecated("Use overload instead")
+        fun ComposeView.setContextThemedContent(content: @Composable () -> Unit) {
+            setContextThemedContent(ViewCompositionStrategy.Default, content)
         }
     }
 }

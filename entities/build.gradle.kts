@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinKsp)
     alias(libs.plugins.safeargsKotlin)
+    alias(libs.plugins.composeCompiler)
 }
 
 apply(from = "../config/quality.gradle")
@@ -51,6 +52,7 @@ dependencies {
     implementation(project(":async"))
     implementation(project(":lists"))
     implementation(project(":forms"))
+    implementation(project(":icons"))
 
     implementation(libs.kotlinStdlib)
     implementation(libs.javarosa) {
@@ -64,10 +66,20 @@ dependencies {
     implementation(libs.dagger)
     ksp(libs.daggerCompiler)
 
+    val composeBom = platform(libs.androidxComposeBom)
+    implementation(composeBom)
+    implementation(libs.androidXComposeMaterial)
+    implementation(libs.androidXConstraintLayoutCompose)
+    implementation(libs.runtime.livedata)
+    implementation(libs.androidXComposePreview)
+    debugImplementation(libs.androidXComposeTooling)
+
     testImplementation(project(":forms-test"))
     testImplementation(libs.junit)
     testImplementation(libs.robolectric)
     testImplementation(libs.hamcrest)
     testImplementation(libs.mockitoKotlin)
     testImplementation(libs.javarosa) // Include with all dependencies
+    testImplementation(libs.androidXComposeUiTestJunit4)
+    debugImplementation(libs.androidXComposeUiTestManifest)
 }
