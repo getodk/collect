@@ -30,6 +30,7 @@ android {
 dependencies {
     coreLibraryDesugaring(libs.desugar)
 
+    implementation(project(":async"))
     implementation(libs.junit)
     implementation(libs.androidxTestCoreKtx)
     implementation(libs.androidxLifecycleLivedataKtx)

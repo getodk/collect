@@ -38,6 +38,7 @@ import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.views.DayNightProgressDialog;
+import org.odk.collect.async.DefaultDispatcherProvider;
 import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.openrosa.http.OpenRosaConstants;
 import org.odk.collect.settings.SettingsProvider;
@@ -50,7 +51,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import kotlinx.coroutines.Dispatchers;
 import timber.log.Timber;
 
 /**
@@ -165,7 +165,7 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
                     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
                         if (modelClass.isAssignableFrom(InstanceUploadViewModel.class)) {
                             return (T) new InstanceUploadViewModel(
-                                    Dispatchers.getIO(),
+                                    new DefaultDispatcherProvider(),
                                     webCredentialsUtils,
                                     instancesRepository,
                                     instancesDataService,

@@ -1,7 +1,6 @@
 package org.odk.collect.android.instancemanagement.send
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import kotlinx.coroutines.test.StandardTestDispatcher
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.MatcherAssert.assertThat
@@ -13,6 +12,7 @@ import org.odk.collect.android.instancemanagement.InstancesDataService
 import org.odk.collect.android.projects.ProjectDependencyModule
 import org.odk.collect.android.utilities.ChangeLocks
 import org.odk.collect.androidshared.data.AppState
+import org.odk.collect.androidtest.TestDispatcherProvider
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.formstest.FormFixtures
 import org.odk.collect.formstest.InMemFormsRepository
@@ -107,9 +107,9 @@ class InstanceUploadViewModelTest {
             instancesSubmitter
         ) {}
 
-        val dispatcher = StandardTestDispatcher()
+        val dispatcherProvider = TestDispatcherProvider()
         viewModel = InstanceUploadViewModel(
-            dispatcher,
+            dispatcherProvider,
             mock(),
             instancesRepository,
             instancesDataService,
@@ -123,7 +123,7 @@ class InstanceUploadViewModelTest {
             "Waiting"
         )
         viewModel.upload(listOf(instance1.dbId, instance2.dbId))
-        dispatcher.scheduler.advanceUntilIdle()
+        dispatcherProvider.runBackground()
 
         assertThat(submittedInstances.containsAll(listOf(instance1.dbId)), equalTo(true))
         assertThat(instancesRepository.get(instance1.dbId)!!.deletedDate, notNullValue())

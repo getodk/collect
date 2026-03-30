@@ -5,16 +5,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import org.odk.collect.android.instancemanagement.InstancesDataService
 import org.odk.collect.android.utilities.WebCredentialsUtils
+import org.odk.collect.async.DispatcherProvider
 import org.odk.collect.forms.instances.InstancesRepository
 
 class InstanceUploadViewModel(
-    private val dispatcher: CoroutineDispatcher,
+    private val dispatcherProvider: DispatcherProvider,
     private val webCredentialsUtils: WebCredentialsUtils,
     private val instancesRepository: InstancesRepository,
     private val instancesDataService: InstancesDataService,
@@ -45,7 +45,7 @@ class InstanceUploadViewModel(
         }
         _state.value = UploadState.Starting
 
-        uploadJob = viewModelScope.launch(dispatcher) {
+        uploadJob = viewModelScope.launch(dispatcherProvider.background) {
             val instancesToUpload = getInstancesToUpload(instanceIdsToUpload)
             val uploadResults = instancesDataService.sendInstances(
                 projectId,
