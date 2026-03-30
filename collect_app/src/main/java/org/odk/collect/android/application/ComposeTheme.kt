@@ -10,9 +10,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import org.odk.collect.android.R
@@ -30,9 +28,7 @@ fun CollectTheme(content: @Composable () -> Unit) {
         onSurface = colorResource(R.color.colorOnSurfaceLight),
         primaryContainer = colorResource(R.color.colorPrimaryContainerLight),
         onPrimaryContainer = colorResource(R.color.colorOnPrimaryContainerLight),
-        surfaceContainerHighest = colorResource(R.color.colorSurfaceContainerHighestLight),
-        errorContainer = colorResource(R.color.colorErrorContainerLight),
-        onErrorContainer = colorResource(R.color.colorOnErrorContainerLight)
+        surfaceContainerHighest = colorResource(R.color.colorSurfaceContainerHighestLight)
     )
 
     val darkColors = darkColorScheme(
@@ -42,9 +38,7 @@ fun CollectTheme(content: @Composable () -> Unit) {
         onSurface = colorResource(R.color.colorOnSurfaceDark),
         primaryContainer = colorResource(R.color.colorPrimaryContainerDark),
         onPrimaryContainer = colorResource(R.color.colorOnPrimaryContainerDark),
-        surfaceContainerHighest = colorResource(R.color.colorSurfaceContainerHighestDark),
-        errorContainer = colorResource(R.color.colorErrorContainerDark),
-        onErrorContainer = colorResource(R.color.colorOnErrorContainerDark)
+        surfaceContainerHighest = colorResource(R.color.colorSurfaceContainerHighestDark)
     )
 
     val colorScheme = if (isSystemInDarkTheme()) darkColors else lightColors
