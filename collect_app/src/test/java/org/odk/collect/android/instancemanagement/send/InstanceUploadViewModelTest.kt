@@ -68,6 +68,7 @@ class InstanceUploadViewModelTest {
                 mock(),
                 mock(),
                 mock(),
+                mock(),
                 mock()
             )
         }
