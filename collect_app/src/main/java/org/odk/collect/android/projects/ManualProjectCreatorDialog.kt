@@ -150,4 +150,6 @@ class ManualProjectCreatorDialog :
     }
 
     override fun cancel() {}
+
+    override fun getBottomView() = binding.bottomContainer
 }

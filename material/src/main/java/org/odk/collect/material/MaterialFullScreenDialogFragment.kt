@@ -42,7 +42,7 @@ abstract class MaterialFullScreenDialogFragment : DialogFragment() {
                 }
             })
 
-            handleEdgeToEdge(requireContext())
+            handleEdgeToEdge(requireContext(), bottomView = getBottomView())
         }
     }
 
@@ -63,4 +63,6 @@ abstract class MaterialFullScreenDialogFragment : DialogFragment() {
     protected open fun shouldShowSoftKeyboard(): Boolean {
         return false
     }
+
+    protected open fun getBottomView(): View? = null
 }
