@@ -19,12 +19,8 @@ public class GetAndSubmitFormTest {
     private final CollectTestRule rule = new CollectTestRule(false);
     private final TestDependencies testDependencies = new TestDependencies();
 
-    private final PageComposeRule pageComposeRule = new PageComposeRule();
-
     @Rule
     public RuleChain chain = TestRuleChain.chain(testDependencies)
-            .around(pageComposeRule.getComposeRule())
-            .around(pageComposeRule)
             .around(rule);
 
     @Test
