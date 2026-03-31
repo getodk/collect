@@ -18,7 +18,8 @@ object TestRuleChain {
         val pageComposeRule = PageComposeRule()
 
         return RuleChain
-            .outerRule(RetryOnDeviceErrorRule())
+            .outerRule(pageComposeRule.composeRule)
+            .around(RetryOnDeviceErrorRule())
             .around(createGrantPermissionRule())
             .around(ResetRotationRule())
             .around(PrepDeviceForTestsRule())
@@ -29,7 +30,6 @@ object TestRuleChain {
                     listOf(asyncWorkTrackerIdlingResource, countingTaskExecutorIdlingResource)
                 )
             )
-            .around(pageComposeRule.composeRule)
             .around(pageComposeRule)
     }
 
