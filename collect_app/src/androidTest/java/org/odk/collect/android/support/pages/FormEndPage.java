@@ -30,7 +30,7 @@ public class FormEndPage extends Page<FormEndPage> {
     }
 
     public FormEndPage clickSaveAsDraftWithError(String errorMsg) {
-        clickOnString(org.odk.collect.strings.R.string.save_as_draft);
+        clickOnString(org.odk.collect.strings.R.string.save_as_draft, this, AssertionFramework.COMPOSE);
         checkIsToastWithMessageDisplayed(errorMsg);
         return this;
     }
@@ -45,14 +45,13 @@ public class FormEndPage extends Page<FormEndPage> {
     }
 
     public FormEndPage clickFinalizeWithError(String errorMsg) {
-        clickOnString(org.odk.collect.strings.R.string.finalize);
+        clickOnString(org.odk.collect.strings.R.string.finalize, this, AssertionFramework.COMPOSE);
         checkIsToastWithMessageDisplayed(errorMsg);
         return this;
     }
 
     public MainMenuPage clickSend() {
-        clickOnString(org.odk.collect.strings.R.string.send);
-        return new MainMenuPage().assertOnPage();
+        return clickOnString(org.odk.collect.strings.R.string.send, new MainMenuPage(), AssertionFramework.COMPOSE);
     }
 
     public FormMapPage clickSaveAndExitBackToMap() {
@@ -60,9 +59,9 @@ public class FormEndPage extends Page<FormEndPage> {
     }
 
     public FormEntryPage clickSaveAndExitWithError(String errorText) {
-        clickOnString(org.odk.collect.strings.R.string.finalize);
-        assertConstraintDisplayed(errorText);
-        return new FormEntryPage(formName).assertOnPage();
+        FormEntryPage page = clickOnString(org.odk.collect.strings.R.string.finalize, new FormEntryPage(formName), AssertionFramework.COMPOSE);
+        assertText(errorText);
+        return page;
     }
 
     public ChangesReasonPromptPage clickSaveAndExitWithChangesReasonPrompt() {
@@ -84,10 +83,5 @@ public class FormEndPage extends Page<FormEndPage> {
 
     public FormEndPage clickOptionsIcon() {
         return clickOptionsIcon(org.odk.collect.strings.R.string.project_settings);
-    }
-
-    public FormEntryPage assertConstraintDisplayed(String constraintText) {
-        FormEntryPage formEntryPage = new FormEntryPage(formName);
-        return formEntryPage.assertText(constraintText);
     }
 }

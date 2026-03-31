@@ -75,8 +75,8 @@ class RequiredAndConstraintQuestionTest {
             .clickGoToArrow()
             .clickGoToEnd()
             .clickOptionsIcon()
-            .clickOnString(R.string.validate)
-            .assertConstraintDisplayed("Custom message")
+            .clickOnString(R.string.validate, FormEntryPage("required_question_with_custom_error_message"))
+            .assertText("Custom message")
             .assertQuestion("Required question", true)
     }
 
@@ -88,8 +88,8 @@ class RequiredAndConstraintQuestionTest {
             .clickGoToArrow()
             .clickGoToEnd()
             .clickOptionsIcon()
-            .clickOnString(R.string.validate)
-            .assertConstraintDisplayed("Custom required message") // Make sure both questions are still displayed on the same screen
+            .clickOnString(R.string.validate, FormEntryPage("requiredQuestionInFieldList"))
+            .assertText("Custom required message") // Make sure both questions are still displayed on the same screen
             .assertQuestion("Foo", true)
             .assertQuestion("Bar", true)
     }
