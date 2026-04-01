@@ -33,6 +33,10 @@ jobs:
     <<: *android_config
     steps:
       - checkout
+      - run:
+          name: Validate Gradlew Wrapper
+          command: ./validate.sh
+
       - restore_cache:
           keys:
             - compile-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
