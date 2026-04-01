@@ -35,7 +35,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - compile-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - compile-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/version.txt" }}
             - compile-
       - run:
           name: Copy gradle config
@@ -52,7 +52,7 @@ jobs:
           paths:
             - ~/.gradle/caches
             - ~/.gradle/wrapper
-          key: compile-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+          key: compile-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/version.txt" }}
       - save_cache:
           paths:
             - ~/work
@@ -72,7 +72,7 @@ jobs:
             - workflow-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       - restore_cache:
           keys:
-            - compile-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - compile-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/version.txt" }}
             - compile-
 
       - run:
@@ -93,7 +93,7 @@ jobs:
             - workflow-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       - restore_cache:
           keys:
-            - compile-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - compile-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/version.txt" }}
             - compile-
 
       - run:
@@ -118,9 +118,9 @@ jobs:
             - workflow-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       - restore_cache:
           keys:
-            - test_modules-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - test_modules-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/version.txt" }}
             - test_modules
-            - compile-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - compile-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/version.txt" }}
             - compile-
 
       - run:
@@ -146,7 +146,7 @@ jobs:
           paths:
             - ~/.gradle/caches
             - ~/.gradle/wrapper
-          key: test_modules-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+          key: test_modules-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/version.txt" }}
 
   test_app:
     <<: *android_config
@@ -158,9 +158,9 @@ jobs:
             - workflow-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       - restore_cache:
           keys:
-            - test_app-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - test_app-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/version.txt" }}
             - test_app-
-            - compile-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - compile-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/version.txt" }}
             - compile-
 
       - run:
@@ -196,7 +196,7 @@ jobs:
           paths:
             - ~/.gradle/caches
             - ~/.gradle/wrapper
-          key: test_app-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+          key: test_app-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/version.txt" }}
 
   build_instrumented:
     <<: *android_config_large
@@ -207,9 +207,9 @@ jobs:
             - workflow-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       - restore_cache:
           keys:
-            - build_instrumented-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - build_instrumented-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/version.txt" }}
             - build_instrumented-
-            - compile-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - compile-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/version.txt" }}
             - compile-
 
       - run:
@@ -224,7 +224,7 @@ jobs:
           paths:
             - ~/.gradle/caches
             - ~/.gradle/wrapper
-          key: build_instrumented-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+          key: build_instrumented-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/version.txt" }}
 
       - persist_to_workspace:
           root: ~/work
@@ -240,7 +240,7 @@ jobs:
             - workflow-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       - restore_cache:
           keys:
-            - compile-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - compile-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/version.txt" }}
             - compile-
 
       - run:
