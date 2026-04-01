@@ -9,19 +9,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.layout.layout
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -172,21 +169,20 @@ private fun VerticalEdgeLabels(
 private fun VerticalStepLabels(labels: List<String>, modifier: Modifier = Modifier) {
     BoxWithConstraints(modifier = modifier) {
         val totalSteps = labels.size - 1
+        val lineHeight = MaterialTheme.typography.bodyLarge.lineHeight.value.dp
 
         labels.forEachIndexed { index, label ->
             if (label.isBlank()) return@forEachIndexed
 
             val fraction = if (totalSteps > 0) index.toFloat() / totalSteps else 0f
-            var textHeight by mutableIntStateOf(0)
 
             val modifier = when (index) {
                 0 -> Modifier.align(Alignment.BottomStart)
                 totalSteps -> Modifier.align(Alignment.TopStart)
                 else -> Modifier
                     .align(Alignment.TopStart)
-                    .onGloballyPositioned { textHeight = it.size.height }
                     .offset {
-                        val yOffset = constraints.maxHeight * (1 - fraction) - textHeight / 2
+                        val yOffset = constraints.maxHeight * (1 - fraction) - lineHeight.roundToPx() / 2
                         IntOffset(0, yOffset.roundToInt())
                     }
             }

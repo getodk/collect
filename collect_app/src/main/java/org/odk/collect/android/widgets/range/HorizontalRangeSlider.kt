@@ -8,20 +8,17 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Slider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInteropFilter
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import kotlin.math.roundToInt
@@ -122,27 +119,29 @@ private fun HorizontalEdgeLabels(labelStart: String, labelEnd: String) {
 private fun HorizontalStepLabels(labels: List<String>) {
     BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
         val totalSteps = labels.size - 1
+        val labelWidth = maxWidth / 5
 
         labels.forEachIndexed { index, label ->
             if (label.isBlank()) return@forEachIndexed
 
-            var textWidth by mutableIntStateOf(0)
-
             val modifier = when (index) {
                 0 -> Modifier.align(Alignment.TopStart)
                 totalSteps -> Modifier.align(Alignment.TopEnd)
-                else -> Modifier
-                    .onGloballyPositioned { textWidth = it.size.width }
-                    .offset {
-                        val fraction = index.toFloat() / totalSteps
-                        val xOffset = constraints.maxWidth * fraction - textWidth / 2
-                        IntOffset(xOffset.roundToInt(), 0)
-                    }
+                else -> Modifier.offset {
+                    val fraction = index.toFloat() / totalSteps
+                    val centerX = (constraints.maxWidth * fraction).roundToInt()
+                    IntOffset(centerX - labelWidth.roundToPx() / 2, 0)
+                }
             }
 
             Label(
-                modifier = modifier.widthIn(max = maxWidth / 5),
-                text = label
+                modifier = modifier.width(labelWidth),
+                text = label,
+                textAlign = when (index) {
+                    0 -> TextAlign.Start
+                    totalSteps -> TextAlign.End
+                    else -> TextAlign.Center
+                }
             )
         }
     }
