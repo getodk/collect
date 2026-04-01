@@ -54,3 +54,8 @@ robolectric-deps/
 
 .local-m2
 apks
+
+# Gradle wrapper
+gradlew
+gradlew.bat
+gradle/wrapper
