@@ -68,7 +68,7 @@ Translations are updated right before the first beta for a release and before th
 
 ## Setting up your development environment
 
-1. Download and install [Git](https://git-scm.com/downloads) and add it to your PATH
+1. Download and install [Git](https://git-scm.com/downloads) and [Gradle](https://gradle.org/) and add them to your PATH
 
 1. Download and install [Android Studio](https://developer.android.com/studio/index.html) 
 
@@ -79,6 +79,8 @@ Translations are updated right before the first beta for a release and before th
         git clone https://github.com/YOUR-GITHUB-USERNAME/collect
 
     If you prefer not to use the command line, you can use Android Studio to create a new project from version control using `https://github.com/YOUR-GITHUB-USERNAME/collect`.
+
+1. Set up the Gradle wrapper locally with `gradle wrapper --gradle-version 9.3.1`
 
 1. Use Android Studio to import the project from its Gradle settings. To run the project, click on the green arrow at the top of the screen.
 
