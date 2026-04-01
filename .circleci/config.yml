@@ -40,6 +40,11 @@ jobs:
       - run:
           name: Copy gradle config
           command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
+
+      - run:
+          name: Set up Gradle Wrapper
+          command: gradle wrapper --gradle-version $(cat gradle/version.txt)
+
       - run:
           name: Download Robolectric deps
           command: ./download-robolectric-deps.sh
