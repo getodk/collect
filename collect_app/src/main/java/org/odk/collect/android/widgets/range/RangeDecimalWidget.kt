@@ -14,6 +14,7 @@ import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.analytics.AnalyticsEvents.RANGE_DECIMAL_WIDGET
 import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.widgets.QuestionWidget
+import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader
 import org.odk.collect.androidshared.ui.ComposeThemeProvider.Companion.setContextThemedContent
 import org.odk.collect.androidshared.ui.ToastUtils
 
@@ -21,13 +22,14 @@ import org.odk.collect.androidshared.ui.ToastUtils
 class RangeDecimalWidget(
     context: Context,
     prompt: QuestionDetails,
+    selectChoiceLoader: SelectChoiceLoader,
     dependencies: Dependencies
 ) : QuestionWidget(
         context,
         dependencies,
         prompt
     ) {
-    private var rangeSliderState by mutableStateOf(RangeSliderState.fromPrompt(formEntryPrompt))
+    private var rangeSliderState by mutableStateOf(RangeSliderState.fromPrompt(formEntryPrompt, selectChoiceLoader))
     private var shouldSuppressFlingGesture = false
 
     init {
