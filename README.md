@@ -80,7 +80,7 @@ Translations are updated right before the first beta for a release and before th
 
     If you prefer not to use the command line, you can use Android Studio to create a new project from version control using `https://github.com/YOUR-GITHUB-USERNAME/collect`.
 
-1. Set up the Gradle wrapper locally with `gradle wrapper --gradle-version 9.3.1`
+1. Set up the Gradle wrapper locally with `gradle wrapper --gradle-version $(cat gradle/version.txt)`
 
 1. Use Android Studio to import the project from its Gradle settings. To run the project, click on the green arrow at the top of the screen.
 
