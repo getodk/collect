@@ -1,2 +1,2 @@
-# When upgrading Gradle Wrapper, this SHA can be retrieved from https://gradle.org/release-checksums/
+# When changed, confirm new checksum is listed at https://gradle.org/release-checksums/
 b3a875ddc1f044746e1b1a55f645584505f4a10438c1afea9f15e92a7c42ec13  gradle/wrapper/gradle-wrapper.jar
