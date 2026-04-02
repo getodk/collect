@@ -35,12 +35,7 @@ class CurrentLocationDelegate {
         }
 
 
-        val circleDescription = CircleDescription(
-            location,
-            location.accuracy.toFloat(),
-            MapConsts.DEFAULT_STROKE_COLOR
-        )
-
+        val circleDescription = CircleDescription(location, location.accuracy.toFloat())
         accuracyHaloId.let {
             if (it == null) {
                 accuracyHaloId = map.addCircle(circleDescription)
