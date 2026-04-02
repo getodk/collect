@@ -9,9 +9,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import kotlin.math.roundToInt
 
-const val THUMB_WIDTH = 4
+private const val THUMB_WIDTH = 4
 
 @Composable
 fun Thumb(value: Float?) {
@@ -25,4 +28,16 @@ fun Thumb(value: Float?) {
             interactionSource = remember { MutableInteractionSource() }
         )
     }
+}
+
+fun Density.calculateThumbOffset(
+    trackSize: Int,
+    thumbValue: Float,
+    isVertical: Boolean
+): IntOffset {
+    val thumbSizePx = THUMB_WIDTH.dp.toPx()
+    val effectiveTrackSize = trackSize - thumbSizePx
+    val fraction = if (isVertical) 1 - thumbValue else thumbValue
+    val offset = (effectiveTrackSize * fraction).roundToInt()
+    return if (isVertical) IntOffset(0, offset) else IntOffset(offset, 0)
 }

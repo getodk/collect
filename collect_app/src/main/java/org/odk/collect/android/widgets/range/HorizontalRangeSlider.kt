@@ -20,7 +20,6 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
-import androidx.compose.ui.unit.dp
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -75,10 +74,11 @@ fun HorizontalRangeSlider(
                 Box(
                     modifier = Modifier
                         .offset {
-                            val thumbWidthPx = THUMB_WIDTH.dp.toPx()
-                            val trackWidth = constraints.maxWidth - thumbWidthPx
-                            val xOffset = trackWidth * thumbValue
-                            IntOffset(xOffset.roundToInt(), 0)
+                            calculateThumbOffset(
+                                trackSize = constraints.maxWidth,
+                                thumbValue = thumbValue,
+                                isVertical = false
+                            )
                         }
                         .pointerInteropFilter { false }
                         .align(Alignment.CenterStart)

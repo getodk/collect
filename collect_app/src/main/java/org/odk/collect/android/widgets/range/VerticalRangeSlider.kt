@@ -91,10 +91,11 @@ fun VerticalRangeSlider(
                     Box(
                         modifier = Modifier
                             .offset {
-                                val thumbHeightPx = THUMB_WIDTH.dp.toPx()
-                                val trackHeight = constraints.maxHeight - thumbHeightPx
-                                val yOffset = trackHeight * (1 - thumbValue)
-                                IntOffset(0, yOffset.roundToInt())
+                                calculateThumbOffset(
+                                    trackSize = constraints.maxHeight,
+                                    thumbValue = thumbValue,
+                                    isVertical = true
+                                )
                             }
                             .rotateVertically()
                             .pointerInteropFilter { false }
