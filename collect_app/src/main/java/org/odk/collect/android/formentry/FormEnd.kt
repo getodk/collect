@@ -1,6 +1,5 @@
 package org.odk.collect.android.formentry
 
-import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.EditOff
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -21,15 +22,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.SemanticsPropertyKey
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.odk.collect.android.R
 import org.odk.collect.android.application.CollectTheme
 import org.odk.collect.androidshared.ui.compose.marginExtraSmall
 import org.odk.collect.androidshared.ui.compose.marginSmall
@@ -137,7 +137,7 @@ fun FormEnd(
 
 @Composable
 private fun EditWarning(
-    @DrawableRes icon: Int,
+    icon: ImageVector,
     @StringRes title: Int,
     @StringRes message: Int?,
     errorBackground: Boolean
@@ -166,14 +166,14 @@ private fun EditWarning(
                     titleText
                 }
 
-                set(EditWarningSemantics.iconProperty, icon)
+                set(EditWarningSemantics.iconProperty, icon.name)
                 set(EditWarningSemantics.errorBackgroundProperty, errorBackground)
             },
         colors = cardColors
     ) {
         Row(modifier = Modifier.padding(marginStandard())) {
             Icon(
-                painter = painterResource(icon),
+                icon,
                 contentDescription = null
             )
 
@@ -199,23 +199,23 @@ private fun getWarning(
     isEditableAfterFinalization: Boolean,
     shouldBeSentAutomatically: Boolean,
     saveAsDraftEnabled: Boolean
-): Triple<Int, Int, Int?> {
+): Triple<ImageVector, Int, Int?> {
     return if (isEditableAfterFinalization) {
         if (shouldBeSentAutomatically) {
             Triple(
-                R.drawable.ic_edit_24,
+                Icons.Default.Edit,
                 string.form_editing_enabled_after_sending,
                 string.form_editing_enabled_after_sending_hint
             )
         } else {
             Triple(
-                R.drawable.ic_edit_24,
+                Icons.Default.Edit,
                 string.form_editing_enabled_after_finalizing,
                 string.form_editing_enabled_after_finalizing_hint
             )
         }
     } else {
-        val icon = R.drawable.ic_edit_off_24
+        val icon = Icons.Default.EditOff
         val message = if (saveAsDraftEnabled) {
             string.form_editing_disabled_hint
         } else {
@@ -240,7 +240,7 @@ private fun getWarning(
 
 object EditWarningSemantics {
     const val TAG = "EditWarning"
-    val iconProperty = SemanticsPropertyKey<Int>("icon")
+    val iconProperty = SemanticsPropertyKey<String>("icon")
     val errorBackgroundProperty = SemanticsPropertyKey<Boolean>("errorBackground")
 }
 

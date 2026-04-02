@@ -1,15 +1,16 @@
 package org.odk.collect.android.formentry
 
 import android.app.Application
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.EditOff
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -20,7 +21,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.odk.collect.android.R.drawable
 import org.odk.collect.strings.R.string
 
 @RunWith(AndroidJUnit4::class)
@@ -197,7 +197,7 @@ class FormEndTest {
                     )
                 )
             )
-            .assert(hasIcon(drawable.ic_edit_off_24))
+            .assert(hasIcon(Icons.Default.EditOff))
             .assert(hasErrorBackground(true))
     }
 
@@ -218,7 +218,7 @@ class FormEndTest {
             .assert(
                 hasContentDescription(application.getString(string.form_editing_disabled_after_finalizing))
             )
-            .assert(hasIcon(drawable.ic_edit_off_24))
+            .assert(hasIcon(Icons.Default.EditOff))
             .assert(hasErrorBackground(true))
     }
 
@@ -244,7 +244,7 @@ class FormEndTest {
                     )
                 )
             )
-            .assert(hasIcon(drawable.ic_edit_off_24))
+            .assert(hasIcon(Icons.Default.EditOff))
             .assert(hasErrorBackground(true))
     }
 
@@ -270,7 +270,7 @@ class FormEndTest {
                     )
                 )
             )
-            .assert(hasIcon(drawable.ic_edit_24))
+            .assert(hasIcon(Icons.Default.Edit))
             .assert(hasErrorBackground(false))
     }
 
@@ -296,7 +296,7 @@ class FormEndTest {
                     )
                 )
             )
-            .assert(hasIcon(drawable.ic_edit_24))
+            .assert(hasIcon(Icons.Default.Edit))
             .assert(hasErrorBackground(false))
     }
 
@@ -322,8 +322,8 @@ class FormEndTest {
     }
 }
 
-private fun hasIcon(@DrawableRes icon: Int): SemanticsMatcher {
-    return SemanticsMatcher.expectValue(EditWarningSemantics.iconProperty, icon)
+private fun hasIcon(icon: ImageVector): SemanticsMatcher {
+    return SemanticsMatcher.expectValue(EditWarningSemantics.iconProperty, icon.name)
 }
 
 private fun hasErrorBackground(errorBackground: Boolean): SemanticsMatcher {
