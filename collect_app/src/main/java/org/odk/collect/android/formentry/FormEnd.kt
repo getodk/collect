@@ -75,13 +75,13 @@ fun FormEnd(
                 .padding(top = 64.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            val screeName = stringResource(org.odk.collect.android.R.string.form_end_screen)
+            val screenName = stringResource(org.odk.collect.android.R.string.form_end_screen)
 
             if (saveAsDraftEnabled) {
                 OutlinedButton(
                     modifier = Modifier.weight(1f),
                     onClick = {
-                        if (MultiClickGuard.allowClick(screeName)) {
+                        if (MultiClickGuard.allowClick(screenName)) {
                             onSave(false)
                         }
                     }
@@ -110,7 +110,7 @@ fun FormEnd(
                 Button(
                     modifier = Modifier.weight(1f),
                     onClick = {
-                        if (MultiClickGuard.allowClick(screeName)) {
+                        if (MultiClickGuard.allowClick(screenName)) {
                             onSave(true)
                         }
                     }
