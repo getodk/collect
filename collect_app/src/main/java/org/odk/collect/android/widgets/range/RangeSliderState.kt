@@ -2,9 +2,9 @@ package org.odk.collect.android.widgets.range
 
 import org.javarosa.core.model.Constants.DATATYPE_INTEGER
 import org.javarosa.core.model.RangeQuestion
+import org.javarosa.core.model.SelectChoice
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.utilities.Appearances
-import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -42,7 +42,7 @@ data class RangeSliderState(
     companion object {
         private const val FRACTION_SCALE = 10
 
-        fun fromPrompt(prompt: FormEntryPrompt, selectChoiceLoader: SelectChoiceLoader): RangeSliderState {
+        fun fromPrompt(prompt: FormEntryPrompt, choices: List<SelectChoice>): RangeSliderState {
             val rangeQuestion = prompt.question as RangeQuestion
             val start = rangeQuestion.rangeStart
             val end = rangeQuestion.rangeEnd
@@ -59,7 +59,7 @@ data class RangeSliderState(
                 range.remainder(step).compareTo(BigDecimal.ZERO) == 0
 
             val labels = if (isValid) {
-                getLabels(prompt, selectChoiceLoader, start, end, step)
+                getLabels(prompt, choices, start, end, step)
             } else {
                 emptyList()
             }
@@ -133,9 +133,7 @@ data class RangeSliderState(
             return start + steps.multiply(step)
         }
 
-        private fun getLabels(prompt: FormEntryPrompt, selectChoiceLoader: SelectChoiceLoader, start: BigDecimal, end: BigDecimal, step: BigDecimal): List<String> {
-            val choices = selectChoiceLoader.loadSelectChoices(prompt)
-
+        private fun getLabels(prompt: FormEntryPrompt, choices: List<SelectChoice>, start: BigDecimal, end: BigDecimal, step: BigDecimal): List<String> {
             val labelMap = choices.associate { choice ->
                 choice.value.toBigDecimalOrNull() to prompt.getSelectChoiceText(choice)
             }

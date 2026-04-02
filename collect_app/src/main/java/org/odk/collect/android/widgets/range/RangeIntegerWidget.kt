@@ -27,7 +27,7 @@ class RangeIntegerWidget(
         dependencies,
         prompt
     ) {
-    private var rangeSliderState by mutableStateOf(RangeSliderState.fromPrompt(formEntryPrompt, selectChoiceLoader))
+    private var rangeSliderState by mutableStateOf(RangeSliderState.fromPrompt(formEntryPrompt, selectChoiceLoader.loadSelectChoices(formEntryPrompt)))
     private var shouldSuppressFlingGesture = false
 
     init {

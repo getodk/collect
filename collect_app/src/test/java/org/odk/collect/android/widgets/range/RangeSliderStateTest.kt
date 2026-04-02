@@ -12,19 +12,17 @@ import org.mockito.Mockito.mock
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.utilities.Appearances
-import org.odk.collect.android.widgets.support.FormEntryPromptSelectChoiceLoader
 
 class RangeSliderStateTest {
     private val question = mock<RangeQuestion>()
     private val promptBuilder = MockFormEntryPromptBuilder().withQuestion(question)
-    private val selectChoiceLoader = FormEntryPromptSelectChoiceLoader()
 
     @Test
     fun `sets sliderValue to null when answer is out of range`() {
         mockIntQuestion(1, 10, 1)
 
         val prompt = promptBuilder.withAnswer(IntegerData(0)).build()
-        val state = RangeSliderState.fromPrompt(prompt, selectChoiceLoader)
+        val state = RangeSliderState.fromPrompt(prompt, emptyList())
 
         assertThat(state.sliderValue, equalTo(null))
     }
@@ -34,7 +32,7 @@ class RangeSliderStateTest {
         mockIntQuestion(0, 10, 15)
 
         val prompt = promptBuilder.withAnswer(IntegerData(5)).build()
-        val state = RangeSliderState.fromPrompt(prompt, selectChoiceLoader)
+        val state = RangeSliderState.fromPrompt(prompt, emptyList())
 
         assertThat(state.sliderValue, equalTo(null))
     }
@@ -48,7 +46,7 @@ class RangeSliderStateTest {
             .withDataType(DATATYPE_INTEGER)
             .build()
 
-        val state = RangeSliderState.fromPrompt(prompt, selectChoiceLoader)
+        val state = RangeSliderState.fromPrompt(prompt, emptyList())
 
         assertThat(state.sliderValue!!.stripTrailingZeros(), equalTo(0.7.toBigDecimal()))
         assertThat(state.realValue, equalTo(7.toBigDecimal()))
@@ -63,7 +61,7 @@ class RangeSliderStateTest {
             .withDataType(DATATYPE_INTEGER)
             .build()
 
-        val state = RangeSliderState.fromPrompt(prompt, selectChoiceLoader)
+        val state = RangeSliderState.fromPrompt(prompt, emptyList())
 
         assertThat(state.sliderValue!!.stripTrailingZeros(), equalTo(0.3.toBigDecimal()))
         assertThat(state.realValue, equalTo(7.toBigDecimal()))
@@ -78,7 +76,7 @@ class RangeSliderStateTest {
             .withDataType(DATATYPE_INTEGER)
             .build()
 
-        val state = RangeSliderState.fromPrompt(prompt, selectChoiceLoader)
+        val state = RangeSliderState.fromPrompt(prompt, emptyList())
 
         assertThat(state.realValue, equalTo(null))
     }
@@ -91,7 +89,7 @@ class RangeSliderStateTest {
             .withDataType(DATATYPE_INTEGER)
             .build()
 
-        val state = RangeSliderState.fromPrompt(prompt, selectChoiceLoader)
+        val state = RangeSliderState.fromPrompt(prompt, emptyList())
 
         assertThat(state.rangeStart, equalTo(0.toBigDecimal()))
         assertThat(state.startLabel, equalTo("0"))
@@ -108,7 +106,7 @@ class RangeSliderStateTest {
             .withDataType(DATATYPE_INTEGER)
             .build()
 
-        val state = RangeSliderState.fromPrompt(prompt, selectChoiceLoader)
+        val state = RangeSliderState.fromPrompt(prompt, emptyList())
 
         assertThat(state.rangeStart, equalTo(10.toBigDecimal()))
         assertThat(state.startLabel, equalTo("10"))
@@ -125,7 +123,7 @@ class RangeSliderStateTest {
             .withDataType(DATATYPE_DECIMAL)
             .build()
 
-        val state = RangeSliderState.fromPrompt(prompt, selectChoiceLoader)
+        val state = RangeSliderState.fromPrompt(prompt, emptyList())
 
         assertThat(state.startLabel, equalTo("0.5"))
         assertThat(state.endLabel, equalTo("10.5"))
@@ -139,12 +137,12 @@ class RangeSliderStateTest {
             .withDataType(DATATYPE_INTEGER)
             .build()
 
-        val state = RangeSliderState.fromPrompt(prompt, selectChoiceLoader)
+        val state = RangeSliderState.fromPrompt(prompt, emptyList())
         assertThat(state.numOfSteps, equalTo(9))
 
         whenever(question.rangeStep).thenReturn(2.toBigDecimal())
 
-        val newState = RangeSliderState.fromPrompt(prompt, selectChoiceLoader)
+        val newState = RangeSliderState.fromPrompt(prompt, emptyList())
         assertThat(newState.numOfSteps, equalTo(4))
     }
 
@@ -156,7 +154,7 @@ class RangeSliderStateTest {
             .withDataType(DATATYPE_DECIMAL)
             .build()
 
-        val state = RangeSliderState.fromPrompt(prompt, selectChoiceLoader)
+        val state = RangeSliderState.fromPrompt(prompt, emptyList())
 
         assertThat(state.numOfSteps, equalTo(4))
     }
@@ -169,7 +167,7 @@ class RangeSliderStateTest {
             .withDataType(DATATYPE_INTEGER)
             .build()
 
-        val state = RangeSliderState.fromPrompt(prompt, selectChoiceLoader)
+        val state = RangeSliderState.fromPrompt(prompt, emptyList())
 
         assertThat(state.isValid, equalTo(true))
         assertThat(state.numOfSteps, equalTo(9))
@@ -184,7 +182,7 @@ class RangeSliderStateTest {
             .withDataType(DATATYPE_INTEGER)
             .build()
 
-        val state = RangeSliderState.fromPrompt(prompt, selectChoiceLoader)
+        val state = RangeSliderState.fromPrompt(prompt, emptyList())
 
         assertThat(state.valueLabel, equalTo(""))
     }
@@ -198,7 +196,7 @@ class RangeSliderStateTest {
             .withDataType(DATATYPE_INTEGER)
             .build()
 
-        val state = RangeSliderState.fromPrompt(prompt, selectChoiceLoader)
+        val state = RangeSliderState.fromPrompt(prompt, emptyList())
 
         assertThat(state.valueLabel, equalTo("5"))
     }
@@ -212,7 +210,7 @@ class RangeSliderStateTest {
             .withDataType(DATATYPE_DECIMAL)
             .build()
 
-        val state = RangeSliderState.fromPrompt(prompt, selectChoiceLoader)
+        val state = RangeSliderState.fromPrompt(prompt, emptyList())
 
         assertThat(state.valueLabel, equalTo("5.0"))
     }
@@ -225,7 +223,7 @@ class RangeSliderStateTest {
             .withDataType(DATATYPE_INTEGER)
             .build()
 
-        val state = RangeSliderState.fromPrompt(prompt, selectChoiceLoader)
+        val state = RangeSliderState.fromPrompt(prompt, emptyList())
         assertThat(state.isDiscrete, equalTo(true))
     }
 
@@ -237,7 +235,7 @@ class RangeSliderStateTest {
             .withDataType(DATATYPE_DECIMAL)
             .build()
 
-        val state = RangeSliderState.fromPrompt(prompt, selectChoiceLoader)
+        val state = RangeSliderState.fromPrompt(prompt, emptyList())
         assertThat(state.isDiscrete, equalTo(false))
     }
 
@@ -249,7 +247,7 @@ class RangeSliderStateTest {
             .withDataType(DATATYPE_INTEGER)
             .build()
 
-        val state = RangeSliderState.fromPrompt(prompt, selectChoiceLoader)
+        val state = RangeSliderState.fromPrompt(prompt, emptyList())
 
         assertThat(state.isEnabled, equalTo(true))
     }
@@ -263,7 +261,7 @@ class RangeSliderStateTest {
             .withReadOnly(true)
             .build()
 
-        val state = RangeSliderState.fromPrompt(prompt, selectChoiceLoader)
+        val state = RangeSliderState.fromPrompt(prompt, emptyList())
 
         assertThat(state.isEnabled, equalTo(false))
     }
@@ -277,7 +275,7 @@ class RangeSliderStateTest {
             .withReadOnly(false)
             .build()
 
-        val state = RangeSliderState.fromPrompt(prompt, selectChoiceLoader)
+        val state = RangeSliderState.fromPrompt(prompt, emptyList())
 
         assertThat(state.isEnabled, equalTo(false))
     }
@@ -290,7 +288,7 @@ class RangeSliderStateTest {
             .withDataType(DATATYPE_INTEGER)
             .build()
 
-        val state = RangeSliderState.fromPrompt(prompt, selectChoiceLoader)
+        val state = RangeSliderState.fromPrompt(prompt, emptyList())
         assertThat(state.isValid, equalTo(true))
     }
 
@@ -302,7 +300,7 @@ class RangeSliderStateTest {
             .withDataType(DATATYPE_INTEGER)
             .build()
 
-        val state = RangeSliderState.fromPrompt(prompt, selectChoiceLoader)
+        val state = RangeSliderState.fromPrompt(prompt, emptyList())
         assertThat(state.isValid, equalTo(false))
     }
 
@@ -314,7 +312,7 @@ class RangeSliderStateTest {
             .withDataType(DATATYPE_INTEGER)
             .build()
 
-        val state = RangeSliderState.fromPrompt(prompt, selectChoiceLoader)
+        val state = RangeSliderState.fromPrompt(prompt, emptyList())
         assertThat(state.isValid, equalTo(false))
     }
 
@@ -326,7 +324,7 @@ class RangeSliderStateTest {
             .withDataType(DATATYPE_INTEGER)
             .build()
 
-        val state = RangeSliderState.fromPrompt(prompt, selectChoiceLoader)
+        val state = RangeSliderState.fromPrompt(prompt, emptyList())
         assertThat(state.isValid, equalTo(false))
     }
 
@@ -338,7 +336,7 @@ class RangeSliderStateTest {
             .withDataType(DATATYPE_INTEGER)
             .build()
 
-        val state = RangeSliderState.fromPrompt(prompt, selectChoiceLoader)
+        val state = RangeSliderState.fromPrompt(prompt, emptyList())
         assertThat(state.isValid, equalTo(false))
     }
 
@@ -350,7 +348,7 @@ class RangeSliderStateTest {
             .withDataType(DATATYPE_INTEGER)
             .build()
 
-        val state = RangeSliderState.fromPrompt(prompt, selectChoiceLoader)
+        val state = RangeSliderState.fromPrompt(prompt, emptyList())
         assertThat(state.isHorizontal, equalTo(true))
     }
 
@@ -363,7 +361,7 @@ class RangeSliderStateTest {
             .withAppearance(Appearances.VERTICAL)
             .build()
 
-        val state = RangeSliderState.fromPrompt(prompt, selectChoiceLoader)
+        val state = RangeSliderState.fromPrompt(prompt, emptyList())
         assertThat(state.isHorizontal, equalTo(false))
     }
 
@@ -375,12 +373,12 @@ class RangeSliderStateTest {
             .withDataType(DATATYPE_INTEGER)
             .build()
 
-        val state = RangeSliderState.fromPrompt(prompt, selectChoiceLoader)
+        val state = RangeSliderState.fromPrompt(prompt, emptyList())
         assertThat(state.numOfTicks, equalTo(11))
 
         whenever(question.rangeStep).thenReturn(2.toBigDecimal())
 
-        val newState = RangeSliderState.fromPrompt(prompt, selectChoiceLoader)
+        val newState = RangeSliderState.fromPrompt(prompt, emptyList())
         assertThat(newState.numOfTicks, equalTo(6))
     }
 
@@ -392,7 +390,7 @@ class RangeSliderStateTest {
             .withDataType(DATATYPE_INTEGER)
             .build()
 
-        val state = RangeSliderState.fromPrompt(prompt, selectChoiceLoader)
+        val state = RangeSliderState.fromPrompt(prompt, emptyList())
         assertThat(state.numOfTicks, equalTo(6))
     }
 
@@ -404,7 +402,7 @@ class RangeSliderStateTest {
             .withDataType(DATATYPE_INTEGER)
             .build()
 
-        val state = RangeSliderState.fromPrompt(prompt, selectChoiceLoader)
+        val state = RangeSliderState.fromPrompt(prompt, emptyList())
         assertThat(state.numOfTicks, equalTo(11))
     }
 
@@ -417,7 +415,7 @@ class RangeSliderStateTest {
             .withAppearance(Appearances.NO_TICKS)
             .build()
 
-        val state = RangeSliderState.fromPrompt(prompt, selectChoiceLoader)
+        val state = RangeSliderState.fromPrompt(prompt, emptyList())
         assertThat(state.numOfTicks, equalTo(0))
     }
 
@@ -429,7 +427,7 @@ class RangeSliderStateTest {
             .withDataType(DATATYPE_INTEGER)
             .build()
 
-        val state = RangeSliderState.fromPrompt(prompt, selectChoiceLoader)
+        val state = RangeSliderState.fromPrompt(prompt, emptyList())
         assertThat(state.numOfTicks, equalTo(0))
     }
 
@@ -441,7 +439,7 @@ class RangeSliderStateTest {
             .withDataType(DATATYPE_INTEGER)
             .build()
 
-        val state = RangeSliderState.fromPrompt(prompt, selectChoiceLoader)
+        val state = RangeSliderState.fromPrompt(prompt, emptyList())
         assertThat(state.labels, equalTo(listOf("", "", "", "", "", "")))
     }
 
@@ -449,21 +447,20 @@ class RangeSliderStateTest {
     fun `returns labels when choices are available`() {
         mockIntQuestion(0, 5, 1)
 
+        val choices = listOf(
+            SelectChoice("0", "0"),
+            SelectChoice("1", "1"),
+            SelectChoice("2", "2"),
+            SelectChoice("3", "3"),
+            SelectChoice("4", "4"),
+            SelectChoice("5", "5")
+        )
         val prompt = promptBuilder
-            .withSelectChoices(
-                listOf(
-                    SelectChoice("0", "0"),
-                    SelectChoice("1", "1"),
-                    SelectChoice("2", "2"),
-                    SelectChoice("3", "3"),
-                    SelectChoice("4", "4"),
-                    SelectChoice("5", "5")
-                )
-            )
+            .withSelectChoices(choices)
             .withDataType(DATATYPE_INTEGER)
             .build()
 
-        val state = RangeSliderState.fromPrompt(prompt, selectChoiceLoader)
+        val state = RangeSliderState.fromPrompt(prompt, choices)
         assertThat(state.labels, equalTo(listOf("0", "1", "2", "3", "4", "5")))
     }
 
@@ -475,7 +472,7 @@ class RangeSliderStateTest {
             .withDataType(DATATYPE_INTEGER)
             .build()
 
-        val state = RangeSliderState.fromPrompt(prompt, selectChoiceLoader)
+        val state = RangeSliderState.fromPrompt(prompt, emptyList())
         assertThat(state.placeholder!!.stripTrailingZeros(), equalTo(0.4.toBigDecimal()))
     }
 
@@ -487,7 +484,7 @@ class RangeSliderStateTest {
             .withDataType(DATATYPE_INTEGER)
             .build()
 
-        val state = RangeSliderState.fromPrompt(prompt, selectChoiceLoader)
+        val state = RangeSliderState.fromPrompt(prompt, emptyList())
         assertThat(state.placeholder, equalTo(null))
     }
 
