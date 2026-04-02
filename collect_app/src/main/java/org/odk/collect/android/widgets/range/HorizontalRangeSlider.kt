@@ -119,7 +119,7 @@ private fun HorizontalEdgeLabels(labelStart: String, labelEnd: String) {
 private fun HorizontalStepLabels(labels: List<String>) {
     BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
         val totalSteps = labels.size - 1
-        val labelWidth = maxWidth / 5
+        val labelWidth = maxWidth / 5 // Each label takes up a fifth of the track width. Confirmed to look good in most cases.
 
         labels.forEachIndexed { index, label ->
             if (label.isBlank()) return@forEachIndexed
