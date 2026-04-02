@@ -35,7 +35,7 @@ jobs:
       - checkout
       - run:
           name: Validate Gradlew Wrapper
-          command: ./validate.sh
+          command: ./validate-gradle-wrapper.sh
 
       - restore_cache:
           keys:
