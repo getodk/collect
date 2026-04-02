@@ -1002,6 +1002,19 @@ class GeoPolyFragmentTest {
             GeoPolyFragment({ OnBackPressedDispatcher() })
         }
 
+        locationTracker.currentLocation = Location(5.0, 5.0)
+        assertThat(mapFragment.getCenter(), equalTo(MapPoint(5.0, 5.0)))
+
+        locationTracker.currentLocation = Location(1.0, 1.0)
+        assertThat(mapFragment.getCenter(), equalTo(MapPoint(5.0, 5.0)))
+    }
+
+    @Test
+    fun whenRecordingIsPaused_mapCenterDoesNoUpdate() {
+        fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment({ OnBackPressedDispatcher() })
+        }
+
         startInput(R.id.automatic_mode)
         locationTracker.currentLocation = Location(5.0, 5.0)
         assertThat(mapFragment.getCenter(), equalTo(MapPoint(5.0, 5.0)))

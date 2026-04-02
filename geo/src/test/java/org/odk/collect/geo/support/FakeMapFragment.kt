@@ -1,17 +1,18 @@
 package org.odk.collect.geo.support
 
 import androidx.fragment.app.Fragment
-import org.odk.collect.maps.traces.LineDescription
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragment.FeatureListener
 import org.odk.collect.maps.MapFragment.PointListener
 import org.odk.collect.maps.MapFragment.ReadyListener
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.circles.CircleDescription
-import org.odk.collect.maps.traces.PolygonDescription
 import org.odk.collect.maps.markers.MarkerDescription
 import org.odk.collect.maps.markers.MarkerIconDescription
+import org.odk.collect.maps.traces.LineDescription
+import org.odk.collect.maps.traces.PolygonDescription
 import kotlin.random.Random
+
 class FakeMapFragment(private val ready: Boolean = false) : Fragment(), MapFragment {
     private var clickListener: PointListener? = null
     private var gpsLocationListener: PointListener? = null
@@ -68,6 +69,7 @@ class FakeMapFragment(private val ready: Boolean = false) : Fragment(), MapFragm
 
     override fun zoomToCurrentLocation(center: MapPoint?) {
         this.center = center
+        this.hasCenter = true
         this.zoom = (zoomLevelSetByUser ?: MapFragment.POINT_ZOOM).toDouble()
     }
 
