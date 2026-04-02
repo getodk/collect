@@ -308,10 +308,13 @@ class MapboxMapFragment :
     ) {
         features[featureId]?.dispose()
         val markers = listOf(markerDescription)
-        val pointAnnotations =
-            MapUtils.createPointAnnotations(requireContext(), pointAnnotationManager, markers)
+        val pointAnnotation = MapUtils.createPointAnnotation(
+            pointAnnotationManager,
+            requireContext(),
+            markerDescription
+        )
 
-        addMarker(featureId, markers[0], pointAnnotations[0])
+        addMarker(featureId, markers[0], pointAnnotation)
     }
 
     override fun addMarkers(markers: List<MarkerDescription>): List<Int> {
