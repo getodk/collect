@@ -8,18 +8,15 @@ import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.support.pages.FormEntryPage.QuestionAndAnswer;
 import org.odk.collect.android.support.rules.CollectTestRule;
-import org.odk.collect.android.support.rules.PageComposeRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 
 @RunWith(AndroidJUnit4.class)
 public class QuickSaveTest {
-    private final PageComposeRule pageComposeRule = new PageComposeRule();
+
     public final CollectTestRule rule = new CollectTestRule();
 
     @Rule
     public final RuleChain chain = TestRuleChain.chain()
-            .around(pageComposeRule)
-            .around(pageComposeRule.getComposeRule())
             .around(rule);
 
     @Test

@@ -10,19 +10,15 @@ import org.odk.collect.android.support.pages.FormEntryPage.QuestionAndAnswer;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.SaveOrDiscardFormDialog;
 import org.odk.collect.android.support.rules.CollectTestRule;
-import org.odk.collect.android.support.rules.PageComposeRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 
 @RunWith(AndroidJUnit4.class)
 public class QuittingFormTest {
-    private final PageComposeRule pageComposeRule = new PageComposeRule();
 
     public CollectTestRule rule = new CollectTestRule();
 
     @Rule
     public RuleChain copyFormChain = TestRuleChain.chain()
-            .around(pageComposeRule)
-            .around(pageComposeRule.getComposeRule())
             .around(rule);
 
     @Test
