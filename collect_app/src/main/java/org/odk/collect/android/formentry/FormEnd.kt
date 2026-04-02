@@ -73,7 +73,7 @@ fun FormEnd(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 64.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+            horizontalArrangement = Arrangement.spacedBy(marginStandard())
         ) {
             val screenName = stringResource(org.odk.collect.android.R.string.form_end_screen)
 
