@@ -36,6 +36,7 @@ import com.mapbox.maps.plugin.LocationPuck2D
 import com.mapbox.maps.plugin.animation.MapAnimationOptions.Companion.mapAnimationOptions
 import com.mapbox.maps.plugin.animation.flyTo
 import com.mapbox.maps.plugin.annotation.annotations
+import com.mapbox.maps.plugin.annotation.generated.PointAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationManager
@@ -57,7 +58,7 @@ import kotlinx.coroutines.launch
 import org.odk.collect.androidshared.utils.ScreenUtils
 import org.odk.collect.location.LocationClient
 import org.odk.collect.location.LocationClient.LocationClientListener
-import org.odk.collect.maps.LineDescription
+import org.odk.collect.maps.traces.LineDescription
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragment.ErrorListener
 import org.odk.collect.maps.MapFragment.FeatureListener
@@ -66,9 +67,10 @@ import org.odk.collect.maps.MapFragment.ReadyListener
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.MapViewModel
 import org.odk.collect.maps.MapViewModelMapFragment
-import org.odk.collect.maps.PolygonDescription
+import org.odk.collect.maps.traces.PolygonDescription
 import org.odk.collect.maps.Zoom
 import org.odk.collect.maps.ZoomObserver
+import org.odk.collect.maps.circles.CircleDescription
 import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils.getReferenceLayerFile
 import org.odk.collect.maps.layers.MbtilesFile
 import org.odk.collect.maps.layers.ReferenceLayerRepository
@@ -300,6 +302,20 @@ class MapboxMapFragment :
         return addMarkers(listOf(markerDescription)).first()
     }
 
+    override fun updateMarker(
+        featureId: Int,
+        markerDescription: MarkerDescription
+    ) {
+        features[featureId]?.dispose()
+        val pointAnnotation = MapUtils.createPointAnnotation(
+            pointAnnotationManager,
+            requireContext(),
+            markerDescription
+        )
+
+        addMarker(featureId, markerDescription, pointAnnotation)
+    }
+
     override fun addMarkers(markers: List<MarkerDescription>): List<Int> {
         val pointAnnotations =
             MapUtils.createPointAnnotations(requireContext(), pointAnnotationManager, markers)
@@ -309,21 +325,30 @@ class MapboxMapFragment :
             .zip(pointAnnotations.asSequence())
             .forEach { (marker, pointAnnotation) ->
                 val featureId = nextFeatureId++
-                val markerFeature = MarkerFeature(
-                    requireContext(),
-                    pointAnnotationManager,
-                    pointAnnotation,
-                    featureId,
-                    featureClickListener,
-                    featureDragEndListener,
-                    marker.point
-                )
-
                 featureIds.add(featureId)
-                features[featureId] = markerFeature
+
+                addMarker(featureId, marker, pointAnnotation)
             }
 
         return featureIds
+    }
+
+    private fun addMarker(
+        featureId: Int,
+        marker: MarkerDescription,
+        pointAnnotation: PointAnnotation
+    ) {
+        val markerFeature = MarkerFeature(
+            requireContext(),
+            pointAnnotationManager,
+            pointAnnotation,
+            featureId,
+            featureClickListener,
+            featureDragEndListener,
+            marker.point
+        )
+
+        features[featureId] = markerFeature
     }
 
     override fun setMarkerIcon(featureId: Int, markerIconDescription: MarkerIconDescription) {
@@ -418,6 +443,17 @@ class MapboxMapFragment :
         addPolygon(featureId, polygonDescription)
     }
 
+    override fun addCircle(circleDescription: CircleDescription): Int {
+        return -1
+    }
+
+    override fun updateCircle(
+        featureId: Int,
+        circleDescription: CircleDescription
+    ) {
+
+    }
+
     override fun getPolyPoints(featureId: Int): List<MapPoint> {
         val feature = features[featureId]
         return if (feature is LineFeature) {
@@ -461,18 +497,6 @@ class MapboxMapFragment :
 
     override fun getGpsLocation(): MapPoint? {
         return lastLocationFix
-    }
-
-    override fun getLocationProvider(): String? {
-        return lastLocationProvider
-    }
-
-    override fun runOnGpsLocationReady(listener: ReadyListener) {
-        if (lastLocationFix != null) {
-            listener.onReady(this)
-        } else {
-            gpsLocationReadyListeners.add(listener)
-        }
     }
 
     override fun setGpsLocationListener(listener: PointListener?) {

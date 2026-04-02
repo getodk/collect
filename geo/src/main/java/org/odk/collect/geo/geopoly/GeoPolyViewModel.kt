@@ -19,7 +19,7 @@ import org.odk.collect.maps.MapPoint
 class GeoPolyViewModel(
     outputMode: OutputMode,
     points: List<MapPoint>,
-    private val retainMockAccuracy: Boolean,
+    retainMockAccuracy: Boolean,
     private val locationTracker: LocationTracker,
     private val scheduler: Scheduler,
     val invalidMessage: LiveData<DisplayString?>
@@ -32,7 +32,8 @@ class GeoPolyViewModel(
     var recordingMode: RecordingMode = RecordingMode.PLACEMENT
         private set
 
-    var inputActive: Boolean = false
+    private val _inputActive = MutableStateFlow(false)
+    var inputActive: StateFlow<Boolean> = _inputActive
         private set
 
     private val _points = MutableStateFlow(
@@ -56,10 +57,20 @@ class GeoPolyViewModel(
         }
     }
 
-    val viewData = _points.asLiveData().combine(invalidMessage)
+    val geoPoly = _points.asLiveData()
+        .combine(invalidMessage)
+        .map {
+            GeoPoly(it.first ?: emptyList(), it.second == null)
+        }
+
+    val currentLocation = locationTracker.getLocation()
 
     private var accuracyThreshold: Int = 0
     private var recording: Cancellable? = null
+
+    init {
+        locationTracker.start(retainMockAccuracy)
+    }
 
     fun add(point: MapPoint) {
         if (invalidMessage.value == null) {
@@ -80,11 +91,10 @@ class GeoPolyViewModel(
 
     fun startRecording(accuracyThreshold: Int, interval: Long) {
         this.accuracyThreshold = accuracyThreshold
-        locationTracker.start(retainMockAccuracy)
         recording = scheduler.repeat({ recordPoint(accuracyThreshold) }, interval)
     }
 
-    private fun recordPoint(accuracyThreshold: Int) {
+    fun recordPoint(accuracyThreshold: Int = 0) {
         locationTracker.getLocation().value?.let {
             if (accuracyThreshold == 0 || it.accuracy <= accuracyThreshold) {
                 add(
@@ -102,7 +112,6 @@ class GeoPolyViewModel(
     fun stopRecording() {
         disableInput()
         recording?.cancel()
-        locationTracker.stop()
     }
 
     fun setRecordingMode(mode: RecordingMode) {
@@ -110,14 +119,17 @@ class GeoPolyViewModel(
     }
 
     fun enableInput() {
-        inputActive = true
+        _inputActive.value = true
     }
 
     fun disableInput() {
-        inputActive = false
+        _inputActive.value = false
     }
 
-    override fun onCleared() {
+    public override fun onCleared() {
         stopRecording()
+        locationTracker.stop()
     }
+
+    data class GeoPoly(val points: List<MapPoint>, val isValid: Boolean)
 }

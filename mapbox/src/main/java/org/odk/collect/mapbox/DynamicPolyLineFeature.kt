@@ -9,10 +9,10 @@ import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationOptions
-import org.odk.collect.maps.LineDescription
+import org.odk.collect.maps.traces.LineDescription
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapPoint
-import org.odk.collect.maps.getMarkersForPoints
+import org.odk.collect.maps.traces.getMarkersForPoints
 
 internal class DynamicPolyLineFeature(
     private val context: Context,
