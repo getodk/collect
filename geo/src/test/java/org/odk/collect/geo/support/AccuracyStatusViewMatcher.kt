@@ -13,7 +13,7 @@ internal class AccuracyStatusViewMatcher(private val accuracy: LocationAccuracy)
     }
 
     override fun describeTo(description: Description) {
-        description.appendText("AccuracyStatusView with a accuracy=$accuracy")
+        description.appendText("AccuracyStatusView with an accuracy=$accuracy")
     }
 
     companion object {
