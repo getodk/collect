@@ -118,6 +118,10 @@ class FormEndTest {
         composeTestRule
             .onNodeWithText(application.getString(string.finalize))
             .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText(application.getString(string.send))
+            .assertIsNotDisplayed()
     }
 
     @Test
@@ -173,6 +177,10 @@ class FormEndTest {
         composeTestRule
             .onNodeWithText(application.getString(string.send))
             .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText(application.getString(string.finalize))
+            .assertIsNotDisplayed()
     }
 
     @Test
