@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -18,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInteropFilter
+import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
@@ -25,10 +25,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Constraints
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import org.odk.collect.androidshared.R.dimen
 import kotlin.math.roundToInt
 
@@ -131,6 +131,8 @@ fun VerticalRangeSlider(
                     .height(SLIDER_HEIGHT.dp)
                     .constrainAs(stepLabelsRef) {
                         start.linkTo(edgeLabelsRef.end, margin = margin)
+                        end.linkTo(parent.end, margin = margin)
+                        width = Dimension.fillToConstraints
                         centerVerticallyTo(sliderRef)
                     }
             )
@@ -168,30 +170,34 @@ private fun VerticalEdgeLabels(
 
 @Composable
 private fun VerticalStepLabels(labels: List<String>, modifier: Modifier = Modifier) {
-    BoxWithConstraints(modifier = modifier) {
+    Box(modifier = modifier) {
         val totalSteps = labels.size - 1
-        val lineHeight = MaterialTheme.typography.bodyLarge.lineHeight.value.dp
 
-        labels.forEachIndexed { index, label ->
-            if (label.isBlank()) return@forEachIndexed
+        SubcomposeLayout { constraints ->
+            val placeable = labels.mapIndexed { index, label ->
+                if (label.isBlank()) return@mapIndexed null
 
-            val fraction = if (totalSteps > 0) index.toFloat() / totalSteps else 0f
+                val measurables = subcompose(index) {
+                    Label(modifier = Modifier, text = label)
+                }
+                val placeable = measurables.first().measure(constraints)
+                val fraction = if (totalSteps > 0) index.toFloat() / totalSteps else 0f
 
-            val modifier = when (index) {
-                0 -> Modifier.align(Alignment.BottomStart)
-                totalSteps -> Modifier.align(Alignment.TopStart)
-                else -> Modifier
-                    .align(Alignment.TopStart)
-                    .offset {
-                        val yOffset = constraints.maxHeight * (1 - fraction) - lineHeight.roundToPx() / 2
-                        IntOffset(0, yOffset.roundToInt())
-                    }
+                val y = when (index) {
+                    0 -> constraints.maxHeight - placeable.height
+                    totalSteps -> 0
+                    else -> (constraints.maxHeight * (1 - fraction) - placeable.height / 2).roundToInt()
+                }
+
+                index to Triple(placeable, 0, y)
+            }.filterNotNull()
+
+            layout(constraints.maxWidth, constraints.maxHeight) {
+                placeable.forEach { (_, triple) ->
+                    val (placeable, x, y) = triple
+                    placeable.placeRelative(x, y)
+                }
             }
-
-            Label(
-                modifier = modifier,
-                text = label
-            )
         }
     }
 }
