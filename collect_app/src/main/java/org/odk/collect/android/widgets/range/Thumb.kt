@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import kotlin.math.roundToInt
 
-private const val THUMB_WIDTH = 4
+private const val THUMB_WIDTH = 6
 
 @Composable
 fun Thumb(value: Float?) {
@@ -36,8 +36,7 @@ fun Density.calculateThumbOffset(
     isVertical: Boolean
 ): IntOffset {
     val thumbSizePx = THUMB_WIDTH.dp.toPx()
-    val effectiveTrackSize = trackSize - thumbSizePx
     val fraction = if (isVertical) 1 - thumbValue else thumbValue
-    val offset = (effectiveTrackSize * fraction).roundToInt()
+    val offset = (trackSize * fraction - thumbSizePx * fraction).roundToInt()
     return if (isVertical) IntOffset(0, offset) else IntOffset(offset, 0)
 }
