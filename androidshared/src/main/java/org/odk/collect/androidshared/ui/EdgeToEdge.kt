@@ -10,6 +10,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
+import androidx.core.view.updatePadding
 import org.odk.collect.androidshared.system.ContextExt.isDarkTheme
 
 object EdgeToEdge {
@@ -39,6 +40,19 @@ object EdgeToEdge {
         }
     }
 
+    fun View.applyBottomBarInsetMargins() {
+        ViewCompat.setOnApplyWindowInsetsListener(this) { v, windowInsets ->
+            val systemBarsInsets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val keyboardInsets = windowInsets.getInsets(WindowInsetsCompat.Type.ime())
+
+            v.updatePadding(
+                bottom = maxOf(0, keyboardInsets.bottom - systemBarsInsets.bottom)
+            )
+
+            windowInsets
+        }
+    }
+
     private fun Window.avoidEdgeToEdge() {
         val contentView = decorView.findViewById<View>(android.R.id.content)
         contentView.addSystemBarInsetMargins()
@@ -55,7 +69,7 @@ object EdgeToEdge {
                 rightMargin = insets.right
             }
 
-            WindowInsetsCompat.CONSUMED
+            windowInsets
         }
     }
 }
