@@ -23,7 +23,10 @@ class CurrentLocationDelegate {
             location,
             false,
             MapFragment.IconAnchor.CENTER,
-            MarkerIconDescription.DrawableResource(org.odk.collect.maps.R.drawable.ic_crosshairs)
+            MarkerIconDescription.DrawableResource(
+                org.odk.collect.maps.R.drawable.ic_current_location,
+                MapConsts.DEFAULT_STROKE_COLOR
+            )
         )
 
         locationMarkerId.let {

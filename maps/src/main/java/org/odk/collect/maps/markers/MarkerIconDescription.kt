@@ -7,10 +7,13 @@ import java.util.Locale
 sealed interface MarkerIconDescription {
     data class DrawableResource @JvmOverloads constructor(
         val drawable: Int,
-        private val color: String? = null,
+        private val color: Int? = null,
         private val symbol: String? = null
     ) : MarkerIconDescription {
-        fun getColor(): Int? = color?.sanitizeToColorInt()
+
+        constructor(drawable: Int, color: String?, symbol: String?) : this(drawable, color?.sanitizeToColorInt(), symbol)
+
+        fun getColor(): Int? = color
 
         fun getSymbol(): String? = symbol?.let {
             if (it.isBlank()) {
