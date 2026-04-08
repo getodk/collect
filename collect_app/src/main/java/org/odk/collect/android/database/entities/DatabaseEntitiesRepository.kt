@@ -278,16 +278,21 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String, private val c
 
     private fun createList(list: String) {
         databaseConnection.resetTransaction {
-            val contentValues = ContentValues()
-            contentValues.put(ListsTable.COLUMN_NAME, list)
-            insertOrThrow(
-                ListsTable.TABLE_NAME,
-                null,
-                contentValues
-            )
+            createListInTransaction(this, list)
+        }
+    }
 
-            execSQL(
-                """
+    private fun createListInTransaction(db: SQLiteDatabase, list: String) {
+        val contentValues = ContentValues()
+        contentValues.put(ListsTable.COLUMN_NAME, list)
+        db.insertOrThrow(
+            ListsTable.TABLE_NAME,
+            null,
+            contentValues
+        )
+
+        db.execSQL(
+            """
                 CREATE TABLE IF NOT EXISTS "$list" (
                     $_ID integer PRIMARY KEY,
                     ${EntitiesTable.COLUMN_ID} text,
@@ -298,14 +303,13 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String, private val c
                     ${EntitiesTable.COLUMN_STATE} integer NOT NULL
                 );
                 """.trimIndent()
-            )
+        )
 
-            execSQL(
-                """
+        db.execSQL(
+            """
                 CREATE UNIQUE INDEX IF NOT EXISTS "${list}_unique_id_index" ON "$list" (${EntitiesTable.COLUMN_ID});
                 """.trimIndent()
-            )
-        }
+        )
     }
 
     private fun updatePropertyColumns(list: String, entity: Entity) {
@@ -340,17 +344,16 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String, private val c
 
         if (removedColumns.isNotEmpty()) {
             val remainingColumns = columnNames - removedColumns.toSet()
-
             val tempTable = "${list}_temp"
-            createList(tempTable)
-            addPropertyColumns(
-                tempTable,
-                remainingColumns.filter {
-                    it.startsWith(EntitiesTable.COLUMN_PROPERTY_PREFIX, ignoreCase = true)
-                }
-            )
 
             databaseConnection.resetTransaction {
+                createListInTransaction(this, tempTable)
+                addPropertyColumns(
+                    tempTable,
+                    remainingColumns.filter {
+                        it.startsWith(EntitiesTable.COLUMN_PROPERTY_PREFIX, ignoreCase = true)
+                    }
+                )
                 copyTableContent(list, tempTable, remainingColumns)
                 dropTable(list)
                 renameTable(tempTable, list)
