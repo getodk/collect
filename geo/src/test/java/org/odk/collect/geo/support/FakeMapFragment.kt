@@ -14,6 +14,7 @@ import org.odk.collect.maps.traces.PolygonDescription
 import kotlin.random.Random
 
 class FakeMapFragment(private val ready: Boolean = false) : Fragment(), MapFragment {
+    private var gpsLocationEnabled: Boolean = false
     private var clickListener: PointListener? = null
     private var gpsLocationListener: PointListener? = null
     private var locationProvider: String? = null
@@ -192,6 +193,14 @@ class FakeMapFragment(private val ready: Boolean = false) : Fragment(), MapFragm
         polygons.clear()
     }
 
+    override fun clearFeatures(ids: List<Int>) {
+        listOf(markers, markerIcons, polyLines, polygons).forEach {
+            ids.forEach { id ->
+                it.remove(id)
+            }
+        }
+    }
+
     override fun setClickListener(listener: PointListener?) {
         this.clickListener = listener
     }
@@ -209,7 +218,10 @@ class FakeMapFragment(private val ready: Boolean = false) : Fragment(), MapFragm
         dragListener = listener
     }
 
-    override fun setGpsLocationEnabled(enabled: Boolean) {}
+    override fun setGpsLocationEnabled(enabled: Boolean) {
+        gpsLocationEnabled = enabled
+    }
+
     override fun getGpsLocation(): MapPoint? {
         return gpsLocation
     }
@@ -231,9 +243,11 @@ class FakeMapFragment(private val ready: Boolean = false) : Fragment(), MapFragm
     }
 
     fun setLocation(mapPoint: MapPoint?) {
-        gpsLocation = mapPoint
-        if (gpsLocationListener != null) {
-            gpsLocationListener!!.onPoint(mapPoint!!)
+        if (gpsLocationEnabled) {
+            gpsLocation = mapPoint
+            if (gpsLocationListener != null) {
+                gpsLocationListener!!.onPoint(mapPoint!!)
+            }
         }
     }
 

@@ -1,9 +1,9 @@
 package org.odk.collect.maps
 
 import org.odk.collect.maps.circles.CircleDescription
-import org.odk.collect.maps.traces.LineDescription
 import org.odk.collect.maps.markers.MarkerDescription
 import org.odk.collect.maps.markers.MarkerIconDescription
+import org.odk.collect.maps.traces.LineDescription
 import org.odk.collect.maps.traces.PolygonDescription
 
 /**
@@ -117,6 +117,7 @@ interface MapFragment {
 
     /** Removes all map features from the map.  */
     fun clearFeatures()
+    fun clearFeatures(ids: List<Int>)
 
     /** Sets or clears the callback for a click on the map.  */
     fun setClickListener(listener: PointListener?)

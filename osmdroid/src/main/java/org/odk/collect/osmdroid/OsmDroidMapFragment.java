@@ -16,8 +16,8 @@ package org.odk.collect.osmdroid;
 
 import static androidx.core.graphics.drawable.BitmapDrawableKt.toDrawable;
 import static androidx.core.graphics.drawable.DrawableKt.toBitmap;
-import static org.odk.collect.maps.traces.TraceDescriptionKt.getMarkersForPoints;
 import static org.odk.collect.maps.markers.MarkerIconCreator.toBitmap;
+import static org.odk.collect.maps.traces.TraceDescriptionKt.getMarkersForPoints;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -46,21 +46,21 @@ import com.google.android.gms.location.LocationListener;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.androidshared.system.ContextExt;
 import org.odk.collect.location.LocationClient;
-import org.odk.collect.maps.circles.CircleDescription;
-import org.odk.collect.maps.traces.LineDescription;
 import org.odk.collect.maps.MapConfigurator;
 import org.odk.collect.maps.MapFragment;
 import org.odk.collect.maps.MapPoint;
 import org.odk.collect.maps.MapViewModel;
 import org.odk.collect.maps.MapViewModelMapFragment;
-import org.odk.collect.maps.traces.PolygonDescription;
 import org.odk.collect.maps.Zoom;
 import org.odk.collect.maps.ZoomObserver;
+import org.odk.collect.maps.circles.CircleDescription;
 import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils;
 import org.odk.collect.maps.layers.ReferenceLayerRepository;
 import org.odk.collect.maps.markers.MarkerDescription;
 import org.odk.collect.maps.markers.MarkerIconCreator;
 import org.odk.collect.maps.markers.MarkerIconDescription;
+import org.odk.collect.maps.traces.LineDescription;
+import org.odk.collect.maps.traces.PolygonDescription;
 import org.odk.collect.settings.SettingsProvider;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.events.MapListener;
@@ -403,6 +403,13 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
         }
 
         nextFeatureId = 1;
+    }
+
+    @Override
+    public void clearFeatures(@NotNull List<@NotNull Integer> ids) {
+        for (Integer id : ids) {
+            features.remove(id).dispose();
+        }
     }
 
     @Override

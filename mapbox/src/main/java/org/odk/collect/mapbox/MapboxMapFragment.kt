@@ -58,7 +58,6 @@ import kotlinx.coroutines.launch
 import org.odk.collect.androidshared.utils.ScreenUtils
 import org.odk.collect.location.LocationClient
 import org.odk.collect.location.LocationClient.LocationClientListener
-import org.odk.collect.maps.traces.LineDescription
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragment.ErrorListener
 import org.odk.collect.maps.MapFragment.FeatureListener
@@ -67,7 +66,6 @@ import org.odk.collect.maps.MapFragment.ReadyListener
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.MapViewModel
 import org.odk.collect.maps.MapViewModelMapFragment
-import org.odk.collect.maps.traces.PolygonDescription
 import org.odk.collect.maps.Zoom
 import org.odk.collect.maps.ZoomObserver
 import org.odk.collect.maps.circles.CircleDescription
@@ -77,6 +75,8 @@ import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.maps.markers.MarkerDescription
 import org.odk.collect.maps.markers.MarkerIconCreator
 import org.odk.collect.maps.markers.MarkerIconDescription
+import org.odk.collect.maps.traces.LineDescription
+import org.odk.collect.maps.traces.PolygonDescription
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.shared.injection.ObjectProviderHost
 import timber.log.Timber
@@ -470,6 +470,10 @@ class MapboxMapFragment :
 
         features.clear()
         nextFeatureId = 1
+    }
+
+    override fun clearFeatures(ids: List<Int>) {
+        ids.forEach { features.remove(it)?.dispose() }
     }
 
     override fun setClickListener(listener: PointListener?) {

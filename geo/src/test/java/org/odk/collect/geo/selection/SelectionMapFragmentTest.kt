@@ -1,5 +1,6 @@
 package org.odk.collect.geo.selection
 
+import android.app.Application
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
@@ -40,14 +41,18 @@ import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.geo.DaggerGeoDependencyComponent
 import org.odk.collect.geo.GeoDependencyModule
 import org.odk.collect.geo.R
+import org.odk.collect.geo.support.FakeLocationTracker
 import org.odk.collect.geo.support.FakeMapFragment
 import org.odk.collect.geo.support.Fixtures
 import org.odk.collect.geo.support.RobolectricApplication
+import org.odk.collect.location.Location
+import org.odk.collect.location.tracker.LocationTracker
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.layers.OfflineMapLayersPickerBottomSheetDialogFragment
 import org.odk.collect.maps.layers.ReferenceLayerRepository
+import org.odk.collect.maps.markers.MarkerDescription
 import org.odk.collect.maps.markers.MarkerIconDescription
 import org.odk.collect.material.BottomSheetBehavior
 import org.odk.collect.material.MaterialProgressDialogFragment
@@ -72,6 +77,7 @@ class SelectionMapFragmentTest {
     }
 
     private val onBackPressedDispatcher = OnBackPressedDispatcher()
+    private val locationTracker = FakeLocationTracker()
 
     @get:Rule
     val launcherRule = FragmentScenarioLauncherRule(
@@ -120,6 +126,10 @@ class SelectionMapFragmentTest {
                 override fun providesWebPageService(): WebPageService {
                     return mock()
                 }
+
+                override fun providesLocationTracker(application: Application): LocationTracker {
+                    return locationTracker
+                }
             }).build()
 
         BottomSheetBehavior.DRAGGING_ENABLED = false
@@ -159,6 +169,30 @@ class SelectionMapFragmentTest {
 
         itemsLiveData.value = emptyList()
         assertThat(map.getMarkers(), equalTo(emptyList()))
+    }
+
+    @Test
+    fun `doesn't clear other markers when items update`() {
+        val items: List<MappableSelectItem> = listOf(
+            Fixtures.actionMappableSelectPoint().copy(id = 0, point = MapPoint(40.0, 0.0))
+        )
+        val itemsLiveData = MutableLiveData(items)
+        whenever(data.getMappableItems()).thenReturn(itemsLiveData)
+
+        launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        map.ready()
+        map.addMarker(
+            MarkerDescription(
+                MapPoint(0.0, 0.0),
+                false,
+                iconDescription = MarkerIconDescription.DrawableResource(R.drawable.ic_info)
+            )
+        )
+
+        assertThat(map.getMarkers().size, equalTo(2))
+
+        itemsLiveData.value = emptyList()
+        assertThat(map.getMarkers().size, equalTo(1))
     }
 
     @Test
@@ -324,7 +358,7 @@ class SelectionMapFragmentTest {
 
         assertThat(map.hasCenter(), equalTo(false))
 
-        map.setLocation(MapPoint(1.0, 2.0))
+        locationTracker.currentLocation = Location(1.0, 2.0)
         assertThat(map.getCenter(), equalTo(MapPoint(1.0, 2.0)))
     }
 
@@ -337,7 +371,7 @@ class SelectionMapFragmentTest {
 
         assertThat(map.hasCenter(), equalTo(false))
 
-        map.setLocation(MapPoint(1.0, 2.0))
+        locationTracker.currentLocation = Location(1.0, 2.0)
         assertThat(map.getCenter(), equalTo(MapPoint(1.0, 2.0)))
         assertThat(map.getZoom(), equalTo(MapFragment.POINT_ZOOM.toDouble()))
     }
@@ -352,7 +386,7 @@ class SelectionMapFragmentTest {
 
         assertThat(map.hasCenter(), equalTo(false))
 
-        map.setLocation(MapPoint(1.0, 2.0))
+        locationTracker.currentLocation = Location(1.0, 2.0)
         assertThat(map.getCenter(), equalTo(MapPoint(1.0, 2.0)))
         assertThat(map.getZoom(), equalTo(10.0))
     }
@@ -366,10 +400,10 @@ class SelectionMapFragmentTest {
 
         assertThat(map.hasCenter(), equalTo(false))
 
-        map.setLocation(MapPoint(1.0, 2.0))
+        locationTracker.currentLocation = Location(1.0, 2.0)
         assertThat(map.getCenter(), equalTo(MapPoint(1.0, 2.0)))
 
-        map.setLocation(MapPoint(3.0, 4.0))
+        locationTracker.currentLocation = Location(3.0, 4.0)
         assertThat(map.getCenter(), equalTo(MapPoint(1.0, 2.0)))
     }
 
@@ -383,7 +417,7 @@ class SelectionMapFragmentTest {
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.ready()
-        map.setLocation(MapPoint(67.0, 48.0))
+        locationTracker.currentLocation = Location(67.0, 48.0)
 
         itemsLiveData.value =
             listOf(Fixtures.actionMappableSelectPoint().copy(id = 0, point = MapPoint(52.0, 0.0)))
@@ -397,7 +431,7 @@ class SelectionMapFragmentTest {
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.ready()
 
-        map.setLocation(MapPoint(40.181389, 44.514444))
+        locationTracker.currentLocation = Location(40.181389, 44.514444)
         onView(withId(R.id.zoom_to_location)).perform(click())
 
         assertThat(map.getCenter(), equalTo(MapPoint(40.181389, 44.514444)))
@@ -742,14 +776,15 @@ class SelectionMapFragmentTest {
     fun `does not move when location changes when centered on already selected item`() {
         val items = listOf(
             Fixtures.actionMappableSelectPoint().copy(id = 0, point = MapPoint(40.0, 0.0)),
-            Fixtures.actionMappableSelectPoint().copy(id = 1, point = MapPoint(41.0, 0.0), selected = true)
+            Fixtures.actionMappableSelectPoint()
+                .copy(id = 1, point = MapPoint(41.0, 0.0), selected = true)
         )
         whenever(data.getMappableItems()).thenReturn(MutableLiveData(items))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.ready()
 
-        map.setLocation(MapPoint(1.0, 2.0))
+        locationTracker.currentLocation = Location(1.0, 2.0)
         assertThat(map.getCenter(), equalTo(items[1].toMapPoint()))
     }
 

@@ -373,6 +373,13 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
         nextFeatureId = 1;
     }
 
+    @Override
+    public void clearFeatures(@NotNull List<@NotNull Integer> ids) {
+        for (Integer id : ids) {
+            features.remove(id).dispose();
+        }
+    }
+
     @Override public void setClickListener(@Nullable PointListener listener) {
         clickListener = listener;
     }

@@ -16,7 +16,7 @@ class CurrentLocationDelegate {
     private var locationMarkerId: Int? = null
     private var accuracyHaloId: Int? = null
 
-    fun update(map: MapFragment, location: MapPoint, follow: Boolean) {
+    fun update(map: MapFragment, location: MapPoint, follow: Boolean = false) {
         currentLocation = location
 
         val markerDescription = MarkerDescription(
