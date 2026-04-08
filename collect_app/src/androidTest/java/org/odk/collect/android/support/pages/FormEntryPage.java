@@ -34,7 +34,7 @@ import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.odk.collect.android.R;
 import org.odk.collect.androidtest.DrawableMatcher;
-import org.odk.collect.testshared.Interactions;
+import org.odk.collect.testshared.EspressoInteractions;
 import org.odk.collect.testshared.ViewActions;
 import org.odk.collect.testshared.WaitFor;
 
@@ -322,7 +322,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
             questionText = question;
         }
 
-        Interactions.replaceText(getQuestionFieldMatcher(questionText), answer);
+        EspressoInteractions.replaceText(getQuestionFieldMatcher(questionText), answer);
         return this;
     }
 
@@ -352,7 +352,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public FormEntryPage clickOnQuestionField(String questionText) {
-        Interactions.clickOn(getQuestionFieldMatcher(questionText));
+        EspressoInteractions.clickOn(getQuestionFieldMatcher(questionText));
         return this;
     }
 

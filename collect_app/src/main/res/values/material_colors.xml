@@ -8,8 +8,6 @@
 
     <color name="colorError">#ba1a1a</color>
     <!-- <color name="colorOnError">#ffffff</color> -->
-    <color name="colorErrorContainer">#ffdad6</color>
-    <color name="colorOnErrorContainer">#410002</color>
 
     <color name="colorSurface">@color/colorSurfaceLight</color>
     <color name="colorSurfaceVariant">#dce3e9</color>
@@ -19,7 +17,7 @@
     <color name="colorSurfaceContainerLow">#f7f7f7</color>
     <color name="colorSurfaceContainer">#f7f7f7</color>
     <color name="colorSurfaceContainerHigh">#f7f7f7</color>
-    <color name="colorSurfaceContainerHighest">#f2f2f2</color>
+    <color name="colorSurfaceContainerHighest">@color/colorSurfaceContainerHighestLight</color>
     <color name="colorSurfaceInverse">#003547</color>
     <color name="colorOnSurfaceInverse">#E1F4FF</color>
 

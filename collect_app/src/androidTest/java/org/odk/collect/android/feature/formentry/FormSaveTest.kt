@@ -10,15 +10,12 @@ import org.odk.collect.android.support.rules.PageComposeRule
 import org.odk.collect.android.support.rules.TestRuleChain
 
 class FormSaveTest {
-    private val pageComposeRule = PageComposeRule()
     private val rule = CollectTestRule()
     private val testDependencies = TestDependencies()
 
     @get:Rule
     val copyFormChain: RuleChain = TestRuleChain
         .chain(testDependencies)
-        .around(pageComposeRule)
-        .around(pageComposeRule.composeRule)
         .around(rule)
 
     @Test

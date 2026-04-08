@@ -2,7 +2,7 @@ package org.odk.collect.android.support.pages
 
 import androidx.test.espresso.matcher.ViewMatchers.withSubstring
 import org.odk.collect.strings.R.string
-import org.odk.collect.testshared.Interactions
+import org.odk.collect.testshared.EspressoInteractions
 
 class FirstLaunchPage : Page<FirstLaunchPage>() {
 
@@ -12,7 +12,7 @@ class FirstLaunchPage : Page<FirstLaunchPage>() {
     }
 
     fun clickTryCollect(): MainMenuPage {
-        Interactions.clickOn(withSubstring(getTranslatedString(string.try_demo))) {
+        EspressoInteractions.clickOn(withSubstring(getTranslatedString(string.try_demo))) {
             MainMenuPage().assertOnPage()
         }
 

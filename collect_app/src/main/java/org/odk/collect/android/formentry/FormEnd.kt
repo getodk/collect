@@ -1,0 +1,271 @@
+package org.odk.collect.android.formentry
+
+import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Send
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.EditOff
+import androidx.compose.material.icons.filled.Save
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.SemanticsPropertyKey
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import org.odk.collect.android.application.CollectTheme
+import org.odk.collect.androidshared.ui.compose.marginExtraSmall
+import org.odk.collect.androidshared.ui.compose.marginSmall
+import org.odk.collect.androidshared.ui.compose.marginStandard
+import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
+import org.odk.collect.strings.R.string
+
+@Composable
+fun FormEnd(
+    formTitle: String,
+    isEditableAfterFinalization: Boolean,
+    shouldBeSentAutomatically: Boolean,
+    saveAsDraftEnabled: Boolean,
+    finalizeEnabled: Boolean,
+    onSave: (Boolean) -> Unit = {}
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(marginStandard()),
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = stringResource(string.save_enter_data_description, formTitle),
+            style = MaterialTheme.typography.titleLarge
+        )
+
+        if (finalizeEnabled) {
+            val (icon, title, message) = getWarning(
+                isEditableAfterFinalization,
+                shouldBeSentAutomatically,
+                saveAsDraftEnabled
+            )
+
+            EditWarning(
+                icon = icon,
+                title = title,
+                message = message,
+                errorBackground = !isEditableAfterFinalization
+            )
+        }
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 64.dp),
+            horizontalArrangement = Arrangement.spacedBy(marginStandard())
+        ) {
+            val screenName = stringResource(org.odk.collect.android.R.string.form_end_screen)
+
+            if (saveAsDraftEnabled) {
+                OutlinedButton(
+                    modifier = Modifier.weight(1f),
+                    onClick = {
+                        if (MultiClickGuard.allowClick(screenName)) {
+                            onSave(false)
+                        }
+                    }
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            Icons.Default.Save,
+                            contentDescription = null
+                        )
+
+                        Text(
+                            text = stringResource(string.save_as_draft),
+                            modifier = Modifier.padding(start = marginExtraSmall())
+                        )
+                    }
+                }
+            }
+
+            if (finalizeEnabled) {
+                val finalizeText = if (shouldBeSentAutomatically) {
+                    string.send
+                } else {
+                    string.finalize
+                }
+
+                Button(
+                    modifier = Modifier.weight(1f),
+                    onClick = {
+                        if (MultiClickGuard.allowClick(screenName)) {
+                            onSave(true)
+                        }
+                    }
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            Icons.AutoMirrored.Default.Send,
+                            contentDescription = null
+                        )
+
+                        Text(
+                            text = stringResource(finalizeText),
+                            modifier = Modifier.padding(start = marginExtraSmall())
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun EditWarning(
+    icon: ImageVector,
+    @StringRes title: Int,
+    @StringRes message: Int?,
+    errorBackground: Boolean
+) {
+    val titleText = stringResource(title)
+    val messageText = message?.let { stringResource(message) }
+
+    val cardColors = if (errorBackground) {
+        CardDefaults.cardColors().copy(
+            containerColor = MaterialTheme.colorScheme.errorContainer,
+            contentColor = MaterialTheme.colorScheme.onErrorContainer
+        )
+    } else {
+        CardDefaults.cardColors()
+    }
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = marginStandard())
+            .testTag(EditWarningSemantics.TAG)
+            .clearAndSetSemantics {
+                contentDescription = if (messageText != null) {
+                    "$titleText: $messageText"
+                } else {
+                    titleText
+                }
+
+                set(EditWarningSemantics.iconProperty, icon.name)
+                set(EditWarningSemantics.errorBackgroundProperty, errorBackground)
+            },
+        colors = cardColors
+    ) {
+        Row(modifier = Modifier.padding(marginStandard())) {
+            Icon(
+                icon,
+                contentDescription = null
+            )
+
+            Column(modifier = Modifier.padding(start = marginStandard())) {
+                Text(
+                    text = titleText,
+                    style = MaterialTheme.typography.titleMedium
+                )
+
+                if (messageText != null) {
+                    Text(
+                        text = messageText,
+                        style = MaterialTheme.typography.bodyLarge,
+                        modifier = Modifier.padding(top = marginSmall())
+                    )
+                }
+            }
+        }
+    }
+}
+
+private fun getWarning(
+    isEditableAfterFinalization: Boolean,
+    shouldBeSentAutomatically: Boolean,
+    saveAsDraftEnabled: Boolean
+): Triple<ImageVector, Int, Int?> {
+    return if (isEditableAfterFinalization) {
+        if (shouldBeSentAutomatically) {
+            Triple(
+                Icons.Default.Edit,
+                string.form_editing_enabled_after_sending,
+                string.form_editing_enabled_after_sending_hint
+            )
+        } else {
+            Triple(
+                Icons.Default.Edit,
+                string.form_editing_enabled_after_finalizing,
+                string.form_editing_enabled_after_finalizing_hint
+            )
+        }
+    } else {
+        val icon = Icons.Default.EditOff
+        val message = if (saveAsDraftEnabled) {
+            string.form_editing_disabled_hint
+        } else {
+            null
+        }
+
+        if (shouldBeSentAutomatically) {
+            Triple(
+                icon,
+                string.form_editing_disabled_after_sending,
+                message
+            )
+        } else {
+            Triple(
+                icon,
+                string.form_editing_disabled_after_finalizing,
+                message
+            )
+        }
+    }
+}
+
+object EditWarningSemantics {
+    const val TAG = "EditWarning"
+    val iconProperty = SemanticsPropertyKey<String>("icon")
+    val errorBackgroundProperty = SemanticsPropertyKey<Boolean>("errorBackground")
+}
+
+@Preview
+@Composable
+private fun PreviewFormEnd(saveAsDraftEnabled: Boolean = true, finalizeEnabled: Boolean = true) {
+    CollectTheme {
+        FormEnd(
+            formTitle = "My form",
+            isEditableAfterFinalization = false,
+            shouldBeSentAutomatically = false,
+            saveAsDraftEnabled = saveAsDraftEnabled,
+            finalizeEnabled = finalizeEnabled
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewFormEndSaveAsDraftDisabled() {
+    PreviewFormEnd(saveAsDraftEnabled = false)
+}
+
+@Preview
+@Composable
+private fun PreviewFormEndFinalizeDisabled() {
+    PreviewFormEnd(finalizeEnabled = false)
+}

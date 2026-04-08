@@ -57,7 +57,7 @@ import org.odk.collect.testshared.EspressoAssertions.assertNotVisible
 import org.odk.collect.testshared.EspressoAssertions.assertVisible
 import org.odk.collect.testshared.FakeScheduler
 import org.odk.collect.testshared.FragmentResultRecorder
-import org.odk.collect.testshared.Interactions
+import org.odk.collect.testshared.EspressoInteractions
 import org.odk.collect.webpage.WebPageService
 import org.robolectric.Shadows
 
@@ -253,7 +253,7 @@ class GeoPolyFragmentTest {
             )
         )
 
-        Interactions.clickOn(withContentDescription(string.pause_location_recording))
+        EspressoInteractions.clickOn(withContentDescription(string.pause_location_recording))
         locationTracker.currentLocation = Location(2.0, 2.0)
         scheduler.runForeground(DEFAULT_RECORDING_INTERVAL)
         assertVisible(
@@ -379,7 +379,7 @@ class GeoPolyFragmentTest {
         resultListener.clear()
 
         onBackPressedDispatcher.onBackPressed()
-        Interactions.clickOn(withText(string.cancel), root = isDialog())
+        EspressoInteractions.clickOn(withText(string.cancel), root = isDialog())
 
         val result = resultListener.getAll().lastOrNull()
         assertThat(result, equalTo(null))
@@ -401,7 +401,7 @@ class GeoPolyFragmentTest {
         resultListener.clear()
 
         onBackPressedDispatcher.onBackPressed()
-        Interactions.clickOn(withText(string.discard), root = isDialog())
+        EspressoInteractions.clickOn(withText(string.discard), root = isDialog())
 
         val result = resultListener.getAll().last()
         assertThat(result.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
@@ -426,7 +426,7 @@ class GeoPolyFragmentTest {
         resultListener.clear()
 
         onBackPressedDispatcher.onBackPressed()
-        Interactions.clickOn(withText(string.discard), root = isDialog())
+        EspressoInteractions.clickOn(withText(string.discard), root = isDialog())
 
         val result = resultListener.getAll().last()
         assertThat(result.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
@@ -454,7 +454,7 @@ class GeoPolyFragmentTest {
         resultListener.clear()
 
         onBackPressedDispatcher.onBackPressed()
-        Interactions.clickOn(withText(string.discard), root = isDialog())
+        EspressoInteractions.clickOn(withText(string.discard), root = isDialog())
 
         val result = resultListener.getAll().last()
         assertThat(result.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
@@ -484,7 +484,7 @@ class GeoPolyFragmentTest {
         scenario.setFragmentResultListener(GeoPolyFragment.REQUEST_GEOPOLY, resultListener)
 
         onBackPressedDispatcher.onBackPressed()
-        Interactions.clickOn(withText(string.discard), root = isDialog())
+        EspressoInteractions.clickOn(withText(string.discard), root = isDialog())
 
         val result = resultListener.getAll().last()
         assertThat(result.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
@@ -661,7 +661,7 @@ class GeoPolyFragmentTest {
         startInput(R.id.manual_mode)
 
         invalidMessage.value = DisplayString.Raw("Blah")
-        Interactions.clickOn(withContentDescription(string.record_geopoint))
+        EspressoInteractions.clickOn(withContentDescription(string.record_geopoint))
         assertThat(mapFragment.getPolyLines()[0].points.size, equalTo(0))
     }
 
@@ -718,7 +718,7 @@ class GeoPolyFragmentTest {
 
         val message = "Something is wrong"
         invalidMessage.value = DisplayString.Raw(message)
-        Interactions.clickOn(withContentDescription(string.close_snackbar))
+        EspressoInteractions.clickOn(withContentDescription(string.close_snackbar))
         assertNotVisible(withText(message))
     }
 
@@ -883,7 +883,7 @@ class GeoPolyFragmentTest {
         val resultListener = FragmentResultRecorder()
         scenario.setFragmentResultListener(GeoPolyFragment.REQUEST_GEOPOLY, resultListener)
 
-        Interactions.clickOn(withContentDescription(string.remove_last_point))
+        EspressoInteractions.clickOn(withContentDescription(string.remove_last_point))
         val result = resultListener.getAll().last()
         assertThat(result.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
         assertThat(
@@ -923,8 +923,8 @@ class GeoPolyFragmentTest {
         val resultListener = FragmentResultRecorder()
         scenario.setFragmentResultListener(GeoPolyFragment.REQUEST_GEOPOLY, resultListener)
 
-        Interactions.clickOn(withContentDescription(string.clear))
-        Interactions.clickOn(withText(string.clear), root = isDialog())
+        EspressoInteractions.clickOn(withContentDescription(string.clear))
+        EspressoInteractions.clickOn(withText(string.clear), root = isDialog())
         assertThat(mapFragment.getPolyLines().first().points.size, equalTo(0))
     }
 
@@ -938,8 +938,8 @@ class GeoPolyFragmentTest {
         val resultListener = FragmentResultRecorder()
         scenario.setFragmentResultListener(GeoPolyFragment.REQUEST_GEOPOLY, resultListener)
 
-        Interactions.clickOn(withContentDescription(string.clear))
-        Interactions.clickOn(withText(string.clear), root = isDialog())
+        EspressoInteractions.clickOn(withContentDescription(string.clear))
+        EspressoInteractions.clickOn(withText(string.clear), root = isDialog())
 
         val result = resultListener.getAll().last()
         assertThat(result.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))

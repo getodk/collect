@@ -7,10 +7,10 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.support.TestDependencies;
-import org.odk.collect.android.support.rules.CollectTestRule;
-import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.SendFinalizedFormPage;
+import org.odk.collect.android.support.rules.CollectTestRule;
+import org.odk.collect.android.support.rules.TestRuleChain;
 
 @RunWith(AndroidJUnit4.class)
 public class GetAndSubmitFormTest {
@@ -19,7 +19,8 @@ public class GetAndSubmitFormTest {
     private final TestDependencies testDependencies = new TestDependencies();
 
     @Rule
-    public RuleChain chain = TestRuleChain.chain(testDependencies).around(rule);
+    public RuleChain chain = TestRuleChain.chain(testDependencies)
+            .around(rule);
 
     @Test
     public void canGetBlankForm_fillItIn_andSubmit() {

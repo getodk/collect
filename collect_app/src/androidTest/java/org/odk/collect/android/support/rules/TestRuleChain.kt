@@ -15,9 +15,11 @@ object TestRuleChain {
     fun chain(testDependencies: TestDependencies = TestDependencies()): RuleChain {
         val asyncWorkTrackerIdlingResource = AsyncWorkTrackerIdlingResource()
         val countingTaskExecutorIdlingResource = CountingTaskExecutorIdlingResource()
+        val pageComposeRule = PageComposeRule()
 
         return RuleChain
-            .outerRule(RetryOnDeviceErrorRule())
+            .outerRule(pageComposeRule.composeRule)
+            .around(RetryOnDeviceErrorRule())
             .around(createGrantPermissionRule())
             .around(ResetRotationRule())
             .around(PrepDeviceForTestsRule())
@@ -28,6 +30,7 @@ object TestRuleChain {
                     listOf(asyncWorkTrackerIdlingResource, countingTaskExecutorIdlingResource)
                 )
             )
+            .around(pageComposeRule)
     }
 
     private fun createGrantPermissionRule() =

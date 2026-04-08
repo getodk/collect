@@ -10,7 +10,6 @@ import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.ProjectSettingsPage
 import org.odk.collect.android.support.rules.CollectTestRule
-import org.odk.collect.android.support.rules.PageComposeRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
 import org.odk.collect.strings.R.string
 import org.odk.collect.testshared.AssertionFramework
@@ -19,12 +18,9 @@ import org.odk.collect.testshared.AssertionFramework
 class FormEndTest {
 
     private val rule = CollectTestRule()
-    private val pageComposeRule = PageComposeRule()
 
     @get:Rule
     val copyFormChain: RuleChain = chain()
-        .around(pageComposeRule.composeRule)
-        .around(pageComposeRule)
         .around(rule)
 
     @Test

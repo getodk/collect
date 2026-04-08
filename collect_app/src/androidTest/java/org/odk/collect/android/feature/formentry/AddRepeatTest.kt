@@ -9,7 +9,6 @@ import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.odk.collect.android.R
-import org.odk.collect.android.support.pages.EndOfFormPage
 import org.odk.collect.android.support.pages.FormEndPage
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.rules.CollectTestRule
@@ -40,7 +39,7 @@ class AddRepeatTest {
             .startBlankForm("One Question Repeat")
             .assertText("Person > 1")
             .swipeToNextQuestionWithRepeatGroup("Person")
-            .clickOnDoNotAdd(EndOfFormPage("One Question Repeat"))
+            .clickOnDoNotAdd(FormEndPage("One Question Repeat"))
     }
 
     @Test

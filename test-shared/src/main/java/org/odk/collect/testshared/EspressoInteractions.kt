@@ -10,7 +10,7 @@ import androidx.test.espresso.action.ViewActions.scrollTo
 import org.hamcrest.Matcher
 import org.odk.collect.testshared.WaitFor.tryAgainOnFail
 
-object Interactions {
+object EspressoInteractions {
 
     /**
      * Click on the view matched by [view]. The root to use can optionally be specified with

@@ -41,7 +41,7 @@ import org.odk.collect.testshared.ActivityControllerRule
 import org.odk.collect.testshared.AssertIntentsHelper
 import org.odk.collect.testshared.EspressoAssertions.assertVisible
 import org.odk.collect.testshared.FakeScheduler
-import org.odk.collect.testshared.Interactions
+import org.odk.collect.testshared.EspressoInteractions
 import org.odk.collect.testshared.RobolectricHelpers.recreateWithProcessRestore
 import org.robolectric.Shadows.shadowOf
 import java.io.File
@@ -95,7 +95,7 @@ class FormFillingActivityTest {
         assertVisible(withText("Two Question"))
         assertVisible(withText("What is your name?"))
 
-        Interactions.clickOn(withText(R.string.form_forward))
+        EspressoInteractions.clickOn(withText(R.string.form_forward))
         scheduler.flush()
         assertVisible(withText("What is your age?"))
 
@@ -133,11 +133,11 @@ class FormFillingActivityTest {
         assertVisible(withText("Two Question"))
         assertVisible(withText("What is your name?"))
 
-        Interactions.clickOn(withText(R.string.form_forward))
+        EspressoInteractions.clickOn(withText(R.string.form_forward))
         scheduler.flush()
         assertVisible(withText("What is your age?"))
 
-        Interactions.clickOn(withContentDescription(R.string.view_hierarchy))
+        EspressoInteractions.clickOn(withContentDescription(R.string.view_hierarchy))
         assertIntentsHelper.assertNewIntent(FormHierarchyFragmentHostActivity::class)
 
         // Recreate and assert we start FormHierarchyFragmentHostActivity
@@ -174,7 +174,7 @@ class FormFillingActivityTest {
         assertVisible(withText("Two Question"))
         assertVisible(withText("What is your name?"))
 
-        Interactions.clickOn(withText(R.string.form_forward))
+        EspressoInteractions.clickOn(withText(R.string.form_forward))
         scheduler.flush()
         assertVisible(withText("What is your age?"))
 
@@ -219,12 +219,12 @@ class FormFillingActivityTest {
         assertVisible(withText("Two Question"))
         assertVisible(withText("What is your name?"))
 
-        Interactions.clickOn(withText(R.string.form_forward))
+        EspressoInteractions.clickOn(withText(R.string.form_forward))
         scheduler.flush()
         assertVisible(withText("What is your age?"))
 
         // Open external app
-        Interactions.clickOn(withContentDescription(R.string.launch_app))
+        EspressoInteractions.clickOn(withContentDescription(R.string.launch_app))
         assertIntentsHelper.assertNewIntent(hasAction("com.example.EXAMPLE"))
 
         // Recreate with result
@@ -262,7 +262,7 @@ class FormFillingActivityTest {
             root = isDialog()
         )
 
-        Interactions.clickOn(withText(R.string.ok), root = isDialog())
+        EspressoInteractions.clickOn(withText(R.string.ok), root = isDialog())
         assertThat(scenario.isFinishing, equalTo(true))
     }
 

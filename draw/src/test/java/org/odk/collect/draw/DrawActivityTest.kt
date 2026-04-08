@@ -21,7 +21,7 @@ import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.shared.TempFiles
 import org.odk.collect.strings.R
 import org.odk.collect.testshared.FakeScheduler
-import org.odk.collect.testshared.Interactions
+import org.odk.collect.testshared.EspressoInteractions
 
 @RunWith(AndroidJUnit4::class)
 internal class DrawActivityTest {
@@ -59,7 +59,7 @@ internal class DrawActivityTest {
         val scenario = launcherRule.launchForResult<DrawActivity>(intent)
 
         Espresso.pressBack()
-        Interactions.clickOn(withText(R.string.discard_changes), isDialog())
+        EspressoInteractions.clickOn(withText(R.string.discard_changes), isDialog())
         assertThat(scenario.isFinishing, equalTo(true))
         assertThat(scenario.result.resultCode, equalTo(Activity.RESULT_CANCELED))
     }
@@ -72,7 +72,7 @@ internal class DrawActivityTest {
         val scenario = launcherRule.launchForResult<DrawActivity>(intent)
 
         Espresso.pressBack()
-        Interactions.clickOn(withText(R.string.keep_editing), isDialog())
+        EspressoInteractions.clickOn(withText(R.string.keep_editing), isDialog())
         assertThat(scenario.isFinishing, equalTo(false))
     }
 
@@ -84,7 +84,7 @@ internal class DrawActivityTest {
         val scenario = launcherRule.launchForResult<DrawActivity>(intent)
 
         Espresso.pressBack()
-        Interactions.clickOn(withText(R.string.keep_changes), isDialog())
+        EspressoInteractions.clickOn(withText(R.string.keep_changes), isDialog())
         scheduler.flush()
         assertThat(scenario.isFinishing, equalTo(true))
         assertThat(scenario.result.resultCode, equalTo(Activity.RESULT_OK))

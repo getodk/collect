@@ -13,6 +13,7 @@ import org.odk.collect.android.widgets.MediaWidgetAnswerViewModel
 import org.odk.collect.android.widgets.WidgetAnswer
 import org.odk.collect.android.widgets.WidgetIconButton
 import org.odk.collect.androidshared.R.dimen
+import org.odk.collect.androidshared.ui.compose.marginStandard
 import org.odk.collect.strings.R.string
 
 @Composable
@@ -38,7 +39,7 @@ fun ArbitraryFileWidgetContent(
         }
 
         WidgetAnswer(
-            Modifier.padding(top = dimensionResource(id = dimen.margin_standard)),
+            Modifier.padding(top = marginStandard()),
             formEntryPrompt,
             answer,
             answerFontSize,

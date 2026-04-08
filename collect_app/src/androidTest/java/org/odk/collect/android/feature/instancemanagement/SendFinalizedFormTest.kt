@@ -24,14 +24,12 @@ import org.odk.collect.androidtest.RecordedIntentsRule
 class SendFinalizedFormTest {
 
     private val testDependencies = TestDependencies()
-    private val pageComposeRule = PageComposeRule()
+
     private val rule = CollectTestRule(useDemoProject = false)
 
     @get:Rule
     val chain: RuleChain = chain(testDependencies)
         .around(RecordedIntentsRule())
-        .around(pageComposeRule)
-        .around(pageComposeRule.composeRule)
         .around(rule)
 
     @Test

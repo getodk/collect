@@ -57,8 +57,6 @@
         <item name="colorSurfaceInverse">@color/colorSurfaceInverse</item>
         <item name="colorOnSurfaceInverse">@color/colorOnSurfaceInverse</item>
         <item name="colorOutline">@color/color_on_surface_medium_emphasis</item>
-        <item name="colorErrorContainer">@color/colorErrorContainer</item>
-        <item name="colorOnErrorContainer">@color/colorOnErrorContainer</item>
         <item name="colorSurfaceContainerLowest">@color/colorSurfaceContainerLowest</item>
         <item name="colorSurfaceContainerLow">@color/colorSurfaceContainerLow</item>
         <item name="colorSurfaceContainer">@color/colorSurfaceContainer</item>

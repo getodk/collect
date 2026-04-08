@@ -30,6 +30,8 @@ import androidx.compose.ui.res.stringResource
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.androidshared.R.dimen
 import org.odk.collect.androidshared.ui.ComposeThemeProvider.Companion.setContextThemedContent
+import org.odk.collect.androidshared.ui.compose.marginSmall
+import org.odk.collect.androidshared.ui.compose.marginStandard
 import org.odk.collect.strings.R.string
 
 object InfoDialog {
@@ -99,16 +101,14 @@ fun InfoContent(
     Surface {
         Column(
             modifier = Modifier
-                .padding(dimensionResource(id = dimen.margin_standard))
+                .padding(marginStandard())
                 .verticalScroll(scrollState)
         ) {
             Title()
             items.forEachIndexed { index, item ->
                 Info(item.icon, item.text)
                 if (index < items.lastIndex) {
-                    HorizontalDivider(
-                        Modifier.padding(horizontal = dimensionResource(id = dimen.margin_small))
-                    )
+                    HorizontalDivider(Modifier.padding(horizontal = marginSmall()))
                 }
             }
             DoneButton(onDone)
@@ -120,9 +120,9 @@ fun InfoContent(
 private fun Title() {
     Text(
         modifier = Modifier.padding(
-            start = dimensionResource(id = dimen.margin_standard),
+            start = marginStandard(),
             top = dimensionResource(id = dimen.margin_extra_small),
-            bottom = dimensionResource(id = dimen.margin_standard)
+            bottom = marginStandard()
         ),
         text = stringResource(string.how_to_modify_map),
         style = MaterialTheme.typography.titleLarge
@@ -134,7 +134,7 @@ private fun Info(icon: ImageVector, text: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(dimensionResource(id = dimen.margin_standard)),
+            .padding(marginStandard()),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
@@ -142,7 +142,7 @@ private fun Info(icon: ImageVector, text: String) {
             contentDescription = null,
         )
         Text(
-            modifier = Modifier.padding(start = dimensionResource(id = dimen.margin_small)),
+            modifier = Modifier.padding(start = marginSmall()),
             text = text,
             style = MaterialTheme.typography.bodyLarge
         )
@@ -154,7 +154,7 @@ private fun DoneButton(onDone: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = dimensionResource(id = dimen.margin_standard)),
+            .padding(top = marginStandard()),
         horizontalArrangement = Arrangement.End
     ) {
         TextButton(onClick = onDone) {
