@@ -2,7 +2,6 @@ package org.odk.collect.geo.geopoly
 
 import android.app.Application
 import androidx.activity.OnBackPressedDispatcher
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
@@ -978,7 +977,7 @@ class GeoPolyFragmentTest {
         }
 
         locationTracker.currentLocation = Location(5.0, 5.0)
-        Interactions.clickOn(withContentDescription(string.show_my_location))
+        EspressoInteractions.clickOn(withContentDescription(string.show_my_location))
         assertThat(mapFragment.getCenter(), equalTo(MapPoint(5.0, 5.0)))
     }
 
@@ -1019,7 +1018,7 @@ class GeoPolyFragmentTest {
         locationTracker.currentLocation = Location(5.0, 5.0)
         assertThat(mapFragment.getCenter(), equalTo(MapPoint(5.0, 5.0)))
 
-        Interactions.clickOn(withContentDescription(string.pause_location_recording))
+        EspressoInteractions.clickOn(withContentDescription(string.pause_location_recording))
         locationTracker.currentLocation = Location(1.0, 1.0)
         assertThat(mapFragment.getCenter(), equalTo(MapPoint(5.0, 5.0)))
     }
