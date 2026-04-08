@@ -106,6 +106,9 @@ class NoOpMapFragment : Fragment(), MapFragment {
     override fun clearFeatures() {
     }
 
+    override fun clearFeatures(ids: List<Int>) {
+    }
+
     override fun setClickListener(listener: MapFragment.PointListener?) {
     }
 
