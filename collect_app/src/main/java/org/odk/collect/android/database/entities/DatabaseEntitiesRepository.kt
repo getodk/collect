@@ -278,11 +278,11 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String, private val c
 
     private fun createList(list: String) {
         databaseConnection.resetTransaction {
-            createListInTransaction(this, list)
+            createList(this, list)
         }
     }
 
-    private fun createListInTransaction(db: SQLiteDatabase, list: String) {
+    private fun createList(db: SQLiteDatabase, list: String) {
         val contentValues = ContentValues()
         contentValues.put(ListsTable.COLUMN_NAME, list)
         db.insertOrThrow(
@@ -347,7 +347,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String, private val c
             val tempTable = "${list}_temp"
 
             databaseConnection.resetTransaction {
-                createListInTransaction(this, tempTable)
+                createList(this, tempTable)
                 addPropertyColumns(
                     tempTable,
                     remainingColumns.filter {
