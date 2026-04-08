@@ -33,6 +33,7 @@ The purpose of this document is to give anyone who reads it a quick overview  of
 * Instances are linked to the forms they are instances of through formid and version. However, the same formid and version combination could represent multiple forms in storage
 * `SharedPreferences` is wrapped in app's own `Settings` abstraction
 * The form hierarchy is rendered using `FormHierarchyFragment`, which hasn't been seriously touched (at a code or design) level for a few years
+* Async work is currently a mix: some parts still use legacy `AsyncTask`, while others use the `Scheduler` abstraction backed by Kotlin coroutines
 
 ## Where we're going
 
@@ -42,7 +43,7 @@ The purpose of this document is to give anyone who reads it a quick overview  of
 * Moving towards a ["data services"](data_services_architecture.pdf) oriented architecture that has emerged over time
 * Writing new code using a [multi-module approach](CODE-GUIDELINES.md#gradle-sub-modules) (feature modules, mini frameworks etc) and breaking old code out into modules when opportunities come up
 * Trying to remove technical debt flagged with `@Deprecated`
-* Replacing async work such as `AsyncTask` with `Flow` (converted to `LiveData` in UI code) + `Scheduler` abstraction
+* Replacing async work such as `AsyncTask` with `Flow` (converted to `LiveData` in UI code) and replacing the previous `Scheduler` abstraction with lifecycle-aware coroutines (such as `viewModelScope`)
 * Gradually removing use of `CursorLoader` (all remaining uses are in `CursorLoaderFactory`)
 * Using AndroidX Test in new local tests and migrating other local tests as we touch them (from classic Robolectric)
 * Improving the `MapFragment` abstraction so more logic can be shared between the map engines
