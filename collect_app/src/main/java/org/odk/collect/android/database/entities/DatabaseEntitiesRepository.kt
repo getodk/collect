@@ -342,11 +342,11 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String, private val c
                 }
             }
 
-        if (removedColumns.isNotEmpty()) {
-            val remainingColumns = columnNames - removedColumns.toSet()
-            val tempTable = "${list}_temp"
+        databaseConnection.resetTransaction {
+            if (removedColumns.isNotEmpty()) {
+                val remainingColumns = columnNames - removedColumns.toSet()
+                val tempTable = "${list}_temp"
 
-            databaseConnection.resetTransaction {
                 createList(this, tempTable)
                 addPropertyColumns(
                     tempTable,
@@ -358,10 +358,10 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String, private val c
                 dropTable(list)
                 renameTable(tempTable, list)
             }
-        }
 
-        if (newColumns.isNotEmpty()) {
-            addPropertyColumns(list, newColumns)
+            if (newColumns.isNotEmpty()) {
+                addPropertyColumns(list, newColumns)
+            }
         }
     }
 
