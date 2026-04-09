@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import org.odk.collect.androidshared.R.dimen
+import org.odk.collect.androidshared.ui.OffsetUtils.calculateOffset
 import kotlin.math.roundToInt
 
 private const val SLIDER_HEIGHT = 330
@@ -91,9 +92,10 @@ fun VerticalRangeSlider(
                     Box(
                         modifier = Modifier
                             .offset {
-                                calculateThumbOffset(
+                                calculateOffset(
                                     trackSize = constraints.maxHeight,
-                                    thumbValue = thumbValue,
+                                    itemWidth = THUMB_WIDTH.dp.toPx(),
+                                    value = thumbValue,
                                     isVertical = true
                                 )
                             }
