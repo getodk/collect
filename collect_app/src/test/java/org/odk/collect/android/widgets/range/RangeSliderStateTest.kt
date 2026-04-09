@@ -444,16 +444,13 @@ class RangeSliderStateTest {
     }
 
     @Test
-    fun `returns labels when choices are available`() {
-        mockIntQuestion(0, 5, 1)
+    fun `returns labels in ascending order when range is increasing`() {
+        mockIntQuestion(0, 2, 1)
 
         val choices = listOf(
             SelectChoice("0", "0"),
             SelectChoice("1", "1"),
-            SelectChoice("2", "2"),
-            SelectChoice("3", "3"),
-            SelectChoice("4", "4"),
-            SelectChoice("5", "5")
+            SelectChoice("2", "2")
         )
         val prompt = promptBuilder
             .withSelectChoices(choices)
@@ -461,7 +458,25 @@ class RangeSliderStateTest {
             .build()
 
         val state = RangeSliderState.fromPrompt(prompt, choices)
-        assertThat(state.labels, equalTo(listOf("0", "1", "2", "3", "4", "5")))
+        assertThat(state.labels, equalTo(listOf("0", "1", "2")))
+    }
+
+    @Test
+    fun `returns labels in descending order when range is decreasing`() {
+        mockIntQuestion(2, 0, 1)
+
+        val choices = listOf(
+            SelectChoice("0", "0"),
+            SelectChoice("1", "1"),
+            SelectChoice("2", "2")
+        )
+        val prompt = promptBuilder
+            .withSelectChoices(choices)
+            .withDataType(DATATYPE_INTEGER)
+            .build()
+
+        val state = RangeSliderState.fromPrompt(prompt, choices)
+        assertThat(state.labels, equalTo(listOf("2", "1", "0")))
     }
 
     @Test
