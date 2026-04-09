@@ -242,19 +242,6 @@ class FakeMapFragment(private val ready: Boolean = false) : Fragment(), MapFragm
         return hasCenter
     }
 
-    fun setLocation(mapPoint: MapPoint?) {
-        if (gpsLocationEnabled) {
-            gpsLocation = mapPoint
-            if (gpsLocationListener != null) {
-                gpsLocationListener!!.onPoint(mapPoint!!)
-            }
-        }
-    }
-
-    fun setLocationProvider(locationProvider: String?) {
-        this.locationProvider = locationProvider
-    }
-
     fun isRetainMockAccuracy(): Boolean {
         return retainMockAccuracy
     }

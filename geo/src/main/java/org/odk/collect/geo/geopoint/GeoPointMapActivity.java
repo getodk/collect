@@ -14,11 +14,13 @@
 
 package org.odk.collect.geo.geopoint;
 
+import static androidx.lifecycle.FlowLiveDataConversions.asLiveData;
 import static org.odk.collect.androidshared.ui.EdgeToEdge.setView;
 import static org.odk.collect.geo.Constants.EXTRA_DRAGGABLE_ONLY;
 import static org.odk.collect.geo.Constants.EXTRA_READ_ONLY;
 import static org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY;
 import static org.odk.collect.geo.GeoActivityUtils.requireLocationPermissions;
+import static org.odk.collect.location.tracker.LocationTrackerKt.bindToLifecycle;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -38,6 +40,7 @@ import org.odk.collect.async.Scheduler;
 import org.odk.collect.externalapp.ExternalAppUtils;
 import org.odk.collect.geo.GeoDependencyComponentProvider;
 import org.odk.collect.geo.R;
+import org.odk.collect.location.tracker.LocationTracker;
 import org.odk.collect.maps.MapFragment;
 import org.odk.collect.maps.MapFragmentFactory;
 import org.odk.collect.maps.MapPoint;
@@ -95,6 +98,9 @@ public class GeoPointMapActivity extends LocalizedActivity {
 
     @Inject
     WebPageService webPageService;
+
+    @Inject
+    LocationTracker locationTracker;
 
     private MapFragment map;
     private int featureId = -1;  // will be a positive featureId once map is ready
@@ -160,6 +166,13 @@ public class GeoPointMapActivity extends LocalizedActivity {
 
         MapFragment mapFragment = ((FragmentContainerView) findViewById(R.id.map_container)).getFragment();
         mapFragment.init(this::initMap, this::finish);
+
+        bindToLifecycle(locationTracker, this, getIntent().getBooleanExtra(EXTRA_RETAIN_MOCK_ACCURACY, false));
+        asLiveData(locationTracker.getLocation()).observe(this, location -> {
+            if (location != null) {
+                onLocationChanged(new MapPoint(location.getLatitude(), location.getLongitude(), location.getAltitude(), location.getAccuracy()));
+            }
+        });
     }
 
     @Override protected void onSaveInstanceState(Bundle state) {
@@ -283,10 +296,6 @@ public class GeoPointMapActivity extends LocalizedActivity {
                 zoomToMarker(false);
             }
         }
-
-        map.setRetainMockAccuracy(intent.getBooleanExtra(EXTRA_RETAIN_MOCK_ACCURACY, false));
-        map.setGpsLocationListener(this::onLocationChanged);
-        map.setGpsLocationEnabled(true);
 
         if (previousState != null) {
             restoreFromInstanceState(previousState);

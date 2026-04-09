@@ -34,10 +34,10 @@ fun LocationTracker.getCurrentLocation(): Location? {
     return this.getLocation().value
 }
 
-fun LocationTracker.bindToLifecycle(lifecycleOwner: LifecycleOwner) {
+fun LocationTracker.bindToLifecycle(lifecycleOwner: LifecycleOwner, retainMockAccuracy: Boolean = false) {
     lifecycleOwner.lifecycle.addObserver(object : DefaultLifecycleObserver {
         override fun onResume(owner: LifecycleOwner) {
-            start()
+            start(retainMockAccuracy)
         }
 
         override fun onPause(owner: LifecycleOwner) {

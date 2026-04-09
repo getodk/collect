@@ -24,8 +24,11 @@ import org.odk.collect.externalapp.ExternalAppUtils.getReturnedSingleValue
 import org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY
 import org.odk.collect.geo.DaggerGeoDependencyComponent
 import org.odk.collect.geo.GeoDependencyModule
+import org.odk.collect.geo.support.FakeLocationTracker
 import org.odk.collect.geo.support.FakeMapFragment
 import org.odk.collect.geo.support.RobolectricApplication
+import org.odk.collect.location.Location
+import org.odk.collect.location.tracker.LocationTracker
 import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.layers.ReferenceLayerRepository
@@ -39,6 +42,8 @@ import org.robolectric.Shadows
 class GeoPointMapActivityTest {
 
     private val mapFragment = FakeMapFragment()
+
+    private val locationTracker = FakeLocationTracker()
 
     @get:Rule
     val launcherRule: ActivityScenarioLauncherRule = ActivityScenarioLauncherRule()
@@ -73,6 +78,10 @@ class GeoPointMapActivityTest {
                 override fun providesWebPageService(): WebPageService {
                     return Mockito.mock()
                 }
+
+                override fun providesLocationTracker(application: Application): LocationTracker {
+                    return locationTracker
+                }
             })
             .build()
     }
@@ -95,8 +104,7 @@ class GeoPointMapActivityTest {
     fun whenLocationSetShouldDisplayStatusMessage() {
         val scenario = launcherRule.launchForResult(GeoPointMapActivity::class.java)
         mapFragment.ready()
-        mapFragment.setLocationProvider("GPS")
-        mapFragment.setLocation(MapPoint(1.0, 2.0, 3.0, 4.0))
+        locationTracker.currentLocation = Location(1.0, 2.0, 3.0, 4.0f)
 
         scenario.onActivity { activity: GeoPointMapActivity? ->
             Assert.assertEquals(
@@ -110,13 +118,12 @@ class GeoPointMapActivityTest {
     fun shouldReturnPointFromLastLocationFix() {
         val scenario = launcherRule.launchForResult(GeoPointMapActivity::class.java)
         mapFragment.ready()
-        mapFragment.setLocationProvider("GPS")
 
         // First location
-        mapFragment.setLocation(MapPoint(1.0, 2.0, 3.0, 4.0))
+        locationTracker.currentLocation = Location(1.0, 2.0, 3.0, 4.0f)
 
         // Second location
-        mapFragment.setLocation(MapPoint(5.0, 6.0, 7.0, 8.0))
+        locationTracker.currentLocation = Location(5.0, 6.0, 7.0, 8.0f)
 
         // When the user clicks the "Save" button, the fix location should be returned.
         scenario.onActivity { activity: GeoPointMapActivity ->
@@ -172,13 +179,13 @@ class GeoPointMapActivityTest {
         launcherRule.launch<Activity>(intent)
         mapFragment.ready()
 
-        assertThat(mapFragment.isRetainMockAccuracy(), equalTo(true))
+        assertThat(locationTracker.retainMockAccuracy, equalTo(true))
 
         intent.putExtra(EXTRA_RETAIN_MOCK_ACCURACY, false)
         launcherRule.launch<Activity>(intent)
         mapFragment.ready()
 
-        assertThat(mapFragment.isRetainMockAccuracy(), equalTo(false))
+        assertThat(locationTracker.retainMockAccuracy, equalTo(false))
     }
 
     @Test
