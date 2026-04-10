@@ -27,6 +27,7 @@ import static org.odk.collect.android.utilities.AnimationUtils.areAnimationsEnab
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 import static org.odk.collect.android.utilities.DialogUtils.getDialog;
 import static org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing;
+import static org.odk.collect.androidshared.ui.EdgeToEdge.applyBottomBarInsetMargins;
 import static org.odk.collect.androidshared.ui.EdgeToEdge.setView;
 import static org.odk.collect.androidshared.ui.ToastUtils.showLongToast;
 import static org.odk.collect.androidshared.ui.ToastUtils.showShortToast;
@@ -521,6 +522,8 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
         );
 
         addMenuProvider(menuProvider, this);
+
+        applyBottomBarInsetMargins(findViewById(R.id.buttonholder));
 
         nextButton = findViewById(R.id.form_forward_button);
         nextButton.setOnClickListener(v -> {
