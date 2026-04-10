@@ -24,6 +24,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.junit4.createEmptyComposeRule
 import androidx.core.content.FileProvider
 import androidx.test.core.app.ApplicationProvider
@@ -61,6 +62,7 @@ import org.odk.collect.android.widgets.DecimalWidget
 import org.odk.collect.android.widgets.IntegerWidget
 import org.odk.collect.android.widgets.StringWidget
 import org.odk.collect.androidtest.RecordedIntentsRule
+import org.odk.collect.androidtest.hasClickLabel
 import org.odk.collect.androidtest.onNodeWithClickLabel
 import org.odk.collect.strings.R
 import java.io.File
@@ -323,10 +325,9 @@ class IntentGroupTest {
             .check(matches(isDisplayed()))
     }
 
+    @OptIn(ExperimentalTestApi::class)
     private fun assertVideoWidgetWithAnswer() {
-        composeRule
-            .onNodeWithClickLabel(R.string.play_video)
-            .assertExists()
+        composeRule.waitUntilExactlyOneExists(hasClickLabel(R.string.play_video))
     }
 
     private fun assertFileWidgetWithAnswer() {
