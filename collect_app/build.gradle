@@ -366,6 +366,7 @@ dependencies {
     implementation(libs.androidXConstraintLayoutCompose)
     implementation(libs.androidXComposeMaterialIcons)
     implementation(libs.androidXComposePreview)
+    implementation(libs.coil)
 
     testImplementation project(':forms-test')
 

@@ -49,6 +49,7 @@ fun WidgetAnswer(
                     )
                 }
             }
+            Constants.CONTROL_IMAGE_CHOOSE -> ImageWidgetAnswer(modifier, answer, mediaWidgetAnswerViewModel, onLongClick)
             Constants.CONTROL_VIDEO_CAPTURE -> VideoWidgetAnswer(modifier, answer, mediaWidgetAnswerViewModel, onLongClick)
             Constants.CONTROL_FILE_CAPTURE -> {
                 val context = LocalContext.current
