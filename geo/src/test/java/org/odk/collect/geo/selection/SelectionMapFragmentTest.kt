@@ -40,10 +40,13 @@ import org.odk.collect.async.Scheduler
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.geo.DaggerGeoDependencyComponent
 import org.odk.collect.geo.GeoDependencyModule
+import org.odk.collect.geo.GeoUtils.toMapPoint
 import org.odk.collect.geo.R
 import org.odk.collect.geo.support.FakeLocationTracker
 import org.odk.collect.geo.support.FakeMapFragment
 import org.odk.collect.geo.support.Fixtures
+import org.odk.collect.geo.support.MapFragmentAssertions.hasZoomedToCurrentLocation
+import org.odk.collect.geo.support.MapFragmentAssertions.showsCurrentLocation
 import org.odk.collect.geo.support.RobolectricApplication
 import org.odk.collect.location.Location
 import org.odk.collect.location.tracker.LocationTracker
@@ -59,6 +62,8 @@ import org.odk.collect.material.MaterialProgressDialogFragment
 import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.strings.R.string
+import org.odk.collect.testshared.Interactions
 import org.odk.collect.testshared.RobolectricHelpers.getFragmentByClass
 import org.odk.collect.webpage.WebPageService
 
@@ -950,6 +955,33 @@ class SelectionMapFragmentTest {
         map.ready()
 
         assertThat(actualResult, equalTo(null))
+    }
+
+    @Test
+    fun `clicking zoom zooms to the current location`() {
+        launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        map.ready()
+
+        locationTracker.currentLocation = Location(5.0, 5.0)
+        locationTracker.currentLocation = Location(6.0, 6.0)
+
+        Interactions.clickOn(withContentDescription(string.show_my_location))
+        assertThat(map, hasZoomedToCurrentLocation(MapPoint(6.0, 6.0)))
+    }
+
+    @Test
+    fun `shows current location`() {
+        launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        map.ready()
+
+        val firstLocation = Location(2.0, 2.0, accuracy = 5.2f)
+        locationTracker.currentLocation = firstLocation
+        assertThat(map, showsCurrentLocation(firstLocation.toMapPoint()))
+
+        val secondLocation = Location(3.0, 2.0, accuracy = 2.1f)
+        locationTracker.currentLocation = secondLocation
+        assertThat(map, showsCurrentLocation(secondLocation.toMapPoint()))
+        assertThat(map, not(showsCurrentLocation(firstLocation.toMapPoint())))
     }
 
     private fun MappableSelectItem.MappableSelectPoint.toMapPoint(): MapPoint {
