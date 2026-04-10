@@ -21,11 +21,13 @@ interface Scheduler {
      * @param background the task to be run
      * @param foreground run on the foreground once the task is complete
      */
+    @Deprecated("Use lifecycle-aware coroutine scopes (e.g. viewModelScope) instead of the Scheduler abstraction")
     fun <T> immediate(background: Supplier<T>, foreground: Consumer<T>)
 
     /**
      * Run work in the foreground or background. Cancelled if application closed.
      */
+    @Deprecated("Use lifecycle-aware coroutine scopes (e.g. viewModelScope) instead of the Scheduler abstraction")
     fun immediate(foreground: Boolean = false, delay: Long? = null, runnable: Runnable)
 
     /**

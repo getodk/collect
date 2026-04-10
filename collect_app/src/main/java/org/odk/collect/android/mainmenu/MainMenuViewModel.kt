@@ -10,8 +10,8 @@ import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
 import org.odk.collect.android.instancemanagement.InstanceDiskSynchronizer
 import org.odk.collect.android.instancemanagement.InstancesDataService
-import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider
-import org.odk.collect.android.instancemanagement.autosend.shouldFormBeSentAutomatically
+import org.odk.collect.android.instancemanagement.send.autosend.AutoSendSettingsProvider
+import org.odk.collect.android.instancemanagement.send.autosend.shouldFormBeSentAutomatically
 import org.odk.collect.android.instancemanagement.canBeEdited
 import org.odk.collect.android.instancemanagement.isDraft
 import org.odk.collect.android.projects.ProjectsDataService

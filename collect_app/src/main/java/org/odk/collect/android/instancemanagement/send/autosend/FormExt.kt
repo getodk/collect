@@ -1,4 +1,4 @@
-package org.odk.collect.android.instancemanagement.autosend
+package org.odk.collect.android.instancemanagement.send.autosend
 
 import org.odk.collect.forms.Form
 
