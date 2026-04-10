@@ -490,8 +490,7 @@
   <string name="change_password">ODK lösenord</string>
   <string name="password_error_whitespace">Inledande eller avslutande blanksteg är inte tillåtet i lösenord</string>
   <string name="username_error_whitespace">Inledande eller avslutande blanksteg är inte tillåtet i användarnamn</string>
-  <string name="app_theme">Tema</string>
-  <string name="language">Språk</string>
+    <string name="language">Språk</string>
   <string name="use_device_language">Använd enhetens språk</string>
   <string name="font_size">Textstorlek</string>
   <string name="change_font_size">Textstorlek</string>

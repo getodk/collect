@@ -1,9 +1,5 @@
 package org.odk.collect.android.support.pages;
 
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-
 public class FormMetadataPage extends PreferencePage<FormMetadataPage> {
 
     @Override
@@ -13,17 +9,17 @@ public class FormMetadataPage extends PreferencePage<FormMetadataPage> {
     }
 
     public FormMetadataPage clickEmail() {
-        onView(withText(getTranslatedString(org.odk.collect.strings.R.string.email))).perform(click());
+        clickOnString(org.odk.collect.strings.R.string.email);
         return this;
     }
 
     public FormMetadataPage clickUsername() {
-        onView(withText(getTranslatedString(org.odk.collect.strings.R.string.username))).perform(click());
+        clickOnString(org.odk.collect.strings.R.string.username);
         return this;
     }
 
     public FormMetadataPage clickPhoneNumber() {
-        onView(withText(getTranslatedString(org.odk.collect.strings.R.string.phone_number))).perform(click());
+        clickOnString(org.odk.collect.strings.R.string.phone_number);
         return this;
     }
 }

@@ -1,7 +1,6 @@
 package org.odk.collect.android.support.pages;
 
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -17,7 +16,7 @@ public class GetBlankFormPage extends Page<GetBlankFormPage> {
     }
 
     public FormsDownloadResultPage clickGetSelected() {
-        onView(withText(getTranslatedString(string.download))).perform(click());
+        clickOnString(string.download);
         return new FormsDownloadResultPage().assertOnPage();
     }
 

@@ -512,8 +512,7 @@
   <string name="change_password">ODK Lozinka</string>
   <string name="password_error_whitespace">Prazan prostor na početku ili kraju nije dozvoljen kod lozinki</string>
   <string name="username_error_whitespace">Prazan prostor na početku ili kraju nije dozvoljen kod korisničkih imena</string>
-  <string name="app_theme">Tema</string>
-  <string name="language">Jezik</string>
+    <string name="language">Jezik</string>
   <string name="use_device_language">Koristi jezik uređaja</string>
   <string name="font_size">Veličina teksta</string>
   <string name="change_font_size">Veličina teksta</string>

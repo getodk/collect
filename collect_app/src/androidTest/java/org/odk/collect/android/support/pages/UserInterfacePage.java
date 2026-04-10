@@ -1,9 +1,7 @@
 package org.odk.collect.android.support.pages;
 
 import static androidx.test.espresso.Espresso.onData;
-import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.equalTo;
 
 public class UserInterfacePage extends Page<UserInterfacePage> {
@@ -15,7 +13,7 @@ public class UserInterfacePage extends Page<UserInterfacePage> {
     }
 
     public UserInterfacePage clickOnLanguage() {
-        onView(withText(getTranslatedString(org.odk.collect.strings.R.string.language))).perform(click());
+        clickOnString(org.odk.collect.strings.R.string.language);
         return this;
     }
 
@@ -31,11 +29,6 @@ public class UserInterfacePage extends Page<UserInterfacePage> {
 
     public UserInterfacePage clickUseSwipesAndButtons() {
         clickOnString(org.odk.collect.strings.R.string.swipe_buttons_navigation);
-        return this;
-    }
-
-    public UserInterfacePage clickOnTheme() {
-        onView(withText(getTranslatedString(org.odk.collect.strings.R.string.app_theme))).perform(click());
         return this;
     }
 

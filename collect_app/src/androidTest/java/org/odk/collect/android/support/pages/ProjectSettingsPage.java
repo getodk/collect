@@ -1,7 +1,6 @@
 package org.odk.collect.android.support.pages;
 
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -72,12 +71,12 @@ public class ProjectSettingsPage extends Page<ProjectSettingsPage> {
     }
 
     public FormManagementPage clickFormManagement() {
-        onView(withText(getTranslatedString(org.odk.collect.strings.R.string.form_management_preferences))).perform(click());
+        clickOnString(org.odk.collect.strings.R.string.form_management_preferences);
         return new FormManagementPage();
     }
 
     public ExperimentalPage clickExperimental() {
-        onView(withText(getTranslatedString(org.odk.collect.strings.R.string.experimental))).perform(click());
+        clickOnString(org.odk.collect.strings.R.string.experimental);
         return new ExperimentalPage().assertOnPage();
     }
 

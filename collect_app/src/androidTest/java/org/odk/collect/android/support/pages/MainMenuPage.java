@@ -220,7 +220,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
 
     public ViewSentFormPage clickViewSentForm(int number) {
         assertNumberOfSentForms(number);
-        onView(withText(getTranslatedString(org.odk.collect.strings.R.string.view_sent_forms))).perform(click());
+        clickOnString(org.odk.collect.strings.R.string.view_sent_forms);
         return new ViewSentFormPage().assertOnPage();
     }
 

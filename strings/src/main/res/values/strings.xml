@@ -890,8 +890,6 @@
     <string name="password_error_whitespace">Leading or trailing whitespace not allowed in passwords</string>
     <string name="username_error_whitespace">Leading or trailing whitespace not allowed in usernames</string>
 
-    <string name="app_theme">Theme</string>
-
     <string name="language">Language</string>
     <string name="use_device_language">Use device language</string>
 

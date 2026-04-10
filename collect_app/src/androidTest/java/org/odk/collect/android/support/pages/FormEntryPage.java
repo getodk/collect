@@ -179,7 +179,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public ProjectSettingsPage clickProjectSettings() {
-        onView(withText(getTranslatedString(org.odk.collect.strings.R.string.project_settings))).perform(click());
+        clickOnString(org.odk.collect.strings.R.string.project_settings);
         return new ProjectSettingsPage().assertOnPage();
     }
 
@@ -233,19 +233,19 @@ public class FormEntryPage extends Page<FormEntryPage> {
 
     public FormEntryPage clickForwardButton() {
         closeSoftKeyboard();
-        onView(withText(getTranslatedString(org.odk.collect.strings.R.string.form_forward))).perform(click());
+        clickOnString(org.odk.collect.strings.R.string.form_forward);
         return this;
     }
 
     public FormEndPage clickForwardButtonToEndScreen() {
         closeSoftKeyboard();
-        onView(withText(getTranslatedString(org.odk.collect.strings.R.string.form_forward))).perform(click());
+        clickOnString(org.odk.collect.strings.R.string.form_forward);
         return new FormEndPage(formName).assertOnPage();
     }
 
     public FormEntryPage clickBackwardButton() {
         closeSoftKeyboard();
-        onView(withText(getTranslatedString(org.odk.collect.strings.R.string.form_backward))).perform(click());
+        clickOnString(org.odk.collect.strings.R.string.form_backward);
         return this;
     }
 
