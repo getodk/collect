@@ -14,6 +14,7 @@ import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.analytics.AnalyticsEvents.RANGE_DECIMAL_WIDGET
 import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.widgets.QuestionWidget
+import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader
 import org.odk.collect.androidshared.ui.ComposeThemeProvider.Companion.setContextThemedContent
 import org.odk.collect.androidshared.ui.ToastUtils
 
@@ -21,13 +22,14 @@ import org.odk.collect.androidshared.ui.ToastUtils
 class RangeDecimalWidget(
     context: Context,
     prompt: QuestionDetails,
+    selectChoiceLoader: SelectChoiceLoader,
     dependencies: Dependencies
 ) : QuestionWidget(
         context,
         dependencies,
         prompt
     ) {
-    private var rangeSliderState by mutableStateOf(RangeSliderState.fromPrompt(formEntryPrompt))
+    private var rangeSliderState by mutableStateOf(RangeSliderState.fromPrompt(formEntryPrompt, selectChoiceLoader.loadSelectChoices(formEntryPrompt)))
     private var shouldSuppressFlingGesture = false
 
     init {
@@ -41,6 +43,7 @@ class RangeDecimalWidget(
                 RangeSlider(
                     value = rangeSliderState.sliderValue,
                     valueLabel = rangeSliderState.valueLabel,
+                    placeholder = rangeSliderState.placeholder,
                     steps = rangeSliderState.numOfSteps,
                     ticks = rangeSliderState.numOfTicks,
                     enabled = rangeSliderState.isEnabled,
@@ -48,6 +51,7 @@ class RangeDecimalWidget(
                     horizontal = rangeSliderState.isHorizontal,
                     startLabel = rangeSliderState.startLabel,
                     endLabel = rangeSliderState.endLabel,
+                    labels = rangeSliderState.labels,
                     onValueChanging = {
                         shouldSuppressFlingGesture = it
                         requestDisallowInterceptTouchEvent(it)
