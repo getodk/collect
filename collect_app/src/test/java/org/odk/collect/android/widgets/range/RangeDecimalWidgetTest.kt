@@ -25,6 +25,7 @@ import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.support.WidgetTestActivity
 import org.odk.collect.android.widgets.base.QuestionWidgetTest
+import org.odk.collect.android.widgets.support.FormEntryPromptSelectChoiceLoader
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener
 import org.odk.collect.androidshared.ui.ToastUtils
@@ -49,6 +50,7 @@ class RangeDecimalWidgetTest : QuestionWidgetTest<RangeDecimalWidget, DecimalDat
         return RangeDecimalWidget(
             activity,
             QuestionDetails(formEntryPrompt),
+            FormEntryPromptSelectChoiceLoader(),
             QuestionWidgetHelpers.widgetDependencies()
         ).also {
             widgetInComposeActivity(composeRule, it)
@@ -132,6 +134,7 @@ class RangeDecimalWidgetTest : QuestionWidgetTest<RangeDecimalWidget, DecimalDat
 
     override fun usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         formEntryPrompt = MockFormEntryPromptBuilder(formEntryPrompt)
+            .withAnswer(DecimalData(5.0))
             .withReadOnly(true)
             .build()
         createWidget()

@@ -2,13 +2,15 @@ package org.odk.collect.android.widgets.range
 
 import android.view.MotionEvent
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,17 +18,24 @@ import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.dp
+import org.odk.collect.androidshared.ui.OffsetUtils.calculateOffset
+import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HorizontalRangeSlider(
     value: Float?,
     valueLabel: String,
+    placeholder: Float?,
     steps: Int,
     ticks: Int,
     enabled: Boolean,
     startLabel: String,
     endLabel: String,
+    labels: List<String>,
     onValueChanging: (Boolean) -> Unit,
     onValueChange: (Float) -> Unit,
     onValueChangeFinished: () -> Unit
@@ -36,32 +45,52 @@ fun HorizontalRangeSlider(
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         ValueLabel(valueLabel)
 
-        Slider(
-            modifier = Modifier
-                .fillMaxWidth()
-                .semantics { contentDescription = sliderContentDescription }
-                .pointerInteropFilter { event ->
-                    if (enabled && event.action == MotionEvent.ACTION_DOWN) {
-                        onValueChanging(true)
-                        if (value == null) {
-                            onValueChange(0f)
+        BoxWithConstraints {
+            Slider(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .semantics { contentDescription = sliderContentDescription }
+                    .pointerInteropFilter { event ->
+                        if (enabled && event.action == MotionEvent.ACTION_DOWN) {
+                            onValueChanging(true)
+                            if (value == null) {
+                                onValueChange(0f)
+                            }
                         }
-                    }
-                    false
+                        false
+                    },
+                value = value ?: 0f,
+                steps = steps,
+                onValueChange = onValueChange,
+                onValueChangeFinished = {
+                    onValueChanging(false)
+                    onValueChangeFinished()
                 },
-            value = value ?: 0f,
-            steps = steps,
-            onValueChange = onValueChange,
-            onValueChangeFinished = {
-                onValueChanging(false)
-                onValueChangeFinished()
-            },
-            thumb = { Thumb(value) },
-            track = { Track(it, ticks) },
-            enabled = enabled
-        )
+                thumb = {},
+                track = { Track(it, ticks) },
+                enabled = enabled
+            )
+
+            val thumbValue = value ?: placeholder
+            if (thumbValue != null) {
+                Box(
+                    modifier = Modifier
+                        .offset {
+                            calculateOffset(
+                                trackSize = constraints.maxWidth,
+                                itemWidth = THUMB_WIDTH.dp.toPx(),
+                                value = thumbValue,
+                                isVertical = false
+                            )
+                        }
+                        .pointerInteropFilter { false }
+                        .align(Alignment.CenterStart)
+                ) { Thumb(value = thumbValue) }
+            }
+        }
 
         HorizontalEdgeLabels(startLabel, endLabel)
+        HorizontalStepLabels(labels)
     }
 }
 
@@ -74,19 +103,49 @@ private fun HorizontalEdgeLabels(labelStart: String, labelEnd: String) {
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(
-            text = labelStart,
+        Label(
             modifier = Modifier.semantics {
                 contentDescription = sliderStartLabelContentDescription
             },
-            style = MaterialTheme.typography.titleLarge
+            text = labelStart,
         )
-        Text(
-            text = labelEnd,
+        Label(
             modifier = Modifier.semantics {
                 contentDescription = sliderEndLabelContentDescription
             },
-            style = MaterialTheme.typography.titleLarge
+            text = labelEnd,
         )
+    }
+}
+
+@Composable
+private fun HorizontalStepLabels(labels: List<String>) {
+    BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
+        val totalSteps = labels.size - 1
+        val labelWidth = maxWidth / 5 // Each label takes up a fifth of the track width. Confirmed to look good in most cases.
+
+        labels.forEachIndexed { index, label ->
+            if (label.isBlank()) return@forEachIndexed
+
+            val modifier = when (index) {
+                0 -> Modifier.align(Alignment.TopStart)
+                totalSteps -> Modifier.align(Alignment.TopEnd)
+                else -> Modifier.offset {
+                    val fraction = index.toFloat() / totalSteps
+                    val centerX = (constraints.maxWidth * fraction).roundToInt()
+                    IntOffset(centerX - labelWidth.roundToPx() / 2, 0)
+                }
+            }
+
+            Label(
+                modifier = modifier.width(labelWidth),
+                text = label,
+                textAlign = when (index) {
+                    0 -> TextAlign.Start
+                    totalSteps -> TextAlign.End
+                    else -> TextAlign.Center
+                }
+            )
+        }
     }
 }
