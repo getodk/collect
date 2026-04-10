@@ -20,7 +20,7 @@ import static org.odk.collect.geo.Constants.EXTRA_DRAGGABLE_ONLY;
 import static org.odk.collect.geo.Constants.EXTRA_READ_ONLY;
 import static org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY;
 import static org.odk.collect.geo.GeoActivityUtils.requireLocationPermissions;
-import static org.odk.collect.location.tracker.LocationTrackerKt.bindToLifecycle;
+import static org.odk.collect.geo.GeoUtils.showCurrentLocation;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -44,6 +44,7 @@ import org.odk.collect.location.tracker.LocationTracker;
 import org.odk.collect.maps.MapFragment;
 import org.odk.collect.maps.MapFragmentFactory;
 import org.odk.collect.maps.MapPoint;
+import org.odk.collect.maps.circles.CurrentLocationDelegate;
 import org.odk.collect.maps.layers.OfflineMapLayersPickerBottomSheetDialogFragment;
 import org.odk.collect.maps.layers.ReferenceLayerRepository;
 import org.odk.collect.maps.markers.MarkerDescription;
@@ -136,6 +137,8 @@ public class GeoPointMapActivity extends LocalizedActivity {
     /** While true, the point cannot be moved by dragging or long-pressing. */
     private boolean isPointLocked;
 
+    private final CurrentLocationDelegate currentLocationDelegate = new CurrentLocationDelegate();
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         ((GeoDependencyComponentProvider) getApplication()).getGeoDependencyComponent().inject(this);
@@ -167,7 +170,6 @@ public class GeoPointMapActivity extends LocalizedActivity {
         MapFragment mapFragment = ((FragmentContainerView) findViewById(R.id.map_container)).getFragment();
         mapFragment.init(this::initMap, this::finish);
 
-        bindToLifecycle(locationTracker, this, getIntent().getBooleanExtra(EXTRA_RETAIN_MOCK_ACCURACY, false));
         asLiveData(locationTracker.getLocation()).observe(this, location -> {
             if (location != null) {
                 onLocationChanged(new MapPoint(location.getLatitude(), location.getLongitude(), location.getAltitude(), location.getAccuracy()));
@@ -244,7 +246,7 @@ public class GeoPointMapActivity extends LocalizedActivity {
 
         // Focuses on marked location
         zoomButton.setEnabled(false);
-        zoomButton.setOnClickListener(v -> map.zoomToCurrentLocation(map.getGpsLocation()));
+        zoomButton.setOnClickListener(v -> currentLocationDelegate.zoomToCurrentLocation(map));
 
         // Menu Layer Toggle
         findViewById(R.id.layer_menu).setOnClickListener(v -> {
@@ -300,6 +302,9 @@ public class GeoPointMapActivity extends LocalizedActivity {
         if (previousState != null) {
             restoreFromInstanceState(previousState);
         }
+
+        boolean retainMockAccuracy = getIntent().getBooleanExtra(EXTRA_RETAIN_MOCK_ACCURACY, false);
+        showCurrentLocation(map, locationTracker, currentLocationDelegate, retainMockAccuracy);
     }
 
     protected void restoreFromInstanceState(Bundle state) {
@@ -353,7 +358,6 @@ public class GeoPointMapActivity extends LocalizedActivity {
             }
 
             if (!foundFirstLocation) {
-                map.zoomToCurrentLocation(map.getGpsLocation());
                 foundFirstLocation = true;
             }
 

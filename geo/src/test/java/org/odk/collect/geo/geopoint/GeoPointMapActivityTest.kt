@@ -9,9 +9,11 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.not
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
@@ -24,8 +26,11 @@ import org.odk.collect.externalapp.ExternalAppUtils.getReturnedSingleValue
 import org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY
 import org.odk.collect.geo.DaggerGeoDependencyComponent
 import org.odk.collect.geo.GeoDependencyModule
+import org.odk.collect.geo.GeoUtils.toMapPoint
 import org.odk.collect.geo.support.FakeLocationTracker
 import org.odk.collect.geo.support.FakeMapFragment
+import org.odk.collect.geo.support.MapFragmentAssertions.hasZoomedToCurrentLocation
+import org.odk.collect.geo.support.MapFragmentAssertions.showsCurrentLocation
 import org.odk.collect.geo.support.RobolectricApplication
 import org.odk.collect.location.Location
 import org.odk.collect.location.tracker.LocationTracker
@@ -35,6 +40,8 @@ import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.strings.R
+import org.odk.collect.strings.R.string
+import org.odk.collect.testshared.Interactions
 import org.odk.collect.webpage.WebPageService
 import org.robolectric.Shadows
 
@@ -170,7 +177,7 @@ class GeoPointMapActivityTest {
     }
 
     @Test
-    fun passingRetainMockAccuracyExtra_updatesMapFragmentState() {
+    fun passingRetainMockAccuracyExtra_updatesLocationTracker() {
         val intent = Intent(
             ApplicationProvider.getApplicationContext(),
             GeoPointMapActivity::class.java
@@ -198,6 +205,33 @@ class GeoPointMapActivityTest {
         )
 
         scenario.recreate()
+    }
+
+    @Test
+    fun `clicking zoom zooms to the current location`() {
+        launcherRule.launch(GeoPointMapActivity::class.java)
+        mapFragment.ready()
+
+        locationTracker.currentLocation = Location(5.0, 5.0)
+        locationTracker.currentLocation = Location(6.0, 6.0)
+
+        Interactions.clickOn(withContentDescription(string.show_my_location))
+        assertThat(mapFragment, hasZoomedToCurrentLocation(MapPoint(6.0, 6.0)))
+    }
+
+    @Test
+    fun `shows current location`() {
+        launcherRule.launch(GeoPointMapActivity::class.java)
+        mapFragment.ready()
+
+        val firstLocation = Location(2.0, 2.0, accuracy = 5.2f)
+        locationTracker.currentLocation = firstLocation
+        assertThat(mapFragment, showsCurrentLocation(firstLocation.toMapPoint()))
+
+        val secondLocation = Location(3.0, 2.0, accuracy = 2.1f)
+        locationTracker.currentLocation = secondLocation
+        assertThat(mapFragment, showsCurrentLocation(secondLocation.toMapPoint()))
+        assertThat(mapFragment, not(showsCurrentLocation(firstLocation.toMapPoint())))
     }
 
     private fun getLocationStatus(activity: Activity): String {

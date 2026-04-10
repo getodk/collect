@@ -14,6 +14,13 @@ object MapFragmentAssertions {
             override fun describeTo(description: Description) {
                 description.appendText("is zoomed to $location")
             }
+
+            override fun describeMismatchSafely(
+                mapFragment: FakeMapFragment,
+                mismatchDescription: Description
+            ) {
+                mismatchDescription.appendText("was ${mapFragment.getCenter()}")
+            }
         }
     }
 
@@ -30,6 +37,13 @@ object MapFragmentAssertions {
 
             override fun describeTo(description: Description) {
                 description.appendText("shows current location as $location")
+            }
+
+            override fun describeMismatchSafely(
+                mapFragment: FakeMapFragment,
+                mismatchDescription: Description
+            ) {
+                mismatchDescription.appendText("was ${mapFragment.getCenter()}")
             }
         }
     }

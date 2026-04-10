@@ -103,12 +103,15 @@ object GeoUtils {
         return MapPoint(this.latitude, this.longitude, this.altitude, this.accuracy.toDouble())
     }
 
+    @JvmStatic
+    @JvmOverloads
     fun MapFragment.showCurrentLocation(
         locationTracker: LocationTracker,
-        currentLocationDelegate: CurrentLocationDelegate
+        currentLocationDelegate: CurrentLocationDelegate,
+        retainMockAccuracy: Boolean = false
     ) {
         val lifecycleOwner = this as Fragment
-        locationTracker.bindToLifecycle(lifecycleOwner)
+        locationTracker.bindToLifecycle(lifecycleOwner, retainMockAccuracy)
         locationTracker.getLocation().asLiveData().observe(lifecycleOwner) {
             if (it != null) {
                 currentLocationDelegate.update(this, it.toMapPoint())
