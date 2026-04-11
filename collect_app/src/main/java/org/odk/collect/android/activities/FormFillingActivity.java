@@ -475,6 +475,8 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
         super.onCreate(savedInstanceState);
 
         setView(this, R.layout.form_entry, false);
+        applyBottomBarInsetMargins(findViewById(R.id.buttonholder));
+
         setupViewModels(viewModelFactory);
 
         // https://github.com/getodk/collect/issues/5469
@@ -522,8 +524,6 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
         );
 
         addMenuProvider(menuProvider, this);
-
-        applyBottomBarInsetMargins(findViewById(R.id.buttonholder));
 
         nextButton = findViewById(R.id.form_forward_button);
         nextButton.setOnClickListener(v -> {
