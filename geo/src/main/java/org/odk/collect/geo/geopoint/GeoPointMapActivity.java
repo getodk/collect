@@ -347,8 +347,6 @@ public class GeoPointMapActivity extends LocalizedActivity {
             placeMarkerButton.setEnabled(true);
         }
 
-        this.location = point;
-
         if (point != null) {
             enableZoomButton(true);
 
@@ -358,6 +356,7 @@ public class GeoPointMapActivity extends LocalizedActivity {
             }
 
             if (!foundFirstLocation) {
+                this.location = point;
                 foundFirstLocation = true;
             }
 

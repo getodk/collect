@@ -26,6 +26,7 @@ import org.odk.collect.externalapp.ExternalAppUtils.getReturnedSingleValue
 import org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY
 import org.odk.collect.geo.DaggerGeoDependencyComponent
 import org.odk.collect.geo.GeoDependencyModule
+import org.odk.collect.geo.GeoUtils
 import org.odk.collect.geo.GeoUtils.toMapPoint
 import org.odk.collect.geo.support.FakeLocationTracker
 import org.odk.collect.geo.support.FakeMapFragment
@@ -122,31 +123,21 @@ class GeoPointMapActivityTest {
     }
 
     @Test
-    fun shouldReturnPointFromLastLocationFix() {
+    fun `returns point from first location fix`() {
         val scenario = launcherRule.launchForResult(GeoPointMapActivity::class.java)
         mapFragment.ready()
 
-        // First location
-        locationTracker.currentLocation = Location(1.0, 2.0, 3.0, 4.0f)
-
-        // Second location
+        val firstLocation = Location(1.0, 2.0, 3.0, 4.0f)
+        locationTracker.currentLocation = firstLocation
         locationTracker.currentLocation = Location(5.0, 6.0, 7.0, 8.0f)
 
-        // When the user clicks the "Save" button, the fix location should be returned.
-        scenario.onActivity { activity: GeoPointMapActivity ->
-            activity.findViewById<View>(org.odk.collect.geo.R.id.accept_location).performClick()
-        }
-
+        Interactions.clickOn(withContentDescription(string.save))
+        assertThat(scenario.result.resultCode, equalTo(Activity.RESULT_OK))
+        val resultData = scenario.result.resultData
         assertThat(
-            scenario.result.resultCode, equalTo(Activity.RESULT_OK)
+            getReturnedSingleValue(resultData),
+            equalTo(GeoUtils.formatLocationResultString(firstLocation))
         )
-        scenario.onActivity { activity: GeoPointMapActivity ->
-            val resultData = scenario.result.resultData
-            assertThat(
-                getReturnedSingleValue(resultData),
-                equalTo(activity.formatResult(MapPoint(5.0, 6.0, 7.0, 8.0)))
-            )
-        }
     }
 
     @Test
