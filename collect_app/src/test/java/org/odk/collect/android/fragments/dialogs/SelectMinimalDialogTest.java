@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.test.core.app.ApplicationProvider;
+import androidx.test.espresso.Espresso;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.javarosa.core.model.SelectChoice;
@@ -70,7 +71,7 @@ public class SelectMinimalDialogTest {
         RobolectricHelpers.runLooper();
 
         assertThat(isDialogVisible(), is(true));
-        dialogFragment.onBackPressed();
+        Espresso.pressBack();
         assertThat(isDialogVisible(), is(false));
     }
 

@@ -72,11 +72,6 @@ public class ChangesReasonPromptDialogFragment extends MaterialFullScreenDialogF
     }
 
     @Override
-    protected void onBackPressed() {
-        dismiss();
-    }
-
-    @Override
     protected Toolbar getToolbar() {
         return getView().findViewById(org.odk.collect.androidshared.R.id.toolbar);
     }

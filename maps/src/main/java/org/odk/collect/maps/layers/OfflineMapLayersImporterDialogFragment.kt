@@ -88,10 +88,6 @@ class OfflineMapLayersImporterDialogFragment(
 
     override fun onCloseClicked() = Unit
 
-    override fun onBackPressed() {
-        dismiss()
-    }
-
     override fun getToolbar(): Toolbar {
         return OfflineMapLayersImporterBinding.bind(requireView()).toolbarLayout.toolbar
     }

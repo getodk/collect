@@ -232,10 +232,6 @@ class QrCodeProjectCreatorDialog :
     override fun onCloseClicked() {
     }
 
-    override fun onBackPressed() {
-        dismiss()
-    }
-
     override fun getToolbar(): Toolbar? {
         return binding.toolbarLayout.toolbar
     }

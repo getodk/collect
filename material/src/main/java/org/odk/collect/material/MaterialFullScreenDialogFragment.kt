@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.activity.ComponentDialog
-import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.DialogFragment
 import org.odk.collect.androidshared.ui.EdgeToEdge.handleEdgeToEdge
@@ -35,13 +34,6 @@ abstract class MaterialFullScreenDialogFragment : DialogFragment() {
                 setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
             }
 
-            setCancelable(false)
-            dialog.onBackPressedDispatcher.addCallback(this@MaterialFullScreenDialogFragment, object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    onBackPressed()
-                }
-            })
-
             handleEdgeToEdge(requireContext())
         }
     }
@@ -55,8 +47,6 @@ abstract class MaterialFullScreenDialogFragment : DialogFragment() {
     }
 
     protected abstract fun onCloseClicked()
-
-    protected abstract fun onBackPressed()
 
     protected abstract fun getToolbar(): Toolbar?
 
