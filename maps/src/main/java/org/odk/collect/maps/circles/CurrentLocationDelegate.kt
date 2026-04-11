@@ -23,10 +23,7 @@ class CurrentLocationDelegate {
             location,
             false,
             MapFragment.IconAnchor.CENTER,
-            MarkerIconDescription.DrawableResource(
-                org.odk.collect.maps.R.drawable.ic_current_location,
-                MapConsts.DEFAULT_STROKE_COLOR
-            )
+            ICON_DESCRIPTION
         )
 
         locationMarkerId.let {
@@ -58,5 +55,12 @@ class CurrentLocationDelegate {
 
     fun zoomToCurrentLocation(map: MapFragment) {
         map.zoomToCurrentLocation(currentLocation)
+    }
+
+    companion object {
+        val ICON_DESCRIPTION = MarkerIconDescription.DrawableResource(
+            org.odk.collect.maps.R.drawable.ic_current_location,
+            MapConsts.DEFAULT_STROKE_COLOR
+        )
     }
 }

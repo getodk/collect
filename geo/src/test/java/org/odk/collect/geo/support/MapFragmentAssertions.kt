@@ -3,6 +3,7 @@ package org.odk.collect.geo.support
 import org.hamcrest.Description
 import org.hamcrest.TypeSafeMatcher
 import org.odk.collect.maps.MapPoint
+import org.odk.collect.maps.circles.CurrentLocationDelegate
 
 object MapFragmentAssertions {
     fun hasZoomedToCurrentLocation(location: MapPoint): TypeSafeMatcher<FakeMapFragment> {
@@ -27,7 +28,10 @@ object MapFragmentAssertions {
     fun showsCurrentLocation(location: MapPoint): TypeSafeMatcher<FakeMapFragment> {
         return object : TypeSafeMatcher<FakeMapFragment>() {
             override fun matchesSafely(mapFragment: FakeMapFragment): Boolean {
-                val hasLocationMarker = mapFragment.getMarkers().contains(location)
+                val hasLocationMarker = mapFragment.getMarkers().any {
+                    it.point == location && it.iconDescription == CurrentLocationDelegate.ICON_DESCRIPTION
+                }
+
                 val hasAccuracyCircle = mapFragment.getCircles().any {
                     it.center == location && it.radius == location.accuracy.toFloat()
                 }

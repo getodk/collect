@@ -26,8 +26,7 @@ class FakeMapFragment(private val ready: Boolean = false) : Fragment(), MapFragm
     private var gpsLocation: MapPoint? = null
     private var featureClickListener: FeatureListener? = null
     private var dragListener: FeatureListener? = null
-    private val markers = mutableMapOf<Int, MapPoint>()
-    private val markerIcons = mutableMapOf<Int, MarkerIconDescription?>()
+    private val markers = mutableMapOf<Int, MarkerDescription>()
     private val polyLines = mutableMapOf<Int, LineDescription>()
     private val polygons = mutableMapOf<Int, PolygonDescription>()
 
@@ -107,9 +106,7 @@ class FakeMapFragment(private val ready: Boolean = false) : Fragment(), MapFragm
     override fun addMarker(markerDescription: MarkerDescription): Int {
         val featureId = generateFeatureId()
 
-        markers[featureId] = markerDescription.point
-        markerIcons[featureId] = markerDescription.iconDescription
-
+        markers[featureId] = markerDescription
         featureIds.add(featureId)
         return featureId
     }
@@ -118,8 +115,7 @@ class FakeMapFragment(private val ready: Boolean = false) : Fragment(), MapFragm
         featureId: Int,
         markerDescription: MarkerDescription
     ) {
-        markers[featureId] = markerDescription.point
-        markerIcons[featureId] = markerDescription.iconDescription
+        markers[featureId] = markerDescription
     }
 
     override fun addMarkers(markers: List<MarkerDescription>): List<Int> {
@@ -129,11 +125,11 @@ class FakeMapFragment(private val ready: Boolean = false) : Fragment(), MapFragm
     }
 
     override fun setMarkerIcon(featureId: Int, markerIconDescription: MarkerIconDescription) {
-        markerIcons[featureId] = markerIconDescription
+        markers[featureId] = markers[featureId]!!.copy(iconDescription = markerIconDescription)
     }
 
     override fun getMarkerPoint(featureId: Int): MapPoint? {
-        return markers[featureId]
+        return markers[featureId]?.point
     }
 
     override fun addPolyLine(lineDescription: LineDescription): Int {
@@ -188,13 +184,12 @@ class FakeMapFragment(private val ready: Boolean = false) : Fragment(), MapFragm
 
     override fun clearFeatures() {
         markers.clear()
-        markerIcons.clear()
         polyLines.clear()
         polygons.clear()
     }
 
     override fun clearFeatures(ids: List<Int>) {
-        listOf(markers, markerIcons, polyLines, polygons).forEach {
+        listOf(markers, polyLines, polygons).forEach {
             ids.forEach { id ->
                 it.remove(id)
             }
@@ -254,12 +249,16 @@ class FakeMapFragment(private val ready: Boolean = false) : Fragment(), MapFragm
         featureClickListener!!.onFeature(featureId)
     }
 
-    fun getMarkers(): List<MapPoint> {
+    fun getMarkers(): List<MarkerDescription> {
         return markers.values.toList()
     }
 
+    fun getMarkersPoints(): List<MapPoint> {
+        return markers.values.map { it.point }
+    }
+
     fun getMarkerIcons(): List<MarkerIconDescription?> {
-        return markerIcons.values.toList()
+        return markers.values.map { it.iconDescription }
     }
 
     fun getZoomBoundingBox(): Pair<Iterable<MapPoint>, Double>? {

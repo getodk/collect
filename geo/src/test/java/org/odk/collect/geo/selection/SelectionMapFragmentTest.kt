@@ -170,10 +170,10 @@ class SelectionMapFragmentTest {
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.ready()
 
-        assertThat(map.getMarkers(), equalTo(itemsLiveData.value?.map { (it as MappableSelectItem.MappableSelectPoint).toMapPoint() }))
+        assertThat(map.getMarkersPoints(), equalTo(itemsLiveData.value?.map { (it as MappableSelectItem.MappableSelectPoint).toMapPoint() }))
 
         itemsLiveData.value = emptyList()
-        assertThat(map.getMarkers(), equalTo(emptyList()))
+        assertThat(map.getMarkersPoints(), equalTo(emptyList()))
     }
 
     @Test
@@ -194,10 +194,10 @@ class SelectionMapFragmentTest {
             )
         )
 
-        assertThat(map.getMarkers().size, equalTo(2))
+        assertThat(map.getMarkersPoints().size, equalTo(2))
 
         itemsLiveData.value = emptyList()
-        assertThat(map.getMarkers().size, equalTo(1))
+        assertThat(map.getMarkersPoints().size, equalTo(1))
     }
 
     @Test
