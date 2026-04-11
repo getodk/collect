@@ -18,6 +18,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -46,88 +47,90 @@ fun FormEnd(
     finalizeEnabled: Boolean,
     onSave: (Boolean) -> Unit = {}
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(marginStandard()),
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = stringResource(string.save_enter_data_description, formTitle),
-            style = MaterialTheme.typography.titleLarge
-        )
-
-        if (finalizeEnabled) {
-            val (icon, title, message) = getWarning(
-                isEditableAfterFinalization,
-                shouldBeSentAutomatically,
-                saveAsDraftEnabled
-            )
-
-            EditWarning(
-                icon = icon,
-                title = title,
-                message = message,
-                errorBackground = !isEditableAfterFinalization
-            )
-        }
-
-        Row(
+    Surface {
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 64.dp),
-            horizontalArrangement = Arrangement.spacedBy(marginStandard())
+                .fillMaxSize()
+                .padding(marginStandard()),
+            verticalArrangement = Arrangement.Center
         ) {
-            val screenName = stringResource(org.odk.collect.android.R.string.form_end_screen)
-
-            if (saveAsDraftEnabled) {
-                OutlinedButton(
-                    modifier = Modifier.weight(1f),
-                    onClick = {
-                        if (MultiClickGuard.allowClick(screenName)) {
-                            onSave(false)
-                        }
-                    }
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            Icons.Default.Save,
-                            contentDescription = null
-                        )
-
-                        Text(
-                            text = stringResource(string.save_as_draft),
-                            modifier = Modifier.padding(start = marginExtraSmall())
-                        )
-                    }
-                }
-            }
+            Text(
+                text = stringResource(string.save_enter_data_description, formTitle),
+                style = MaterialTheme.typography.titleLarge
+            )
 
             if (finalizeEnabled) {
-                val finalizeText = if (shouldBeSentAutomatically) {
-                    string.send
-                } else {
-                    string.finalize
-                }
+                val (icon, title, message) = getWarning(
+                    isEditableAfterFinalization,
+                    shouldBeSentAutomatically,
+                    saveAsDraftEnabled
+                )
 
-                Button(
-                    modifier = Modifier.weight(1f),
-                    onClick = {
-                        if (MultiClickGuard.allowClick(screenName)) {
-                            onSave(true)
+                EditWarning(
+                    icon = icon,
+                    title = title,
+                    message = message,
+                    errorBackground = !isEditableAfterFinalization
+                )
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 64.dp),
+                horizontalArrangement = Arrangement.spacedBy(marginStandard())
+            ) {
+                val screenName = stringResource(org.odk.collect.android.R.string.form_end_screen)
+
+                if (saveAsDraftEnabled) {
+                    OutlinedButton(
+                        modifier = Modifier.weight(1f),
+                        onClick = {
+                            if (MultiClickGuard.allowClick(screenName)) {
+                                onSave(false)
+                            }
+                        }
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                Icons.Default.Save,
+                                contentDescription = null
+                            )
+
+                            Text(
+                                text = stringResource(string.save_as_draft),
+                                modifier = Modifier.padding(start = marginExtraSmall())
+                            )
                         }
                     }
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            Icons.AutoMirrored.Default.Send,
-                            contentDescription = null
-                        )
+                }
 
-                        Text(
-                            text = stringResource(finalizeText),
-                            modifier = Modifier.padding(start = marginExtraSmall())
-                        )
+                if (finalizeEnabled) {
+                    val finalizeText = if (shouldBeSentAutomatically) {
+                        string.send
+                    } else {
+                        string.finalize
+                    }
+
+                    Button(
+                        modifier = Modifier.weight(1f),
+                        onClick = {
+                            if (MultiClickGuard.allowClick(screenName)) {
+                                onSave(true)
+                            }
+                        }
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                Icons.AutoMirrored.Default.Send,
+                                contentDescription = null
+                            )
+
+                            Text(
+                                text = stringResource(finalizeText),
+                                modifier = Modifier.padding(start = marginExtraSmall())
+                            )
+                        }
                     }
                 }
             }
