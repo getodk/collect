@@ -447,8 +447,7 @@
   <string name="change_username">ODK Username</string>
   <string name="password">Wachtwoord</string>
   <string name="change_password">Wachtwoord</string>
-  <string name="app_theme">Thema</string>
-  <string name="language">Taal</string>
+    <string name="language">Taal</string>
   <string name="font_size">Tekstgrootte</string>
   <string name="change_font_size">Tekstgrootte</string>
   <string name="font_size_extra_large">Extra groot</string>

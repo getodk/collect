@@ -40,6 +40,7 @@ object EdgeToEdge {
         }
     }
 
+    @JvmStatic
     fun View.applyBottomBarInsetMargins() {
         ViewCompat.setOnApplyWindowInsetsListener(this) { v, windowInsets ->
             val systemBarsInsets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())

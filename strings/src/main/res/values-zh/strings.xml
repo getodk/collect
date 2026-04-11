@@ -707,8 +707,7 @@
   <string name="change_password">密码</string>
   <string name="password_error_whitespace">密码中不允许有前导或尾随空格</string>
   <string name="username_error_whitespace">用户名中不允许有前导或尾随空格</string>
-  <string name="app_theme">主题</string>
-  <string name="language">语言</string>
+    <string name="language">语言</string>
   <string name="use_device_language">使用设备语言</string>
   <string name="font_size">字体大小</string>
   <string name="change_font_size">字体大小</string>

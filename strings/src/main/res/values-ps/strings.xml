@@ -280,8 +280,7 @@
   <string name="change_username">ODK کارنوم</string>
   <string name="password">پټنوم</string>
   <string name="change_password">ODK پټنوم</string>
-  <string name="app_theme">مدار</string>
-  <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
+    <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
   <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
   <!--Heading for the settings category about updating blank forms-->
   <!--Name of the setting that defines how blank forms are updated from the server.-->
