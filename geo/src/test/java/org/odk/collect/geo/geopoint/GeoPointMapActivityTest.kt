@@ -37,6 +37,7 @@ import org.odk.collect.location.Location
 import org.odk.collect.location.tracker.LocationTracker
 import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.maps.MapPoint
+import org.odk.collect.maps.circles.CurrentLocationDelegate
 import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.SettingsProvider
@@ -138,6 +139,21 @@ class GeoPointMapActivityTest {
             getReturnedSingleValue(resultData),
             equalTo(GeoUtils.formatLocationResultString(firstLocation))
         )
+    }
+
+    @Test
+    fun `shows marker at first location fix`() {
+        launcherRule.launchForResult(GeoPointMapActivity::class.java)
+        mapFragment.ready()
+
+        val firstLocation = Location(1.0, 2.0, 3.0, 4.0f)
+        locationTracker.currentLocation = firstLocation
+        locationTracker.currentLocation = Location(5.0, 6.0, 7.0, 8.0f)
+
+        val markers = mapFragment.getMarkers()
+            .filter { it.iconDescription != CurrentLocationDelegate.ICON_DESCRIPTION }
+        assertThat(markers.size, equalTo(1))
+        assertThat(markers[0].point, equalTo(firstLocation.toMapPoint()))
     }
 
     @Test
