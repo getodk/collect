@@ -14,7 +14,6 @@
 
 package org.odk.collect.geo.geopoint;
 
-import static androidx.lifecycle.FlowLiveDataConversions.asLiveData;
 import static org.odk.collect.androidshared.ui.EdgeToEdge.setView;
 import static org.odk.collect.geo.Constants.EXTRA_DRAGGABLE_ONLY;
 import static org.odk.collect.geo.Constants.EXTRA_READ_ONLY;
@@ -53,8 +52,11 @@ import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.strings.localization.LocalizedActivity;
 import org.odk.collect.webpage.WebPageService;
 
+import java.util.Arrays;
+
 import javax.inject.Inject;
 
+import kotlin.Unit;
 import timber.log.Timber;
 
 /**
@@ -169,12 +171,6 @@ public class GeoPointMapActivity extends LocalizedActivity {
 
         MapFragment mapFragment = ((FragmentContainerView) findViewById(R.id.map_container)).getFragment();
         mapFragment.init(this::initMap, this::finish);
-
-        asLiveData(locationTracker.getLocation()).observe(this, location -> {
-            if (location != null) {
-                onLocationChanged(new MapPoint(location.getLatitude(), location.getLongitude(), location.getAltitude(), location.getAccuracy()));
-            }
-        });
     }
 
     @Override protected void onSaveInstanceState(Bundle state) {
@@ -304,7 +300,10 @@ public class GeoPointMapActivity extends LocalizedActivity {
         }
 
         boolean retainMockAccuracy = getIntent().getBooleanExtra(EXTRA_RETAIN_MOCK_ACCURACY, false);
-        showCurrentLocation(map, locationTracker, currentLocationDelegate, retainMockAccuracy);
+        showCurrentLocation(map, locationTracker, currentLocationDelegate, retainMockAccuracy, mapPoint -> {
+            onLocationChanged(mapPoint);
+            return Unit.INSTANCE;
+        });
     }
 
     protected void restoreFromInstanceState(Bundle state) {
@@ -408,7 +407,10 @@ public class GeoPointMapActivity extends LocalizedActivity {
 
     /** Places the marker and enables the button to remove it. */
     private void placeMarker(@NonNull MapPoint point) {
-        map.clearFeatures();
+        if (featureId != -1) {
+            map.clearFeatures(Arrays.asList(featureId));
+        }
+
         featureId = map.addMarker(new MarkerDescription(point, intentDraggable && !intentReadOnly && !isPointLocked, MapFragment.IconAnchor.CENTER, new MarkerIconDescription.DrawableResource(org.odk.collect.icons.R.drawable.ic_map_point)));
         if (!intentReadOnly) {
             clearButton.setEnabled(true);
