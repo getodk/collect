@@ -43,7 +43,7 @@ import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.strings.R
 import org.odk.collect.strings.R.string
-import org.odk.collect.testshared.Interactions
+import org.odk.collect.testshared.EspressoInteractions
 import org.odk.collect.webpage.WebPageService
 import org.robolectric.Shadows
 
@@ -132,7 +132,7 @@ class GeoPointMapActivityTest {
         locationTracker.currentLocation = firstLocation
         locationTracker.currentLocation = Location(5.0, 6.0, 7.0, 8.0f)
 
-        Interactions.clickOn(withContentDescription(string.save))
+        EspressoInteractions.clickOn(withContentDescription(string.save))
         assertThat(scenario.result.resultCode, equalTo(Activity.RESULT_OK))
         val resultData = scenario.result.resultData
         assertThat(
@@ -165,7 +165,7 @@ class GeoPointMapActivityTest {
         val secondLocation = Location(5.0, 6.0, 7.0, 8.0f)
         locationTracker.currentLocation = secondLocation
 
-        Interactions.clickOn(withContentDescription(string.record_geopoint))
+        EspressoInteractions.clickOn(withContentDescription(string.record_geopoint))
 
         val markers = mapFragment.getMarkers()
             .filter { it.iconDescription != CurrentLocationDelegate.ICON_DESCRIPTION }
@@ -239,7 +239,7 @@ class GeoPointMapActivityTest {
         locationTracker.currentLocation = Location(5.0, 5.0)
         locationTracker.currentLocation = Location(6.0, 6.0)
 
-        Interactions.clickOn(withContentDescription(string.show_my_location))
+        EspressoInteractions.clickOn(withContentDescription(string.show_my_location))
         assertThat(mapFragment, hasZoomedToCurrentLocation(MapPoint(6.0, 6.0)))
     }
 

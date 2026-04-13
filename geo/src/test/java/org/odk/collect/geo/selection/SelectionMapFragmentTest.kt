@@ -63,7 +63,7 @@ import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.strings.R.string
-import org.odk.collect.testshared.Interactions
+import org.odk.collect.testshared.EspressoInteractions
 import org.odk.collect.testshared.RobolectricHelpers.getFragmentByClass
 import org.odk.collect.webpage.WebPageService
 
@@ -965,7 +965,7 @@ class SelectionMapFragmentTest {
         locationTracker.currentLocation = Location(5.0, 5.0)
         locationTracker.currentLocation = Location(6.0, 6.0)
 
-        Interactions.clickOn(withContentDescription(string.show_my_location))
+        EspressoInteractions.clickOn(withContentDescription(string.show_my_location))
         assertThat(map, hasZoomedToCurrentLocation(MapPoint(6.0, 6.0)))
     }
 
