@@ -480,6 +480,40 @@ class RangeSliderStateTest {
     }
 
     @Test
+    fun `returns labels correctly when choices use integer values for decimal question`() {
+        mockDecimalQuestion(0.0F, 1.0F, 0.5F)
+
+        val choices = listOf(
+            SelectChoice("0", "0"),
+            SelectChoice("1", "1")
+        )
+        val prompt = promptBuilder
+            .withSelectChoices(choices)
+            .withDataType(DATATYPE_INTEGER)
+            .build()
+
+        val state = RangeSliderState.fromPrompt(prompt, choices)
+        assertThat(state.labels, equalTo(listOf("0", "", "1")))
+    }
+
+    @Test
+    fun `returns labels correctly when choices use decimal values for integer question`() {
+        mockIntQuestion(0, 1, 1)
+
+        val choices = listOf(
+            SelectChoice("0.0", "0"),
+            SelectChoice("1.0", "1")
+        )
+        val prompt = promptBuilder
+            .withSelectChoices(choices)
+            .withDataType(DATATYPE_INTEGER)
+            .build()
+
+        val state = RangeSliderState.fromPrompt(prompt, choices)
+        assertThat(state.labels, equalTo(listOf("0", "1")))
+    }
+
+    @Test
     fun `returns correct value for valid placeholder`() {
         mockIntQuestion(0, 10, 1, placeholder = 4)
 
