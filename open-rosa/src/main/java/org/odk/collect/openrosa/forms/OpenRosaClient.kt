@@ -24,10 +24,11 @@ class OpenRosaClient(
     serverURL: String,
     openRosaHttpInterface: OpenRosaHttpInterface?,
     private val webCredentialsProvider: WebCredentialsProvider,
-    private val openRosaResponseParser: OpenRosaResponseParser
+    private val openRosaResponseParser: OpenRosaResponseParser,
+    deviceId: String
 ) : FormSource, EntitySource {
     private val openRosaXMLFetcher =
-        OpenRosaXmlFetcher(openRosaHttpInterface, this.webCredentialsProvider)
+        OpenRosaXmlFetcher(openRosaHttpInterface, this.webCredentialsProvider, deviceId)
 
     private var serverUrl: String = serverURL
 
