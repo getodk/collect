@@ -394,7 +394,7 @@ public class GeoPointMapActivity extends LocalizedActivity {
     }
 
     private void clear() {
-        map.clearFeatures();
+        map.clearFeatures(Arrays.asList(featureId));
         featureId = -1;
         clearButton.setEnabled(false);
 

@@ -258,6 +258,19 @@ class GeoPointMapActivityTest {
         assertThat(mapFragment, not(showsCurrentLocation(firstLocation.toMapPoint())))
     }
 
+    @Test
+    fun `clicking clear clears marker`() {
+        launcherRule.launch(GeoPointMapActivity::class.java)
+        mapFragment.ready()
+
+        val location = Location(2.0, 2.0, accuracy = 5.2f)
+        locationTracker.currentLocation = location
+
+        EspressoInteractions.clickOn(withContentDescription(string.clear))
+        assertThat(mapFragment.getMarkers().size, equalTo(1))
+        assertThat(mapFragment, showsCurrentLocation(location.toMapPoint()))
+    }
+
     private fun getLocationStatus(activity: Activity): String {
         return activity
             .findViewById<View>(org.odk.collect.geo.R.id.status_section)
