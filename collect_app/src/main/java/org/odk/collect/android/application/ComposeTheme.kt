@@ -53,6 +53,7 @@ fun CollectTheme(content: @Composable () -> Unit) {
             fontFamily = FontFamily.SansSerif,
             fontWeight = FontWeight.Medium
         ),
+        headlineSmall = MaterialTheme.typography.headlineSmall
     )
 
     val shapes = Shapes(

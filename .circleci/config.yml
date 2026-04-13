@@ -347,7 +347,7 @@ workflows:
             branches:
               ignore:
                 - master
-                - ^v((20)[0-9]{2})\.\d+\.x$
+                - /^v\d+\.\d+.x$/
       - compile:
           requires:
             - hold_pr
@@ -374,7 +374,7 @@ workflows:
             branches:
               only:
                 - master
-                - ^v((20)[0-9]{2})\.\d+\.x$
+                - /^v\d+\.\d+.x$/
       - check_quality:
           requires:
             - compile
@@ -416,7 +416,7 @@ workflows:
       - compile:
           filters:
             tags:
-              only: /^v((20)[0-9]{2})\.\d+\.\d+$/ # matches semvers like v1.2.3
+              only: /^v\d+\.\d+.\d+$/
             branches:
               ignore: /.*/
       - create_dependency_backup:
@@ -424,7 +424,7 @@ workflows:
             - compile
           filters:
             tags:
-              only: /^v((20)[0-9]{2})\.\d+\.\d+$/ # matches semvers like v1.2.3
+              only: /^v\d+\.\d+.\d+$/
             branches:
               ignore: /.*/
 
