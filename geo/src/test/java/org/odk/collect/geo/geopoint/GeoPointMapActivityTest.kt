@@ -157,6 +157,23 @@ class GeoPointMapActivityTest {
     }
 
     @Test
+    fun `clicking add marker moves marker to the current location`() {
+        launcherRule.launchForResult(GeoPointMapActivity::class.java)
+        mapFragment.ready()
+
+        locationTracker.currentLocation = Location(1.0, 2.0, 3.0, 4.0f)
+        val secondLocation = Location(5.0, 6.0, 7.0, 8.0f)
+        locationTracker.currentLocation = secondLocation
+
+        Interactions.clickOn(withContentDescription(string.record_geopoint))
+
+        val markers = mapFragment.getMarkers()
+            .filter { it.iconDescription != CurrentLocationDelegate.ICON_DESCRIPTION }
+        assertThat(markers.size, equalTo(1))
+        assertThat(markers[0].point, equalTo(secondLocation.toMapPoint()))
+    }
+
+    @Test
     fun whenLocationExtraIncluded_showsMarker() {
         val intent = Intent(
             ApplicationProvider.getApplicationContext(),

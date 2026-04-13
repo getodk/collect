@@ -99,6 +99,7 @@ object GeoUtils {
         return MapPoint(this.getPart(0), this.getPart(1), this.getPart(2), this.getPart(3))
     }
 
+    @JvmStatic
     fun org.odk.collect.location.Location.toMapPoint(): MapPoint {
         return MapPoint(this.latitude, this.longitude, this.altitude, this.accuracy.toDouble())
     }

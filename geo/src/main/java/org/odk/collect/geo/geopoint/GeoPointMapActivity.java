@@ -20,6 +20,8 @@ import static org.odk.collect.geo.Constants.EXTRA_READ_ONLY;
 import static org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY;
 import static org.odk.collect.geo.GeoActivityUtils.requireLocationPermissions;
 import static org.odk.collect.geo.GeoUtils.showCurrentLocation;
+import static org.odk.collect.geo.GeoUtils.toMapPoint;
+import static org.odk.collect.location.tracker.LocationTrackerKt.getCurrentLocation;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -39,6 +41,7 @@ import org.odk.collect.async.Scheduler;
 import org.odk.collect.externalapp.ExternalAppUtils;
 import org.odk.collect.geo.GeoDependencyComponentProvider;
 import org.odk.collect.geo.R;
+import org.odk.collect.location.Location;
 import org.odk.collect.location.tracker.LocationTracker;
 import org.odk.collect.maps.MapFragment;
 import org.odk.collect.maps.MapFragmentFactory;
@@ -119,7 +122,6 @@ public class GeoPointMapActivity extends LocalizedActivity {
     private ImageButton clearButton;
 
     private boolean captureLocation;
-    private boolean foundFirstLocation;
 
     /**
      * True if a tap on the clear button removed an existing marker and
@@ -127,16 +129,24 @@ public class GeoPointMapActivity extends LocalizedActivity {
      */
     private boolean setClear;
 
-    /** True if the current point came from the intent. */
+    /**
+     * True if the current point came from the intent.
+     */
     private boolean pointFromIntent;
 
-    /** True if the intent requested for the point to be read-only. */
+    /**
+     * True if the intent requested for the point to be read-only.
+     */
     private boolean intentReadOnly;
 
-    /** True if the intent requested for the marker to be draggable. */
+    /**
+     * True if the intent requested for the marker to be draggable.
+     */
     private boolean intentDraggable;
 
-    /** While true, the point cannot be moved by dragging or long-pressing. */
+    /**
+     * While true, the point cannot be moved by dragging or long-pressing.
+     */
     private boolean isPointLocked;
 
     private final CurrentLocationDelegate currentLocationDelegate = new CurrentLocationDelegate();
@@ -173,7 +183,8 @@ public class GeoPointMapActivity extends LocalizedActivity {
         mapFragment.init(this::initMap, this::finish);
     }
 
-    @Override protected void onSaveInstanceState(Bundle state) {
+    @Override
+    protected void onSaveInstanceState(Bundle state) {
         super.onSaveInstanceState(state);
         if (map == null) {
             // initMap() is called asynchronously, so map can be null if the activity
@@ -190,7 +201,6 @@ public class GeoPointMapActivity extends LocalizedActivity {
         // Flags
         state.putBoolean(IS_DRAGGED_KEY, isDragged);
         state.putBoolean(CAPTURE_LOCATION_KEY, captureLocation);
-        state.putBoolean(FOUND_FIRST_LOCATION_KEY, foundFirstLocation);
         state.putBoolean(SET_CLEAR_KEY, setClear);
         state.putBoolean(POINT_FROM_INTENT_KEY, pointFromIntent);
         state.putBoolean(INTENT_READ_ONLY_KEY, intentReadOnly);
@@ -233,8 +243,10 @@ public class GeoPointMapActivity extends LocalizedActivity {
 
         placeMarkerButton.setEnabled(false);
         placeMarkerButton.setOnClickListener(v -> {
-            MapPoint mapPoint = map.getGpsLocation();
-            if (mapPoint != null) {
+            Location currentLocation = getCurrentLocation(locationTracker);
+
+            if (currentLocation != null) {
+                MapPoint mapPoint = toMapPoint(currentLocation);
                 placeMarker(mapPoint);
                 zoomToMarker(true);
             }
@@ -290,7 +302,6 @@ public class GeoPointMapActivity extends LocalizedActivity {
                 pointFromIntent = true;
                 locationStatus.setVisibility(View.GONE);
                 zoomButton.setEnabled(true);
-                foundFirstLocation = true;
                 zoomToMarker(false);
             }
         }
@@ -309,7 +320,6 @@ public class GeoPointMapActivity extends LocalizedActivity {
     protected void restoreFromInstanceState(Bundle state) {
         isDragged = state.getBoolean(IS_DRAGGED_KEY, false);
         captureLocation = state.getBoolean(CAPTURE_LOCATION_KEY, false);
-        foundFirstLocation = state.getBoolean(FOUND_FIRST_LOCATION_KEY, false);
         setClear = state.getBoolean(SET_CLEAR_KEY, false);
         pointFromIntent = state.getBoolean(POINT_FROM_INTENT_KEY, false);
         intentReadOnly = state.getBoolean(INTENT_READ_ONLY_KEY, false);
@@ -327,7 +337,6 @@ public class GeoPointMapActivity extends LocalizedActivity {
         // Restore the flags again, because placeMarker() and clear() modify some of them.
         isDragged = state.getBoolean(IS_DRAGGED_KEY, false);
         captureLocation = state.getBoolean(CAPTURE_LOCATION_KEY, false);
-        foundFirstLocation = state.getBoolean(FOUND_FIRST_LOCATION_KEY, false);
         setClear = state.getBoolean(SET_CLEAR_KEY, false);
         pointFromIntent = state.getBoolean(POINT_FROM_INTENT_KEY, false);
         intentReadOnly = state.getBoolean(INTENT_READ_ONLY_KEY, false);
@@ -352,11 +361,6 @@ public class GeoPointMapActivity extends LocalizedActivity {
             if (!captureLocation && !setClear) {
                 placeMarker(point);
                 placeMarkerButton.setEnabled(true);
-            }
-
-            if (!foundFirstLocation) {
-                this.location = point;
-                foundFirstLocation = true;
             }
 
             locationStatus.setAccuracy(new LocationAccuracy.Improving((float) point.accuracy));
@@ -405,8 +409,12 @@ public class GeoPointMapActivity extends LocalizedActivity {
         setClear = true;
     }
 
-    /** Places the marker and enables the button to remove it. */
+    /**
+     * Places the marker and enables the button to remove it.
+     */
     private void placeMarker(@NonNull MapPoint point) {
+        this.location = point;
+
         if (featureId != -1) {
             map.clearFeatures(Arrays.asList(featureId));
         }
