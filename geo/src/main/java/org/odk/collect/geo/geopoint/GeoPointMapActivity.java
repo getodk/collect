@@ -265,11 +265,6 @@ public class GeoPointMapActivity extends LocalizedActivity {
         clearButton.setEnabled(false);
         clearButton.setOnClickListener(v -> {
             clear();
-            if (map.getGpsLocation() != null) {
-                placeMarkerButton.setEnabled(true);
-                // locationStatus.setVisibility(View.VISIBLE);
-            }
-            // placeMarkerButton.setEnabled(true);
             locationStatus.setVisibility(View.VISIBLE);
             pointFromIntent = false;
         });

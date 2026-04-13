@@ -34,7 +34,6 @@ dependencies {
 
     implementation(project(":androidshared"))
     implementation(project(":icons"))
-    implementation(project(":location"))
     implementation(project(":maps"))
     implementation(project(":settings"))
     implementation(project(":shared"))

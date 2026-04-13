@@ -132,29 +132,6 @@ interface MapFragment {
     fun setDragEndListener(listener: FeatureListener?)
 
     /**
-     * Enables/disables GPS tracking.  While enabled, the GPS location is shown
-     * on the map, the first GPS fix will trigger any pending callbacks set by
-     * runOnGpsLocationReady(), and every GPS fix will invoke the callback set
-     * by setGpsLocationListener().
-     */
-    @Deprecated(message = "Location should be handled outside of MapFragment")
-    fun setGpsLocationEnabled(enabled: Boolean)
-
-    /** Gets the last GPS location fix, or null if there hasn't been one.  */
-    @Deprecated(message = "Location should be handled outside of MapFragment")
-    fun getGpsLocation(): MapPoint?
-
-    /**
-     * Sets or clears the callback for GPS location updates.  This callback
-     * will only be invoked while GPS is enabled with setGpsLocationEnabled().
-     */
-    @Deprecated(message = "Location should be handled outside of MapFragment")
-    fun setGpsLocationListener(listener: PointListener?)
-
-    @Deprecated(message = "Location should be handled outside of MapFragment")
-    fun setRetainMockAccuracy(retainMockAccuracy: Boolean)
-
-    /**
      * @return true if the [MapFragment] center has already been set (by [MapFragment.zoomToPoint] for instance).
      */
     fun hasCenter(): Boolean

@@ -31,15 +31,12 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.Circle;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
@@ -53,12 +50,10 @@ import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.androidshared.system.ContextExt;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.googlemaps.GoogleMapConfigurator.GoogleMapTypeOption;
 import org.odk.collect.googlemaps.circles.CircleFeature;
 import org.odk.collect.googlemaps.scaleview.MapScaleView;
-import org.odk.collect.location.LocationClient;
 import org.odk.collect.maps.MapConfigurator;
 import org.odk.collect.maps.MapFragment;
 import org.odk.collect.maps.MapPoint;
@@ -89,7 +84,6 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 public class GoogleMapFragment extends MapViewModelMapFragment implements
-        LocationListener, LocationClient.LocationClientListener,
         GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener,
         GoogleMap.OnMarkerClickListener, GoogleMap.OnMarkerDragListener,
         GoogleMap.OnPolylineClickListener, GoogleMap.OnPolygonClickListener {
@@ -101,26 +95,16 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
     ReferenceLayerRepository referenceLayerRepository;
 
     @Inject
-    LocationClient locationClient;
-
-    @Inject
     SettingsProvider settingsProvider;
 
     private GoogleMap map;
     private MapScaleView scaleView;
     private ReadyListener readyListener;
     private ErrorListener errorListener;
-    private Marker locationCrosshairs;
-    private Circle accuracyCircle;
-    private final List<ReadyListener> gpsLocationReadyListeners = new ArrayList<>();
     private PointListener clickListener;
     private PointListener longPressListener;
-    private PointListener gpsLocationListener;
     private FeatureListener featureClickListener;
     private FeatureListener dragEndListener;
-
-    private boolean clientWantsLocationUpdates;
-    private MapPoint lastLocationFix;
 
     private int nextFeatureId = 1;
     private final Map<Integer, MapFeature> features = new HashMap<>();
@@ -248,16 +232,6 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
         super.onAttach(context);
         GoogleMapsDependencyComponent component = ((GoogleMapsDependencyComponentProvider) context.getApplicationContext()).getGoogleMapsDependencyComponent();
         component.inject(this);
-    }
-
-    @Override public void onResume() {
-        super.onResume();
-        enableLocationUpdates(clientWantsLocationUpdates);
-    }
-
-    @Override public void onPause() {
-        super.onPause();
-        enableLocationUpdates(false);
     }
 
     @Override public void onDestroy() {
@@ -396,42 +370,6 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
         dragEndListener = listener;
     }
 
-    @Override public void setGpsLocationListener(@Nullable PointListener listener) {
-        gpsLocationListener = listener;
-    }
-
-    @Override
-    public void setRetainMockAccuracy(boolean retainMockAccuracy) {
-        locationClient.setRetainMockAccuracy(retainMockAccuracy);
-    }
-
-    @Override public void setGpsLocationEnabled(boolean enable) {
-        if (enable != clientWantsLocationUpdates) {
-            clientWantsLocationUpdates = enable;
-            enableLocationUpdates(clientWantsLocationUpdates);
-        }
-    }
-
-    @Override public void onLocationChanged(Location location) {
-        Timber.i("onLocationChanged: location = %s", location);
-        lastLocationFix = fromLocation(location);
-        for (ReadyListener listener : gpsLocationReadyListeners) {
-            listener.onReady(this);
-        }
-        gpsLocationReadyListeners.clear();
-        if (gpsLocationListener != null) {
-            gpsLocationListener.onPoint(lastLocationFix);
-        }
-
-        if (getActivity() != null) {
-            updateLocationIndicator(toLatLng(lastLocationFix), location.getAccuracy());
-        }
-    }
-
-    @Override public @Nullable MapPoint getGpsLocation() {
-        return lastLocationFix;
-    }
-
     @Override public void onMapClick(LatLng latLng) {
         if (clickListener != null) {
             clickListener.onPoint(fromLatLng(latLng));
@@ -445,11 +383,6 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
     }
 
     @Override public boolean onMarkerClick(Marker marker) {
-        // Avoid calling listeners if location crosshair is clicked on.
-        if (marker == locationCrosshairs) {
-            return true;
-        }
-
         if (featureClickListener != null) { // FormMapActivity
             featureClickListener.onFeature(findFeature(marker));
         } else { // GeoWidget
@@ -491,18 +424,6 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
         if (dragEndListener != null && featureId != -1) {
             dragEndListener.onFeature(featureId);
         }
-    }
-
-    @Override public void onClientStart() {
-        lastLocationFix = fromLocation(locationClient.getLastLocation());
-        Timber.i("Requesting location updates (to %s)", this);
-        locationClient.requestLocationUpdates(this);
-    }
-
-    @Override public void onClientStartFailure() {
-    }
-
-    @Override public void onClientStop() {
     }
 
     private static @NonNull MapPoint fromLatLng(@NonNull LatLng latLng) {
@@ -586,44 +507,6 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
         } else {
             map.moveCamera(movement);
         }
-    }
-
-    private void enableLocationUpdates(boolean enable) {
-        if (enable) {
-            Timber.i("Starting LocationClient %s (for MapFragment %s)", locationClient, this);
-            locationClient.start(this);
-        } else {
-            Timber.i("Stopping LocationClient %s (for MapFragment %s)", locationClient, this);
-            locationClient.stop();
-        }
-    }
-
-    private void updateLocationIndicator(LatLng loc, double radius) {
-        if (map == null) {
-            return;
-        }
-        if (locationCrosshairs == null) {
-            locationCrosshairs = map.addMarker(new MarkerOptions()
-                .position(loc)
-                .icon(getBitmapDescriptor(getContext(), new MarkerIconDescription.DrawableResource(org.odk.collect.maps.R.drawable.ic_crosshairs)))
-                .anchor(0.5f, 0.5f)  // center the crosshairs on the position
-            );
-        }
-        if (accuracyCircle == null) {
-            int stroke = ContextExt.getThemeAttributeValue(requireContext(), androidx.appcompat.R.attr.colorPrimary);
-            int fill = getResources().getColor(org.odk.collect.androidshared.R.color.color_primary_low_emphasis);
-            accuracyCircle = map.addCircle(new CircleOptions()
-                .center(loc)
-                .radius(radius)
-                .strokeWidth(1)
-                .strokeColor(stroke)
-                .fillColor(fill)
-            );
-        }
-
-        locationCrosshairs.setPosition(loc);
-        accuracyCircle.setCenter(loc);
-        accuracyCircle.setRadius(radius);
     }
 
     /** Finds the feature to which the given marker belongs. */

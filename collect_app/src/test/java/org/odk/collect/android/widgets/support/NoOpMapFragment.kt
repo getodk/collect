@@ -121,19 +121,6 @@ class NoOpMapFragment : Fragment(), MapFragment {
     override fun setDragEndListener(listener: MapFragment.FeatureListener?) {
     }
 
-    override fun setGpsLocationEnabled(enabled: Boolean) {
-    }
-
-    override fun getGpsLocation(): MapPoint? {
-        TODO("Not yet implemented")
-    }
-
-    override fun setGpsLocationListener(listener: MapFragment.PointListener?) {
-    }
-
-    override fun setRetainMockAccuracy(retainMockAccuracy: Boolean) {
-    }
-
     override fun hasCenter(): Boolean {
         return false
     }

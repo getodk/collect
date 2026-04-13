@@ -17,7 +17,6 @@ class FakeMapFragment(private val ready: Boolean = false) : Fragment(), MapFragm
     private var gpsLocationEnabled: Boolean = false
     private var clickListener: PointListener? = null
     private var gpsLocationListener: PointListener? = null
-    private var locationProvider: String? = null
     private var retainMockAccuracy = false
     private var center: MapPoint? = null
     private var zoom = 0.0
@@ -211,26 +210,6 @@ class FakeMapFragment(private val ready: Boolean = false) : Fragment(), MapFragm
 
     override fun setDragEndListener(listener: FeatureListener?) {
         dragListener = listener
-    }
-
-    override fun setGpsLocationEnabled(enabled: Boolean) {
-        gpsLocationEnabled = enabled
-    }
-
-    override fun getGpsLocation(): MapPoint? {
-        return gpsLocation
-    }
-
-    override fun setGpsLocationListener(listener: PointListener?) {
-        gpsLocationListener = listener
-
-        gpsLocation?.let {
-            listener?.onPoint(it)
-        }
-    }
-
-    override fun setRetainMockAccuracy(retainMockAccuracy: Boolean) {
-        this.retainMockAccuracy = retainMockAccuracy
     }
 
     override fun hasCenter(): Boolean {
