@@ -255,7 +255,7 @@ class FakeMapFragment(private val ready: Boolean = false) : Fragment(), MapFragm
     fun getFeatureId(points: List<MapPoint>): Int {
         return if (points.size == 1) {
             markers.entries.find {
-                it.value == points[0]
+                it.value.point == points[0]
             }!!.key
         } else {
             polyLines.entries.find {
