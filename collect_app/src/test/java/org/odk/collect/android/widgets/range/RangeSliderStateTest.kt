@@ -489,7 +489,7 @@ class RangeSliderStateTest {
         )
         val prompt = promptBuilder
             .withSelectChoices(choices)
-            .withDataType(DATATYPE_INTEGER)
+            .withDataType(DATATYPE_DECIMAL)
             .build()
 
         val state = RangeSliderState.fromPrompt(prompt, choices)
