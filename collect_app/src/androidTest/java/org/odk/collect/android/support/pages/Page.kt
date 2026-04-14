@@ -162,7 +162,7 @@ abstract class Page<T : Page<T>> {
     }
 
     @JvmOverloads
-    fun asyncAssertText(text: String, inDialog: Boolean = true): T {
+    fun asyncAssertText(text: String, inDialog: Boolean = false): T {
         return waitFor {
             if (inDialog) {
                 assertTextInDialog(text)
