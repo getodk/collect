@@ -153,7 +153,7 @@ jobs:
           key: test_modules-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
 
   test_app:
-    <<: *android_config_large
+    <<: *android_config
     parallelism: 4
     steps:
       - checkout
