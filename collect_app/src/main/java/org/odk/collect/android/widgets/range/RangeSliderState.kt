@@ -135,7 +135,7 @@ data class RangeSliderState(
 
         private fun getLabels(prompt: FormEntryPrompt, choices: List<SelectChoice>, start: BigDecimal, end: BigDecimal, step: BigDecimal): List<String> {
             val labelMap = choices.associate { choice ->
-                choice.value.toBigDecimalOrNull() to prompt.getSelectChoiceText(choice)
+                choice.value.toBigDecimalOrNull()?.stripTrailingZeros() to prompt.getSelectChoiceText(choice)
             }
 
             val labels = mutableListOf<String>()
@@ -143,7 +143,7 @@ data class RangeSliderState(
             val direction = if (end >= start) BigDecimal.ONE else -BigDecimal.ONE
 
             while (if (direction > BigDecimal.ZERO) current <= end else current >= end) {
-                labels.add(labelMap[current] ?: "")
+                labels.add(labelMap[current.stripTrailingZeros()] ?: "")
                 current += step * direction
             }
 
