@@ -45,7 +45,7 @@ class AndroidShortcutsTest {
 
         testDependencies.scheduler.runDeferredTasks()
 
-        shortcutsPage.asyncAssertText("One Question")
+        shortcutsPage.asyncAssertText("One Question", inDialog = true)
     }
 
     @Test

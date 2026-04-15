@@ -7,11 +7,15 @@ import androidx.test.runner.lifecycle.Stage
 import com.google.common.collect.Iterables
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
+import org.odk.collect.testshared.WaitFor.waitFor
 
 class AppClosedPage : Page<AppClosedPage>() {
 
     override fun assertOnPage(): AppClosedPage {
-        assertThat(currentActivity, equalTo(null))
+        waitFor {
+            assertThat(currentActivity, equalTo(null))
+        }
+
         return this
     }
 

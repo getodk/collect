@@ -1,8 +1,5 @@
 package org.odk.collect.android.support.pages
 
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.odk.collect.testshared.WaitFor.tryAgainOnFail
 
 class ManualProjectCreatorDialogPage : Page<ManualProjectCreatorDialogPage>() {
@@ -36,7 +33,7 @@ class ManualProjectCreatorDialogPage : Page<ManualProjectCreatorDialogPage>() {
     }
 
     fun addProjectAndAssertDuplicateDialogShown(): ManualProjectCreatorDialogPage {
-        onView(withText(org.odk.collect.strings.R.string.add)).perform(click())
+        clickOnString(org.odk.collect.strings.R.string.add)
         assertText(org.odk.collect.strings.R.string.duplicate_project_details)
         return this
     }
