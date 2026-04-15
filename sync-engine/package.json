@@ -1,0 +1,21 @@
+{
+  "name": "@fieldform/sync-engine",
+  "version": "0.1.0",
+  "description": "Offline-first submission sync engine with conflict resolution for ODK-compatible data collection",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "idb": "^8.0.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0",
+    "vitest": "^3.1.0",
+    "fake-indexeddb": "^6.0.0"
+  }
+}
