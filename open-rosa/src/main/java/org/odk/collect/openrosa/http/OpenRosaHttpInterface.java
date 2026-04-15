@@ -16,8 +16,6 @@
 
 package org.odk.collect.openrosa.http;
 
-import android.net.Uri;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -67,15 +65,6 @@ public interface OpenRosaHttpInterface {
                                             @NonNull URI uri,
                                             @NonNull HttpCredentialsInterface credentials,
                                             @NonNull long contentLength) throws Exception;
-
-    @NonNull
-    static String getRequestUrlWithDeviceId(@NonNull String urlString, String deviceId) {
-        return Uri.parse(urlString)
-                .buildUpon()
-                .appendQueryParameter("deviceID", deviceId)
-                .build()
-                .toString();
-    }
 
     interface FileToContentTypeMapper {
 

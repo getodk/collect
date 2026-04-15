@@ -91,3 +91,8 @@ fun Uri.getFileName(context: Context): String? {
 
     return fileName
 }
+
+fun Uri.addQueryParam(key: String, value: String?): Uri =
+    buildUpon()
+        .appendQueryParameter(key, value)
+        .build()

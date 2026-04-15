@@ -17,6 +17,7 @@ import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.projects.ProjectDependencyModule
 import org.odk.collect.android.utilities.ResponseMessageParser
+import org.odk.collect.entities.javarosa.parse.toUriWithParam
 import org.odk.collect.openrosa.http.CaseInsensitiveHeaders
 import org.odk.collect.openrosa.http.HttpHeadResult
 import org.odk.collect.projects.ProjectDependencyFactory
@@ -250,7 +251,7 @@ class OpenRosaServerInstanceUploader(
             else -> getServerSubmissionURL(unprotectedSettings)
         }
 
-        return OpenRosaHttpInterface.getRequestUrlWithDeviceId(urlString, deviceId)
+        return urlString.toUriWithParam("deviceID", deviceId).toString()
     }
 
     private fun getServerSubmissionURL(unprotectedSettings: Settings): String {

@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 
 import org.javarosa.xform.parse.XFormParser;
 import org.kxml2.kdom.Document;
+import org.odk.collect.entities.javarosa.parse.StringExtKt;
 import org.odk.collect.openrosa.http.HttpCredentialsInterface;
 import org.odk.collect.openrosa.http.HttpGetResult;
 import org.odk.collect.openrosa.http.OpenRosaHttpInterface;
@@ -89,7 +90,7 @@ public class OpenRosaXmlFetcher {
             throw new Exception("Invalid server URL (no hostname): " + downloadUrl);
         }
 
-        uri = URI.create(OpenRosaHttpInterface.getRequestUrlWithDeviceId(uri.toString(), deviceId));
+        uri = URI.create(StringExtKt.toUriWithParam(uri.toString(), "deviceID", deviceId).toString());
         return httpInterface.executeGetRequest(uri, contentType, webCredentialsProvider.getCredentials(uri));
     }
 
