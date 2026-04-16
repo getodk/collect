@@ -44,13 +44,7 @@ object EdgeToEdge {
     @JvmStatic
     fun View.applyBottomBarInsetMargins() {
         ViewCompat.setOnApplyWindowInsetsListener(this) { v, windowInsets ->
-            val systemBarsInsets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-            val keyboardInsets = windowInsets.getInsets(WindowInsetsCompat.Type.ime())
-
-            v.updatePadding(
-                bottom = maxOf(0, keyboardInsets.bottom - systemBarsInsets.bottom)
-            )
-
+            v.updatePadding(bottom = windowInsets.keyboardOffset())
             windowInsets
         }
     }
@@ -58,15 +52,16 @@ object EdgeToEdge {
     @JvmStatic
     fun Snackbar.applySnackbarInsetOffset() {
         ViewCompat.setOnApplyWindowInsetsListener(view) { _, windowInsets ->
-            val systemBarsInsets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-            val keyboardInsets = windowInsets.getInsets(WindowInsetsCompat.Type.ime())
-
-            val offset = maxOf(0, keyboardInsets.bottom - systemBarsInsets.bottom)
-            view.translationY = -offset.toFloat()
-
+            view.translationY = -windowInsets.keyboardOffset().toFloat()
             windowInsets
         }
         ViewCompat.requestApplyInsets(view)
+    }
+
+    private fun WindowInsetsCompat.keyboardOffset(): Int {
+        val systemBars = getInsets(WindowInsetsCompat.Type.systemBars())
+        val keyboard = getInsets(WindowInsetsCompat.Type.ime())
+        return maxOf(0, keyboard.bottom - systemBars.bottom)
     }
 
     private fun Window.avoidEdgeToEdge() {
