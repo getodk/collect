@@ -42,7 +42,7 @@ object EdgeToEdge {
     }
 
     @JvmStatic
-    fun View.applyBottomBarInsetMargins() {
+    fun View.applyBottomInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(this) { v, windowInsets ->
             v.updatePadding(bottom = windowInsets.keyboardOffset())
             windowInsets
@@ -50,7 +50,7 @@ object EdgeToEdge {
     }
 
     @JvmStatic
-    fun Snackbar.applySnackbarInsetOffset() {
+    fun Snackbar.applyBottomInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(view) { _, windowInsets ->
             view.translationY = -windowInsets.keyboardOffset().toFloat()
             windowInsets
