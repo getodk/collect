@@ -95,6 +95,19 @@ class RequiredAndConstraintQuestionTest {
     }
 
     @Test
+    fun validatingFormByPressingValidateInOptionsMenuOnFormEndScreen_displaysSuccessMessage() {
+        rule.startAtMainMenu()
+            .copyForm("required_question_with_custom_error_message.xml")
+            .startBlankForm("required_question_with_custom_error_message")
+            .answerQuestion("* Required question", "blah")
+            .swipeToEndScreen()
+            .clickOptionsIcon()
+            .clickOnString(R.string.validate)
+            .assertText(R.string.success_form_validation)
+            .assertTextDoesNotExist("Custom message")
+    }
+
+    @Test
     fun emptyRequiredQuestion_isNotSavedToAuditLogOnMovingForward() {
         rule.startAtMainMenu()
             .copyForm("required_question_with_custom_error_message.xml")
