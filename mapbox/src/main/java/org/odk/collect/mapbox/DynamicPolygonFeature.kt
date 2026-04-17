@@ -1,6 +1,8 @@
 package org.odk.collect.mapbox
 
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import com.mapbox.geojson.Point
 import com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListener
 import com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationDragListener
@@ -27,6 +29,8 @@ internal class DynamicPolygonFeature(
     private val featureDragEndListener: MapFragment.FeatureListener?,
     private val polygonDescription: PolygonDescription
 ) : LineFeature {
+    private val mainHandler = Handler(Looper.getMainLooper())
+
     override val points: List<MapPoint>
         get() = _points.toList()
 
@@ -147,7 +151,9 @@ internal class DynamicPolygonFeature(
             if (featureDragEndListener != null) {
                 for (pointAnnotation in pointAnnotations) {
                     if (annotation.id == pointAnnotation.id) {
-                        featureDragEndListener.onFeature(featureId)
+                        mainHandler.post {
+                            featureDragEndListener.onFeature(featureId)
+                        }
                         break
                     }
                 }
