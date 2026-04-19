@@ -1,30 +1,31 @@
 package org.odk.collect.android.widgets.range
 
-import android.view.MotionEvent
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Slider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.pointerInteropFilter
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import org.odk.collect.androidshared.ui.OffsetUtils.calculateOffset
 import kotlin.math.roundToInt
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HorizontalRangeSlider(
     value: Float?,
@@ -40,40 +41,51 @@ fun HorizontalRangeSlider(
     onValueChange: (Float) -> Unit,
     onValueChangeFinished: () -> Unit
 ) {
-    val sliderContentDescription = stringResource(org.odk.collect.strings.R.string.horizontal_slider)
-
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         ValueLabel(valueLabel)
 
-        BoxWithConstraints {
-            Slider(
+        BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
+            val sliderContentDescription = stringResource(org.odk.collect.strings.R.string.horizontal_slider)
+            val layoutDirection = LocalLayoutDirection.current
+
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .height(48.dp)
                     .semantics { contentDescription = sliderContentDescription }
-                    .pointerInteropFilter { event ->
-                        if (enabled && event.action == MotionEvent.ACTION_DOWN) {
-                            onValueChanging(true)
-                            if (value == null) {
-                                onValueChange(0f)
+                    .pointerInput(enabled, steps) {
+                        if (enabled) {
+                            awaitEachGesture {
+                                val trackWidth = size.width.toFloat()
+                                val down = awaitFirstDown()
+                                onValueChanging(true)
+                                onValueChange(positionToValue(down.position.x, steps, trackWidth, layoutDirection))
+
+                                do {
+                                    val event = awaitPointerEvent()
+                                    val pointer = event.changes.firstOrNull() ?: break
+                                    if (!pointer.pressed) break
+                                    pointer.consume()
+                                    onValueChange(positionToValue(pointer.position.x, steps, trackWidth, layoutDirection))
+                                } while (true)
+
+                                onValueChanging(false)
+                                onValueChangeFinished()
                             }
                         }
-                        false
-                    },
-                value = value ?: 0f,
-                steps = steps,
-                onValueChange = onValueChange,
-                onValueChangeFinished = {
-                    onValueChanging(false)
-                    onValueChangeFinished()
-                },
-                thumb = {},
-                track = { Track(it, ticks) },
-                enabled = enabled
+                    }
+                    .align(Alignment.Center)
+            )
+
+            Track(
+                modifier = Modifier.align(Alignment.Center),
+                value = value,
+                ticks = ticks
             )
 
             val thumbValue = value ?: placeholder
             if (thumbValue != null) {
-                Box(
+                Thumb(
                     modifier = Modifier
                         .offset {
                             calculateOffset(
@@ -83,9 +95,8 @@ fun HorizontalRangeSlider(
                                 isVertical = false
                             )
                         }
-                        .pointerInteropFilter { false }
                         .align(Alignment.CenterStart)
-                ) { Thumb(value = thumbValue) }
+                )
             }
         }
 
@@ -148,4 +159,11 @@ private fun HorizontalStepLabels(labels: List<String>) {
             )
         }
     }
+}
+
+private fun positionToValue(position: Float, steps: Int, trackWidth: Float, layoutDirection: LayoutDirection): Float {
+    val adjustedPosition = if (layoutDirection == LayoutDirection.Rtl) trackWidth - position else position
+    val fraction = adjustedPosition.coerceIn(0f, trackWidth) / trackWidth
+    val divisions = steps + 1
+    return (fraction * divisions).roundToInt().toFloat() / divisions
 }
