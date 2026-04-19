@@ -32,6 +32,7 @@ import org.odk.collect.androidshared.ui.OffsetUtils.calculateOffset
 import kotlin.math.roundToInt
 
 private const val SLIDER_HEIGHT = 330
+private const val THUMB_HEIGHT = 6
 
 @Composable
 fun VerticalRangeSlider(
@@ -177,7 +178,7 @@ private fun VerticalTrack(
                     .offset {
                         calculateOffset(
                             trackSize = constraints.maxHeight,
-                            itemWidth = THUMB_WIDTH.dp.toPx(),
+                            itemSize = THUMB_HEIGHT.dp.toPx(),
                             value = thumbValue,
                             isVertical = true
                         )
@@ -195,7 +196,7 @@ private fun VerticalThumb(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .width(40.dp)
-            .height(6.dp)
+            .height(THUMB_HEIGHT.dp)
             .clip(CircleShape)
             .background(MaterialTheme.colorScheme.primary)
             .semantics { contentDescription = sliderThumbContentDescription }

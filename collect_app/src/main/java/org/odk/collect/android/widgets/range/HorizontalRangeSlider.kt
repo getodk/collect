@@ -1,5 +1,6 @@
 package org.odk.collect.android.widgets.range
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.layout.Arrangement
@@ -11,9 +12,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
@@ -25,6 +29,8 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import org.odk.collect.androidshared.ui.OffsetUtils.calculateOffset
 import kotlin.math.roundToInt
+
+private const val THUMB_WIDTH = 6
 
 @Composable
 fun HorizontalRangeSlider(
@@ -44,65 +50,120 @@ fun HorizontalRangeSlider(
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         ValueLabel(valueLabel)
 
-        BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
-            val sliderContentDescription = stringResource(org.odk.collect.strings.R.string.horizontal_slider)
-            val layoutDirection = LocalLayoutDirection.current
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(48.dp)
-                    .semantics { contentDescription = sliderContentDescription }
-                    .pointerInput(enabled, steps) {
-                        if (enabled) {
-                            awaitEachGesture {
-                                val trackWidth = size.width.toFloat()
-                                val down = awaitFirstDown()
-                                onValueChanging(true)
-                                onValueChange(positionToValue(down.position.x, steps, trackWidth, layoutDirection))
-
-                                do {
-                                    val event = awaitPointerEvent()
-                                    val pointer = event.changes.firstOrNull() ?: break
-                                    if (!pointer.pressed) break
-                                    pointer.consume()
-                                    onValueChange(positionToValue(pointer.position.x, steps, trackWidth, layoutDirection))
-                                } while (true)
-
-                                onValueChanging(false)
-                                onValueChangeFinished()
-                            }
-                        }
-                    }
-                    .align(Alignment.Center)
-            )
-
-            Track(
-                modifier = Modifier.align(Alignment.Center),
-                value = value,
-                ticks = ticks
-            )
-
-            val thumbValue = value ?: placeholder
-            if (thumbValue != null) {
-                Thumb(
-                    modifier = Modifier
-                        .offset {
-                            calculateOffset(
-                                trackSize = constraints.maxWidth,
-                                itemWidth = THUMB_WIDTH.dp.toPx(),
-                                value = thumbValue,
-                                isVertical = false
-                            )
-                        }
-                        .align(Alignment.CenterStart)
-                )
-            }
-        }
+        HorizontalTrack(
+            value = value,
+            placeholder = placeholder,
+            ticks = ticks,
+            steps = steps,
+            enabled = enabled,
+            onValueChanging = onValueChanging,
+            onValueChange = onValueChange,
+            onValueChangeFinished = onValueChangeFinished
+        )
 
         HorizontalEdgeLabels(startLabel, endLabel)
         HorizontalStepLabels(labels)
     }
+}
+
+@Composable
+private fun HorizontalTrack(
+    value: Float?,
+    placeholder: Float?,
+    ticks: Int,
+    steps: Int = 0,
+    enabled: Boolean,
+    onValueChanging: ((Boolean) -> Unit),
+    onValueChange: ((Float) -> Unit),
+    onValueChangeFinished: (() -> Unit)
+) {
+    val layoutDirection = LocalLayoutDirection.current
+
+    BoxWithConstraints(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(48.dp)
+            .pointerInput(steps, layoutDirection) {
+                if (enabled) {
+                    val trackWidth = size.width.toFloat()
+                    awaitEachGesture {
+                        val down = awaitFirstDown()
+                        onValueChanging(true)
+                        onValueChange(positionToValue(down.position.x, steps, trackWidth, layoutDirection))
+
+                        do {
+                            val event = awaitPointerEvent()
+                            val pointer = event.changes.firstOrNull() ?: break
+                            if (!pointer.pressed) break
+                            pointer.consume()
+                            onValueChange(positionToValue(pointer.position.x, steps, trackWidth, layoutDirection))
+                        } while (true)
+
+                        onValueChanging(false)
+                        onValueChangeFinished()
+                    }
+                }
+            }
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(20.dp)
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.primaryContainer)
+                .align(Alignment.Center)
+        ) {
+            if (value != null) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(fraction = value)
+                        .height(20.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.primary)
+                )
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.Center),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                repeat(ticks) { Tick() }
+            }
+        }
+
+        val thumbValue = value ?: placeholder
+        if (thumbValue != null) {
+            HorizontalThumb(
+                modifier = Modifier
+                    .offset {
+                        calculateOffset(
+                            trackSize = constraints.maxWidth,
+                            itemSize = THUMB_WIDTH.dp.toPx(),
+                            value = thumbValue,
+                            isVertical = false
+                        )
+                    }
+                    .align(Alignment.CenterStart)
+            )
+        }
+    }
+}
+
+@Composable
+private fun HorizontalThumb(modifier: Modifier = Modifier) {
+    val sliderThumbContentDescription = stringResource(org.odk.collect.strings.R.string.slider_thumb)
+
+    Box(
+        modifier = modifier
+            .width(THUMB_WIDTH.dp)
+            .height(40.dp)
+            .clip(CircleShape)
+            .background(MaterialTheme.colorScheme.primary)
+            .semantics { contentDescription = sliderThumbContentDescription }
+    )
 }
 
 @Composable
