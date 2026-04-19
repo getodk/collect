@@ -1,31 +1,29 @@
 package org.odk.collect.android.widgets.range
 
-import android.view.MotionEvent
+import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Slider
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.TransformOrigin
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.input.pointer.pointerInteropFilter
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.SubcomposeLayout
-import androidx.compose.ui.layout.layout
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.unit.Constraints
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
@@ -35,7 +33,6 @@ import kotlin.math.roundToInt
 
 private const val SLIDER_HEIGHT = 330
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VerticalRangeSlider(
     value: Float?,
@@ -53,93 +50,156 @@ fun VerticalRangeSlider(
 ) {
     val sliderContentDescription = stringResource(org.odk.collect.strings.R.string.vertical_slider)
 
-    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-        ConstraintLayout(Modifier.fillMaxWidth()) {
-            val (valueLabelRef, sliderRef, edgeLabelsRef, stepLabelsRef) = createRefs()
+    ConstraintLayout(Modifier.fillMaxWidth()) {
+        val (valueLabelRef, sliderRef, edgeLabelsRef, stepLabelsRef) = createRefs()
+        val margin = dimensionResource(id = dimen.margin_standard)
 
-            BoxWithConstraints(
-                modifier = Modifier
-                    .height(SLIDER_HEIGHT.dp)
-                    .constrainAs(sliderRef) { centerHorizontallyTo(parent) }
-            ) {
-                Slider(
-                    modifier = Modifier
-                        .semantics { contentDescription = sliderContentDescription }
-                        .rotateVertically()
-                        .pointerInteropFilter { event ->
-                            if (enabled && event.action == MotionEvent.ACTION_DOWN) {
-                                onValueChanging(true)
-                                if (value == null) {
-                                    onValueChange(0f)
-                                }
-                            }
-                            false
-                        },
-                    value = value ?: 0f,
-                    steps = steps,
-                    onValueChange = onValueChange,
-                    onValueChangeFinished = {
-                        onValueChanging(false)
-                        onValueChangeFinished()
-                    },
-                    thumb = {},
-                    track = { Track(it, ticks) },
-                    enabled = enabled
-                )
-
-                val thumbValue = value ?: placeholder
-                if (thumbValue != null) {
-                    Box(
-                        modifier = Modifier
-                            .offset {
-                                calculateOffset(
-                                    trackSize = constraints.maxHeight,
-                                    itemWidth = THUMB_WIDTH.dp.toPx(),
-                                    value = thumbValue,
-                                    isVertical = true
-                                )
-                            }
-                            .rotateVertically()
-                            .pointerInteropFilter { false }
-                            .align(Alignment.TopCenter)
-                    ) { Thumb(value = thumbValue) }
-                }
+        ValueLabel(
+            valueLabel,
+            modifier = Modifier.constrainAs(valueLabelRef) {
+                end.linkTo(sliderRef.start, margin = margin)
+                centerVerticallyTo(sliderRef)
             }
+        )
 
-            val margin = dimensionResource(id = dimen.margin_standard)
+        VerticalTrack(
+            modifier = Modifier
+                .height(SLIDER_HEIGHT.dp)
+                .semantics { contentDescription = sliderContentDescription }
+                .constrainAs(sliderRef) { centerHorizontallyTo(parent) },
+            value = value,
+            placeholder = placeholder,
+            ticks = ticks,
+            steps = steps,
+            enabled = enabled,
+            onValueChanging = onValueChanging,
+            onValueChange = onValueChange,
+            onValueChangeFinished = onValueChangeFinished
+        )
 
-            ValueLabel(
-                valueLabel,
-                modifier = Modifier.constrainAs(valueLabelRef) {
-                    end.linkTo(sliderRef.start, margin = margin)
+        VerticalEdgeLabels(
+            startLabel,
+            endLabel,
+            modifier = Modifier
+                .height(SLIDER_HEIGHT.dp)
+                .constrainAs(edgeLabelsRef) {
+                    start.linkTo(sliderRef.end, margin = margin)
                     centerVerticallyTo(sliderRef)
                 }
-            )
+        )
 
-            VerticalEdgeLabels(
-                startLabel,
-                endLabel,
-                modifier = Modifier
-                    .height(SLIDER_HEIGHT.dp)
-                    .constrainAs(edgeLabelsRef) {
-                        start.linkTo(sliderRef.end, margin = margin)
-                        centerVerticallyTo(sliderRef)
-                    }
-            )
+        VerticalStepLabels(
+            labels,
+            modifier = Modifier
+                .height(SLIDER_HEIGHT.dp)
+                .constrainAs(stepLabelsRef) {
+                    start.linkTo(edgeLabelsRef.end, margin = margin)
+                    end.linkTo(parent.end, margin = margin)
+                    width = Dimension.fillToConstraints
+                    centerVerticallyTo(sliderRef)
+                }
+        )
+    }
+}
 
-            VerticalStepLabels(
-                labels,
-                modifier = Modifier
-                    .height(SLIDER_HEIGHT.dp)
-                    .constrainAs(stepLabelsRef) {
-                        start.linkTo(edgeLabelsRef.end, margin = margin)
-                        end.linkTo(parent.end, margin = margin)
-                        width = Dimension.fillToConstraints
-                        centerVerticallyTo(sliderRef)
+@Composable
+private fun VerticalTrack(
+    modifier: Modifier = Modifier,
+    value: Float?,
+    placeholder: Float?,
+    ticks: Int,
+    steps: Int = 0,
+    enabled: Boolean,
+    onValueChanging: (Boolean) -> Unit,
+    onValueChange: (Float) -> Unit,
+    onValueChangeFinished: () -> Unit
+) {
+    BoxWithConstraints(
+        modifier = modifier
+            .width(48.dp)
+            .fillMaxHeight()
+            .pointerInput(steps) {
+                if (enabled) {
+                    val trackHeight = size.height.toFloat()
+                    awaitEachGesture {
+                        val down = awaitFirstDown()
+                        onValueChanging(true)
+                        onValueChange(positionToValue(down.position.y, steps, trackHeight))
+
+                        do {
+                            val event = awaitPointerEvent()
+                            val pointer = event.changes.firstOrNull() ?: break
+                            if (!pointer.pressed) break
+                            pointer.consume()
+                            onValueChange(positionToValue(pointer.position.y, steps, trackHeight))
+                        } while (true)
+
+                        onValueChanging(false)
+                        onValueChangeFinished()
                     }
+                }
+            }
+    ) {
+        Box(
+            modifier = Modifier
+                .width(20.dp)
+                .fillMaxHeight()
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.primaryContainer)
+                .align(Alignment.Center)
+        ) {
+            if (value != null) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxHeight(fraction = value)
+                        .width(20.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.primary)
+                        .align(Alignment.BottomCenter)
+                )
+            }
+
+            Column(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .align(Alignment.Center),
+                verticalArrangement = Arrangement.SpaceBetween,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                repeat(ticks) { Tick() }
+            }
+        }
+
+        val thumbValue = value ?: placeholder
+        if (thumbValue != null) {
+            VerticalThumb(
+                modifier = Modifier
+                    .offset {
+                        calculateOffset(
+                            trackSize = constraints.maxHeight,
+                            itemWidth = THUMB_WIDTH.dp.toPx(),
+                            value = thumbValue,
+                            isVertical = true
+                        )
+                    }
+                    .align(Alignment.TopCenter)
             )
         }
     }
+}
+
+@Composable
+private fun VerticalThumb(modifier: Modifier = Modifier) {
+    val sliderThumbContentDescription = stringResource(org.odk.collect.strings.R.string.slider_thumb)
+
+    Box(
+        modifier = modifier
+            .width(40.dp)
+            .height(6.dp)
+            .clip(CircleShape)
+            .background(MaterialTheme.colorScheme.primary)
+            .semantics { contentDescription = sliderThumbContentDescription }
+    )
 }
 
 @Composable
@@ -204,21 +264,8 @@ private fun VerticalStepLabels(labels: List<String>, modifier: Modifier = Modifi
     }
 }
 
-private fun Modifier.rotateVertically() = this
-    .graphicsLayer {
-        rotationZ = 270f
-        transformOrigin = TransformOrigin(0f, 0f)
-    }
-    .layout { measurable, constraints ->
-        val placeable = measurable.measure(
-            Constraints(
-                minWidth = constraints.minHeight,
-                maxWidth = constraints.maxHeight,
-                minHeight = constraints.minWidth,
-                maxHeight = constraints.maxHeight,
-            )
-        )
-        layout(placeable.height, placeable.width) {
-            placeable.place(-placeable.width, 0)
-        }
-    }
+private fun positionToValue(y: Float, steps: Int, trackHeight: Float): Float {
+    val fraction = 1f - y.coerceIn(0f, trackHeight) / trackHeight
+    val divisions = steps + 1
+    return (fraction * divisions).roundToInt().toFloat() / divisions
+}
