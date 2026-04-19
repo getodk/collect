@@ -2,7 +2,6 @@ package org.odk.collect.android.widgets.range
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
-import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.click
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -134,13 +133,20 @@ class RangeDecimalWidgetTest : QuestionWidgetTest<RangeDecimalWidget, DecimalDat
 
     override fun usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         formEntryPrompt = MockFormEntryPromptBuilder(formEntryPrompt)
-            .withAnswer(DecimalData(5.0))
             .withReadOnly(true)
             .build()
         createWidget()
 
         composeRule
             .onNodeWithContentDescription(org.odk.collect.strings.R.string.horizontal_slider)
-            .assertIsNotEnabled()
+            .performTouchInput { click() }
+
+        composeRule
+            .onNodeWithContentDescription(org.odk.collect.strings.R.string.current_slider_value)
+            .assertIsNotDisplayed()
+
+        composeRule
+            .onNodeWithContentDescription(org.odk.collect.strings.R.string.slider_thumb)
+            .assertIsNotDisplayed()
     }
 }

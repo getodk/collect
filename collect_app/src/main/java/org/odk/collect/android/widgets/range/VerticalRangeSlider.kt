@@ -49,8 +49,6 @@ fun VerticalRangeSlider(
     onValueChangeFinished: () -> Unit,
     onValueChange: (Float) -> Unit
 ) {
-    val sliderContentDescription = stringResource(org.odk.collect.strings.R.string.vertical_slider)
-
     ConstraintLayout(Modifier.fillMaxWidth()) {
         val (valueLabelRef, sliderRef, edgeLabelsRef, stepLabelsRef) = createRefs()
         val margin = dimensionResource(id = dimen.margin_standard)
@@ -66,7 +64,6 @@ fun VerticalRangeSlider(
         VerticalTrack(
             modifier = Modifier
                 .height(SLIDER_HEIGHT.dp)
-                .semantics { contentDescription = sliderContentDescription }
                 .constrainAs(sliderRef) { centerHorizontallyTo(parent) },
             value = value,
             placeholder = placeholder,
@@ -115,6 +112,8 @@ private fun VerticalTrack(
     onValueChange: (Float) -> Unit,
     onValueChangeFinished: () -> Unit
 ) {
+    val sliderContentDescription = stringResource(org.odk.collect.strings.R.string.vertical_slider)
+
     BoxWithConstraints(
         modifier = modifier
             .width(48.dp)
@@ -140,6 +139,7 @@ private fun VerticalTrack(
                     }
                 }
             }
+            .semantics { contentDescription = sliderContentDescription }
     ) {
         Box(
             modifier = Modifier

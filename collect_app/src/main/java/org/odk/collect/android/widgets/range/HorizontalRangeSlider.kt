@@ -77,6 +77,7 @@ private fun HorizontalTrack(
     onValueChange: ((Float) -> Unit),
     onValueChangeFinished: (() -> Unit)
 ) {
+    val sliderContentDescription = stringResource(org.odk.collect.strings.R.string.horizontal_slider)
     val layoutDirection = LocalLayoutDirection.current
 
     BoxWithConstraints(
@@ -104,6 +105,7 @@ private fun HorizontalTrack(
                     }
                 }
             }
+            .semantics { contentDescription = sliderContentDescription }
     ) {
         Box(
             modifier = Modifier
