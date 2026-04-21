@@ -128,6 +128,8 @@ internal class DynamicPolyLineFeature(
             if (featureDragEndListener != null) {
                 for (pointAnnotation in pointAnnotations) {
                     if (annotation.id == pointAnnotation.id) {
+                        // Deferred to avoid ConcurrentModificationException caused by Mapbox iterating over
+                        // its annotation list while this callback disposes and recreates annotations.
                         mainHandler.post {
                             featureDragEndListener.onFeature(featureId)
                         }
