@@ -649,13 +649,16 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
         });
     }
 
-    private void handleValidationResult(ODKView view, ValidationResult validationResult) {
+    private void handleValidationResult(ValidationResult validationResult) {
         if (validationResult instanceof FailedValidationResult failedValidationResult) {
             String errorMessage = failedValidationResult.getCustomErrorMessage();
             if (errorMessage == null) {
                 errorMessage = getString(failedValidationResult.getDefaultErrorMessage());
             }
-            view.setErrorForQuestionWithIndex(failedValidationResult.getIndex(), errorMessage);
+            ODKView view = getCurrentViewIfODKView();
+            if (view != null) {
+                view.setErrorForQuestionWithIndex(failedValidationResult.getIndex(), errorMessage);
+            }
             swipeHandler.setBeenSwiped(false);
         } else if (validationResult instanceof SuccessValidationResult) {
             SnackbarUtils.showSnackbar(
@@ -1839,16 +1842,19 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
     private int animationCompletionSet;
 
     private void afterAllAnimations() {
-        ODKView view = getCurrentViewIfODKView();
-        if (view != null) {
-            CurrentFormIndex index = formEntryViewModel.getCurrentIndex().getValue();
-            ValidationResult validationResult = index.getValidationResult();
-            if (validationResult != null) {
-                handleValidationResult(view, validationResult);
-            } else if (index.getQuestionIndex() != null) {
-                view.focusToTopOf(index.getQuestionIndex());
-            } else {
-                view.setFocus(this);
+        CurrentFormIndex index = formEntryViewModel.getCurrentIndex().getValue();
+        ValidationResult validationResult = index.getValidationResult();
+
+        if (validationResult != null) {
+            handleValidationResult(validationResult);
+        } else {
+            ODKView view = getCurrentViewIfODKView();
+            if (view != null) {
+                if (index.getQuestionIndex() != null) {
+                    view.focusToTopOf(index.getQuestionIndex());
+                } else {
+                    view.setFocus(this);
+                }
             }
         }
 
