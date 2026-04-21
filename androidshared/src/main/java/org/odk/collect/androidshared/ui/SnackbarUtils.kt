@@ -26,6 +26,7 @@ import com.google.android.material.R
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import org.odk.collect.androidshared.data.Consumable
+import org.odk.collect.androidshared.ui.EdgeToEdge.applyBottomInsets
 
 /**
  * Convenience wrapper around Android's [Snackbar] API.
@@ -132,6 +133,8 @@ object SnackbarUtils {
                 dismiss()
             }
         }
+
+        applyBottomInsets()
     }.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
         override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
             super.onDismissed(transientBottomBar, event)

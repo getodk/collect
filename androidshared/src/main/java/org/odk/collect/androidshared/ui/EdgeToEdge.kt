@@ -11,6 +11,7 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
+import com.google.android.material.snackbar.Snackbar
 import org.odk.collect.androidshared.system.ContextExt.isDarkTheme
 
 object EdgeToEdge {
@@ -41,17 +42,26 @@ object EdgeToEdge {
     }
 
     @JvmStatic
-    fun View.applyBottomBarInsetMargins() {
+    fun View.applyBottomInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(this) { v, windowInsets ->
-            val systemBarsInsets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-            val keyboardInsets = windowInsets.getInsets(WindowInsetsCompat.Type.ime())
-
-            v.updatePadding(
-                bottom = maxOf(0, keyboardInsets.bottom - systemBarsInsets.bottom)
-            )
-
+            v.updatePadding(bottom = windowInsets.keyboardSafeOffset())
             windowInsets
         }
+    }
+
+    @JvmStatic
+    fun Snackbar.applyBottomInsets() {
+        ViewCompat.setOnApplyWindowInsetsListener(view) { _, windowInsets ->
+            view.translationY = -windowInsets.keyboardSafeOffset().toFloat()
+            windowInsets
+        }
+        ViewCompat.requestApplyInsets(view)
+    }
+
+    private fun WindowInsetsCompat.keyboardSafeOffset(): Int {
+        val systemBars = getInsets(WindowInsetsCompat.Type.systemBars())
+        val keyboard = getInsets(WindowInsetsCompat.Type.ime())
+        return maxOf(0, keyboard.bottom - systemBars.bottom)
     }
 
     private fun Window.avoidEdgeToEdge() {
