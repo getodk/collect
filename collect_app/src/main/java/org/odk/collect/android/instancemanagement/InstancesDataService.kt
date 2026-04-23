@@ -216,7 +216,7 @@ class InstancesDataService(
         }
     }
 
-    fun sendInstances(
+    suspend fun sendInstances(
         projectId: String,
         instances: List<Instance>,
         referrer: String,
@@ -224,14 +224,13 @@ class InstancesDataService(
         cancelAfterAuthException: Boolean,
         externalDeleteAfterUpload: Boolean?,
         defaultSuccessMessage: String,
-        ensureActive: () -> Unit,
         onProgress: (current: Int, total: Int) -> Unit = { _, _ -> }
     ): List<InstanceUploadResult> {
         val projectDependencyModule = projectDependencyModuleFactory.create(projectId)
 
-        return projectDependencyModule.instancesLock.withLock { acquiredLock: Boolean ->
+        return projectDependencyModule.instancesLock.withLockSuspend { acquiredLock: Boolean ->
             if (acquiredLock) {
-                instanceSubmitter.submitInstances(
+                val result = instanceSubmitter.submitInstancesSuspend(
                     projectId,
                     instances,
                     referrer,
@@ -239,11 +238,13 @@ class InstancesDataService(
                     cancelAfterAuthException,
                     externalDeleteAfterUpload,
                     defaultSuccessMessage,
-                    ensureActive,
                     onProgress
-                ).also {
-                    logResults(projectDependencyModule.formsRepository, it, auto = false)
-                }
+                )
+
+                logResults(projectDependencyModule.formsRepository, result, auto = false)
+                update(projectId)
+
+                result
             } else {
                 emptyList()
             }
