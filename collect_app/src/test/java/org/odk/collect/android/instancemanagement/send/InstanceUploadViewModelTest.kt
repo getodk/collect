@@ -26,7 +26,99 @@ class InstanceUploadViewModelTest {
     private lateinit var viewModel: InstanceUploadViewModel
 
     @Test
-    fun `submitted instance is deleted even when upload is cancelled`() {
+    fun `instance is not submitted when upload process is canceled during execution`() {
+        val form = FormFixtures.form("1")
+        val formsRepository = InMemFormsRepository().apply {
+            save(form)
+        }
+
+        val instance = Instance.Builder()
+            .dbId(1)
+            .formId(form.formId)
+            .formVersion(form.version)
+            .status(Instance.STATUS_COMPLETE)
+            .finalizationDate(1)
+            .build()
+
+        val instancesRepository = InMemInstancesRepository().apply {
+            save(instance)
+        }
+
+        val projectsDependencyModuleFactory = CachingProjectDependencyModuleFactory { projectId ->
+            ProjectDependencyModule(
+                projectId,
+                { InMemSettings() },
+                { formsRepository },
+                { instancesRepository },
+                mock(),
+                { ChangeLocks(BooleanChangeLock(), BooleanChangeLock()) },
+                mock(),
+                mock(),
+                mock(),
+                mock(),
+                mock()
+            )
+        }
+
+        val submittedInstances = mutableListOf<Long>()
+
+        val instanceUploader = object : InstanceUploader {
+            override fun uploadOneSubmission(
+                projectId: String,
+                instance: Instance,
+                deviceId: String?,
+                overrideURL: String?,
+                referrer: String
+            ): String {
+                viewModel.cancel()
+                Thread.sleep(1000)
+
+                submittedInstances.add(instance.dbId)
+                instancesRepository.save(
+                    Instance.Builder(instance)
+                        .status(Instance.STATUS_SUBMITTED)
+                        .build()
+                )
+                return "Success"
+            }
+        }
+
+        val instancesSubmitter = InstanceSubmitter(
+            instanceUploader,
+            projectsDependencyModuleFactory,
+            mock()
+        )
+        val instancesDataService = InstancesDataService(
+            AppState(),
+            mock(),
+            projectsDependencyModuleFactory,
+            mock(),
+            instancesSubmitter
+        ) {}
+
+        val dispatcherProvider = TestDispatcherProvider()
+        viewModel = InstanceUploadViewModel(
+            dispatcherProvider,
+            mock(),
+            instancesRepository,
+            instancesDataService,
+            "projectId",
+            "",
+            null,
+            null,
+            null,
+            null,
+            "Success",
+            "Waiting"
+        )
+        viewModel.upload(listOf(instance.dbId))
+        dispatcherProvider.runBackground()
+
+        assertThat(submittedInstances.isEmpty(), equalTo(true))
+    }
+
+    @Test
+    fun `submitted instances are deleted when upload process is canceled during execution`() {
         val form = FormFixtures.form("1")
         val formsRepository = InMemFormsRepository().apply {
             save(form)
@@ -75,6 +167,7 @@ class InstanceUploadViewModelTest {
 
         val submittedInstances = mutableListOf<Long>()
 
+        var progress = 0;
         val instanceUploader = object : InstanceUploader {
             override fun uploadOneSubmission(
                 projectId: String,
@@ -83,13 +176,16 @@ class InstanceUploadViewModelTest {
                 overrideURL: String?,
                 referrer: String
             ): String {
+                if (++progress == 2) {
+                    viewModel.cancel()
+                }
+
                 submittedInstances.add(instance.dbId)
                 instancesRepository.save(
                     Instance.Builder(instance)
                         .status(Instance.STATUS_SUBMITTED)
                         .build()
                 )
-                viewModel.cancel()
                 return "Success"
             }
         }
