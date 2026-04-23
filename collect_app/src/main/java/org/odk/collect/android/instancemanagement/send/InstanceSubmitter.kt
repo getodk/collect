@@ -1,5 +1,8 @@
 package org.odk.collect.android.instancemanagement.send
 
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.runInterruptible
 import org.odk.collect.android.instancemanagement.InstanceDeleter
 import org.odk.collect.android.projects.ProjectDependencyModule
 import org.odk.collect.android.utilities.InstanceAutoDeleteChecker
@@ -21,14 +24,45 @@ class InstanceSubmitter(
 
     fun submitInstances(
         projectId: String,
+        toUpload: List<Instance>
+    ): List<InstanceUploadResult> {
+        val projectDependencyModule = projectDependencyFactory.create(projectId)
+        val formsRepository = projectDependencyModule.formsRepository
+        val instancesRepository = projectDependencyModule.instancesRepository
+        val generalSettings = projectDependencyModule.generalSettings
+
+        val uploadResults = mutableListOf<InstanceUploadResult>()
+        val deviceId = propertyManager.getSingularProperty(PROPMGR_DEVICE_ID)
+
+        val sortedInstances = toUpload.sortedBy { it.finalizationDate }
+        for (instance in sortedInstances) {
+            try {
+                val resultMessage = instanceUploader.uploadOneSubmission(projectId, instance, deviceId, null, "")
+                uploadResults.add(InstanceUploadResult.Success(instance, resultMessage))
+
+                deleteInstance(instance, formsRepository, instancesRepository, generalSettings, null)
+            } catch (e: FormUploadException) {
+                Timber.d(e)
+                uploadResults.add(InstanceUploadResult.Error(instance, e))
+
+                if (e is FormUploadAuthRequestedException) {
+                    break
+                }
+            }
+        }
+
+        return uploadResults
+    }
+
+    suspend fun submitInstancesSuspend(
+        projectId: String,
         toUpload: List<Instance>,
-        referrer: String = "",
-        overrideURL: String? = null,
-        cancelAfterAuthException: Boolean = false,
-        externalDeleteAfterUpload: Boolean? = null,
-        defaultSuccessMessage: String? = null,
-        ensureActive: () -> Unit = {},
-        onProgress: (current: Int, total: Int) -> Unit = { _, _ -> }
+        referrer: String,
+        overrideURL: String?,
+        cancelAfterAuthException: Boolean,
+        externalDeleteAfterUpload: Boolean?,
+        defaultSuccessMessage: String?,
+        onProgress: (current: Int, total: Int) -> Unit
     ): List<InstanceUploadResult> {
         val projectDependencyModule = projectDependencyFactory.create(projectId)
         val formsRepository = projectDependencyModule.formsRepository
@@ -40,13 +74,14 @@ class InstanceSubmitter(
 
         val sortedInstances = toUpload.sortedBy { it.finalizationDate }
         for ((index, instance) in sortedInstances.withIndex()) {
-            ensureActive()
-            onProgress( index + 1, sortedInstances.size)
+            currentCoroutineContext().ensureActive()
+            onProgress(index + 1, sortedInstances.size)
 
             try {
-                val resultMessage = instanceUploader.uploadOneSubmission(projectId, instance, deviceId, overrideURL, referrer)
+                val resultMessage = runInterruptible {
+                    instanceUploader.uploadOneSubmission(projectId, instance, deviceId, overrideURL, referrer)
+                }
                 uploadResults.add(InstanceUploadResult.Success(instance, resultMessage ?: defaultSuccessMessage))
-
                 deleteInstance(instance, formsRepository, instancesRepository, generalSettings, externalDeleteAfterUpload)
             } catch (e: FormUploadException) {
                 Timber.d(e)
