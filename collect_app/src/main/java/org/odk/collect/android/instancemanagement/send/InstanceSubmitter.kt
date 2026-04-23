@@ -54,7 +54,7 @@ class InstanceSubmitter(
         return uploadResults
     }
 
-    suspend fun submitInstancesSuspend(
+    suspend fun submitInstances(
         projectId: String,
         toUpload: List<Instance>,
         referrer: String,
