@@ -230,7 +230,7 @@ class InstancesDataService(
 
         return projectDependencyModule.instancesLock.withLockSuspend { acquiredLock: Boolean ->
             if (acquiredLock) {
-                val result = instanceSubmitter.submitInstancesSuspend(
+                val result = instanceSubmitter.submitInstances(
                     projectId,
                     instances,
                     referrer,
