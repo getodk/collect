@@ -102,10 +102,6 @@ object SnackbarUtils {
             view.findViewById<TextView>(R.id.snackbar_text)
         textView.isSingleLine = false
 
-        if (anchorView?.visibility != View.GONE) {
-            this.anchorView = anchorView
-        }
-
         if (displayDismissButton) {
             view.findViewById<Button>(R.id.snackbar_action).let {
                 val dismissButton = ImageView(view.context).apply {
@@ -134,7 +130,7 @@ object SnackbarUtils {
             }
         }
 
-        applyBottomInsets()
+        applyBottomInsets(anchorView)
     }.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
         override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
             super.onDismissed(transientBottomBar, event)
