@@ -41,7 +41,12 @@ class SynchronizedDatabaseConnection(
     fun resetTransaction(
         body: SQLiteDatabase.() -> Unit
     ) {
-        transaction(body)
-        databaseConnection.reset()
+        withConnection {
+            writableDatabase.transaction {
+                body()
+            }
+
+            reset()
+        }
     }
 }
