@@ -414,7 +414,7 @@ public class GeoPointMapActivity extends LocalizedActivity {
             map.clearFeatures(Arrays.asList(featureId));
         }
 
-        featureId = map.addMarker(new MarkerDescription(point, intentDraggable && !intentReadOnly && !isPointLocked, MapFragment.IconAnchor.CENTER, new MarkerIconDescription.DrawableResource(org.odk.collect.icons.R.drawable.ic_map_point)));
+        featureId = map.addMarker(new MarkerDescription(point, intentDraggable && !intentReadOnly && !isPointLocked, MapFragment.IconAnchor.BOTTOM, new MarkerIconDescription.DrawableResource(org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_small)));
         if (!intentReadOnly) {
             clearButton.setEnabled(true);
         }
