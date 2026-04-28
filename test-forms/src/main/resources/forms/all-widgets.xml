@@ -504,7 +504,7 @@
         <label>URL widget</label>
         <hint>text type with url appearance and default value of http://opendatakit.org/</hint>
       </input>
-      <input appearance="ex:change.uw.android.BREATHCOUNT" ref="/data/text_widgets/ex_string_widget">
+      <input appearance="ex:android.intent.action.SET_TIMER(android.intent.extra.alarm.LENGTH='15')" ref="/data/text_widgets/ex_string_widget">
         <label>Ex string widget</label>
         <hint>text type with ex:change.uw.android.BREATHCOUNT appearance (can use other external apps)</hint>
       </input>

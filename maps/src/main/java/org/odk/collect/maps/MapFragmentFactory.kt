@@ -1,5 +1,5 @@
 package org.odk.collect.maps
 
-interface MapFragmentFactory {
+fun interface MapFragmentFactory {
     fun createMapFragment(): MapFragment
 }

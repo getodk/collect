@@ -587,7 +587,7 @@
     <!-- Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list -->
     <string name="delete_layer_confirmation_message">Are you sure you want to delete the %1$s offline layer?</string>
 
-    <string name="record_geopoint">Record a point</string>
+    <string name="record_geopoint">Add marker</string>
     <string name="location_accuracy">Accuracy: %1$s</string>
     <string name="location_accuracy_unacceptable">⚠️ Accuracy: %1$s (unacceptable)</string>
     <string name="provider_disabled_error">Sorry, Location providers are disabled!</string>

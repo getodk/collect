@@ -1,6 +1,6 @@
 package org.odk.collect.maps.circles
 
-import org.odk.collect.maps.MapConsts
+import androidx.core.graphics.toColorInt
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.markers.MarkerDescription
@@ -16,14 +16,14 @@ class CurrentLocationDelegate {
     private var locationMarkerId: Int? = null
     private var accuracyHaloId: Int? = null
 
-    fun update(map: MapFragment, location: MapPoint, follow: Boolean) {
+    fun update(map: MapFragment, location: MapPoint, follow: Boolean = false) {
         currentLocation = location
 
         val markerDescription = MarkerDescription(
             location,
             false,
             MapFragment.IconAnchor.CENTER,
-            MarkerIconDescription.DrawableResource(org.odk.collect.maps.R.drawable.ic_crosshairs)
+            ICON_DESCRIPTION
         )
 
         locationMarkerId.let {
@@ -55,5 +55,13 @@ class CurrentLocationDelegate {
 
     fun zoomToCurrentLocation(map: MapFragment) {
         map.zoomToCurrentLocation(currentLocation)
+    }
+
+    companion object {
+        val ICON_DESCRIPTION = MarkerIconDescription.DrawableResource(
+            drawable = org.odk.collect.maps.R.drawable.ic_current_location,
+            color = "#6393F2".toColorInt(),
+            background = true
+        )
     }
 }

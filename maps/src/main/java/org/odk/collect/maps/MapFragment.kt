@@ -1,9 +1,9 @@
 package org.odk.collect.maps
 
 import org.odk.collect.maps.circles.CircleDescription
-import org.odk.collect.maps.traces.LineDescription
 import org.odk.collect.maps.markers.MarkerDescription
 import org.odk.collect.maps.markers.MarkerIconDescription
+import org.odk.collect.maps.traces.LineDescription
 import org.odk.collect.maps.traces.PolygonDescription
 
 /**
@@ -117,6 +117,7 @@ interface MapFragment {
 
     /** Removes all map features from the map.  */
     fun clearFeatures()
+    fun clearFeatures(ids: List<Int>)
 
     /** Sets or clears the callback for a click on the map.  */
     fun setClickListener(listener: PointListener?)
@@ -129,29 +130,6 @@ interface MapFragment {
 
     /** Sets or clears the callback for when a drag is completed.  */
     fun setDragEndListener(listener: FeatureListener?)
-
-    /**
-     * Enables/disables GPS tracking.  While enabled, the GPS location is shown
-     * on the map, the first GPS fix will trigger any pending callbacks set by
-     * runOnGpsLocationReady(), and every GPS fix will invoke the callback set
-     * by setGpsLocationListener().
-     */
-    @Deprecated(message = "Location should be handled outside of MapFragment")
-    fun setGpsLocationEnabled(enabled: Boolean)
-
-    /** Gets the last GPS location fix, or null if there hasn't been one.  */
-    @Deprecated(message = "Location should be handled outside of MapFragment")
-    fun getGpsLocation(): MapPoint?
-
-    /**
-     * Sets or clears the callback for GPS location updates.  This callback
-     * will only be invoked while GPS is enabled with setGpsLocationEnabled().
-     */
-    @Deprecated(message = "Location should be handled outside of MapFragment")
-    fun setGpsLocationListener(listener: PointListener?)
-
-    @Deprecated(message = "Location should be handled outside of MapFragment")
-    fun setRetainMockAccuracy(retainMockAccuracy: Boolean)
 
     /**
      * @return true if the [MapFragment] center has already been set (by [MapFragment.zoomToPoint] for instance).

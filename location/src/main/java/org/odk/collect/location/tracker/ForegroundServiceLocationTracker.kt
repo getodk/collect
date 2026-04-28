@@ -79,9 +79,7 @@ class LocationTrackerService : Service(), LocationClient.LocationClientListener 
 
         if (intent?.hasExtra(EXTRA_UPDATE_INTERVAL) == true) {
             val interval = intent.getLongExtra(EXTRA_UPDATE_INTERVAL, -1)
-            locationClient.setUpdateInterval(
-                interval
-            )
+            locationClient.setUpdateInterval(interval)
         }
 
         locationClient.start(this)
@@ -90,7 +88,7 @@ class LocationTrackerService : Service(), LocationClient.LocationClientListener 
 
     override fun onDestroy() {
         locationClient.stop()
-        application.getState().clear(LOCATION_KEY)
+        application.getState().setFlow(LOCATION_KEY, null)
     }
 
     override fun onClientStart() {
