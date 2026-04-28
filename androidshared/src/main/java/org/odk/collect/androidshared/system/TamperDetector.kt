@@ -9,7 +9,7 @@ object TamperDetector {
 
     @JvmStatic
     fun isTampered(context: Context, expectedSignature: String): Boolean {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && expectedSignature.isNotBlank()) {
             val packageInfo = context.packageManager.getPackageInfo(
                 context.packageName,
                 PackageManager.PackageInfoFlags.of(PackageManager.GET_SIGNING_CERTIFICATES.toLong())
