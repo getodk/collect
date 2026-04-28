@@ -118,6 +118,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt'
             resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
             resValue("string", "mapbox_access_token", mapboxAccessToken)
+            buildConfigField("String", "SIGNATURE", "\"\"")
         }
 
         // Release build for the official ODK Collect app
@@ -130,6 +131,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt'
             resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
             resValue("string", "mapbox_access_token", mapboxAccessToken)
+            buildConfigField("String", "SIGNATURE", "\"\"")
 
             matchingFallbacks = ['release'] // So other modules use release build type for this
         }
@@ -142,6 +144,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt'
             resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
             resValue("string", "mapbox_access_token", mapboxAccessToken)
+            buildConfigField("String", "SIGNATURE", "\"\"")
 
             matchingFallbacks = ['release'] // So other modules use release build type for this
         }
