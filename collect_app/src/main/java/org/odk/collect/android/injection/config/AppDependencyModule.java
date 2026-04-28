@@ -95,6 +95,7 @@ import org.odk.collect.androidshared.system.BroadcastReceiverRegister;
 import org.odk.collect.androidshared.system.BroadcastReceiverRegisterImpl;
 import org.odk.collect.androidshared.system.IntentLauncher;
 import org.odk.collect.androidshared.system.IntentLauncherImpl;
+import org.odk.collect.androidshared.system.TamperDetector;
 import org.odk.collect.androidshared.utils.ScreenUtils;
 import org.odk.collect.androidshared.utils.SettingsUniqueIdGenerator;
 import org.odk.collect.androidshared.utils.UniqueIdGenerator;
@@ -203,7 +204,8 @@ public class AppDependencyModule {
     @Singleton
     public Analytics providesAnalytics(Application application) {
         try {
-            return new BlockableFirebaseAnalytics(application);
+            boolean isTampered = TamperDetector.isTampered(application, BuildConfig.SIGNATURE);
+            return new BlockableFirebaseAnalytics(application, !isTampered);
         } catch (IllegalStateException e) {
             // Couldn't setup Firebase so use no-op instance
             return new NoopAnalytics();

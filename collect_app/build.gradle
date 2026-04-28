@@ -154,6 +154,7 @@ android {
             buildConfigField("String", "ENTITIES_FILTER_SEARCH_PROJECT_URL", "\"$entitiesFilterSearchProjectUrl\"")
             buildConfigField("String", "THOUSAND_MEDIA_FILE_PROJECT_URL", "\"$thousandMediaFileProjectUrl\"")
             buildConfigField("String", "THOUSAND_MEDIA_FILE_ENTITY_LIST_PROJECT_URL", "\"$thousandMediaFileEntityListProjectUrl\"")
+            buildConfigField("String", "SIGNATURE", "\"\"")
         }
     }
 
