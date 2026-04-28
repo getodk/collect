@@ -1,6 +1,6 @@
 package org.odk.collect.maps.circles
 
-import org.odk.collect.maps.MapConsts
+import androidx.core.graphics.toColorInt
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.markers.MarkerDescription
@@ -60,7 +60,7 @@ class CurrentLocationDelegate {
     companion object {
         val ICON_DESCRIPTION = MarkerIconDescription.DrawableResource(
             drawable = org.odk.collect.maps.R.drawable.ic_current_location,
-            color = MapConsts.DEFAULT_STROKE_COLOR,
+            color = "#6393F2".toColorInt(),
             background = true
         )
     }

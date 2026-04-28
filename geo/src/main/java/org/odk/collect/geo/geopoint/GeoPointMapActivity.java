@@ -25,6 +25,7 @@ import static org.odk.collect.location.tracker.LocationTrackerKt.getCurrentLocat
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -414,7 +415,8 @@ public class GeoPointMapActivity extends LocalizedActivity {
             map.clearFeatures(Arrays.asList(featureId));
         }
 
-        featureId = map.addMarker(new MarkerDescription(point, intentDraggable && !intentReadOnly && !isPointLocked, MapFragment.IconAnchor.BOTTOM, new MarkerIconDescription.DrawableResource(org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_small)));
+        MarkerIconDescription.DrawableResource iconDescription = new MarkerIconDescription.DrawableResource(org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_big, Color.parseColor("#52C268"));
+        featureId = map.addMarker(new MarkerDescription(point, intentDraggable && !intentReadOnly && !isPointLocked, MapFragment.IconAnchor.BOTTOM, iconDescription));
         if (!intentReadOnly) {
             clearButton.setEnabled(true);
         }
