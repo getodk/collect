@@ -20,6 +20,18 @@ interface ChangeLock {
         }
     }
 
+    suspend fun <T> withLockSuspend(function: suspend (Boolean) -> T): T {
+        val acquired = tryLock(DEFAULT_TOKEN)
+
+        return try {
+            function(acquired)
+        } finally {
+            if (acquired) {
+                unlock(DEFAULT_TOKEN)
+            }
+        }
+    }
+
     fun tryLock(token: Any): Boolean
 
     fun unlock(token: Any)
