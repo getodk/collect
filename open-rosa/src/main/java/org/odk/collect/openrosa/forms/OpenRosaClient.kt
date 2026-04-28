@@ -1,6 +1,6 @@
 package org.odk.collect.openrosa.forms
 
-import android.net.Uri
+import org.odk.collect.entities.javarosa.parse.toUriWithParam
 import org.odk.collect.entities.server.EntitySource
 import org.odk.collect.forms.FormListItem
 import org.odk.collect.forms.FormSource
@@ -24,10 +24,11 @@ class OpenRosaClient(
     serverURL: String,
     openRosaHttpInterface: OpenRosaHttpInterface?,
     private val webCredentialsProvider: WebCredentialsProvider,
-    private val openRosaResponseParser: OpenRosaResponseParser
+    private val openRosaResponseParser: OpenRosaResponseParser,
+    deviceId: String
 ) : FormSource, EntitySource {
     private val openRosaXMLFetcher =
-        OpenRosaXmlFetcher(openRosaHttpInterface, this.webCredentialsProvider)
+        OpenRosaXmlFetcher(openRosaHttpInterface, this.webCredentialsProvider, deviceId)
 
     private var serverUrl: String = serverURL
 
@@ -153,10 +154,7 @@ class OpenRosaClient(
     }
 
     override fun fetchDeletedStates(integrityUrl: String, ids: List<String>): List<Pair<String, Boolean>> {
-        val uri = Uri.parse(integrityUrl)
-            .buildUpon()
-            .appendQueryParameter("id", ids.joinToString(","))
-            .build()
+        val uri = integrityUrl.toUriWithParam("id", ids.joinToString(","))
 
         val result = openRosaXMLFetcher.getXML(uri.toString())
         if (!result.isOpenRosaResponse) {

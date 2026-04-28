@@ -10,16 +10,14 @@ import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.settings.Settings
 import timber.log.Timber
 import java.io.File
-import java.io.UnsupportedEncodingException
 import java.net.URI
-import java.net.URLEncoder
 import androidx.core.net.toUri
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.analytics.AnalyticsEvents
-import org.odk.collect.android.analytics.AnalyticsUtils
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.projects.ProjectDependencyModule
 import org.odk.collect.android.utilities.ResponseMessageParser
+import org.odk.collect.entities.javarosa.parse.toUriWithParam
 import org.odk.collect.openrosa.http.CaseInsensitiveHeaders
 import org.odk.collect.openrosa.http.HttpHeadResult
 import org.odk.collect.projects.ProjectDependencyFactory
@@ -253,12 +251,7 @@ class OpenRosaServerInstanceUploader(
             else -> getServerSubmissionURL(unprotectedSettings)
         }
 
-        return try {
-            "$urlString?deviceID=" + URLEncoder.encode(deviceId ?: "", "UTF-8")
-        } catch (e: UnsupportedEncodingException) {
-            Timber.i(e, "Error encoding URL for device id : %s", deviceId)
-            urlString
-        }
+        return urlString.toUriWithParam("deviceID", deviceId).toString()
     }
 
     private fun getServerSubmissionURL(unprotectedSettings: Settings): String {
