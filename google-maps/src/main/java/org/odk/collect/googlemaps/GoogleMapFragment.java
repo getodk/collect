@@ -549,6 +549,14 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
         if (map == null || context == null) {  // during Robolectric tests, map will be null
             return null;
         }
+
+        int index;
+        if (markerDescription.getIconDescription().getBackground()) {
+            index = 1;
+        } else {
+            index = 2;
+        }
+
         // A Marker's position is a LatLng with just latitude and longitude
         // fields.  We need to store the point's altitude and standard
         // deviation values somewhere, so they go in the marker's snippet.
@@ -558,6 +566,7 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
             .draggable(markerDescription.isDraggable())
             .icon(getBitmapDescriptor(context, markerDescription.getIconDescription()))
             .anchor(getIconAnchorValueX(markerDescription.getIconAnchor()), getIconAnchorValueY(markerDescription.getIconAnchor()))  // center the icon on the position
+            .zIndex(index)
         );
     }
 

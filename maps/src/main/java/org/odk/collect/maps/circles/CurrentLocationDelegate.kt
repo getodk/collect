@@ -59,8 +59,9 @@ class CurrentLocationDelegate {
 
     companion object {
         val ICON_DESCRIPTION = MarkerIconDescription.DrawableResource(
-            org.odk.collect.maps.R.drawable.ic_current_location,
-            MapConsts.DEFAULT_STROKE_COLOR
+            drawable = org.odk.collect.maps.R.drawable.ic_current_location,
+            color = MapConsts.DEFAULT_STROKE_COLOR,
+            background = true
         )
     }
 }
