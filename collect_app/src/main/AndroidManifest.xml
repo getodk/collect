@@ -128,7 +128,9 @@ the specific language governing permissions and limitations under the License.
             android:theme="@style/Theme.Collect"
             tools:replace="android:theme"
             android:screenOrientation="landscape"
-            android:resizeableActivity="false"/>
+            android:resizeableActivity="false">
+            <property android:name="android.window.PROPERTY_COMPAT_ALLOW_RESTRICTED_RESIZABILITY" android:value="true" />
+        </activity>
         <activity android:name=".activities.InstanceChooserList" />
         <activity
             android:name=".formlists.blankformlist.BlankFormListActivity"
