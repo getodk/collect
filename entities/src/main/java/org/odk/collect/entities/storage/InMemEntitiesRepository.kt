@@ -137,9 +137,9 @@ class InMemEntitiesRepository(private val clock: () -> Long = { 0 }) : EntitiesR
             .filterNot { properties.any { property -> property.equals(it, ignoreCase = true) } }
         properties.addAll(newProperties)
 
-        val removedProperties = properties
-            .filter { property -> expectedProperties.none { it.equals(property, ignoreCase = true) } }
-        properties.removeAll(removedProperties.toSet())
+//        val removedProperties = properties
+//            .filter { property -> expectedProperties.none { it.equals(property, ignoreCase = true) } }
+//        properties.removeAll(removedProperties.toSet())
     }
 
     private fun mergeProperties(

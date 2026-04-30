@@ -321,16 +321,16 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String, private val c
             .map { EntitiesTable.getPropertyColumn(it.first) }
             .distinctBy { it.lowercase() }
 
-        val removedColumns = columnNames
-            .filter { it.startsWith(EntitiesTable.COLUMN_PROPERTY_PREFIX, ignoreCase = true) }
-            .filterNot { columnName ->
-                expectedColumns.any {
-                    it.equals(
-                        columnName,
-                        ignoreCase = true
-                    )
-                }
-            }
+//        val removedColumns = columnNames
+//            .filter { it.startsWith(EntitiesTable.COLUMN_PROPERTY_PREFIX, ignoreCase = true) }
+//            .filterNot { columnName ->
+//                expectedColumns.any {
+//                    it.equals(
+//                        columnName,
+//                        ignoreCase = true
+//                    )
+//                }
+//            }
 
         val newColumns = expectedColumns
             .filterNot { columnName ->
@@ -343,21 +343,21 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String, private val c
             }
 
         databaseConnection.resetTransaction {
-            if (removedColumns.isNotEmpty()) {
-                val remainingColumns = columnNames - removedColumns.toSet()
-                val tempTable = "${list}_temp"
-
-                createList(this, tempTable)
-                addPropertyColumns(
-                    tempTable,
-                    remainingColumns.filter {
-                        it.startsWith(EntitiesTable.COLUMN_PROPERTY_PREFIX, ignoreCase = true)
-                    }
-                )
-                copyTableContent(list, tempTable, remainingColumns)
-                dropTable(list)
-                renameTable(tempTable, list)
-            }
+//            if (removedColumns.isNotEmpty()) {
+//                val remainingColumns = columnNames - removedColumns.toSet()
+//                val tempTable = "${list}_temp"
+//
+//                createList(this, tempTable)
+//                addPropertyColumns(
+//                    tempTable,
+//                    remainingColumns.filter {
+//                        it.startsWith(EntitiesTable.COLUMN_PROPERTY_PREFIX, ignoreCase = true)
+//                    }
+//                )
+//                copyTableContent(list, tempTable, remainingColumns)
+//                dropTable(list)
+//                renameTable(tempTable, list)
+//            }
 
             if (newColumns.isNotEmpty()) {
                 addPropertyColumns(list, newColumns)

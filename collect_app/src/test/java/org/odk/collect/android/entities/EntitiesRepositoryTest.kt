@@ -116,13 +116,13 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `#save adds new properties and removes missing ones`() {
+    fun `#save adds new properties`() {
         val repository = buildSubject()
 
         val wine = Entity.New(
             "1",
             "Léoville Barton 2008",
-            properties = listOf("window" to "2019-2038", "region" to "Bordeaux"),
+            properties = listOf("window" to "2019-2038"),
             version = 1
         )
         repository.save("wines", wine)
@@ -130,7 +130,7 @@ abstract class EntitiesRepositoryTest {
         val updatedWine = Entity.New(
             wine.id,
             "Léoville Barton 2008",
-            properties = listOf("window" to "2019-2038", "score" to "92"),
+            properties = listOf("score" to "92"),
             version = 2
         )
         repository.save("wines", updatedWine)
@@ -141,13 +141,13 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `#save adds new properties and removes missing ones for lists with dashes`() {
+    fun `#save adds new properties for lists with dashes`() {
         val repository = buildSubject()
 
         val wine = Entity.New(
             "1",
             "Léoville Barton 2008",
-            properties = listOf("window" to "2019-2038", "region" to "Bordeaux"),
+            properties = listOf("window" to "2019-2038"),
             version = 1
         )
         repository.save("favourite-wines", wine)
@@ -155,7 +155,7 @@ abstract class EntitiesRepositoryTest {
         val updatedWine = Entity.New(
             wine.id,
             "Léoville Barton 2008",
-            properties = listOf("window" to "2019-2038", "score" to "92"),
+            properties = listOf("score" to "92"),
             version = 2
         )
         repository.save("favourite-wines", updatedWine)
@@ -166,13 +166,13 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `#save adds new properties and removes missing ones to existing entities`() {
+    fun `#save adds new properties to existing entities`() {
         val repository = buildSubject()
 
         val wine = Entity.New(
             "1",
             "Léoville Barton 2008",
-            properties = listOf("window" to "2019-2038", "region" to "Bordeaux"),
+            properties = listOf("window" to "2019-2038"),
             version = 1
         )
         repository.save("wines", wine)
@@ -180,7 +180,7 @@ abstract class EntitiesRepositoryTest {
         val otherWine = Entity.New(
             "2",
             "Léoville Barton 2009",
-            properties = listOf("window" to "2020-2039", "score" to "92"),
+            properties = listOf("score" to "92"),
             version = 2
         )
         repository.save("wines", otherWine)
@@ -188,7 +188,7 @@ abstract class EntitiesRepositoryTest {
         val wines = repository.query("wines")
         assertThat(wines.size, equalTo(2))
         assertThat(wines[0].properties, contains("window" to "2019-2038", "score" to ""))
-        assertThat(wines[1].properties, contains("window" to "2020-2039", "score" to "92"))
+        assertThat(wines[1].properties, contains("window" to "", "score" to "92"))
     }
 
     @Test
