@@ -631,7 +631,7 @@ class GeoPolyFragmentTest {
     }
 
     @Test
-    fun whenInvalidMessageIsNotNull_pointsCannotBeAddedByClicking() {
+    fun whenInvalidMessageIsNotNull_pointsCanBeAddedByClicking() {
         val invalidMessage = MutableLiveData<DisplayString?>(null)
         fragmentLauncherRule.launchInContainer {
             GeoPolyFragment(
@@ -644,7 +644,7 @@ class GeoPolyFragmentTest {
 
         invalidMessage.value = DisplayString.Raw("Blah")
         mapFragment.click(MapPoint(0.0, 0.0))
-        assertThat(mapFragment.getPolyLines()[0].points.size, equalTo(0))
+        assertThat(mapFragment.getPolyLines()[0].points.size, equalTo(1))
     }
 
     @Test
@@ -665,7 +665,7 @@ class GeoPolyFragmentTest {
     }
 
     @Test
-    fun whenInvalidMessageIsNotNull_automaticRecordingStops() {
+    fun whenInvalidMessageIsNotNull_automaticRecordingDoesNotStop() {
         val invalidMessage = MutableLiveData<DisplayString?>(null)
         fragmentLauncherRule.launchInContainer {
             GeoPolyFragment(
@@ -679,7 +679,7 @@ class GeoPolyFragmentTest {
         invalidMessage.value = DisplayString.Raw("Blah")
         locationTracker.currentLocation = Location(1.0, 1.0, 1.0, 1f)
         scheduler.runForeground(0)
-        assertThat(mapFragment.getPolyLines()[0].points.size, equalTo(0))
+        assertThat(mapFragment.getPolyLines()[0].points.size, equalTo(1))
     }
 
     @Test
