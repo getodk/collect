@@ -486,8 +486,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public OpenRosaClientProvider providesFormSourceProvider(SettingsProvider settingsProvider, OpenRosaHttpInterface openRosaHttpInterface, PropertyManager propertyManager) {
-        return new OpenRosaClientProvider(settingsProvider::getUnprotectedSettings, openRosaHttpInterface, propertyManager);
+    public OpenRosaClientProvider providesFormSourceProvider(SettingsProvider settingsProvider, OpenRosaHttpInterface openRosaHttpInterface, InstallIDProvider installIDProvider) {
+        return new OpenRosaClientProvider(settingsProvider::getUnprotectedSettings, openRosaHttpInterface, installIDProvider);
     }
 
     @Provides

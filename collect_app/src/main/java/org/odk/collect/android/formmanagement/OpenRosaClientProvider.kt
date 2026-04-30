@@ -1,8 +1,7 @@
 package org.odk.collect.android.formmanagement
 
 import org.odk.collect.android.utilities.WebCredentialsUtils
-import org.odk.collect.metadata.PropertyManager
-import org.odk.collect.metadata.PropertyManager.Companion.PROPMGR_DEVICE_ID
+import org.odk.collect.metadata.InstallIDProvider
 import org.odk.collect.openrosa.forms.OpenRosaClient
 import org.odk.collect.openrosa.http.OpenRosaHttpInterface
 import org.odk.collect.openrosa.parse.Kxml2OpenRosaResponseParser
@@ -13,20 +12,19 @@ import org.odk.collect.shared.settings.Settings
 class OpenRosaClientProvider(
     private val settingsFactory: ProjectDependencyFactory<Settings>,
     private val openRosaHttpInterface: OpenRosaHttpInterface,
-    private val propertyManager: PropertyManager
+    private val installIDProvider: InstallIDProvider
 ) {
 
     fun create(projectId: String): OpenRosaClient {
         val settings = settingsFactory.create(projectId)
         val serverURL = settings.getString(ProjectKeys.KEY_SERVER_URL)!!
-        val deviceId = propertyManager.getSingularProperty(PROPMGR_DEVICE_ID)
 
         return OpenRosaClient(
             serverURL,
             openRosaHttpInterface,
             WebCredentialsUtils(settings),
             Kxml2OpenRosaResponseParser,
-            deviceId
+            installIDProvider.installID
         )
     }
 }
