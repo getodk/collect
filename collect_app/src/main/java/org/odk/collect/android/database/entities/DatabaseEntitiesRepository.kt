@@ -178,6 +178,13 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String, private val c
         }
     }
 
+    override fun cleanUpProperties(
+        list: String,
+        properties: List<String>
+    ) {
+        TODO("Not yet implemented")
+    }
+
     override fun getCount(list: String): Int {
         if (!listExists(list)) {
             return 0

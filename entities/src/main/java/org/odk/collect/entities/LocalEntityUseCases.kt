@@ -128,6 +128,10 @@ object LocalEntityUseCases {
                 entitiesRepository.delete(list, it.id)
             }
 
+        if (newAndUpdated.isNotEmpty()) {
+            entitiesRepository.cleanUpProperties(list, newAndUpdated[0].properties.map { it.first })
+        }
+
         entitiesRepository.save(list, *newAndUpdated.toTypedArray())
         entitiesRepository.updateList(
             list,

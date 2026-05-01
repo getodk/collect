@@ -712,6 +712,14 @@ private class MeasurableEntitiesRepository(private val wrapped: EntitiesReposito
         accesses += 1
         return wrapped.getList(list)
     }
+
+    override fun cleanUpProperties(
+        list: String,
+        properties: List<String>
+    ) {
+        accesses += 1
+        wrapped.cleanUpProperties(list, properties)
+    }
 }
 
 private class FakeEntitySource : EntitySource {

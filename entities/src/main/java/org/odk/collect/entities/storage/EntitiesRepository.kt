@@ -12,6 +12,8 @@ interface EntitiesRepository {
     fun getByIndex(list: String, index: Int): Entity.Saved?
     fun updateList(list: String, hash: String, needsApproval: Boolean)
     fun getList(list: String): EntityList?
+
+    fun cleanUpProperties(list: String, properties: List<String>)
 }
 
 fun EntitiesRepository.getListNames(): List<String> {
