@@ -68,3 +68,7 @@ sealed interface Entity {
         )
     }
 }
+
+fun Entity.propertyNames(): List<String> {
+    return properties.map { it.first }
+}
