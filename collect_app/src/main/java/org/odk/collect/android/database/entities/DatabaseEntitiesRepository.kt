@@ -181,6 +181,10 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String, private val c
         list: String,
         properties: List<String>
     ) {
+        if (!listExists(list)) {
+            return
+        }
+
         databaseConnection.resetTransaction {
             val columnNames = this.getColumnNames(quote(list))
 

@@ -843,4 +843,12 @@ abstract class EntitiesRepositoryTest {
         repository.cleanUpProperties("wines", listOf("rating"))
         assertThat(repository.query("wines")[0].propertyNames(), equalTo(listOf("rating")))
     }
+
+    @Test
+    fun `#cleanUpProperties does nothing if list doesn't exist`() {
+        val repository = buildSubject()
+
+        repository.cleanUpProperties("wines", listOf("rating"))
+        assertThat(repository.getLists(), equalTo(emptyList()))
+    }
 }
