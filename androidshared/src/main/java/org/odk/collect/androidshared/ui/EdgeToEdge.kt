@@ -9,6 +9,7 @@ import androidx.annotation.LayoutRes
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import com.google.android.material.snackbar.Snackbar
@@ -49,12 +50,21 @@ object EdgeToEdge {
         }
     }
 
-    @JvmStatic
-    fun Snackbar.applyBottomInsets() {
+    fun Snackbar.applyBottomInsets(anchorView: View?) {
         ViewCompat.setOnApplyWindowInsetsListener(view) { _, windowInsets ->
-            view.translationY = -windowInsets.keyboardSafeOffset().toFloat()
+            view.post {
+                val anchorOffset = if (anchorView != null && anchorView.isVisible) {
+                    val lp = anchorView.layoutParams as? ViewGroup.MarginLayoutParams
+                    anchorView.height + (lp?.bottomMargin ?: 0)
+                } else {
+                    0
+                }
+
+                view.translationY  = -maxOf(windowInsets.keyboardSafeOffset(), anchorOffset).toFloat()
+            }
             windowInsets
         }
+
         ViewCompat.requestApplyInsets(view)
     }
 
