@@ -398,6 +398,7 @@ public class GeoPointMapActivity extends LocalizedActivity {
         map.clearFeatures(Arrays.asList(featureId));
         featureId = -1;
         clearButton.setEnabled(false);
+        placeMarkerButton.setEnabled(true);
 
         isPointLocked = false;
         isDragged = false;

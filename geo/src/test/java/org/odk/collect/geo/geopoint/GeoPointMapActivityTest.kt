@@ -43,6 +43,7 @@ import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.strings.R
 import org.odk.collect.strings.R.string
+import org.odk.collect.testshared.EspressoAssertions
 import org.odk.collect.testshared.EspressoInteractions
 import org.odk.collect.webpage.WebPageService
 import org.robolectric.Shadows
@@ -269,6 +270,20 @@ class GeoPointMapActivityTest {
         EspressoInteractions.clickOn(withContentDescription(string.clear))
         assertThat(mapFragment.getMarkers().size, equalTo(1))
         assertThat(mapFragment, showsCurrentLocation(location.toMapPoint()))
+    }
+
+    @Test
+    fun `clearing an existing location enables the place marker button`() {
+        val intent = Intent(
+            ApplicationProvider.getApplicationContext(),
+            GeoPointMapActivity::class.java
+        )
+        intent.putExtra(GeoPointMapActivity.EXTRA_LOCATION, MapPoint(1.0, 2.0))
+        launcherRule.launch<Activity>(intent)
+        mapFragment.ready()
+
+        EspressoInteractions.clickOn(withContentDescription(string.clear))
+        EspressoAssertions.assertEnabled(withContentDescription(string.record_geopoint))
     }
 
     private fun getLocationStatus(activity: Activity): String {
