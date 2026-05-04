@@ -73,11 +73,9 @@ class GeoPolyViewModel(
     }
 
     fun add(point: MapPoint) {
-        if (invalidMessage.value == null) {
-            val points = _points.value
-            if (points.isEmpty() || point != points.last()) {
-                _points.value = points + point
-            }
+        val points = _points.value
+        if (points.isEmpty() || point != points.last()) {
+            _points.value = points + point
         }
     }
 
