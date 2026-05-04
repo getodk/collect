@@ -44,10 +44,6 @@ class NoOpMapFragment : Fragment(), MapFragment {
     ) {
     }
 
-    override fun addMarker(markerDescription: MarkerDescription): Int {
-        TODO("Not yet implemented")
-    }
-
     override fun updateMarker(
         featureId: Int,
         markerDescription: MarkerDescription

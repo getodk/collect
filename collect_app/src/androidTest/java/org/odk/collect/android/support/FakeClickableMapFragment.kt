@@ -46,11 +46,6 @@ class FakeClickableMapFragment : Fragment(), MapFragment {
         animate: Boolean
     ) {}
 
-    override fun addMarker(markerDescription: MarkerDescription): Int {
-        val id = idCounter++
-        return id
-    }
-
     override fun updateMarker(
         featureId: Int,
         markerDescription: MarkerDescription
@@ -60,7 +55,7 @@ class FakeClickableMapFragment : Fragment(), MapFragment {
 
     override fun addMarkers(markers: List<MarkerDescription>): List<Int> {
         return markers.map {
-            addMarker(it)
+            idCounter++
         }
     }
 

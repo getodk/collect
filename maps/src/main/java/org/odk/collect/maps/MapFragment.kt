@@ -79,10 +79,8 @@ interface MapFragment {
      * the user will be able to drag the marker to change its location.
      * Returns a positive integer, the featureId for the newly added shape.
      */
-    fun addMarker(markerDescription: MarkerDescription): Int
-    fun updateMarker(featureId: Int, markerDescription: MarkerDescription)
-
     fun addMarkers(markers: List<MarkerDescription>): List<Int>
+    fun updateMarker(featureId: Int, markerDescription: MarkerDescription)
 
     /** Sets the icon for a marker.  */
     @Deprecated(message = "Use #updateMarker instead")
@@ -161,4 +159,8 @@ interface MapFragment {
     }
 
     enum class IconAnchor { CENTER, BOTTOM }
+}
+
+fun MapFragment.addMarker(marker: MarkerDescription): Int {
+    return addMarkers(listOf(marker))[0]
 }

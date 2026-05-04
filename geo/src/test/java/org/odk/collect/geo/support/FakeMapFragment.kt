@@ -102,14 +102,6 @@ class FakeMapFragment(private val ready: Boolean = false) : Fragment(), MapFragm
         }
     }
 
-    override fun addMarker(markerDescription: MarkerDescription): Int {
-        val featureId = generateFeatureId()
-
-        markers[featureId] = markerDescription
-        featureIds.add(featureId)
-        return featureId
-    }
-
     override fun updateMarker(
         featureId: Int,
         markerDescription: MarkerDescription
@@ -121,6 +113,14 @@ class FakeMapFragment(private val ready: Boolean = false) : Fragment(), MapFragm
         return markers.map {
             addMarker(it)
         }
+    }
+
+    private fun addMarker(markerDescription: MarkerDescription): Int {
+        val featureId = generateFeatureId()
+
+        markers[featureId] = markerDescription
+        featureIds.add(featureId)
+        return featureId
     }
 
     override fun setMarkerIcon(featureId: Int, markerIconDescription: MarkerIconDescription) {

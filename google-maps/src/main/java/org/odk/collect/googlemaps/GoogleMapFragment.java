@@ -254,21 +254,16 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
         return map.getCameraPosition().zoom;
     }
 
-    @Override public int addMarker(MarkerDescription markerDescription) {
-        int featureId = nextFeatureId++;
-        return addMarker(featureId, markerDescription);
-    }
-
-    private int addMarker(int featureId, MarkerDescription markerDescription) {
+    private void addMarker(int featureId, MarkerDescription markerDescription) {
         features.put(featureId, new MarkerFeature(getActivity(), markerDescription, map));
-        return featureId;
     }
 
     @Override
     public List<Integer> addMarkers(List<MarkerDescription> markers) {
         List<Integer> featureIds = new ArrayList<>();
         for (MarkerDescription markerDescription : markers) {
-            int featureId = addMarker(markerDescription);
+            int featureId = nextFeatureId++;
+            addMarker(featureId, markerDescription);
             featureIds.add(featureId);
         }
 

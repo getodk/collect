@@ -267,10 +267,6 @@ class MapboxMapFragment :
         return _mapViewModel
     }
 
-    override fun addMarker(markerDescription: MarkerDescription): Int {
-        return addMarkers(listOf(markerDescription)).first()
-    }
-
     override fun updateMarker(
         featureId: Int,
         markerDescription: MarkerDescription

@@ -53,6 +53,7 @@ import org.odk.collect.location.tracker.LocationTracker
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.maps.MapPoint
+import org.odk.collect.maps.addMarker
 import org.odk.collect.maps.layers.OfflineMapLayersPickerBottomSheetDialogFragment
 import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.maps.markers.MarkerDescription

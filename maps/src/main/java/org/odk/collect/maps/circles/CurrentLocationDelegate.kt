@@ -3,6 +3,7 @@ package org.odk.collect.maps.circles
 import androidx.core.graphics.toColorInt
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapPoint
+import org.odk.collect.maps.addMarker
 import org.odk.collect.maps.markers.MarkerDescription
 import org.odk.collect.maps.markers.MarkerIconDescription
 

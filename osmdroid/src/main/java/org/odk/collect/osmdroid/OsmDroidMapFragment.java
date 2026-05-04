@@ -15,6 +15,7 @@
 package org.odk.collect.osmdroid;
 
 import static androidx.core.graphics.drawable.BitmapDrawableKt.toDrawable;
+import static org.odk.collect.maps.MapFragmentKt.addMarker;
 import static org.odk.collect.maps.markers.MarkerIconCreator.toBitmap;
 import static org.odk.collect.maps.traces.TraceDescriptionKt.getMarkersForPoints;
 
@@ -266,24 +267,15 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment {
     }
 
     @Override
-    public int addMarker(MarkerDescription markerDescription) {
-        int featureId = nextFeatureId++;
-        return addMarker(featureId, markerDescription);
-    }
-
-    private int addMarker(int featureId, MarkerDescription markerDescription) {
-        features.put(featureId, new MarkerFeature(map, markerDescription));
-        return featureId;
-    }
-
-    @Override
     public List<Integer> addMarkers(List<MarkerDescription> markers) {
         List<Integer> featureIds = new ArrayList<>();
         for (MarkerDescription markerDescription : markers) {
-            int featureId = addMarker(markerDescription);
+            int featureId = nextFeatureId++;
+            features.put(featureId, new MarkerFeature(map, markerDescription));
             featureIds.add(featureId);
         }
 
+        map.invalidate();
         return featureIds;
     }
 
@@ -615,7 +607,7 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment {
     @Override
     public void updateMarker(int featureId, @NotNull MarkerDescription markerDescription) {
         features.get(featureId).dispose();
-        addMarker(featureId, markerDescription);
+        addMarker(this, markerDescription);
     }
 
     @Override
