@@ -1,10 +1,13 @@
 package org.odk.collect.entities.javarosa.parse
 
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
+import org.junit.runner.RunWith
 import java.util.UUID
 
+@RunWith(AndroidJUnit4::class)
 class StringExtTest {
 
     @Test
@@ -41,5 +44,37 @@ class StringExtTest {
     fun `#isV4UUID is false for invalid UUID string`() {
         val invalid = "not-a-uuid"
         assertThat(invalid.isV4UUID(), equalTo(false))
+    }
+
+    @Test
+    fun `#toUriWithParam adds single query param to uri`() {
+        val url = "https://example.com"
+        val result = url.toUriWithParam("id", "123")
+
+        assertThat(result.toString(), equalTo("https://example.com?id=123"))
+    }
+
+    @Test
+    fun `#toUriWithParam preserves existing query parameters`() {
+        val url = "https://example.com?foo=bar"
+        val result = url.toUriWithParam("id", "123")
+
+        assertThat(result.toString(), equalTo("https://example.com?foo=bar&id=123"))
+    }
+
+    @Test
+    fun `#toUriWithParam sets null value as query param`() {
+        val url = "https://example.com"
+        val result = url.toUriWithParam("id", null)
+
+        assertThat(result.toString(), equalTo("https://example.com?id=null"))
+    }
+
+    @Test
+    fun `#toUriWithParam does not change uri path`() {
+        val url = "https://example.com/path/subpath"
+        val result = url.toUriWithParam("id", "123")
+
+        assertThat(result.toString(), equalTo("https://example.com/path/subpath?id=123"))
     }
 }

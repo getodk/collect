@@ -1,5 +1,7 @@
 package org.odk.collect.entities.javarosa.parse
 
+import android.net.Uri
+import androidx.core.net.toUri
 import java.util.UUID
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
@@ -20,3 +22,9 @@ fun String?.isV4UUID(): Boolean {
         false
     }
 }
+
+fun String.toUriWithParam(key: String, value: String?): Uri =
+    this.toUri()
+        .buildUpon()
+        .appendQueryParameter(key, value)
+        .build()

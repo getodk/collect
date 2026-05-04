@@ -40,9 +40,10 @@ android {
 }
 
 dependencies {
-    implementation(project(":entities"))
     coreLibraryDesugaring(libs.desugar)
 
+    implementation(project(":androidshared"))
+    implementation(project(":entities"))
     implementation(project(":shared"))
     implementation(project(":forms"))
 
