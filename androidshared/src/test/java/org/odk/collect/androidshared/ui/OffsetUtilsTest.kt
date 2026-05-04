@@ -10,7 +10,7 @@ class OffsetUtilsTest {
     fun `calculateOffset returns zero offset when horizontal and value is 0`() {
         val result = OffsetUtils.calculateOffset(
             trackSize = 1000,
-            itemWidth = 100f,
+            itemSize = 100f,
             value = 0f,
             isVertical = false
         )
@@ -21,7 +21,7 @@ class OffsetUtilsTest {
     fun `calculateOffset returns max offset when horizontal and value is 1`() {
         val result = OffsetUtils.calculateOffset(
             trackSize = 1000,
-            itemWidth = 100f,
+            itemSize = 100f,
             value = 1f,
             isVertical = false
         )
@@ -32,7 +32,7 @@ class OffsetUtilsTest {
     fun `calculateOffset returns middle offset when horizontal and value is 0,5`() {
         val result = OffsetUtils.calculateOffset(
             trackSize = 1000,
-            itemWidth = 100f,
+            itemSize = 100f,
             value = 0.5f,
             isVertical = false
         )
@@ -43,7 +43,7 @@ class OffsetUtilsTest {
     fun `calculateOffset returns max offset when vertical and value is 0`() {
         val result = OffsetUtils.calculateOffset(
             trackSize = 1000,
-            itemWidth = 100f,
+            itemSize = 100f,
             value = 0f,
             isVertical = true
         )
@@ -54,7 +54,7 @@ class OffsetUtilsTest {
     fun `calculateOffset returns zero offset when vertical and value is 1`() {
         val result = OffsetUtils.calculateOffset(
             trackSize = 1000,
-            itemWidth = 100f,
+            itemSize = 100f,
             value = 1f,
             isVertical = true
         )
@@ -65,7 +65,7 @@ class OffsetUtilsTest {
     fun `calculateOffset returns middle offset when vertical and value is 0,5`() {
         val result = OffsetUtils.calculateOffset(
             trackSize = 1000,
-            itemWidth = 100f,
+            itemSize = 100f,
             value = 0.5f,
             isVertical = true
         )
@@ -76,7 +76,7 @@ class OffsetUtilsTest {
     fun `calculateOffset returns zero offset when itemWidth equals trackSize`() {
         val result = OffsetUtils.calculateOffset(
             trackSize = 100,
-            itemWidth = 100f,
+            itemSize = 100f,
             value = 0.5f,
             isVertical = false
         )

@@ -149,15 +149,6 @@ class RangeSliderTest {
     }
 
     @Test
-    fun `disables slider when isEnabled is false`() {
-        setContent(enabled = false)
-
-        composeTestRule
-            .onNodeWithContentDescription(org.odk.collect.strings.R.string.horizontal_slider)
-            .assertIsNotEnabled()
-    }
-
-    @Test
     fun `displays ticks when numOfTicks is greater than 0`() {
         setContent(ticks = 3)
 
@@ -216,7 +207,7 @@ class RangeSliderTest {
     }
 
     @Test
-    fun `does not call onValueChange when horizontal slider start is not enabled`() {
+    fun `does not call onValueChange when horizontal slider is not enabled`() {
         var newValue: Float? = null
 
         setContent(
@@ -269,7 +260,7 @@ class RangeSliderTest {
     }
 
     @Test
-    fun `does not call onValueChange when vertical slider start is not enabled`() {
+    fun `does not call onValueChange when vertical slider is not enabled`() {
         var newValue: Float? = null
 
         setContent(

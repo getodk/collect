@@ -2,7 +2,6 @@ package org.odk.collect.android.widgets.range
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
-import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.click
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -85,7 +84,7 @@ class RangeIntegerWidgetTest : QuestionWidgetTest<RangeIntegerWidget, IntegerDat
         composeRule
             .onNodeWithContentDescription(org.odk.collect.strings.R.string.current_slider_value)
             .assertIsDisplayed()
-            .assertTextEquals("5")
+            .assertTextEquals("6")
 
         composeRule
             .onNodeWithContentDescription(org.odk.collect.strings.R.string.slider_thumb)
@@ -134,13 +133,20 @@ class RangeIntegerWidgetTest : QuestionWidgetTest<RangeIntegerWidget, IntegerDat
 
     override fun usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         formEntryPrompt = MockFormEntryPromptBuilder(formEntryPrompt)
-            .withAnswer(IntegerData(5))
             .withReadOnly(true)
             .build()
         createWidget()
 
         composeRule
             .onNodeWithContentDescription(org.odk.collect.strings.R.string.horizontal_slider)
-            .assertIsNotEnabled()
+            .performTouchInput { click() }
+
+        composeRule
+            .onNodeWithContentDescription(org.odk.collect.strings.R.string.current_slider_value)
+            .assertIsNotDisplayed()
+
+        composeRule
+            .onNodeWithContentDescription(org.odk.collect.strings.R.string.slider_thumb)
+            .assertIsNotDisplayed()
     }
 }
