@@ -373,6 +373,8 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment {
         for (Integer id : ids) {
             features.remove(id).dispose();
         }
+
+        map.invalidate();
     }
 
     @Override
