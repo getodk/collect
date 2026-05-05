@@ -179,7 +179,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String, private val c
 
     override fun cleanUpProperties(
         list: String,
-        properties: List<String>
+        properties: Set<String>
     ) {
         if (!listExists(list)) {
             return

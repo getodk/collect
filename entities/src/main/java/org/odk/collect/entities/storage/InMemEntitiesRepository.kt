@@ -86,7 +86,7 @@ class InMemEntitiesRepository(private val clock: () -> Long = { 0 }) : EntitiesR
         return lists.firstOrNull { it.name == list }
     }
 
-    override fun cleanUpProperties(list: String, properties: List<String>) {
+    override fun cleanUpProperties(list: String, properties: Set<String>) {
         val listProperties = listProperties[list]
         if (listProperties != null) {
             val removedProperties = listProperties

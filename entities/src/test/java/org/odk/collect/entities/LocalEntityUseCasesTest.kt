@@ -739,7 +739,7 @@ private class MeasurableEntitiesRepository(private val wrapped: EntitiesReposito
 
     override fun cleanUpProperties(
         list: String,
-        properties: List<String>
+        properties: Set<String>
     ) {
         accesses += 1
         wrapped.cleanUpProperties(list, properties)
