@@ -590,6 +590,30 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
+    fun `#updateLocalEntitiesFromServer removes properties that no longer appear in the entity source when no entities are updated`() {
+        val entity = Entity.New("noah", "Noah", 1, listOf(Pair("length", "6:38")))
+        val csv1 = createEntityList(entity)
+        LocalEntityUseCases.updateLocalEntitiesFromServer(
+            "songs",
+            csv1,
+            entitiesRepository,
+            FormFixtures.mediaFile(hash = "hash1")
+        )
+
+        val csv2 = createEntityList(entity.copy(properties = emptyList()))
+        LocalEntityUseCases.updateLocalEntitiesFromServer(
+            "songs",
+            csv2,
+            entitiesRepository,
+            FormFixtures.mediaFile(hash = "hash2")
+        )
+
+        val songs = entitiesRepository.query("songs")
+        assertThat(songs.size, equalTo(1))
+        assertThat(songs[0].properties, equalTo(emptyList()))
+    }
+
+    @Test
     fun `#updateOfflineLocalEntitiesFromServer removes offline entities that are deleted according to the entity source`() {
         entitiesRepository.save(
             "songs",
