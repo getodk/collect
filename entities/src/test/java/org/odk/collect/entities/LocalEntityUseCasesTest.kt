@@ -568,32 +568,49 @@ class LocalEntityUseCasesTest {
         assertThat(hash, equalTo("hash"))
     }
 
-    private fun createEntityList(vararg entities: Entity): File {
-        if (entities.isNotEmpty()) {
-            val header = listOf(
-                EntitySchema.ID,
-                EntitySchema.LABEL,
-                EntitySchema.VERSION
-            ) + entities[0].properties.map { it.first }
+    @Test
+    fun `#updateLocalEntitiesFromServer removes properties that no longer appear in the entity source`() {
+        entitiesRepository.save(
+            "songs",
+            Entity.New("noah", "Noah", 1, listOf(Pair("length", "6:38")))
+        )
+        val csv =
+            createEntityList(Entity.New("noah", "Noah", 2, emptyList()))
 
-            val rows = entities.map { entity ->
-                listOf(
-                    entity.id,
-                    entity.label,
-                    entity.version.toString()
-                ) + entity.properties.map { it.second }
-            }.toTypedArray()
+        LocalEntityUseCases.updateLocalEntitiesFromServer(
+            "songs",
+            csv,
+            entitiesRepository,
+            FormFixtures.mediaFile(hash = "hash")
+        )
 
-            return createCsv(header, *rows)
-        } else {
-            val header = listOf(
-                EntitySchema.ID,
-                EntitySchema.LABEL,
-                EntitySchema.VERSION
-            )
+        val songs = entitiesRepository.query("songs")
+        assertThat(songs.size, equalTo(1))
+        assertThat(songs[0].properties, equalTo(emptyList()))
+    }
 
-            return createCsv(header)
-        }
+    @Test
+    fun `#updateLocalEntitiesFromServer removes properties that no longer appear in the entity source when no entities are updated`() {
+        val entity = Entity.New("noah", "Noah", 1, listOf(Pair("length", "6:38")))
+        val csv1 = createEntityList(entity)
+        LocalEntityUseCases.updateLocalEntitiesFromServer(
+            "songs",
+            csv1,
+            entitiesRepository,
+            FormFixtures.mediaFile(hash = "hash1")
+        )
+
+        val csv2 = createEntityList(entity.copy(properties = emptyList()))
+        LocalEntityUseCases.updateLocalEntitiesFromServer(
+            "songs",
+            csv2,
+            entitiesRepository,
+            FormFixtures.mediaFile(hash = "hash2")
+        )
+
+        val songs = entitiesRepository.query("songs")
+        assertThat(songs.size, equalTo(1))
+        assertThat(songs[0].properties, equalTo(emptyList()))
     }
 
     @Test
@@ -621,6 +638,34 @@ class LocalEntityUseCasesTest {
         assertThat(songs.size, equalTo(2))
         assertThat(songs[0].label, equalTo("Noah"))
         assertThat(songs[1].label, equalTo("Midnight City"))
+    }
+
+    private fun createEntityList(vararg entities: Entity): File {
+        if (entities.isNotEmpty()) {
+            val header = listOf(
+                EntitySchema.ID,
+                EntitySchema.LABEL,
+                EntitySchema.VERSION
+            ) + entities[0].properties.map { it.first }
+
+            val rows = entities.map { entity ->
+                listOf(
+                    entity.id,
+                    entity.label,
+                    entity.version.toString()
+                ) + entity.properties.map { it.second }
+            }.toTypedArray()
+
+            return createCsv(header, *rows)
+        } else {
+            val header = listOf(
+                EntitySchema.ID,
+                EntitySchema.LABEL,
+                EntitySchema.VERSION
+            )
+
+            return createCsv(header)
+        }
     }
 
     private fun createCsv(header: List<String>, vararg rows: List<String?>): File {
@@ -690,6 +735,14 @@ private class MeasurableEntitiesRepository(private val wrapped: EntitiesReposito
     override fun getList(list: String): EntityList? {
         accesses += 1
         return wrapped.getList(list)
+    }
+
+    override fun cleanUpProperties(
+        list: String,
+        properties: Set<String>
+    ) {
+        accesses += 1
+        wrapped.cleanUpProperties(list, properties)
     }
 }
 

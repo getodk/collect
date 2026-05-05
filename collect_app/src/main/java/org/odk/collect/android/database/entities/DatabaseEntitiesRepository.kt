@@ -76,8 +76,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String, private val c
             createList(list)
         }
 
-        updatePropertyColumns(list, entities.first())
-
+        addMissingPropertyColumns(list, entities.first())
         databaseConnection.transaction {
             entities.forEach { entity ->
                 val existing = if (listExists) {
@@ -175,6 +174,49 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String, private val c
             readableDatabase
                 .query(ListsTable.TABLE_NAME, "${ListsTable.COLUMN_NAME} = ?", arrayOf(list))
                 .first { mapCursorRowToEntityList(it) }
+        }
+    }
+
+    override fun cleanUpProperties(
+        list: String,
+        properties: Set<String>
+    ) {
+        if (!listExists(list)) {
+            return
+        }
+
+        databaseConnection.resetTransaction {
+            val columnNames = this.getColumnNames(quote(list))
+
+            val expectedColumns = properties
+                .map { EntitiesTable.getPropertyColumn(it) }
+                .distinctBy { it.lowercase() }
+
+            val removedColumns = columnNames
+                .filter { it.startsWith(EntitiesTable.COLUMN_PROPERTY_PREFIX, ignoreCase = true) }
+                .filterNot { columnName ->
+                    expectedColumns.any {
+                        it.equals(
+                            columnName,
+                            ignoreCase = true
+                        )
+                    }
+                }
+
+            val remainingColumns = columnNames - removedColumns.toSet()
+            val tempTable = "${list}_temp"
+
+            createList(this, tempTable)
+            addPropertyColumns(
+                this,
+                tempTable,
+                remainingColumns.filter {
+                    it.startsWith(EntitiesTable.COLUMN_PROPERTY_PREFIX, ignoreCase = true)
+                },
+            )
+            copyTableContent(list, tempTable, remainingColumns)
+            dropTable(list)
+            renameTable(tempTable, list)
         }
     }
 
@@ -312,64 +354,37 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String, private val c
         )
     }
 
-    private fun updatePropertyColumns(list: String, entity: Entity) {
-        val columnNames = databaseConnection.withConnection {
-            readableDatabase.getColumnNames(quote(list))
-        }
-
-        val expectedColumns = entity.properties
-            .map { EntitiesTable.getPropertyColumn(it.first) }
-            .distinctBy { it.lowercase() }
-
-        val removedColumns = columnNames
-            .filter { it.startsWith(EntitiesTable.COLUMN_PROPERTY_PREFIX, ignoreCase = true) }
-            .filterNot { columnName ->
-                expectedColumns.any {
-                    it.equals(
-                        columnName,
-                        ignoreCase = true
-                    )
-                }
-            }
-
-        val newColumns = expectedColumns
-            .filterNot { columnName ->
-                columnNames.any {
-                    it.equals(
-                        columnName,
-                        ignoreCase = true
-                    )
-                }
-            }
-
+    private fun addMissingPropertyColumns(list: String, entity: Entity) {
         databaseConnection.resetTransaction {
-            if (removedColumns.isNotEmpty()) {
-                val remainingColumns = columnNames - removedColumns.toSet()
-                val tempTable = "${list}_temp"
+            val columnNames = getColumnNames(quote(list))
 
-                createList(this, tempTable)
-                addPropertyColumns(
-                    tempTable,
-                    remainingColumns.filter {
-                        it.startsWith(EntitiesTable.COLUMN_PROPERTY_PREFIX, ignoreCase = true)
+            val expectedColumns = entity.properties
+                .map { EntitiesTable.getPropertyColumn(it.first) }
+                .distinctBy { it.lowercase() }
+
+            val newColumns = expectedColumns
+                .filterNot { columnName ->
+                    columnNames.any {
+                        it.equals(
+                            columnName,
+                            ignoreCase = true
+                        )
                     }
-                )
-                copyTableContent(list, tempTable, remainingColumns)
-                dropTable(list)
-                renameTable(tempTable, list)
-            }
+                }
 
             if (newColumns.isNotEmpty()) {
-                addPropertyColumns(list, newColumns)
+                addPropertyColumns(this, list, newColumns)
             }
         }
     }
 
-    private fun addPropertyColumns(list: String, columns: List<String>) {
-        databaseConnection.withConnection {
-            columns.forEach {
-                writableDatabase.addColumn(list, it, "text NOT NULL", default = "''")
-            }
+    private fun addPropertyColumns(
+        writableDatabase: SQLiteDatabase,
+        list: String,
+        columns: List<String>
+    ) {
+        columns.forEach {
+            writableDatabase.addColumn(list, it, "text NOT NULL", default = "''")
         }
     }
 
