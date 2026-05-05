@@ -15,7 +15,6 @@
 package org.odk.collect.osmdroid;
 
 import static androidx.core.graphics.drawable.BitmapDrawableKt.toDrawable;
-import static org.odk.collect.maps.MapFragmentKt.addMarker;
 import static org.odk.collect.maps.markers.MarkerIconCreator.toBitmap;
 import static org.odk.collect.maps.traces.TraceDescriptionKt.getMarkersForPoints;
 
@@ -607,7 +606,8 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment {
     @Override
     public void updateMarker(int featureId, @NotNull MarkerDescription markerDescription) {
         features.get(featureId).dispose();
-        addMarker(this, markerDescription);
+        features.put(featureId, new MarkerFeature(map, markerDescription));
+        map.invalidate();
     }
 
     @Override
