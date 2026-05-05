@@ -355,26 +355,24 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String, private val c
     }
 
     private fun addMissingPropertyColumns(list: String, entity: Entity) {
-        val columnNames = databaseConnection.withConnection {
-            readableDatabase.getColumnNames(quote(list))
-        }
+        databaseConnection.resetTransaction {
+            val columnNames = getColumnNames(quote(list))
 
-        val expectedColumns = entity.properties
-            .map { EntitiesTable.getPropertyColumn(it.first) }
-            .distinctBy { it.lowercase() }
+            val expectedColumns = entity.properties
+                .map { EntitiesTable.getPropertyColumn(it.first) }
+                .distinctBy { it.lowercase() }
 
-        val newColumns = expectedColumns
-            .filterNot { columnName ->
-                columnNames.any {
-                    it.equals(
-                        columnName,
-                        ignoreCase = true
-                    )
+            val newColumns = expectedColumns
+                .filterNot { columnName ->
+                    columnNames.any {
+                        it.equals(
+                            columnName,
+                            ignoreCase = true
+                        )
+                    }
                 }
-            }
 
-        if (newColumns.isNotEmpty()) {
-            databaseConnection.resetTransaction {
+            if (newColumns.isNotEmpty()) {
                 addPropertyColumns(this, list, newColumns)
             }
         }
