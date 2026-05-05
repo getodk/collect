@@ -9,19 +9,23 @@ object TamperDetector {
 
     @JvmStatic
     fun isTampered(context: Context, expectedSignature: String): Boolean {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && expectedSignature.isNotBlank()) {
-            val packageInfo = context.packageManager.getPackageInfo(
-                context.packageName,
-                PackageManager.PackageInfoFlags.of(PackageManager.GET_SIGNING_CERTIFICATES.toLong())
-            )
-            val signatures = packageInfo.signingInfo?.signingCertificateHistory
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && expectedSignature.isNotBlank()) {
+                val packageInfo = context.packageManager.getPackageInfo(
+                    context.packageName,
+                    PackageManager.PackageInfoFlags.of(PackageManager.GET_SIGNING_CERTIFICATES.toLong())
+                )
+                val signatures = packageInfo.signingInfo?.signingCertificateHistory
 
-            return signatures?.none { sig ->
-                val bytes = sig.toByteArray()
-                val digest = MessageDigest.getInstance("SHA-256").digest(bytes)
-                digest.joinToString(":") { "%02x".format(it).uppercase() } == expectedSignature
-            } ?: false
-        } else {
+                return signatures?.none { sig ->
+                    val bytes = sig.toByteArray()
+                    val digest = MessageDigest.getInstance("SHA-256").digest(bytes)
+                    digest.joinToString(":") { "%02x".format(it).uppercase() } == expectedSignature
+                } ?: false
+            } else {
+                return false
+            }
+        } catch (_: Throwable) {
             return false
         }
     }
