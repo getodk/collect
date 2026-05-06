@@ -1,6 +1,9 @@
 package org.odk.collect.android.feature.formentry.entities
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.equalTo
+import org.javarosa.xform.parse.XFormParser
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
@@ -115,5 +118,39 @@ class EntityFormCreateUpdateTest {
             .startBlankForm("One Question Entity Update")
             .assertTextDoesNotExist("Romulus Roy")
             .assertText("Roman Roy")
+    }
+
+    /**
+     * Entity IDs are often generated on the first load of a form instance (using the
+     * odk-instance-first-load event). If the node containing the ID is non-relevant when a draft is
+     * saved, it should still be included in that draft. If it's not, the ID will be lost when
+     * reloading the draft (as odk-instance-first-load won't fire again).
+     */
+    @Test
+    fun entityIdGeneratedOnFirstLoad_isPreserved_whenSavingDraftWhileEntityNodeIsNonRelevant() {
+        testDependencies.server.addForm("entity-registration-with-relevance.xml")
+
+        rule.withProject(testDependencies.server.url, matchExactly = true)
+            .startBlankForm("Entity registration with relevance")
+            .pressBackAndSaveAsDraft()
+            .clickDrafts()
+            .clickOnForm("Entity registration with relevance")
+            .clickOnQuestion("Do you want to continue?")
+            .clickOnText("Yes")
+            .swipeToNextQuestion("Name")
+            .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
+            .clickSendFinalizedForm(1)
+            .clickSelectAll()
+            .clickSendSelected()
+
+        val file = testDependencies.server.submissions[0]
+        val instanceRootElement = XFormParser.getXMLDocument(file.inputStream().reader()).rootElement
+        val entityElement = instanceRootElement
+            .getElement(null, "participant")
+            .getElement(null, "meta")
+            .getElement(null, "entity")
+        val id = entityElement.getAttributeValue(null, "id")
+
+        assertThat(id.isBlank(), equalTo(false))
     }
 }

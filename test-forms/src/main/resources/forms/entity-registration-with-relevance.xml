@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<h:html
+    xmlns="http://www.w3.org/2002/xforms"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:jr="http://openrosa.org/javarosa"
+    xmlns:orx="http://openrosa.org/xforms"
+    xmlns:odk="http://www.opendatakit.org/xforms"
+    xmlns:entities="http://www.opendatakit.org/xforms/entities">
+    <h:head>
+        <h:title>Entity registration with relevance</h:title>
+        <model odk:xforms-version="1.0.0" entities:entities-version="2024.1.0">
+            <instance>
+                <data id="entity_registration_with_relevance">
+                    <continue/>
+                    <participant>
+                        <name/>
+                        <meta>
+                            <entity dataset="people" create="1" id="">
+                                <label/>
+                            </entity>
+                        </meta>
+                    </participant>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+            <instance id="yes_no">
+                <root>
+                    <item>
+                        <name>yes</name>
+                        <label>Yes</label>
+                    </item>
+                    <item>
+                        <name>no</name>
+                        <label>No</label>
+                    </item>
+                </root>
+            </instance>
+            <bind nodeset="/data/continue" type="string"/>
+            <bind nodeset="/data/participant" relevant="/data/continue = 'yes'"/>
+            <bind nodeset="/data/participant/name" type="string"/>
+            <bind nodeset="/data/participant/meta/entity/@id" readonly="true()" type="string"/>
+            <setvalue ref="/data/participant/meta/entity/@id" event="odk-instance-first-load" value="uuid()"/>
+            <bind nodeset="/data/participant/meta/entity/label" calculate="/data/participant/name" readonly="true()" type="string"/>
+            <bind nodeset="/data/meta/instanceID" type="string" readonly="true()" jr:preload="uid"/>
+        </model>
+    </h:head>
+    <h:body>
+        <select1 ref="/data/continue">
+            <label>Do you want to continue?</label>
+            <itemset nodeset="instance('yes_no')/root/item">
+                <value ref="name"/>
+                <label ref="label"/>
+            </itemset>
+        </select1>
+        <group ref="/data/participant">
+            <label>Participant details</label>
+            <input ref="/data/participant/name">
+                <label>Name</label>
+            </input>
+        </group>
+    </h:body>
+</h:html>
