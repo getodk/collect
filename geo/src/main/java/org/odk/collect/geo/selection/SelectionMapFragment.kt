@@ -86,7 +86,6 @@ class SelectionMapFragment(
     private lateinit var bottomSheetCallback: BottomSheetCallback
 
     private val itemsByFeatureId: MutableMap<Int, MappableItem> = mutableMapOf()
-    private val featureIdsByItemId: MutableMap<Long, Int> = mutableMapOf()
 
     /**
      * Points to be mapped. Note: kept separately from [.itemsByFeatureId] so we can
@@ -367,7 +366,7 @@ class SelectionMapFragment(
         val selectedItem = selectedItemViewModel.getSelectedItem()
 
         if (selectedItem != null) {
-            val featureId = featureIdsByItemId[selectedItem.id]
+            val featureId = featureIdByItemId(selectedItem.id)
             if (featureId != null) {
                 onFeatureSelected(featureId, selectedByUser = false)
             }
@@ -381,7 +380,7 @@ class SelectionMapFragment(
     }
 
     private fun resetIcon(selectedItem: MappableItem.MappablePoint) {
-        val featureId = featureIdsByItemId[selectedItem.id]
+        val featureId = featureIdByItemId(selectedItem.id)
         if (featureId != null) {
             map.setMarkerIcon(
                 featureId,
@@ -395,7 +394,7 @@ class SelectionMapFragment(
      */
     private fun updateFeatures(items: List<MappableItem>) {
         points.clear()
-        map.clearFeatures(featureIdsByItemId.values.toList())
+        map.clearFeatures(itemsByFeatureId.keys.toList())
         itemsByFeatureId.clear()
 
         val singlePoints = items.filterIsInstance<MappableItem.MappablePoint>()
@@ -434,7 +433,6 @@ class SelectionMapFragment(
 
         (singlePoints + lines + polygons).zip(pointIds + lineIds + polygonIds).forEach { (item, featureId) ->
             itemsByFeatureId[featureId] = item
-            featureIdsByItemId[item.id] = featureId
             when (item) {
                 is MappableItem.MappablePoint -> points.add(item.point)
                 is MappableItem.MappableLine -> points.addAll(item.points)
@@ -443,6 +441,10 @@ class SelectionMapFragment(
         }
 
         featureCount = items.size
+    }
+
+    private fun featureIdByItemId(id: Long): Int? {
+        return itemsByFeatureId.filter { (_, item) -> item.id == id }.keys.firstOrNull()
     }
 
     companion object {
