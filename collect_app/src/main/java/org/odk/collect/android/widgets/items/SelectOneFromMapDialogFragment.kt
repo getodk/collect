@@ -18,11 +18,12 @@ import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.async.Scheduler
 import org.odk.collect.entities.javarosa.parse.EntitySchema
 import org.odk.collect.geo.geopoly.GeoPolyUtils.parseGeometry
-import org.odk.collect.geo.selection.IconifiedText
-import org.odk.collect.geo.selection.MappableItem
+import org.odk.collect.geo.items.IconifiedText
+import org.odk.collect.geo.items.MappableItem
 import org.odk.collect.geo.selection.SelectionMapData
 import org.odk.collect.geo.selection.SelectionMapFragment
 import org.odk.collect.geo.selection.SelectionMapFragment.Companion.REQUEST_SELECT_ITEM
+import org.odk.collect.icons.R
 import javax.inject.Inject
 
 class SelectOneFromMapDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
@@ -121,12 +122,12 @@ internal class SelectChoicesMapData(
                                     prompt.getSelectChoiceText(selectChoice),
                                     properties,
                                     point = points[0],
-                                    smallIcon = if (markerSymbol.isNullOrBlank()) org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_small else org.odk.collect.icons.R.drawable.ic_map_marker_small,
-                                    largeIcon = if (markerSymbol.isNullOrBlank()) org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_big else org.odk.collect.icons.R.drawable.ic_map_marker_big,
+                                    smallIcon = if (markerSymbol.isNullOrBlank()) R.drawable.ic_map_marker_with_hole_small else R.drawable.ic_map_marker_small,
+                                    largeIcon = if (markerSymbol.isNullOrBlank()) R.drawable.ic_map_marker_with_hole_big else R.drawable.ic_map_marker_big,
                                     color = markerColor,
                                     symbol = markerSymbol,
                                     action = IconifiedText(
-                                        org.odk.collect.icons.R.drawable.ic_save,
+                                        R.drawable.ic_save,
                                         resources.getString(org.odk.collect.strings.R.string.select_item)
                                     )
                                 )
@@ -137,7 +138,7 @@ internal class SelectChoicesMapData(
                                     properties,
                                     points = points,
                                     action = IconifiedText(
-                                        org.odk.collect.icons.R.drawable.ic_save,
+                                        R.drawable.ic_save,
                                         resources.getString(org.odk.collect.strings.R.string.select_item)
                                     ),
                                     strokeWidth = getPropertyValue(selectChoice, STROKE_WIDTH),
@@ -150,7 +151,7 @@ internal class SelectChoicesMapData(
                                     properties,
                                     points = points,
                                     action = IconifiedText(
-                                        org.odk.collect.icons.R.drawable.ic_save,
+                                        R.drawable.ic_save,
                                         resources.getString(org.odk.collect.strings.R.string.select_item)
                                     ),
                                     strokeWidth = getPropertyValue(selectChoice, STROKE_WIDTH),

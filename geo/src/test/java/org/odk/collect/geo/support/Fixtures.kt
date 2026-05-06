@@ -1,8 +1,8 @@
 package org.odk.collect.geo.support
 
 import android.R
-import org.odk.collect.geo.selection.IconifiedText
-import org.odk.collect.geo.selection.MappableItem
+import org.odk.collect.geo.items.IconifiedText
+import org.odk.collect.geo.items.MappableItem
 import org.odk.collect.maps.MapPoint
 
 object Fixtures {

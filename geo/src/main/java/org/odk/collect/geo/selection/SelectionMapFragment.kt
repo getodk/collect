@@ -22,11 +22,13 @@ import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.androidshared.ui.multiclicksafe.setMultiClickSafeOnClickListener
-import org.odk.collect.androidshared.utils.sanitizeToColorInt
 import org.odk.collect.async.Scheduler
 import org.odk.collect.geo.GeoDependencyComponentProvider
 import org.odk.collect.geo.GeoUtils.showCurrentLocation
 import org.odk.collect.geo.databinding.SelectionMapLayoutBinding
+import org.odk.collect.geo.items.MappableData
+import org.odk.collect.geo.items.MappableItem
+import org.odk.collect.geo.items.MappableItemsDelegate
 import org.odk.collect.location.tracker.LocationTracker
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory
@@ -34,10 +36,7 @@ import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.circles.CurrentLocationDelegate
 import org.odk.collect.maps.layers.OfflineMapLayersPickerBottomSheetDialogFragment
 import org.odk.collect.maps.layers.ReferenceLayerRepository
-import org.odk.collect.maps.markers.MarkerDescription
 import org.odk.collect.maps.markers.MarkerIconDescription
-import org.odk.collect.maps.traces.LineDescription
-import org.odk.collect.maps.traces.PolygonDescription
 import org.odk.collect.material.BottomSheetBehavior
 import org.odk.collect.material.MaterialProgressDialogFragment
 import org.odk.collect.permissions.PermissionsChecker
@@ -432,84 +431,4 @@ interface SelectionMapData : MappableData {
     fun getItemCount(): NonNullLiveData<Int>
 
     fun isSelected(mappableItem: MappableItem): Boolean
-}
-
-private class MappableItemsDelegate {
-
-    /**
-     * Points to be mapped. Note: kept separately from [.itemsByFeatureId] so we can
-     * quickly zoom to bounding box.
-     */
-    private val points: MutableList<MapPoint> = mutableListOf()
-    private val itemsByFeatureId: MutableMap<Int, MappableItem> = mutableMapOf()
-
-    fun updateFeatures(map: MapFragment, items: List<MappableItem>) {
-        map.clearFeatures(itemsByFeatureId.keys.toList())
-        itemsByFeatureId.clear()
-
-        val itemsAndFeatureIds = addFeatures(map, items)
-        itemsAndFeatureIds.forEach { (item, featureId) ->
-            itemsByFeatureId[featureId] = item
-            when (item) {
-                is MappableItem.MappablePoint -> points.add(item.point)
-                is MappableItem.MappableLine -> points.addAll(item.points)
-                is MappableItem.MappablePolygon -> points.addAll(item.points)
-            }
-        }
-    }
-
-    fun getItem(featureId: Int): MappableItem? {
-        return itemsByFeatureId[featureId]
-    }
-
-    fun getFeatureId(item: MappableItem): Int? {
-        return itemsByFeatureId.filter { it.value.id == item.id }.keys.firstOrNull()
-    }
-
-    fun zoomToFitItems(map: MapFragment) {
-        if (points.isNotEmpty()) {
-            map.zoomToBoundingBox(points, 0.8, false)
-        }
-    }
-
-    private fun addFeatures(
-        map: MapFragment,
-        items: List<MappableItem>
-    ): List<Pair<MappableItem, Int>> {
-        val singlePoints = items.filterIsInstance<MappableItem.MappablePoint>()
-        val lines = items.filterIsInstance<MappableItem.MappableLine>()
-        val polygons = items.filterIsInstance<MappableItem.MappablePolygon>()
-
-        val markerDescriptions = singlePoints.map {
-            MarkerDescription(
-                MapPoint(it.point.latitude, it.point.longitude),
-                false,
-                MapFragment.IconAnchor.BOTTOM,
-                MarkerIconDescription.DrawableResource(it.smallIcon, it.color, it.symbol)
-            )
-        }
-
-        val pointIds = map.addMarkers(markerDescriptions)
-        val lineIds = lines.fold(listOf<Int>()) { ids, item ->
-            ids + map.addPolyLine(
-                LineDescription(
-                    item.points,
-                    item.strokeWidth,
-                    item.strokeColor?.sanitizeToColorInt()
-                )
-            )
-        }
-        val polygonIds = polygons.fold(listOf<Int>()) { ids, item ->
-            ids + map.addPolygon(
-                PolygonDescription(
-                    item.points,
-                    item.strokeWidth,
-                    item.strokeColor?.sanitizeToColorInt(),
-                    item.fillColor?.sanitizeToColorInt()
-                )
-            )
-        }
-
-        return (singlePoints + lines + polygons).zip(pointIds + lineIds + polygonIds)
-    }
 }

@@ -1,4 +1,4 @@
-package org.odk.collect.geo.selection
+package org.odk.collect.geo.items
 
 import androidx.lifecycle.LiveData
 import org.odk.collect.androidshared.livedata.NonNullLiveData

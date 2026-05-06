@@ -16,9 +16,9 @@ import org.odk.collect.formstest.FormUtils
 import org.odk.collect.formstest.InMemFormsRepository
 import org.odk.collect.formstest.InMemInstancesRepository
 import org.odk.collect.formstest.InstanceUtils
-import org.odk.collect.geo.selection.IconifiedText
-import org.odk.collect.geo.selection.MappableItem
-import org.odk.collect.geo.selection.Status
+import org.odk.collect.geo.items.IconifiedText
+import org.odk.collect.geo.items.MappableItem
+import org.odk.collect.geo.items.Status
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.keys.ProtectedProjectKeys

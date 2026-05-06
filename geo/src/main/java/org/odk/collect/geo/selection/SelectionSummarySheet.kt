@@ -11,6 +11,8 @@ import androidx.core.view.size
 import org.odk.collect.geo.R
 import org.odk.collect.geo.databinding.PropertyBinding
 import org.odk.collect.geo.databinding.SelectionSummarySheetLayoutBinding
+import org.odk.collect.geo.items.MappableItem
+import org.odk.collect.geo.items.Status
 
 internal class SelectionSummarySheet(context: Context, attrs: AttributeSet?) :
     FrameLayout(context, attrs) {

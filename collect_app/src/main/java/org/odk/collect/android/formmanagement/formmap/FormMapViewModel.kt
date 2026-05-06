@@ -17,10 +17,10 @@ import org.odk.collect.forms.Form
 import org.odk.collect.forms.FormsRepository
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.forms.instances.InstancesRepository
-import org.odk.collect.geo.selection.IconifiedText
-import org.odk.collect.geo.selection.MappableItem
+import org.odk.collect.geo.items.IconifiedText
+import org.odk.collect.geo.items.MappableItem
 import org.odk.collect.geo.selection.SelectionMapData
-import org.odk.collect.geo.selection.Status
+import org.odk.collect.geo.items.Status
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProtectedProjectKeys

@@ -1,5 +1,6 @@
 package org.odk.collect.geo.selection
 
+import android.R
 import android.app.Application
 import android.view.View
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
@@ -9,6 +10,8 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.geo.databinding.PropertyBinding
+import org.odk.collect.geo.items.IconifiedText
+import org.odk.collect.geo.items.Status
 import org.odk.collect.geo.support.Fixtures
 import org.odk.collect.testshared.RobolectricHelpers.getCreatedFromResId
 
@@ -72,11 +75,11 @@ class SelectionSummarySheetTest {
             Fixtures.actionMappableSelectPoint().copy(
                 properties = listOf(
                     IconifiedText(
-                        android.R.drawable.ic_btn_speak_now,
+                        R.drawable.ic_btn_speak_now,
                         "Emotion"
                     ),
                     IconifiedText(
-                        android.R.drawable.ic_dialog_info,
+                        R.drawable.ic_dialog_info,
                         "Mystery"
                     )
                 )
@@ -122,7 +125,7 @@ class SelectionSummarySheetTest {
             Fixtures.actionMappableSelectPoint().copy(
                 properties = listOf(
                     IconifiedText(
-                        android.R.drawable.ic_btn_speak_now,
+                        R.drawable.ic_btn_speak_now,
                         "Emotion"
                     )
                 )
@@ -133,7 +136,7 @@ class SelectionSummarySheetTest {
             Fixtures.actionMappableSelectPoint().copy(
                 properties = listOf(
                     IconifiedText(
-                        android.R.drawable.ic_dialog_info,
+                        R.drawable.ic_dialog_info,
                         "Mystery"
                     )
                 )
@@ -169,7 +172,7 @@ class SelectionSummarySheetTest {
         selectionSummarySheet.setItem(
             Fixtures.actionMappableSelectPoint().copy(
                 action = IconifiedText(
-                    android.R.drawable.ic_btn_speak_now,
+                    R.drawable.ic_btn_speak_now,
                     "Come on in"
                 )
             )

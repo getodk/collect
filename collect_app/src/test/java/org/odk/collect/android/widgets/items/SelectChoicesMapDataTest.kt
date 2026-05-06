@@ -15,8 +15,8 @@ import org.odk.collect.android.widgets.support.FormElementFixtures.selectChoice
 import org.odk.collect.android.widgets.support.FormElementFixtures.treeElement
 import org.odk.collect.androidtest.getOrAwaitValue
 import org.odk.collect.entities.javarosa.parse.EntitySchema
-import org.odk.collect.geo.selection.IconifiedText
-import org.odk.collect.geo.selection.MappableItem
+import org.odk.collect.geo.items.IconifiedText
+import org.odk.collect.geo.items.MappableItem
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.testshared.FakeScheduler
 
