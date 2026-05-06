@@ -2,8 +2,14 @@ package org.odk.collect.geo
 
 import android.content.Context
 import android.location.Location
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.asLiveData
 import org.javarosa.core.model.data.GeoPointData
+import org.odk.collect.location.tracker.LocationTracker
+import org.odk.collect.location.tracker.bindToLifecycle
+import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapPoint
+import org.odk.collect.maps.circles.CurrentLocationDelegate
 import org.odk.collect.shared.strings.StringUtils.removeEnd
 import org.odk.collect.strings.R
 import java.text.DecimalFormat
@@ -93,7 +99,27 @@ object GeoUtils {
         return MapPoint(this.getPart(0), this.getPart(1), this.getPart(2), this.getPart(3))
     }
 
+    @JvmStatic
     fun org.odk.collect.location.Location.toMapPoint(): MapPoint {
         return MapPoint(this.latitude, this.longitude, this.altitude, this.accuracy.toDouble())
+    }
+
+    @JvmStatic
+    @JvmOverloads
+    fun MapFragment.showCurrentLocation(
+        locationTracker: LocationTracker,
+        currentLocationDelegate: CurrentLocationDelegate,
+        retainMockAccuracy: Boolean = false,
+        afterUpdate: (MapPoint) -> Unit = {}
+    ) {
+        val lifecycleOwner = this as Fragment
+        locationTracker.bindToLifecycle(lifecycleOwner, retainMockAccuracy)
+        locationTracker.getLocation().asLiveData().observe(lifecycleOwner) {
+            if (it != null) {
+                val mapPoint = it.toMapPoint()
+                currentLocationDelegate.update(this, mapPoint)
+                afterUpdate(mapPoint)
+            }
+        }
     }
 }

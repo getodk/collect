@@ -1,18 +1,15 @@
 package org.odk.collect.mapbox
 
 import android.graphics.Color
-import android.location.Location
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.startup.AppInitializer
-import com.google.android.gms.location.LocationListener
 import com.mapbox.android.gestures.MoveGestureDetector
 import com.mapbox.android.gestures.StandardScaleGestureDetector
 import com.mapbox.geojson.Point
@@ -32,7 +29,6 @@ import com.mapbox.maps.extension.style.sources.generated.RasterSource
 import com.mapbox.maps.extension.style.sources.generated.VectorSource
 import com.mapbox.maps.extension.style.sources.getSource
 import com.mapbox.maps.loader.MapboxMapsInitializer
-import com.mapbox.maps.plugin.LocationPuck2D
 import com.mapbox.maps.plugin.animation.MapAnimationOptions.Companion.mapAnimationOptions
 import com.mapbox.maps.plugin.animation.flyTo
 import com.mapbox.maps.plugin.annotation.annotations
@@ -52,13 +48,9 @@ import com.mapbox.maps.plugin.gestures.addOnMapClickListener
 import com.mapbox.maps.plugin.gestures.addOnMapLongClickListener
 import com.mapbox.maps.plugin.gestures.addOnMoveListener
 import com.mapbox.maps.plugin.gestures.addOnScaleListener
-import com.mapbox.maps.plugin.locationcomponent.location
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.odk.collect.androidshared.utils.ScreenUtils
-import org.odk.collect.location.LocationClient
-import org.odk.collect.location.LocationClient.LocationClientListener
-import org.odk.collect.maps.traces.LineDescription
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragment.ErrorListener
 import org.odk.collect.maps.MapFragment.FeatureListener
@@ -67,7 +59,6 @@ import org.odk.collect.maps.MapFragment.ReadyListener
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.MapViewModel
 import org.odk.collect.maps.MapViewModelMapFragment
-import org.odk.collect.maps.traces.PolygonDescription
 import org.odk.collect.maps.Zoom
 import org.odk.collect.maps.ZoomObserver
 import org.odk.collect.maps.circles.CircleDescription
@@ -77,6 +68,8 @@ import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.maps.markers.MarkerDescription
 import org.odk.collect.maps.markers.MarkerIconCreator
 import org.odk.collect.maps.markers.MarkerIconDescription
+import org.odk.collect.maps.traces.LineDescription
+import org.odk.collect.maps.traces.PolygonDescription
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.shared.injection.ObjectProviderHost
 import timber.log.Timber
@@ -86,9 +79,7 @@ import java.io.IOException
 class MapboxMapFragment :
     MapViewModelMapFragment(),
     OnMapClickListener,
-    OnMapLongClickListener,
-    LocationListener,
-    LocationClientListener {
+    OnMapLongClickListener {
 
     private lateinit var mapView: MapView
     private lateinit var mapboxMap: MapboxMap
@@ -97,23 +88,16 @@ class MapboxMapFragment :
     private lateinit var polylineAnnotationManager: PolylineAnnotationManager
     private lateinit var polygonAnnotationManager: PolygonAnnotationManager
     private var mapReadyListener: ReadyListener? = null
-    private val gpsLocationReadyListeners = mutableListOf<ReadyListener>()
 
     private var nextFeatureId = 1
     private val features = mutableMapOf<Int, MapFeature>()
-
-    private var gpsLocationListener: PointListener? = null
     private var clickListener: PointListener? = null
     private var longPressListener: PointListener? = null
 
     private var featureClickListener: FeatureListener? = null
     private var featureDragEndListener: FeatureListener? = null
-
-    private var lastLocationProvider: String? = null
-    private var lastLocationFix: MapPoint? = null
     private var tileServer: TileHttpServer? = null
     private var referenceLayerFile: File? = null
-    private var clientWantsLocationUpdates = false
     private var topStyleLayerId: String? = null
 
     private val _mapViewModel by viewModels<MapViewModel> {
@@ -133,10 +117,6 @@ class MapboxMapFragment :
 
     private val referenceLayerRepository: ReferenceLayerRepository by lazy {
         (requireActivity().applicationContext as ObjectProviderHost).getObjectProvider().provide(ReferenceLayerRepository::class.java)
-    }
-
-    private val locationClient: LocationClient by lazy {
-        (requireActivity().applicationContext as ObjectProviderHost).getObjectProvider().provide(LocationClient::class.java)
     }
 
     override fun init(readyListener: ReadyListener?, errorListener: ErrorListener?) {
@@ -209,7 +189,6 @@ class MapboxMapFragment :
             .annotations
             .createPointAnnotationManager()
 
-        initLocationComponent()
         moveOrAnimateCamera(MapFragment.INITIAL_CENTER, false, MapFragment.INITIAL_ZOOM.toDouble())
 
         // If the screen is rotated before the map is ready, this fragment could already be detached,
@@ -257,16 +236,6 @@ class MapboxMapFragment :
         return mapView
     }
 
-    override fun onResume() {
-        super.onResume()
-        enableLocationUpdates(clientWantsLocationUpdates)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        enableLocationUpdates(false)
-    }
-
     override fun onDestroy() {
         tileServer?.destroy()
         MarkerIconCreator.clearCache()
@@ -296,10 +265,6 @@ class MapboxMapFragment :
 
     override fun getMapViewModel(): MapViewModel {
         return _mapViewModel
-    }
-
-    override fun addMarker(markerDescription: MarkerDescription): Int {
-        return addMarkers(listOf(markerDescription)).first()
     }
 
     override fun updateMarker(
@@ -472,6 +437,10 @@ class MapboxMapFragment :
         nextFeatureId = 1
     }
 
+    override fun clearFeatures(ids: List<Int>) {
+        ids.forEach { features.remove(it)?.dispose() }
+    }
+
     override fun setClickListener(listener: PointListener?) {
         clickListener = listener
     }
@@ -488,25 +457,6 @@ class MapboxMapFragment :
         featureDragEndListener = listener
     }
 
-    override fun setGpsLocationEnabled(enabled: Boolean) {
-        if (enabled != clientWantsLocationUpdates) {
-            clientWantsLocationUpdates = enabled
-            enableLocationUpdates(clientWantsLocationUpdates)
-        }
-    }
-
-    override fun getGpsLocation(): MapPoint? {
-        return lastLocationFix
-    }
-
-    override fun setGpsLocationListener(listener: PointListener?) {
-        gpsLocationListener = listener
-    }
-
-    override fun setRetainMockAccuracy(retainMockAccuracy: Boolean) {
-        locationClient.setRetainMockAccuracy(retainMockAccuracy)
-    }
-
     override fun onMapClick(point: Point): Boolean {
         clickListener?.onPoint(MapPoint(point.latitude(), point.longitude()))
 
@@ -520,51 +470,6 @@ class MapboxMapFragment :
     override fun onMapLongClick(point: Point): Boolean {
         longPressListener?.onPoint(MapPoint(point.latitude(), point.longitude()))
         return true
-    }
-
-    override fun onLocationChanged(location: Location) {
-        lastLocationFix = MapPoint(
-            location.latitude,
-            location.longitude,
-            location.altitude,
-            location.accuracy.toDouble()
-        )
-        lastLocationProvider = location.provider
-        Timber.i(
-            "Received location update: %s (%s)",
-            lastLocationFix,
-            lastLocationProvider
-        )
-        for (listener in gpsLocationReadyListeners) {
-            listener.onReady(this)
-        }
-        gpsLocationReadyListeners.clear()
-        gpsLocationListener?.onPoint(lastLocationFix!!)
-    }
-
-    @SuppressWarnings("MissingPermission") // permission checks for location services are handled in widgets
-    private fun enableLocationUpdates(enabled: Boolean) {
-        if (enabled) {
-            Timber.i("Starting LocationClient %s (for MapFragment %s)", locationClient, this)
-            locationClient.start(this)
-        } else {
-            Timber.i("Stopping LocationClient %s (for MapFragment %s)", locationClient, this)
-            locationClient.stop()
-        }
-
-        mapView.location.enabled = enabled
-    }
-
-    private fun initLocationComponent() {
-        mapView.location.updateSettings {
-            this.enabled = true
-            this.locationPuck = LocationPuck2D(
-                AppCompatResources.getDrawable(
-                    requireContext(),
-                    org.odk.collect.maps.R.drawable.ic_crosshairs
-                )
-            )
-        }
     }
 
     private fun moveOrAnimateCamera(point: MapPoint, animate: Boolean, zoom: Double? = getZoom()) {
@@ -679,17 +584,6 @@ class MapboxMapFragment :
         if (mapboxMap.getStyle()?.getSource(source.sourceId) == null) {
             mapboxMap.getStyle()?.addSource(source)
         }
-    }
-
-    override fun onClientStart() {
-        Timber.i("Requesting location updates (to %s)", this)
-        locationClient.requestLocationUpdates(this)
-    }
-
-    override fun onClientStartFailure() {
-    }
-
-    override fun onClientStop() {
     }
 
     companion object {

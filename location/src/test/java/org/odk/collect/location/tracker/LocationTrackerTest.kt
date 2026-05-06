@@ -51,4 +51,25 @@ abstract class LocationTrackerTest {
         runBackground()
         assertThat(locationTracker.getCurrentLocation(), equalTo(null))
     }
+
+    @Test
+    fun canBeRestarted() {
+        val location = locationTracker.getLocation()
+
+        locationTracker.start()
+        runBackground()
+
+        setDeviceLocation(Location(1.0, 1.0))
+        runBackground()
+
+        locationTracker.stop()
+        runBackground()
+
+        locationTracker.start()
+        runBackground()
+
+        setDeviceLocation(Location(2.0, 2.0))
+        runBackground()
+        assertThat(location.value, equalTo(Location(2.0, 2.0)))
+    }
 }

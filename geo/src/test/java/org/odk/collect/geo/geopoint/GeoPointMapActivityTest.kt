@@ -1,0 +1,295 @@
+package org.odk.collect.geo.geopoint
+
+import android.app.Activity
+import android.app.Application
+import android.content.Intent
+import android.view.View
+import android.widget.TextView
+import androidx.test.core.app.ApplicationProvider
+import androidx.test.espresso.Espresso
+import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.not
+import org.junit.Assert
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.mockito.Mockito
+import org.odk.collect.androidtest.ActivityScenarioLauncherRule
+import org.odk.collect.async.Scheduler
+import org.odk.collect.externalapp.ExternalAppUtils.getReturnedSingleValue
+import org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY
+import org.odk.collect.geo.DaggerGeoDependencyComponent
+import org.odk.collect.geo.GeoDependencyModule
+import org.odk.collect.geo.GeoUtils
+import org.odk.collect.geo.GeoUtils.toMapPoint
+import org.odk.collect.geo.support.FakeLocationTracker
+import org.odk.collect.geo.support.FakeMapFragment
+import org.odk.collect.geo.support.MapFragmentAssertions.hasZoomedToCurrentLocation
+import org.odk.collect.geo.support.MapFragmentAssertions.showsCurrentLocation
+import org.odk.collect.geo.support.RobolectricApplication
+import org.odk.collect.location.Location
+import org.odk.collect.location.tracker.LocationTracker
+import org.odk.collect.maps.MapFragmentFactory
+import org.odk.collect.maps.MapPoint
+import org.odk.collect.maps.circles.CurrentLocationDelegate
+import org.odk.collect.maps.layers.ReferenceLayerRepository
+import org.odk.collect.settings.InMemSettingsProvider
+import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.strings.R
+import org.odk.collect.strings.R.string
+import org.odk.collect.testshared.EspressoAssertions
+import org.odk.collect.testshared.EspressoInteractions
+import org.odk.collect.webpage.WebPageService
+import org.robolectric.Shadows
+
+@RunWith(AndroidJUnit4::class)
+class GeoPointMapActivityTest {
+
+    private val mapFragment = FakeMapFragment()
+
+    private val locationTracker = FakeLocationTracker()
+
+    @get:Rule
+    val launcherRule: ActivityScenarioLauncherRule = ActivityScenarioLauncherRule()
+
+    @Before
+    fun setUp() {
+        val shadowApplication =
+            Shadows.shadowOf(ApplicationProvider.getApplicationContext<Application?>())
+        shadowApplication.grantPermissions("android.permission.ACCESS_FINE_LOCATION")
+        shadowApplication.grantPermissions("android.permission.ACCESS_COARSE_LOCATION")
+
+        val application = ApplicationProvider.getApplicationContext<RobolectricApplication>()
+        application.geoDependencyComponent = DaggerGeoDependencyComponent.builder()
+            .application(application)
+            .geoDependencyModule(object : GeoDependencyModule() {
+                override fun providesMapFragmentFactory(): MapFragmentFactory {
+                    return MapFragmentFactory { mapFragment }
+                }
+
+                override fun providesReferenceLayerRepository(): ReferenceLayerRepository {
+                    return Mockito.mock()
+                }
+
+                override fun providesScheduler(): Scheduler {
+                    return Mockito.mock()
+                }
+
+                override fun providesSettingsProvider(): SettingsProvider {
+                    return InMemSettingsProvider()
+                }
+
+                override fun providesWebPageService(): WebPageService {
+                    return Mockito.mock()
+                }
+
+                override fun providesLocationTracker(application: Application): LocationTracker {
+                    return locationTracker
+                }
+            })
+            .build()
+    }
+
+    @Test
+    fun whenLocationNotSetShouldDisplayPleaseWaitMessage() {
+        val scenario = launcherRule.launchForResult(GeoPointMapActivity::class.java)
+        mapFragment.ready()
+
+        scenario.onActivity { activity: GeoPointMapActivity? ->
+            Assert.assertEquals(
+                activity!!.getString(
+                    R.string.please_wait_long
+                ), getLocationStatus(activity)
+            )
+        }
+    }
+
+    @Test
+    fun whenLocationSetShouldDisplayStatusMessage() {
+        val scenario = launcherRule.launchForResult(GeoPointMapActivity::class.java)
+        mapFragment.ready()
+        locationTracker.currentLocation = Location(1.0, 2.0, 3.0, 4.0f)
+
+        scenario.onActivity { activity: GeoPointMapActivity? ->
+            Assert.assertEquals(
+                "Accuracy: 4 m",
+                getLocationStatus(activity!!)
+            )
+        }
+    }
+
+    @Test
+    fun `returns point from first location fix`() {
+        val scenario = launcherRule.launchForResult(GeoPointMapActivity::class.java)
+        mapFragment.ready()
+
+        val firstLocation = Location(1.0, 2.0, 3.0, 4.0f)
+        locationTracker.currentLocation = firstLocation
+        locationTracker.currentLocation = Location(5.0, 6.0, 7.0, 8.0f)
+
+        EspressoInteractions.clickOn(withContentDescription(string.save))
+        assertThat(scenario.result.resultCode, equalTo(Activity.RESULT_OK))
+        val resultData = scenario.result.resultData
+        assertThat(
+            getReturnedSingleValue(resultData),
+            equalTo(GeoUtils.formatLocationResultString(firstLocation))
+        )
+    }
+
+    @Test
+    fun `shows marker at first location fix`() {
+        launcherRule.launchForResult(GeoPointMapActivity::class.java)
+        mapFragment.ready()
+
+        val firstLocation = Location(1.0, 2.0, 3.0, 4.0f)
+        locationTracker.currentLocation = firstLocation
+        locationTracker.currentLocation = Location(5.0, 6.0, 7.0, 8.0f)
+
+        val markers = mapFragment.getMarkers()
+            .filter { it.iconDescription != CurrentLocationDelegate.ICON_DESCRIPTION }
+        assertThat(markers.size, equalTo(1))
+        assertThat(markers[0].point, equalTo(firstLocation.toMapPoint()))
+    }
+
+    @Test
+    fun `clicking add marker moves marker to the current location`() {
+        launcherRule.launchForResult(GeoPointMapActivity::class.java)
+        mapFragment.ready()
+
+        locationTracker.currentLocation = Location(1.0, 2.0, 3.0, 4.0f)
+        val secondLocation = Location(5.0, 6.0, 7.0, 8.0f)
+        locationTracker.currentLocation = secondLocation
+
+        EspressoInteractions.clickOn(withContentDescription(string.record_geopoint))
+
+        val markers = mapFragment.getMarkers()
+            .filter { it.iconDescription != CurrentLocationDelegate.ICON_DESCRIPTION }
+        assertThat(markers.size, equalTo(1))
+        assertThat(markers[0].point, equalTo(secondLocation.toMapPoint()))
+    }
+
+    @Test
+    fun whenLocationExtraIncluded_showsMarker() {
+        val intent = Intent(
+            ApplicationProvider.getApplicationContext(),
+            GeoPointMapActivity::class.java
+        )
+        intent.putExtra(GeoPointMapActivity.EXTRA_LOCATION, MapPoint(1.0, 2.0))
+        launcherRule.launch<Activity>(intent)
+        mapFragment.ready()
+
+        val markers = mapFragment.getMarkersPoints()
+        assertThat(markers.size, equalTo(1))
+        assertThat(markers[0].latitude, equalTo(1.0))
+        assertThat(
+            markers[0].longitude,
+            equalTo(2.0)
+        )
+    }
+
+    @Test
+    fun mapFragmentRetainMockAccuracy_isFalse() {
+        launcherRule.launch(GeoPointMapActivity::class.java)
+        mapFragment.ready()
+
+        assertThat(mapFragment.isRetainMockAccuracy(), equalTo(false))
+    }
+
+    @Test
+    fun passingRetainMockAccuracyExtra_updatesLocationTracker() {
+        val intent = Intent(
+            ApplicationProvider.getApplicationContext(),
+            GeoPointMapActivity::class.java
+        )
+        intent.putExtra(EXTRA_RETAIN_MOCK_ACCURACY, true)
+        launcherRule.launch<Activity>(intent)
+        mapFragment.ready()
+
+        assertThat(locationTracker.retainMockAccuracy, equalTo(true))
+
+        intent.putExtra(EXTRA_RETAIN_MOCK_ACCURACY, false)
+        launcherRule.launch<Activity>(intent)
+        mapFragment.ready()
+
+        assertThat(locationTracker.retainMockAccuracy, equalTo(false))
+    }
+
+    @Test
+    fun recreatingTheActivityWithTheLayersDialogDisplayedDoesNotCrashTheApp() {
+        val scenario = launcherRule.launch(GeoPointMapActivity::class.java)
+        mapFragment.ready()
+
+        Espresso.onView(ViewMatchers.withId(org.odk.collect.geo.R.id.layer_menu)).perform(
+            ViewActions.click()
+        )
+
+        scenario.recreate()
+    }
+
+    @Test
+    fun `clicking zoom zooms to the current location`() {
+        launcherRule.launch(GeoPointMapActivity::class.java)
+        mapFragment.ready()
+
+        locationTracker.currentLocation = Location(5.0, 5.0)
+        locationTracker.currentLocation = Location(6.0, 6.0)
+
+        EspressoInteractions.clickOn(withContentDescription(string.show_my_location))
+        assertThat(mapFragment, hasZoomedToCurrentLocation(MapPoint(6.0, 6.0)))
+    }
+
+    @Test
+    fun `shows current location`() {
+        launcherRule.launch(GeoPointMapActivity::class.java)
+        mapFragment.ready()
+
+        val firstLocation = Location(2.0, 2.0, accuracy = 5.2f)
+        locationTracker.currentLocation = firstLocation
+        assertThat(mapFragment, showsCurrentLocation(firstLocation.toMapPoint()))
+
+        val secondLocation = Location(3.0, 2.0, accuracy = 2.1f)
+        locationTracker.currentLocation = secondLocation
+        assertThat(mapFragment, showsCurrentLocation(secondLocation.toMapPoint()))
+        assertThat(mapFragment, not(showsCurrentLocation(firstLocation.toMapPoint())))
+    }
+
+    @Test
+    fun `clicking clear clears marker`() {
+        launcherRule.launch(GeoPointMapActivity::class.java)
+        mapFragment.ready()
+
+        val location = Location(2.0, 2.0, accuracy = 5.2f)
+        locationTracker.currentLocation = location
+
+        EspressoInteractions.clickOn(withContentDescription(string.clear))
+        assertThat(mapFragment.getMarkers().size, equalTo(1))
+        assertThat(mapFragment, showsCurrentLocation(location.toMapPoint()))
+    }
+
+    @Test
+    fun `clearing an existing location enables the place marker button`() {
+        val intent = Intent(
+            ApplicationProvider.getApplicationContext(),
+            GeoPointMapActivity::class.java
+        )
+        intent.putExtra(GeoPointMapActivity.EXTRA_LOCATION, MapPoint(1.0, 2.0))
+        launcherRule.launch<Activity>(intent)
+        mapFragment.ready()
+
+        EspressoInteractions.clickOn(withContentDescription(string.clear))
+        EspressoAssertions.assertEnabled(withContentDescription(string.record_geopoint))
+    }
+
+    private fun getLocationStatus(activity: Activity): String {
+        return activity
+            .findViewById<View>(org.odk.collect.geo.R.id.status_section)
+            .findViewById<TextView>(org.odk.collect.geo.R.id.location_status)
+            .text.toString()
+    }
+}
