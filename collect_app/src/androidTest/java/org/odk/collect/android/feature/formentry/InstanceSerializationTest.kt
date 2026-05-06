@@ -70,7 +70,7 @@ class InstanceSerializationTest {
     }
 
     @Test
-    fun finalizingForm_doesPrunesNonRelevantNodes() {
+    fun finalizingForm_prunesNonRelevantNodes() {
         testDependencies.server.addForm("one-question-relevance.xml")
 
         rule.withProject(testDependencies.server.url, matchExactly = true)
@@ -91,7 +91,7 @@ class InstanceSerializationTest {
     }
 
     @Test
-    fun finalizingAllDrafts_doesPrunesNonRelevantNodes() {
+    fun finalizingAllDrafts_prunesNonRelevantNodes() {
         testDependencies.server.addForm("one-question-relevance.xml")
 
         rule.withProject(testDependencies.server.url, matchExactly = true)
