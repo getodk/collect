@@ -327,8 +327,6 @@ public class GeoPointMapActivity extends LocalizedActivity {
         MapPoint point = state.getParcelable(POINT_KEY);
         if (point != null) {
             placeMarker(point);
-        } else {
-            clear();
         }
 
         // Restore the flags again, because placeMarker() and clear() modify some of them.
