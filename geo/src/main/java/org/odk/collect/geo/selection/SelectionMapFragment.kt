@@ -25,6 +25,8 @@ import org.odk.collect.androidshared.ui.multiclicksafe.setMultiClickSafeOnClickL
 import org.odk.collect.async.Scheduler
 import org.odk.collect.geo.GeoDependencyComponentProvider
 import org.odk.collect.geo.GeoUtils.showCurrentLocation
+import org.odk.collect.geo.GeoUtils.showData
+import org.odk.collect.geo.GeoUtils.showLoading
 import org.odk.collect.geo.databinding.SelectionMapLayoutBinding
 import org.odk.collect.geo.items.MappableData
 import org.odk.collect.geo.items.MappableItem
@@ -38,7 +40,6 @@ import org.odk.collect.maps.layers.OfflineMapLayersPickerBottomSheetDialogFragme
 import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.maps.markers.MarkerIconDescription
 import org.odk.collect.material.BottomSheetBehavior
-import org.odk.collect.material.MaterialProgressDialogFragment
 import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.webpage.WebPageService
@@ -126,15 +127,7 @@ class SelectionMapFragment(
             requireActivity().finish()
         }
 
-        MaterialProgressDialogFragment.showOn(
-            this,
-            selectionMapData.isLoading(),
-            childFragmentManager
-        ) {
-            MaterialProgressDialogFragment().also { dialog ->
-                dialog.message = getString(org.odk.collect.strings.R.string.loading)
-            }
-        }
+        showLoading(selectionMapData)
     }
 
     override fun onCreateView(
@@ -224,11 +217,9 @@ class SelectionMapFragment(
         map.setFeatureClickListener(::onFeatureSelected)
         map.setClickListener { onClick() }
 
-        selectionMapData.getMappableItems().observe(viewLifecycleOwner) {
-            if (it != null) {
-                updateItems(it)
-                updateCounts(binding)
-            }
+        map.showData(selectionMapData, mappableItemsDelegate) { items ->
+            updateItems(items)
+            updateCounts(binding)
         }
 
         map.showCurrentLocation(locationTracker, currentLocationDelegate)
@@ -364,11 +355,6 @@ class SelectionMapFragment(
     }
 
     private fun updateItems(items: List<MappableItem>) {
-        if (!::map.isInitialized) {
-            return
-        }
-
-        mappableItemsDelegate.updateFeatures(map, items)
         featureCount = items.size
 
         val previouslySelectedItem = items
