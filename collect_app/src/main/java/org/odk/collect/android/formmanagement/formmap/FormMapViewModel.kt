@@ -18,7 +18,7 @@ import org.odk.collect.forms.FormsRepository
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.forms.instances.InstancesRepository
 import org.odk.collect.geo.selection.IconifiedText
-import org.odk.collect.geo.selection.MappableSelectItem
+import org.odk.collect.geo.selection.MappableItem
 import org.odk.collect.geo.selection.SelectionMapData
 import org.odk.collect.geo.selection.Status
 import org.odk.collect.maps.MapPoint
@@ -40,7 +40,7 @@ class FormMapViewModel(
     private var _form: Form? = null
 
     private val mapTitle = MutableLiveData<String?>()
-    private var mappableItems = MutableLiveData<List<MappableSelectItem>>(null)
+    private var mappableItems = MutableLiveData<List<MappableItem>>(null)
     private var itemCount = MutableNonNullLiveData(0)
     private val isLoading = MutableNonNullLiveData(false)
 
@@ -56,7 +56,11 @@ class FormMapViewModel(
         return itemCount
     }
 
-    override fun getMappableItems(): LiveData<List<MappableSelectItem>?> {
+    override fun isSelected(mappableItem: MappableItem): Boolean {
+        return false
+    }
+
+    override fun getMappableItems(): LiveData<List<MappableItem>?> {
         return mappableItems
     }
 
@@ -71,7 +75,7 @@ class FormMapViewModel(
             background = {
                 val form = _form ?: formsRepository.get(formId)!!.also { _form = it }
                 val instances = instancesRepository.getAllByFormId(form.formId)
-                val items = mutableListOf<MappableSelectItem>()
+                val items = mutableListOf<MappableItem>()
 
                 for (instance in instances) {
                     if (instance.geometry != null && instance.geometryType == Instance.GEOMETRY_TYPE_POINT) {
@@ -94,7 +98,7 @@ class FormMapViewModel(
             },
             foreground = {
                 mapTitle.value = it.first
-                mappableItems.value = it.second as List<MappableSelectItem>
+                mappableItems.value = it.second as List<MappableItem>
                 itemCount.value = it.third
                 isLoading.value = false
             }
@@ -105,7 +109,7 @@ class FormMapViewModel(
         instance: Instance,
         latitude: Double,
         longitude: Double
-    ): MappableSelectItem {
+    ): MappableItem {
         val instanceLastStatusChangeDate = instance.getStatusDescription(resources)
 
         return if (instance.deletedDate != null) {
@@ -116,7 +120,7 @@ class FormMapViewModel(
             )
 
             val info = "$instanceLastStatusChangeDate\n${dateFormat.format(instance.deletedDate)}"
-            MappableSelectItem.MappableSelectPoint(
+            MappableItem.MappablePoint(
                 instance.dbId,
                 instance.userVisibleInstanceName(resources),
                 point = MapPoint(latitude, longitude),
@@ -131,7 +135,7 @@ class FormMapViewModel(
             ).contains(instance.status)
         ) {
             val info = "$instanceLastStatusChangeDate\n${resources.getString(org.odk.collect.strings.R.string.cannot_edit_completed_form)}"
-            MappableSelectItem.MappableSelectPoint(
+            MappableItem.MappablePoint(
                 instance.dbId,
                 instance.userVisibleInstanceName(resources),
                 point = MapPoint(latitude, longitude),
@@ -147,7 +151,7 @@ class FormMapViewModel(
                     createViewAction()
                 }
 
-            MappableSelectItem.MappableSelectPoint(
+            MappableItem.MappablePoint(
                 instance.dbId,
                 instance.userVisibleInstanceName(resources),
                 point = MapPoint(latitude, longitude),

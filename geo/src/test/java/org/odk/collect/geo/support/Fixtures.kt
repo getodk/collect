@@ -2,12 +2,12 @@ package org.odk.collect.geo.support
 
 import android.R
 import org.odk.collect.geo.selection.IconifiedText
-import org.odk.collect.geo.selection.MappableSelectItem
+import org.odk.collect.geo.selection.MappableItem
 import org.odk.collect.maps.MapPoint
 
 object Fixtures {
-    fun actionMappableSelectPoint(): MappableSelectItem.MappableSelectPoint {
-        return MappableSelectItem.MappableSelectPoint(
+    fun actionMappableSelectPoint(): MappableItem.MappablePoint {
+        return MappableItem.MappablePoint(
             0,
             "0",
             listOf(IconifiedText(R.drawable.ic_lock_idle_charging, "An item")),
@@ -18,8 +18,8 @@ object Fixtures {
         )
     }
 
-    fun infoMappableSelectPoint(): MappableSelectItem.MappableSelectPoint {
-        return MappableSelectItem.MappableSelectPoint(
+    fun infoMappableSelectPoint(): MappableItem.MappablePoint {
+        return MappableItem.MappablePoint(
             0,
             "0",
             listOf(IconifiedText(R.drawable.ic_lock_idle_charging, "An item")),
@@ -30,8 +30,8 @@ object Fixtures {
         )
     }
 
-    fun actionMappableSelectLine(): MappableSelectItem.MappableSelectLine {
-        return MappableSelectItem.MappableSelectLine(
+    fun actionMappableSelectLine(): MappableItem.MappableLine {
+        return MappableItem.MappableLine(
             0,
             "0",
             listOf(IconifiedText(R.drawable.ic_lock_idle_charging, "An item")),
@@ -40,8 +40,8 @@ object Fixtures {
         )
     }
 
-    fun actionMappableSelectPolygon(): MappableSelectItem.MappableSelectPolygon {
-        return MappableSelectItem.MappableSelectPolygon(
+    fun actionMappableSelectPolygon(): MappableItem.MappablePolygon {
+        return MappableItem.MappablePolygon(
             0,
             "0",
             listOf(IconifiedText(R.drawable.ic_lock_idle_charging, "An item")),

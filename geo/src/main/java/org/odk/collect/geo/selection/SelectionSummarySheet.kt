@@ -44,7 +44,7 @@ internal class SelectionSummarySheet(context: Context, attrs: AttributeSet?) :
         }
     }
 
-    fun setItem(item: MappableSelectItem) {
+    fun setItem(item: MappableItem) {
         itemId = item.id
         when (item.status) {
             Status.ERRORS -> binding.statusChip.errors = true

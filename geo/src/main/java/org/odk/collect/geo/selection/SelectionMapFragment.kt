@@ -85,7 +85,7 @@ class SelectionMapFragment(
     private lateinit var summarySheet: SelectionSummarySheet
     private lateinit var bottomSheetCallback: BottomSheetCallback
 
-    private val itemsByFeatureId: MutableMap<Int, MappableSelectItem> = mutableMapOf()
+    private val itemsByFeatureId: MutableMap<Int, MappableItem> = mutableMapOf()
     private val featureIdsByItemId: MutableMap<Long, Int> = mutableMapOf()
 
     /**
@@ -267,7 +267,7 @@ class SelectionMapFragment(
                 val selectedItem = selectedItemViewModel.getSelectedItem()
                 if (newState == STATE_HIDDEN && selectedItem != null) {
                     selectedItemViewModel.setSelectedItem(null)
-                    if (selectedItem is MappableSelectItem.MappableSelectPoint) {
+                    if (selectedItem is MappableItem.MappablePoint) {
                         resetIcon(selectedItem)
                     }
 
@@ -301,7 +301,7 @@ class SelectionMapFragment(
         val selectedItem = selectedItemViewModel.getSelectedItem()
 
         if (item != null) {
-            if (selectedItem != null && selectedItem.id != item.id && selectedItem is MappableSelectItem.MappableSelectPoint) {
+            if (selectedItem != null && selectedItem.id != item.id && selectedItem is MappableItem.MappablePoint) {
                 resetIcon(selectedItem)
             }
 
@@ -314,9 +314,9 @@ class SelectionMapFragment(
                 )
             } else {
                 when (item) {
-                    is MappableSelectItem.MappableSelectLine -> map.zoomToBoundingBox(item.points, 0.8, true)
-                    is MappableSelectItem.MappableSelectPolygon -> map.zoomToBoundingBox(item.points, 0.8, true)
-                    is MappableSelectItem.MappableSelectPoint -> {
+                    is MappableItem.MappableLine -> map.zoomToBoundingBox(item.points, 0.8, true)
+                    is MappableItem.MappablePolygon -> map.zoomToBoundingBox(item.points, 0.8, true)
+                    is MappableItem.MappablePoint -> {
                         val point = item.point
 
                         if (maintainZoom) {
@@ -353,15 +353,17 @@ class SelectionMapFragment(
         summarySheetBehavior.state = STATE_HIDDEN
     }
 
-    private fun updateItems(items: List<MappableSelectItem>) {
+    private fun updateItems(items: List<MappableItem>) {
         if (!::map.isInitialized) {
             return
         }
 
         updateFeatures(items)
 
-        val previouslySelectedItem =
-            itemsByFeatureId.filter { it.value.selected }.map { it.key }.firstOrNull()
+        val previouslySelectedItem = itemsByFeatureId
+                .filter { selectionMapData.isSelected(it.value) }
+                .map { it.key }
+                .firstOrNull()
         val selectedItem = selectedItemViewModel.getSelectedItem()
 
         if (selectedItem != null) {
@@ -378,7 +380,7 @@ class SelectionMapFragment(
         }
     }
 
-    private fun resetIcon(selectedItem: MappableSelectItem.MappableSelectPoint) {
+    private fun resetIcon(selectedItem: MappableItem.MappablePoint) {
         val featureId = featureIdsByItemId[selectedItem.id]
         if (featureId != null) {
             map.setMarkerIcon(
@@ -391,14 +393,14 @@ class SelectionMapFragment(
     /**
      * Clears the existing features on the map and places features for the current form's instances.
      */
-    private fun updateFeatures(items: List<MappableSelectItem>) {
+    private fun updateFeatures(items: List<MappableItem>) {
         points.clear()
         map.clearFeatures(featureIdsByItemId.values.toList())
         itemsByFeatureId.clear()
 
-        val singlePoints = items.filterIsInstance<MappableSelectItem.MappableSelectPoint>()
-        val lines = items.filterIsInstance<MappableSelectItem.MappableSelectLine>()
-        val polygons = items.filterIsInstance<MappableSelectItem.MappableSelectPolygon>()
+        val singlePoints = items.filterIsInstance<MappableItem.MappablePoint>()
+        val lines = items.filterIsInstance<MappableItem.MappableLine>()
+        val polygons = items.filterIsInstance<MappableItem.MappablePolygon>()
 
         val markerDescriptions = singlePoints.map {
             MarkerDescription(
@@ -434,9 +436,9 @@ class SelectionMapFragment(
             itemsByFeatureId[featureId] = item
             featureIdsByItemId[item.id] = featureId
             when (item) {
-                is MappableSelectItem.MappableSelectPoint -> points.add(item.point)
-                is MappableSelectItem.MappableSelectLine -> points.addAll(item.points)
-                is MappableSelectItem.MappableSelectPolygon -> points.addAll(item.points)
+                is MappableItem.MappablePoint -> points.add(item.point)
+                is MappableItem.MappableLine -> points.addAll(item.points)
+                is MappableItem.MappablePolygon -> points.addAll(item.points)
             }
         }
 
@@ -452,21 +454,21 @@ class SelectionMapFragment(
 
 internal class SelectedItemViewModel : ViewModel() {
 
-    private var selectedItem: MappableSelectItem? = null
+    private var selectedItem: MappableItem? = null
 
-    fun getSelectedItem(): MappableSelectItem? {
+    fun getSelectedItem(): MappableItem? {
         return selectedItem
     }
 
-    fun setSelectedItem(item: MappableSelectItem?) {
+    fun setSelectedItem(item: MappableItem?) {
         selectedItem = item
     }
 }
 
-interface SelectionMapData {
-    fun isLoading(): NonNullLiveData<Boolean>
+interface SelectionMapData : MappableData {
     fun getMapTitle(): LiveData<String?>
     fun getItemType(): String
     fun getItemCount(): NonNullLiveData<Int>
-    fun getMappableItems(): LiveData<List<MappableSelectItem>?>
+
+    fun isSelected(mappableItem: MappableItem): Boolean
 }

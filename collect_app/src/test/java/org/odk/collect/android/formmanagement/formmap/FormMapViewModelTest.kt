@@ -17,7 +17,7 @@ import org.odk.collect.formstest.InMemFormsRepository
 import org.odk.collect.formstest.InMemInstancesRepository
 import org.odk.collect.formstest.InstanceUtils
 import org.odk.collect.geo.selection.IconifiedText
-import org.odk.collect.geo.selection.MappableSelectItem
+import org.odk.collect.geo.selection.MappableItem
 import org.odk.collect.geo.selection.Status
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.settings.InMemSettingsProvider
@@ -107,7 +107,7 @@ class FormMapViewModelTest {
         val viewModel = createAndLoadViewModel(form)
         assertThat(viewModel.getMappableItems().value!!.size, equalTo(1))
 
-        val expectedItem = MappableSelectItem.MappableSelectPoint(
+        val expectedItem = MappableItem.MappablePoint(
             instanceWithPoint.dbId,
             instanceWithPoint.displayName,
             point = MapPoint(2.0, 1.0),
@@ -146,7 +146,7 @@ class FormMapViewModelTest {
         )
 
         val viewModel = createAndLoadViewModel(form)
-        val expectedItem = MappableSelectItem.MappableSelectPoint(
+        val expectedItem = MappableItem.MappablePoint(
             instance.dbId,
             instance.userVisibleInstanceName(),
             point = MapPoint(2.0, 1.0),
@@ -185,7 +185,7 @@ class FormMapViewModelTest {
         )
 
         val viewModel = createAndLoadViewModel(form)
-        val expectedItem = MappableSelectItem.MappableSelectPoint(
+        val expectedItem = MappableItem.MappablePoint(
             instance.dbId,
             instance.userVisibleInstanceName(),
             point = MapPoint(2.0, 1.0),
@@ -224,7 +224,7 @@ class FormMapViewModelTest {
         )
 
         val viewModel = createAndLoadViewModel(form)
-        val expectedItem = MappableSelectItem.MappableSelectPoint(
+        val expectedItem = MappableItem.MappablePoint(
             instance.dbId,
             instance.userVisibleInstanceName(),
             point = MapPoint(2.0, 1.0),
@@ -263,7 +263,7 @@ class FormMapViewModelTest {
         )
 
         val viewModel = createAndLoadViewModel(form)
-        val expectedItem = MappableSelectItem.MappableSelectPoint(
+        val expectedItem = MappableItem.MappablePoint(
             instance.dbId,
             instance.userVisibleInstanceName(),
             point = MapPoint(2.0, 1.0),
@@ -303,7 +303,7 @@ class FormMapViewModelTest {
         settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_EDIT_SAVED, false)
 
         val viewModel = createAndLoadViewModel(form)
-        val expectedItem = MappableSelectItem.MappableSelectPoint(
+        val expectedItem = MappableItem.MappablePoint(
             instance.dbId,
             instance.userVisibleInstanceName(),
             point = MapPoint(2.0, 1.0),
@@ -341,7 +341,7 @@ class FormMapViewModelTest {
         )
 
         val viewModel = createAndLoadViewModel(form)
-        val expectedItem = MappableSelectItem.MappableSelectPoint(
+        val expectedItem = MappableItem.MappablePoint(
             instance.dbId,
             instance.userVisibleInstanceName(),
             point = MapPoint(2.0, 1.0),
@@ -379,7 +379,7 @@ class FormMapViewModelTest {
         )
 
         val viewModel = createAndLoadViewModel(form)
-        val expectedItem = MappableSelectItem.MappableSelectPoint(
+        val expectedItem = MappableItem.MappablePoint(
             instance.dbId,
             instance.userVisibleInstanceName(),
             point = MapPoint(2.0, 1.0),
@@ -417,7 +417,7 @@ class FormMapViewModelTest {
         )
 
         val viewModel = createAndLoadViewModel(form)
-        val expectedItem = MappableSelectItem.MappableSelectPoint(
+        val expectedItem = MappableItem.MappablePoint(
             instance.dbId,
             instance.userVisibleInstanceName(),
             point = MapPoint(2.0, 1.0),
