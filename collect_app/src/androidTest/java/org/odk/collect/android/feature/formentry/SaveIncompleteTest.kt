@@ -44,4 +44,23 @@ class SaveIncompleteTest {
             .clickOnForm("Two Question Save Incomplete Required")
             .assertText("Dez")
     }
+
+    @Test
+    fun savingDraft_doesNotPruneNonRelevantNodes() {
+        rule.startAtMainMenu()
+            .copyForm("one-question-relevance.xml")
+            .startBlankForm("One Question Relevance")
+            .clickOnText("Yes")
+            .swipeToNextQuestion("what is your age")
+            .answerQuestion("what is your age", "30")
+            .swipeToPreviousQuestion("Do you want to continue?")
+            .clickOnText("No")
+            .pressBackAndSaveAsDraft()
+            .clickDrafts(1)
+            .clickOnForm("One Question Relevance")
+            .clickOnQuestion("Do you want to continue?")
+            .clickOnText("Yes")
+            .swipeToNextQuestion("what is your age")
+            .assertAnswer("what is your age", "30")
+    }
 }
