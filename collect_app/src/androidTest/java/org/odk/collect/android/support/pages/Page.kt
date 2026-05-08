@@ -599,7 +599,10 @@ abstract class Page<T : Page<T>> {
     }
 
     fun closeSnackbar(): T {
-        EspressoInteractions.clickOn(withContentDescription(org.odk.collect.strings.R.string.close_snackbar))
+        waitFor {
+            EspressoInteractions.clickOn(withContentDescription(org.odk.collect.strings.R.string.close_snackbar))
+        }
+
         return this as T
     }
 
