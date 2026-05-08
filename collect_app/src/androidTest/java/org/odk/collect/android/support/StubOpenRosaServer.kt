@@ -270,12 +270,13 @@ class StubOpenRosaServer : OpenRosaHttpInterface {
         }
 
     private fun getFormResponse(uri: URI): InputStream {
-        val formID = uri.query.split("=".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1]
+        val formID = getFormId(uri)
         return getFormXML(formID)
     }
 
     private fun getManifestResponse(uri: URI): InputStream? {
-        val formID = uri.query.split("=".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1]
+        val formID = getFormId(uri)
+
         val xformItem = forms[formID.toInt()]
 
         if (xformItem.mediaFiles.isEmpty()) {
@@ -390,6 +391,11 @@ class StubOpenRosaServer : OpenRosaHttpInterface {
             )
         )
     }
+
+    private fun getFormId(uri: URI) =
+        uri.query.split("&")
+            .first { it.startsWith("formId=") }
+            .substringAfter("=")
 
     fun deleteEntity(id: String) {
         deletedEntities.add(id)

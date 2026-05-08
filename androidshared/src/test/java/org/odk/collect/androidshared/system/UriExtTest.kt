@@ -1,6 +1,7 @@
 package org.odk.collect.androidshared.system
 
 import android.app.Application
+import android.net.Uri
 import androidx.core.net.toUri
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -40,5 +41,37 @@ class UriExtTest {
         val fileUri = file.toUri()
 
         assertThat(fileUri.getFileName(context), equalTo(file.name))
+    }
+
+    @Test
+    fun `#addQueryParam adds single query param`() {
+        val uri = Uri.parse("https://example.com")
+        val result = uri.addQueryParam("id", "123")
+
+        assertThat(result.toString(), equalTo("https://example.com?id=123"))
+    }
+
+    @Test
+    fun `#addQueryParam preserves existing query parameters`() {
+        val uri = Uri.parse("https://example.com?foo=bar")
+        val result = uri.addQueryParam("id", "123")
+
+        assertThat(result.toString(), equalTo("https://example.com?foo=bar&id=123"))
+    }
+
+    @Test
+    fun `#addQueryParam allows null value`() {
+        val uri = Uri.parse("https://example.com")
+        val result = uri.addQueryParam("id", null)
+
+        assertThat(result.toString(), equalTo("https://example.com?id=null"))
+    }
+
+    @Test
+    fun `#addQueryParam does not change uri path`() {
+        val uri = Uri.parse("https://example.com/path/subpath")
+        val result = uri.addQueryParam("id", "123")
+
+        assertThat(result.toString(), equalTo("https://example.com/path/subpath?id=123"))
     }
 }

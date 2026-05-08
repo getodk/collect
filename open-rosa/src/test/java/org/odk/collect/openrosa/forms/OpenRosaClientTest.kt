@@ -38,7 +38,8 @@ class OpenRosaClientTest {
             "http://blah.com///",
             httpInterface,
             webCredentialsProvider,
-            responseParser
+            responseParser,
+            "myDeviceId"
         )
 
         whenever(
@@ -56,13 +57,13 @@ class OpenRosaClientTest {
         )
 
         formListApi.fetchFormList()
-        verify(httpInterface).executeGetRequest(eq(URI("http://blah.com/formList")), any(), any())
+        verify(httpInterface).executeGetRequest(eq(URI("http://blah.com/formList?deviceID=myDeviceId")), any(), any())
     }
 
     @Test
     fun fetchFormList_whenThereIsAnUnknownHostException_throwsUnreachableFormApiException() {
         val formListApi =
-            OpenRosaClient("http://blah.com", httpInterface, webCredentialsProvider, responseParser)
+            OpenRosaClient("http://blah.com", httpInterface, webCredentialsProvider, responseParser, "myDeviceId")
 
         try {
             whenever(
@@ -81,7 +82,7 @@ class OpenRosaClientTest {
     @Test
     fun fetchFormList_whenThereIsAnSSLException_throwsSecurityErrorFormApiException() {
         val formListApi =
-            OpenRosaClient("http://blah.com", httpInterface, webCredentialsProvider, responseParser)
+            OpenRosaClient("http://blah.com", httpInterface, webCredentialsProvider, responseParser, "myDeviceId")
 
         try {
             whenever(
@@ -100,7 +101,7 @@ class OpenRosaClientTest {
     @Test
     fun fetchFormList_whenThereIsATimeout_throwsFetchError() {
         val formListApi =
-            OpenRosaClient("http://blah.com", httpInterface, webCredentialsProvider, responseParser)
+            OpenRosaClient("http://blah.com", httpInterface, webCredentialsProvider, responseParser, "myDeviceId")
 
         try {
             whenever(
@@ -119,7 +120,7 @@ class OpenRosaClientTest {
     @Test
     fun fetchFormList_whenThereIsA404_throwsUnreachableApiException() {
         val formListApi =
-            OpenRosaClient("http://blah.com", httpInterface, webCredentialsProvider, responseParser)
+            OpenRosaClient("http://blah.com", httpInterface, webCredentialsProvider, responseParser, "myDeviceId")
 
         try {
             whenever(
@@ -136,7 +137,7 @@ class OpenRosaClientTest {
     @Test
     fun fetchFormList_whenThereIsAServerError_throwsServerError() {
         val formListApi =
-            OpenRosaClient("http://blah.com", httpInterface, webCredentialsProvider, responseParser)
+            OpenRosaClient("http://blah.com", httpInterface, webCredentialsProvider, responseParser, "myDeviceId")
 
         try {
             whenever(
@@ -154,7 +155,7 @@ class OpenRosaClientTest {
     @Test
     fun fetchFormList_whenOpenRosaResponse_whenParserFails_throwsParseError() {
         val formListApi =
-            OpenRosaClient("http://blah.com", httpInterface, webCredentialsProvider, responseParser)
+            OpenRosaClient("http://blah.com", httpInterface, webCredentialsProvider, responseParser, "myDeviceId")
 
         try {
             whenever(
@@ -186,7 +187,8 @@ class OpenRosaClientTest {
             "http://blah.com///",
             httpInterface,
             webCredentialsProvider,
-            responseParser
+            responseParser,
+            "myDeviceId"
         )
 
         whenever(
@@ -210,7 +212,7 @@ class OpenRosaClientTest {
     @Test
     fun fetchManifest_whenThereIsAnUnknownHostException_throwsUnreachableFormApiException() {
         val formListApi =
-            OpenRosaClient("http://blah.com", httpInterface, webCredentialsProvider, responseParser)
+            OpenRosaClient("http://blah.com", httpInterface, webCredentialsProvider, responseParser, "myDeviceId")
 
         try {
             whenever(
@@ -229,7 +231,7 @@ class OpenRosaClientTest {
     @Test
     fun fetchManifest_whenThereIsAServerError_throwsServerError() {
         val formListApi =
-            OpenRosaClient("http://blah.com", httpInterface, webCredentialsProvider, responseParser)
+            OpenRosaClient("http://blah.com", httpInterface, webCredentialsProvider, responseParser, "myDeviceId")
 
         try {
             whenever(
@@ -247,7 +249,7 @@ class OpenRosaClientTest {
     @Test
     fun fetchManifest_whenOpenRosaResponse_whenParserFails_throwsParseError() {
         val formListApi =
-            OpenRosaClient("http://blah.com", httpInterface, webCredentialsProvider, responseParser)
+            OpenRosaClient("http://blah.com", httpInterface, webCredentialsProvider, responseParser, "myDeviceId")
 
         try {
             whenever(
@@ -276,7 +278,7 @@ class OpenRosaClientTest {
     @Test
     fun fetchManifest_whenNotOpenRosaResponse_throwsParseError() {
         val formListApi =
-            OpenRosaClient("http://blah.com", httpInterface, webCredentialsProvider, responseParser)
+            OpenRosaClient("http://blah.com", httpInterface, webCredentialsProvider, responseParser, "myDeviceId")
 
         try {
             whenever(
@@ -300,7 +302,7 @@ class OpenRosaClientTest {
     @Test
     fun fetchForm_whenThereIsAServerError_throwsServerError() {
         val formListApi =
-            OpenRosaClient("http://blah.com", httpInterface, webCredentialsProvider, responseParser)
+            OpenRosaClient("http://blah.com", httpInterface, webCredentialsProvider, responseParser, "myDeviceId")
 
         try {
             whenever(
@@ -319,7 +321,7 @@ class OpenRosaClientTest {
     @Throws(Exception::class)
     fun fetchMediaFile_whenThereIsAServerError_throwsServerError() {
         val formListApi =
-            OpenRosaClient("http://blah.com", httpInterface, webCredentialsProvider, responseParser)
+            OpenRosaClient("http://blah.com", httpInterface, webCredentialsProvider, responseParser, "myDeviceId")
 
         try {
             whenever(
@@ -337,7 +339,7 @@ class OpenRosaClientTest {
     @Test
     fun fetchDeletedStates_whenNotOpenRosaResponse_throwsParseError() {
         val client =
-            OpenRosaClient("http://blah.com", httpInterface, webCredentialsProvider, responseParser)
+            OpenRosaClient("http://blah.com", httpInterface, webCredentialsProvider, responseParser, "myDeviceId")
 
         try {
             whenever(
@@ -362,7 +364,7 @@ class OpenRosaClientTest {
     @Test
     fun fetchDeletedStates_whenOpenRosaResponse_whenParserFails_throwsParseError() {
         val client =
-            OpenRosaClient("http://blah.com", httpInterface, webCredentialsProvider, responseParser)
+            OpenRosaClient("http://blah.com", httpInterface, webCredentialsProvider, responseParser, "myDeviceId")
 
         try {
             whenever(
