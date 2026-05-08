@@ -6,7 +6,7 @@ import org.odk.collect.geo.items.MappableItem
 import org.odk.collect.maps.MapPoint
 
 object Fixtures {
-    fun actionMappableSelectPoint(): MappableItem.MappablePoint {
+    fun actionMappablePoint(): MappableItem.MappablePoint {
         return MappableItem.MappablePoint(
             0,
             "0",
@@ -18,7 +18,7 @@ object Fixtures {
         )
     }
 
-    fun infoMappableSelectPoint(): MappableItem.MappablePoint {
+    fun infoMappablePoint(): MappableItem.MappablePoint {
         return MappableItem.MappablePoint(
             0,
             "0",
@@ -30,7 +30,7 @@ object Fixtures {
         )
     }
 
-    fun actionMappableSelectLine(): MappableItem.MappableLine {
+    fun actionMappableLine(): MappableItem.MappableLine {
         return MappableItem.MappableLine(
             0,
             "0",
@@ -40,7 +40,7 @@ object Fixtures {
         )
     }
 
-    fun actionMappableSelectPolygon(): MappableItem.MappablePolygon {
+    fun actionMappablePolygon(): MappableItem.MappablePolygon {
         return MappableItem.MappablePolygon(
             0,
             "0",

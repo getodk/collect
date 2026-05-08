@@ -233,10 +233,6 @@ class FakeMapFragment(private val ready: Boolean = false) : Fragment(), MapFragm
         return markers.values.toList()
     }
 
-    fun getMarkersPoints(): List<MapPoint> {
-        return markers.values.map { it.point }
-    }
-
     fun getMarkerIcons(): List<MarkerIconDescription?> {
         return markers.values.map { it.iconDescription }
     }
