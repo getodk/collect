@@ -54,8 +54,8 @@ object EdgeToEdge {
         ViewCompat.setOnApplyWindowInsetsListener(view) { _, windowInsets ->
             view.post {
                 val anchorOffset = if (anchorView != null && anchorView.isVisible) {
-                    val lp = anchorView.layoutParams as? ViewGroup.MarginLayoutParams
-                    anchorView.height + (lp?.bottomMargin ?: 0)
+                    val layoutParams = anchorView.layoutParams as? ViewGroup.MarginLayoutParams
+                    anchorView.height + (layoutParams?.bottomMargin ?: 0)
                 } else {
                     0
                 }
