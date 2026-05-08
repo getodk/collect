@@ -30,13 +30,6 @@ class CollectTestRule @JvmOverloads constructor(
         }
     }
 
-    fun reopenApp(): MainMenuPage {
-        return launch(
-            getLaunchIntent(),
-            MainMenuPage()
-        ).assertOnPage()
-    }
-
     fun startAtMainMenu() = MainMenuPage()
 
     fun startAtFirstLaunch() = FirstLaunchPage()
