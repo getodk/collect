@@ -50,6 +50,7 @@ import org.odk.collect.geo.support.FakeMapFragment
 import org.odk.collect.geo.support.Fixtures
 import org.odk.collect.geo.support.MapFragmentAssertions.hasZoomedToCurrentLocation
 import org.odk.collect.geo.support.MapFragmentAssertions.showsCurrentLocation
+import org.odk.collect.geo.support.MapFragmentAssertions.showsMappableData
 import org.odk.collect.geo.support.MapFragmentAssertions.showsMappableLines
 import org.odk.collect.geo.support.MapFragmentAssertions.showsMappablePoints
 import org.odk.collect.geo.support.MapFragmentAssertions.showsMappablePolygons
@@ -178,10 +179,10 @@ class SelectionMapFragmentTest {
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.ready()
 
-        assertThat(map, showsMappablePoints(items))
+        assertThat(map, showsMappableData(data))
 
         itemsLiveData.value = emptyList()
-        assertThat(map, showsMappablePoints(emptyList()))
+        assertThat(map, showsMappableData(data))
     }
 
     @Test
@@ -248,7 +249,7 @@ class SelectionMapFragmentTest {
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.ready()
-        assertThat(map, showsMappableLines(items, strokeWidth = 10f, strokeColor = -1))
+        assertThat(map, showsMappableData(data, lineStrokeWidth = 10f, lineStrokeColor = -1))
         onView(withText(application.getString(org.odk.collect.strings.R.string.select_item_count, "Things", 0, 1)))
             .check(matches(isDisplayed()))
     }
@@ -277,11 +278,11 @@ class SelectionMapFragmentTest {
 
         assertThat(
             map,
-            showsMappablePolygons(
-                items,
-                strokeWidth = 10f,
-                strokeColor = -5583634,
-                fillColor = 1157627903
+            showsMappableData(
+                data,
+                polygonStrokeWidth = 10f,
+                polygonStrokeColor = -5583634,
+                polygonFillColor = 1157627903
             )
         )
         onView(withText(application.getString(org.odk.collect.strings.R.string.select_item_count, "Things", 0, 1)))
