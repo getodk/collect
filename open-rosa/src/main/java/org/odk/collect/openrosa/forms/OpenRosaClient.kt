@@ -1,6 +1,6 @@
 package org.odk.collect.openrosa.forms
 
-import org.odk.collect.entities.javarosa.parse.toUriWithParam
+import org.odk.collect.entities.javarosa.parse.toUri
 import org.odk.collect.entities.server.EntitySource
 import org.odk.collect.forms.FormListItem
 import org.odk.collect.forms.FormSource
@@ -154,7 +154,7 @@ class OpenRosaClient(
     }
 
     override fun fetchDeletedStates(integrityUrl: String, ids: List<String>): List<Pair<String, Boolean>> {
-        val uri = integrityUrl.toUriWithParam("id", ids.joinToString(","))
+        val uri = integrityUrl.toUri("id" to ids.joinToString(","))
 
         val result = openRosaXMLFetcher.getXML(uri.toString())
         if (!result.isOpenRosaResponse) {

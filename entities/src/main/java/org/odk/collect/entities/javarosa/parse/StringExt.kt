@@ -23,8 +23,12 @@ fun String?.isV4UUID(): Boolean {
     }
 }
 
-fun String.toUriWithParam(key: String, value: String?): Uri =
+fun String.toUri(vararg params: Pair<String, String?>): Uri =
     this.toUri()
         .buildUpon()
-        .appendQueryParameter(key, value)
+        .apply {
+            params.forEach { (key, value) ->
+                appendQueryParameter(key, value)
+            }
+        }
         .build()

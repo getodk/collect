@@ -17,6 +17,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import kotlin.Pair;
 import timber.log.Timber;
 
 /**
@@ -90,7 +91,7 @@ public class OpenRosaXmlFetcher {
             throw new Exception("Invalid server URL (no hostname): " + downloadUrl);
         }
 
-        uri = URI.create(StringExtKt.toUriWithParam(uri.toString(), "deviceID", deviceId).toString());
+        uri = URI.create(StringExtKt.toUri(uri.toString(), new Pair<>("deviceID", deviceId)).toString());
         return httpInterface.executeGetRequest(uri, contentType, webCredentialsProvider.getCredentials(uri));
     }
 

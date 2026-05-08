@@ -47,33 +47,33 @@ class StringExtTest {
     }
 
     @Test
-    fun `#toUriWithParam adds single query param to uri`() {
+    fun `#toUri adds single query param to uri`() {
         val url = "https://example.com"
-        val result = url.toUriWithParam("id", "123")
+        val result = url.toUri("id" to "123")
 
         assertThat(result.toString(), equalTo("https://example.com?id=123"))
     }
 
     @Test
-    fun `#toUriWithParam preserves existing query parameters`() {
+    fun `#toUri preserves existing query parameters`() {
         val url = "https://example.com?foo=bar"
-        val result = url.toUriWithParam("id", "123")
+        val result = url.toUri("id" to "123")
 
         assertThat(result.toString(), equalTo("https://example.com?foo=bar&id=123"))
     }
 
     @Test
-    fun `#toUriWithParam sets null value as query param`() {
+    fun `#toUri sets null value as query param`() {
         val url = "https://example.com"
-        val result = url.toUriWithParam("id", null)
+        val result = url.toUri("id" to null)
 
         assertThat(result.toString(), equalTo("https://example.com?id=null"))
     }
 
     @Test
-    fun `#toUriWithParam does not change uri path`() {
+    fun `#toUri does not change uri path`() {
         val url = "https://example.com/path/subpath"
-        val result = url.toUriWithParam("id", "123")
+        val result = url.toUri("id" to "123")
 
         assertThat(result.toString(), equalTo("https://example.com/path/subpath?id=123"))
     }
