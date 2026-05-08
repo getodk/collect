@@ -117,7 +117,7 @@ internal class SelectChoicesMapData(
                                 val markerSymbol =
                                     getPropertyValue(selectChoice, MARKER_SYMBOL)
 
-                                list + MappableItem.MappablePoint(
+                                list + MappableItem.Point(
                                     index.toLong(),
                                     prompt.getSelectChoiceText(selectChoice),
                                     properties,
@@ -132,7 +132,7 @@ internal class SelectChoicesMapData(
                                     )
                                 )
                             } else if (points.first() != points.last()) {
-                                list + MappableItem.MappableLine(
+                                list + MappableItem.Line(
                                     index.toLong(),
                                     prompt.getSelectChoiceText(selectChoice),
                                     properties,
@@ -145,7 +145,7 @@ internal class SelectChoicesMapData(
                                     strokeColor = getPropertyValue(selectChoice, STROKE)
                                 )
                             } else {
-                                list + MappableItem.MappablePolygon(
+                                list + MappableItem.Polygon(
                                     index.toLong(),
                                     prompt.getSelectChoiceText(selectChoice),
                                     properties,

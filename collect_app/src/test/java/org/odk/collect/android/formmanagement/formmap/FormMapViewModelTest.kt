@@ -107,7 +107,7 @@ class FormMapViewModelTest {
         val viewModel = createAndLoadViewModel(form)
         assertThat(viewModel.getMappableItems().value!!.size, equalTo(1))
 
-        val expectedItem = MappableItem.MappablePoint(
+        val expectedItem = MappableItem.Point(
             instanceWithPoint.dbId,
             instanceWithPoint.displayName,
             point = MapPoint(2.0, 1.0),
@@ -146,7 +146,7 @@ class FormMapViewModelTest {
         )
 
         val viewModel = createAndLoadViewModel(form)
-        val expectedItem = MappableItem.MappablePoint(
+        val expectedItem = MappableItem.Point(
             instance.dbId,
             instance.userVisibleInstanceName(),
             point = MapPoint(2.0, 1.0),
@@ -185,7 +185,7 @@ class FormMapViewModelTest {
         )
 
         val viewModel = createAndLoadViewModel(form)
-        val expectedItem = MappableItem.MappablePoint(
+        val expectedItem = MappableItem.Point(
             instance.dbId,
             instance.userVisibleInstanceName(),
             point = MapPoint(2.0, 1.0),
@@ -224,7 +224,7 @@ class FormMapViewModelTest {
         )
 
         val viewModel = createAndLoadViewModel(form)
-        val expectedItem = MappableItem.MappablePoint(
+        val expectedItem = MappableItem.Point(
             instance.dbId,
             instance.userVisibleInstanceName(),
             point = MapPoint(2.0, 1.0),
@@ -263,7 +263,7 @@ class FormMapViewModelTest {
         )
 
         val viewModel = createAndLoadViewModel(form)
-        val expectedItem = MappableItem.MappablePoint(
+        val expectedItem = MappableItem.Point(
             instance.dbId,
             instance.userVisibleInstanceName(),
             point = MapPoint(2.0, 1.0),
@@ -303,7 +303,7 @@ class FormMapViewModelTest {
         settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_EDIT_SAVED, false)
 
         val viewModel = createAndLoadViewModel(form)
-        val expectedItem = MappableItem.MappablePoint(
+        val expectedItem = MappableItem.Point(
             instance.dbId,
             instance.userVisibleInstanceName(),
             point = MapPoint(2.0, 1.0),
@@ -341,7 +341,7 @@ class FormMapViewModelTest {
         )
 
         val viewModel = createAndLoadViewModel(form)
-        val expectedItem = MappableItem.MappablePoint(
+        val expectedItem = MappableItem.Point(
             instance.dbId,
             instance.userVisibleInstanceName(),
             point = MapPoint(2.0, 1.0),
@@ -379,7 +379,7 @@ class FormMapViewModelTest {
         )
 
         val viewModel = createAndLoadViewModel(form)
-        val expectedItem = MappableItem.MappablePoint(
+        val expectedItem = MappableItem.Point(
             instance.dbId,
             instance.userVisibleInstanceName(),
             point = MapPoint(2.0, 1.0),
@@ -417,7 +417,7 @@ class FormMapViewModelTest {
         )
 
         val viewModel = createAndLoadViewModel(form)
-        val expectedItem = MappableItem.MappablePoint(
+        val expectedItem = MappableItem.Point(
             instance.dbId,
             instance.userVisibleInstanceName(),
             point = MapPoint(2.0, 1.0),

@@ -28,9 +28,9 @@ class MappableItemsDelegate {
         itemsAndFeatureIds.forEach { (item, featureId) ->
             itemsByFeatureId[featureId] = item
             when (item) {
-                is MappableItem.MappablePoint -> points.add(item.point)
-                is MappableItem.MappableLine -> points.addAll(item.points)
-                is MappableItem.MappablePolygon -> points.addAll(item.points)
+                is MappableItem.Point -> points.add(item.point)
+                is MappableItem.Line -> points.addAll(item.points)
+                is MappableItem.Polygon -> points.addAll(item.points)
             }
         }
     }
@@ -53,9 +53,9 @@ class MappableItemsDelegate {
         map: MapFragment,
         items: List<MappableItem>
     ): List<Pair<MappableItem, Int>> {
-        val singlePoints = items.filterIsInstance<MappableItem.MappablePoint>()
-        val lines = items.filterIsInstance<MappableItem.MappableLine>()
-        val polygons = items.filterIsInstance<MappableItem.MappablePolygon>()
+        val singlePoints = items.filterIsInstance<MappableItem.Point>()
+        val lines = items.filterIsInstance<MappableItem.Line>()
+        val polygons = items.filterIsInstance<MappableItem.Polygon>()
 
         val markerDescriptions = singlePoints.map {
             MarkerDescription(

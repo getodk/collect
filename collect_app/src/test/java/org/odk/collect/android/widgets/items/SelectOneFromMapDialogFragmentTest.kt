@@ -186,7 +186,7 @@ class SelectOneFromMapDialogFragmentTest {
                 data.getMappableItems().value,
                 equalTo(
                     listOf(
-                        MappableItem.MappablePoint(
+                        MappableItem.Point(
                             0,
                             "A",
                             point = MapPoint(
@@ -202,7 +202,7 @@ class SelectOneFromMapDialogFragmentTest {
                                 application.getString(org.odk.collect.strings.R.string.select_item)
                             )
                         ),
-                        MappableItem.MappablePoint(
+                        MappableItem.Point(
                             1,
                             "B",
                             point = MapPoint(

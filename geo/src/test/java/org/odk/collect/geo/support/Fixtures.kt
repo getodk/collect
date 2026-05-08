@@ -6,8 +6,8 @@ import org.odk.collect.geo.items.MappableItem
 import org.odk.collect.maps.MapPoint
 
 object Fixtures {
-    fun actionMappablePoint(): MappableItem.MappablePoint {
-        return MappableItem.MappablePoint(
+    fun actionMappablePoint(): MappableItem.Point {
+        return MappableItem.Point(
             0,
             "0",
             listOf(IconifiedText(R.drawable.ic_lock_idle_charging, "An item")),
@@ -18,8 +18,8 @@ object Fixtures {
         )
     }
 
-    fun infoMappablePoint(): MappableItem.MappablePoint {
-        return MappableItem.MappablePoint(
+    fun infoMappablePoint(): MappableItem.Point {
+        return MappableItem.Point(
             0,
             "0",
             listOf(IconifiedText(R.drawable.ic_lock_idle_charging, "An item")),
@@ -30,8 +30,8 @@ object Fixtures {
         )
     }
 
-    fun actionMappableLine(): MappableItem.MappableLine {
-        return MappableItem.MappableLine(
+    fun actionMappableLine(): MappableItem.Line {
+        return MappableItem.Line(
             0,
             "0",
             listOf(IconifiedText(R.drawable.ic_lock_idle_charging, "An item")),
@@ -40,8 +40,8 @@ object Fixtures {
         )
     }
 
-    fun actionMappablePolygon(): MappableItem.MappablePolygon {
-        return MappableItem.MappablePolygon(
+    fun actionMappablePolygon(): MappableItem.Polygon {
+        return MappableItem.Polygon(
             0,
             "0",
             listOf(IconifiedText(R.drawable.ic_lock_idle_charging, "An item")),

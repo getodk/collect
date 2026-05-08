@@ -51,7 +51,7 @@ class SelectChoicesMapDataTest {
         val mappableItems = data.getMappableItems().getOrAwaitValue()!!
         assertThat(mappableItems.size, equalTo(1))
 
-        val points = (mappableItems[0] as MappableItem.MappableLine).points
+        val points = (mappableItems[0] as MappableItem.Line).points
         assertThat(
             points,
             equalTo(listOf(MapPoint(12.0, -1.0, 3.0, 4.0), MapPoint(12.1, -1.0, 3.0, 4.0)))
@@ -81,7 +81,7 @@ class SelectChoicesMapDataTest {
         val mappableItems = data.getMappableItems().getOrAwaitValue()!!
         assertThat(mappableItems.size, equalTo(1))
 
-        val points = (mappableItems[0] as MappableItem.MappablePolygon).points
+        val points = (mappableItems[0] as MappableItem.Polygon).points
         assertThat(
             points,
             equalTo(listOf(MapPoint(12.0, -1.0, 3.0, 4.0), MapPoint(12.1, -1.0, 3.0, 4.0), MapPoint(12.0, -1.0, 3.0, 4.0)))
@@ -234,7 +234,7 @@ class SelectChoicesMapDataTest {
             .build()
 
         val data = loadDataForPrompt(prompt)
-        val item = data.getMappableItems().getOrAwaitValue()!![0] as MappableItem.MappablePoint
+        val item = data.getMappableItems().getOrAwaitValue()!![0] as MappableItem.Point
         assertThat(item.symbol, equalTo("A"))
         assertThat(item.color, equalTo("#ffffff"))
     }
@@ -265,7 +265,7 @@ class SelectChoicesMapDataTest {
             .build()
 
         val data = loadDataForPrompt(prompt)
-        val item = data.getMappableItems().getOrAwaitValue()!![0] as MappableItem.MappableLine
+        val item = data.getMappableItems().getOrAwaitValue()!![0] as MappableItem.Line
         assertThat(item.strokeWidth, equalTo("10"))
         assertThat(item.strokeColor, equalTo("#ffffff"))
     }
@@ -297,7 +297,7 @@ class SelectChoicesMapDataTest {
             .build()
 
         val data = loadDataForPrompt(prompt)
-        val item = data.getMappableItems().getOrAwaitValue()!![0] as MappableItem.MappablePolygon
+        val item = data.getMappableItems().getOrAwaitValue()!![0] as MappableItem.Polygon
         assertThat(item.strokeWidth, equalTo("10"))
         assertThat(item.strokeColor, equalTo("#000000"))
         assertThat(item.fillColor, equalTo("#ffffff"))
@@ -324,7 +324,7 @@ class SelectChoicesMapDataTest {
             .build()
 
         val data = loadDataForPrompt(prompt)
-        val item = data.getMappableItems().getOrAwaitValue()!![0] as MappableItem.MappablePoint
+        val item = data.getMappableItems().getOrAwaitValue()!![0] as MappableItem.Point
         assertThat(item.smallIcon, equalTo(org.odk.collect.icons.R.drawable.ic_map_marker_small))
         assertThat(item.largeIcon, equalTo(org.odk.collect.icons.R.drawable.ic_map_marker_big))
     }
@@ -358,11 +358,11 @@ class SelectChoicesMapDataTest {
 
         val data = loadDataForPrompt(prompt)
 
-        val firstItem = data.getMappableItems().getOrAwaitValue()!![0] as MappableItem.MappablePoint
+        val firstItem = data.getMappableItems().getOrAwaitValue()!![0] as MappableItem.Point
         assertThat(firstItem.smallIcon, equalTo(org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_small))
         assertThat(firstItem.largeIcon, equalTo(org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_big))
 
-        val secondItem = data.getMappableItems().getOrAwaitValue()!![1] as MappableItem.MappablePoint
+        val secondItem = data.getMappableItems().getOrAwaitValue()!![1] as MappableItem.Point
         assertThat(secondItem.smallIcon, equalTo(org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_small))
         assertThat(secondItem.largeIcon, equalTo(org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_big))
     }

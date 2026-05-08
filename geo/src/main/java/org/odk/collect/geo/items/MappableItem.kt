@@ -12,7 +12,7 @@ sealed class MappableItem {
     abstract val action: IconifiedText?
     abstract val status: Status?
 
-    data class MappablePoint(
+    data class Point(
         override val id: Long,
         override val name: String,
         override val properties: List<IconifiedText> = emptyList(),
@@ -26,7 +26,7 @@ sealed class MappableItem {
         val symbol: String? = null
     ) : MappableItem()
 
-    data class MappableLine(
+    data class Line(
         override val id: Long,
         override val name: String,
         override val properties: List<IconifiedText> = emptyList(),
@@ -38,7 +38,7 @@ sealed class MappableItem {
         val strokeColor: String? = null
     ) : MappableItem()
 
-    data class MappablePolygon(
+    data class Polygon(
         override val id: Long,
         override val name: String,
         override val properties: List<IconifiedText> = emptyList(),

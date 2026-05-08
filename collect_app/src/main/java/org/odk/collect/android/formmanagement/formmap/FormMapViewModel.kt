@@ -120,7 +120,7 @@ class FormMapViewModel(
             )
 
             val info = "$instanceLastStatusChangeDate\n${dateFormat.format(instance.deletedDate)}"
-            MappableItem.MappablePoint(
+            MappableItem.Point(
                 instance.dbId,
                 instance.userVisibleInstanceName(resources),
                 point = MapPoint(latitude, longitude),
@@ -135,7 +135,7 @@ class FormMapViewModel(
             ).contains(instance.status)
         ) {
             val info = "$instanceLastStatusChangeDate\n${resources.getString(org.odk.collect.strings.R.string.cannot_edit_completed_form)}"
-            MappableItem.MappablePoint(
+            MappableItem.Point(
                 instance.dbId,
                 instance.userVisibleInstanceName(resources),
                 point = MapPoint(latitude, longitude),
@@ -151,7 +151,7 @@ class FormMapViewModel(
                     createViewAction()
                 }
 
-            MappableItem.MappablePoint(
+            MappableItem.Point(
                 instance.dbId,
                 instance.userVisibleInstanceName(resources),
                 point = MapPoint(latitude, longitude),

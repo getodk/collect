@@ -50,6 +50,9 @@ import org.odk.collect.geo.support.FakeMapFragment
 import org.odk.collect.geo.support.Fixtures
 import org.odk.collect.geo.support.MapFragmentAssertions.hasZoomedToCurrentLocation
 import org.odk.collect.geo.support.MapFragmentAssertions.showsCurrentLocation
+import org.odk.collect.geo.support.MapFragmentAssertions.showsMappableLines
+import org.odk.collect.geo.support.MapFragmentAssertions.showsMappablePoints
+import org.odk.collect.geo.support.MapFragmentAssertions.showsMappablePolygons
 import org.odk.collect.geo.support.RobolectricApplication
 import org.odk.collect.location.Location
 import org.odk.collect.location.tracker.LocationTracker
@@ -165,23 +168,20 @@ class SelectionMapFragmentTest {
 
     @Test
     fun `updates markers when items update`() {
-        val items: List<MappableItem> = listOf(
+        val items = listOf(
             Fixtures.actionMappablePoint().copy(id = 0, point = MapPoint(40.0, 0.0)),
             Fixtures.actionMappablePoint().copy(id = 1, point = MapPoint(41.0, 0.0))
         )
-        val itemsLiveData = MutableLiveData(items)
+        val itemsLiveData = MutableLiveData<List<MappableItem>>(items)
         whenever(data.getMappableItems()).thenReturn(itemsLiveData)
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.ready()
 
-        assertThat(
-            map.getMarkers().map { it.point },
-            equalTo(itemsLiveData.value?.map { (it as MappableItem.MappablePoint).toMapPoint() })
-        )
+        assertThat(map, showsMappablePoints(items))
 
         itemsLiveData.value = emptyList()
-        assertThat(map.getMarkers(), equalTo(emptyList()))
+        assertThat(map, showsMappablePoints(emptyList()))
     }
 
     @Test
@@ -231,7 +231,7 @@ class SelectionMapFragmentTest {
 
     @Test
     fun `shows polyline when item is MappableLine`() {
-        val items: List<MappableItem> = listOf(
+        val items: List<MappableItem.Line> = listOf(
             Fixtures.actionMappableLine().copy(
                 id = 0,
                 points = listOf(
@@ -243,21 +243,19 @@ class SelectionMapFragmentTest {
             )
         )
 
-        val itemsLiveData = MutableLiveData(items)
+        val itemsLiveData = MutableLiveData<List<MappableItem>>(items)
         whenever(data.getMappableItems()).thenReturn(itemsLiveData)
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.ready()
-        assertThat(map.getPolyLines()[0].points, equalTo(itemsLiveData.value?.map { (it as MappableItem.MappableLine).points }?.first()))
-        assertThat(map.getPolyLines()[0].getStrokeWidth(), equalTo(10f))
-        assertThat(map.getPolyLines()[0].getStrokeColor(), equalTo(-1))
+        assertThat(map, showsMappableLines(items, strokeWidth = 10f, strokeColor = -1))
         onView(withText(application.getString(org.odk.collect.strings.R.string.select_item_count, "Things", 0, 1)))
             .check(matches(isDisplayed()))
     }
 
     @Test
     fun `shows polygon when item is MappablePolygon`() {
-        val items: List<MappableItem> = listOf(
+        val items: List<MappableItem.Polygon> = listOf(
             Fixtures.actionMappablePolygon().copy(
                 id = 0,
                 points = listOf(
@@ -271,16 +269,21 @@ class SelectionMapFragmentTest {
             )
         )
 
-        val itemsLiveData = MutableLiveData(items)
+        val itemsLiveData = MutableLiveData<List<MappableItem>>(items)
         whenever(data.getMappableItems()).thenReturn(itemsLiveData)
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.ready()
 
-        assertThat(map.getPolygons()[0].points, equalTo(itemsLiveData.value?.map { (it as MappableItem.MappablePolygon).points }?.first()))
-        assertThat(map.getPolygons()[0].getStrokeWidth(), equalTo(10f))
-        assertThat(map.getPolygons()[0].getStrokeColor(), equalTo(-5583634))
-        assertThat(map.getPolygons()[0].getFillColor(), equalTo(1157627903))
+        assertThat(
+            map,
+            showsMappablePolygons(
+                items,
+                strokeWidth = 10f,
+                strokeColor = -5583634,
+                fillColor = 1157627903
+            )
+        )
         onView(withText(application.getString(org.odk.collect.strings.R.string.select_item_count, "Things", 0, 1)))
             .check(matches(isDisplayed()))
     }
@@ -546,8 +549,8 @@ class SelectionMapFragmentTest {
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.ready()
 
-        map.clickOnFeatureId(map.getFeatureId(listOf((items[1] as MappableItem.MappablePoint).point)))
-        assertThat(map.getCenter(), equalTo((items[1] as MappableItem.MappablePoint).point))
+        map.clickOnFeatureId(map.getFeatureId(listOf((items[1] as MappableItem.Point).point)))
+        assertThat(map.getCenter(), equalTo((items[1] as MappableItem.Point).point))
     }
 
     @Test
@@ -995,7 +998,7 @@ class SelectionMapFragmentTest {
         assertThat(map, not(showsCurrentLocation(firstLocation.toMapPoint())))
     }
 
-    private fun MappableItem.MappablePoint.toMapPoint(): MapPoint {
+    private fun MappableItem.Point.toMapPoint(): MapPoint {
         return MapPoint(this.point.latitude, this.point.longitude)
     }
 }

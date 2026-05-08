@@ -256,7 +256,7 @@ class SelectionMapFragment(
                 val selectedItem = selectedMappableItemViewModel.getSelectedItem()
                 if (newState == STATE_HIDDEN && selectedItem != null) {
                     selectedMappableItemViewModel.setSelectedItem(null)
-                    if (selectedItem is MappableItem.MappablePoint) {
+                    if (selectedItem is MappableItem.Point) {
                         resetIcon(selectedItem)
                     }
 
@@ -294,7 +294,7 @@ class SelectionMapFragment(
         val selectedItem = selectedMappableItemViewModel.getSelectedItem()
 
         if (item != null) {
-            if (selectedItem != null && selectedItem.id != item.id && selectedItem is MappableItem.MappablePoint) {
+            if (selectedItem != null && selectedItem.id != item.id && selectedItem is MappableItem.Point) {
                 resetIcon(selectedItem)
             }
 
@@ -307,9 +307,9 @@ class SelectionMapFragment(
                 )
             } else {
                 when (item) {
-                    is MappableItem.MappableLine -> map.zoomToBoundingBox(item.points, 0.8, true)
-                    is MappableItem.MappablePolygon -> map.zoomToBoundingBox(item.points, 0.8, true)
-                    is MappableItem.MappablePoint -> {
+                    is MappableItem.Line -> map.zoomToBoundingBox(item.points, 0.8, true)
+                    is MappableItem.Polygon -> map.zoomToBoundingBox(item.points, 0.8, true)
+                    is MappableItem.Point -> {
                         val point = item.point
 
                         if (maintainZoom) {
@@ -377,7 +377,7 @@ class SelectionMapFragment(
         }
     }
 
-    private fun resetIcon(selectedItem: MappableItem.MappablePoint) {
+    private fun resetIcon(selectedItem: MappableItem.Point) {
         val featureId = mappableItemsDelegate.getFeatureId(selectedItem)
         if (featureId != null) {
             map.setMarkerIcon(
