@@ -154,7 +154,6 @@ private fun VerticalTrack(
                     modifier = Modifier
                         .fillMaxHeight(fraction = value)
                         .width(20.dp)
-                        .clip(CircleShape)
                         .background(MaterialTheme.colorScheme.primary)
                         .align(Alignment.BottomCenter)
                 )

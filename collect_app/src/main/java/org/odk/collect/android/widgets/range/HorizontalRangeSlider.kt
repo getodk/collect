@@ -120,7 +120,6 @@ private fun HorizontalTrack(
                     modifier = Modifier
                         .fillMaxWidth(fraction = value)
                         .height(20.dp)
-                        .clip(CircleShape)
                         .background(MaterialTheme.colorScheme.primary)
                 )
             }
