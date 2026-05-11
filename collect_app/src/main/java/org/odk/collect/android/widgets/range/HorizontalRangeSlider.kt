@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,6 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -228,4 +230,25 @@ private fun positionToValue(position: Float, steps: Int, trackWidth: Float, layo
     val fraction = adjustedPosition.coerceIn(0f, trackWidth) / trackWidth
     val divisions = steps + 1
     return (fraction * divisions).roundToInt().toFloat() / divisions
+}
+
+@Preview
+@Composable
+private fun HorizontalRangeSliderPreview() {
+    Surface {
+        HorizontalRangeSlider(
+            value = 0.5f,
+            valueLabel = "5",
+            placeholder = null,
+            steps = 9,
+            ticks = 11,
+            enabled = true,
+            startLabel = "0",
+            endLabel = "10",
+            labels = listOf("very bad", "very good"),
+            onValueChanging = {},
+            onValueChange = {},
+            onValueChangeFinished = {}
+        )
+    }
 }
