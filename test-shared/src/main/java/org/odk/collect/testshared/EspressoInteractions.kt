@@ -33,8 +33,7 @@ object EspressoInteractions {
         }
 
         /**
-         * Click on the view again in an attempt to clear any long press UI if a long press might
-         * have occurred. More discussion of this issue can be found at https://stackoverflow.com/questions/32330671/android-espresso-performs-longclick-instead-of-click.
+         * Click on item and throw exception if Espresso detects a long press.
          */
         val clickAction = click(ExceptionRollbackAction())
 
