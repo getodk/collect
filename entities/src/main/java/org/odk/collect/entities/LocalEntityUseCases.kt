@@ -26,7 +26,7 @@ object LocalEntityUseCases {
             val id = formEntity.id
             val label = formEntity.label
             when (formEntity.action) {
-                EntityAction.CREATE -> saveNewEntity(id, label, formEntity.dataset, formEntity.properties, entitiesRepository)
+                EntityAction.CREATE -> saveNewEntity(id, label, formEntity.dataset, formEntity.properties, entitiesRepository, debugLogger)
 
                 EntityAction.UPDATE -> {
                     val existing = entitiesRepository.findEntityById(formEntity.dataset, id)
@@ -38,7 +38,7 @@ object LocalEntityUseCases {
                 EntityAction.UPSERT -> {
                     val existing = entitiesRepository.findEntityById(formEntity.dataset, id)
                     if (existing == null) {
-                        saveNewEntity(id, label, formEntity.dataset, formEntity.properties, entitiesRepository)
+                        saveNewEntity(id, label, formEntity.dataset, formEntity.properties, entitiesRepository, debugLogger)
                     } else {
                         saveUpdatedEntity(label, formEntity.dataset, formEntity.properties, existing, entitiesRepository)
                     }
@@ -59,7 +59,8 @@ object LocalEntityUseCases {
         label: String,
         dataset: String,
         properties: List<Pair<String, String>>,
-        entitiesRepository: EntitiesRepository
+        entitiesRepository: EntitiesRepository,
+        debugLogger: DebugLogger? = null
     ) {
         if (label.isNotBlank()) {
             val list = entitiesRepository.getList(dataset)
@@ -75,6 +76,11 @@ object LocalEntityUseCases {
                     )
                 )
             }
+        } else {
+            debugLogger?.log(
+                "Entities",
+                "Failed to create dataset=$dataset, id=$id, label=$label"
+            )
         }
     }
 
