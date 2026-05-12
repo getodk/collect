@@ -40,7 +40,6 @@ import org.odk.collect.maps.circles.CurrentLocationDelegate
 import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.SettingsProvider
-import org.odk.collect.strings.R
 import org.odk.collect.strings.R.string
 import org.odk.collect.testshared.EspressoAssertions
 import org.odk.collect.testshared.EspressoInteractions
@@ -277,6 +276,7 @@ class GeoPointMapActivityTest {
         launcherRule.launch<Activity>(intent)
         mapFragment.ready()
 
+        EspressoAssertions.assertDisabled(withContentDescription(string.record_geopoint))
         EspressoInteractions.clickOn(withContentDescription(string.clear))
         EspressoAssertions.assertEnabled(withContentDescription(string.record_geopoint))
     }
