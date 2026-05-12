@@ -14,7 +14,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.not
-import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -102,10 +101,9 @@ class GeoPointMapActivityTest {
         mapFragment.ready()
 
         scenario.onActivity { activity: GeoPointMapActivity? ->
-            Assert.assertEquals(
-                activity!!.getString(
-                    R.string.please_wait_long
-                ), getLocationStatus(activity)
+            assertThat(
+                activity!!.getString(string.please_wait_long),
+                equalTo(getLocationStatus(activity))
             )
         }
     }
@@ -117,10 +115,7 @@ class GeoPointMapActivityTest {
         locationTracker.currentLocation = Location(1.0, 2.0, 3.0, 4.0f)
 
         scenario.onActivity { activity: GeoPointMapActivity? ->
-            Assert.assertEquals(
-                "Accuracy: 4 m",
-                getLocationStatus(activity!!)
-            )
+            assertThat("Accuracy: 4 m", equalTo(getLocationStatus(activity!!)))
         }
     }
 
