@@ -185,6 +185,7 @@ class FakeMapFragment(private val ready: Boolean = false) : Fragment(), MapFragm
         markers.clear()
         polyLines.clear()
         polygons.clear()
+        circles.clear()
     }
 
     override fun clearFeatures(ids: List<Int>) {
