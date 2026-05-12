@@ -47,7 +47,7 @@ object MapFragmentAssertions {
                 mapFragment: FakeMapFragment,
                 mismatchDescription: Description
             ) {
-                mismatchDescription.appendText("was ${mapFragment.getCenter()}")
+                mismatchDescription.appendText("did not show current location")
             }
         }
     }
