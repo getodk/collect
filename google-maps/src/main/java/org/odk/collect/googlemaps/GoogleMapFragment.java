@@ -254,16 +254,12 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
         return map.getCameraPosition().zoom;
     }
 
-    private void addMarker(int featureId, MarkerDescription markerDescription) {
-        features.put(featureId, new MarkerFeature(getActivity(), markerDescription, map));
-    }
-
     @Override
     public List<Integer> addMarkers(List<MarkerDescription> markers) {
         List<Integer> featureIds = new ArrayList<>();
         for (MarkerDescription markerDescription : markers) {
             int featureId = nextFeatureId++;
-            addMarker(featureId, markerDescription);
+            features.put(featureId, new MarkerFeature(getActivity(), markerDescription, map));
             featureIds.add(featureId);
         }
 
@@ -620,7 +616,7 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
     @Override
     public void updateMarker(int featureId, @NotNull MarkerDescription markerDescription) {
         features.get(featureId).dispose();
-        addMarker(featureId, markerDescription);
+        features.put(featureId, new MarkerFeature(getActivity(), markerDescription, map));
     }
 
     @Override
