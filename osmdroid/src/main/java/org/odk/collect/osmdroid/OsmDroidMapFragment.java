@@ -365,7 +365,9 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment {
             features.remove(id).dispose();
         }
 
-        map.invalidate();
+        if (map != null) {
+            map.invalidate();
+        }
     }
 
     @Override
