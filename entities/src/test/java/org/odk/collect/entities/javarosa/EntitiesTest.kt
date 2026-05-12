@@ -896,7 +896,7 @@ class EntitiesTest {
     }
 
     @Test
-    fun `filling form with create and update does not make entity available`() {
+    fun `filling form with create and update makes entity available with upsert action`() {
         val scenario = Scenario.init(
             "Upsert entity form",
             html(
@@ -918,6 +918,8 @@ class EntitiesTest {
                             )
                         ),
                         bind("/data/name").type("string").withSaveTo("name"),
+                        entityIdBind(),
+                        entityIdSetValue(),
                         bind("/data/meta/entity/label").type("string").calculate("/data/name")
                     )
                 ),
@@ -932,7 +934,12 @@ class EntitiesTest {
         scenario.finalizeInstance()
 
         val entities = scenario.formEntryController.model.extras.get(EntitiesExtra::class.java).entities
-        assertThat(entities.size, equalTo(0))
+        assertThat(entities.size, equalTo(1))
+        assertThat(entities[0].dataset, equalTo("people"))
+        assertThat(entities[0].id, notNullValue())
+        assertThat(entities[0].label, equalTo("Tom Wambsgans"))
+        assertThat(entities[0].properties, equalTo(listOf(Pair("name", "Tom Wambsgans"))))
+        assertThat(entities[0].action, equalTo(EntityAction.UPSERT))
     }
 
     @Test

@@ -79,7 +79,7 @@ class EntityFormCreateUpdateTest {
     }
 
     @Test
-    fun fillingEntityCreateForm_withUpdate_doesNotCreateEntityForFollowUpForms() {
+    fun fillingEntityCreateForm_withUpdate_createsEntityForFollowUpForms() {
         testDependencies.server.addForm("one-question-entity-create-and-update.xml")
         testDependencies.server.addForm(
             "one-question-entity-update.xml",
@@ -92,12 +92,11 @@ class EntityFormCreateUpdateTest {
 
             .startBlankForm("One Question Entity Update")
             .assertQuestion("Select person")
-            .assertText("Roman Roy")
-            .assertTextDoesNotExist("Logan Roy")
+            .assertTexts("Roman Roy", "Logan Roy")
     }
 
     @Test
-    fun fillingEntityUpdateForm_withCreate_doesNotUpdateEntityForFollowUpForms() {
+    fun fillingEntityUpdateForm_withCreate_updatesEntityForFollowUpForms() {
         testDependencies.server.addForm(
             "one-question-entity-update-and-create.xml",
             listOf(EntityListItem("people.csv"))
@@ -113,7 +112,6 @@ class EntityFormCreateUpdateTest {
             .clickFinalize()
 
             .startBlankForm("One Question Entity Update")
-            .assertTextDoesNotExist("Romulus Roy")
-            .assertText("Roman Roy")
+            .assertText("Romulus Roy")
     }
 }
