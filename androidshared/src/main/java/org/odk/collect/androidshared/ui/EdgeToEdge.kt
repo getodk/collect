@@ -52,7 +52,7 @@ object EdgeToEdge {
 
     fun Snackbar.applyBottomInsets(anchorView: View?) {
         ViewCompat.setOnApplyWindowInsetsListener(view) { _, windowInsets ->
-            view.post {
+            view.post { // wait for anchorView to reposition before reading its offset
                 val anchorOffset = if (anchorView != null && anchorView.isVisible) {
                     val layoutParams = anchorView.layoutParams as? ViewGroup.MarginLayoutParams
                     anchorView.height + (layoutParams?.bottomMargin ?: 0)
