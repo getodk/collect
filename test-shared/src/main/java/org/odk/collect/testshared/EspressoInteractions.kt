@@ -68,7 +68,7 @@ object EspressoInteractions {
         closeSoftKeyboard()
     }
 
-    class ExceptionRollbackAction : ViewAction {
+    private class ExceptionRollbackAction : ViewAction {
         override fun getConstraints(): Matcher<View> {
             return object : TypeSafeMatcher<View>() {
                 override fun matchesSafely(view: View): Boolean {

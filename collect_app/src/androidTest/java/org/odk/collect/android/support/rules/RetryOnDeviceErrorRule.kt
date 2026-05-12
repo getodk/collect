@@ -5,6 +5,7 @@ import androidx.test.espresso.PerformException
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
+import org.odk.collect.testshared.EspressoInteractions
 import timber.log.Timber
 
 class RetryOnDeviceErrorRule : TestRule {
@@ -25,6 +26,9 @@ class RetryOnDeviceErrorRule : TestRule {
                     } else if (e::class.simpleName == "RootViewWithoutFocusException") {
                         Timber.w("RetryOnDeviceErrorRule: Retrying due to RootViewWithoutFocusException!")
                         Timber.e(e)
+                        base.evaluate()
+                    } else if (e is EspressoInteractions.LongPressInsteadOfClickException) {
+                        Timber.w("LongPressInsteadOfClickException: Retrying due to accidental long press!")
                         base.evaluate()
                     } else {
                         throw e
