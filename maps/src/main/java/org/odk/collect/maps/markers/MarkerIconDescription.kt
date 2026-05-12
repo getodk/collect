@@ -29,6 +29,6 @@ sealed interface MarkerIconDescription {
     }
 
     data class TracePoint(val lineSize: Float, val color: Int) : MarkerIconDescription {
-        override val background = true
+        override val background = false
     }
 }
