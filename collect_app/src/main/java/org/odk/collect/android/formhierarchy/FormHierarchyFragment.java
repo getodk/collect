@@ -304,7 +304,7 @@ public class FormHierarchyFragment extends Fragment {
                     view,
                     getString(org.odk.collect.strings.R.string.finalized_form_edit_started),
                     SnackbarUtils.DURATION_LONG,
-                    null,
+                    view.findViewById(R.id.buttonholder),
                     null,
                     true
             );
