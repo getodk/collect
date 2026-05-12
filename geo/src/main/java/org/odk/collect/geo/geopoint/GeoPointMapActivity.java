@@ -89,6 +89,7 @@ public class GeoPointMapActivity extends LocalizedActivity {
     public static final String LOCATION_INFO_VISIBILITY_KEY = "location_info_visibility";
 
     public static final String EXTRA_LOCATION = "gp";
+    public static final String MARKER_COLOR = "#52C268";
 
     protected Bundle previousState;
 
@@ -415,7 +416,7 @@ public class GeoPointMapActivity extends LocalizedActivity {
             map.clearFeatures(Arrays.asList(featureId));
         }
 
-        MarkerIconDescription.DrawableResource iconDescription = new MarkerIconDescription.DrawableResource(org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_big, Color.parseColor("#52C268"));
+        MarkerIconDescription.DrawableResource iconDescription = new MarkerIconDescription.DrawableResource(org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_big, Color.parseColor(MARKER_COLOR));
         featureId = addMarker(map, new MarkerDescription(point, intentDraggable && !intentReadOnly && !isPointLocked, MapFragment.IconAnchor.BOTTOM, iconDescription));
         if (!intentReadOnly) {
             clearButton.setEnabled(true);
