@@ -68,7 +68,7 @@ object EntityFormParser {
         }
 
         return if (shouldCreate && shouldUpdate) {
-            null
+            EntityAction.UPSERT
         } else if (shouldCreate) {
             EntityAction.CREATE
         } else if (shouldUpdate) {

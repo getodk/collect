@@ -26,7 +26,7 @@ class EntityFormFinalizationProcessor : FormEntryFinalizationProcessor {
                 val id = EntityFormParser.parseId(element)
                 val label = EntityFormParser.parseLabel(element)
 
-                if (action == EntityAction.CREATE || action == EntityAction.UPDATE) {
+                if (action is EntityAction) {
                     val entity = createEntity(
                         dataset,
                         id,
@@ -79,7 +79,7 @@ class EntityFormFinalizationProcessor : FormEntryFinalizationProcessor {
             }
         }
 
-        return if (id.isV4UUID() && (action == EntityAction.UPDATE || label.isNotBlank())) {
+        return if (id.isV4UUID()) {
             FormEntity(action, dataset, id, label, fields)
         } else {
             null

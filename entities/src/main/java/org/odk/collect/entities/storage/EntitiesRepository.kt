@@ -1,5 +1,6 @@
 package org.odk.collect.entities.storage
 
+import org.odk.collect.entities.javarosa.parse.EntitySchema
 import org.odk.collect.shared.Query
 
 interface EntitiesRepository {
@@ -16,4 +17,8 @@ interface EntitiesRepository {
 
 fun EntitiesRepository.getListNames(): List<String> {
     return getLists().map { it.name }
+}
+
+fun EntitiesRepository.findEntityById(dataset: String, id: String): Entity.Saved? {
+    return query(dataset, Query.StringEq(EntitySchema.ID, id)).firstOrNull()
 }

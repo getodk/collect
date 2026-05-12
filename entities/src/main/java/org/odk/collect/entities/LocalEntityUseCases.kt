@@ -8,9 +8,9 @@ import org.odk.collect.entities.javarosa.spec.EntityAction
 import org.odk.collect.entities.server.EntitySource
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
+import org.odk.collect.entities.storage.findEntityById
 import org.odk.collect.forms.MediaFile
 import org.odk.collect.shared.DebugLogger
-import org.odk.collect.shared.Query
 import java.io.File
 import java.util.UUID
 
@@ -26,36 +26,21 @@ object LocalEntityUseCases {
             val id = formEntity.id
             val label = formEntity.label
             when (formEntity.action) {
-                EntityAction.CREATE -> {
-                    val list = entitiesRepository.getList(formEntity.dataset)
-                    if (list != null && !list.needsApproval) {
-                        val entity = Entity.New(
-                            id,
-                            label,
-                            1,
-                            formEntity.properties,
-                            branchId = UUID.randomUUID().toString()
-                        )
+                EntityAction.CREATE -> saveNewEntity(id, label, formEntity.dataset, formEntity.properties, entitiesRepository)
 
-                        entitiesRepository.save(formEntity.dataset, entity)
+                EntityAction.UPDATE -> {
+                    val existing = entitiesRepository.findEntityById(formEntity.dataset, id)
+                    if (existing != null) {
+                        saveUpdatedEntity(label, formEntity.dataset, formEntity.properties, existing, entitiesRepository)
                     }
                 }
 
-                EntityAction.UPDATE -> {
-                    val existing = entitiesRepository.query(
-                        formEntity.dataset,
-                        Query.StringEq(EntitySchema.ID, formEntity.id)
-                    ).firstOrNull()
-
-                    if (existing != null) {
-                        entitiesRepository.save(
-                            formEntity.dataset,
-                            existing.copy(
-                                label = label.ifBlank { existing.label },
-                                properties = formEntity.properties,
-                                version = existing.version + 1
-                            )
-                        )
+                EntityAction.UPSERT -> {
+                    val existing = entitiesRepository.findEntityById(formEntity.dataset, id)
+                    if (existing == null) {
+                        saveNewEntity(id, label, formEntity.dataset, formEntity.properties, entitiesRepository)
+                    } else {
+                        saveUpdatedEntity(label, formEntity.dataset, formEntity.properties, existing, entitiesRepository)
                     }
                 }
             }
@@ -67,6 +52,47 @@ object LocalEntityUseCases {
                 "Failed to create/update dataset=${it.dataset}, id=${it.id}, label=${it.label}"
             )
         }
+    }
+
+    private fun saveNewEntity(
+        id: String,
+        label: String,
+        dataset: String,
+        properties: List<Pair<String, String>>,
+        entitiesRepository: EntitiesRepository
+    ) {
+        if (label.isNotBlank()) {
+            val list = entitiesRepository.getList(dataset)
+            if (list != null && !list.needsApproval) {
+                entitiesRepository.save(
+                    dataset,
+                    Entity.New(
+                        id,
+                        label,
+                        1,
+                        properties,
+                        branchId = UUID.randomUUID().toString()
+                    )
+                )
+            }
+        }
+    }
+
+    private fun saveUpdatedEntity(
+        label: String,
+        dataset: String,
+        properties: List<Pair<String, String>>,
+        existing: Entity.Saved,
+        entitiesRepository: EntitiesRepository
+    ) {
+        entitiesRepository.save(
+            dataset,
+            existing.copy(
+                label = label.ifBlank { existing.label },
+                properties = properties,
+                version = existing.version + 1
+            )
+        )
     }
 
     fun updateLocalEntitiesFromServer(
