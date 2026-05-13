@@ -3,6 +3,7 @@ package org.odk.collect.entities
 import org.apache.commons.csv.CSVRecord
 import org.javarosa.core.model.instance.SecondaryInstanceCSVParserBuilder
 import org.odk.collect.entities.javarosa.finalization.EntitiesExtra
+import org.odk.collect.entities.javarosa.finalization.FormEntity
 import org.odk.collect.entities.javarosa.parse.EntitySchema
 import org.odk.collect.entities.javarosa.spec.EntityAction
 import org.odk.collect.entities.server.EntitySource
@@ -23,24 +24,22 @@ object LocalEntityUseCases {
         debugLogger: DebugLogger? = null
     ) {
         formEntities?.entities?.forEach { formEntity ->
-            val id = formEntity.id
-            val label = formEntity.label
             when (formEntity.action) {
-                EntityAction.CREATE -> saveNewEntity(id, label, formEntity.dataset, formEntity.properties, entitiesRepository, debugLogger)
+                EntityAction.CREATE -> saveNewEntity(formEntity, entitiesRepository, debugLogger)
 
                 EntityAction.UPDATE -> {
-                    val existing = entitiesRepository.findEntityById(formEntity.dataset, id)
+                    val existing = entitiesRepository.findEntityById(formEntity.dataset, formEntity.id)
                     if (existing != null) {
-                        saveUpdatedEntity(label, formEntity.dataset, formEntity.properties, existing, entitiesRepository)
+                        saveUpdatedEntity(formEntity, existing, entitiesRepository)
                     }
                 }
 
                 EntityAction.UPSERT -> {
-                    val existing = entitiesRepository.findEntityById(formEntity.dataset, id)
+                    val existing = entitiesRepository.findEntityById(formEntity.dataset, formEntity.id)
                     if (existing == null) {
-                        saveNewEntity(id, label, formEntity.dataset, formEntity.properties, entitiesRepository, debugLogger)
+                        saveNewEntity(formEntity, entitiesRepository, debugLogger)
                     } else {
-                        saveUpdatedEntity(label, formEntity.dataset, formEntity.properties, existing, entitiesRepository)
+                        saveUpdatedEntity(formEntity, existing, entitiesRepository)
                     }
                 }
             }
@@ -55,23 +54,20 @@ object LocalEntityUseCases {
     }
 
     private fun saveNewEntity(
-        id: String,
-        label: String,
-        dataset: String,
-        properties: List<Pair<String, String>>,
+        formEntity: FormEntity,
         entitiesRepository: EntitiesRepository,
         debugLogger: DebugLogger? = null
     ) {
-        if (label.isNotBlank()) {
-            val list = entitiesRepository.getList(dataset)
+        if (formEntity.label.isNotBlank()) {
+            val list = entitiesRepository.getList(formEntity.dataset)
             if (list != null && !list.needsApproval) {
                 entitiesRepository.save(
-                    dataset,
+                    formEntity.dataset,
                     Entity.New(
-                        id,
-                        label,
+                        formEntity.id,
+                        formEntity.label,
                         1,
-                        properties,
+                        formEntity.properties,
                         branchId = UUID.randomUUID().toString()
                     )
                 )
@@ -79,23 +75,21 @@ object LocalEntityUseCases {
         } else {
             debugLogger?.log(
                 "Entities",
-                "Failed to create dataset=$dataset, id=$id, label=$label"
+                "Failed to create dataset=${formEntity.dataset}, id=${formEntity.id}, label=${formEntity.label}"
             )
         }
     }
 
     private fun saveUpdatedEntity(
-        label: String,
-        dataset: String,
-        properties: List<Pair<String, String>>,
+        formEntity: FormEntity,
         existing: Entity.Saved,
         entitiesRepository: EntitiesRepository
     ) {
         entitiesRepository.save(
-            dataset,
+            formEntity.dataset,
             existing.copy(
-                label = label.ifBlank { existing.label },
-                properties = properties,
+                label = formEntity.label.ifBlank { existing.label },
+                properties = formEntity.properties,
                 version = existing.version + 1
             )
         )
