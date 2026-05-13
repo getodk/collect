@@ -12,10 +12,6 @@ class CollectGoogleMapsDependencyModule(
         return appDependencyComponent.referenceLayerRepository()
     }
 
-    override fun providesLocationClient(): LocationClient {
-        return appDependencyComponent.locationClient()
-    }
-
     override fun providesSettingsProvider(): SettingsProvider {
         return appDependencyComponent.settingsProvider()
     }

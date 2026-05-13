@@ -1,7 +1,6 @@
 package org.odk.collect.android.injection.config
 
 import org.odk.collect.android.geo.MapConfiguratorProvider
-import org.odk.collect.location.LocationClient
 import org.odk.collect.maps.MapConfigurator
 import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.osmdroid.OsmDroidDependencyModule
@@ -13,10 +12,6 @@ class CollectOsmDroidDependencyModule(
 ) : OsmDroidDependencyModule() {
     override fun providesReferenceLayerRepository(): ReferenceLayerRepository {
         return appDependencyComponent.referenceLayerRepository()
-    }
-
-    override fun providesLocationClient(): LocationClient {
-        return appDependencyComponent.locationClient()
     }
 
     override fun providesMapConfigurator(): MapConfigurator {

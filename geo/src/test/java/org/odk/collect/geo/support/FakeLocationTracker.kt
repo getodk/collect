@@ -9,8 +9,10 @@ class FakeLocationTracker : LocationTracker {
 
     var currentLocation: Location? = null
         set(value) {
-            _currentLocation.value = value
-            field = value
+            if (isStarted) {
+                _currentLocation.value = value
+                field = value
+            }
         }
 
     var retainMockAccuracy: Boolean = false

@@ -7,6 +7,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
+import android.graphics.drawable.GradientDrawable
 import android.util.LruCache
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
@@ -93,7 +94,16 @@ object MarkerIconCreator {
             drawable.mutate()
 
             val isBackgroundDark = color?.let {
-                drawable.setTint(it)
+                /**
+                 * Tint icon for normal Drawables, but only change solid color for
+                 * GradientDrawables (shapes).
+                 */
+                if (drawable is GradientDrawable) {
+                    drawable.setColor(it)
+                } else {
+                    drawable.setTint(it)
+                }
+
                 ColorUtils.calculateLuminance(color) < 0.5
             } ?: true
 

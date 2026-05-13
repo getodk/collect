@@ -25,16 +25,19 @@ import org.odk.collect.androidshared.ui.multiclicksafe.setMultiClickSafeOnClickL
 import org.odk.collect.androidshared.utils.sanitizeToColorInt
 import org.odk.collect.async.Scheduler
 import org.odk.collect.geo.GeoDependencyComponentProvider
+import org.odk.collect.geo.GeoUtils.showCurrentLocation
 import org.odk.collect.geo.databinding.SelectionMapLayoutBinding
-import org.odk.collect.maps.traces.LineDescription
+import org.odk.collect.location.tracker.LocationTracker
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.maps.MapPoint
-import org.odk.collect.maps.traces.PolygonDescription
+import org.odk.collect.maps.circles.CurrentLocationDelegate
 import org.odk.collect.maps.layers.OfflineMapLayersPickerBottomSheetDialogFragment
 import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.maps.markers.MarkerDescription
 import org.odk.collect.maps.markers.MarkerIconDescription
+import org.odk.collect.maps.traces.LineDescription
+import org.odk.collect.maps.traces.PolygonDescription
 import org.odk.collect.material.BottomSheetBehavior
 import org.odk.collect.material.MaterialProgressDialogFragment
 import org.odk.collect.permissions.PermissionsChecker
@@ -72,6 +75,9 @@ class SelectionMapFragment(
     @Inject
     lateinit var webPageService: WebPageService
 
+    @Inject
+    lateinit var locationTracker: LocationTracker
+
     private val selectedItemViewModel by viewModels<SelectedItemViewModel>()
 
     private lateinit var map: MapFragment
@@ -91,6 +97,7 @@ class SelectionMapFragment(
     private var featureCount: Int = 0
 
     private var previousState: Bundle? = null
+    private val currentLocationDelegate = CurrentLocationDelegate()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         childFragmentManager.fragmentFactory = FragmentFactoryBuilder()
@@ -190,7 +197,7 @@ class SelectionMapFragment(
         map = newMapFragment
 
         binding.zoomToLocation.setMultiClickSafeOnClickListener {
-            map.zoomToCurrentLocation(map.getGpsLocation())
+            currentLocationDelegate.zoomToCurrentLocation(map)
         }
 
         binding.zoomToBounds.setMultiClickSafeOnClickListener {
@@ -217,8 +224,6 @@ class SelectionMapFragment(
             binding.newItem.visibility = View.GONE
         }
 
-        map.setGpsLocationEnabled(true)
-
         map.setFeatureClickListener(::onFeatureSelected)
         map.setClickListener { onClick() }
 
@@ -228,6 +233,8 @@ class SelectionMapFragment(
                 updateCounts(binding)
             }
         }
+
+        map.showCurrentLocation(locationTracker, currentLocationDelegate)
     }
 
     private fun updateCounts(binding: SelectionMapLayoutBinding) {
@@ -367,11 +374,6 @@ class SelectionMapFragment(
         } else if (!map.hasCenter()) {
             if (zoomToFitItems && points.isNotEmpty()) {
                 map.zoomToBoundingBox(points, 0.8, false)
-            } else {
-                map.setGpsLocationListener { point ->
-                    map.zoomToCurrentLocation(point)
-                    map.setGpsLocationListener(null)
-                }
             }
         }
     }
@@ -391,7 +393,7 @@ class SelectionMapFragment(
      */
     private fun updateFeatures(items: List<MappableSelectItem>) {
         points.clear()
-        map.clearFeatures()
+        map.clearFeatures(featureIdsByItemId.values.toList())
         itemsByFeatureId.clear()
 
         val singlePoints = items.filterIsInstance<MappableSelectItem.MappableSelectPoint>()
