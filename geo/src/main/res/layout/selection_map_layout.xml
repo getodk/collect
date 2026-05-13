@@ -105,6 +105,7 @@
         app:behavior_hideable="true"
         android:maxWidth="@null"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        app:paddingBottomSystemWindowInsets="false"
         style="@style/Widget.Material3.BottomSheet"
         tools:visibility="gone" />
 
