@@ -28,8 +28,18 @@ class EntityFormParserTest {
         val entityElement = TreeElement(ELEMENT_ENTITY)
         entityElement.setAttribute(null, ATTRIBUTE_UPDATE, "true")
 
-        val dataset = parseAction(entityElement)
-        assertThat(dataset, equalTo(EntityAction.UPDATE))
+        val action = parseAction(entityElement)
+        assertThat(action, equalTo(EntityAction.UPDATE))
+    }
+
+    @Test
+    fun `parse action finds upsert with true create and update strings`() {
+        val entityElement = TreeElement(ELEMENT_ENTITY)
+        entityElement.setAttribute(null, ATTRIBUTE_CREATE, "true")
+        entityElement.setAttribute(null, ATTRIBUTE_UPDATE, "true")
+
+        val action = parseAction(entityElement)
+        assertThat(action, equalTo(EntityAction.UPSERT))
     }
 
     @Test

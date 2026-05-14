@@ -79,41 +79,37 @@ class EntityFormCreateUpdateTest {
     }
 
     @Test
-    fun fillingEntityCreateForm_withUpdate_doesNotCreateEntityForFollowUpForms() {
-        testDependencies.server.addForm("one-question-entity-create-and-update.xml")
+    fun fillingEntityCreateAndUpdateForm_createsEntityForFollowUpFormsIfItDoesNotExist_andUpdatesItIfItDoes() {
         testDependencies.server.addForm(
-            "one-question-entity-update.xml",
+            "one-question-entity-upsert.xml",
             listOf(EntityListItem("people.csv"))
         )
 
         rule.withProject(testDependencies.server.url, matchExactly = true)
-            .startBlankForm("One Question Entity Registration")
-            .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
+            // 1. Create a new entity
+            .startBlankForm("One Question Entity Upsert")
+            .clickOnText("Create entity")
+            .swipeToNextQuestion("Name")
+            .answerQuestion("Name", "Logan Roy")
+            .swipeToEndScreen()
+            .clickFinalize()
 
-            .startBlankForm("One Question Entity Update")
-            .assertQuestion("Select person")
-            .assertText("Roman Roy")
-            .assertTextDoesNotExist("Logan Roy")
-    }
-
-    @Test
-    fun fillingEntityUpdateForm_withCreate_doesNotUpdateEntityForFollowUpForms() {
-        testDependencies.server.addForm(
-            "one-question-entity-update-and-create.xml",
-            listOf(EntityListItem("people.csv"))
-        )
-
-        rule.withProject(testDependencies.server.url, matchExactly = true)
-            .startBlankForm("One Question Entity Update")
-            .assertQuestion("Select person")
+            // 2. Verify creation and update it
+            .startBlankForm("One Question Entity Upsert")
+            .clickOnText("Update entity")
+            .swipeToNextQuestion("Select person")
+            .assertTexts("Roman Roy", "Logan Roy")
             .clickOnText("Roman Roy")
             .swipeToNextQuestion("Name")
             .answerQuestion("Name", "Romulus Roy")
             .swipeToEndScreen()
             .clickFinalize()
 
-            .startBlankForm("One Question Entity Update")
-            .assertTextDoesNotExist("Romulus Roy")
-            .assertText("Roman Roy")
+            // 3. Verify update
+            .startBlankForm("One Question Entity Upsert")
+            .clickOnText("Update entity")
+            .swipeToNextQuestion("Select person")
+            .assertTexts("Romulus Roy", "Logan Roy")
+            .assertTextDoesNotExist("Roman Roy")
     }
 }

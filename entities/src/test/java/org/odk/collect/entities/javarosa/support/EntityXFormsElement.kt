@@ -29,6 +29,11 @@ object EntityXFormsElement {
                 "entity dataset=\"$dataset\" update=\"$actionValue\" id=\"\"",
                 t("label")
             )
+
+            EntityAction.UPSERT -> t(
+                "entity dataset=\"$dataset\" create=\"$actionValue\" update=\"$actionValue\" id=\"\"",
+                t("label")
+            )
         }
     }
 

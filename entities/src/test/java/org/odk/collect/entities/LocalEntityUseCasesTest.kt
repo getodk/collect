@@ -50,6 +50,19 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
+    fun `#updateLocalEntitiesFromForm does not save a new entity on create if label is blank`() {
+        entitiesRepository.addList("things")
+
+        val formEntity =
+            FormEntity(EntityAction.CREATE, "things", "id", "", listOf("property" to "value"))
+        val formEntities = EntitiesExtra(listOf(formEntity))
+        LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
+
+        val entities = entitiesRepository.query("things")
+        assertThat(entities.size, equalTo(0))
+    }
+
+    @Test
     fun `#updateLocalEntitiesFromForm does not save a new entity on create if the list doesn't already exist`() {
         val formEntity =
             FormEntity(EntityAction.CREATE, "things", "id", "label", listOf("property" to "value"))
@@ -126,6 +139,58 @@ class LocalEntityUseCasesTest {
         assertThat(entities[0].label, equalTo("label"))
         assertThat(entities[0].properties.size, equalTo(1))
         assertThat(entities[0].properties[0], equalTo("prop" to "value 2"))
+    }
+
+    @Test
+    fun `#updateLocalEntitiesFromForm saves a new entity on upsert if it doesn't exist`() {
+        entitiesRepository.addList("things")
+
+        val formEntity =
+            FormEntity(EntityAction.UPSERT, "things", "id", "label", listOf("property" to "value"))
+        val formEntities = EntitiesExtra(listOf(formEntity))
+
+        LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
+        val entities = entitiesRepository.query("things")
+        assertThat(entities.size, equalTo(1))
+        assertThat(entities[0].id, equalTo(formEntity.id))
+        assertThat(entities[0].label, equalTo(formEntity.label))
+        assertThat(entities[0].properties, equalTo(formEntity.properties))
+        assertThat(entities[0].branchId, not(blankOrNullString()))
+    }
+
+    @Test
+    fun `#updateLocalEntitiesFromForm does not save a new entity on upsert if label is blank`() {
+        entitiesRepository.addList("things")
+
+        val formEntity =
+            FormEntity(EntityAction.UPSERT, "things", "id", "", listOf("property" to "value"))
+        val formEntities = EntitiesExtra(listOf(formEntity))
+
+        LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
+        val entities = entitiesRepository.query("things")
+        assertThat(entities.size, equalTo(0))
+    }
+
+    @Test
+    fun `#updateLocalEntitiesFromForm updates an existing entity on upsert if it exists`() {
+        entitiesRepository.save(
+            "things",
+            Entity.New(
+                "id",
+                "label",
+                version = 1
+            )
+        )
+
+        val formEntity =
+            FormEntity(EntityAction.UPSERT, "things", "id", "new label", emptyList())
+        val formEntities = EntitiesExtra(listOf(formEntity))
+
+        LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
+        val entities = entitiesRepository.query("things")
+        assertThat(entities.size, equalTo(1))
+        assertThat(entities[0].label, equalTo("new label"))
+        assertThat(entities[0].version, equalTo(2))
     }
 
     @Test
