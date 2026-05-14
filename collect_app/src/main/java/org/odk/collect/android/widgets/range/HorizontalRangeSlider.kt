@@ -133,7 +133,9 @@ private fun HorizontalTrack(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                repeat(ticks) { Tick() }
+                repeat(ticks) { index ->
+                    Tick(isEdgeTick = index == 0 || index == ticks - 1)
+                }
             }
         }
 

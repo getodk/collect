@@ -149,7 +149,7 @@ class RangeSliderTest {
     }
 
     @Test
-    fun `displays ticks when numOfTicks is greater than 0`() {
+    fun `displays ticks except for the first and last when ticks parameter is greater than 0`() {
         setContent(ticks = 3)
 
         composeTestRule
@@ -157,11 +157,11 @@ class RangeSliderTest {
                 org.odk.collect.strings.R.string.slider_tick,
                 useUnmergedTree = true
             )
-            .assertCountEquals(3)
+            .assertCountEquals(1)
     }
 
     @Test
-    fun `does not display ticks when numOfTicks is 0`() {
+    fun `does not display ticks when ticks parameter is 0`() {
         setContent(ticks = 0)
 
         composeTestRule
