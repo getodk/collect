@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>One Question Relevance</h:title>
+        <model>
+            <instance>
+                <data id="one_question_relevance" orx:version="1">
+                    <continue/>
+                    <age/>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+            <instance id="yes_no">
+                <root>
+                    <item>
+                        <name>yes</name>
+                        <label>Yes</label>
+                    </item>
+                    <item>
+                        <name>no</name>
+                        <label>No</label>
+                    </item>
+                </root>
+            </instance>
+            <bind nodeset="/data/continue" type="string"/>
+            <bind nodeset="age" type="int" relevant="/data/continue = 'yes'"/>
+            <bind nodeset="/data/meta/instanceID" type="string" readonly="true()" jr:preload="uid"/>
+        </model>
+    </h:head>
+    <h:body>
+        <select1 ref="/data/continue">
+            <label>Do you want to continue?</label>
+            <itemset nodeset="instance('yes_no')/root/item">
+                <value ref="name"/>
+                <label ref="label"/>
+            </itemset>
+        </select1>
+        <input ref="/data/age">
+            <label>what is your age</label>
+        </input>
+    </h:body>
+</h:html>

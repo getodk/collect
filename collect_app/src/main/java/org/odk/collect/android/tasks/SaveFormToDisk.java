@@ -406,18 +406,7 @@ public class SaveFormToDisk {
 
             instance = updateInstanceDatabase(false, canEditAfterCompleted, validationResult);
 
-            if (!canEditAfterCompleted) {
-                manageFilesAfterSavingEncryptedForm(instanceXml, submissionXml);
-            } else {
-                // try to delete the submissionXml file, since it is
-                // identical to the existing instanceXml file
-                // (we don't need to delete and rename anything).
-                if (!submissionXml.delete()) {
-                    String msg = "Error deleting " + submissionXml.getAbsolutePath()
-                            + " (instance is re-openable)";
-                    Timber.w(msg);
-                }
-            }
+            replaceInstanceFileWithSubmissionFile(instanceXml, submissionXml);
 
             // if encrypted, delete all plaintext files
             // (anything not named instanceXml or anything not ending in .enc)
@@ -458,7 +447,7 @@ public class SaveFormToDisk {
         }
     }
 
-    public static void manageFilesAfterSavingEncryptedForm(File instanceXml, File submissionXml) throws IOException {
+    public static void replaceInstanceFileWithSubmissionFile(File instanceXml, File submissionXml) throws IOException {
         // AT THIS POINT, there is no going back.  We are committed
         // to returning "success" (true) whether or not we can
         // rename "submission.xml" to instanceXml and whether or

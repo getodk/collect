@@ -998,7 +998,7 @@ public class JavaRosaFormController implements FormController {
     public ByteArrayPayload getFilledInFormXml() throws IOException {
         // assume no binary data inside the model.
         FormInstance datamodel = getInstance();
-        XFormSerializingVisitor serializer = new XFormSerializingVisitor();
+        XFormSerializingVisitor serializer = new XFormSerializingVisitor(false);
 
         return (ByteArrayPayload) serializer.createSerializedPayload(datamodel);
     }
