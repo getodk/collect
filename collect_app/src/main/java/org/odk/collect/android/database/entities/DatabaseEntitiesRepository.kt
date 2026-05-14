@@ -206,7 +206,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String, private val c
             val remainingColumns = columnNames - removedColumns.toSet()
             val tempTable = "${list}_temp"
 
-            createList(this, tempTable)
+            createListTable(this, tempTable)
             addPropertyColumns(
                 this,
                 tempTable,
@@ -333,24 +333,27 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String, private val c
             contentValues
         )
 
-        db.execSQL(
-            """
-                CREATE TABLE IF NOT EXISTS "$list" (
-                    $_ID integer PRIMARY KEY,
-                    ${EntitiesTable.COLUMN_ID} text,
-                    ${EntitiesTable.COLUMN_LABEL} text,
-                    ${EntitiesTable.COLUMN_VERSION} integer,
-                    ${EntitiesTable.COLUMN_TRUNK_VERSION} integer,
-                    ${EntitiesTable.COLUMN_BRANCH_ID} text,
-                    ${EntitiesTable.COLUMN_STATE} integer NOT NULL
-                );
-                """.trimIndent()
-        )
-
+        createListTable(db, list)
         db.execSQL(
             """
                 CREATE UNIQUE INDEX IF NOT EXISTS "${list}_unique_id_index" ON "$list" (${EntitiesTable.COLUMN_ID});
                 """.trimIndent()
+        )
+    }
+
+    private fun createListTable(db: SQLiteDatabase, list: String) {
+        db.execSQL(
+            """
+                    CREATE TABLE IF NOT EXISTS "$list" (
+                        $_ID integer PRIMARY KEY,
+                        ${EntitiesTable.COLUMN_ID} text,
+                        ${EntitiesTable.COLUMN_LABEL} text,
+                        ${EntitiesTable.COLUMN_VERSION} integer,
+                        ${EntitiesTable.COLUMN_TRUNK_VERSION} integer,
+                        ${EntitiesTable.COLUMN_BRANCH_ID} text,
+                        ${EntitiesTable.COLUMN_STATE} integer NOT NULL
+                    );
+                    """.trimIndent()
         )
     }
 
