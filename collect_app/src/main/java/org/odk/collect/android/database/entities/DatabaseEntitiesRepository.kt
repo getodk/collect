@@ -205,7 +205,6 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String, private val c
 
             val remainingColumns = columnNames - removedColumns.toSet()
             val tempTable = "${list}_temp"
-
             createListTable(this, tempTable)
             addPropertyColumns(
                 this,
@@ -214,9 +213,11 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String, private val c
                     it.startsWith(EntitiesTable.COLUMN_PROPERTY_PREFIX, ignoreCase = true)
                 },
             )
+
             copyTableContent(list, tempTable, remainingColumns)
             dropTable(list)
             renameTable(tempTable, list)
+            indexListTable(this, list)
         }
     }
 
@@ -334,11 +335,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String, private val c
         )
 
         createListTable(db, list)
-        db.execSQL(
-            """
-                CREATE UNIQUE INDEX IF NOT EXISTS "${list}_unique_id_index" ON "$list" (${EntitiesTable.COLUMN_ID});
-                """.trimIndent()
-        )
+        indexListTable(db, list)
     }
 
     private fun createListTable(db: SQLiteDatabase, list: String) {
@@ -354,6 +351,14 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String, private val c
                         ${EntitiesTable.COLUMN_STATE} integer NOT NULL
                     );
                     """.trimIndent()
+        )
+    }
+
+    private fun indexListTable(db: SQLiteDatabase, list: String) {
+        db.execSQL(
+            """
+                CREATE UNIQUE INDEX "${list}_unique_id_index" ON "$list" (${EntitiesTable.COLUMN_ID});
+                """.trimIndent()
         )
     }
 
