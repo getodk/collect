@@ -341,7 +341,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String, private val c
     private fun createListTable(db: SQLiteDatabase, list: String) {
         db.execSQL(
             """
-                    CREATE TABLE IF NOT EXISTS "$list" (
+                    CREATE TABLE "$list" (
                         $_ID integer PRIMARY KEY,
                         ${EntitiesTable.COLUMN_ID} text,
                         ${EntitiesTable.COLUMN_LABEL} text,
