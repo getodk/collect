@@ -12,6 +12,7 @@ import org.odk.collect.entities.storage.Entity
 import org.odk.collect.entities.storage.EntityList
 import org.odk.collect.entities.storage.QueryException
 import org.odk.collect.entities.storage.getListNames
+import org.odk.collect.entities.storage.propertyNames
 import org.odk.collect.shared.Query
 
 abstract class EntitiesRepositoryTest {
@@ -116,13 +117,13 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `#save adds new properties and removes missing ones`() {
+    fun `#save adds new properties`() {
         val repository = buildSubject()
 
         val wine = Entity.New(
             "1",
             "Léoville Barton 2008",
-            properties = listOf("window" to "2019-2038", "region" to "Bordeaux"),
+            properties = listOf("window" to "2019-2038"),
             version = 1
         )
         repository.save("wines", wine)
@@ -130,7 +131,7 @@ abstract class EntitiesRepositoryTest {
         val updatedWine = Entity.New(
             wine.id,
             "Léoville Barton 2008",
-            properties = listOf("window" to "2019-2038", "score" to "92"),
+            properties = listOf("score" to "92"),
             version = 2
         )
         repository.save("wines", updatedWine)
@@ -141,13 +142,13 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `#save adds new properties and removes missing ones for lists with dashes`() {
+    fun `#save adds new properties for lists with dashes`() {
         val repository = buildSubject()
 
         val wine = Entity.New(
             "1",
             "Léoville Barton 2008",
-            properties = listOf("window" to "2019-2038", "region" to "Bordeaux"),
+            properties = listOf("window" to "2019-2038"),
             version = 1
         )
         repository.save("favourite-wines", wine)
@@ -155,7 +156,7 @@ abstract class EntitiesRepositoryTest {
         val updatedWine = Entity.New(
             wine.id,
             "Léoville Barton 2008",
-            properties = listOf("window" to "2019-2038", "score" to "92"),
+            properties = listOf("score" to "92"),
             version = 2
         )
         repository.save("favourite-wines", updatedWine)
@@ -166,13 +167,13 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `#save adds new properties and removes missing ones to existing entities`() {
+    fun `#save adds new properties to existing entities`() {
         val repository = buildSubject()
 
         val wine = Entity.New(
             "1",
             "Léoville Barton 2008",
-            properties = listOf("window" to "2019-2038", "region" to "Bordeaux"),
+            properties = listOf("window" to "2019-2038"),
             version = 1
         )
         repository.save("wines", wine)
@@ -180,7 +181,7 @@ abstract class EntitiesRepositoryTest {
         val otherWine = Entity.New(
             "2",
             "Léoville Barton 2009",
-            properties = listOf("window" to "2020-2039", "score" to "92"),
+            properties = listOf("score" to "92"),
             version = 2
         )
         repository.save("wines", otherWine)
@@ -188,7 +189,7 @@ abstract class EntitiesRepositoryTest {
         val wines = repository.query("wines")
         assertThat(wines.size, equalTo(2))
         assertThat(wines[0].properties, contains("window" to "2019-2038", "score" to ""))
-        assertThat(wines[1].properties, contains("window" to "2020-2039", "score" to "92"))
+        assertThat(wines[1].properties, contains("window" to "", "score" to "92"))
     }
 
     @Test
@@ -826,5 +827,28 @@ abstract class EntitiesRepositoryTest {
         repository.updateList("blah", "abcd", false)
         assertThat(repository.getLists().size, equalTo(1))
         assertThat(repository.query("blah").size, equalTo(0))
+    }
+
+    @Test
+    fun `#cleanUpProperties removes list properties not in properties param`() {
+        val repository = buildSubject()
+
+        val wine = Entity.New(
+            "1",
+            "Léoville Barton 2008",
+            properties = listOf("vintage" to "2008", "rating" to "92")
+        )
+        repository.save("wines", wine)
+
+        repository.cleanUpProperties("wines", setOf("rating"))
+        assertThat(repository.query("wines")[0].propertyNames(), equalTo(listOf("rating")))
+    }
+
+    @Test
+    fun `#cleanUpProperties does nothing if list doesn't exist`() {
+        val repository = buildSubject()
+
+        repository.cleanUpProperties("wines", setOf("rating"))
+        assertThat(repository.getLists(), equalTo(emptyList()))
     }
 }

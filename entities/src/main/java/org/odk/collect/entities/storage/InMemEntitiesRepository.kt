@@ -52,8 +52,14 @@ class InMemEntitiesRepository(private val clock: () -> Long = { 0 }) : EntitiesR
         return when (query) {
             is Query.StringEq -> entities.filter { it.getFieldValue(query.column) == query.value }
             is Query.StringNotEq -> entities.filter { it.getFieldValue(query.column) != query.value }
-            is Query.NumericEq -> entities.filter { it.getFieldValue(query.column).toDoubleOrNull() == query.value }
-            is Query.NumericNotEq -> entities.filter { it.getFieldValue(query.column).toDoubleOrNull() != query.value }
+            is Query.NumericEq -> entities.filter {
+                it.getFieldValue(query.column).toDoubleOrNull() == query.value
+            }
+
+            is Query.NumericNotEq -> entities.filter {
+                it.getFieldValue(query.column).toDoubleOrNull() != query.value
+            }
+
             is Query.And -> query(list, query.queryA).intersect(query(list, query.queryB)).toList()
             is Query.Or -> query(list, query.queryA).union(query(list, query.queryB)).toList()
             null -> entities
@@ -78,6 +84,15 @@ class InMemEntitiesRepository(private val clock: () -> Long = { 0 }) : EntitiesR
 
     override fun getList(list: String): EntityList? {
         return lists.firstOrNull { it.name == list }
+    }
+
+    override fun cleanUpProperties(list: String, properties: Set<String>) {
+        val listProperties = listProperties[list]
+        if (listProperties != null) {
+            val removedProperties = listProperties
+                .filter { property -> properties.none { it.equals(property, ignoreCase = true) } }
+            listProperties.removeAll(removedProperties.toSet())
+        }
     }
 
     override fun save(list: String, vararg entities: Entity) {
@@ -136,10 +151,6 @@ class InMemEntitiesRepository(private val clock: () -> Long = { 0 }) : EntitiesR
         val newProperties = expectedProperties
             .filterNot { properties.any { property -> property.equals(it, ignoreCase = true) } }
         properties.addAll(newProperties)
-
-        val removedProperties = properties
-            .filter { property -> expectedProperties.none { it.equals(property, ignoreCase = true) } }
-        properties.removeAll(removedProperties.toSet())
     }
 
     private fun mergeProperties(

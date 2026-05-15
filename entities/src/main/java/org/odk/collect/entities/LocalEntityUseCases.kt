@@ -114,6 +114,8 @@ object LocalEntityUseCases {
             return
         }
 
+        val serverProperties = csvParser.headerMap.removeReservedProperties().keys
+        entitiesRepository.cleanUpProperties(list, serverProperties)
         val localEntities = entitiesRepository.query(list)
 
         val missingFromServer = localEntities.associateBy { it.id }.toMutableMap()
@@ -186,9 +188,9 @@ object LocalEntityUseCases {
     private fun parseEntityFromRecord(record: CSVRecord): ServerEntity? {
         val map = record.toMap()
 
-        val id = map.remove(EntitySchema.ID)
-        val label = map.remove(EntitySchema.LABEL)
-        val version = map.remove(EntitySchema.VERSION)?.toInt()
+        val id = map[EntitySchema.ID]
+        val label = map[EntitySchema.LABEL]
+        val version = map[EntitySchema.VERSION]?.toInt()
         if (id == null || label == null || version == null) {
             return null
         }
@@ -197,7 +199,7 @@ object LocalEntityUseCases {
             id,
             label,
             version,
-            map
+            map.removeReservedProperties()
         )
     }
 }
@@ -218,5 +220,11 @@ private data class ServerEntity(
             branchId = UUID.randomUUID().toString(),
             trunkVersion = this.version
         )
+    }
+}
+
+private fun <T> Map<String, T>.removeReservedProperties(): Map<String, T> {
+    return filterNot {
+        it.key == EntitySchema.ID || it.key == EntitySchema.LABEL || it.key.startsWith("__")
     }
 }
