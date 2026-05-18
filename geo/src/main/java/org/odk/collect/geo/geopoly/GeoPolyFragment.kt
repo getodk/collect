@@ -27,6 +27,7 @@ import org.odk.collect.geo.GeoActivityUtils.requireLocationPermissions
 import org.odk.collect.geo.GeoDependencyComponentProvider
 import org.odk.collect.geo.GeoUtils
 import org.odk.collect.geo.GeoUtils.showData
+import org.odk.collect.geo.GeoUtils.showItemLoading
 import org.odk.collect.geo.GeoUtils.toMapPoint
 import org.odk.collect.geo.R
 import org.odk.collect.geo.databinding.GeopolyLayoutBinding
@@ -143,6 +144,10 @@ class GeoPolyFragment @JvmOverloads constructor(
 
         viewModel.points.asLiveData().observe(this) {
             setChangeResult(it)
+        }
+
+        if (mappableData != null) {
+            showItemLoading(mappableData)
         }
     }
 

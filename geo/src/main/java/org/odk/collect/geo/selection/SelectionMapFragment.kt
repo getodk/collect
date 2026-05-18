@@ -26,7 +26,7 @@ import org.odk.collect.async.Scheduler
 import org.odk.collect.geo.GeoDependencyComponentProvider
 import org.odk.collect.geo.GeoUtils.showCurrentLocation
 import org.odk.collect.geo.GeoUtils.showData
-import org.odk.collect.geo.GeoUtils.showLoading
+import org.odk.collect.geo.GeoUtils.showItemLoading
 import org.odk.collect.geo.databinding.SelectionMapLayoutBinding
 import org.odk.collect.geo.items.MappableData
 import org.odk.collect.geo.items.MappableItem
@@ -127,7 +127,7 @@ class SelectionMapFragment(
             requireActivity().finish()
         }
 
-        showLoading(selectionMapData)
+        showItemLoading(selectionMapData)
     }
 
     override fun onCreateView(

@@ -16,14 +16,18 @@ import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.hamcrest.MatcherAssert
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.not
+import org.hamcrest.Matchers.notNullValue
+import org.hamcrest.Matchers.nullValue
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
+import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.androidshared.ui.DisplayString
 import org.odk.collect.androidshared.ui.SnackbarUtils
@@ -41,6 +45,7 @@ import org.odk.collect.geo.geopoly.GeoPolyFragment.Companion.INTERVAL_OPTIONS
 import org.odk.collect.geo.geopoly.GeoPolyFragment.OutputMode
 import org.odk.collect.geo.items.MappableData
 import org.odk.collect.geo.items.MappableItem
+import org.odk.collect.geo.selection.SelectionMapFragment
 import org.odk.collect.geo.support.AccuracyStatusViewMatcher.Companion.hasAccuracy
 import org.odk.collect.geo.support.FakeLocationTracker
 import org.odk.collect.geo.support.FakeMapFragment
@@ -56,6 +61,7 @@ import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.layers.ReferenceLayerRepository
+import org.odk.collect.material.MaterialProgressDialogFragment
 import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.strings.R.string
@@ -65,6 +71,7 @@ import org.odk.collect.testshared.EspressoAssertions.assertVisible
 import org.odk.collect.testshared.EspressoInteractions
 import org.odk.collect.testshared.FakeScheduler
 import org.odk.collect.testshared.FragmentResultRecorder
+import org.odk.collect.testshared.RobolectricHelpers.getFragmentByClass
 import org.odk.collect.webpage.WebPageService
 import org.robolectric.Shadows
 
@@ -1042,6 +1049,34 @@ class GeoPolyFragmentTest {
         assertThat(map, showsMappableData(mappableData))
     }
 
+    @Test
+    fun showsProgressWhileLoadingItems() {
+        val mappableData = FakeMappableData(emptyList())
+        mappableData.isLoading = false
+
+        launcherRule.launchInContainer {
+            GeoPolyFragment({ OnBackPressedDispatcher() }, mappableData = mappableData)
+        }.onFragment {
+            val dialogClass = MaterialProgressDialogFragment::class.java
+            MatcherAssert.assertThat(
+                getFragmentByClass(it.childFragmentManager, dialogClass),
+                nullValue()
+            )
+
+            mappableData.isLoading = true
+            assertThat(
+                getFragmentByClass(it.childFragmentManager, dialogClass),
+                notNullValue()
+            )
+
+            mappableData.isLoading = false
+            assertThat(
+                getFragmentByClass(it.childFragmentManager, dialogClass),
+                nullValue()
+            )
+        }
+    }
+
     private fun overrideDependencies(mapFragment: MapFragment) {
         val application = ApplicationProvider.getApplicationContext<RobolectricApplication>()
         application.geoDependencyComponent = DaggerGeoDependencyComponent.builder()
@@ -1092,11 +1127,20 @@ private val DEFAULT_RECORDING_INTERVAL =
     INTERVAL_OPTIONS[GeoPolyFragment.DEFAULT_INTERVAL_INDEX].toLong() * 1000
 
 private class FakeMappableData(private val items: List<MappableItem>) : MappableData {
+
+    var isLoading = false
+        set(value) {
+            _isLoading.value = value
+            field = value
+        }
+
+    private val _isLoading = MutableNonNullLiveData(isLoading)
+
     override fun getMappableItems(): LiveData<List<MappableItem>?> {
         return MutableLiveData(items)
     }
 
     override fun isLoading(): NonNullLiveData<Boolean> {
-        TODO("Not yet implemented")
+        return _isLoading
     }
 }
