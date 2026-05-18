@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.systemGestureExclusion
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -86,6 +87,7 @@ private fun HorizontalTrack(
         modifier = Modifier
             .fillMaxWidth()
             .height(48.dp)
+            .systemGestureExclusion()
             .pointerInput(steps, layoutDirection) {
                 if (enabled) {
                     val trackWidth = size.width.toFloat()
