@@ -13,6 +13,7 @@ import org.junit.runner.RunWith
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.widgets.support.FormElementFixtures.selectChoice
 import org.odk.collect.android.widgets.support.FormElementFixtures.treeElement
+import org.odk.collect.android.widgets.support.FormEntryPromptSelectChoiceLoader
 import org.odk.collect.androidtest.getOrAwaitValue
 import org.odk.collect.entities.javarosa.parse.EntitySchema
 import org.odk.collect.geo.items.IconifiedText
@@ -34,7 +35,12 @@ class SelectChoicesMapDataTest {
             selectChoice(
                 value = "a",
                 item = treeElement(
-                    children = listOf(treeElement(SelectChoicesMapData.GEOMETRY, "12.0 -1.0 3 4; 12.1 -1.0 3 4"))
+                    children = listOf(
+                        treeElement(
+                            SelectChoicesMapData.GEOMETRY,
+                            "12.0 -1.0 3 4; 12.1 -1.0 3 4"
+                        )
+                    )
                 )
             )
         )
@@ -64,7 +70,12 @@ class SelectChoicesMapDataTest {
             selectChoice(
                 value = "a",
                 item = treeElement(
-                    children = listOf(treeElement(SelectChoicesMapData.GEOMETRY, "12.0 -1.0 3 4; 12.1 -1.0 3 4; 12.0 -1.0 3 4"))
+                    children = listOf(
+                        treeElement(
+                            SelectChoicesMapData.GEOMETRY,
+                            "12.0 -1.0 3 4; 12.1 -1.0 3 4; 12.0 -1.0 3 4"
+                        )
+                    )
                 )
             )
         )
@@ -84,7 +95,13 @@ class SelectChoicesMapDataTest {
         val points = (mappableItems[0] as MappableItem.Polygon).points
         assertThat(
             points,
-            equalTo(listOf(MapPoint(12.0, -1.0, 3.0, 4.0), MapPoint(12.1, -1.0, 3.0, 4.0), MapPoint(12.0, -1.0, 3.0, 4.0)))
+            equalTo(
+                listOf(
+                    MapPoint(12.0, -1.0, 3.0, 4.0),
+                    MapPoint(12.1, -1.0, 3.0, 4.0),
+                    MapPoint(12.0, -1.0, 3.0, 4.0)
+                )
+            )
         )
     }
 
@@ -93,7 +110,14 @@ class SelectChoicesMapDataTest {
         val choices = listOf(
             selectChoice(
                 value = "a",
-                item = treeElement(children = listOf(treeElement(SelectChoicesMapData.GEOMETRY, "12.0 -1.0 305 0")))
+                item = treeElement(
+                    children = listOf(
+                        treeElement(
+                            SelectChoicesMapData.GEOMETRY,
+                            "12.0 -1.0 305 0"
+                        )
+                    )
+                )
             ),
             selectChoice(
                 value = "b",
@@ -147,7 +171,13 @@ class SelectChoicesMapDataTest {
             .build()
 
         val resources = ApplicationProvider.getApplicationContext<Application>().resources
-        val data = SelectChoicesMapData(resources, scheduler, prompt, null)
+        val data = SelectChoicesMapData(
+            resources,
+            scheduler,
+            prompt,
+            FormEntryPromptSelectChoiceLoader(),
+            null
+        )
         assertThat(data.isLoading().value, equalTo(true))
         assertThat(data.getMappableItems().value, equalTo(null))
 
@@ -281,7 +311,10 @@ class SelectChoicesMapDataTest {
                 value = "a",
                 item = treeElement(
                     children = listOf(
-                        treeElement(SelectChoicesMapData.GEOMETRY, "12.0 -1.0 3 4; 12.1 -1.0 3 4; 12.0 -1.0 3 4"),
+                        treeElement(
+                            SelectChoicesMapData.GEOMETRY,
+                            "12.0 -1.0 3 4; 12.1 -1.0 3 4; 12.0 -1.0 3 4"
+                        ),
                         treeElement(SelectChoicesMapData.STROKE_WIDTH, "10"),
                         treeElement(SelectChoicesMapData.STROKE, "#000000"),
                         treeElement(SelectChoicesMapData.FILL, "#ffffff")
@@ -359,12 +392,24 @@ class SelectChoicesMapDataTest {
         val data = loadDataForPrompt(prompt)
 
         val firstItem = data.getMappableItems().getOrAwaitValue()!![0] as MappableItem.Point
-        assertThat(firstItem.smallIcon, equalTo(org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_small))
-        assertThat(firstItem.largeIcon, equalTo(org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_big))
+        assertThat(
+            firstItem.smallIcon,
+            equalTo(org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_small)
+        )
+        assertThat(
+            firstItem.largeIcon,
+            equalTo(org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_big)
+        )
 
         val secondItem = data.getMappableItems().getOrAwaitValue()!![1] as MappableItem.Point
-        assertThat(secondItem.smallIcon, equalTo(org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_small))
-        assertThat(secondItem.largeIcon, equalTo(org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_big))
+        assertThat(
+            secondItem.smallIcon,
+            equalTo(org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_small)
+        )
+        assertThat(
+            secondItem.largeIcon,
+            equalTo(org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_big)
+        )
     }
 
     @Test
@@ -423,7 +468,13 @@ class SelectChoicesMapDataTest {
 
     private fun loadDataForPrompt(prompt: FormEntryPrompt): SelectChoicesMapData {
         val resources = ApplicationProvider.getApplicationContext<Application>().resources
-        val data = SelectChoicesMapData(resources, scheduler, prompt, null)
+        val data = SelectChoicesMapData(
+            resources,
+            scheduler,
+            prompt,
+            FormEntryPromptSelectChoiceLoader(),
+            null
+        )
         scheduler.flush()
         return data
     }

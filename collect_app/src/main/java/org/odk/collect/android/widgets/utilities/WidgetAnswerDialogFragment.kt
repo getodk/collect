@@ -17,6 +17,7 @@ import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.WidgetAnswerDialogLayoutBinding
 import org.odk.collect.android.formentry.FormEntryViewModel
+import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader
 import org.odk.collect.android.widgets.viewmodels.QuestionViewModel
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.material.MaterialFullScreenDialogFragment
@@ -32,16 +33,24 @@ abstract class WidgetAnswerDialogFragment<T : Fragment>(
     private val prompt: FormEntryPrompt by lazy {
         formEntryViewModel.getQuestionPrompt(requireArguments().getSerializable(ARG_FORM_INDEX) as FormIndex)
     }
+
+    private val selectChoiceLoader: SelectChoiceLoader by lazy {
+        formEntryViewModel
+    }
+
     protected val constraintValidationResult by lazy {
         questionViewModel.constraintValidationResult
     }
 
-    abstract fun onCreateFragment(prompt: FormEntryPrompt): T
+    abstract fun onCreateFragment(
+        prompt: FormEntryPrompt,
+        selectChoiceLoader: SelectChoiceLoader
+    ): T
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         childFragmentManager.fragmentFactory = FragmentFactoryBuilder()
-            .forClass(type) { onCreateFragment(prompt) }
+            .forClass(type) { onCreateFragment(prompt, selectChoiceLoader) }
             .build()
     }
 

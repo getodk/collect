@@ -11,6 +11,7 @@ import org.javarosa.core.model.data.SelectOneData
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.utilities.Appearances
+import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils
 import org.odk.collect.android.widgets.utilities.WidgetAnswerDialogFragment
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
@@ -40,7 +41,10 @@ class SelectOneFromMapDialogFragment(viewModelFactory: ViewModelProvider.Factory
         DaggerUtils.getComponent(context).inject(this)
     }
 
-    override fun onCreateFragment(prompt: FormEntryPrompt): SelectionMapFragment {
+    override fun onCreateFragment(
+        prompt: FormEntryPrompt,
+        selectChoiceLoader: SelectChoiceLoader
+    ): SelectionMapFragment {
         childFragmentManager.setFragmentResultListener(REQUEST_SELECT_ITEM, this) { _, result ->
             val selectedIndex = result.getLong(SelectionMapFragment.RESULT_SELECTED_ITEM).toInt()
             val selectedChoice = prompt.selectChoices[selectedIndex]
@@ -49,7 +53,13 @@ class SelectOneFromMapDialogFragment(viewModelFactory: ViewModelProvider.Factory
 
         val selectedIndex = requireArguments().getSerializable(ARG_SELECTED_INDEX) as Int?
         return SelectionMapFragment(
-            SelectChoicesMapData(this.resources, scheduler, prompt, selectedIndex),
+            SelectChoicesMapData(
+                this.resources,
+                scheduler,
+                prompt,
+                selectChoiceLoader,
+                selectedIndex
+            ),
             skipSummary = Appearances.hasAppearance(prompt, Appearances.QUICK),
             zoomToFitItems = false,
             showNewItemButton = false,
@@ -66,6 +76,7 @@ internal class SelectChoicesMapData(
     private val resources: Resources,
     scheduler: Scheduler,
     prompt: FormEntryPrompt,
+    private val selectChoiceLoader: SelectChoiceLoader,
     private val selectedIndex: Int?
 ) : SelectionMapData {
 
@@ -79,7 +90,7 @@ internal class SelectChoicesMapData(
 
         scheduler.immediate(
             background = {
-                loadItemsFromChoices(prompt.selectChoices, prompt)
+                loadItemsFromChoices(prompt)
             },
             foreground = {
                 itemCount.value = prompt.selectChoices.size
@@ -89,10 +100,8 @@ internal class SelectChoicesMapData(
         )
     }
 
-    private fun loadItemsFromChoices(
-        selectChoices: MutableList<SelectChoice>,
-        prompt: FormEntryPrompt
-    ): List<MappableItem> {
+    private fun loadItemsFromChoices(prompt: FormEntryPrompt): List<MappableItem> {
+        val selectChoices = selectChoiceLoader.loadSelectChoices(prompt)
         return selectChoices.foldIndexed(emptyList()) { index, list, selectChoice ->
             val geometry = selectChoice.getChild(GEOMETRY)
 

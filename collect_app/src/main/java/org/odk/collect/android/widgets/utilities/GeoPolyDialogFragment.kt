@@ -10,6 +10,7 @@ import org.javarosa.core.model.data.IAnswerData
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.javarosawrapper.FailedValidationResult
 import org.odk.collect.android.utilities.FormEntryPromptUtils
+import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader
 import org.odk.collect.android.widgets.utilities.AdditionalAttributes.INCREMENTAL
 import org.odk.collect.android.widgets.utilities.BindAttributes.ALLOW_MOCK_ACCURACY
 import org.odk.collect.androidshared.ui.DisplayString
@@ -23,7 +24,7 @@ class GeoPolyDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
         viewModelFactory
     ) {
 
-    override fun onCreateFragment(prompt: FormEntryPrompt): GeoPolyFragment {
+    override fun onCreateFragment(prompt: FormEntryPrompt, selectChoiceLoader: SelectChoiceLoader): GeoPolyFragment {
         val outputMode = when (prompt.dataType) {
             Constants.DATATYPE_GEOSHAPE -> OutputMode.GEOSHAPE
             Constants.DATATYPE_GEOTRACE -> OutputMode.GEOTRACE
