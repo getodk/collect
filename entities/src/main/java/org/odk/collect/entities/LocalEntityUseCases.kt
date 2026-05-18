@@ -2,6 +2,8 @@ package org.odk.collect.entities
 
 import org.apache.commons.csv.CSVRecord
 import org.javarosa.core.model.instance.SecondaryInstanceCSVParserBuilder
+import org.odk.collect.analytics.Analytics
+import org.odk.collect.entities.analytics.AnalyticsEvents
 import org.odk.collect.entities.javarosa.finalization.EntitiesExtra
 import org.odk.collect.entities.javarosa.finalization.FormEntity
 import org.odk.collect.entities.javarosa.parse.EntitySchema
@@ -31,6 +33,8 @@ object LocalEntityUseCases {
                     val existing = entitiesRepository.findEntityById(formEntity.dataset, formEntity.id)
                     if (existing != null) {
                         saveUpdatedEntity(formEntity, existing, entitiesRepository)
+                    } else {
+                        Analytics.log(AnalyticsEvents.ENTITY_FAILURE, "failure_code", "UPDATE_NO_MATCH")
                     }
                 }
 
@@ -77,6 +81,8 @@ object LocalEntityUseCases {
                 "Entities",
                 "Failed to create dataset=${formEntity.dataset}, id=${formEntity.id}, label=${formEntity.label}"
             )
+
+            Analytics.log(AnalyticsEvents.ENTITY_FAILURE, "failure_code", "CREATE_NO_LABEL")
         }
     }
 
