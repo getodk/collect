@@ -67,22 +67,29 @@ class MappableItemsDelegate {
         }
 
         val pointIds = map.addMarkers(markerDescriptions)
-        val lineIds = lines.fold(listOf<Int>()) { ids, item ->
-            ids + map.addPolyLine(
-                LineDescription(
-                    item.points,
-                    item.strokeWidth,
-                    item.strokeColor?.sanitizeToColorInt()
+        val lineIds = mutableListOf<Int>()
+        lines.forEach { item ->
+            lineIds.add(
+                map.addPolyLine(
+                    LineDescription(
+                        item.points,
+                        item.strokeWidth,
+                        item.strokeColor?.sanitizeToColorInt()
+                    )
                 )
             )
         }
-        val polygonIds = polygons.fold(listOf<Int>()) { ids, item ->
-            ids + map.addPolygon(
-                PolygonDescription(
-                    item.points,
-                    item.strokeWidth,
-                    item.strokeColor?.sanitizeToColorInt(),
-                    item.fillColor?.sanitizeToColorInt()
+
+        val polygonIds = mutableListOf<Int>()
+        polygons.forEach { item ->
+            polygonIds.add(
+                map.addPolygon(
+                    PolygonDescription(
+                        item.points,
+                        item.strokeWidth,
+                        item.strokeColor?.sanitizeToColorInt(),
+                        item.fillColor?.sanitizeToColorInt()
+                    )
                 )
             )
         }
