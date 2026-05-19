@@ -23,6 +23,7 @@ class MappableItemsDelegate {
     fun updateFeatures(map: MapFragment, items: List<MappableItem>) {
         map.clearFeatures(itemsByFeatureId.keys.toList())
         itemsByFeatureId.clear()
+        points.clear()
 
         val itemsAndFeatureIds = addFeatures(map, items)
         itemsAndFeatureIds.forEach { (item, featureId) ->

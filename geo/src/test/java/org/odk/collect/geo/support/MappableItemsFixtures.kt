@@ -5,7 +5,7 @@ import org.odk.collect.geo.items.IconifiedText
 import org.odk.collect.geo.items.MappableItem
 import org.odk.collect.maps.MapPoint
 
-object Fixtures {
+object MappableItemsFixtures {
     fun actionMappablePoint(): MappableItem.Point {
         return MappableItem.Point(
             0,
@@ -18,15 +18,15 @@ object Fixtures {
         )
     }
 
-    fun infoMappablePoint(): MappableItem.Point {
+    fun point(point: MapPoint = MapPoint(0.0, 0.0), info: String? = null): MappableItem.Point {
         return MappableItem.Point(
             0,
             "0",
             listOf(IconifiedText(R.drawable.ic_lock_idle_charging, "An item")),
-            point = MapPoint(0.0, 0.0),
+            point = point,
             smallIcon = R.drawable.ic_lock_power_off,
             largeIcon = R.drawable.ic_lock_idle_charging,
-            info = "Info"
+            info = info
         )
     }
 
