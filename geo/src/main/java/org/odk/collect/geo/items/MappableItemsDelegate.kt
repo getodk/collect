@@ -59,7 +59,7 @@ class MappableItemsDelegate {
 
         val markerDescriptions = singlePoints.map {
             MarkerDescription(
-                MapPoint(it.point.latitude, it.point.longitude),
+                it.point,
                 false,
                 MapFragment.IconAnchor.BOTTOM,
                 MarkerIconDescription.DrawableResource(it.smallIcon, it.color, it.symbol)
