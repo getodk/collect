@@ -155,14 +155,14 @@ object MapFragmentAssertions {
             }
 
             override fun describeTo(description: Description) {
-                description.appendText("shows polylines for $items")
+                description.appendText("shows polygons for $items")
             }
 
             override fun describeMismatchSafely(
                 mapFragment: FakeMapFragment,
                 mismatchDescription: Description
             ) {
-                mismatchDescription.appendText("was ${mapFragment.getPolyLines()}")
+                mismatchDescription.appendText("was ${mapFragment.getPolygons()}")
             }
         }
     }
