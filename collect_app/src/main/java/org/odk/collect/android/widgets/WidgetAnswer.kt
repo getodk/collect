@@ -1,6 +1,7 @@
 package org.odk.collect.android.widgets
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AttachFile
 import androidx.compose.runtime.Composable
@@ -9,6 +10,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.unit.dp
 import org.javarosa.core.model.Constants
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.widgets.video.VideoWidgetAnswer
@@ -49,6 +51,12 @@ fun WidgetAnswer(
                     )
                 }
             }
+            Constants.CONTROL_IMAGE_CHOOSE -> ImageWidgetAnswer(
+                if (summaryView) modifier.heightIn(max = 200.dp) else modifier,
+                answer,
+                mediaWidgetAnswerViewModel,
+                onLongClick
+            )
             Constants.CONTROL_VIDEO_CAPTURE -> VideoWidgetAnswer(modifier, answer, mediaWidgetAnswerViewModel, onLongClick)
             Constants.CONTROL_FILE_CAPTURE -> {
                 val context = LocalContext.current

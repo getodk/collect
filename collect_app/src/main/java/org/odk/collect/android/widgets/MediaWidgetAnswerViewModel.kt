@@ -10,6 +10,7 @@ import org.odk.collect.android.utilities.MediaUtils
 import org.odk.collect.android.utilities.QuestionMediaManager
 import org.odk.collect.androidshared.utils.getVideoThumbnail
 import org.odk.collect.async.Scheduler
+import java.io.File
 
 class MediaWidgetAnswerViewModel(
     private val scheduler: Scheduler,
@@ -28,6 +29,10 @@ class MediaWidgetAnswerViewModel(
         }
 
         return bitmapState
+    }
+
+    fun getImage(answer: String?): File? {
+        return questionMediaManager.getAnswerFile(answer)
     }
 
     fun openFile(context: Context, answer: String?, mimeType: String? = null) {
