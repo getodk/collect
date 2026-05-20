@@ -93,7 +93,7 @@ internal class SelectChoicesMapData(
                 loadItemsFromChoices(prompt)
             },
             foreground = {
-                itemCount.value = prompt.selectChoices.size
+                itemCount.value = it.size
                 items.value = it
                 isLoading.value = false
             }
