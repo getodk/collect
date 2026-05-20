@@ -31,7 +31,7 @@ import org.odk.collect.android.javarosawrapper.SuccessValidationResult
 import org.odk.collect.android.javarosawrapper.ValidationResult
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
-import org.odk.collect.android.widgets.items.SelectChoicesMapData
+import org.odk.collect.android.widgets.items.GeoSelectChoiceElements
 import org.odk.collect.android.widgets.support.FormElementFixtures.selectChoice
 import org.odk.collect.android.widgets.support.FormElementFixtures.treeElement
 import org.odk.collect.android.widgets.utilities.AdditionalAttributes.INCREMENTAL
@@ -548,11 +548,11 @@ class GeoPolyDialogFragmentTest {
         val selectChoices = listOf(
             selectChoice(
                 value = "a",
-                item = treeElement(children = listOf(treeElement(SelectChoicesMapData.GEOMETRY, "12.0 -1.0 305 0")))
+                item = treeElement(children = listOf(treeElement(GeoSelectChoiceElements.GEOMETRY, "12.0 -1.0 305 0")))
             ),
             selectChoice(
                 value = "b",
-                item = treeElement(children = listOf(treeElement(SelectChoicesMapData.GEOMETRY, "13.0 -1.0 305 0")))
+                item = treeElement(children = listOf(treeElement(GeoSelectChoiceElements.GEOMETRY, "13.0 -1.0 305 0")))
             )
         )
 

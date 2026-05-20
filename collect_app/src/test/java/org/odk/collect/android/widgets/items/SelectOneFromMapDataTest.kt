@@ -22,7 +22,7 @@ import org.odk.collect.maps.MapPoint
 import org.odk.collect.testshared.FakeScheduler
 
 @RunWith(AndroidJUnit4::class)
-class SelectChoicesMapDataTest {
+class SelectOneFromMapDataTest {
 
     private val scheduler = FakeScheduler()
 
@@ -37,7 +37,7 @@ class SelectChoicesMapDataTest {
                 item = treeElement(
                     children = listOf(
                         treeElement(
-                            SelectChoicesMapData.GEOMETRY,
+                            GeoSelectChoiceElements.GEOMETRY,
                             "12.0 -1.0 3 4; 12.1 -1.0 3 4"
                         )
                     )
@@ -72,7 +72,7 @@ class SelectChoicesMapDataTest {
                 item = treeElement(
                     children = listOf(
                         treeElement(
-                            SelectChoicesMapData.GEOMETRY,
+                            GeoSelectChoiceElements.GEOMETRY,
                             "12.0 -1.0 3 4; 12.1 -1.0 3 4; 12.0 -1.0 3 4"
                         )
                     )
@@ -113,7 +113,7 @@ class SelectChoicesMapDataTest {
                 item = treeElement(
                     children = listOf(
                         treeElement(
-                            SelectChoicesMapData.GEOMETRY,
+                            GeoSelectChoiceElements.GEOMETRY,
                             "12.0 -1.0 305 0"
                         )
                     )
@@ -144,7 +144,7 @@ class SelectChoicesMapDataTest {
                 value = "a",
                 item = treeElement(
                     children = listOf(
-                        treeElement(SelectChoicesMapData.GEOMETRY, "12.0 -1.0 305 0"),
+                        treeElement(GeoSelectChoiceElements.GEOMETRY, "12.0 -1.0 305 0"),
                         treeElement("property", "blah")
                     )
                 )
@@ -171,7 +171,7 @@ class SelectChoicesMapDataTest {
             .build()
 
         val resources = ApplicationProvider.getApplicationContext<Application>().resources
-        val data = SelectChoicesMapData(
+        val data = SelectOneFromMapData(
             resources,
             scheduler,
             prompt,
@@ -195,7 +195,7 @@ class SelectChoicesMapDataTest {
                 value = "a",
                 item = treeElement(
                     children = listOf(
-                        treeElement(SelectChoicesMapData.GEOMETRY, "0 170.00 0 0")
+                        treeElement(GeoSelectChoiceElements.GEOMETRY, "0 170.00 0 0")
                     )
                 )
             ),
@@ -204,7 +204,7 @@ class SelectChoicesMapDataTest {
                 value = "b",
                 item = treeElement(
                     children = listOf(
-                        treeElement(SelectChoicesMapData.GEOMETRY, "blah")
+                        treeElement(GeoSelectChoiceElements.GEOMETRY, "blah")
                     )
                 )
             ),
@@ -213,7 +213,7 @@ class SelectChoicesMapDataTest {
                 value = "c",
                 item = treeElement(
                     children = listOf(
-                        treeElement(SelectChoicesMapData.GEOMETRY, "0 180.1 0 0")
+                        treeElement(GeoSelectChoiceElements.GEOMETRY, "0 180.1 0 0")
                     )
                 )
             ),
@@ -222,7 +222,7 @@ class SelectChoicesMapDataTest {
                 value = "c",
                 item = treeElement(
                     children = listOf(
-                        treeElement(SelectChoicesMapData.GEOMETRY, "0 180 0 0; 0 180.1 0 0")
+                        treeElement(GeoSelectChoiceElements.GEOMETRY, "0 180 0 0; 0 180.1 0 0")
                     )
                 )
             )
@@ -249,9 +249,9 @@ class SelectChoicesMapDataTest {
                 value = "a",
                 item = treeElement(
                     children = listOf(
-                        treeElement(SelectChoicesMapData.GEOMETRY, "12.0 -1.0 305 0"),
-                        treeElement(SelectChoicesMapData.MARKER_SYMBOL, "A"),
-                        treeElement(SelectChoicesMapData.MARKER_COLOR, "#ffffff")
+                        treeElement(GeoSelectChoiceElements.GEOMETRY, "12.0 -1.0 305 0"),
+                        treeElement(GeoSelectChoiceElements.MARKER_SYMBOL, "A"),
+                        treeElement(GeoSelectChoiceElements.MARKER_COLOR, "#ffffff")
                     )
                 )
             )
@@ -280,9 +280,9 @@ class SelectChoicesMapDataTest {
                 value = "a",
                 item = treeElement(
                     children = listOf(
-                        treeElement(SelectChoicesMapData.GEOMETRY, "12.0 -1.0 3 4; 12.1 -1.0 3 4"),
-                        treeElement(SelectChoicesMapData.STROKE_WIDTH, "10"),
-                        treeElement(SelectChoicesMapData.STROKE, "#ffffff")
+                        treeElement(GeoSelectChoiceElements.GEOMETRY, "12.0 -1.0 3 4; 12.1 -1.0 3 4"),
+                        treeElement(GeoSelectChoiceElements.STROKE_WIDTH, "10"),
+                        treeElement(GeoSelectChoiceElements.STROKE, "#ffffff")
                     )
                 )
             )
@@ -312,12 +312,12 @@ class SelectChoicesMapDataTest {
                 item = treeElement(
                     children = listOf(
                         treeElement(
-                            SelectChoicesMapData.GEOMETRY,
+                            GeoSelectChoiceElements.GEOMETRY,
                             "12.0 -1.0 3 4; 12.1 -1.0 3 4; 12.0 -1.0 3 4"
                         ),
-                        treeElement(SelectChoicesMapData.STROKE_WIDTH, "10"),
-                        treeElement(SelectChoicesMapData.STROKE, "#000000"),
-                        treeElement(SelectChoicesMapData.FILL, "#ffffff")
+                        treeElement(GeoSelectChoiceElements.STROKE_WIDTH, "10"),
+                        treeElement(GeoSelectChoiceElements.STROKE, "#000000"),
+                        treeElement(GeoSelectChoiceElements.FILL, "#ffffff")
                     )
                 )
             )
@@ -343,8 +343,8 @@ class SelectChoicesMapDataTest {
                 value = "a",
                 item = treeElement(
                     children = listOf(
-                        treeElement(SelectChoicesMapData.GEOMETRY, "12.0 -1.0 305 0"),
-                        treeElement(SelectChoicesMapData.MARKER_SYMBOL, "A")
+                        treeElement(GeoSelectChoiceElements.GEOMETRY, "12.0 -1.0 305 0"),
+                        treeElement(GeoSelectChoiceElements.MARKER_SYMBOL, "A")
                     )
                 )
             )
@@ -369,7 +369,7 @@ class SelectChoicesMapDataTest {
                 value = "a",
                 item = treeElement(
                     children = listOf(
-                        treeElement(SelectChoicesMapData.GEOMETRY, "12.0 -1.0 305 0")
+                        treeElement(GeoSelectChoiceElements.GEOMETRY, "12.0 -1.0 305 0")
                     )
                 )
             ),
@@ -377,8 +377,8 @@ class SelectChoicesMapDataTest {
                 value = "b",
                 item = treeElement(
                     children = listOf(
-                        treeElement(SelectChoicesMapData.GEOMETRY, "0 170.00 0 0"),
-                        treeElement(SelectChoicesMapData.MARKER_SYMBOL, " ")
+                        treeElement(GeoSelectChoiceElements.GEOMETRY, "0 170.00 0 0"),
+                        treeElement(GeoSelectChoiceElements.MARKER_SYMBOL, " ")
                     )
                 )
             )
@@ -419,7 +419,7 @@ class SelectChoicesMapDataTest {
                 value = "a",
                 item = treeElement(
                     children = listOf(
-                        treeElement(SelectChoicesMapData.GEOMETRY, "12.0 -1.0 305 0"),
+                        treeElement(GeoSelectChoiceElements.GEOMETRY, "12.0 -1.0 305 0"),
                         treeElement(EntitySchema.VERSION, "version"),
                         treeElement(EntitySchema.TRUNK_VERSION, "trunk-version"),
                         treeElement(EntitySchema.BRANCH_ID, "branch-id")
@@ -445,12 +445,12 @@ class SelectChoicesMapDataTest {
                 value = "a",
                 item = treeElement(
                     children = listOf(
-                        treeElement(SelectChoicesMapData.GEOMETRY, "12.0 -1.0 305 0"),
-                        treeElement(SelectChoicesMapData.MARKER_COLOR, "#ffffff"),
-                        treeElement(SelectChoicesMapData.MARKER_SYMBOL, "A"),
-                        treeElement(SelectChoicesMapData.STROKE, "#ffffff"),
-                        treeElement(SelectChoicesMapData.STROKE_WIDTH, "5"),
-                        treeElement(SelectChoicesMapData.FILL, "#ffffff"),
+                        treeElement(GeoSelectChoiceElements.GEOMETRY, "12.0 -1.0 305 0"),
+                        treeElement(GeoSelectChoiceElements.MARKER_COLOR, "#ffffff"),
+                        treeElement(GeoSelectChoiceElements.MARKER_SYMBOL, "A"),
+                        treeElement(GeoSelectChoiceElements.STROKE, "#ffffff"),
+                        treeElement(GeoSelectChoiceElements.STROKE_WIDTH, "5"),
+                        treeElement(GeoSelectChoiceElements.FILL, "#ffffff"),
                     )
                 )
             )
@@ -466,9 +466,9 @@ class SelectChoicesMapDataTest {
         assertThat(properties.size, equalTo(0))
     }
 
-    private fun loadDataForPrompt(prompt: FormEntryPrompt): SelectChoicesMapData {
+    private fun loadDataForPrompt(prompt: FormEntryPrompt): SelectOneFromMapData {
         val resources = ApplicationProvider.getApplicationContext<Application>().resources
-        val data = SelectChoicesMapData(
+        val data = SelectOneFromMapData(
             resources,
             scheduler,
             prompt,

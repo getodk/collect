@@ -57,11 +57,11 @@ class SelectOneFromMapDialogFragmentTest {
     private val selectChoices = listOf(
         selectChoice(
             value = "a",
-            item = treeElement(children = listOf(treeElement(SelectChoicesMapData.GEOMETRY, "12.0 -1.0 305 0")))
+            item = treeElement(children = listOf(treeElement(GeoSelectChoiceElements.GEOMETRY, "12.0 -1.0 305 0")))
         ),
         selectChoice(
             value = "b",
-            item = treeElement(children = listOf(treeElement(SelectChoicesMapData.GEOMETRY, "13.0 -1.0 305 0")))
+            item = treeElement(children = listOf(treeElement(GeoSelectChoiceElements.GEOMETRY, "13.0 -1.0 305 0")))
         )
     )
 
@@ -182,8 +182,8 @@ class SelectOneFromMapDialogFragmentTest {
 
             assertThat(data.getMapTitle().value, equalTo(prompt.longText))
             assertThat(data.getItemCount().value, equalTo(prompt.selectChoices.size))
-            val firstFeatureGeometry = selectChoices[0].getChild(SelectChoicesMapData.GEOMETRY)!!.split(" ")
-            val secondFeatureGeometry = selectChoices[1].getChild(SelectChoicesMapData.GEOMETRY)!!.split(" ")
+            val firstFeatureGeometry = selectChoices[0].getChild(GeoSelectChoiceElements.GEOMETRY)!!.split(" ")
+            val secondFeatureGeometry = selectChoices[1].getChild(GeoSelectChoiceElements.GEOMETRY)!!.split(" ")
             assertThat(
                 data.getMappableItems().value,
                 equalTo(

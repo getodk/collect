@@ -11,7 +11,7 @@ import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.javarosawrapper.FailedValidationResult
 import org.odk.collect.android.utilities.FormEntryPromptUtils
 import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader
-import org.odk.collect.android.widgets.items.SelectChoicesMapData
+import org.odk.collect.android.widgets.items.SelectOneFromMapData
 import org.odk.collect.android.widgets.utilities.AdditionalAttributes.INCREMENTAL
 import org.odk.collect.android.widgets.utilities.BindAttributes.ALLOW_MOCK_ACCURACY
 import org.odk.collect.androidshared.ui.DisplayString
@@ -85,7 +85,7 @@ class GeoPolyDialogFragment(
                     null
                 }
             },
-            mappableData = SelectChoicesMapData(
+            mappableData = SelectOneFromMapData(
                 this.resources,
                 scheduler,
                 prompt,
