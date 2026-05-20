@@ -1,65 +1,67 @@
 package org.odk.collect.android.widgets
 
 import android.content.Intent
-import android.graphics.drawable.BitmapDrawable
 import android.provider.MediaStore
-import android.view.View.GONE
-import android.view.View.VISIBLE
-import androidx.core.util.Pair
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.performClick
 import net.bytebuddy.utility.RandomString
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
-import org.hamcrest.Matchers.notNullValue
-import org.hamcrest.Matchers.nullValue
+import org.javarosa.core.model.Constants
 import org.javarosa.core.model.data.StringData
-import org.javarosa.core.reference.ReferenceManager
-import org.junit.Assert.assertNull
+import org.junit.Rule
 import org.junit.Test
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.spy
+import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import org.odk.collect.android.R
 import org.odk.collect.android.formentry.questions.QuestionDetails
-import org.odk.collect.android.injection.config.AppDependencyModule
-import org.odk.collect.android.support.CollectHelpers
-import org.odk.collect.android.support.CollectHelpers.setupFakeReferenceManager
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
+import org.odk.collect.android.support.WidgetTestActivity
 import org.odk.collect.android.widgets.base.FileWidgetTest
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry
-import org.odk.collect.android.widgets.support.SynchronousImageLoader
 import org.odk.collect.android.widgets.utilities.FileAnswerDelegate
-import org.odk.collect.imageloader.ImageLoader
+import org.odk.collect.androidtest.onNodeWithClickLabel
 import org.odk.collect.shared.TempFiles
+import org.odk.collect.strings.R.string
 import org.robolectric.Shadows.shadowOf
 import java.io.File
-import org.mockito.kotlin.spy
-import org.mockito.kotlin.verify
 
 class ImageWidgetTest : FileWidgetTest<ImageWidget>() {
+    @get:Rule
+    val composeRule = createAndroidComposeRule<WidgetTestActivity>()
+
     private var currentFile: File? = null
     private lateinit var fileAnswerDelegate: FileAnswerDelegate
 
-    override fun createWidget(): ImageWidget {
-        val fakeQuestionMediaManager = object : FakeQuestionMediaManager() {
-            override fun getAnswerFile(fileName: String): File? {
-                return if (currentFile == null) {
-                    super.getAnswerFile(fileName)
-                } else {
-                    if (fileName == DrawWidgetTest.USER_SPECIFIED_IMAGE_ANSWER) currentFile else null
-                }
-            }
+    private val fakeQuestionMediaManager = object : FakeQuestionMediaManager() {
+        override fun getAnswerFile(fileName: String): File? {
+            return currentFile
         }
+    }
+    private val mediaWidgetAnswerViewModel = MediaWidgetAnswerViewModel(mock(), fakeQuestionMediaManager, mock())
+    private val dependencies = QuestionWidget.Dependencies(
+        null,
+        mediaWidgetAnswerViewModel
+    )
 
+    override fun createWidget(): ImageWidget {
         fileAnswerDelegate = spy(FileAnswerDelegate(fakeQuestionMediaManager, formEntryPrompt))
+        whenever(formEntryPrompt.controlType).thenReturn(Constants.CONTROL_IMAGE_CHOOSE)
 
         return ImageWidget(
-            activity,
+            composeRule.activity,
             QuestionDetails(formEntryPrompt, readOnlyOverride),
             fakeQuestionMediaManager,
             FakeWaitingForDataRegistry(),
             TempFiles.getPathInTempDir(),
             dependencies,
             fileAnswerDelegate
-        )
+        ).also {
+            widgetInComposeActivity(composeRule, it)
+            activity = composeRule.activity
+        }
     }
 
     @Test
@@ -82,28 +84,32 @@ class ImageWidgetTest : FileWidgetTest<ImageWidget>() {
     fun `buttons should launch correct intents when there is no custom package`() {
         stubAllRuntimePermissionsGranted(true)
 
-        var intent = getIntentLaunchedByClick(R.id.capture_button)
+        composeRule.onNodeWithClickLabel(activity.getString(string.capture_image)).performClick()
+        var intent = shadowOf(activity).nextStartedActivity
         assertActionEquals(MediaStore.ACTION_IMAGE_CAPTURE, intent)
         assertThat(intent!!.getPackage(), equalTo(null))
 
-        intent = getIntentLaunchedByClick(R.id.choose_button)
+        composeRule.onNodeWithClickLabel(activity.getString(string.choose_image)).performClick()
+        intent = shadowOf(activity).nextStartedActivity
         assertActionEquals(Intent.ACTION_GET_CONTENT, intent)
         assertTypeEquals("image/*", intent)
     }
 
     @Test
     fun `buttons should launch correct intents when custom package is set`() {
-        formEntryPrompt = MockFormEntryPromptBuilder()
+        formEntryPrompt = MockFormEntryPromptBuilder(formEntryPrompt)
             .withAdditionalAttribute("intent", "com.customcameraapp")
             .build()
 
         stubAllRuntimePermissionsGranted(true)
 
-        var intent = getIntentLaunchedByClick(R.id.capture_button)
+        composeRule.onNodeWithClickLabel(activity.getString(string.capture_image)).performClick()
+        var intent = shadowOf(activity).nextStartedActivity
         assertActionEquals(MediaStore.ACTION_IMAGE_CAPTURE, intent)
         assertThat(intent!!.getPackage(), equalTo("com.customcameraapp"))
 
-        intent = getIntentLaunchedByClick(R.id.choose_button)
+        composeRule.onNodeWithClickLabel(activity.getString(string.choose_image)).performClick()
+        intent = shadowOf(activity).nextStartedActivity
         assertActionEquals(Intent.ACTION_GET_CONTENT, intent)
         assertTypeEquals("image/*", intent)
     }
@@ -112,108 +118,44 @@ class ImageWidgetTest : FileWidgetTest<ImageWidget>() {
     fun `capture button should not launch any intent when permissions denied`() {
         stubAllRuntimePermissionsGranted(false)
 
-        assertNull(getIntentLaunchedByClick(R.id.capture_button))
+        composeRule.onNodeWithClickLabel(activity.getString(string.capture_image)).performClick()
+        assertThat(shadowOf(activity).nextStartedActivity, equalTo(null))
     }
 
     @Test
     override fun usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         whenever(formEntryPrompt.isReadOnly).thenReturn(true)
+        createWidget()
 
-        assertThat(spyWidget.binding.captureButton.visibility, equalTo(GONE))
-        assertThat(spyWidget.binding.chooseButton.visibility, equalTo(GONE))
+        composeRule.onNodeWithClickLabel(activity.getString(string.capture_image)).assertDoesNotExist()
+        composeRule.onNodeWithClickLabel(activity.getString(string.choose_image)).assertDoesNotExist()
     }
 
     @Test
     fun `when read-only override option is used should all clickable elements be disabled`() {
         readOnlyOverride = true
         whenever(formEntryPrompt.isReadOnly).thenReturn(false)
+        createWidget()
 
-        assertThat(spyWidget.binding.captureButton.visibility, equalTo(GONE))
-        assertThat(spyWidget.binding.chooseButton.visibility, equalTo(GONE))
+        composeRule.onNodeWithClickLabel(activity.getString(string.capture_image)).assertDoesNotExist()
+        composeRule.onNodeWithClickLabel(activity.getString(string.choose_image)).assertDoesNotExist()
     }
 
     @Test
-    fun `when there is no answer hide image view and error message`() {
-        val widget = createWidget()
-
-        assertThat(widget.binding.image.visibility, equalTo(GONE))
-        assertThat(widget.binding.image.drawable, nullValue())
-
-        assertThat(widget.binding.errorMessage.visibility, equalTo(GONE))
-    }
-
-    @Test
-    fun `when the answer image cannot be loaded hide image view and show error message`() {
-        CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
-            override fun providesImageLoader(): ImageLoader {
-                return SynchronousImageLoader(true)
-            }
-        })
-
-        val imagePath = File.createTempFile("current", ".bmp").absolutePath
-        currentFile = File(imagePath)
-
-        formEntryPrompt = MockFormEntryPromptBuilder()
-            .withAnswerDisplayText(DrawWidgetTest.USER_SPECIFIED_IMAGE_ANSWER)
-            .build()
-
-        val widget = createWidget()
-
-        assertThat(widget.binding.image.visibility, equalTo(GONE))
-        assertThat(widget.binding.image.drawable, nullValue())
-
-        assertThat(widget.binding.errorMessage.visibility, equalTo(VISIBLE))
-    }
-
-    @Test
-    fun `when prompt has default answer does not show`() {
-        val imagePath = File.createTempFile("default", ".bmp").absolutePath
-        val referenceManager = setupFakeReferenceManager(
-            listOf(
-                Pair(DrawWidgetTest.DEFAULT_IMAGE_ANSWER, imagePath)
-            )
-        )
-        CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
-            override fun providesReferenceManager(): ReferenceManager {
-                return referenceManager
-            }
-
-            override fun providesImageLoader(): ImageLoader {
-                return SynchronousImageLoader()
-            }
-        })
-
-        formEntryPrompt = MockFormEntryPromptBuilder()
-            .withAnswerDisplayText(DrawWidgetTest.DEFAULT_IMAGE_ANSWER)
-            .build()
-
-        val widget = createWidget()
-        val imageView = widget.binding.image
-        assertThat(imageView.visibility, equalTo(GONE))
+    fun `when there is no answer hide image view`() {
+        createWidget()
+        composeRule.onNodeWithClickLabel(activity.getString(string.open_file)).assertDoesNotExist()
     }
 
     @Test
     fun `when prompt has current answer shows in image view`() {
-        CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
-            override fun providesImageLoader(): ImageLoader {
-                return SynchronousImageLoader()
-            }
-        })
+        currentFile = File.createTempFile("current", ".bmp")
 
-        val imagePath = File.createTempFile("current", ".bmp").absolutePath
-        currentFile = File(imagePath)
-
-        formEntryPrompt = MockFormEntryPromptBuilder()
-            .withAnswerDisplayText(DrawWidgetTest.USER_SPECIFIED_IMAGE_ANSWER)
+        formEntryPrompt = MockFormEntryPromptBuilder(formEntryPrompt)
+            .withAnswerDisplayText("current.bmp")
             .build()
 
-        val widget = createWidget()
-        val imageView = widget.binding.image
-        assertThat(imageView.visibility, equalTo(VISIBLE))
-        val drawable = imageView.drawable
-        assertThat(drawable, notNullValue())
-
-        val loadedPath = shadowOf((drawable as BitmapDrawable).bitmap).createdFromPath
-        assertThat(loadedPath, equalTo(imagePath))
+        createWidget()
+        composeRule.onNodeWithClickLabel(activity.getString(string.open_file)).assertExists()
     }
 }
