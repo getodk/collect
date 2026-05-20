@@ -1,10 +1,15 @@
 package org.odk.collect.android.widgets
 
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -23,24 +28,35 @@ fun ImageWidgetAnswer(
 ) {
     val context = LocalContext.current
     val imageFile = remember(answer) { mediaWidgetAnswerViewModel.getImage(answer) }
+    var isError by remember(answer) { mutableStateOf(false) }
 
     imageFile?.let {
-        AsyncImage(
-            model = it,
-            contentScale = ContentScale.Fit,
-            contentDescription = null,
-            modifier = modifier
-                .wrapContentWidth(Alignment.Start)
-                .clip(MaterialTheme.shapes.large)
-                .combinedClickable(
-                    onClick = {
-                        if (MultiClickGuard.allowClick()) {
-                            mediaWidgetAnswerViewModel.openFile(context, answer, "image/*")
-                        }
-                    },
-                    onLongClick = onLongClick,
-                    onClickLabel = stringResource(org.odk.collect.strings.R.string.open_file)
-                )
-        )
+        if (isError) {
+            Text(
+                modifier = modifier,
+                text = stringResource(org.odk.collect.strings.R.string.selected_invalid_image),
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodyMedium,
+            )
+        } else {
+            AsyncImage(
+                model = it,
+                contentScale = ContentScale.Fit,
+                contentDescription = null,
+                onError = { isError = true },
+                modifier = modifier
+                    .wrapContentWidth(Alignment.Start)
+                    .clip(MaterialTheme.shapes.large)
+                    .combinedClickable(
+                        onClick = {
+                            if (MultiClickGuard.allowClick()) {
+                                mediaWidgetAnswerViewModel.openFile(context, answer, "image/*")
+                            }
+                        },
+                        onLongClick = onLongClick,
+                        onClickLabel = stringResource(org.odk.collect.strings.R.string.open_file)
+                    )
+            )
+        }
     }
 }
