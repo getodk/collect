@@ -93,16 +93,16 @@ internal class SelectChoicesMapData(
                 loadItemsFromChoices(prompt)
             },
             foreground = {
-                itemCount.value = it.size
-                items.value = it
+                itemCount.value = it.first
+                items.value = it.second
                 isLoading.value = false
             }
         )
     }
 
-    private fun loadItemsFromChoices(prompt: FormEntryPrompt): List<MappableItem> {
+    private fun loadItemsFromChoices(prompt: FormEntryPrompt): Pair<Int, List<MappableItem>> {
         val selectChoices = selectChoiceLoader.loadSelectChoices(prompt)
-        return selectChoices.foldIndexed(emptyList()) { index, list, selectChoice ->
+        val mappableItems = selectChoices.foldIndexed(emptyList<MappableItem>()) { index, list, selectChoice ->
             val geometry = selectChoice.getChild(GEOMETRY)
 
             if (geometry != null) {
@@ -181,6 +181,8 @@ internal class SelectChoicesMapData(
                 list
             }
         }
+
+        return Pair(selectChoices.size, mappableItems)
     }
 
     private fun getPropertyValue(selectChoice: SelectChoice, propertyName: String): String? {

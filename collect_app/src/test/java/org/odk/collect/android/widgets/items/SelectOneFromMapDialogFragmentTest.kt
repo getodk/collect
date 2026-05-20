@@ -19,6 +19,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
@@ -79,6 +80,7 @@ class SelectOneFromMapDialogFragmentTest {
 
     private val formEntryViewModel = mock<FormEntryViewModel> {
         on { getQuestionPrompt(prompt.index) } doReturn prompt
+        on { loadSelectChoices(prompt) } doAnswer { prompt.selectChoices }
     }
 
     private val application = ApplicationProvider.getApplicationContext<Application>()
