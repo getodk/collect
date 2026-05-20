@@ -38,10 +38,11 @@ import org.odk.collect.android.widgets.utilities.WidgetAnswerDialogFragment.Comp
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.async.Scheduler
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
-import org.odk.collect.geo.selection.IconifiedText
-import org.odk.collect.geo.selection.MappableSelectItem
+import org.odk.collect.geo.items.IconifiedText
+import org.odk.collect.geo.items.MappableItem
 import org.odk.collect.geo.selection.SelectionMapFragment
 import org.odk.collect.geo.selection.SelectionMapFragment.Companion.REQUEST_SELECT_ITEM
+import org.odk.collect.icons.R
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.maps.MapPoint
@@ -185,7 +186,7 @@ class SelectOneFromMapDialogFragmentTest {
                 data.getMappableItems().value,
                 equalTo(
                     listOf(
-                        MappableSelectItem.MappableSelectPoint(
+                        MappableItem.Point(
                             0,
                             "A",
                             point = MapPoint(
@@ -194,14 +195,14 @@ class SelectOneFromMapDialogFragmentTest {
                                 firstFeatureGeometry[2].toDouble(),
                                 firstFeatureGeometry[3].toDouble()
                             ),
-                            smallIcon = org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_small,
-                            largeIcon = org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_big,
+                            smallIcon = R.drawable.ic_map_marker_with_hole_small,
+                            largeIcon = R.drawable.ic_map_marker_with_hole_big,
                             action = IconifiedText(
-                                org.odk.collect.icons.R.drawable.ic_save,
+                                R.drawable.ic_save,
                                 application.getString(org.odk.collect.strings.R.string.select_item)
                             )
                         ),
-                        MappableSelectItem.MappableSelectPoint(
+                        MappableItem.Point(
                             1,
                             "B",
                             point = MapPoint(
@@ -210,10 +211,10 @@ class SelectOneFromMapDialogFragmentTest {
                                 secondFeatureGeometry[2].toDouble(),
                                 secondFeatureGeometry[3].toDouble()
                             ),
-                            smallIcon = org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_small,
-                            largeIcon = org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_big,
+                            smallIcon = R.drawable.ic_map_marker_with_hole_small,
+                            largeIcon = R.drawable.ic_map_marker_with_hole_big,
                             action = IconifiedText(
-                                org.odk.collect.icons.R.drawable.ic_save,
+                                R.drawable.ic_save,
                                 application.getString(org.odk.collect.strings.R.string.select_item)
                             )
                         )
@@ -243,7 +244,7 @@ class SelectOneFromMapDialogFragmentTest {
             assertThat(fragment.showNewItemButton, equalTo(false))
 
             val data = fragment.selectionMapData
-            assertThat(data.getMappableItems().value!![1].selected, equalTo(true))
+            assertThat(data.isSelected(data.getMappableItems().value!![1]), equalTo(true))
         }
     }
 

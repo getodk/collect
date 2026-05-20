@@ -1,13 +1,13 @@
 package org.odk.collect.geo.support
 
 import android.R
-import org.odk.collect.geo.selection.IconifiedText
-import org.odk.collect.geo.selection.MappableSelectItem
+import org.odk.collect.geo.items.IconifiedText
+import org.odk.collect.geo.items.MappableItem
 import org.odk.collect.maps.MapPoint
 
-object Fixtures {
-    fun actionMappableSelectPoint(): MappableSelectItem.MappableSelectPoint {
-        return MappableSelectItem.MappableSelectPoint(
+object MappableItemsFixtures {
+    fun actionMappablePoint(): MappableItem.Point {
+        return MappableItem.Point(
             0,
             "0",
             listOf(IconifiedText(R.drawable.ic_lock_idle_charging, "An item")),
@@ -18,20 +18,20 @@ object Fixtures {
         )
     }
 
-    fun infoMappableSelectPoint(): MappableSelectItem.MappableSelectPoint {
-        return MappableSelectItem.MappableSelectPoint(
+    fun point(point: MapPoint = MapPoint(0.0, 0.0), info: String? = null): MappableItem.Point {
+        return MappableItem.Point(
             0,
             "0",
             listOf(IconifiedText(R.drawable.ic_lock_idle_charging, "An item")),
-            point = MapPoint(0.0, 0.0),
+            point = point,
             smallIcon = R.drawable.ic_lock_power_off,
             largeIcon = R.drawable.ic_lock_idle_charging,
-            info = "Info"
+            info = info
         )
     }
 
-    fun actionMappableSelectLine(): MappableSelectItem.MappableSelectLine {
-        return MappableSelectItem.MappableSelectLine(
+    fun actionMappableLine(): MappableItem.Line {
+        return MappableItem.Line(
             0,
             "0",
             listOf(IconifiedText(R.drawable.ic_lock_idle_charging, "An item")),
@@ -40,8 +40,8 @@ object Fixtures {
         )
     }
 
-    fun actionMappableSelectPolygon(): MappableSelectItem.MappableSelectPolygon {
-        return MappableSelectItem.MappableSelectPolygon(
+    fun actionMappablePolygon(): MappableItem.Polygon {
+        return MappableItem.Polygon(
             0,
             "0",
             listOf(IconifiedText(R.drawable.ic_lock_idle_charging, "An item")),

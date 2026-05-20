@@ -1,7 +1,11 @@
 package org.odk.collect.geo.support
 
 import org.hamcrest.Description
+import org.hamcrest.Matcher
+import org.hamcrest.Matchers.allOf
 import org.hamcrest.TypeSafeMatcher
+import org.odk.collect.geo.items.MappableData
+import org.odk.collect.geo.items.MappableItem
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.circles.CurrentLocationDelegate
 
@@ -50,5 +54,141 @@ object MapFragmentAssertions {
                 mismatchDescription.appendText("did not show current location")
             }
         }
+    }
+
+    fun showsMappablePoints(items: List<MappableItem.Point>): TypeSafeMatcher<FakeMapFragment> {
+        return object : TypeSafeMatcher<FakeMapFragment>() {
+            override fun matchesSafely(mapFragment: FakeMapFragment): Boolean {
+                val markerPoints = mapFragment.getMarkers().map { it.point }
+                return markerPoints == items.map { it.point }
+            }
+
+            override fun describeTo(description: Description) {
+                description.appendText("shows markers for $items")
+            }
+
+            override fun describeMismatchSafely(
+                mapFragment: FakeMapFragment,
+                mismatchDescription: Description
+            ) {
+                mismatchDescription.appendText("was ${mapFragment.getMarkers()}")
+            }
+        }
+    }
+
+    fun showsMappableLines(
+        items: List<MappableItem.Line>,
+        strokeWidth: Float? = null,
+        strokeColor: Int? = null
+    ): TypeSafeMatcher<FakeMapFragment> {
+        return object : TypeSafeMatcher<FakeMapFragment>() {
+            override fun matchesSafely(mapFragment: FakeMapFragment): Boolean {
+                val polyLines = mapFragment.getPolyLines()
+
+                val pointsMatch = polyLines.map { it.points } == items.map { it.points }
+                val styleIsCorrect = polyLines.all {
+                    val strokeWidthIsCorrect = if (strokeWidth != null) {
+                        it.getStrokeWidth() == strokeWidth
+                    } else {
+                        true
+                    }
+
+                    val strokeColorIsCorrect = if (strokeColor != null) {
+                        it.getStrokeColor() == strokeColor
+                    } else {
+                        true
+                    }
+
+                    strokeWidthIsCorrect && strokeColorIsCorrect
+                }
+
+                return pointsMatch && styleIsCorrect
+            }
+
+            override fun describeTo(description: Description) {
+                description.appendText("shows polylines for $items")
+            }
+
+            override fun describeMismatchSafely(
+                mapFragment: FakeMapFragment,
+                mismatchDescription: Description
+            ) {
+                mismatchDescription.appendText("was ${mapFragment.getPolyLines()}")
+            }
+        }
+    }
+
+    fun showsMappablePolygons(
+        items: List<MappableItem.Polygon>,
+        strokeWidth: Float? = null,
+        strokeColor: Int? = null,
+        fillColor: Int? = null
+    ): TypeSafeMatcher<FakeMapFragment> {
+        return object : TypeSafeMatcher<FakeMapFragment>() {
+            override fun matchesSafely(mapFragment: FakeMapFragment): Boolean {
+                val polyLines = mapFragment.getPolygons()
+
+                val pointsMatch = polyLines.map { it.points } == items.map { it.points }
+                val styleIsCorrect = polyLines.all {
+                    val strokeWidthIsCorrect = if (strokeWidth != null) {
+                        it.getStrokeWidth() == strokeWidth
+                    } else {
+                        true
+                    }
+
+                    val strokeColorIsCorrect = if (strokeColor != null) {
+                        it.getStrokeColor() == strokeColor
+                    } else {
+                        true
+                    }
+
+                    val fillColorIsCorrect = if (fillColor != null) {
+                        it.getFillColor() == fillColor
+                    } else {
+                        true
+                    }
+
+                    strokeWidthIsCorrect && strokeColorIsCorrect && fillColorIsCorrect
+                }
+
+                return pointsMatch && styleIsCorrect
+            }
+
+            override fun describeTo(description: Description) {
+                description.appendText("shows polygons for $items")
+            }
+
+            override fun describeMismatchSafely(
+                mapFragment: FakeMapFragment,
+                mismatchDescription: Description
+            ) {
+                mismatchDescription.appendText("was ${mapFragment.getPolygons()}")
+            }
+        }
+    }
+
+    fun showsMappableData(
+        mappableData: MappableData,
+        lineStrokeWidth: Float? = null,
+        lineStrokeColor: Int? = null,
+        polygonStrokeWidth: Float? = null,
+        polygonStrokeColor: Int? = null,
+        polygonFillColor: Int? = null
+    ): Matcher<FakeMapFragment> {
+        val items = mappableData.getMappableItems().value
+        val points = items?.filterIsInstance<MappableItem.Point>() ?: emptyList()
+        val lines = items?.filterIsInstance<MappableItem.Line>() ?: emptyList()
+        val polygons = items?.filterIsInstance<MappableItem.Polygon>() ?: emptyList()
+
+        return allOf(
+            showsMappablePoints(points),
+            showsMappableLines(lines, lineStrokeWidth, lineStrokeColor),
+            showsMappablePolygons(
+                polygons,
+                polygonStrokeWidth,
+                polygonStrokeColor,
+                polygonFillColor
+            )
+        )
     }
 }

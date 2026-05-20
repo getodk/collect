@@ -1,5 +1,6 @@
 package org.odk.collect.geo.selection
 
+import android.R
 import android.app.Application
 import android.view.View
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
@@ -9,7 +10,9 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.geo.databinding.PropertyBinding
-import org.odk.collect.geo.support.Fixtures
+import org.odk.collect.geo.items.IconifiedText
+import org.odk.collect.geo.items.Status
+import org.odk.collect.geo.support.MappableItemsFixtures
 import org.odk.collect.testshared.RobolectricHelpers.getCreatedFromResId
 
 @RunWith(AndroidJUnit4::class)
@@ -23,7 +26,7 @@ class SelectionSummarySheetTest {
     fun `setItem shows an error chip when the status is ERRORS`() {
         val selectionSummarySheet = SelectionSummarySheet(application)
         selectionSummarySheet.setItem(
-            Fixtures.actionMappableSelectPoint().copy(
+            MappableItemsFixtures.actionMappablePoint().copy(
                 status = Status.ERRORS
             )
         )
@@ -36,7 +39,7 @@ class SelectionSummarySheetTest {
     fun `setItem shows a no-error chip when the status is NO_ERRORS`() {
         val selectionSummarySheet = SelectionSummarySheet(application)
         selectionSummarySheet.setItem(
-            Fixtures.actionMappableSelectPoint().copy(
+            MappableItemsFixtures.actionMappablePoint().copy(
                 status = Status.NO_ERRORS
             )
         )
@@ -48,7 +51,7 @@ class SelectionSummarySheetTest {
     @Test
     fun `setItem does not show a chip if the status is null`() {
         val selectionSummarySheet = SelectionSummarySheet(application)
-        selectionSummarySheet.setItem(Fixtures.actionMappableSelectPoint())
+        selectionSummarySheet.setItem(MappableItemsFixtures.actionMappablePoint())
 
         assertThat(selectionSummarySheet.binding.statusChip.visibility, equalTo(View.GONE))
     }
@@ -57,7 +60,7 @@ class SelectionSummarySheetTest {
     fun `setItem shows name`() {
         val selectionSummarySheet = SelectionSummarySheet(application)
         selectionSummarySheet.setItem(
-            Fixtures.actionMappableSelectPoint().copy(
+            MappableItemsFixtures.actionMappablePoint().copy(
                 name = "Cosmic Dread"
             )
         )
@@ -69,14 +72,14 @@ class SelectionSummarySheetTest {
     fun `setItem shows properties`() {
         val selectionSummarySheet = SelectionSummarySheet(application)
         selectionSummarySheet.setItem(
-            Fixtures.actionMappableSelectPoint().copy(
+            MappableItemsFixtures.actionMappablePoint().copy(
                 properties = listOf(
                     IconifiedText(
-                        android.R.drawable.ic_btn_speak_now,
+                        R.drawable.ic_btn_speak_now,
                         "Emotion"
                     ),
                     IconifiedText(
-                        android.R.drawable.ic_dialog_info,
+                        R.drawable.ic_dialog_info,
                         "Mystery"
                     )
                 )
@@ -100,7 +103,7 @@ class SelectionSummarySheetTest {
     fun `properties without icons have hidden icon view`() {
         val selectionSummarySheet = SelectionSummarySheet(application)
         selectionSummarySheet.setItem(
-            Fixtures.actionMappableSelectPoint().copy(
+            MappableItemsFixtures.actionMappablePoint().copy(
                 properties = listOf(
                     IconifiedText(
                         null,
@@ -119,10 +122,10 @@ class SelectionSummarySheetTest {
     fun `properties reset between items`() {
         val selectionSummarySheet = SelectionSummarySheet(application)
         selectionSummarySheet.setItem(
-            Fixtures.actionMappableSelectPoint().copy(
+            MappableItemsFixtures.actionMappablePoint().copy(
                 properties = listOf(
                     IconifiedText(
-                        android.R.drawable.ic_btn_speak_now,
+                        R.drawable.ic_btn_speak_now,
                         "Emotion"
                     )
                 )
@@ -130,10 +133,10 @@ class SelectionSummarySheetTest {
         )
 
         selectionSummarySheet.setItem(
-            Fixtures.actionMappableSelectPoint().copy(
+            MappableItemsFixtures.actionMappablePoint().copy(
                 properties = listOf(
                     IconifiedText(
-                        android.R.drawable.ic_dialog_info,
+                        R.drawable.ic_dialog_info,
                         "Mystery"
                     )
                 )
@@ -153,9 +156,7 @@ class SelectionSummarySheetTest {
     fun `setItem shows info and hides action when it is non-null`() {
         val selectionSummarySheet = SelectionSummarySheet(application)
         selectionSummarySheet.setItem(
-            Fixtures.infoMappableSelectPoint().copy(
-                info = "Don't even bother looking"
-            )
+            MappableItemsFixtures.point(info = "Don't even bother looking")
         )
 
         assertThat(selectionSummarySheet.binding.info.visibility, equalTo(View.VISIBLE))
@@ -167,9 +168,9 @@ class SelectionSummarySheetTest {
     fun `setItem shows action and hides info when it is non-null`() {
         val selectionSummarySheet = SelectionSummarySheet(application)
         selectionSummarySheet.setItem(
-            Fixtures.actionMappableSelectPoint().copy(
+            MappableItemsFixtures.actionMappablePoint().copy(
                 action = IconifiedText(
-                    android.R.drawable.ic_btn_speak_now,
+                    R.drawable.ic_btn_speak_now,
                     "Come on in"
                 )
             )

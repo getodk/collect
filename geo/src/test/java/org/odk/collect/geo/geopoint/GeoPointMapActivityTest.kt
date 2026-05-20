@@ -178,11 +178,11 @@ class GeoPointMapActivityTest {
         launcherRule.launch<Activity>(intent)
         mapFragment.ready()
 
-        val markers = mapFragment.getMarkersPoints()
+        val markers = mapFragment.getMarkers()
         assertThat(markers.size, equalTo(1))
-        assertThat(markers[0].latitude, equalTo(1.0))
+        assertThat(markers[0].point.latitude, equalTo(1.0))
         assertThat(
-            markers[0].longitude,
+            markers[0].point.longitude,
             equalTo(2.0)
         )
     }

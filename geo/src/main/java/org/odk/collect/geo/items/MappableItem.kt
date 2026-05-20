@@ -1,21 +1,21 @@
-package org.odk.collect.geo.selection
+package org.odk.collect.geo.items
 
+import androidx.lifecycle.LiveData
+import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.maps.MapPoint
 
-sealed class MappableSelectItem {
+sealed class MappableItem {
     abstract val id: Long
     abstract val name: String
     abstract val properties: List<IconifiedText>
-    abstract val selected: Boolean
     abstract val info: String?
     abstract val action: IconifiedText?
     abstract val status: Status?
 
-    data class MappableSelectPoint(
+    data class Point(
         override val id: Long,
         override val name: String,
         override val properties: List<IconifiedText> = emptyList(),
-        override val selected: Boolean = false,
         override val info: String? = null,
         override val action: IconifiedText? = null,
         override val status: Status? = null,
@@ -24,26 +24,24 @@ sealed class MappableSelectItem {
         val largeIcon: Int,
         val color: String? = null,
         val symbol: String? = null
-    ) : MappableSelectItem()
+    ) : MappableItem()
 
-    data class MappableSelectLine(
+    data class Line(
         override val id: Long,
         override val name: String,
         override val properties: List<IconifiedText> = emptyList(),
-        override val selected: Boolean = false,
         override val info: String? = null,
         override val action: IconifiedText? = null,
         override val status: Status? = null,
         val points: List<MapPoint>,
         val strokeWidth: String? = null,
         val strokeColor: String? = null
-    ) : MappableSelectItem()
+    ) : MappableItem()
 
-    data class MappableSelectPolygon(
+    data class Polygon(
         override val id: Long,
         override val name: String,
         override val properties: List<IconifiedText> = emptyList(),
-        override val selected: Boolean = false,
         override val info: String? = null,
         override val action: IconifiedText? = null,
         override val status: Status? = null,
@@ -51,9 +49,14 @@ sealed class MappableSelectItem {
         val strokeWidth: String? = null,
         val strokeColor: String? = null,
         val fillColor: String? = null
-    ) : MappableSelectItem()
+    ) : MappableItem()
 }
 
 data class IconifiedText(val icon: Int?, val text: String)
 
 enum class Status { ERRORS, NO_ERRORS }
+
+interface MappableData {
+    fun getMappableItems(): LiveData<List<MappableItem>?>
+    fun isLoading(): NonNullLiveData<Boolean>
+}

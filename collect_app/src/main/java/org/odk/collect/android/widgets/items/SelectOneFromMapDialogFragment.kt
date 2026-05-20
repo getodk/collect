@@ -18,11 +18,12 @@ import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.async.Scheduler
 import org.odk.collect.entities.javarosa.parse.EntitySchema
 import org.odk.collect.geo.geopoly.GeoPolyUtils.parseGeometry
-import org.odk.collect.geo.selection.IconifiedText
-import org.odk.collect.geo.selection.MappableSelectItem
+import org.odk.collect.geo.items.IconifiedText
+import org.odk.collect.geo.items.MappableItem
 import org.odk.collect.geo.selection.SelectionMapData
 import org.odk.collect.geo.selection.SelectionMapFragment
 import org.odk.collect.geo.selection.SelectionMapFragment.Companion.REQUEST_SELECT_ITEM
+import org.odk.collect.icons.R
 import javax.inject.Inject
 
 class SelectOneFromMapDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
@@ -70,7 +71,7 @@ internal class SelectChoicesMapData(
 
     private val mapTitle = MutableLiveData(prompt.longText)
     private val itemCount = MutableNonNullLiveData(0)
-    private val items = MutableLiveData<List<MappableSelectItem>?>(null)
+    private val items = MutableLiveData<List<MappableItem>?>(null)
     private val isLoading = MutableNonNullLiveData(true)
 
     init {
@@ -91,7 +92,7 @@ internal class SelectChoicesMapData(
     private fun loadItemsFromChoices(
         selectChoices: MutableList<SelectChoice>,
         prompt: FormEntryPrompt
-    ): List<MappableSelectItem> {
+    ): List<MappableItem> {
         return selectChoices.foldIndexed(emptyList()) { index, list, selectChoice ->
             val geometry = selectChoice.getChild(GEOMETRY)
 
@@ -116,44 +117,41 @@ internal class SelectChoicesMapData(
                                 val markerSymbol =
                                     getPropertyValue(selectChoice, MARKER_SYMBOL)
 
-                                list + MappableSelectItem.MappableSelectPoint(
+                                list + MappableItem.Point(
                                     index.toLong(),
                                     prompt.getSelectChoiceText(selectChoice),
                                     properties,
-                                    selectChoice.index == selectedIndex,
                                     point = points[0],
-                                    smallIcon = if (markerSymbol.isNullOrBlank()) org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_small else org.odk.collect.icons.R.drawable.ic_map_marker_small,
-                                    largeIcon = if (markerSymbol.isNullOrBlank()) org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_big else org.odk.collect.icons.R.drawable.ic_map_marker_big,
+                                    smallIcon = if (markerSymbol.isNullOrBlank()) R.drawable.ic_map_marker_with_hole_small else R.drawable.ic_map_marker_small,
+                                    largeIcon = if (markerSymbol.isNullOrBlank()) R.drawable.ic_map_marker_with_hole_big else R.drawable.ic_map_marker_big,
                                     color = markerColor,
                                     symbol = markerSymbol,
                                     action = IconifiedText(
-                                        org.odk.collect.icons.R.drawable.ic_save,
+                                        R.drawable.ic_save,
                                         resources.getString(org.odk.collect.strings.R.string.select_item)
                                     )
                                 )
                             } else if (points.first() != points.last()) {
-                                list + MappableSelectItem.MappableSelectLine(
+                                list + MappableItem.Line(
                                     index.toLong(),
                                     prompt.getSelectChoiceText(selectChoice),
                                     properties,
-                                    selectChoice.index == selectedIndex,
                                     points = points,
                                     action = IconifiedText(
-                                        org.odk.collect.icons.R.drawable.ic_save,
+                                        R.drawable.ic_save,
                                         resources.getString(org.odk.collect.strings.R.string.select_item)
                                     ),
                                     strokeWidth = getPropertyValue(selectChoice, STROKE_WIDTH),
                                     strokeColor = getPropertyValue(selectChoice, STROKE)
                                 )
                             } else {
-                                list + MappableSelectItem.MappableSelectPolygon(
+                                list + MappableItem.Polygon(
                                     index.toLong(),
                                     prompt.getSelectChoiceText(selectChoice),
                                     properties,
-                                    selectChoice.index == selectedIndex,
                                     points = points,
                                     action = IconifiedText(
-                                        org.odk.collect.icons.R.drawable.ic_save,
+                                        R.drawable.ic_save,
                                         resources.getString(org.odk.collect.strings.R.string.select_item)
                                     ),
                                     strokeWidth = getPropertyValue(selectChoice, STROKE_WIDTH),
@@ -196,7 +194,11 @@ internal class SelectChoicesMapData(
         return itemCount
     }
 
-    override fun getMappableItems(): LiveData<List<MappableSelectItem>?> {
+    override fun isSelected(mappableItem: MappableItem): Boolean {
+        return mappableItem.id == selectedIndex?.toLong()
+    }
+
+    override fun getMappableItems(): LiveData<List<MappableItem>?> {
         return items
     }
 
