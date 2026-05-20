@@ -2,7 +2,10 @@ package org.odk.collect.android.widgets
 
 import android.content.Intent
 import android.provider.MediaStore
+import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import net.bytebuddy.utility.RandomString
 import org.hamcrest.MatcherAssert.assertThat
@@ -157,5 +160,20 @@ class ImageWidgetTest : FileWidgetTest<ImageWidget>() {
 
         createWidget()
         composeRule.onNodeWithClickLabel(activity.getString(string.open_file)).assertExists()
+        composeRule.onNodeWithText(activity.getString(string.selected_invalid_image)).assertDoesNotExist()
+    }
+
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun `when the answer image cannot be loaded shows error message`() {
+        val imageFile = File("non_existent_file.bmp")
+        currentFile = imageFile
+
+        formEntryPrompt = MockFormEntryPromptBuilder(formEntryPrompt)
+            .withAnswerDisplayText("non_existent_file.bmp")
+            .build()
+
+        createWidget()
+        composeRule.waitUntilAtLeastOneExists(hasText(activity.getString(string.selected_invalid_image)))
     }
 }
