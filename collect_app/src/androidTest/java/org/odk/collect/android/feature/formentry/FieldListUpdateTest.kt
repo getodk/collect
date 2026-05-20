@@ -19,6 +19,7 @@ import org.odk.collect.android.support.pages.ProjectSettingsPage
 import org.odk.collect.android.support.rules.FormEntryActivityTestRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
 import org.odk.collect.androidtest.RecordedIntentsRule
+import org.odk.collect.testshared.AssertionFramework
 import java.io.File
 import java.io.FileOutputStream
 import java.util.Random
@@ -234,9 +235,9 @@ class FieldListUpdateTest {
             .clickOnGroup("Push off screen binary")
             .clickOnQuestion("Source10")
             .assertNoQuestion("Target10-15")
-            .clickOnString(org.odk.collect.strings.R.string.capture_image)
+            .clickOnString(org.odk.collect.strings.R.string.capture_image, FormEntryPage("fieldlist-updates"), AssertionFramework.COMPOSE)
             .assertQuestion("Target10-15")
-            .assertText(org.odk.collect.strings.R.string.capture_image)
+            .assertText(org.odk.collect.strings.R.string.capture_image, AssertionFramework.COMPOSE)
     }
 
     @Test
