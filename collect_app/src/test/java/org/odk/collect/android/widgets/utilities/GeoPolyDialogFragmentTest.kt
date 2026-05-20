@@ -10,6 +10,7 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
+import org.hamcrest.Matchers.notNullValue
 import org.javarosa.core.model.Constants
 import org.javarosa.core.model.data.GeoShapeData
 import org.javarosa.core.model.data.GeoTraceData
@@ -19,6 +20,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
+import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
@@ -29,6 +31,9 @@ import org.odk.collect.android.javarosawrapper.SuccessValidationResult
 import org.odk.collect.android.javarosawrapper.ValidationResult
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
+import org.odk.collect.android.widgets.items.GeoSelectChoiceElements
+import org.odk.collect.android.widgets.support.FormElementFixtures.selectChoice
+import org.odk.collect.android.widgets.support.FormElementFixtures.treeElement
 import org.odk.collect.android.widgets.utilities.AdditionalAttributes.INCREMENTAL
 import org.odk.collect.android.widgets.utilities.WidgetAnswerDialogFragment.Companion.ARG_FORM_INDEX
 import org.odk.collect.android.widgets.viewmodels.QuestionViewModel
@@ -37,7 +42,9 @@ import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.geo.geopoly.GeoPolyFragment
 import org.odk.collect.geo.geopoly.GeoPolyFragment.OutputMode
+import org.odk.collect.geo.items.MappableItem
 import org.odk.collect.maps.MapPoint
+import org.odk.collect.testshared.FakeScheduler
 import org.odk.collect.testshared.getOrAwaitValue
 
 @RunWith(AndroidJUnit4::class)
@@ -47,6 +54,7 @@ class GeoPolyDialogFragmentTest {
     private val constraintValidationResult = MutableLiveData<ValidationResult>(SuccessValidationResult)
     private val formEntryViewModel = mock<FormEntryViewModel> {
         on { getQuestionPrompt(prompt.index) } doReturn prompt
+        on { loadSelectChoices(prompt) } doAnswer { prompt.selectChoices }
     }
 
     private val questionViewModel = mock<QuestionViewModel> {
@@ -63,12 +71,14 @@ class GeoPolyDialogFragmentTest {
         }
     }
 
+    private val scheduler = FakeScheduler()
+
     @get:Rule
     val launcherRule =
         FragmentScenarioLauncherRule(
             FragmentFactoryBuilder()
                 .forClass(GeoPolyDialogFragment::class) {
-                    GeoPolyDialogFragment(viewModelFactory)
+                    GeoPolyDialogFragment(viewModelFactory, scheduler)
                 }.build()
         )
 
@@ -531,6 +541,37 @@ class GeoPolyDialogFragmentTest {
         scenario.recreate()
         constraintValidationResult.value =
             FailedValidationResult(prompt.index, FormEntryController.ANSWER_CONSTRAINT_VIOLATED, null, R.string.cancel)
+    }
+
+    @Test
+    fun `configures GeoPolyFragment with MappableData`() {
+        val selectChoices = listOf(
+            selectChoice(
+                value = "a",
+                item = treeElement(children = listOf(treeElement(GeoSelectChoiceElements.GEOMETRY, "12.0 -1.0 305 0")))
+            ),
+            selectChoice(
+                value = "b",
+                item = treeElement(children = listOf(treeElement(GeoSelectChoiceElements.GEOMETRY, "13.0 -1.0 305 0")))
+            )
+        )
+
+        prompt = MockFormEntryPromptBuilder(prompt)
+            .withDataType(Constants.DATATYPE_GEOTRACE)
+            .withSelectChoices(selectChoices)
+            .build()
+
+        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
+            GeoPolyDialogFragment::class,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ) {
+            scheduler.flush()
+            assertThat(it.mappableData, notNullValue())
+            val mappableItems = it.mappableData!!.getMappableItems().getOrAwaitValue()
+            assertThat(mappableItems!!.size, equalTo(2))
+            assertThat((mappableItems[0] as MappableItem.Point).point, equalTo(MapPoint(12.0, -1.0, 305.0)))
+            assertThat((mappableItems[1] as MappableItem.Point).point, equalTo(MapPoint(13.0, -1.0, 305.0)))
+        }
     }
 
     private fun geoTraceOf(points: List<MapPoint>): GeoTraceData {

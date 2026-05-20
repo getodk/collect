@@ -1,29 +1,17 @@
 package org.odk.collect.android.widgets.items
 
 import android.content.Context
-import android.content.res.Resources
 import androidx.activity.ComponentDialog
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
-import org.javarosa.core.model.SelectChoice
 import org.javarosa.core.model.data.SelectOneData
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.utilities.Appearances
-import org.odk.collect.android.widgets.utilities.GeoWidgetUtils
+import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader
 import org.odk.collect.android.widgets.utilities.WidgetAnswerDialogFragment
-import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
-import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.async.Scheduler
-import org.odk.collect.entities.javarosa.parse.EntitySchema
-import org.odk.collect.geo.geopoly.GeoPolyUtils.parseGeometry
-import org.odk.collect.geo.items.IconifiedText
-import org.odk.collect.geo.items.MappableItem
-import org.odk.collect.geo.selection.SelectionMapData
 import org.odk.collect.geo.selection.SelectionMapFragment
 import org.odk.collect.geo.selection.SelectionMapFragment.Companion.REQUEST_SELECT_ITEM
-import org.odk.collect.icons.R
 import javax.inject.Inject
 
 class SelectOneFromMapDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
@@ -40,7 +28,10 @@ class SelectOneFromMapDialogFragment(viewModelFactory: ViewModelProvider.Factory
         DaggerUtils.getComponent(context).inject(this)
     }
 
-    override fun onCreateFragment(prompt: FormEntryPrompt): SelectionMapFragment {
+    override fun onCreateFragment(
+        prompt: FormEntryPrompt,
+        selectChoiceLoader: SelectChoiceLoader
+    ): SelectionMapFragment {
         childFragmentManager.setFragmentResultListener(REQUEST_SELECT_ITEM, this) { _, result ->
             val selectedIndex = result.getLong(SelectionMapFragment.RESULT_SELECTED_ITEM).toInt()
             val selectedChoice = prompt.selectChoices[selectedIndex]
@@ -49,7 +40,13 @@ class SelectOneFromMapDialogFragment(viewModelFactory: ViewModelProvider.Factory
 
         val selectedIndex = requireArguments().getSerializable(ARG_SELECTED_INDEX) as Int?
         return SelectionMapFragment(
-            SelectChoicesMapData(this.resources, scheduler, prompt, selectedIndex),
+            SelectOneFromMapData(
+                this.resources,
+                scheduler,
+                prompt,
+                selectChoiceLoader,
+                selectedIndex
+            ),
             skipSummary = Appearances.hasAppearance(prompt, Appearances.QUICK),
             zoomToFitItems = false,
             showNewItemButton = false,
@@ -62,164 +59,3 @@ class SelectOneFromMapDialogFragment(viewModelFactory: ViewModelProvider.Factory
     }
 }
 
-internal class SelectChoicesMapData(
-    private val resources: Resources,
-    scheduler: Scheduler,
-    prompt: FormEntryPrompt,
-    private val selectedIndex: Int?
-) : SelectionMapData {
-
-    private val mapTitle = MutableLiveData(prompt.longText)
-    private val itemCount = MutableNonNullLiveData(0)
-    private val items = MutableLiveData<List<MappableItem>?>(null)
-    private val isLoading = MutableNonNullLiveData(true)
-
-    init {
-        isLoading.value = true
-
-        scheduler.immediate(
-            background = {
-                loadItemsFromChoices(prompt.selectChoices, prompt)
-            },
-            foreground = {
-                itemCount.value = prompt.selectChoices.size
-                items.value = it
-                isLoading.value = false
-            }
-        )
-    }
-
-    private fun loadItemsFromChoices(
-        selectChoices: MutableList<SelectChoice>,
-        prompt: FormEntryPrompt
-    ): List<MappableItem> {
-        return selectChoices.foldIndexed(emptyList()) { index, list, selectChoice ->
-            val geometry = selectChoice.getChild(GEOMETRY)
-
-            if (geometry != null) {
-                try {
-                    val points = parseGeometry(geometry)
-                    if (points.isNotEmpty()) {
-                        val withinBounds = points.all {
-                            GeoWidgetUtils.isWithinMapBounds(it)
-                        }
-
-                        if (withinBounds) {
-                            val properties = selectChoice.additionalChildren.filterNot {
-                                FILTERED_PROPERTIES.contains(it.first)
-                            }.map {
-                                IconifiedText(null, "${it.first}: ${it.second}")
-                            }
-
-                            if (points.size == 1) {
-                                val markerColor =
-                                    getPropertyValue(selectChoice, MARKER_COLOR)
-                                val markerSymbol =
-                                    getPropertyValue(selectChoice, MARKER_SYMBOL)
-
-                                list + MappableItem.Point(
-                                    index.toLong(),
-                                    prompt.getSelectChoiceText(selectChoice),
-                                    properties,
-                                    point = points[0],
-                                    smallIcon = if (markerSymbol.isNullOrBlank()) R.drawable.ic_map_marker_with_hole_small else R.drawable.ic_map_marker_small,
-                                    largeIcon = if (markerSymbol.isNullOrBlank()) R.drawable.ic_map_marker_with_hole_big else R.drawable.ic_map_marker_big,
-                                    color = markerColor,
-                                    symbol = markerSymbol,
-                                    action = IconifiedText(
-                                        R.drawable.ic_save,
-                                        resources.getString(org.odk.collect.strings.R.string.select_item)
-                                    )
-                                )
-                            } else if (points.first() != points.last()) {
-                                list + MappableItem.Line(
-                                    index.toLong(),
-                                    prompt.getSelectChoiceText(selectChoice),
-                                    properties,
-                                    points = points,
-                                    action = IconifiedText(
-                                        R.drawable.ic_save,
-                                        resources.getString(org.odk.collect.strings.R.string.select_item)
-                                    ),
-                                    strokeWidth = getPropertyValue(selectChoice, STROKE_WIDTH),
-                                    strokeColor = getPropertyValue(selectChoice, STROKE)
-                                )
-                            } else {
-                                list + MappableItem.Polygon(
-                                    index.toLong(),
-                                    prompt.getSelectChoiceText(selectChoice),
-                                    properties,
-                                    points = points,
-                                    action = IconifiedText(
-                                        R.drawable.ic_save,
-                                        resources.getString(org.odk.collect.strings.R.string.select_item)
-                                    ),
-                                    strokeWidth = getPropertyValue(selectChoice, STROKE_WIDTH),
-                                    strokeColor = getPropertyValue(selectChoice, STROKE),
-                                    fillColor = getPropertyValue(selectChoice, FILL)
-                                )
-                            }
-                        } else {
-                            list
-                        }
-                    } else {
-                        list
-                    }
-                } catch (_: NumberFormatException) {
-                    list
-                }
-            } else {
-                list
-            }
-        }
-    }
-
-    private fun getPropertyValue(selectChoice: SelectChoice, propertyName: String): String? {
-        return selectChoice.additionalChildren.firstOrNull { it.first == propertyName }?.second
-    }
-
-    override fun isLoading(): NonNullLiveData<Boolean> {
-        return isLoading
-    }
-
-    override fun getMapTitle(): LiveData<String?> {
-        return mapTitle
-    }
-
-    override fun getItemType(): String {
-        return resources.getString(org.odk.collect.strings.R.string.choices)
-    }
-
-    override fun getItemCount(): NonNullLiveData<Int> {
-        return itemCount
-    }
-
-    override fun isSelected(mappableItem: MappableItem): Boolean {
-        return mappableItem.id == selectedIndex?.toLong()
-    }
-
-    override fun getMappableItems(): LiveData<List<MappableItem>?> {
-        return items
-    }
-
-    companion object PropertyNames {
-        const val GEOMETRY = "geometry"
-        const val MARKER_COLOR = "marker-color"
-        const val MARKER_SYMBOL = "marker-symbol"
-        const val STROKE = "stroke"
-        const val STROKE_WIDTH = "stroke-width"
-        const val FILL = "fill"
-
-        private val FILTERED_PROPERTIES = arrayOf(
-            GEOMETRY,
-            MARKER_COLOR,
-            MARKER_SYMBOL,
-            STROKE,
-            STROKE_WIDTH,
-            FILL,
-            EntitySchema.VERSION,
-            EntitySchema.TRUNK_VERSION,
-            EntitySchema.BRANCH_ID
-        )
-    }
-}

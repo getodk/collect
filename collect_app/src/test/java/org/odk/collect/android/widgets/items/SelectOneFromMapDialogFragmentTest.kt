@@ -19,6 +19,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
@@ -56,11 +57,11 @@ class SelectOneFromMapDialogFragmentTest {
     private val selectChoices = listOf(
         selectChoice(
             value = "a",
-            item = treeElement(children = listOf(treeElement(SelectChoicesMapData.GEOMETRY, "12.0 -1.0 305 0")))
+            item = treeElement(children = listOf(treeElement(GeoSelectChoiceElements.GEOMETRY, "12.0 -1.0 305 0")))
         ),
         selectChoice(
             value = "b",
-            item = treeElement(children = listOf(treeElement(SelectChoicesMapData.GEOMETRY, "13.0 -1.0 305 0")))
+            item = treeElement(children = listOf(treeElement(GeoSelectChoiceElements.GEOMETRY, "13.0 -1.0 305 0")))
         )
     )
 
@@ -79,6 +80,7 @@ class SelectOneFromMapDialogFragmentTest {
 
     private val formEntryViewModel = mock<FormEntryViewModel> {
         on { getQuestionPrompt(prompt.index) } doReturn prompt
+        on { loadSelectChoices(prompt) } doAnswer { prompt.selectChoices }
     }
 
     private val application = ApplicationProvider.getApplicationContext<Application>()
@@ -180,8 +182,8 @@ class SelectOneFromMapDialogFragmentTest {
 
             assertThat(data.getMapTitle().value, equalTo(prompt.longText))
             assertThat(data.getItemCount().value, equalTo(prompt.selectChoices.size))
-            val firstFeatureGeometry = selectChoices[0].getChild(SelectChoicesMapData.GEOMETRY)!!.split(" ")
-            val secondFeatureGeometry = selectChoices[1].getChild(SelectChoicesMapData.GEOMETRY)!!.split(" ")
+            val firstFeatureGeometry = selectChoices[0].getChild(GeoSelectChoiceElements.GEOMETRY)!!.split(" ")
+            val secondFeatureGeometry = selectChoices[1].getChild(GeoSelectChoiceElements.GEOMETRY)!!.split(" ")
             assertThat(
                 data.getMappableItems().value,
                 equalTo(

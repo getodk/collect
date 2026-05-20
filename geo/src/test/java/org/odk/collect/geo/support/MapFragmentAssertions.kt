@@ -85,7 +85,7 @@ object MapFragmentAssertions {
             override fun matchesSafely(mapFragment: FakeMapFragment): Boolean {
                 val polyLines = mapFragment.getPolyLines()
 
-                val pointsMatch = polyLines.map { it.points } == items.map { it.points }
+                val pointsMatch = items.all { item -> polyLines.any { item.points == it.points } }
                 val styleIsCorrect = polyLines.all {
                     val strokeWidthIsCorrect = if (strokeWidth != null) {
                         it.getStrokeWidth() == strokeWidth
@@ -126,10 +126,10 @@ object MapFragmentAssertions {
     ): TypeSafeMatcher<FakeMapFragment> {
         return object : TypeSafeMatcher<FakeMapFragment>() {
             override fun matchesSafely(mapFragment: FakeMapFragment): Boolean {
-                val polyLines = mapFragment.getPolygons()
+                val polygons = mapFragment.getPolygons()
 
-                val pointsMatch = polyLines.map { it.points } == items.map { it.points }
-                val styleIsCorrect = polyLines.all {
+                val pointsMatch = items.all { item -> polygons.any { item.points == it.points } }
+                val styleIsCorrect = polygons.all {
                     val strokeWidthIsCorrect = if (strokeWidth != null) {
                         it.getStrokeWidth() == strokeWidth
                     } else {

@@ -141,7 +141,7 @@ object GeoUtils {
         }
     }
 
-    fun Fragment.showLoading(mappableData: MappableData) {
+    fun Fragment.showItemLoading(mappableData: MappableData) {
         MaterialProgressDialogFragment.showOn(
             this,
             mappableData.isLoading(),

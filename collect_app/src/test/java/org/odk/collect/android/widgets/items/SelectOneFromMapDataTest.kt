@@ -13,6 +13,7 @@ import org.junit.runner.RunWith
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.widgets.support.FormElementFixtures.selectChoice
 import org.odk.collect.android.widgets.support.FormElementFixtures.treeElement
+import org.odk.collect.android.widgets.support.FormEntryPromptSelectChoiceLoader
 import org.odk.collect.androidtest.getOrAwaitValue
 import org.odk.collect.entities.javarosa.parse.EntitySchema
 import org.odk.collect.geo.items.IconifiedText
@@ -21,7 +22,7 @@ import org.odk.collect.maps.MapPoint
 import org.odk.collect.testshared.FakeScheduler
 
 @RunWith(AndroidJUnit4::class)
-class SelectChoicesMapDataTest {
+class SelectOneFromMapDataTest {
 
     private val scheduler = FakeScheduler()
 
@@ -34,7 +35,12 @@ class SelectChoicesMapDataTest {
             selectChoice(
                 value = "a",
                 item = treeElement(
-                    children = listOf(treeElement(SelectChoicesMapData.GEOMETRY, "12.0 -1.0 3 4; 12.1 -1.0 3 4"))
+                    children = listOf(
+                        treeElement(
+                            GeoSelectChoiceElements.GEOMETRY,
+                            "12.0 -1.0 3 4; 12.1 -1.0 3 4"
+                        )
+                    )
                 )
             )
         )
@@ -64,7 +70,12 @@ class SelectChoicesMapDataTest {
             selectChoice(
                 value = "a",
                 item = treeElement(
-                    children = listOf(treeElement(SelectChoicesMapData.GEOMETRY, "12.0 -1.0 3 4; 12.1 -1.0 3 4; 12.0 -1.0 3 4"))
+                    children = listOf(
+                        treeElement(
+                            GeoSelectChoiceElements.GEOMETRY,
+                            "12.0 -1.0 3 4; 12.1 -1.0 3 4; 12.0 -1.0 3 4"
+                        )
+                    )
                 )
             )
         )
@@ -84,7 +95,13 @@ class SelectChoicesMapDataTest {
         val points = (mappableItems[0] as MappableItem.Polygon).points
         assertThat(
             points,
-            equalTo(listOf(MapPoint(12.0, -1.0, 3.0, 4.0), MapPoint(12.1, -1.0, 3.0, 4.0), MapPoint(12.0, -1.0, 3.0, 4.0)))
+            equalTo(
+                listOf(
+                    MapPoint(12.0, -1.0, 3.0, 4.0),
+                    MapPoint(12.1, -1.0, 3.0, 4.0),
+                    MapPoint(12.0, -1.0, 3.0, 4.0)
+                )
+            )
         )
     }
 
@@ -93,7 +110,14 @@ class SelectChoicesMapDataTest {
         val choices = listOf(
             selectChoice(
                 value = "a",
-                item = treeElement(children = listOf(treeElement(SelectChoicesMapData.GEOMETRY, "12.0 -1.0 305 0")))
+                item = treeElement(
+                    children = listOf(
+                        treeElement(
+                            GeoSelectChoiceElements.GEOMETRY,
+                            "12.0 -1.0 305 0"
+                        )
+                    )
+                )
             ),
             selectChoice(
                 value = "b",
@@ -120,7 +144,7 @@ class SelectChoicesMapDataTest {
                 value = "a",
                 item = treeElement(
                     children = listOf(
-                        treeElement(SelectChoicesMapData.GEOMETRY, "12.0 -1.0 305 0"),
+                        treeElement(GeoSelectChoiceElements.GEOMETRY, "12.0 -1.0 305 0"),
                         treeElement("property", "blah")
                     )
                 )
@@ -147,7 +171,13 @@ class SelectChoicesMapDataTest {
             .build()
 
         val resources = ApplicationProvider.getApplicationContext<Application>().resources
-        val data = SelectChoicesMapData(resources, scheduler, prompt, null)
+        val data = SelectOneFromMapData(
+            resources,
+            scheduler,
+            prompt,
+            FormEntryPromptSelectChoiceLoader(),
+            null
+        )
         assertThat(data.isLoading().value, equalTo(true))
         assertThat(data.getMappableItems().value, equalTo(null))
 
@@ -165,7 +195,7 @@ class SelectChoicesMapDataTest {
                 value = "a",
                 item = treeElement(
                     children = listOf(
-                        treeElement(SelectChoicesMapData.GEOMETRY, "0 170.00 0 0")
+                        treeElement(GeoSelectChoiceElements.GEOMETRY, "0 170.00 0 0")
                     )
                 )
             ),
@@ -174,7 +204,7 @@ class SelectChoicesMapDataTest {
                 value = "b",
                 item = treeElement(
                     children = listOf(
-                        treeElement(SelectChoicesMapData.GEOMETRY, "blah")
+                        treeElement(GeoSelectChoiceElements.GEOMETRY, "blah")
                     )
                 )
             ),
@@ -183,7 +213,7 @@ class SelectChoicesMapDataTest {
                 value = "c",
                 item = treeElement(
                     children = listOf(
-                        treeElement(SelectChoicesMapData.GEOMETRY, "0 180.1 0 0")
+                        treeElement(GeoSelectChoiceElements.GEOMETRY, "0 180.1 0 0")
                     )
                 )
             ),
@@ -192,7 +222,7 @@ class SelectChoicesMapDataTest {
                 value = "c",
                 item = treeElement(
                     children = listOf(
-                        treeElement(SelectChoicesMapData.GEOMETRY, "0 180 0 0; 0 180.1 0 0")
+                        treeElement(GeoSelectChoiceElements.GEOMETRY, "0 180 0 0; 0 180.1 0 0")
                     )
                 )
             )
@@ -219,9 +249,9 @@ class SelectChoicesMapDataTest {
                 value = "a",
                 item = treeElement(
                     children = listOf(
-                        treeElement(SelectChoicesMapData.GEOMETRY, "12.0 -1.0 305 0"),
-                        treeElement(SelectChoicesMapData.MARKER_SYMBOL, "A"),
-                        treeElement(SelectChoicesMapData.MARKER_COLOR, "#ffffff")
+                        treeElement(GeoSelectChoiceElements.GEOMETRY, "12.0 -1.0 305 0"),
+                        treeElement(GeoSelectChoiceElements.MARKER_SYMBOL, "A"),
+                        treeElement(GeoSelectChoiceElements.MARKER_COLOR, "#ffffff")
                     )
                 )
             )
@@ -250,9 +280,9 @@ class SelectChoicesMapDataTest {
                 value = "a",
                 item = treeElement(
                     children = listOf(
-                        treeElement(SelectChoicesMapData.GEOMETRY, "12.0 -1.0 3 4; 12.1 -1.0 3 4"),
-                        treeElement(SelectChoicesMapData.STROKE_WIDTH, "10"),
-                        treeElement(SelectChoicesMapData.STROKE, "#ffffff")
+                        treeElement(GeoSelectChoiceElements.GEOMETRY, "12.0 -1.0 3 4; 12.1 -1.0 3 4"),
+                        treeElement(GeoSelectChoiceElements.STROKE_WIDTH, "10"),
+                        treeElement(GeoSelectChoiceElements.STROKE, "#ffffff")
                     )
                 )
             )
@@ -281,10 +311,13 @@ class SelectChoicesMapDataTest {
                 value = "a",
                 item = treeElement(
                     children = listOf(
-                        treeElement(SelectChoicesMapData.GEOMETRY, "12.0 -1.0 3 4; 12.1 -1.0 3 4; 12.0 -1.0 3 4"),
-                        treeElement(SelectChoicesMapData.STROKE_WIDTH, "10"),
-                        treeElement(SelectChoicesMapData.STROKE, "#000000"),
-                        treeElement(SelectChoicesMapData.FILL, "#ffffff")
+                        treeElement(
+                            GeoSelectChoiceElements.GEOMETRY,
+                            "12.0 -1.0 3 4; 12.1 -1.0 3 4; 12.0 -1.0 3 4"
+                        ),
+                        treeElement(GeoSelectChoiceElements.STROKE_WIDTH, "10"),
+                        treeElement(GeoSelectChoiceElements.STROKE, "#000000"),
+                        treeElement(GeoSelectChoiceElements.FILL, "#ffffff")
                     )
                 )
             )
@@ -310,8 +343,8 @@ class SelectChoicesMapDataTest {
                 value = "a",
                 item = treeElement(
                     children = listOf(
-                        treeElement(SelectChoicesMapData.GEOMETRY, "12.0 -1.0 305 0"),
-                        treeElement(SelectChoicesMapData.MARKER_SYMBOL, "A")
+                        treeElement(GeoSelectChoiceElements.GEOMETRY, "12.0 -1.0 305 0"),
+                        treeElement(GeoSelectChoiceElements.MARKER_SYMBOL, "A")
                     )
                 )
             )
@@ -336,7 +369,7 @@ class SelectChoicesMapDataTest {
                 value = "a",
                 item = treeElement(
                     children = listOf(
-                        treeElement(SelectChoicesMapData.GEOMETRY, "12.0 -1.0 305 0")
+                        treeElement(GeoSelectChoiceElements.GEOMETRY, "12.0 -1.0 305 0")
                     )
                 )
             ),
@@ -344,8 +377,8 @@ class SelectChoicesMapDataTest {
                 value = "b",
                 item = treeElement(
                     children = listOf(
-                        treeElement(SelectChoicesMapData.GEOMETRY, "0 170.00 0 0"),
-                        treeElement(SelectChoicesMapData.MARKER_SYMBOL, " ")
+                        treeElement(GeoSelectChoiceElements.GEOMETRY, "0 170.00 0 0"),
+                        treeElement(GeoSelectChoiceElements.MARKER_SYMBOL, " ")
                     )
                 )
             )
@@ -359,12 +392,24 @@ class SelectChoicesMapDataTest {
         val data = loadDataForPrompt(prompt)
 
         val firstItem = data.getMappableItems().getOrAwaitValue()!![0] as MappableItem.Point
-        assertThat(firstItem.smallIcon, equalTo(org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_small))
-        assertThat(firstItem.largeIcon, equalTo(org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_big))
+        assertThat(
+            firstItem.smallIcon,
+            equalTo(org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_small)
+        )
+        assertThat(
+            firstItem.largeIcon,
+            equalTo(org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_big)
+        )
 
         val secondItem = data.getMappableItems().getOrAwaitValue()!![1] as MappableItem.Point
-        assertThat(secondItem.smallIcon, equalTo(org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_small))
-        assertThat(secondItem.largeIcon, equalTo(org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_big))
+        assertThat(
+            secondItem.smallIcon,
+            equalTo(org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_small)
+        )
+        assertThat(
+            secondItem.largeIcon,
+            equalTo(org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_big)
+        )
     }
 
     @Test
@@ -374,7 +419,7 @@ class SelectChoicesMapDataTest {
                 value = "a",
                 item = treeElement(
                     children = listOf(
-                        treeElement(SelectChoicesMapData.GEOMETRY, "12.0 -1.0 305 0"),
+                        treeElement(GeoSelectChoiceElements.GEOMETRY, "12.0 -1.0 305 0"),
                         treeElement(EntitySchema.VERSION, "version"),
                         treeElement(EntitySchema.TRUNK_VERSION, "trunk-version"),
                         treeElement(EntitySchema.BRANCH_ID, "branch-id")
@@ -400,12 +445,12 @@ class SelectChoicesMapDataTest {
                 value = "a",
                 item = treeElement(
                     children = listOf(
-                        treeElement(SelectChoicesMapData.GEOMETRY, "12.0 -1.0 305 0"),
-                        treeElement(SelectChoicesMapData.MARKER_COLOR, "#ffffff"),
-                        treeElement(SelectChoicesMapData.MARKER_SYMBOL, "A"),
-                        treeElement(SelectChoicesMapData.STROKE, "#ffffff"),
-                        treeElement(SelectChoicesMapData.STROKE_WIDTH, "5"),
-                        treeElement(SelectChoicesMapData.FILL, "#ffffff"),
+                        treeElement(GeoSelectChoiceElements.GEOMETRY, "12.0 -1.0 305 0"),
+                        treeElement(GeoSelectChoiceElements.MARKER_COLOR, "#ffffff"),
+                        treeElement(GeoSelectChoiceElements.MARKER_SYMBOL, "A"),
+                        treeElement(GeoSelectChoiceElements.STROKE, "#ffffff"),
+                        treeElement(GeoSelectChoiceElements.STROKE_WIDTH, "5"),
+                        treeElement(GeoSelectChoiceElements.FILL, "#ffffff"),
                     )
                 )
             )
@@ -421,9 +466,15 @@ class SelectChoicesMapDataTest {
         assertThat(properties.size, equalTo(0))
     }
 
-    private fun loadDataForPrompt(prompt: FormEntryPrompt): SelectChoicesMapData {
+    private fun loadDataForPrompt(prompt: FormEntryPrompt): SelectOneFromMapData {
         val resources = ApplicationProvider.getApplicationContext<Application>().resources
-        val data = SelectChoicesMapData(resources, scheduler, prompt, null)
+        val data = SelectOneFromMapData(
+            resources,
+            scheduler,
+            prompt,
+            FormEntryPromptSelectChoiceLoader(),
+            null
+        )
         scheduler.flush()
         return data
     }
