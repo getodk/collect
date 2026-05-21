@@ -3,6 +3,7 @@ package org.odk.collect.android.widgets.items
 import android.content.res.Resources
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
@@ -19,7 +20,7 @@ class SelectOneFromMapData(
     prompt: FormEntryPrompt,
     private val selectChoiceLoader: SelectChoiceLoader,
     private val selectedIndex: Int?
-) : SelectionMapData {
+) : ViewModel(), SelectionMapData {
 
     private val mapTitle = MutableLiveData(prompt.longText)
     private val itemCount = MutableNonNullLiveData(0)

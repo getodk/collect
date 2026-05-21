@@ -2,7 +2,9 @@ package org.odk.collect.android.widgets.items
 
 import android.content.Context
 import androidx.activity.ComponentDialog
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.viewModelFactory
 import org.javarosa.core.model.data.SelectOneData
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.injection.DaggerUtils
@@ -13,6 +15,7 @@ import org.odk.collect.async.Scheduler
 import org.odk.collect.geo.selection.SelectionMapFragment
 import org.odk.collect.geo.selection.SelectionMapFragment.Companion.REQUEST_SELECT_ITEM
 import javax.inject.Inject
+import kotlin.getValue
 
 class SelectOneFromMapDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
     WidgetAnswerDialogFragment<SelectionMapFragment>(
@@ -39,14 +42,22 @@ class SelectOneFromMapDialogFragment(viewModelFactory: ViewModelProvider.Factory
         }
 
         val selectedIndex = requireArguments().getSerializable(ARG_SELECTED_INDEX) as Int?
+        val selectOnFromMapData by viewModels<SelectOneFromMapData> {
+            viewModelFactory {
+                addInitializer(SelectOneFromMapData::class) {
+                    SelectOneFromMapData(
+                        this@SelectOneFromMapDialogFragment.resources,
+                        scheduler,
+                        prompt,
+                        selectChoiceLoader,
+                        selectedIndex
+                    )
+                }
+            }
+        }
+
         return SelectionMapFragment(
-            SelectOneFromMapData(
-                this.resources,
-                scheduler,
-                prompt,
-                selectChoiceLoader,
-                selectedIndex
-            ),
+            selectOnFromMapData,
             skipSummary = Appearances.hasAppearance(prompt, Appearances.QUICK),
             zoomToFitItems = false,
             showNewItemButton = false,
