@@ -18,6 +18,7 @@ object MappableItemsParser {
 
     fun parseChoices(
         choices: List<SelectChoice>,
+        options: Options,
         translator: (SelectChoice) -> String
     ): List<MappableItem> {
         return choices.foldIndexed(emptyList()) { index, list, selectChoice ->
@@ -53,6 +54,7 @@ object MappableItemsParser {
                                     largeIcon = if (markerSymbol.isNullOrBlank()) R.drawable.ic_map_marker_with_hole_big else R.drawable.ic_map_marker_big,
                                     color = markerColor,
                                     symbol = markerSymbol,
+                                    action = options.action
                                 )
                             } else if (points.first() != points.last()) {
                                 list + MappableItem.Line(
@@ -61,7 +63,8 @@ object MappableItemsParser {
                                     properties,
                                     points = points,
                                     strokeWidth = getPropertyValue(selectChoice, STROKE_WIDTH),
-                                    strokeColor = getPropertyValue(selectChoice, STROKE)
+                                    strokeColor = getPropertyValue(selectChoice, STROKE),
+                                    action = options.action
                                 )
                             } else {
                                 list + MappableItem.Polygon(
@@ -71,7 +74,8 @@ object MappableItemsParser {
                                     points = points,
                                     strokeWidth = getPropertyValue(selectChoice, STROKE_WIDTH),
                                     strokeColor = getPropertyValue(selectChoice, STROKE),
-                                    fillColor = getPropertyValue(selectChoice, FILL)
+                                    fillColor = getPropertyValue(selectChoice, FILL),
+                                    action = options.action
                                 )
                             }
                         } else {
@@ -104,6 +108,8 @@ object MappableItemsParser {
         EntitySchema.TRUNK_VERSION,
         EntitySchema.BRANCH_ID
     )
+
+    data class Options(val action: IconifiedText? = null)
 }
 
 object GeoSelectChoiceElements {

@@ -43,20 +43,15 @@ class SelectOneFromMapData(
 
     private fun loadItemsFromChoices(prompt: FormEntryPrompt): Pair<Int, List<MappableItem>> {
         val selectChoices = selectChoiceLoader.loadSelectChoices(prompt)
-        val mappableItems =
-            MappableItemsParser.parseChoices(selectChoices, prompt::getSelectChoiceText)
-                .map {
-                    val action = IconifiedText(
-                        R.drawable.ic_save,
-                        resources.getString(org.odk.collect.strings.R.string.select_item)
-                    )
 
-                    when (it) {
-                        is MappableItem.Line -> it.copy(action = action)
-                        is MappableItem.Point -> it.copy(action = action)
-                        is MappableItem.Polygon -> it.copy(action = action)
-                    }
-                }
+        val options = MappableItemsParser.Options(
+            action = IconifiedText(
+                R.drawable.ic_save,
+                resources.getString(org.odk.collect.strings.R.string.select_item)
+            )
+        )
+        val mappableItems =
+            MappableItemsParser.parseChoices(selectChoices, options, prompt::getSelectChoiceText)
 
         return Pair(selectChoices.size, mappableItems)
     }
