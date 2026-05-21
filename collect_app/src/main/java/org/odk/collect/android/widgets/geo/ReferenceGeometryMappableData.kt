@@ -25,7 +25,7 @@ class ReferenceGeometryMappableDate(
         trackableWorker.immediate(
             background = {
                 val selectChoices = selectChoiceLoader.loadSelectChoices(prompt)
-                val options = MappableItemsParser.Options()
+                val options = MappableItemsParser.Options(color = ITEM_COLOR)
                 MappableItemsParser.parseChoices(
                     selectChoices,
                     options,
@@ -44,5 +44,9 @@ class ReferenceGeometryMappableDate(
 
     override fun isLoading(): NonNullLiveData<Boolean> {
         return trackableWorker.isWorking
+    }
+
+    companion object {
+        const val ITEM_COLOR = "#5e5284"
     }
 }

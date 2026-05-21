@@ -52,7 +52,7 @@ object MappableItemsParser {
                                     point = points[0],
                                     smallIcon = if (markerSymbol.isNullOrBlank()) R.drawable.ic_map_marker_with_hole_small else R.drawable.ic_map_marker_small,
                                     largeIcon = if (markerSymbol.isNullOrBlank()) R.drawable.ic_map_marker_with_hole_big else R.drawable.ic_map_marker_big,
-                                    color = markerColor,
+                                    color = markerColor ?: options.color,
                                     symbol = markerSymbol,
                                     action = options.action
                                 )
@@ -63,7 +63,8 @@ object MappableItemsParser {
                                     properties,
                                     points = points,
                                     strokeWidth = getPropertyValue(selectChoice, STROKE_WIDTH),
-                                    strokeColor = getPropertyValue(selectChoice, STROKE),
+                                    strokeColor = getPropertyValue(selectChoice, STROKE)
+                                        ?: options.color,
                                     action = options.action
                                 )
                             } else {
@@ -73,7 +74,8 @@ object MappableItemsParser {
                                     properties,
                                     points = points,
                                     strokeWidth = getPropertyValue(selectChoice, STROKE_WIDTH),
-                                    strokeColor = getPropertyValue(selectChoice, STROKE),
+                                    strokeColor = getPropertyValue(selectChoice, STROKE)
+                                        ?: options.color,
                                     fillColor = getPropertyValue(selectChoice, FILL),
                                     action = options.action
                                 )
@@ -109,7 +111,7 @@ object MappableItemsParser {
         EntitySchema.BRANCH_ID
     )
 
-    data class Options(val action: IconifiedText? = null)
+    data class Options(val action: IconifiedText? = null, val color: String? = null)
 }
 
 object GeoSelectChoiceElements {
