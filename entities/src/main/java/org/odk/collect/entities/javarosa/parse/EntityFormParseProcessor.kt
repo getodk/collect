@@ -51,7 +51,7 @@ class EntityFormParseProcessor() : BindAttributeProcessor, FormDefProcessor, Mod
                     throw MissingModelAttributeException(ENTITIES_NAMESPACE, "entities-version")
                 } else if (LOCAL_ENTITY_VERSIONS.any { prefix -> it.startsWith(prefix) }) {
                     val saveTos = bindAttributes.mapNotNull { (ref, value) ->
-                        val parentElement = formDef.mainInstance.resolveReference(ref).parent as TreeElement
+                        val parentElement = formDef.mainInstance.resolveReference(ref)?.parent as TreeElement
                         findNearestEntityGroupElement(parentElement)?.let { entityGroup ->
                             SaveTo(ref, value, entityGroup.ref.genericize())
                         }
