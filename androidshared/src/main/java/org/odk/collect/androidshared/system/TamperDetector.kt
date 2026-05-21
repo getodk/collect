@@ -20,7 +20,7 @@ object TamperDetector {
                 return signatures?.none { sig ->
                     val bytes = sig.toByteArray()
                     val digest = MessageDigest.getInstance("SHA-256").digest(bytes)
-                    digest.joinToString(":") { "%02x".format(it).uppercase() } == expectedSignature
+                    digest.joinToString(":") { "%02X".format(it) } == expectedSignature
                 } ?: false
             } else {
                 return false
