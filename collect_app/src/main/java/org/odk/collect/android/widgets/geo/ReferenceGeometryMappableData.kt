@@ -2,6 +2,7 @@ package org.odk.collect.android.widgets.geo
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader
 import org.odk.collect.android.widgets.items.MappableItemsParser
@@ -15,7 +16,7 @@ class ReferenceGeometryMappableDate(
     scheduler: Scheduler,
     prompt: FormEntryPrompt,
     private val selectChoiceLoader: SelectChoiceLoader,
-) : MappableData {
+) : ViewModel(), MappableData {
 
     private val trackableWorker = TrackableWorker(scheduler)
     private val items = MutableLiveData<List<MappableItem>?>()

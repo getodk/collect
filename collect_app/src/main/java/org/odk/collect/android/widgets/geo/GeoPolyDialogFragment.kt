@@ -1,8 +1,10 @@
 package org.odk.collect.android.widgets.geo
 
 import androidx.activity.ComponentDialog
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.map
+import androidx.lifecycle.viewmodel.viewModelFactory
 import org.javarosa.core.model.Constants
 import org.javarosa.core.model.data.GeoShapeData
 import org.javarosa.core.model.data.GeoTraceData
@@ -71,6 +73,14 @@ class GeoPolyDialogFragment(
             else -> throw IllegalArgumentException()
         }
 
+        val referenceGeometryMappableDate by viewModels<ReferenceGeometryMappableDate> {
+            viewModelFactory {
+                addInitializer(ReferenceGeometryMappableDate::class) {
+                    ReferenceGeometryMappableDate(scheduler, prompt, selectChoiceLoader)
+                }
+            }
+        }
+
         return GeoPolyFragment(
             { (requireDialog() as ComponentDialog).onBackPressedDispatcher },
             outputMode,
@@ -88,7 +98,7 @@ class GeoPolyDialogFragment(
                     null
                 }
             },
-            mappableData = ReferenceGeometryMappableDate(scheduler, prompt, selectChoiceLoader)
+            mappableData = referenceGeometryMappableDate
         )
     }
 
