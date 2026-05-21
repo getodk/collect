@@ -27,7 +27,6 @@ class PullDataFunctionHandlerTest {
         entitiesRepository.addList("things")
 
         val scenario = Scenario.init(
-            "Pull data form",
             html(
                 head(
                     title("Pull data form"),
@@ -71,7 +70,6 @@ class PullDataFunctionHandlerTest {
         )
 
         val scenario = Scenario.init(
-            "Pull data form",
             html(
                 head(
                     title("Pull data form"),
@@ -111,7 +109,6 @@ class PullDataFunctionHandlerTest {
         )
 
         val scenario = Scenario.init(
-            "Pull data form",
             html(
                 head(
                     title("Pull data form"),
@@ -151,7 +148,6 @@ class PullDataFunctionHandlerTest {
         )
 
         val scenario = Scenario.init(
-            "Pull data form",
             html(
                 head(
                     title("Pull data form"),
