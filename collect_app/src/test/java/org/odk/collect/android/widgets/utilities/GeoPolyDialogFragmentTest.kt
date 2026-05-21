@@ -31,6 +31,7 @@ import org.odk.collect.android.javarosawrapper.SuccessValidationResult
 import org.odk.collect.android.javarosawrapper.ValidationResult
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
+import org.odk.collect.android.widgets.geo.GeoPolyDialogFragment
 import org.odk.collect.android.widgets.items.GeoSelectChoiceElements
 import org.odk.collect.android.widgets.support.FormElementFixtures.selectChoice
 import org.odk.collect.android.widgets.support.FormElementFixtures.treeElement
