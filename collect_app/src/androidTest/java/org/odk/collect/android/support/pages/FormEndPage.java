@@ -8,8 +8,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.testshared.AssertionFramework;
 import org.odk.collect.testshared.WaitFor;
 
-import java.util.concurrent.Callable;
-
 public class FormEndPage extends Page<FormEndPage> {
 
     private final String formName;
