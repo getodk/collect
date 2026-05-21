@@ -45,14 +45,13 @@ import org.odk.collect.geo.geopoly.GeoPolyFragment.Companion.INTERVAL_OPTIONS
 import org.odk.collect.geo.geopoly.GeoPolyFragment.OutputMode
 import org.odk.collect.geo.items.MappableData
 import org.odk.collect.geo.items.MappableItem
-import org.odk.collect.geo.selection.SelectionMapFragment
 import org.odk.collect.geo.support.AccuracyStatusViewMatcher.Companion.hasAccuracy
 import org.odk.collect.geo.support.FakeLocationTracker
 import org.odk.collect.geo.support.FakeMapFragment
-import org.odk.collect.geo.support.Fixtures
 import org.odk.collect.geo.support.MapFragmentAssertions.hasZoomedToCurrentLocation
 import org.odk.collect.geo.support.MapFragmentAssertions.showsCurrentLocation
 import org.odk.collect.geo.support.MapFragmentAssertions.showsMappableData
+import org.odk.collect.geo.support.MappableItemsFixtures
 import org.odk.collect.geo.support.RobolectricApplication
 import org.odk.collect.location.Location
 import org.odk.collect.location.tracker.LocationTracker
@@ -1036,9 +1035,9 @@ class GeoPolyFragmentTest {
     fun showsItemsFromMappableData() {
         val mappableData = FakeMappableData(
             listOf(
-                Fixtures.infoMappablePoint(),
-                Fixtures.actionMappableLine(),
-                Fixtures.actionMappablePolygon()
+                MappableItemsFixtures.point(),
+                MappableItemsFixtures.actionMappableLine(),
+                MappableItemsFixtures.actionMappablePolygon()
             )
         )
 
