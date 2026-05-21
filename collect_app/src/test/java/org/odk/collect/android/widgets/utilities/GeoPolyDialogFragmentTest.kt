@@ -52,7 +52,8 @@ import org.odk.collect.testshared.getOrAwaitValue
 class GeoPolyDialogFragmentTest {
 
     private var prompt = MockFormEntryPromptBuilder().build()
-    private val constraintValidationResult = MutableLiveData<ValidationResult>(SuccessValidationResult)
+    private val constraintValidationResult =
+        MutableLiveData<ValidationResult>(SuccessValidationResult)
     private val formEntryViewModel = mock<FormEntryViewModel> {
         on { getQuestionPrompt(prompt.index) } doReturn prompt
         on { loadSelectChoices(prompt) } doAnswer { prompt.selectChoices }
@@ -491,7 +492,12 @@ class GeoPolyDialogFragmentTest {
             assertThat(it.invalidMessage.getOrAwaitValue(), equalTo(null))
         }
 
-        constraintValidationResult.value = FailedValidationResult(prompt.index, FormEntryController.ANSWER_CONSTRAINT_VIOLATED, "blah", 0)
+        constraintValidationResult.value = FailedValidationResult(
+            prompt.index,
+            FormEntryController.ANSWER_CONSTRAINT_VIOLATED,
+            "blah",
+            0
+        )
         launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
             GeoPolyDialogFragment::class,
             bundleOf(ARG_FORM_INDEX to prompt.index)
@@ -514,12 +520,20 @@ class GeoPolyDialogFragmentTest {
         }
 
         constraintValidationResult.value =
-            FailedValidationResult(prompt.index, FormEntryController.ANSWER_CONSTRAINT_VIOLATED, null, R.string.cancel)
+            FailedValidationResult(
+                prompt.index,
+                FormEntryController.ANSWER_CONSTRAINT_VIOLATED,
+                null,
+                R.string.cancel
+            )
         launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
             GeoPolyDialogFragment::class,
             bundleOf(ARG_FORM_INDEX to prompt.index)
         ) {
-            assertThat(it.invalidMessage.getOrAwaitValue(), equalTo(DisplayString.Resource(R.string.cancel)))
+            assertThat(
+                it.invalidMessage.getOrAwaitValue(),
+                equalTo(DisplayString.Resource(R.string.cancel))
+            )
         }
     }
 
@@ -541,7 +555,12 @@ class GeoPolyDialogFragmentTest {
 
         scenario.recreate()
         constraintValidationResult.value =
-            FailedValidationResult(prompt.index, FormEntryController.ANSWER_CONSTRAINT_VIOLATED, null, R.string.cancel)
+            FailedValidationResult(
+                prompt.index,
+                FormEntryController.ANSWER_CONSTRAINT_VIOLATED,
+                null,
+                R.string.cancel
+            )
     }
 
     @Test
@@ -549,11 +568,36 @@ class GeoPolyDialogFragmentTest {
         val selectChoices = listOf(
             selectChoice(
                 value = "a",
-                item = treeElement(children = listOf(treeElement(GeoSelectChoiceElements.GEOMETRY, "12.0 -1.0 305 0")))
+                item = treeElement(
+                    children = listOf(
+                        treeElement(
+                            GeoSelectChoiceElements.GEOMETRY,
+                            "12.0 -1.0 305 0"
+                        )
+                    )
+                )
             ),
             selectChoice(
                 value = "b",
-                item = treeElement(children = listOf(treeElement(GeoSelectChoiceElements.GEOMETRY, "13.0 -1.0 305 0")))
+                item = treeElement(
+                    children = listOf(
+                        treeElement(
+                            GeoSelectChoiceElements.GEOMETRY,
+                            "12.0 -1.0 3 4; 12.1 -1.0 3 4"
+                        )
+                    )
+                )
+            ),
+            selectChoice(
+                value = "c",
+                item = treeElement(
+                    children = listOf(
+                        treeElement(
+                            GeoSelectChoiceElements.GEOMETRY,
+                            "12.0 -1.0 3 4; 12.1 -1.0 3 4; 12.0 -1.0 3 4"
+                        )
+                    )
+                )
             )
         )
 
@@ -569,9 +613,25 @@ class GeoPolyDialogFragmentTest {
             scheduler.flush()
             assertThat(it.mappableData, notNullValue())
             val mappableItems = it.mappableData!!.getMappableItems().getOrAwaitValue()
-            assertThat(mappableItems!!.size, equalTo(2))
-            assertThat((mappableItems[0] as MappableItem.Point).point, equalTo(MapPoint(12.0, -1.0, 305.0)))
-            assertThat((mappableItems[1] as MappableItem.Point).point, equalTo(MapPoint(13.0, -1.0, 305.0)))
+            assertThat(mappableItems!!.size, equalTo(3))
+            assertThat(
+                (mappableItems[0] as MappableItem.Point).point,
+                equalTo(MapPoint(12.0, -1.0, 305.0))
+            )
+            assertThat(
+                (mappableItems[1] as MappableItem.Line).points,
+                equalTo(listOf(MapPoint(12.0, -1.0, 3.0, 4.0), MapPoint(12.1, -1.0, 3.0, 4.0)))
+            )
+            assertThat(
+                (mappableItems[2] as MappableItem.Polygon).points,
+                equalTo(
+                    listOf(
+                        MapPoint(12.0, -1.0, 3.0, 4.0),
+                        MapPoint(12.1, -1.0, 3.0, 4.0),
+                        MapPoint(12.0, -1.0, 3.0, 4.0)
+                    )
+                )
+            )
         }
     }
 
