@@ -76,7 +76,8 @@ object MappableItemsParser {
                                     strokeWidth = getPropertyValue(selectChoice, STROKE_WIDTH),
                                     strokeColor = getPropertyValue(selectChoice, STROKE)
                                         ?: options.color,
-                                    fillColor = getPropertyValue(selectChoice, FILL),
+                                    fillColor = getPropertyValue(selectChoice, FILL)
+                                        ?: options.color,
                                     action = options.action
                                 )
                             }

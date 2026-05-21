@@ -639,6 +639,7 @@ class GeoPolyDialogFragmentTest {
                 )
             )
             assertThat(polygon.strokeColor, equalTo(ReferenceGeometryMappableDate.ITEM_COLOR))
+            assertThat(polygon.fillColor, equalTo(ReferenceGeometryMappableDate.ITEM_COLOR))
         }
     }
 
