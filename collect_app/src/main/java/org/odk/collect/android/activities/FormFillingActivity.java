@@ -161,7 +161,6 @@ import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.SavepointsRepositoryProvider;
-import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.widgets.GeoShapeWidget;
 import org.odk.collect.android.widgets.GeoTraceWidget;
 import org.odk.collect.android.widgets.MediaWidgetAnswerViewModel;
@@ -180,8 +179,8 @@ import org.odk.collect.androidshared.system.IntentLauncher;
 import org.odk.collect.androidshared.system.PlayServicesChecker;
 import org.odk.collect.androidshared.system.ProcessRestoreDetector;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
-import org.odk.collect.androidshared.ui.FragmentFactoryBuilder;
 import org.odk.collect.androidshared.ui.DialogUtils;
+import org.odk.collect.androidshared.ui.FragmentFactoryBuilder;
 import org.odk.collect.androidshared.ui.SnackbarUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.async.Scheduler;
@@ -224,7 +223,7 @@ import timber.log.Timber;
  * @author Thomas Smyth, Sassafras Tech Collective (tom@sassafrastech.com; constraint behavior
  * option)
  */
-public class FormFillingActivity extends LocalizedActivity implements CollectComposeThemeProvider, AnimationListener,
+public class FormFillingActivity extends LocalizedActivity implements CollectComposeThemeProvider,
         FormLoaderListener, AdvanceToNextListener, SwipeHandler.OnSwipeListener,
         SavepointListener,
         RankingWidgetDialog.RankingListener, SaveFormIndexTask.SaveFormIndexListener,
@@ -315,9 +314,6 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
 
     @Inject
     AudioRecorder audioRecorder;
-
-    @Inject
-    SoftKeyboardController softKeyboardController;
 
     @Inject
     PermissionsChecker permissionsChecker;
@@ -1372,8 +1368,22 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
         }
 
         // complete setup for animations...
-        inAnimation.setAnimationListener(this);
-        outAnimation.setAnimationListener(this);
+        outAnimation.setAnimationListener(new AnimationListener() {
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                swipeHandler.setBeenSwiped(false);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+        });
 
         if (!areAnimationsEnabled(this)) {
             inAnimation.setDuration(0);
@@ -1388,16 +1398,15 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
         currentView = next;
         swipeHandler.setView(currentView);
         questionHolder.addView(currentView, lp);
-        animationCompletionSet = 0;
+        afterAllAnimations();
 
         if (staleView != null) {
             // start OutAnimation for transition...
             staleView.startAnimation(outAnimation);
             // and remove the old view (MUST occur after start of animation!!!)
             questionHolder.removeView(staleView);
-        } else {
-            animationCompletionSet = 2;
         }
+
         appBarLayout.setLiftOnScrollTargetViewId(R.id.odk_view_container);
         // start InAnimation for transition...
         currentView.startAnimation(inAnimation);
@@ -1839,8 +1848,6 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
         super.onDestroy();
     }
 
-    private int animationCompletionSet;
-
     private void afterAllAnimations() {
         CurrentFormIndex index = formEntryViewModel.getCurrentIndex().getValue();
         ValidationResult validationResult = index.getValidationResult();
@@ -1857,31 +1864,6 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
                 }
             }
         }
-
-        swipeHandler.setBeenSwiped(false);
-    }
-
-    @Override
-    public void onAnimationEnd(Animation animation) {
-        if (inAnimation == animation) {
-            animationCompletionSet |= 1;
-        } else if (outAnimation == animation) {
-            animationCompletionSet |= 2;
-        } else {
-            Timber.e(new Error("Unexpected animation"));
-        }
-
-        if (animationCompletionSet == 3) {
-            this.afterAllAnimations();
-        }
-    }
-
-    @Override
-    public void onAnimationRepeat(Animation animation) {
-    }
-
-    @Override
-    public void onAnimationStart(Animation animation) {
     }
 
     /**
