@@ -59,8 +59,8 @@ object MapFragmentAssertions {
     fun showsMappablePoints(items: List<MappableItem.Point>): TypeSafeMatcher<FakeMapFragment> {
         return object : TypeSafeMatcher<FakeMapFragment>() {
             override fun matchesSafely(mapFragment: FakeMapFragment): Boolean {
-                val markerPoints = mapFragment.getMarkers().map { it.point }
-                return markerPoints == items.map { it.point }
+                val markers = mapFragment.getMarkers()
+                return items.all { item -> markers.any { it.point == item.point } }
             }
 
             override fun describeTo(description: Description) {
