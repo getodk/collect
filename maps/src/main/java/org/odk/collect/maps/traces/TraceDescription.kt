@@ -11,6 +11,8 @@ interface TraceDescription {
     val highlightLastPoint: Boolean
     fun getStrokeWidth(): Float
     fun getStrokeColor(): Int
+
+    val background: Boolean
 }
 
 fun TraceDescription.getMarkersForPoints(): List<MarkerDescription> {
