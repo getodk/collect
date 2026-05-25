@@ -71,7 +71,8 @@ private class TestTraceDescription(
     override val points: List<MapPoint>,
     override val highlightLastPoint: Boolean,
     private val strokeWidth: Float,
-    private val strokeColor: Int
+    private val strokeColor: Int,
+    override val background: Boolean = false
 ) : TraceDescription {
     override fun getStrokeWidth(): Float {
         return strokeWidth
