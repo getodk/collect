@@ -85,24 +85,13 @@ object MapFragmentAssertions {
             override fun matchesSafely(mapFragment: FakeMapFragment): Boolean {
                 val polyLines = mapFragment.getPolyLines()
 
-                val pointsMatch = items.all { item -> polyLines.any { item.points == it.points } }
-                val styleIsCorrect = polyLines.all {
-                    val strokeWidthIsCorrect = if (strokeWidth != null) {
-                        it.getStrokeWidth() == strokeWidth
-                    } else {
-                        true
+                return items.all { item ->
+                    polyLines.any {
+                        item.points == it.points &&
+                                (strokeWidth == null || it.getStrokeWidth() == strokeWidth) &&
+                                (strokeColor == null || it.getStrokeColor() == strokeColor)
                     }
-
-                    val strokeColorIsCorrect = if (strokeColor != null) {
-                        it.getStrokeColor() == strokeColor
-                    } else {
-                        true
-                    }
-
-                    strokeWidthIsCorrect && strokeColorIsCorrect
                 }
-
-                return pointsMatch && styleIsCorrect
             }
 
             override fun describeTo(description: Description) {
@@ -127,31 +116,14 @@ object MapFragmentAssertions {
         return object : TypeSafeMatcher<FakeMapFragment>() {
             override fun matchesSafely(mapFragment: FakeMapFragment): Boolean {
                 val polygons = mapFragment.getPolygons()
-
-                val pointsMatch = items.all { item -> polygons.any { item.points == it.points } }
-                val styleIsCorrect = polygons.all {
-                    val strokeWidthIsCorrect = if (strokeWidth != null) {
-                        it.getStrokeWidth() == strokeWidth
-                    } else {
-                        true
+                return items.all { item ->
+                    polygons.any {
+                        item.points == it.points &&
+                                (strokeWidth == null || it.getStrokeWidth() == strokeWidth) &&
+                                (strokeColor == null || it.getStrokeColor() == strokeColor) &&
+                                (fillColor == null || it.getFillColor() == fillColor)
                     }
-
-                    val strokeColorIsCorrect = if (strokeColor != null) {
-                        it.getStrokeColor() == strokeColor
-                    } else {
-                        true
-                    }
-
-                    val fillColorIsCorrect = if (fillColor != null) {
-                        it.getFillColor() == fillColor
-                    } else {
-                        true
-                    }
-
-                    strokeWidthIsCorrect && strokeColorIsCorrect && fillColorIsCorrect
                 }
-
-                return pointsMatch && styleIsCorrect
             }
 
             override fun describeTo(description: Description) {
