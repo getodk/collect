@@ -1398,7 +1398,7 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
         currentView = next;
         swipeHandler.setView(currentView);
         questionHolder.addView(currentView, lp);
-        afterAllAnimations();
+        focusWidget();
 
         if (staleView != null) {
             // start OutAnimation for transition...
@@ -1848,7 +1848,7 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
         super.onDestroy();
     }
 
-    private void afterAllAnimations() {
+    private void focusWidget() {
         CurrentFormIndex index = formEntryViewModel.getCurrentIndex().getValue();
         ValidationResult validationResult = index.getValidationResult();
 
