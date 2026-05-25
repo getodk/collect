@@ -56,11 +56,19 @@ object MapFragmentAssertions {
         }
     }
 
-    fun showsMappablePoints(items: List<MappableItem.Point>): TypeSafeMatcher<FakeMapFragment> {
+    fun showsMappablePoints(
+        items: List<MappableItem.Point>,
+        background: Boolean? = null
+    ): TypeSafeMatcher<FakeMapFragment> {
         return object : TypeSafeMatcher<FakeMapFragment>() {
             override fun matchesSafely(mapFragment: FakeMapFragment): Boolean {
                 val markers = mapFragment.getMarkers()
-                return items.all { item -> markers.any { it.point == item.point } }
+                return items.all { item ->
+                    markers.any {
+                        it.point == item.point &&
+                                (background == null || it.iconDescription.background == background)
+                    }
+                }
             }
 
             override fun describeTo(description: Description) {
@@ -79,7 +87,8 @@ object MapFragmentAssertions {
     fun showsMappableLines(
         items: List<MappableItem.Line>,
         strokeWidth: Float? = null,
-        strokeColor: Int? = null
+        strokeColor: Int? = null,
+        background: Boolean? = null
     ): TypeSafeMatcher<FakeMapFragment> {
         return object : TypeSafeMatcher<FakeMapFragment>() {
             override fun matchesSafely(mapFragment: FakeMapFragment): Boolean {
@@ -89,7 +98,8 @@ object MapFragmentAssertions {
                     polyLines.any {
                         item.points == it.points &&
                                 (strokeWidth == null || it.getStrokeWidth() == strokeWidth) &&
-                                (strokeColor == null || it.getStrokeColor() == strokeColor)
+                                (strokeColor == null || it.getStrokeColor() == strokeColor) &&
+                                (background == null || it.background == background)
                     }
                 }
             }
@@ -111,7 +121,8 @@ object MapFragmentAssertions {
         items: List<MappableItem.Polygon>,
         strokeWidth: Float? = null,
         strokeColor: Int? = null,
-        fillColor: Int? = null
+        fillColor: Int? = null,
+        background: Boolean? = null
     ): TypeSafeMatcher<FakeMapFragment> {
         return object : TypeSafeMatcher<FakeMapFragment>() {
             override fun matchesSafely(mapFragment: FakeMapFragment): Boolean {
@@ -121,7 +132,8 @@ object MapFragmentAssertions {
                         item.points == it.points &&
                                 (strokeWidth == null || it.getStrokeWidth() == strokeWidth) &&
                                 (strokeColor == null || it.getStrokeColor() == strokeColor) &&
-                                (fillColor == null || it.getFillColor() == fillColor)
+                                (fillColor == null || it.getFillColor() == fillColor) &&
+                                (background == null || it.background == background)
                     }
                 }
             }
@@ -145,7 +157,8 @@ object MapFragmentAssertions {
         lineStrokeColor: Int? = null,
         polygonStrokeWidth: Float? = null,
         polygonStrokeColor: Int? = null,
-        polygonFillColor: Int? = null
+        polygonFillColor: Int? = null,
+        background: Boolean? = null
     ): Matcher<FakeMapFragment> {
         val items = mappableData.getMappableItems().value
         val points = items?.filterIsInstance<MappableItem.Point>() ?: emptyList()
@@ -153,13 +166,14 @@ object MapFragmentAssertions {
         val polygons = items?.filterIsInstance<MappableItem.Polygon>() ?: emptyList()
 
         return allOf(
-            showsMappablePoints(points),
-            showsMappableLines(lines, lineStrokeWidth, lineStrokeColor),
+            showsMappablePoints(points, background),
+            showsMappableLines(lines, lineStrokeWidth, lineStrokeColor, background),
             showsMappablePolygons(
                 polygons,
                 polygonStrokeWidth,
                 polygonStrokeColor,
-                polygonFillColor
+                polygonFillColor,
+                background
             )
         )
     }
