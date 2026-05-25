@@ -115,7 +115,7 @@ class GeoPolyFragment @JvmOverloads constructor(
     }
 
     private val currentLocationDelegate = CurrentLocationDelegate()
-    private val mappableItemsDelegate = MappableItemsDelegate()
+    private val mappableItemsDelegate = MappableItemsDelegate(background = true)
 
     override fun onAttach(context: Context) {
         super.onAttach(context)

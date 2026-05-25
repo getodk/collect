@@ -15,7 +15,12 @@ sealed interface MarkerIconDescription {
         override val background: Boolean = false
     ) : MarkerIconDescription {
 
-        constructor(drawable: Int, color: String?, symbol: String?) : this(drawable, color?.sanitizeToColorInt(), symbol)
+        constructor(
+            drawable: Int,
+            color: String?,
+            symbol: String?,
+            background: Boolean = false
+        ) : this(drawable, color?.sanitizeToColorInt(), symbol, background)
 
         fun getColor(): Int? = color
 
