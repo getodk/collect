@@ -8,6 +8,7 @@ import org.odk.collect.geo.items.MappableData
 import org.odk.collect.geo.items.MappableItem
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.circles.CurrentLocationDelegate
+import org.odk.collect.maps.markers.MarkerIconDescription
 
 object MapFragmentAssertions {
     fun hasZoomedToCurrentLocation(location: MapPoint): TypeSafeMatcher<FakeMapFragment> {
@@ -58,15 +59,18 @@ object MapFragmentAssertions {
 
     fun showsMappablePoints(
         items: List<MappableItem.Point>,
-        background: Boolean? = null
+        background: Boolean? = null,
+        clickable: Boolean? = null
     ): TypeSafeMatcher<FakeMapFragment> {
         return object : TypeSafeMatcher<FakeMapFragment>() {
             override fun matchesSafely(mapFragment: FakeMapFragment): Boolean {
                 val markers = mapFragment.getMarkers()
                 return items.all { item ->
                     markers.any {
+                        val iconDescription = it.iconDescription
                         it.point == item.point &&
-                                (background == null || it.iconDescription.background == background)
+                                (background == null || iconDescription.background == background) &&
+                                (clickable == null || iconDescription is MarkerIconDescription.DrawableResource && iconDescription.clickable == clickable)
                     }
                 }
             }
@@ -88,7 +92,8 @@ object MapFragmentAssertions {
         items: List<MappableItem.Line>,
         strokeWidth: Float? = null,
         strokeColor: Int? = null,
-        background: Boolean? = null
+        background: Boolean? = null,
+        clickable: Boolean? = null
     ): TypeSafeMatcher<FakeMapFragment> {
         return object : TypeSafeMatcher<FakeMapFragment>() {
             override fun matchesSafely(mapFragment: FakeMapFragment): Boolean {
@@ -99,7 +104,8 @@ object MapFragmentAssertions {
                         item.points == it.points &&
                                 (strokeWidth == null || it.getStrokeWidth() == strokeWidth) &&
                                 (strokeColor == null || it.getStrokeColor() == strokeColor) &&
-                                (background == null || it.background == background)
+                                (background == null || it.background == background) &&
+                                (clickable == null || it.clickable == clickable)
                     }
                 }
             }
@@ -122,7 +128,8 @@ object MapFragmentAssertions {
         strokeWidth: Float? = null,
         strokeColor: Int? = null,
         fillColor: Int? = null,
-        background: Boolean? = null
+        background: Boolean? = null,
+        clickable: Boolean? = null
     ): TypeSafeMatcher<FakeMapFragment> {
         return object : TypeSafeMatcher<FakeMapFragment>() {
             override fun matchesSafely(mapFragment: FakeMapFragment): Boolean {
@@ -133,7 +140,8 @@ object MapFragmentAssertions {
                                 (strokeWidth == null || it.getStrokeWidth() == strokeWidth) &&
                                 (strokeColor == null || it.getStrokeColor() == strokeColor) &&
                                 (fillColor == null || it.getFillColor() == fillColor) &&
-                                (background == null || it.background == background)
+                                (background == null || it.background == background) &&
+                                (clickable == null || it.clickable == clickable)
                     }
                 }
             }
@@ -158,7 +166,8 @@ object MapFragmentAssertions {
         polygonStrokeWidth: Float? = null,
         polygonStrokeColor: Int? = null,
         polygonFillColor: Int? = null,
-        background: Boolean? = null
+        background: Boolean? = null,
+        clickable: Boolean? = null
     ): Matcher<FakeMapFragment> {
         val items = mappableData.getMappableItems().value
         val points = items?.filterIsInstance<MappableItem.Point>() ?: emptyList()
@@ -166,14 +175,15 @@ object MapFragmentAssertions {
         val polygons = items?.filterIsInstance<MappableItem.Polygon>() ?: emptyList()
 
         return allOf(
-            showsMappablePoints(points, background),
-            showsMappableLines(lines, lineStrokeWidth, lineStrokeColor, background),
+            showsMappablePoints(points, background, clickable),
+            showsMappableLines(lines, lineStrokeWidth, lineStrokeColor, background, clickable),
             showsMappablePolygons(
                 polygons,
                 polygonStrokeWidth,
                 polygonStrokeColor,
                 polygonFillColor,
-                background
+                background,
+                clickable
             )
         )
     }

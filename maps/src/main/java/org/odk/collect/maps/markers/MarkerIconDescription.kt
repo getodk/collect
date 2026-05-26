@@ -20,8 +20,9 @@ sealed interface MarkerIconDescription {
             drawable: Int,
             color: String?,
             symbol: String?,
-            background: Boolean = false
-        ) : this(drawable, color?.sanitizeToColorInt(), symbol, background)
+            background: Boolean = false,
+            clickable: Boolean = true
+        ) : this(drawable, color?.sanitizeToColorInt(), symbol, background, clickable)
 
         fun getColor(): Int? = color
 

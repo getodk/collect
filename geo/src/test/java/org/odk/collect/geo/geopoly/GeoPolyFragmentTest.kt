@@ -1045,7 +1045,7 @@ class GeoPolyFragmentTest {
             GeoPolyFragment({ OnBackPressedDispatcher() }, mappableData = mappableData)
         }
 
-        assertThat(map, showsMappableData(mappableData, background = true))
+        assertThat(map, showsMappableData(mappableData, background = true, clickable = false))
     }
 
     @Test

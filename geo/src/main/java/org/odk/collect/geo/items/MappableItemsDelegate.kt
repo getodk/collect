@@ -11,7 +11,10 @@ import org.odk.collect.maps.traces.PolygonDescription
 /**
  * Helper for showing a list of [MappableItem] objects on a [org.odk.collect.maps.MapFragment]
  */
-class MappableItemsDelegate(private val background: Boolean = false) {
+class MappableItemsDelegate(
+    private val background: Boolean = false,
+    private val clickable: Boolean = true
+) {
 
     /**
      * Points to be mapped. Note: kept separately from [.itemsByFeatureId] so we can
@@ -67,7 +70,8 @@ class MappableItemsDelegate(private val background: Boolean = false) {
                     it.smallIcon,
                     it.color,
                     it.symbol,
-                    background
+                    background,
+                    clickable
                 )
             )
         }
@@ -81,7 +85,8 @@ class MappableItemsDelegate(private val background: Boolean = false) {
                         item.points,
                         item.strokeWidth,
                         item.strokeColor?.sanitizeToColorInt(),
-                        background = background
+                        background = background,
+                        clickable = clickable
                     )
                 )
             )
@@ -96,7 +101,8 @@ class MappableItemsDelegate(private val background: Boolean = false) {
                         item.strokeWidth,
                         item.strokeColor?.sanitizeToColorInt(),
                         item.fillColor?.sanitizeToColorInt(),
-                        background = background
+                        background = background,
+                        clickable = clickable
                     )
                 )
             )
