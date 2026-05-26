@@ -724,7 +724,7 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
                         .zIndex(getZIndex(lineDescription.getBackground()))
                         .width(lineDescription.getStrokeWidth())
                         .addAll(latLngs)
-                        .clickable(true)
+                        .clickable(lineDescription.getClickable())
                 );
             } else {
                 polyline.setPoints(latLngs);
@@ -822,6 +822,7 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
                     .zIndex(getZIndex(lineDescription.getBackground()))
                     .width(lineDescription.getStrokeWidth())
                     .addAll(latLngs)
+                    .clickable(lineDescription.getClickable())
                 );
             } else {
                 polyline.setPoints(latLngs);
@@ -907,6 +908,7 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
                         .strokeWidth(polygonDescription.getStrokeWidth())
                         .fillColor(polygonDescription.getFillColor())
                         .addAll(latLngs)
+                        .clickable(polygonDescription.getClickable())
                 );
             } else {
                 polygon.setPoints(latLngs);
@@ -951,8 +953,8 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
                     .strokeColor(polygonDescription.getStrokeColor())
                     .strokeWidth(polygonDescription.getStrokeWidth())
                     .fillColor(polygonDescription.getFillColor())
-                    .clickable(true)
                     .zIndex(getZIndex(polygonDescription.getBackground()))
+                    .clickable(polygonDescription.getClickable())
             );
         }
 
