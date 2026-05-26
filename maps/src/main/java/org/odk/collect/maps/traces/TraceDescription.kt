@@ -13,6 +13,7 @@ interface TraceDescription {
     fun getStrokeColor(): Int
 
     val background: Boolean
+    val clickable: Boolean
 }
 
 fun TraceDescription.getMarkersForPoints(): List<MarkerDescription> {

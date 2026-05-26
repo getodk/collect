@@ -12,7 +12,8 @@ sealed interface MarkerIconDescription {
         val drawable: Int,
         private val color: Int? = null,
         private val symbol: String? = null,
-        override val background: Boolean = false
+        override val background: Boolean = false,
+        val clickable: Boolean = true
     ) : MarkerIconDescription {
 
         constructor(
