@@ -1,37 +1,26 @@
 {
   "project_info": {
-    "project_number": "640412404956",
-    "firebase_url": "https://getodk-forks.firebaseio.com",
-    "project_id": "getodk-forks",
-    "storage_bucket": "getodk-forks.appspot.com"
+    "project_number": "753293086875",
+    "project_id": "stime-collect",
+    "storage_bucket": "stime-collect.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:640412404956:android:730483f389563845cb7819",
+        "mobilesdk_app_id": "1:753293086875:android:07a4b7ee16b7a46f20f63e",
         "android_client_info": {
-          "package_name": "org.odk.collect.android"
+          "package_name": "com.sopami.collect.android"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "640412404956-ag8do5nic02k70qr2k1a0mv3du8222hv.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyA5tuKwVrlKEs-7iMSpdTmAy6qSH-w0lik"
+          "current_key": "AIzaSyAtXsiNIjYqg-tTIbo8vPs3ig3S8aCC2xk"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "640412404956-ag8do5nic02k70qr2k1a0mv3du8222hv.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

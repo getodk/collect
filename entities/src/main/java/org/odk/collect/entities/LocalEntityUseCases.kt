@@ -67,7 +67,6 @@ object LocalEntityUseCases {
         list: String,
         serverList: File,
         entitiesRepository: EntitiesRepository,
-        entitySource: EntitySource,
         mediaFile: MediaFile
     ) {
         val existingListHash = entitiesRepository.getList(list)?.hash
@@ -117,13 +116,12 @@ object LocalEntityUseCases {
             }
         }
 
-        handleMissingEntities(
-            list,
-            missingFromServer.values,
-            entitiesRepository,
-            entitySource,
-            mediaFile.integrityUrl
-        )
+        missingFromServer.values
+            .filter { it.state == Entity.State.ONLINE }
+            .forEach {
+                entitiesRepository.delete(list, it.id)
+            }
+
         entitiesRepository.save(list, *newAndUpdated.toTypedArray())
         entitiesRepository.updateList(
             list,
@@ -132,22 +130,19 @@ object LocalEntityUseCases {
         )
     }
 
-    private fun handleMissingEntities(
+    fun cleanUpDeletedOfflineEntities(
         list: String,
-        missingFromServer: Collection<Entity.Saved>,
         entitiesRepository: EntitiesRepository,
         entitySource: EntitySource,
-        integrityUrl: String?
+        mediaFile: MediaFile
     ) {
-        val missingOnline = missingFromServer.filter { it.state == Entity.State.ONLINE }
-        val missingOffline = missingFromServer.filter { it.state == Entity.State.OFFLINE }
+        val offlineLocalEntities = entitiesRepository
+            .query(list)
+            .filter { it.state == Entity.State.OFFLINE }
 
-        missingOnline.forEach {
-            entitiesRepository.delete(list, it.id)
-        }
-
-        if (integrityUrl != null && missingOffline.isNotEmpty()) {
-            entitySource.fetchDeletedStates(integrityUrl, missingOffline.map { it.id }).forEach {
+        val integrityUrl = mediaFile.integrityUrl
+        if (integrityUrl != null && offlineLocalEntities.isNotEmpty()) {
+            entitySource.fetchDeletedStates(integrityUrl, offlineLocalEntities.map { it.id }).forEach {
                 if (it.second) {
                     entitiesRepository.delete(list, it.first)
                 }

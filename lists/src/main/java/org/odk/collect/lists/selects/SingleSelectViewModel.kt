@@ -12,8 +12,12 @@ class SingleSelectViewModel(
 ) : ViewModel() {
 
     private val _selected = MutableLiveData<String?>(selected)
-    private val selected = LiveDataUtils.zip(_selected, data).map { (selected, data) ->
-        selected.takeIf { id -> data.any { it.id == id } }
+    private val selected = LiveDataUtils.combine(_selected, data).map { (selected, data) ->
+        if (selected != null && data != null) {
+            selected.takeIf { id -> data.any { it.id == id } }
+        } else {
+            null
+        }
     }
 
     fun getSelected(): LiveData<String?> {

@@ -8,6 +8,8 @@ class BarcodeWidgetScannerFragment : BarCodeScannerFragment() {
     }
 
     override fun handleScanningResult(result: String) {
-        returnSingleValue(requireActivity(), result)
+        if (isAdded) {
+            returnSingleValue(requireActivity(), result)
+        }
     }
 }

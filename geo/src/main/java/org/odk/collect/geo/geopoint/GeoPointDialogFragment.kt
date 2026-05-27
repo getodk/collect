@@ -58,7 +58,7 @@ class GeoPointDialogFragment : DialogFragment() {
         }
 
         binding.threshold.text =
-            getString(org.odk.collect.strings.R.string.point_will_be_saved, formatAccuracy(context, accuracyThreshold))
+            getString(org.odk.collect.strings.R.string.point_will_be_saved, formatAccuracy(requireContext(), accuracyThreshold))
 
         viewModel.timeElapsed.observe(this) {
             binding.time.text =

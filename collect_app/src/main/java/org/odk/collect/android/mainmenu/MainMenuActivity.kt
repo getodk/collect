@@ -8,6 +8,7 @@ import org.odk.collect.android.R
 import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.activities.CrashHandlerActivity
 import org.odk.collect.android.activities.FirstLaunchActivity
+import org.odk.collect.android.application.CollectComposeThemeProvider
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.ProjectSettingsDialog
 import org.odk.collect.android.utilities.ThemeUtils
@@ -17,9 +18,10 @@ import org.odk.collect.mobiledevicemanagement.MDMConfigObserver
 import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.strings.localization.LocalizedActivity
+import org.odk.collect.webpage.WebPageService
 import javax.inject.Inject
 
-class MainMenuActivity : LocalizedActivity() {
+class MainMenuActivity : LocalizedActivity(), CollectComposeThemeProvider {
 
     @Inject
     lateinit var viewModelFactory: MainMenuViewModelFactory
@@ -32,6 +34,9 @@ class MainMenuActivity : LocalizedActivity() {
 
     @Inject
     lateinit var mdmConfigObserver: MDMConfigObserver
+
+    @Inject
+    lateinit var webPageService: WebPageService
 
     private lateinit var currentProjectViewModel: CurrentProjectViewModel
 
@@ -79,7 +84,7 @@ class MainMenuActivity : LocalizedActivity() {
                     ProjectSettingsDialog(viewModelFactory)
                 }
                 .forClass(MainMenuFragment::class) {
-                    MainMenuFragment(viewModelFactory, settingsProvider)
+                    MainMenuFragment(viewModelFactory, webPageService)
                 }
                 .build()
 

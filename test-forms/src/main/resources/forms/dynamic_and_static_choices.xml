@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<h:html
+    xmlns="http://www.w3.org/2002/xforms"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:jr="http://openrosa.org/javarosa"
+    xmlns:orx="http://openrosa.org/xforms"
+    xmlns:odk="http://www.opendatakit.org/xforms">
+    <h:head>
+        <h:title>dynamic_and_static_choices</h:title>
+        <model odk:xforms-version="1.0.0">
+            <instance>
+                <data id="dynamic_and_static_choices">
+                    <fruits/>
+                    <numbers/>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+            <bind nodeset="/data/fruits" type="string"/>
+            <bind nodeset="/data/numbers" type="string"/>
+            <bind nodeset="/data/meta/instanceID" type="string" readonly="true()" jr:preload="uid"/>
+        </model>
+    </h:head>
+    <h:body>
+        <select1 ref="/data/fruits" appearance="search('fruits')">
+            <label>Choose a fruit</label>
+            <item>
+                <label>name</label>
+                <value>name_key</value>
+            </item>
+            <item>
+                <label>None of the above</label>
+                <value>0</value>
+            </item>
+        </select1>
+        <select1 ref="/data/numbers" appearance="search('numbers')">
+            <label>Choose a number</label>
+            <item>
+                <label>0</label>
+                <value>0</value>
+            </item>
+            <item>
+                <label>1</label>
+                <value>1</value>
+            </item>
+        </select1>
+    </h:body>
+</h:html>

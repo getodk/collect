@@ -14,6 +14,8 @@
 
 package org.odk.collect.android.widgets;
 
+import static org.odk.collect.geo.GeoUtils.parseGeometryPoint;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -49,7 +51,7 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
     }
 
     @Override
-    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
+    protected View onCreateWidgetView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = GeopointQuestionBinding.inflate(((Activity) context).getLayoutInflater());
 
         binding.geoAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
@@ -76,7 +78,7 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
 
     @Override
     public IAnswerData getAnswer() {
-        double[] parsedGeometryPoint = GeoWidgetUtils.parseGeometryPoint(answerText);
+        double[] parsedGeometryPoint = parseGeometryPoint(answerText);
         return parsedGeometryPoint == null
                 ? null
                 : new GeoPointData(parsedGeometryPoint);

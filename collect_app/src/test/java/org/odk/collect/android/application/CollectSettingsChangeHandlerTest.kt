@@ -1,14 +1,20 @@
 package org.odk.collect.android.application
 
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler
 import org.odk.collect.android.formmanagement.FormsDataService
+import org.odk.collect.android.preferences.Defaults
 import org.odk.collect.metadata.PropertyManager
 import org.odk.collect.settings.keys.ProjectKeys
 
+@RunWith(AndroidJUnit4::class)
 class CollectSettingsChangeHandlerTest {
 
     private val propertyManager = mock<PropertyManager>()
@@ -58,13 +64,31 @@ class CollectSettingsChangeHandlerTest {
 
     @Test
     fun `updates PropertyManager when multiple settings are changed`() {
-        handler.onSettingsChanged("projectId")
+        handler.onSettingsChanged("projectId", emptyList(), emptyList())
         verify(propertyManager).reload()
     }
 
     @Test
-    fun `schedule updates when multiple settings are changes`() {
-        handler.onSettingsChanged("projectId")
-        verify(formUpdateScheduler).scheduleUpdates("projectId")
+    fun `schedules updates when settings change and include form update-related ones`() {
+        val relevantKeys = setOf(ProjectKeys.KEY_FORM_UPDATE_MODE, ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK)
+        val allUnprotectedKeys = Defaults.unprotected.keys
+        val allProtectedKeys = Defaults.protected.keys
+
+        allUnprotectedKeys.forEach { key ->
+            handler.onSettingsChanged("projectId", listOf(key), emptyList())
+
+            if (key in relevantKeys) {
+                verify(formUpdateScheduler).scheduleUpdates("projectId")
+            } else {
+                verify(formUpdateScheduler, never()).scheduleUpdates("projectId")
+            }
+
+            clearInvocations(formUpdateScheduler)
+        }
+
+        allProtectedKeys.forEach { key ->
+            handler.onSettingsChanged("projectId", emptyList(), listOf(key))
+            verify(formUpdateScheduler, never()).scheduleUpdates("projectId")
+        }
     }
 }

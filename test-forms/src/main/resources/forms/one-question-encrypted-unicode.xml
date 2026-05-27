@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>One Question Encrypted Unicode</h:title>
+        <model>
+            <submission base64RsaPublicKey="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAysbTy+pI99GTbLBeBfbEKO+mQJDoL0moKh+r0ECz/yAmUkZOBumwI0o9il0tIygtEKbnUBkc9iwWs0FAvTBK63NpVqfXrtyt64+2UYMWuhXatwFbnqz+5D+C6qlmv5qsHEjJLK4LRUvNcxRY1pTtTQ9EYHpYSiqwcEsHwX18GKAueaki0ZnfU1fT5x1rVU+cJ2GgdHUMW81eXUNATYQyDqy4Ehqmo9zL19gT4AVb5ODWMG2bCKUpZdxkBtkkoLqZM2jiYzdedvOMjrYGx8INE4uumF02sbnJ1KF9GhXyLoTv0mSvCVhZrOL/jgmSBlQRKtacAv9Rbj1RtnedhG9ylQIDAQAB"/>
+            <instance>
+                <data id="one_questión_encrypted_unicode" orx:version="versión 4">
+                    <age/>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+            <bind nodeset="age" type="int"/>
+            <bind nodeset="/data/meta/instanceID" type="string" readonly="true()" jr:preload="uid"/>
+        </model>
+    </h:head>
+    <h:body>
+        <input ref="/data/age">
+            <label>what is your age</label>
+        </input>
+    </h:body>
+</h:html>

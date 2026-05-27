@@ -223,4 +223,37 @@ class MatchExactlyTest {
             .clickFillBlankForm()
             .assertFormDoesNotExist("One Question Updated")
     }
+
+    @Test
+    fun whenMatchExactlyStopped_andFails_showNotification_andOpenFormListOnClick() {
+        testDependencies.server.alwaysReturnError()
+
+        rule.startAtMainMenu()
+            .setServer(testDependencies.server.url)
+            .enableMatchExactly()
+
+        testDependencies.scheduler.runDeferredTasks(isLastUniqueExecution = false, isStopped = true)
+
+        notificationDrawerRule
+            .open()
+            .assertNotification("ODK Collect", "Form update failed", "Demo project")
+            .clickNotification(
+                "ODK Collect",
+                "Form update failed",
+                FillBlankFormPage()
+            )
+    }
+
+    @Test
+    fun whenMatchExactlyStopped_andSucceeds_showNotification_andOpenFormListOnClick() {
+        rule.startAtMainMenu()
+            .setServer(testDependencies.server.url)
+            .enableMatchExactly()
+
+        testDependencies.scheduler.runDeferredTasks(isLastUniqueExecution = false, isStopped = true)
+
+        notificationDrawerRule
+            .open()
+            .assertNoNotification("ODK Collect")
+    }
 }

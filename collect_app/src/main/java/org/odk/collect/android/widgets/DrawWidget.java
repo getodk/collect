@@ -46,7 +46,7 @@ public class DrawWidget extends BaseImageWidget {
     }
 
     @Override
-    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
+    protected View onCreateWidgetView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = DrawWidgetBinding.inflate(((Activity) context).getLayoutInflater());
         binding.drawButton.setOnClickListener(v -> imageClickHandler.clickImage("drawButton"));
         binding.image.setOnClickListener(v -> imageClickHandler.clickImage("viewImage"));

@@ -93,27 +93,20 @@ interface MapFragment {
      * Returns a positive integer, the featureId for the newly added shape.
      */
     fun addPolyLine(lineDescription: LineDescription): Int
+    fun updatePolyLine(featureId: Int, lineDescription: LineDescription)
 
     /**
      * Adds a polygon to the map with given sequence of vertices. * Returns a positive integer,
      * the featureId for the newly added shape.
      */
     fun addPolygon(polygonDescription: PolygonDescription): Int
-
-    /** Appends a vertex to the polyline or polygon specified by featureId.  */
-    fun appendPointToPolyLine(featureId: Int, point: MapPoint)
-
-    /**
-     * Removes the last vertex of the polyline or polygon specified by featureId.
-     * If there are no vertices, does nothing.
-     */
-    fun removePolyLineLastPoint(featureId: Int)
+    fun updatePolygon(featureId: Int, polygonDescription: PolygonDescription)
 
     /**
      * Returns the vertices of the polyline or polygon specified by featureId, or an
      * empty list if the featureId does not identify an existing polyline or polygon.
      */
-    fun getPolyLinePoints(featureId: Int): List<MapPoint>
+    fun getPolyPoints(featureId: Int): List<MapPoint>
 
     /** Removes all map features from the map.  */
     fun clearFeatures()
@@ -136,12 +129,15 @@ interface MapFragment {
      * runOnGpsLocationReady(), and every GPS fix will invoke the callback set
      * by setGpsLocationListener().
      */
+    @Deprecated(message = "Location should be handled outside of MapFragment")
     fun setGpsLocationEnabled(enabled: Boolean)
 
     /** Gets the last GPS location fix, or null if there hasn't been one.  */
+    @Deprecated(message = "Location should be handled outside of MapFragment")
     fun getGpsLocation(): MapPoint?
 
     /** Gets the provider of the last fix, or null if there hasn't been one.  */
+    @Deprecated(message = "Location should be handled outside of MapFragment")
     fun getLocationProvider(): String?
 
     /**
@@ -152,14 +148,17 @@ interface MapFragment {
      * Activities that set callbacks should call setGpsLocationEnabled(false)
      * in their onStop() or onDestroy() methods, to prevent invalid callbacks.
      */
+    @Deprecated(message = "Location should be handled outside of MapFragment")
     fun runOnGpsLocationReady(listener: ReadyListener)
 
     /**
      * Sets or clears the callback for GPS location updates.  This callback
      * will only be invoked while GPS is enabled with setGpsLocationEnabled().
      */
+    @Deprecated(message = "Location should be handled outside of MapFragment")
     fun setGpsLocationListener(listener: PointListener?)
 
+    @Deprecated(message = "Location should be handled outside of MapFragment")
     fun setRetainMockAccuracy(retainMockAccuracy: Boolean)
 
     /**

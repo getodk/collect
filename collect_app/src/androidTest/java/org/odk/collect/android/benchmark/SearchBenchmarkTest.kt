@@ -14,11 +14,12 @@ import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
-import org.odk.collect.android.test.BuildConfig.ENTITIES_FILTER_SEARCH_TEST_PROJECT_URL
+import org.odk.collect.android.test.BuildConfig.ENTITIES_FILTER_SEARCH_PROJECT_URL
 
 /**
- * Benchmarks the performance of search() forms. [ENTITIES_FILTER_SEARCH_TEST_PROJECT_URL] should be
- * set to a project that contains the "100k Entities Filter search()" form.
+ * Benchmarks the performance of search() forms. [ENTITIES_FILTER_SEARCH_PROJECT_URL] should be
+ * set to a project that contains the "100k Entities Filter search()" benchmark form and the
+ * "entities_100k" entity list.
  *
  * Devices that currently pass:
  * - Fairphone 3
@@ -36,8 +37,8 @@ class SearchBenchmarkTest {
     @Test
     fun run() {
         assertThat(
-            "Need to set ENTITIES_FILTER_SEARCH_TEST_PROJECT_URL before running!",
-            ENTITIES_FILTER_SEARCH_TEST_PROJECT_URL,
+            "Need to set ENTITIES_FILTER_SEARCH_PROJECT_URL before running!",
+            ENTITIES_FILTER_SEARCH_PROJECT_URL,
             not(blankOrNullString())
         )
 
@@ -45,7 +46,7 @@ class SearchBenchmarkTest {
 
         rule.startAtFirstLaunch()
             .clickManuallyEnterProjectDetails()
-            .inputUrl(ENTITIES_FILTER_SEARCH_TEST_PROJECT_URL)
+            .inputUrl(ENTITIES_FILTER_SEARCH_PROJECT_URL)
             .addProject()
 
             .clickGetBlankForm()

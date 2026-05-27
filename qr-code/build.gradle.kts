@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.composeCompiler)
 }
 
 apply(from = "../config/quality.gradle")
@@ -37,6 +38,7 @@ android {
 
     buildFeatures {
         viewBinding = true
+        compose = true
     }
 }
 
@@ -44,6 +46,7 @@ dependencies {
     coreLibraryDesugaring(libs.desugar)
 
     implementation(project(":androidshared"))
+    implementation(project(":strings"))
 
     implementation(libs.zxingAndroidEmbedded)
     implementation(libs.mlkit.barcodescanning)
@@ -52,6 +55,15 @@ dependencies {
     implementation(libs.cameraxView)
     implementation(libs.mlkit.barcodescanning)
     implementation(libs.camera.mlkit.vision)
+
+    val composeBom = platform(libs.androidxComposeBom)
+    implementation(composeBom)
+    implementation(libs.androidXComposeMaterial)
+    implementation(libs.androidXComposeMaterialIconsExtended)
+    implementation(libs.androidXConstraintLayoutCompose)
+
+    implementation(libs.androidXComposePreview)
+    debugImplementation(libs.androidXComposeTooling)
 
     testImplementation(libs.androidxTestExtJunit)
     testImplementation(libs.hamcrest)

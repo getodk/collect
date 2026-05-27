@@ -1,6 +1,7 @@
 package org.odk.collect.android.projects
 
 import androidx.core.view.children
+import androidx.core.view.size
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
@@ -12,6 +13,7 @@ import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.gson.Gson
+import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.Matchers.notNullValue
@@ -40,16 +42,10 @@ import org.odk.collect.testshared.RobolectricHelpers
 
 @RunWith(AndroidJUnit4::class)
 class ProjectSettingsDialogTest {
-
+    private val currentProject = Project.Saved("x", "Project X", "X", "#ffffff")
+    private val currentProjectLiveData = MutableLiveData(currentProject)
     private val currentProjectViewModel: CurrentProjectViewModel = mock {
-        on { currentProject } doReturn MutableLiveData(
-            Project.Saved(
-                "x",
-                "Project X",
-                "X",
-                "#ffffff"
-            )
-        )
+        on { currentProject } doReturn currentProjectLiveData
     }
 
     private val projectsRepository = InMemProjectsRepository(UUIDGenerator())
@@ -160,6 +156,18 @@ class ProjectSettingsDialogTest {
         scenario.onFragment {
             it.binding.projectList.children.iterator().asSequence().first().performClick()
             verify(currentProjectViewModel).setCurrentProject(projectY)
+        }
+    }
+
+    @Test
+    fun `project list should not be duplicated on current project update`() {
+        projectsRepository.save(Project.New("Project Y", "Y", "#ffffff"))
+
+        val scenario = launcherRule.launch(ProjectSettingsDialog::class.java)
+        scenario.onFragment {
+            assertThat(it.binding.projectList.size, equalTo(1))
+            currentProjectLiveData.value = currentProject
+            assertThat(it.binding.projectList.size, equalTo(1))
         }
     }
 }

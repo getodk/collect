@@ -14,6 +14,7 @@ import android.app.Activity;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.compose.ui.test.junit4.AndroidComposeTestRule;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
@@ -159,5 +160,9 @@ public abstract class QuestionWidgetTest<W extends Widget, A extends IAnswerData
 
         assertThat(viewsRegisterForContextMenu.size(), is(1));
         assertThat(viewsRegisterForContextMenu.get(0), is(widget));
+    }
+
+    protected void widgetInComposeActivity(AndroidComposeTestRule composeRule, View widget) {
+        composeRule.getActivity().setContentView(widget);
     }
 }

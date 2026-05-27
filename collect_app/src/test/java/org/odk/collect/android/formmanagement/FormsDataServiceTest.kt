@@ -11,6 +11,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.verifyNoInteractions
+import org.mockito.Mockito.verifyNoMoreInteractions
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
@@ -26,10 +27,12 @@ import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.androidshared.data.AppState
 import org.odk.collect.androidtest.getOrAwaitValue
 import org.odk.collect.androidtest.recordValues
+import org.odk.collect.forms.Form
 import org.odk.collect.forms.FormListItem
 import org.odk.collect.forms.FormSource
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.formstest.FormUtils
+import org.odk.collect.formstest.FormUtils.createXFormFile
 import org.odk.collect.projects.Project
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.locks.BooleanChangeLock
@@ -198,27 +201,66 @@ class FormsDataServiceTest {
     }
 
     @Test
-    fun `matchFormsWithServer() notifies when called with default notify value`() {
+    fun `matchFormsWithServer() notifies on error when called with default notify value`() {
         val error = FormSourceException.FetchError()
         whenever(formSource.fetchFormList()).thenThrow(error)
-        formsDataService.matchFormsWithServer(project.uuid)
+        formsDataService.matchFormsWithServer(project.uuid) { false }
         verify(notifier).onSync(error, project.uuid)
+        verifyNoMoreInteractions(notifier)
     }
 
     @Test
-    fun `matchFormsWithServer() notifies when called with notify true`() {
-        val error = FormSourceException.FetchError()
-        whenever(formSource.fetchFormList()).thenThrow(error)
-        formsDataService.matchFormsWithServer(project.uuid, true)
-        verify(notifier).onSync(error, project.uuid)
+    fun `matchFormsWithServer() notifies on success when called with default notify value`() {
+        formsDataService.matchFormsWithServer(project.uuid) { false }
+        verify(notifier).onSync(null, project.uuid)
+        verifyNoMoreInteractions(notifier)
     }
 
     @Test
-    fun `matchFormsWithServer() does not notify when called with notify false`() {
+    fun `matchFormsWithServer() notifies on error when called with notify true`() {
         val error = FormSourceException.FetchError()
         whenever(formSource.fetchFormList()).thenThrow(error)
-        formsDataService.matchFormsWithServer(project.uuid, false)
+        formsDataService.matchFormsWithServer(project.uuid, true) { false }
+        verify(notifier).onSync(error, project.uuid)
+        verifyNoMoreInteractions(notifier)
+    }
+
+    @Test
+    fun `matchFormsWithServer() notifies on success when called with notify true`() {
+        formsDataService.matchFormsWithServer(project.uuid, true) { false }
+        verify(notifier).onSync(null, project.uuid)
+        verifyNoMoreInteractions(notifier)
+    }
+
+    @Test
+    fun `matchFormsWithServer() does not notify on error when called with default isStopped value`() {
+        val error = FormSourceException.FetchError()
+        whenever(formSource.fetchFormList()).thenThrow(error)
+        formsDataService.matchFormsWithServer(project.uuid, notify = false)
         verifyNoInteractions(notifier)
+    }
+
+    @Test
+    fun `matchFormsWithServer() does not notify on success when called with default isStopped value`() {
+        formsDataService.matchFormsWithServer(project.uuid, notify = false)
+        verifyNoInteractions(notifier)
+    }
+
+    @Test
+    fun `matchFormsWithServer() does not notify on error when called with isStopped false`() {
+        val error = FormSourceException.FetchError()
+        whenever(formSource.fetchFormList()).thenThrow(error)
+        formsDataService.matchFormsWithServer(project.uuid, false) { false }
+        verifyNoInteractions(notifier)
+    }
+
+    @Test
+    fun `matchFormsWithServer() notifies on error when called with isStopped true`() {
+        val error = FormSourceException.FetchError()
+        whenever(formSource.fetchFormList()).thenThrow(error)
+        formsDataService.matchFormsWithServer(project.uuid, false) { true }
+        verify(notifier).onSyncStopped(project.uuid)
+        verifyNoMoreInteractions(notifier)
     }
 
     @Test
@@ -242,6 +284,32 @@ class FormsDataServiceTest {
             formsDataService.refresh(project.uuid)
             assertThat(projectValues, equalTo(listOf(false)))
         }
+    }
+
+    @Test
+    fun `#getFormsCount ignores soft-deleted forms`() {
+        formsRepositoryProvider.create(project.uuid).apply {
+            save(
+                Form.Builder()
+                    .displayName("1")
+                    .formId("1")
+                    .version("1")
+                    .deleted(false)
+                    .formFilePath(createXFormFile("1", "1").absolutePath)
+                    .build()
+            )
+            save(
+                Form.Builder()
+                    .displayName("2")
+                    .formId("2")
+                    .version("1")
+                    .deleted(true)
+                    .formFilePath(createXFormFile("2", "1").absolutePath)
+                    .build()
+            )
+        }
+        formsDataService.update(project.uuid)
+        assertThat(formsDataService.getFormsCount(project.uuid).value, equalTo(1))
     }
 
     private fun addFormToServer(updatedXForm: String, formId: String, formVersion: String) {

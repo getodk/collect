@@ -13,7 +13,7 @@ import org.odk.collect.geo.geopoint.GeoPointDialogFragment
 import org.odk.collect.geo.geopoint.GeoPointMapActivity
 import org.odk.collect.geo.geopoint.GeoPointViewModelFactory
 import org.odk.collect.geo.geopoint.LocationTrackerGeoPointViewModel
-import org.odk.collect.geo.geopoly.GeoPolyActivity
+import org.odk.collect.geo.geopoly.GeoPolyFragment
 import org.odk.collect.geo.selection.SelectionMapFragment
 import org.odk.collect.location.LocationClient
 import org.odk.collect.location.satellites.SatelliteInfoClient
@@ -22,7 +22,7 @@ import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.settings.SettingsProvider
-import org.odk.collect.webpage.ExternalWebPageHelper
+import org.odk.collect.webpage.WebPageService
 import javax.inject.Singleton
 
 interface GeoDependencyComponentProvider {
@@ -45,10 +45,10 @@ interface GeoDependencyComponent {
     }
 
     fun inject(geoPointMapActivity: GeoPointMapActivity)
-    fun inject(geoPolyActivity: GeoPolyActivity)
     fun inject(geoPointDialogFragment: GeoPointDialogFragment)
     fun inject(geoPointActivity: GeoPointActivity)
     fun inject(selectionMapFragment: SelectionMapFragment)
+    fun inject(geoPolyFragment: GeoPolyFragment)
 
     val scheduler: Scheduler
     val locationTracker: LocationTracker
@@ -121,7 +121,7 @@ open class GeoDependencyModule {
     }
 
     @Provides
-    open fun providesExternalWebPageHelper(): ExternalWebPageHelper {
+    open fun providesWebPageService(): WebPageService {
         throw UnsupportedOperationException("This should be overridden by dependent application")
     }
 }

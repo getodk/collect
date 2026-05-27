@@ -46,32 +46,6 @@ class GoogleDriveProjectsDeleterTest {
     }
 
     @Test
-    fun `GD projects that cannot be deleted because of unsent forms should be converted to ODK protocol and marked as old GD projects`() {
-        projectsRepository.save(Project.Saved("1", "project", "Q", "#000000"))
-        settingsProvider.getUnprotectedSettings("1").save(ProjectKeys.KEY_PROTOCOL, ProjectKeys.PROTOCOL_GOOGLE_SHEETS)
-        whenever(projectDeleter.deleteProject("1")).thenReturn(DeleteProjectResult.UnsentInstances)
-
-        googleDriveProjectsDeleter.run()
-
-        assertThat(settingsProvider.getUnprotectedSettings("1").getString(ProjectKeys.KEY_PROTOCOL), equalTo(ProjectKeys.PROTOCOL_SERVER))
-        assertThat(settingsProvider.getUnprotectedSettings("1").getString(ProjectKeys.KEY_SERVER_URL), equalTo("https://example.com"))
-        assertThat(projectsRepository.get("1")!!.isOldGoogleDriveProject, equalTo(true))
-    }
-
-    @Test
-    fun `GD projects that cannot be deleted because of running background jobs should be converted to ODK protocol and marked as old GD projects`() {
-        projectsRepository.save(Project.Saved("1", "project", "Q", "#000000"))
-        settingsProvider.getUnprotectedSettings("1").save(ProjectKeys.KEY_PROTOCOL, ProjectKeys.PROTOCOL_GOOGLE_SHEETS)
-        whenever(projectDeleter.deleteProject("1")).thenReturn(DeleteProjectResult.RunningBackgroundJobs)
-
-        googleDriveProjectsDeleter.run()
-
-        assertThat(settingsProvider.getUnprotectedSettings("1").getString(ProjectKeys.KEY_PROTOCOL), equalTo(ProjectKeys.PROTOCOL_SERVER))
-        assertThat(settingsProvider.getUnprotectedSettings("1").getString(ProjectKeys.KEY_SERVER_URL), equalTo("https://example.com"))
-        assertThat(projectsRepository.get("1")!!.isOldGoogleDriveProject, equalTo(true))
-    }
-
-    @Test
     fun `If GD project deletion results in 'DeletedSuccessfullyLastProject' there is no attempt to convert it to ODK protocol and mark it as an old GD project`() {
         projectsRepository.save(Project.Saved("1", "project", "Q", "#000000"))
         settingsProvider.getUnprotectedSettings("1").save(ProjectKeys.KEY_PROTOCOL, ProjectKeys.PROTOCOL_GOOGLE_SHEETS)

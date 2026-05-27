@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.analytics.AnalyticsEvents
+import org.odk.collect.android.application.CollectComposeThemeProvider
 import org.odk.collect.android.databinding.FirstLaunchLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.mainmenu.MainMenuActivity
@@ -29,7 +30,7 @@ import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.strings.localization.LocalizedActivity
 import javax.inject.Inject
 
-class FirstLaunchActivity : LocalizedActivity() {
+class FirstLaunchActivity : LocalizedActivity(), CollectComposeThemeProvider {
 
     @Inject
     lateinit var projectsRepository: ProjectsRepository
@@ -116,7 +117,7 @@ class FirstLaunchActivity : LocalizedActivity() {
                 text = SpannableStringBuilder()
                     .append(getString(org.odk.collect.strings.R.string.dont_have_project))
                     .append(" ")
-                    .color(getThemeAttributeValue(context, com.google.android.material.R.attr.colorAccent)) {
+                    .color(getThemeAttributeValue(context, androidx.appcompat.R.attr.colorPrimary)) {
                         append(getString(org.odk.collect.strings.R.string.try_demo))
                     }
 

@@ -118,16 +118,17 @@ the specific language governing permissions and limitations under the License.
 
         <activity
             android:name=".activities.ScannerWithFlashlightActivity"
-            android:screenOrientation="portrait"
-            android:stateNotNeeded="true"
-            android:windowSoftInputMode="stateAlwaysHidden" />
+            android:configChanges="orientation|screenSize"/>
         <activity
             android:name=".activities.FormFillingActivity"
             android:theme="@style/Theme.Collect.FormEntry"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name="org.odk.collect.draw.DrawActivity"
-            android:screenOrientation="landscape" />
+            android:theme="@style/Theme.Collect"
+            tools:replace="android:theme"
+            android:screenOrientation="landscape"
+            android:resizeableActivity="false"/>
         <activity android:name=".activities.InstanceChooserList" />
         <activity
             android:name=".formlists.blankformlist.BlankFormListActivity"
@@ -167,7 +168,6 @@ the specific language governing permissions and limitations under the License.
 
         <activity android:name=".activities.FormMapActivity" />
         <activity android:name=".activities.BearingActivity" />
-        <activity android:name="org.odk.collect.webpage.WebViewActivity" />
         <activity
             android:name="org.odk.collect.selfiecamera.CaptureSelfieActivity"
             android:theme="@style/Theme.Collect"
@@ -220,11 +220,11 @@ the specific language governing permissions and limitations under the License.
 
         <provider
             android:name=".external.FormsProvider"
-            android:authorities="org.odk.collect.android.provider.odk.forms"
+            android:authorities="${applicationId}.provider.odk.forms"
             android:exported="true" />
         <provider
             android:name=".external.InstanceProvider"
-            android:authorities="org.odk.collect.android.provider.odk.instances"
+            android:authorities="${applicationId}.provider.odk.instances"
             android:exported="true" />
 
         <activity-alias

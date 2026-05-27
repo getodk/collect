@@ -393,6 +393,15 @@ public class JavaRosaFormController implements FormController {
         }
     }
 
+    public ValidationResult validateAnswerConstraint(FormIndex index, IAnswerData answer) {
+        boolean isAnswerValid = getFormDef().evaluateConstraint(index.getReference(), answer);
+        if (isAnswerValid) {
+            return SuccessValidationResult.INSTANCE;
+        } else {
+            return getFailedValidationResult(index, FormEntryController.ANSWER_CONSTRAINT_VIOLATED);
+        }
+    }
+
     public ValidationResult validateAnswers(boolean moveToInvalidIndex) throws JavaRosaException {
         try {
             ValidateOutcome validateOutcome = getFormDef().validate();
@@ -650,13 +659,12 @@ public class JavaRosaFormController implements FormController {
     public ValidationResult saveOneScreenAnswer(FormIndex index, IAnswerData answer, boolean evaluateConstraints) throws JavaRosaException {
         // Within a group, you can only save for question events
         if (getEvent(index) == FormEntryController.EVENT_QUESTION) {
+            saveAnswer(index, answer);
             if (evaluateConstraints) {
                 int saveStatus = answerQuestion(index, answer);
                 if (saveStatus != FormEntryController.ANSWER_OK) {
                     return getFailedValidationResult(index, saveStatus);
                 }
-            } else {
-                saveAnswer(index, answer);
             }
         } else {
             Timber.w("Attempted to save an index referencing something other than a question: %s",
@@ -990,7 +998,7 @@ public class JavaRosaFormController implements FormController {
     public ByteArrayPayload getFilledInFormXml() throws IOException {
         // assume no binary data inside the model.
         FormInstance datamodel = getInstance();
-        XFormSerializingVisitor serializer = new XFormSerializingVisitor();
+        XFormSerializingVisitor serializer = new XFormSerializingVisitor(false);
 
         return (ByteArrayPayload) serializer.createSerializedPayload(datamodel);
     }
@@ -1002,76 +1010,41 @@ public class JavaRosaFormController implements FormController {
                 getSubmissionDataReference());
     }
 
-    /**
-     * Traverse the submission looking for the first matching tag in depth-first order.
-     */
-    private TreeElement findDepthFirst(TreeElement parent, String name) {
-        int len = parent.getNumChildren();
-        for (int i = 0; i < len; ++i) {
-            TreeElement e = parent.getChildAt(i);
-            if (name.equals(e.getName())) {
-                return e;
-            } else if (e.getNumChildren() != 0) {
-                TreeElement v = findDepthFirst(e, name);
-                if (v != null) {
-                    return v;
-                }
-            }
-        }
-        return null;
-    }
-
     public InstanceMetadata getSubmissionMetadata() {
         FormDef formDef = formEntryController.getModel().getForm();
         TreeElement rootElement = formDef.getInstance().getRoot();
-
-        TreeElement trueSubmissionElement;
-        // Determine the information about the submission...
-        SubmissionProfile p = formDef.getSubmissionProfile();
-        if (p == null || p.getRef() == null) {
-            trueSubmissionElement = rootElement;
-        } else {
-            IDataReference ref = p.getRef();
-            trueSubmissionElement = formDef.getInstance().resolveReference(ref);
-            // resolveReference returns null if the reference is to the root element...
-            if (trueSubmissionElement == null) {
-                trueSubmissionElement = rootElement;
-            }
-        }
-
-        // and find the depth-first meta block in this...
-        TreeElement e = findDepthFirst(trueSubmissionElement, "meta");
+        TreeElement meta = rootElement.getFirstChild("meta");
 
         String instanceId = null;
         String instanceName = null;
         AuditConfig auditConfig = null;
 
-        if (e != null) {
-            List<TreeElement> v;
+        if (meta != null) {
+            List<TreeElement> metaElements;
 
             // instance id...
-            v = e.getChildrenWithName(INSTANCE_ID);
-            if (v.size() == 1) {
-                IAnswerData sa = v.get(0).getValue();
+            metaElements = meta.getChildrenWithName(INSTANCE_ID);
+            if (metaElements.size() == 1) {
+                IAnswerData sa = metaElements.get(0).getValue();
                 if (sa != null) {
                     instanceId = sa.getDisplayText();
                 }
             }
 
             // instance name...
-            v = e.getChildrenWithName(INSTANCE_NAME);
-            if (v.size() == 1) {
-                IAnswerData sa = v.get(0).getValue();
+            metaElements = meta.getChildrenWithName(INSTANCE_NAME);
+            if (metaElements.size() == 1) {
+                IAnswerData sa = metaElements.get(0).getValue();
                 if (sa != null) {
                     instanceName = sa.getDisplayText();
                 }
             }
 
             // timing element...
-            v = e.getChildrenWithName(AUDIT);
-            if (v.size() == 1) {
+            metaElements = meta.getChildrenWithName(AUDIT);
+            if (metaElements.size() == 1) {
 
-                TreeElement auditElement = v.get(0);
+                TreeElement auditElement = metaElements.get(0);
 
                 String locationPriority = auditElement.getBindAttributeValue(XML_OPENDATAKIT_NAMESPACE, "location-priority");
                 String locationMinInterval = auditElement.getBindAttributeValue(XML_OPENDATAKIT_NAMESPACE, "location-min-interval");

@@ -43,6 +43,8 @@ dependencies {
         exclude("com.google.firebase")
     }
 
+    implementation(project(":icons"))
+
     testImplementation(libs.hamcrest)
     testImplementation(libs.robolectric)
     testImplementation(libs.androidxTestExtJunit)

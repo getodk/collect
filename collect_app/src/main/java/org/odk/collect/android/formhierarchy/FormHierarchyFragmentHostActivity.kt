@@ -86,7 +86,6 @@ class FormHierarchyFragmentHostActivity : LocalizedActivity() {
     private val sessionId by lazy { intent.getStringExtra(EXTRA_SESSION_ID)!! }
     private val viewModelFactory by lazy {
         FormEntryViewModelFactory(
-            this,
             FormOpeningMode.EDIT_SAVED,
             sessionId,
             scheduler,

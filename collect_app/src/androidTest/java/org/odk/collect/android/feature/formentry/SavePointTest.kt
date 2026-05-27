@@ -256,6 +256,26 @@ class SavePointTest {
             .assertText("46")
     }
 
+    @Test
+    fun savepoint_doesNotPruneNonRelevantNodes() {
+        rule.setUpProjectAndCopyForm("one-question-relevance.xml")
+            .fillNewForm("one-question-relevance.xml", "One Question Relevance")
+            .clickOnText("Yes")
+            .swipeToNextQuestion("what is your age")
+            .answerQuestion("what is your age", "30")
+            .swipeToPreviousQuestion("Do you want to continue?")
+            .clickOnText("No")
+
+        recentAppsRule.leaveAndKillApp()
+
+        rule.fillNewFormWithSavepoint("one-question-relevance.xml")
+            .clickRecover(FormHierarchyPage("One Question Relevance"))
+            .clickOnQuestion("Do you want to continue?")
+            .clickOnText("Yes")
+            .swipeToNextQuestion("what is your age")
+            .assertAnswer("what is your age", "30")
+    }
+
     /**
      * Simulates a case where the process is killed without lifecycle clean up (like a phone
      * being battery dying).

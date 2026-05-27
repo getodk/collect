@@ -2,11 +2,11 @@
 
 <resources xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Changes to this theme should also be made in ComposeTheme.kt-->
     <style name="Theme.Collect" parent="Theme.Material3.DayNight.NoActionBar">
 
         <!-- Original AppCompat attributes. -->
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="colorSecondary">@color/colorPrimary</item>
         <item name="android:colorBackground">@color/colorSurface</item>
         <item name="colorError">@color/colorError</item>
@@ -150,7 +150,7 @@
 
     <style name="Theme.Collect.SplashScreen" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/colorSurface</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_screen_icon</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/s_time_logo</item>
         <item name="postSplashScreenTheme">@style/Theme.Collect</item>
     </style>
 

@@ -10,16 +10,21 @@ import org.mockito.Mockito.mock
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.storage.StoragePathProvider
+import org.odk.collect.android.support.async.TrackingCoroutineAndWorkManagerScheduler
 import org.odk.collect.android.version.VersionInformation
 import org.odk.collect.androidshared.system.BroadcastReceiverRegister
 import org.odk.collect.async.Scheduler
 import org.odk.collect.async.network.NetworkStateProvider
+import org.odk.collect.audioclips.AudioPlayerFactory
 import org.odk.collect.openrosa.http.OpenRosaHttpInterface
 import org.odk.collect.qrcode.BarcodeScannerViewContainer
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.testshared.FakeAudioPlayerFactory
 import org.odk.collect.testshared.FakeBarcodeScannerViewFactory
 import org.odk.collect.testshared.FakeBroadcastReceiverRegister
+import org.odk.collect.testshared.MockWebPageService
 import org.odk.collect.utilities.UserAgentProvider
+import org.odk.collect.webpage.WebPageService
 
 open class TestDependencies @JvmOverloads constructor(
     private val useRealServer: Boolean = false
@@ -29,12 +34,15 @@ open class TestDependencies @JvmOverloads constructor(
     @JvmField val storagePathProvider: StoragePathProvider = StoragePathProvider()
 
     val networkStateProvider: FakeNetworkStateProvider = FakeNetworkStateProvider()
-    val scheduler: TestScheduler = TestScheduler(networkStateProvider)
+    val scheduler: TrackingCoroutineAndWorkManagerScheduler =
+        TrackingCoroutineAndWorkManagerScheduler(networkStateProvider)
     val fakeBarcodeScannerViewFactory = FakeBarcodeScannerViewFactory()
     val broadcastReceiverRegister: FakeBroadcastReceiverRegister = FakeBroadcastReceiverRegister()
     val restrictionsManager: RestrictionsManager = mock<RestrictionsManager>().apply {
         whenever(applicationRestrictions).thenReturn(Bundle())
     }
+    val audioPlayerFactory = FakeAudioPlayerFactory()
+    val webPageService = MockWebPageService()
 
     override fun provideHttpInterface(
         mimeTypeMap: MimeTypeMap,
@@ -72,5 +80,13 @@ open class TestDependencies @JvmOverloads constructor(
 
     override fun providesRestrictionsManager(context: Context): RestrictionsManager {
         return restrictionsManager
+    }
+
+    override fun providesAudioPlayerFactory(scheduler: Scheduler): AudioPlayerFactory {
+        return audioPlayerFactory
+    }
+
+    override fun providesWebPageService(): WebPageService {
+        return webPageService
     }
 }

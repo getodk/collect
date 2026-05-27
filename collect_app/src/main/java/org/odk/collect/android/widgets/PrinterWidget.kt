@@ -25,7 +25,7 @@ class PrinterWidget(
         render()
     }
 
-    override fun onCreateAnswerView(context: Context, prompt: FormEntryPrompt, answerFontSize: Int): View {
+    override fun onCreateWidgetView(context: Context, prompt: FormEntryPrompt, answerFontSize: Int): View {
         val answerView = LayoutInflater.from(context).inflate(R.layout.printer_widget, null)
         answerView
             .findViewById<MultiClickSafeMaterialButton>(R.id.printer_button)

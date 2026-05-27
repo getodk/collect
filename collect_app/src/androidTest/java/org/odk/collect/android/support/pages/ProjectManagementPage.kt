@@ -17,20 +17,17 @@ class ProjectManagementPage : Page<ProjectManagementPage>() {
         return QRCodePage().assertOnPage()
     }
 
-    fun clickOnDeleteProject(): ProjectManagementPage {
-        scrollToRecyclerViewItemAndClickText(org.odk.collect.strings.R.string.delete_project)
-        return this
-    }
-
     fun deleteProject(): MainMenuPage {
         scrollToRecyclerViewItemAndClickText(org.odk.collect.strings.R.string.delete_project)
-        clickOnString(org.odk.collect.strings.R.string.delete_project_yes)
+        inputText(getTranslatedString(org.odk.collect.strings.R.string.delete_trigger))
+        clickOnString(org.odk.collect.strings.R.string.delete_project_confirm_button_text)
         return MainMenuPage()
     }
 
     fun deleteLastProject(): FirstLaunchPage {
         scrollToRecyclerViewItemAndClickText(org.odk.collect.strings.R.string.delete_project)
-        clickOnString(org.odk.collect.strings.R.string.delete_project_yes)
+        inputText("delete")
+        clickOnString(org.odk.collect.strings.R.string.delete_project_confirm_button_text)
         return FirstLaunchPage()
     }
 }

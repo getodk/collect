@@ -45,14 +45,8 @@ class LineDescriptionTest {
     }
 
     @Test
-    fun `getStrokeColor returns the default color when the passed one is invalid`() {
-        val lineDescription = LineDescription(strokeColor = "blah")
-        assertThat(lineDescription.getStrokeColor(), equalTo(MapConsts.DEFAULT_STROKE_COLOR))
-    }
-
-    @Test
-    fun `getStrokeColor returns custom color when it is valid`() {
-        val lineDescription = LineDescription(strokeColor = "#aaccee")
+    fun `getStrokeColor returns custom color`() {
+        val lineDescription = LineDescription(strokeColor = -5583634)
         assertThat(lineDescription.getStrokeColor(), equalTo(-5583634))
     }
 }

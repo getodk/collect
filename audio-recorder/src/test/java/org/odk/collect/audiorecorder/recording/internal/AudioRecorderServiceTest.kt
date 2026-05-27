@@ -12,9 +12,10 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.androidshared.ui.ReturnToAppActivity
+import org.odk.collect.androidshared.utils.InMemUniqueIdGenerator
+import org.odk.collect.androidshared.utils.UniqueIdGenerator
 import org.odk.collect.async.Scheduler
 import org.odk.collect.audiorecorder.AudioRecorderDependencyModule
-import org.odk.collect.audiorecorder.R
 import org.odk.collect.audiorecorder.recorder.Output
 import org.odk.collect.audiorecorder.recorder.Recorder
 import org.odk.collect.audiorecorder.recording.AudioRecorderService
@@ -46,6 +47,10 @@ class AudioRecorderServiceTest {
 
                 override fun providesScheduler(application: Application): Scheduler {
                     return scheduler
+                }
+
+                override fun providesUniqueIdGenerator(): UniqueIdGenerator {
+                    return InMemUniqueIdGenerator()
                 }
             }
         )

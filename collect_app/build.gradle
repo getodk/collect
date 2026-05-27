@@ -1,9 +1,11 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.kotlinKapt)
     alias(libs.plugins.kotlinParcelize)
     alias(libs.plugins.ossLicenses)
     alias(libs.plugins.safeargs)
+    alias(libs.plugins.composeCompiler)
 }
 apply from: '../config/quality.gradle'
 
@@ -43,31 +45,25 @@ def getMasterCommitCount = { ->
 }
 
 def getVersionName = { ->
-    try {
-        def stdout = new ByteArrayOutputStream()
-        exec {
-            switch (ant.properties.os) {
-                case 'windows':
-                    commandLine 'cmd', '/c', 'git', 'describe', '--tags', '--dirty', '--always'
-                    break
-                case 'unix':
-                    commandLine 'git', 'describe', '--tags', '--dirty', '--always'
-                    break
-            }
-            standardOutput = stdout
+    return providers.exec {
+        switch (ant.properties.os) {
+            case 'windows':
+                commandLine 'cmd', '/c', 'git', 'describe', '--tags', '--dirty', '--always'
+                break
+            case 'unix':
+                commandLine 'git', 'describe', '--tags', '--dirty', '--always'
+                break
         }
-        return stdout.toString().trim()
-    } catch (ignored) {
-        return null
-    }
+    }.getStandardOutput().getAsText().get().trim()
 }
 
 def secrets = getSecrets()
 def googleMapsApiKey = secrets.getProperty('GOOGLE_MAPS_API_KEY', '')
 def mapboxAccessToken = secrets.getProperty('MAPBOX_ACCESS_TOKEN', '')
-def entitiesFilterTestProjectUrl = secrets.getProperty('ENTITIES_FILTER_TEST_PROJECT_URL', '')
-def entitiesFilterSearchTestProjectUrl = secrets.getProperty('ENTITIES_FILTER_SEARCH_TEST_PROJECT_URL', '')
-def collectBenchmarksTestProjectUrl = secrets.getProperty('COLLECT_BENCHMARKS_TEST_PROJECT_URL', '')
+def entitiesFilterProjectUrl = secrets.getProperty('ENTITIES_FILTER_PROJECT_URL', '')
+def entitiesFilterSearchProjectUrl = secrets.getProperty('ENTITIES_FILTER_SEARCH_PROJECT_URL', '')
+def thousandMediaFileProjectUrl = secrets.getProperty('THOUSAND_MEDIA_FILE_PROJECT_URL', '')
+def thousandMediaFileEntityListProjectUrl = secrets.getProperty('THOUSAND_MEDIA_FILE_ENTITY_LIST_PROJECT_URL', '')
 
 android {
     compileSdk libs.versions.compileSdk.get().toInteger()
@@ -75,17 +71,21 @@ android {
     buildFeatures {
         viewBinding true
         buildConfig true
+        compose true
     }
 
     defaultConfig {
-        applicationId('org.odk.collect.android')
+        applicationId('com.sopami.collect.android')
         minSdk libs.versions.minSdk.get().toInteger()
         targetSdkVersion libs.versions.targetSdk.get().toInteger()
         versionCode project.hasProperty('versionCode') ? project.getProperties()['versionCode'].toInteger() : 5112
         versionName getVersionName()
         testInstrumentationRunner('androidx.test.runner.AndroidJUnitRunner')
         vectorDrawables.useSupportLibrary = true
-        archivesBaseName = 'ODK-Collect'
+    }
+
+    base {
+        archivesName = "STIME-Collect"
     }
 
     signingConfigs {
@@ -147,9 +147,10 @@ android {
             debuggable(true)
             resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
             resValue("string", "mapbox_access_token", mapboxAccessToken)
-            buildConfigField("String", "ENTITIES_FILTER_TEST_PROJECT_URL", "\"$entitiesFilterTestProjectUrl\"")
-            buildConfigField("String", "ENTITIES_FILTER_SEARCH_TEST_PROJECT_URL", "\"$entitiesFilterSearchTestProjectUrl\"")
-            buildConfigField("String", "COLLECT_BENCHMARKS_TEST_PROJECT_URL", "\"$collectBenchmarksTestProjectUrl\"")
+            buildConfigField("String", "ENTITIES_FILTER_PROJECT_URL", "\"$entitiesFilterProjectUrl\"")
+            buildConfigField("String", "ENTITIES_FILTER_SEARCH_PROJECT_URL", "\"$entitiesFilterSearchProjectUrl\"")
+            buildConfigField("String", "THOUSAND_MEDIA_FILE_PROJECT_URL", "\"$thousandMediaFileProjectUrl\"")
+            buildConfigField("String", "THOUSAND_MEDIA_FILE_ENTITY_LIST_PROJECT_URL", "\"$thousandMediaFileEntityListProjectUrl\"")
         }
     }
 
@@ -273,6 +274,7 @@ dependencies {
     implementation project(':db')
     implementation project(':open-rosa')
     implementation project(':mobile-device-management')
+    implementation project(':timedgrid')
 
     if (getSecrets().getProperty('MAPBOX_DOWNLOADS_TOKEN', '') != '') {
         implementation project(':mapbox')
@@ -323,11 +325,12 @@ dependencies {
     // Android Architecture Components:
     implementation libs.androidxLifecycleRuntimeKtx
     implementation libs.androidxLifecycleLivedataKtx
+    implementation libs.androidxLifecycleViewmodelCompose
     implementation libs.androidxViewpager2
 
     // Dagger:
     implementation libs.dagger
-    annotationProcessor libs.daggerCompiler
+    kapt libs.daggerCompiler
 
     // Needed for injection into Robolectric tests
     testAnnotationProcessor libs.daggerCompiler
@@ -345,6 +348,13 @@ dependencies {
     implementation libs.splashscreen
     implementation libs.androidxNavigationFragmentKtx
 
+    var composeBom = platform(libs.androidxComposeBom)
+    implementation(composeBom)
+    implementation(libs.androidXComposeMaterial)
+    implementation(libs.androidXConstraintLayoutCompose)
+    implementation(libs.androidXComposeMaterialIcons)
+    implementation(libs.androidXComposePreview)
+
     testImplementation project(':forms-test')
 
     // Testing-only dependencies
@@ -359,8 +369,8 @@ dependencies {
     testImplementation(project(":shadows"))
     testImplementation(project(":test-forms"))
 
+    testImplementation libs.androidXComposeUiTestJunit4
     testImplementation libs.robolectric
-
     testImplementation libs.androidxTestExtJunit
     testImplementation libs.androidxArchCoreTesting
 
@@ -373,6 +383,8 @@ dependencies {
     androidTestImplementation project(':androidtest')
     androidTestImplementation project(':test-forms')
 
+    androidTestImplementation(composeBom)
+    androidTestImplementation libs.androidXComposeUiTestJunit4
     androidTestImplementation libs.caverockAndroidsvg
     androidTestImplementation libs.mockitoAndroid
     androidTestImplementation libs.androidxTestExtJunit
@@ -394,6 +406,7 @@ dependencies {
 
     // Real LeakCanary for debug and selfSigned builds only: notifications, analysis, etc
     debugImplementation libs.leakcanary
+    debugImplementation(libs.androidXComposeTooling)
     selfSignedReleaseImplementation libs.leakcanary
 }
 

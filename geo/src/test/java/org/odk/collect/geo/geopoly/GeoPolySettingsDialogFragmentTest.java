@@ -6,7 +6,6 @@ import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertFalse;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.robolectric.Shadows.shadowOf;
 
@@ -36,14 +35,14 @@ public class GeoPolySettingsDialogFragmentTest {
 
     private FragmentManager fragmentManager;
     private GeoPolySettingsDialogFragment dialogFragment;
+    private GeoPolySettingsDialogFragment.SettingsDialogCallback callback;
 
     @Before
     public void setup() {
         FragmentActivity activity = RobolectricHelpers.createThemedActivity(FragmentActivity.class);
         fragmentManager = activity.getSupportFragmentManager();
-        dialogFragment = new GeoPolySettingsDialogFragment();
-
-        dialogFragment.callback = mock(GeoPolySettingsDialogFragment.SettingsDialogCallback.class);
+        callback = Mockito.mock(GeoPolySettingsDialogFragment.SettingsDialogCallback.class);
+        dialogFragment = new GeoPolySettingsDialogFragment(callback);
     }
 
     @Test
@@ -102,11 +101,11 @@ public class GeoPolySettingsDialogFragmentTest {
         dialog.getButton(DialogInterface.BUTTON_POSITIVE).performClick();
         RobolectricHelpers.runLooper();
 
-        InOrder orderVerifier = Mockito.inOrder(dialogFragment.callback);
-        orderVerifier.verify(dialogFragment.callback).updateRecordingMode(sampleId);
-        orderVerifier.verify(dialogFragment.callback).setIntervalIndex(2);
-        orderVerifier.verify(dialogFragment.callback).setAccuracyThresholdIndex(2);
-        orderVerifier.verify(dialogFragment.callback).startInput();
+        InOrder orderVerifier = Mockito.inOrder(callback);
+        orderVerifier.verify(callback).updateRecordingMode(sampleId);
+        orderVerifier.verify(callback).setIntervalIndex(2);
+        orderVerifier.verify(callback).setAccuracyThresholdIndex(2);
+        orderVerifier.verify(callback).startInput();
     }
 
     @Test
@@ -139,9 +138,9 @@ public class GeoPolySettingsDialogFragmentTest {
 
     @Test
     public void creatingDialog_showsCorrectView() {
-        when(dialogFragment.callback.getCheckedId()).thenReturn(sampleId);
-        when(dialogFragment.callback.getIntervalIndex()).thenReturn(2);
-        when(dialogFragment.callback.getAccuracyThresholdIndex()).thenReturn(2);
+        when(callback.getCheckedId()).thenReturn(sampleId);
+        when(callback.getIntervalIndex()).thenReturn(2);
+        when(callback.getAccuracyThresholdIndex()).thenReturn(2);
 
         dialogFragment.show(fragmentManager, "TAG");
         RobolectricHelpers.runLooper();

@@ -75,6 +75,8 @@ open class StubFormController : FormController {
 
     override fun answerQuestion(index: FormIndex?, data: IAnswerData?): Int = -1
 
+    override fun validateAnswerConstraint(index: FormIndex, answer: IAnswerData?): ValidationResult = SuccessValidationResult
+
     @Throws(JavaRosaException::class)
     override fun validateAnswers(moveToInvalidIndex: Boolean): ValidationResult = SuccessValidationResult
 

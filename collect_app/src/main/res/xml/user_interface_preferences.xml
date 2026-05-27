@@ -4,14 +4,6 @@
     android:title="@string/client">
 
     <ListPreference
-        android:dialogTitle="@string/app_theme"
-        android:entries="@array/theme_entries"
-        android:entryValues="@array/theme_entry_values"
-        android:key="appTheme"
-        android:title="@string/app_theme"
-        app:iconSpaceReserved="false" />
-
-    <ListPreference
         android:dialogTitle="@string/language"
         android:key="app_language"
         android:title="@string/language"

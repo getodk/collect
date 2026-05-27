@@ -1,7 +1,10 @@
 package org.odk.collect.android.widgets.utilities;
 
+import static org.odk.collect.android.widgets.utilities.BindAttributes.QUALITY;
+
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
+import org.odk.collect.android.widgets.utilities.BindAttributes.Quality;
 
 public class RecordingRequesterProvider {
 
@@ -14,11 +17,11 @@ public class RecordingRequesterProvider {
     }
 
     public RecordingRequester create(FormEntryPrompt prompt, boolean externalRecorderPreferred) {
-        String audioQuality = FormEntryPromptUtils.getBindAttribute(prompt, "quality");
+        String audioQuality = FormEntryPromptUtils.getBindAttribute(prompt, QUALITY);
 
-        if (audioQuality != null && (audioQuality.equals("normal") || audioQuality.equals("voice-only") || audioQuality.equals("low"))) {
+        if (audioQuality != null && (audioQuality.equals(Quality.NORMAL.getValue()) || audioQuality.equals(Quality.VOICE_ONLY.getValue()) || audioQuality.equals(Quality.LOW.getValue()))) {
             return internalRecordingRequester;
-        } else if (audioQuality != null && audioQuality.equals("external")) {
+        } else if (audioQuality != null && audioQuality.equals(Quality.EXTERNAL.getValue())) {
             return externalAppRecordingRequester;
         } else if (externalRecorderPreferred) {
             return externalAppRecordingRequester;

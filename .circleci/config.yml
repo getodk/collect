@@ -7,40 +7,39 @@ references:
   android_config_small: &android_config_small
     working_directory: ~/work
     docker:
-      - image: cimg/android:2025.04
+      - image: cimg/android:2025.09
     resource_class: small
 
   android_config: &android_config
     working_directory: ~/work
     docker:
-      - image: cimg/android:2025.04
-    resource_class: medium+
+      - image: cimg/android:2025.09
+    resource_class: large
 
   android_config_large: &android_config_large
     working_directory: ~/work
     docker:
-      - image: cimg/android:2025.04
-    resource_class: large
+      - image: cimg/android:2025.09
+    resource_class: xlarge
+
+  gcloud_config: &gcloud_config
+    working_directory: ~/work
+    docker:
+      - image: cimg/gcp:2025.01
+    resource_class: small
 
 jobs:
   compile:
     <<: *android_config
     steps:
       - checkout
-      - run:
-          name: Generate combined build.gradle file for cache key
-          command: cat build.gradle */build.gradle */build.gradle.kts .circleci/config.yml gradle/libs.versions.toml > deps.txt
       - restore_cache:
           keys:
-            - compile-deps-{{ checksum "deps.txt" }}
-            - compile-deps-
-      - restore_cache:
-          keys:
-            - gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - compile-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - compile-
       - run:
           name: Copy gradle config
-          command: mkdir -p ~/.gradle && cp .circleci/gradle-compile.properties ~/.gradle/gradle.properties
-
+          command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
       - run:
           name: Download Robolectric deps
           command: ./download-robolectric-deps.sh
@@ -51,29 +50,30 @@ jobs:
 
       - save_cache:
           paths:
+            - ~/.gradle/caches
             - ~/.gradle/wrapper
-          key: gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+          key: compile-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
       - save_cache:
           paths:
-            - ~/.gradle/caches/modules-2/files-2.1
-          key: compile-deps-{{ checksum "deps.txt" }}
+            - ~/work
+          key: workflow-{{ .Environment.CIRCLE_WORKFLOW_ID }}
+
       - persist_to_workspace:
           root: ~/work
           paths:
-            - .
+            - collect_app/build/outputs/apk
 
   create_dependency_backup:
-    <<: *android_config
+    <<: *android_config_small
     steps:
-      - attach_workspace:
-          at: ~/work
+      - checkout
       - restore_cache:
           keys:
-            - compile-deps-{{ checksum "deps.txt" }}
-            - compile-deps-
+            - workflow-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       - restore_cache:
           keys:
-            - gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - compile-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - compile-
 
       - run:
           name: Create Maven repo from dependencies
@@ -85,21 +85,20 @@ jobs:
           path: maven.tar
 
   check_quality:
-    <<: *android_config_large
+    <<: *android_config
     steps:
-      - attach_workspace:
-          at: ~/work
+      - checkout
       - restore_cache:
           keys:
-            - compile-deps-{{ checksum "deps.txt" }}
-            - compile-deps-
+            - workflow-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       - restore_cache:
           keys:
-            - gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - compile-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - compile-
 
       - run:
           name: Copy gradle config
-          command: mkdir -p ~/.gradle && cp .circleci/gradle-large.properties ~/.gradle/gradle.properties
+          command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
 
       - run:
           name: Run code quality checks
@@ -113,16 +112,16 @@ jobs:
     <<: *android_config
     parallelism: 4
     steps:
-      - attach_workspace:
-          at: ~/work
+      - checkout
       - restore_cache:
           keys:
-            - test-modules-deps-{{ checksum "deps.txt" }}
-            - test-modules-deps-
-            - compile-deps-
+            - workflow-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       - restore_cache:
           keys:
-            - gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - test_modules-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - test_modules
+            - compile-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - compile-
 
       - run:
           name: Copy gradle config
@@ -145,23 +144,24 @@ jobs:
 
       - save_cache:
           paths:
-            - ~/.gradle/caches/modules-2/files-2.1
-          key: test-modules-deps-{{ checksum "deps.txt" }}
+            - ~/.gradle/caches
+            - ~/.gradle/wrapper
+          key: test_modules-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
 
   test_app:
     <<: *android_config
     parallelism: 4
     steps:
-      - attach_workspace:
-          at: ~/work
+      - checkout
       - restore_cache:
           keys:
-            - test-app-deps-{{ checksum "deps.txt" }}
-            - test-app-deps-
-            - compile-deps-
+            - workflow-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       - restore_cache:
           keys:
-            - gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - test_app-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - test_app-
+            - compile-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - compile-
 
       - run:
           name: Copy gradle config
@@ -194,22 +194,23 @@ jobs:
 
       - save_cache:
           paths:
-            - ~/.gradle/caches/modules-2/files-2.1
-          key: test-app-deps-{{ checksum "deps.txt" }}
+            - ~/.gradle/caches
+            - ~/.gradle/wrapper
+          key: test_app-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
 
   build_instrumented:
     <<: *android_config_large
     steps:
-      - attach_workspace:
-          at: ~/work
+      - checkout
       - restore_cache:
           keys:
-            - intrumented-deps-{{ checksum "deps.txt" }}
-            - intrumented-deps-
-            - compile-deps-
+            - workflow-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       - restore_cache:
           keys:
-            - gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - build_instrumented-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - build_instrumented-
+            - compile-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - compile-
 
       - run:
           name: Copy gradle config
@@ -221,38 +222,52 @@ jobs:
 
       - save_cache:
           paths:
-            - ~/.gradle/caches/modules-2/files-2.1
-          key: intrumented-deps-{{ checksum "deps.txt" }}
+            - ~/.gradle/caches
+            - ~/.gradle/wrapper
+          key: build_instrumented-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
 
       - persist_to_workspace:
           root: ~/work
           paths:
-            - .
+            - collect_app/build/outputs/apk
 
   build_release:
     <<: *android_config
     steps:
-      - attach_workspace:
-          at: ~/work
+      - checkout
       - restore_cache:
           keys:
-            - compile-deps-{{ checksum "deps.txt" }}
-            - compile-deps
+            - workflow-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       - restore_cache:
           keys:
-            - gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - compile-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - compile-
 
       - run:
           name: Copy gradle config
           command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
 
       - run:
+          name: Set up secrets.properties for Maps frameworks
+          command: |
+            if [[ -n "$GOOGLE_MAPS_API_KEY" ]]; then \
+              echo "GOOGLE_MAPS_API_KEY=$GOOGLE_MAPS_API_KEY" >> secrets.properties
+              echo "MAPBOX_ACCESS_TOKEN=$MAPBOX_ACCESS_TOKEN" >> secrets.properties
+              echo "MAPBOX_DOWNLOADS_TOKEN=$MAPBOX_DOWNLOADS_TOKEN" >> secrets.properties
+            fi
+
+      - run:
           name: Assemble self signed release build
           command: ./gradlew assembleSelfSignedRelease
 
       - run:
-          name: Check APK size isn't larger than 12.1MB
-          command: ./check-size.sh
+          name: Check APK size hasn't increased
+          command: |
+            if [[ -n "$GOOGLE_MAPS_API_KEY" ]]; then \
+              ./check-size.sh 23300000
+            else
+              ./check-size.sh 14000000
+            fi
 
       - run:
           name: Copy APK to predictable path for artifact storage
@@ -261,31 +276,10 @@ jobs:
           path: selfSignedRelease.apk
 
   test_smoke_instrumented:
-    <<: *android_config
+    <<: *gcloud_config
     steps:
       - attach_workspace:
-          at: ~/work
-      - restore_cache:
-          keys:
-            - intrumented-deps-{{ checksum "deps.txt" }}
-            - intrumented-deps
-            - compile-deps-
-      - restore_cache:
-          keys:
-            - gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
-
-      - run:
-          name: Copy gradle config
-          command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
-
-      - run:
-          name: Assemble test build
-          command: ./gradlew assembleDebug assembleDebugAndroidTest
-
-      - save_cache:
-          paths:
-            - ~/.gradle/caches/modules-2/files-2.1
-          key: intrumented-deps-{{ checksum "deps.txt" }}
+          at: /tmp/workspace
 
       - run:
           name: Authorize gcloud
@@ -301,8 +295,8 @@ jobs:
             if [[ "$CIRCLE_PROJECT_USERNAME" == "getodk" ]]; then \
               echo "y" | gcloud beta firebase test android run \
               --type instrumentation \
-              --app collect_app/build/outputs/apk/debug/*.apk \
-              --test collect_app/build/outputs/apk/androidTest/debug/*.apk \
+              --app /tmp/workspace/collect_app/build/outputs/apk/debug/ODK-Collect-debug.apk \
+              --test /tmp/workspace/collect_app/build/outputs/apk/androidTest/debug/ODK-Collect-debug-androidTest.apk \
               --device model=MediumPhone.arm,version=34,locale=en,orientation=portrait \
               --results-bucket opendatakit-collect-test-results \
               --directories-to-pull /sdcard --timeout 20m \
@@ -311,15 +305,15 @@ jobs:
           no_output_timeout: 25m
 
   test_instrumented:
-    <<: *android_config_small
+    <<: *gcloud_config
     steps:
       - attach_workspace:
-          at: ~/work
+          at: /tmp/workspace
 
       - run:
           name: Authorize gcloud
           command: |
-            if [[ "$CIRCLE_PROJECT_USERNAME" == "getodk" ]]; then \
+            if [[ -n "$GCLOUD_SERVICE_KEY" ]]; then \
               gcloud config set project api-project-322300403941
               echo $GCLOUD_SERVICE_KEY | base64 --decode > client-secret.json
               gcloud auth activate-service-account --key-file client-secret.json
@@ -327,25 +321,32 @@ jobs:
       - run:
           name: Run integration tests
           command: |
-            if [[ "$CIRCLE_PROJECT_USERNAME" == "getodk" ]]; then \
-              echo "y" | gcloud beta firebase test android run \
+            echo "y" | gcloud beta firebase test android run \
               --type instrumentation \
               --num-uniform-shards=25 \
-              --app collect_app/build/outputs/apk/debug/*.apk \
-              --test collect_app/build/outputs/apk/androidTest/debug/*.apk \
+              --app /tmp/workspace/collect_app/build/outputs/apk/debug/ODK-Collect-debug.apk \
+              --test /tmp/workspace/collect_app/build/outputs/apk/androidTest/debug/ODK-Collect-debug-androidTest.apk \
               --device model=MediumPhone.arm,version=34,locale=en,orientation=portrait \
               --results-bucket opendatakit-collect-test-results \
               --directories-to-pull /sdcard --timeout 20m \
               --test-targets "notPackage org.odk.collect.android.regression" \
               --test-targets "notPackage org.odk.collect.android.benchmark"
-            fi
           no_output_timeout: 25m
 
 workflows:
   version: 2
-  commit:
+  pr:
     jobs:
-      - compile
+      - hold_pr:
+          type: approval
+          filters:
+            branches:
+              ignore:
+                - master
+                - /^v\d+\.\d+.x$/
+      - compile:
+          requires:
+            - hold_pr
       - check_quality:
           requires:
             - compile
@@ -361,17 +362,33 @@ workflows:
       - build_instrumented:
           requires:
             - compile
-          filters:
-            branches:
-              ignore:
-                - master
-      - test_smoke_instrumented:
-          requires:
-            - compile
+
+  master:
+    jobs:
+      - compile:
           filters:
             branches:
               only:
                 - master
+                - /^v\d+\.\d+.x$/
+      - check_quality:
+          requires:
+            - compile
+      - test_modules:
+          requires:
+            - compile
+      - test_app:
+          requires:
+            - compile
+      - build_release:
+          requires:
+            - compile
+      - build_instrumented:
+          requires:
+            - compile
+      - test_smoke_instrumented:
+          requires:
+            - build_instrumented
 
   nightly:
     triggers:
@@ -395,7 +412,7 @@ workflows:
       - compile:
           filters:
             tags:
-              only: /^v((20)[0-9]{2})\.\d+\.\d+$/ # matches semvers like v1.2.3
+              only: /^v\d+\.\d+.\d+$/
             branches:
               ignore: /.*/
       - create_dependency_backup:
@@ -403,7 +420,7 @@ workflows:
             - compile
           filters:
             tags:
-              only: /^v((20)[0-9]{2})\.\d+\.\d+$/ # matches semvers like v1.2.3
+              only: /^v\d+\.\d+.\d+$/
             branches:
               ignore: /.*/
 

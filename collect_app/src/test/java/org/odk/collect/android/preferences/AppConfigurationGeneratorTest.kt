@@ -99,7 +99,7 @@ class AppConfigurationGeneratorTest {
     fun `Only saved settings should be included in json`() {
         val generalPrefs = mapOf<String, Any>(
             ProjectKeys.KEY_DELETE_AFTER_SEND to true,
-            ProjectKeys.KEY_APP_THEME to "dark_theme"
+            ProjectKeys.KEY_GUIDANCE_HINT to "no"
         )
 
         val adminPrefs = mapOf<String, Any>(
@@ -118,7 +118,7 @@ class AppConfigurationGeneratorTest {
     @Test
     fun `Saved but default settings should not be included in json`() {
         val generalPrefs = Defaults.unprotected.filter {
-            it.key == ProjectKeys.KEY_DELETE_AFTER_SEND || it.key == ProjectKeys.KEY_APP_THEME
+            it.key == ProjectKeys.KEY_DELETE_AFTER_SEND || it.key == ProjectKeys.KEY_GUIDANCE_HINT
         }
 
         val adminPrefs = Defaults.protected.filter {

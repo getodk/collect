@@ -14,6 +14,7 @@ import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationVi
 import org.odk.collect.android.formentry.questions.AnswersProvider
 import org.odk.collect.android.formhierarchy.FormHierarchyFragmentHostActivity
 import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity
+import org.odk.collect.android.utilities.ActionRegister
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.androidshared.system.PlayServicesChecker
 import org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing
@@ -33,7 +34,8 @@ class FormEntryMenuProvider(
     private val backgroundLocationViewModel: BackgroundLocationViewModel,
     private val backgroundAudioViewModel: BackgroundAudioViewModel,
     private val settingsProvider: SettingsProvider,
-    private val formEntryMenuClickListener: FormEntryMenuClickListener
+    private val formEntryMenuClickListener: FormEntryMenuClickListener,
+    private val beforeMenuItemClick: () -> Boolean
 ) : MenuProvider {
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.form_menu, menu)
@@ -95,6 +97,10 @@ class FormEntryMenuProvider(
             return true
         }
 
+        if (!beforeMenuItemClick()) {
+            return true
+        }
+
         return when (item.itemId) {
             R.id.menu_add_repeat -> {
                 if (audioRecorder.isRecording() && !backgroundAudioViewModel.isBackgroundRecording) {
@@ -121,6 +127,8 @@ class FormEntryMenuProvider(
                 true
             }
             R.id.menu_goto -> {
+                ActionRegister.actionDetected()
+
                 if (audioRecorder.isRecording() && !backgroundAudioViewModel.isBackgroundRecording) {
                     showIfNotShowing(RecordingWarningDialogFragment::class.java, activity.supportFragmentManager)
                 } else {
@@ -154,7 +162,7 @@ class FormEntryMenuProvider(
             }
             R.id.menu_validate -> {
                 formEntryViewModel.saveScreenAnswersToFormController(answersProvider.answers, false)
-                formEntryViewModel.validate()
+                formEntryViewModel.validateForm()
                 true
             }
             R.id.menu_languages -> {

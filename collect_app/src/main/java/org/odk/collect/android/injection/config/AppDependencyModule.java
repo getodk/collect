@@ -51,7 +51,6 @@ import org.odk.collect.android.formlists.blankformlist.BlankFormListViewModel;
 import org.odk.collect.android.formmanagement.CollectFormEntryControllerFactory;
 import org.odk.collect.android.formmanagement.FormsDataService;
 import org.odk.collect.android.formmanagement.OpenRosaClientProvider;
-import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.geo.MapConfiguratorProvider;
 import org.odk.collect.android.geo.MapFragmentFactoryImpl;
 import org.odk.collect.android.instancemanagement.InstancesDataService;
@@ -87,20 +86,23 @@ import org.odk.collect.android.utilities.SavepointsRepositoryProvider;
 import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.version.VersionInformation;
+import org.odk.collect.android.widgets.utilities.ViewModelAudioPlayerFactory;
 import org.odk.collect.androidshared.bitmap.ImageCompressor;
 import org.odk.collect.androidshared.system.BroadcastReceiverRegister;
 import org.odk.collect.androidshared.system.BroadcastReceiverRegisterImpl;
 import org.odk.collect.androidshared.system.IntentLauncher;
 import org.odk.collect.androidshared.system.IntentLauncherImpl;
 import org.odk.collect.androidshared.utils.ScreenUtils;
+import org.odk.collect.androidshared.utils.SettingsUniqueIdGenerator;
+import org.odk.collect.androidshared.utils.UniqueIdGenerator;
 import org.odk.collect.async.CoroutineAndWorkManagerScheduler;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.async.network.ConnectivityProvider;
 import org.odk.collect.async.network.NetworkStateProvider;
+import org.odk.collect.audioclips.AudioPlayerFactory;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.recording.AudioRecorderFactory;
 import org.odk.collect.entities.storage.EntitiesRepository;
-import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.imageloader.GlideImageLoader;
 import org.odk.collect.imageloader.ImageLoader;
 import org.odk.collect.location.GoogleFusedLocationClient;
@@ -121,7 +123,6 @@ import org.odk.collect.openrosa.http.okhttp.OkHttpConnection;
 import org.odk.collect.permissions.ContextCompatPermissionChecker;
 import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.permissions.PermissionsProvider;
-import org.odk.collect.projects.Project;
 import org.odk.collect.projects.ProjectCreator;
 import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.projects.SettingsConnectionMatcher;
@@ -140,7 +141,8 @@ import org.odk.collect.settings.keys.MetaKeys;
 import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.shared.strings.UUIDGenerator;
 import org.odk.collect.utilities.UserAgentProvider;
-import org.odk.collect.webpage.ExternalWebPageHelper;
+import org.odk.collect.webpage.CustomTabsWebPageService;
+import org.odk.collect.webpage.WebPageService;
 
 import java.io.File;
 
@@ -327,15 +329,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public ServerFormsDetailsFetcher providesServerFormDetailsFetcher(FormsRepositoryProvider formsRepositoryProvider, OpenRosaClientProvider formSourceProvider, ProjectsDataService projectsDataService) {
-        Project.Saved currentProject = projectsDataService.requireCurrentProject();
-        FormsRepository formsRepository = formsRepositoryProvider.create(currentProject.getUuid());
-        return new ServerFormsDetailsFetcher(formsRepository, formSourceProvider.create(currentProject.getUuid()));
-    }
-
-    @Provides
-    public Notifier providesNotifier(Application application, SettingsProvider settingsProvider, ProjectsRepository projectsRepository) {
-        return new NotificationManagerNotifier(application, settingsProvider, projectsRepository);
+    public Notifier providesNotifier(Application application, SettingsProvider settingsProvider, ProjectsRepository projectsRepository, UniqueIdGenerator uniqueIdGenerator) {
+        return new NotificationManagerNotifier(application, settingsProvider, projectsRepository, uniqueIdGenerator);
     }
 
     @Provides
@@ -387,8 +382,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public ExternalWebPageHelper providesExternalWebPageHelper() {
-        return new ExternalWebPageHelper();
+    public WebPageService providesWebPageService() {
+        return CustomTabsWebPageService.INSTANCE;
     }
 
     @Provides
@@ -528,13 +523,13 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public ApplicationInitializer providesApplicationInitializer(Application context, PropertyManager propertyManager, Analytics analytics, UpgradeInitializer upgradeInitializer, AnalyticsInitializer analyticsInitializer, ProjectsRepository projectsRepository, SettingsProvider settingsProvider, MapsInitializer mapsInitializer, EntitiesRepositoryProvider entitiesRepositoryProvider, ProjectsDataService projectsDataService) {
-        return new ApplicationInitializer(context, propertyManager, analytics, upgradeInitializer, analyticsInitializer, mapsInitializer, projectsRepository, settingsProvider, entitiesRepositoryProvider, projectsDataService);
+    public ApplicationInitializer providesApplicationInitializer(Application context, PropertyManager propertyManager, Analytics analytics, UpgradeInitializer upgradeInitializer, AnalyticsInitializer analyticsInitializer, ProjectsRepository projectsRepository, SettingsProvider settingsProvider, MapsInitializer mapsInitializer, EntitiesRepositoryProvider entitiesRepositoryProvider, ProjectsDataService projectsDataService, Scheduler scheduler, InstancesRepositoryProvider instancesRepositoryProvider, FormsRepositoryProvider formsRepositoryProvider) {
+        return new ApplicationInitializer(context, propertyManager, analytics, upgradeInitializer, analyticsInitializer, mapsInitializer, projectsRepository, settingsProvider, entitiesRepositoryProvider, projectsDataService, scheduler, instancesRepositoryProvider, formsRepositoryProvider);
     }
 
     @Provides
-    public ProjectDeleter providesProjectDeleter(ProjectsRepository projectsRepository, ProjectsDataService projectsDataService, FormUpdateScheduler formUpdateScheduler, InstanceSubmitScheduler instanceSubmitScheduler, InstancesRepositoryProvider instancesRepositoryProvider, StoragePathProvider storagePathProvider, ChangeLockProvider changeLockProvider, SettingsProvider settingsProvider) {
-        return new ProjectDeleter(projectsRepository, projectsDataService, formUpdateScheduler, instanceSubmitScheduler, instancesRepositoryProvider, storagePathProvider, changeLockProvider, settingsProvider);
+    public ProjectDeleter providesProjectDeleter(ProjectsRepository projectsRepository, ProjectsDataService projectsDataService, FormUpdateScheduler formUpdateScheduler, InstanceSubmitScheduler instanceSubmitScheduler, StoragePathProvider storagePathProvider, SettingsProvider settingsProvider) {
+        return new ProjectDeleter(projectsRepository, projectsDataService, formUpdateScheduler, instanceSubmitScheduler, storagePathProvider, settingsProvider);
     }
 
     @Provides
@@ -590,8 +585,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public BlankFormListViewModel.Factory providesBlankFormListViewModel(FormsRepositoryProvider formsRepositoryProvider, InstancesRepositoryProvider instancesRepositoryProvider, Application application, FormsDataService formsDataService, Scheduler scheduler, SettingsProvider settingsProvider, ChangeLockProvider changeLockProvider, ProjectsDataService projectsDataService) {
-        return new BlankFormListViewModel.Factory(instancesRepositoryProvider.create(), application, formsDataService, scheduler, settingsProvider.getUnprotectedSettings(), projectsDataService.requireCurrentProject().getUuid());
+    public BlankFormListViewModel.Factory providesBlankFormListViewModel(InstancesRepositoryProvider instancesRepositoryProvider, Application application, FormsDataService formsDataService, Scheduler scheduler, SettingsProvider settingsProvider, ProjectsDataService projectsDataService, UniqueIdGenerator uniqueIdGenerator) {
+        return new BlankFormListViewModel.Factory(instancesRepositoryProvider.create(), application, formsDataService, scheduler, settingsProvider.getUnprotectedSettings(), projectsDataService.requireCurrentProject().getUuid(), uniqueIdGenerator);
     }
 
     @Provides
@@ -651,5 +646,16 @@ public class AppDependencyModule {
     @Provides
     public BarcodeScannerViewContainer.Factory providesBarcodeScannerViewFactory(SettingsProvider settingsProvider) {
         return new SettingsBarcodeScannerViewFactory(settingsProvider.getUnprotectedSettings());
+    }
+
+    @Provides
+    public AudioPlayerFactory providesAudioPlayerFactory(Scheduler scheduler) {
+        return new ViewModelAudioPlayerFactory(scheduler);
+    }
+
+    @Provides
+    @Singleton
+    public UniqueIdGenerator providesUniqueIdGenerator(SettingsProvider settingsProvider) {
+        return new SettingsUniqueIdGenerator(settingsProvider.getMetaSettings());
     }
 }

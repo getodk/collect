@@ -5,9 +5,12 @@ object DataKeys {
     const val INSTANCES_EDITABLE_COUNT = "instancesEditableCount"
     const val INSTANCES_SENDABLE_COUNT = "instancesSendableCount"
     const val INSTANCES_SENT_COUNT = "instancesSentCount"
+    const val INSTANCES_SUCCESSFULLY_SENT_COUNT = "instancesSuccessfullySentCount"
+    const val INSTANCES_UNSENT_COUNT = "instancesUnsentCount"
     const val INSTANCES = "instances"
 
     const val FORMS = "forms"
+    const val FORMS_COUNT = "formsCount"
     const val SYNC_STATUS_SYNCING = "syncStatusSyncing"
     const val SYNC_STATUS_ERROR = "syncStatusError"
     const val DISK_ERROR = "diskError"

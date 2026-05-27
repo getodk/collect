@@ -42,10 +42,10 @@ class FormListSortingAdapter(
     }
 
     private fun selectItem(binding: SortItemLayoutBinding) {
-        binding.title.setTextColor(getThemeAttributeValue(binding.root.context, com.google.android.material.R.attr.colorAccent))
+        binding.title.setTextColor(getThemeAttributeValue(binding.root.context, androidx.appcompat.R.attr.colorPrimary))
         DrawableCompat.setTintList(
             binding.icon.drawable,
-            ColorStateList.valueOf(getThemeAttributeValue(binding.root.context, com.google.android.material.R.attr.colorAccent))
+            ColorStateList.valueOf(getThemeAttributeValue(binding.root.context, androidx.appcompat.R.attr.colorPrimary))
         )
     }
 

@@ -157,7 +157,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
 
             deleteInstanceFiles(instance);
         } catch (SQLiteConstraintException e) {
-            throw new IntegrityException();
+            throw new IntegrityException(e.getMessage());
         }
     }
 
@@ -176,7 +176,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
                 deleteInstanceFiles(instance);
             }
         } catch (SQLiteConstraintException e) {
-            throw new IntegrityException();
+            throw new IntegrityException(e.getMessage());
         }
     }
 
@@ -286,7 +286,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
                     values
             );
         } catch (SQLiteConstraintException e) {
-            throw new IntegrityException();
+            throw new IntegrityException(e.getMessage());
         }
     }
 

@@ -21,10 +21,9 @@ class ZxingBarcodeScannerViewFactory : BarcodeScannerViewContainer.Factory {
         activity: Activity,
         lifecycleOwner: LifecycleOwner,
         qrOnly: Boolean,
-        prompt: String,
         useFrontCamera: Boolean
     ): BarcodeScannerView {
-        return ZxingBarcodeScannerView(activity, lifecycleOwner, qrOnly, prompt, useFrontCamera)
+        return ZxingBarcodeScannerView(activity, lifecycleOwner, qrOnly, useFrontCamera)
     }
 }
 
@@ -33,7 +32,6 @@ private class ZxingBarcodeScannerView(
     private val activity: Activity,
     private val lifecycleOwner: LifecycleOwner,
     private val qrOnly: Boolean,
-    private val prompt: String,
     private val useFrontCamera: Boolean
 ) : BarcodeScannerView(activity) {
 
@@ -50,8 +48,7 @@ private class ZxingBarcodeScannerView(
         val captureManager = getCaptureManager(
             activity,
             binding.barcodeView,
-            supportedFormats,
-            prompt
+            supportedFormats
         )
 
         lifecycleOwner.lifecycle.addObserver(object : DefaultLifecycleObserver {
@@ -100,6 +97,14 @@ private class ZxingBarcodeScannerView(
                 torchListener.onTorchOff()
             }
         })
+    }
+
+    override fun supportsFullScreenViewFinder(): Boolean {
+        return false
+    }
+
+    override fun setFullScreenViewFinder(fullScannerViewFinder: Boolean) {
+        // Ignored
     }
 
     private fun getCaptureManager(
