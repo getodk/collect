@@ -1,0 +1,47 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./gradlew *)",
+      "Bash(git fetch *)",
+      "Bash(git log *)",
+      "Bash(git diff *)",
+      "Bash(git status*)",
+      "Bash(git show *)",
+      "Bash(git branch *)",
+      "Bash(git tag *)",
+      "Bash(git checkout *)",
+      "Bash(git merge *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push origin setup/* )",
+      "Bash(git push origin fix/* )",
+      "Bash(git push origin feat/* )",
+      "Bash(git push origin sync/* )",
+      "Bash(git push origin chore/* )",
+      "Bash(git rm *)",
+      "Bash(gh pr create*)",
+      "Bash(gh pr view*)",
+      "Bash(gh pr list*)",
+      "Bash(adb devices*)",
+      "Bash(adb install*)",
+      "Bash(adb shell am start*)",
+      "Bash(adb shell am force-stop*)",
+      "Bash(adb shell pm clear*)",
+      "Bash(adb shell input*)",
+      "Bash(adb logcat*)",
+      "Bash(adb exec-out screencap*)",
+      "Bash(~/Library/Android/sdk/platform-tools/adb *)",
+      "Bash(~/Library/Android/sdk/emulator/emulator *)",
+      "Bash(find . *)",
+      "Bash(grep *)",
+      "Bash(ls *)",
+      "Bash(cat *)"
+    ],
+    "deny": [
+      "Bash(git push origin master)",
+      "Bash(git push origin main)",
+      "Bash(git push --force*)",
+      "Bash(git reset --hard*)"
+    ]
+  }
+}
