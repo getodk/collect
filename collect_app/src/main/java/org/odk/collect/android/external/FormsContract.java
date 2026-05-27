@@ -18,6 +18,7 @@ package org.odk.collect.android.external;
 
 import android.net.Uri;
 
+import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.database.forms.DatabaseFormColumns;
 
 /**
@@ -29,7 +30,7 @@ import org.odk.collect.android.database.forms.DatabaseFormColumns;
  */
 public final class FormsContract {
 
-    static final String AUTHORITY = "org.odk.collect.android.provider.odk.forms";
+    static final String AUTHORITY = BuildConfig.APPLICATION_ID + ".provider.odk.forms";
     public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.odk.form";
     public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.odk.form";
 
