@@ -225,17 +225,20 @@ class InstancesDataServiceTest {
         instancesRepository.save(InstanceFixtures.instance(status = STATUS_COMPLETE))
         instancesRepository.save(InstanceFixtures.instance(status = STATUS_SUBMITTED))
         instancesRepository.save(InstanceFixtures.instance(status = STATUS_INCOMPLETE))
+        instancesRepository.save(InstanceFixtures.instance(status = STATUS_SUBMISSION_FAILED))
 
         instancesDataService.update(projectId)
         assertThat(
             instancesDataService.getInstances(projectId).value,
             equalTo(instancesRepository.all)
         )
-        assertThat(instancesDataService.getSentCount(projectId).value, equalTo(1))
+        assertThat(instancesDataService.getSentCount(projectId).value, equalTo(2))
+        assertThat(instancesDataService.getSuccessfullySentCount(projectId).value, equalTo(1))
         assertThat(instancesDataService.getEditableCount(projectId).value, equalTo(1))
-        assertThat(instancesDataService.getSendableCount(projectId).value, equalTo(1))
+        assertThat(instancesDataService.getSendableCount(projectId).value, equalTo(2))
         assertThat(instancesDataService.getInstances("otherProjectId").value, equalTo(emptyList()))
         assertThat(instancesDataService.getSentCount("otherProjectId").value, equalTo(0))
+        assertThat(instancesDataService.getSuccessfullySentCount("otherProjectId").value, equalTo(0))
         assertThat(instancesDataService.getEditableCount("otherProjectId").value, equalTo(0))
         assertThat(instancesDataService.getSendableCount("otherProjectId").value, equalTo(0))
     }

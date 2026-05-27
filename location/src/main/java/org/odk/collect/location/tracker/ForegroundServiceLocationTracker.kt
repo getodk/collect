@@ -10,20 +10,23 @@ import android.content.Intent
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
+import kotlinx.coroutines.flow.StateFlow
 import org.odk.collect.androidshared.data.getState
 import org.odk.collect.androidshared.ui.ReturnToAppActivity
+import org.odk.collect.androidshared.utils.UniqueIdGenerator
 import org.odk.collect.location.Location
 import org.odk.collect.location.LocationClient
 import org.odk.collect.location.LocationClientProvider
-import org.odk.collect.location.R
+import org.odk.collect.location.LocationDependencyComponentProvider
 import org.odk.collect.strings.localization.getLocalizedString
+import javax.inject.Inject
 
 private const val LOCATION_KEY = "location"
 
 class ForegroundServiceLocationTracker(private val application: Application) : LocationTracker {
 
-    override fun getCurrentLocation(): Location? {
-        return application.getState().get(LOCATION_KEY)
+    override fun getLocation(): StateFlow<Location?> {
+        return application.getState().getFlow(LOCATION_KEY, null)
     }
 
     override fun start(retainMockAccuracy: Boolean, updateInterval: Long?) {
@@ -40,12 +43,25 @@ class ForegroundServiceLocationTracker(private val application: Application) : L
     override fun stop() {
         application.stopService(Intent(application, LocationTrackerService::class.java))
     }
+
+    override fun warm(location: Location?) {
+        application.getState().setFlow(LOCATION_KEY, location)
+    }
 }
 
 class LocationTrackerService : Service(), LocationClient.LocationClientListener {
 
+    @Inject
+    lateinit var uniqueIdGenerator: UniqueIdGenerator
+
     private val locationClient: LocationClient by lazy {
         LocationClientProvider.getClient(application)
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        val provider = applicationContext as LocationDependencyComponentProvider
+        provider.locationDependencyComponent.inject(this)
     }
 
     override fun onBind(intent: Intent?): IBinder? {
@@ -55,7 +71,7 @@ class LocationTrackerService : Service(), LocationClient.LocationClientListener 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         setupNotificationChannel()
         startForeground(
-            NOTIFICATION_ID,
+            uniqueIdGenerator.getInt(NOTIFICATION_IDENTIFIER),
             createNotification()
         )
 
@@ -68,9 +84,8 @@ class LocationTrackerService : Service(), LocationClient.LocationClientListener 
 
         if (intent?.hasExtra(EXTRA_UPDATE_INTERVAL) == true) {
             val interval = intent.getLongExtra(EXTRA_UPDATE_INTERVAL, -1)
-            locationClient.setUpdateIntervals(
-                interval,
-                interval / 2
+            locationClient.setUpdateInterval(
+                interval
             )
         }
 
@@ -85,7 +100,7 @@ class LocationTrackerService : Service(), LocationClient.LocationClientListener 
 
     override fun onClientStart() {
         locationClient.requestLocationUpdates {
-            application.getState().set(
+            application.getState().setFlow(
                 LOCATION_KEY,
                 Location(it.latitude, it.longitude, it.altitude, it.accuracy)
             )
@@ -132,7 +147,7 @@ class LocationTrackerService : Service(), LocationClient.LocationClientListener 
         const val EXTRA_RETAIN_MOCK_ACCURACY = "retain_mock_accuracy"
         const val EXTRA_UPDATE_INTERVAL = "update_interval"
 
-        private const val NOTIFICATION_ID = 1
+        private const val NOTIFICATION_IDENTIFIER = "location_tracking"
         private const val NOTIFICATION_CHANNEL = "location_tracking"
     }
 }

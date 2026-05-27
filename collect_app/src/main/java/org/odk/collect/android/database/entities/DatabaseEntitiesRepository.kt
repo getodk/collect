@@ -6,7 +6,6 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.provider.BaseColumns._ID
-import androidx.core.database.getLongOrNull
 import org.odk.collect.db.sqlite.CursorExt.first
 import org.odk.collect.db.sqlite.CursorExt.foldAndClose
 import org.odk.collect.db.sqlite.CursorExt.getBoolean
@@ -235,17 +234,22 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String, private val c
 
     private fun queryWithAttachedRowNumber(list: String, query: Query?): List<Entity.Saved> {
         try {
+            val cursorMapper = { cursor: Cursor ->
+                cursor.foldAndClose {
+                    mapCursorRowToEntity(it, it.getInt(ROW_NUMBER))
+                }
+            }
+
             return if (query == null) {
-                databaseConnection.rawQueryWithRowNumber(list)
+                databaseConnection.rawQueryWithRowNumber(list, cursorMapper = cursorMapper)
             } else {
                 val sqlQuery = query.toSql()
                 databaseConnection.rawQueryWithRowNumber(
                     list,
                     sqlQuery.selection,
-                    sqlQuery.selectionArgs
+                    sqlQuery.selectionArgs,
+                    cursorMapper = cursorMapper
                 )
-            }.foldAndClose {
-                mapCursorRowToEntity(it, it.getInt(ROW_NUMBER))
             }
         } catch (e: SQLiteException) {
             throw QueryException(e.message)

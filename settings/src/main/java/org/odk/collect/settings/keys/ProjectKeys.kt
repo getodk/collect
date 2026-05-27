@@ -1,6 +1,7 @@
 package org.odk.collect.settings.keys
 
 object ProjectKeys {
+
     // server_preferences.xml
     const val KEY_PROTOCOL = "protocol"
 
@@ -10,7 +11,6 @@ object ProjectKeys {
     const val KEY_PASSWORD = "password"
 
     // user_interface_preferences.xml
-    const val KEY_APP_THEME = "appTheme"
     const val KEY_APP_LANGUAGE = "app_language"
     const val KEY_FONT_SIZE = "font_size"
     const val KEY_NAVIGATION = "navigation"
@@ -52,7 +52,7 @@ object ProjectKeys {
 
     // experimental_preferences.xml
     const val KEY_DEBUG_FILTERS = "experimental_debug_filters"
-    const val KEY_MLKIT_SCANNING = "mlkit_scanning"
+    const val KEY_ZXING_SCANNING = "zxing_scanning"
 
     // values
     const val PROTOCOL_SERVER = "odk_default"

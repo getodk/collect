@@ -1,5 +1,14 @@
 set -e
 
+[ "$1" = "-h" -o "$1" = "--help" ] && echo "
+    Usage: `basename $0` lastReleasedVersionCode nextReleaseTag [additionalReleaseTag]
+
+    Creates up to two releases with versionCodes incremented from lastReleasedVersionCode. The last
+    released version code will typically be the last version code published on the Play Store (beta
+    or production). Two releases are needed when a patch is needed to the last production release
+    and a beta is already ongoing for the next release.
+" && exit
+
 mkdir -p apks
 rm -f apks/*
 

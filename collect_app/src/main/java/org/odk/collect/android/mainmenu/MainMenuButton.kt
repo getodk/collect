@@ -33,7 +33,7 @@ class MainMenuButton(context: Context, attrs: AttributeSet?) : FrameLayout(conte
         }
 
         badge = BadgeDrawable.create(context).apply {
-            backgroundColor = getThemeAttributeValue(context, com.google.android.material.R.attr.colorPrimary)
+            backgroundColor = getThemeAttributeValue(context, androidx.appcompat.R.attr.colorPrimary)
             badgeGravity = BadgeDrawable.BOTTOM_END
         }
     }

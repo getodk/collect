@@ -114,7 +114,7 @@ class FormMapViewModelTest {
             smallIcon = R.drawable.ic_room_form_state_incomplete_24dp,
             largeIcon = R.drawable.ic_room_form_state_incomplete_48dp,
             action = IconifiedText(
-                R.drawable.ic_edit,
+                org.odk.collect.icons.R.drawable.ic_edit,
                 application.getString(org.odk.collect.strings.R.string.edit_data)
             ),
             info = formatDate(
@@ -153,7 +153,7 @@ class FormMapViewModelTest {
             smallIcon = R.drawable.ic_room_form_state_incomplete_24dp,
             largeIcon = R.drawable.ic_room_form_state_incomplete_48dp,
             action = IconifiedText(
-                R.drawable.ic_edit,
+                org.odk.collect.icons.R.drawable.ic_edit,
                 application.getString(org.odk.collect.strings.R.string.edit_data)
             ),
             info = formatDate(
@@ -192,7 +192,7 @@ class FormMapViewModelTest {
             smallIcon = R.drawable.ic_room_form_state_incomplete_24dp,
             largeIcon = R.drawable.ic_room_form_state_incomplete_48dp,
             action = IconifiedText(
-                R.drawable.ic_edit,
+                org.odk.collect.icons.R.drawable.ic_edit,
                 application.getString(org.odk.collect.strings.R.string.edit_data)
             ),
             info = formatDate(
@@ -231,7 +231,7 @@ class FormMapViewModelTest {
             smallIcon = R.drawable.ic_room_form_state_incomplete_24dp,
             largeIcon = R.drawable.ic_room_form_state_incomplete_48dp,
             action = IconifiedText(
-                R.drawable.ic_edit,
+                org.odk.collect.icons.R.drawable.ic_edit,
                 application.getString(org.odk.collect.strings.R.string.edit_data)
             ),
             info = formatDate(

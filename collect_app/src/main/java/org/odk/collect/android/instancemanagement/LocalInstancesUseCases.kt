@@ -1,5 +1,7 @@
 package org.odk.collect.android.instancemanagement
 
+import org.odk.collect.analytics.Analytics
+import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.android.utilities.FormNameUtils
 import org.odk.collect.forms.FormsRepository
@@ -50,6 +52,14 @@ object LocalInstancesUseCases {
         if (latestEditInstance != null) {
             return InstanceEditResult.EditBlockedByNewerExistingEdit(latestEditInstance)
         }
+
+        val formHash = Analytics.getParamValue("form")
+        val actionValue = if (sourceInstance.status == Instance.STATUS_COMPLETE) {
+            "finalized $formHash"
+        } else {
+            "sent $formHash"
+        }
+        Analytics.log(AnalyticsEvents.EDIT_FINALIZED_OR_SENT_FORM, "action", actionValue)
 
         val targetInstance = cloneInstance(sourceInstance, instanceFilePath, instancesDir, instancesRepository, formsRepository, clock)
 

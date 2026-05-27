@@ -1,11 +1,10 @@
 package org.odk.collect.android.feature.projects
 
 import android.app.Application
+import androidx.core.net.toUri
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.espresso.intent.Intents.intended
-import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
-import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra
-import org.hamcrest.CoreMatchers.allOf
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.equalTo
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
@@ -15,7 +14,6 @@ import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain
 import org.odk.collect.androidtest.RecordedIntentsRule
 import org.odk.collect.projects.Project
-import org.odk.collect.webpage.WebViewActivity
 
 class GoogleDriveDeprecationTest {
     private val rule = CollectTestRule()
@@ -52,11 +50,9 @@ class GoogleDriveDeprecationTest {
             .selectProject("Old GD project")
             .clickOnString(org.odk.collect.strings.R.string.learn_more_button_text)
 
-        intended(
-            allOf(
-                hasComponent(WebViewActivity::class.java.name),
-                hasExtra("url", "https://forum.getodk.org/t/40097")
-            )
+        assertThat(
+            testDependencies.webPageService.openedPages,
+            equalTo(listOf("https://forum.getodk.org/t/40097".toUri()))
         )
     }
 

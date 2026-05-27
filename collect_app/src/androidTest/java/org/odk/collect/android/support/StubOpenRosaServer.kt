@@ -391,18 +391,8 @@ class StubOpenRosaServer : OpenRosaHttpInterface {
         )
     }
 
-    fun deleteEntity(list: String, id: String) {
+    fun deleteEntity(id: String) {
         deletedEntities.add(id)
-
-        for (form in forms) {
-            val entityList = form.mediaFiles.stream()
-                .filter { mediaFileItem: MediaFileItem -> mediaFileItem is EntityListItem && mediaFileItem.name == list }
-                .findFirst()
-
-            if (entityList.isPresent) {
-                (entityList.get() as EntityListItem).incrementVersion()
-            }
-        }
     }
 
     private class XFormItem(

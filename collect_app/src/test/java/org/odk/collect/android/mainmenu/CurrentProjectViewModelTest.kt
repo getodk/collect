@@ -11,12 +11,16 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.projects.ProjectsDataService
+import org.odk.collect.androidtest.MainDispatcherRule
 import org.odk.collect.projects.Project
 
 class CurrentProjectViewModelTest {
 
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
+
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
 
     private val projectsDataService = mock<ProjectsDataService> {
         on { getCurrentProject() } doReturn MutableStateFlow(

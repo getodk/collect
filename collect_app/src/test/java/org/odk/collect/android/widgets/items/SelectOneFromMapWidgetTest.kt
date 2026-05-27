@@ -16,14 +16,11 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.fakes.FakePermissionsProvider
 import org.odk.collect.android.formentry.FormEntryViewModel
 import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.injection.config.AppDependencyModule
-import org.odk.collect.android.listeners.AdvanceToNextListener
-import org.odk.collect.android.preferences.GuidanceHint
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
@@ -35,6 +32,7 @@ import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithA
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetDependencies
 import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils
 import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils.FontSize
+import org.odk.collect.android.widgets.utilities.WidgetAnswerDialogFragment.Companion.ARG_FORM_INDEX
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory
@@ -43,6 +41,7 @@ import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.enums.GuidanceHintMode
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.testshared.RobolectricHelpers.getFragmentByClass
 import org.robolectric.Robolectric
@@ -59,7 +58,10 @@ class SelectOneFromMapWidgetTest {
 
     private val settingsProvider = InMemSettingsProvider().also {
         it.getUnprotectedSettings().save(ProjectKeys.KEY_FONT_SIZE, "12")
-        it.getUnprotectedSettings().save(ProjectKeys.KEY_GUIDANCE_HINT, GuidanceHint.YES.toString())
+        it.getUnprotectedSettings().save(
+            ProjectKeys.KEY_GUIDANCE_HINT,
+            GuidanceHintMode.YES.getValue(activityController.get())
+        )
     }
 
     @Before
@@ -94,8 +96,6 @@ class SelectOneFromMapWidgetTest {
         val widget = SelectOneFromMapWidget(
             activityController.get(),
             QuestionDetails(promptWithAnswer(null)),
-            false,
-            mock(),
             widgetDependencies()
         )
 
@@ -121,7 +121,7 @@ class SelectOneFromMapWidgetTest {
 
         val prompt = promptWithAnswer(null)
         val widget =
-            SelectOneFromMapWidget(activity, QuestionDetails(prompt), false, mock(), widgetDependencies())
+            SelectOneFromMapWidget(activity, QuestionDetails(prompt), widgetDependencies())
         whenever(formEntryViewModel.getQuestionPrompt(prompt.index)).doReturn(prompt)
 
         widget.binding.button.performClick()
@@ -133,7 +133,7 @@ class SelectOneFromMapWidgetTest {
         assertThat(fragment, notNullValue())
         assertThat(
             fragment?.requireArguments()
-                ?.getSerializable(SelectOneFromMapDialogFragment.ARG_FORM_INDEX),
+                ?.getSerializable(ARG_FORM_INDEX),
             equalTo(prompt.index)
         )
     }
@@ -143,8 +143,6 @@ class SelectOneFromMapWidgetTest {
         val widget = SelectOneFromMapWidget(
             activityController.get(),
             QuestionDetails(promptWithAnswer(null)),
-            false,
-            mock(),
             widgetDependencies()
         )
 
@@ -170,8 +168,6 @@ class SelectOneFromMapWidgetTest {
         val widget = SelectOneFromMapWidget(
             activityController.get(),
             QuestionDetails(prompt),
-            false,
-            mock(),
             widgetDependencies()
         )
         assertThat(widget.binding.answer.text, equalTo("A"))
@@ -183,8 +179,6 @@ class SelectOneFromMapWidgetTest {
         val widget = SelectOneFromMapWidget(
             activityController.get(),
             QuestionDetails(promptWithAnswer(null)),
-            false,
-            mock(),
             widgetDependencies()
         )
 
@@ -202,8 +196,6 @@ class SelectOneFromMapWidgetTest {
         val widget = SelectOneFromMapWidget(
             activityController.get(),
             QuestionDetails(promptWithAnswer(answer)),
-            false,
-            mock(),
             widgetDependencies()
         )
         assertThat(widget.answer, equalTo(answer))
@@ -217,8 +209,6 @@ class SelectOneFromMapWidgetTest {
         val widget = SelectOneFromMapWidget(
             activityController.get(),
             QuestionDetails(promptWithAnswer(answer)),
-            false,
-            mock(),
             widgetDependencies()
         )
         widget.clearAnswer()
@@ -233,8 +223,6 @@ class SelectOneFromMapWidgetTest {
         val widget = SelectOneFromMapWidget(
             activityController.get(),
             QuestionDetails(promptWithAnswer(answer)),
-            false,
-            mock(),
             widgetDependencies()
         )
 
@@ -255,143 +243,10 @@ class SelectOneFromMapWidgetTest {
         val widget = SelectOneFromMapWidget(
             activityController.get(),
             QuestionDetails(prompt),
-            false,
-            mock(),
             widgetDependencies()
         )
 
         widget.clearAnswer()
         assertThat(widget.binding.answer.text, equalTo(""))
-    }
-
-    @Test
-    fun `setData sets answer`() {
-        val widget = SelectOneFromMapWidget(
-            activityController.get(),
-            QuestionDetails(promptWithAnswer(null)),
-            false,
-            mock(),
-            widgetDependencies()
-        )
-
-        val selectChoice = selectChoice(value = "a", index = 101)
-        val answer = SelectOneData(selectChoice.selection())
-        widget.setData(answer)
-        assertThat(widget.answer, equalTo(answer))
-    }
-
-    @Test
-    fun `setData updates shown answer`() {
-        val choices = listOf(selectChoice("a"), selectChoice("b"))
-        val prompt = MockFormEntryPromptBuilder()
-            .withSelectChoices(choices)
-            .withSelectChoiceText(
-                mapOf(choices[0] to "A", choices[1] to "B")
-            )
-            .build()
-        val widget = SelectOneFromMapWidget(
-            activityController.get(),
-            QuestionDetails(prompt),
-            false,
-            mock(),
-            widgetDependencies()
-        )
-
-        widget.setData(SelectOneData(choices[1].selection()))
-        assertThat(widget.binding.answer.text, equalTo("B"))
-    }
-
-    @Test
-    fun `setData calls value change listener`() {
-        val choices = listOf(selectChoice("a"))
-        val prompt = MockFormEntryPromptBuilder()
-            .withSelectChoices(choices)
-            .withSelectChoiceText(mapOf(choices[0] to "A"))
-            .build()
-
-        val widget = SelectOneFromMapWidget(
-            activityController.get(),
-            QuestionDetails(prompt),
-            false,
-            mock(),
-            widgetDependencies()
-        )
-
-        val mockValueChangedListener = mockValueChangedListener(widget)
-        widget.setData(SelectOneData(choices[0].selection()))
-        verify(mockValueChangedListener).widgetValueChanged(widget)
-    }
-
-    @Test
-    fun `setData answer is passed to SelectOneFromMapDialogFragment`() {
-        val activity = activityController.setup().get()
-        activity.supportFragmentManager.fragmentFactory = FragmentFactoryBuilder().forClass(SelectOneFromMapDialogFragment::class.java) {
-            SelectOneFromMapDialogFragment(object : ViewModelProvider.Factory {
-                override fun <T : ViewModel> create(
-                    modelClass: Class<T>,
-                    extras: CreationExtras
-                ): T {
-                    return formEntryViewModel as T
-                }
-            })
-        }.build()
-
-        val choices = listOf(selectChoice("a"), selectChoice("b"))
-        val prompt = MockFormEntryPromptBuilder()
-            .withSelectChoices(choices)
-            .withSelectChoiceText(mapOf(choices[0] to "A", choices[1] to "B"))
-            .build()
-
-        val widget =
-            SelectOneFromMapWidget(activity, QuestionDetails(prompt), false, mock(), widgetDependencies())
-        widget.setData(SelectOneData(choices[1].selection()))
-
-        whenever(formEntryViewModel.getQuestionPrompt(prompt.index)).doReturn(prompt)
-        widget.binding.button.performClick()
-
-        val fragment = getFragmentByClass(
-            activityController.get().supportFragmentManager,
-            SelectOneFromMapDialogFragment::class.java
-        )
-        assertThat(fragment, notNullValue())
-        assertThat(
-            fragment?.requireArguments()
-                ?.getSerializable(SelectOneFromMapDialogFragment.ARG_SELECTED_INDEX),
-            equalTo(choices[1].index)
-        )
-    }
-
-    @Test
-    fun `setData calls AdvanceToNextListener when the 'quick' appearance is used`() {
-        val listener = mock<AdvanceToNextListener>()
-        val widget = SelectOneFromMapWidget(
-            activityController.get(),
-            QuestionDetails(promptWithAnswer(null)),
-            true,
-            listener,
-            widgetDependencies()
-        )
-
-        val selectChoice = selectChoice(value = "a", index = 101)
-        val answer = SelectOneData(selectChoice.selection())
-        widget.setData(answer)
-        verify(listener).advance()
-    }
-
-    @Test
-    fun `setData does not call AdvanceToNextListener when the 'quick' appearance is not used`() {
-        val listener = mock<AdvanceToNextListener>()
-        val widget = SelectOneFromMapWidget(
-            activityController.get(),
-            QuestionDetails(promptWithAnswer(null)),
-            false,
-            listener,
-            widgetDependencies()
-        )
-
-        val selectChoice = selectChoice(value = "a", index = 101)
-        val answer = SelectOneData(selectChoice.selection())
-        widget.setData(answer)
-        verifyNoInteractions(listener)
     }
 }

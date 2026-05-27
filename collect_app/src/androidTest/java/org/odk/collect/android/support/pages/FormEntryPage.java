@@ -206,8 +206,12 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public FormHierarchyPage clickGoToArrow() {
-        onView(withId(R.id.menu_goto)).perform(click());
-        return new FormHierarchyPage(formName).assertOnPage();
+        // This click sometimes ends up turning into a long press
+        tryFlakyAction(() -> {
+            onView(withId(R.id.menu_goto)).perform(click());
+        });
+
+        return new FormHierarchyPage(formName);
     }
 
     public FormEntryPage clickWidgetButton() {
@@ -459,8 +463,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public FormEntryPage assertBackgroundLocationSnackbarShown() {
-        onView(withId(com.google.android.material.R.id.snackbar_text))
-                .check(matches(withText(String.format(ApplicationProvider.getApplicationContext().getString(org.odk.collect.strings.R.string.background_location_enabled), "⋮"))));
+        checkIsSnackbarWithMessageDisplayed(String.format(ApplicationProvider.getApplicationContext().getString(org.odk.collect.strings.R.string.background_location_enabled), "⋮"));
         return this;
     }
 

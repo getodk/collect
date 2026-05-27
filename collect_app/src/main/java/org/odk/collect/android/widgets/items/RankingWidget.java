@@ -57,7 +57,7 @@ public class RankingWidget extends QuestionWidget implements WidgetDataReceiver 
     }
 
     @Override
-    protected View onCreateAnswerView(@NonNull Context context, @NonNull FormEntryPrompt prompt, int answerFontSize) {
+    protected View onCreateWidgetView(@NonNull Context context, @NonNull FormEntryPrompt prompt, int answerFontSize) {
         binding = RankingWidgetBinding.inflate(((Activity) context).getLayoutInflater());
 
         binding.rankItemsButton.setOnClickListener(v -> {

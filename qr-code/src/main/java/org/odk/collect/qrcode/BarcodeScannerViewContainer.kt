@@ -19,11 +19,10 @@ class BarcodeScannerViewContainer(context: Context, attrs: AttributeSet?) :
         activity: Activity,
         lifecycleOwner: LifecycleOwner,
         qrOnly: Boolean = false,
-        prompt: String = "",
-        useFrontCamera: Boolean = false
+        useFrontCamera: Boolean = false,
     ) {
         barcodeScannerView =
-            factory.create(activity, lifecycleOwner, qrOnly, prompt, useFrontCamera)
+            factory.create(activity, lifecycleOwner, qrOnly, useFrontCamera)
         addView(barcodeScannerView)
     }
 
@@ -32,8 +31,7 @@ class BarcodeScannerViewContainer(context: Context, attrs: AttributeSet?) :
             activity: Activity,
             lifecycleOwner: LifecycleOwner,
             qrOnly: Boolean = false,
-            prompt: String = "",
-            useFrontCamera: Boolean
+            useFrontCamera: Boolean,
         ): BarcodeScannerView
     }
 }
@@ -46,6 +44,9 @@ abstract class BarcodeScannerView(context: Context) : FrameLayout(context) {
     protected abstract fun scan(callback: (String) -> Unit)
     abstract fun setTorchOn(on: Boolean)
     abstract fun setTorchListener(torchListener: TorchListener)
+
+    abstract fun supportsFullScreenViewFinder(): Boolean
+    abstract fun setFullScreenViewFinder(fullScannerViewFinder: Boolean)
 
     fun start() {
         this.scan { result ->

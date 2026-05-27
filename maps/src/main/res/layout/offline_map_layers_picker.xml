@@ -64,7 +64,7 @@
         android:layout_marginStart="@dimen/margin_standard"
         android:text="@string/get_help_with_offline_layers"
         android:textAppearance="?textAppearanceLabelLarge"
-        android:textColor="?colorAccent"
+        android:textColor="?colorPrimary"
         app:layout_constraintBottom_toBottomOf="@id/mbtiles_info_icon"
         app:layout_constraintEnd_toStartOf="@id/guideline_end"
         app:layout_constraintStart_toEndOf="@id/mbtiles_info_icon"

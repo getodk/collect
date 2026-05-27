@@ -4,32 +4,47 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Application
 import android.content.Context
+import android.graphics.Rect
 import android.view.LayoutInflater
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis.COORDINATE_SYSTEM_VIEW_REFERENCED
 import androidx.camera.core.TorchState
 import androidx.camera.mlkit.vision.MlKitAnalyzer
 import androidx.camera.view.LifecycleCameraController
+import androidx.compose.runtime.mutableStateOf
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.gms.common.moduleinstall.ModuleInstall
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
+import org.odk.collect.androidshared.ui.ComposeThemeProvider.Companion.setContextThemedContent
+import org.odk.collect.qrcode.BarcodeCandidate
+import org.odk.collect.qrcode.BarcodeFilter
+import org.odk.collect.qrcode.BarcodeFormat
 import org.odk.collect.qrcode.BarcodeScannerView
 import org.odk.collect.qrcode.BarcodeScannerViewContainer
+import org.odk.collect.qrcode.DetectedBarcode
+import org.odk.collect.qrcode.DetectedState
+import org.odk.collect.qrcode.ScannerOverlay
+import org.odk.collect.qrcode.calculateViewFinder
 import org.odk.collect.qrcode.databinding.MlkitBarcodeScannerLayoutBinding
 
-class MlKitBarcodeScannerViewFactory : BarcodeScannerViewContainer.Factory {
+class MlKitBarcodeScannerViewFactory(private val scanThreshold: Int) :
+    BarcodeScannerViewContainer.Factory {
     override fun create(
         activity: Activity,
         lifecycleOwner: LifecycleOwner,
         qrOnly: Boolean,
-        prompt: String,
         useFrontCamera: Boolean
     ): BarcodeScannerView {
-        return MlKitBarcodeScannerView(activity, lifecycleOwner, qrOnly, useFrontCamera, prompt)
+        return MlKitBarcodeScannerView(
+            activity,
+            lifecycleOwner,
+            qrOnly,
+            useFrontCamera,
+            scanThreshold
+        )
     }
 
     companion object {
@@ -62,25 +77,32 @@ private class MlKitBarcodeScannerView(
     private val lifecycleOwner: LifecycleOwner,
     private val qrOnly: Boolean,
     private val useFrontCamera: Boolean,
-    prompt: String
+    private val scanThreshold: Int
 ) : BarcodeScannerView(context) {
 
     private val binding =
         MlkitBarcodeScannerLayoutBinding.inflate(LayoutInflater.from(context), this, true)
     private val cameraController = LifecycleCameraController(context)
+    private val viewFinderRect = Rect()
+
+    private val detectedState = mutableStateOf<DetectedState>(DetectedState.None)
+    private val fullScreenViewFinderState = mutableStateOf(false)
 
     init {
-        binding.prompt.text = prompt
+        binding.composeView.setContextThemedContent {
+            ScannerOverlay(detectedState.value, fullScreenViewFinderState.value)
+        }
+    }
 
-        lifecycleOwner.lifecycle.addObserver(object : DefaultLifecycleObserver {
-            override fun onResume(owner: LifecycleOwner) {
-                binding.scannerOverlay.startAnimations()
-            }
-
-            override fun onPause(owner: LifecycleOwner) {
-                binding.scannerOverlay.stopAnimations()
-            }
-        })
+    override fun onLayout(
+        changed: Boolean,
+        left: Int,
+        top: Int,
+        right: Int,
+        bottom: Int
+    ) {
+        updateViewFinderSize()
+        super.onLayout(changed, left, top, right, bottom)
     }
 
     override fun scan(callback: (String) -> Unit) {
@@ -103,6 +125,7 @@ private class MlKitBarcodeScannerView(
         val barcodeScanner = BarcodeScanning.getClient(options)
 
         val executor = ContextCompat.getMainExecutor(context)
+        val barcodeFilter = BarcodeFilter(viewFinderRect, scanThreshold)
         cameraController.setImageAnalysisAnalyzer(
             executor,
             MlKitAnalyzer(
@@ -111,13 +134,16 @@ private class MlKitBarcodeScannerView(
                 executor
             ) { result: MlKitAnalyzer.Result ->
                 val value = result.getValue(barcodeScanner)
-                val barcode = value?.firstOrNull()
+                val barcodeCandidates = value?.map { it.toCandidate() } ?: emptyList()
+                barcodeFilter.filter(barcodeCandidates).also {
+                    detectedState.value = it
 
-                if (barcode != null) {
-                    val contents = processBarcode(barcode)
-                    if (!contents.isNullOrEmpty()) {
-                        cameraController.unbind()
-                        callback(contents)
+                    if (it is DetectedState.Full) {
+                        val contents = processBarcode(it.barcode)
+                        if (!contents.isNullOrEmpty()) {
+                            cameraController.unbind()
+                            callback(contents)
+                        }
                     }
                 }
             }
@@ -138,20 +164,59 @@ private class MlKitBarcodeScannerView(
         }
     }
 
-    private fun processBarcode(barcode: Barcode): String? {
-        val bytes = barcode.rawBytes
-        val utf8Contents = barcode.rawValue
+    override fun supportsFullScreenViewFinder(): Boolean {
+        return true
+    }
 
-        return if (!utf8Contents.isNullOrEmpty()) {
-            utf8Contents
-        } else if (bytes != null && barcode.format == Barcode.FORMAT_PDF417) {
-            /**
-             * Allow falling back to Latin encoding for PDF417 barcodes. This provides parity
-             * with the Zxing implementation.
-             */
-            String(bytes, Charsets.ISO_8859_1)
-        } else {
-            null
+    override fun setFullScreenViewFinder(fullScreenViewFinder: Boolean) {
+        fullScreenViewFinderState.value = fullScreenViewFinder
+        updateViewFinderSize()
+    }
+
+    private fun updateViewFinderSize() {
+        val (viewFinderOffset, viewFinderSize) = calculateViewFinder(
+            this.width.toFloat(),
+            this.height.toFloat(),
+            fullScreenViewFinderState.value
+        )
+
+        viewFinderRect.set(
+            viewFinderOffset.x.toInt(),
+            viewFinderOffset.y.toInt(),
+            (viewFinderOffset.x + viewFinderSize.width).toInt(),
+            (viewFinderOffset.y + viewFinderSize.height).toInt()
+        )
+    }
+
+    private fun processBarcode(barcode: DetectedBarcode): String? {
+        return when (barcode) {
+            is DetectedBarcode.Utf8 -> {
+                barcode.contents
+            }
+
+            is DetectedBarcode.Bytes -> {
+                if (barcode.format == BarcodeFormat.PDF417) {
+                    /**
+                     * Allow falling back to Latin encoding for PDF417 barcodes. This provides parity
+                     * with the Zxing implementation.
+                     */
+                    String(barcode.bytes, Charsets.ISO_8859_1)
+                } else {
+                    null
+                }
+            }
+        }
+    }
+
+    companion object {
+
+        private fun Barcode.toCandidate(): BarcodeCandidate {
+            val format = when (this.format) {
+                Barcode.FORMAT_PDF417 -> BarcodeFormat.PDF417
+                else -> BarcodeFormat.OTHER
+            }
+
+            return BarcodeCandidate(this.rawBytes, this.rawValue, this.boundingBox, format)
         }
     }
 }

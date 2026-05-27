@@ -64,7 +64,7 @@ class FormEntryMenuProviderTest {
         backgroundAudioViewModel,
         settingsProvider,
         formEntryMenuClickListener
-    )
+    ) { true }
 
     @Test
     fun onPrepare_inRepeatQuestion_showsAddRepeat() {

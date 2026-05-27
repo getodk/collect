@@ -42,11 +42,13 @@ dependencies {
 
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation(project(":async"))
+    implementation(project(":audio-clips"))
     implementation(project(":shared"))
     implementation(project(":androidshared"))
     implementation(project(":androidtest"))
     implementation(project(":service-test"))
     implementation(project(":qr-code"))
+    implementation(project(":web-page"))
     implementation(libs.androidxRecyclerview)
     implementation(libs.kotlinStdlib)
     implementation(libs.androidxCoreKtx)

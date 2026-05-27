@@ -138,7 +138,7 @@ public abstract class OpenRosaPostRequestTest {
         assertThat(firstPartLines[1], containsString("name=\"xml_submission_file\""));
         assertThat(firstPartLines[1], containsString("filename=\"" + tempFile.getName() + "\""));
         assertThat(firstPartLines[2], containsString("Content-Type: text/xml"));
-        assertThat(firstPartLines[5], equalTo("<node>content</node>"));
+        assertThat(firstPartLines[4], equalTo("<node>content</node>"));
     }
 
     @Test
@@ -156,12 +156,12 @@ public abstract class OpenRosaPostRequestTest {
         String[] secondPartLines = parts.get(1);
         assertThat(secondPartLines[1], containsString("name=\"" + attachment1.getName() + "\""));
         assertThat(secondPartLines[1], containsString("filename=\"" + attachment1.getName() + "\""));
-        assertThat(secondPartLines[5], equalTo("blah blah blah"));
+        assertThat(secondPartLines[4], equalTo("blah blah blah"));
 
         String[] thirdPartLines = parts.get(2);
         assertThat(thirdPartLines[1], containsString("name=\"" + attachment2.getName() + "\""));
         assertThat(thirdPartLines[1], containsString("filename=\"" + attachment2.getName() + "\""));
-        assertThat(thirdPartLines[5], equalTo("blah2 blah2 blah2"));
+        assertThat(thirdPartLines[4], equalTo("blah2 blah2 blah2"));
     }
 
     @Test
@@ -198,7 +198,7 @@ public abstract class OpenRosaPostRequestTest {
         String[] secondPartLines = parts.get(1);
         assertThat(secondPartLines[1], containsString("name=\"" + attachment1.getName() + "\""));
         assertThat(secondPartLines[1], containsString("filename=\"" + attachment1.getName() + "\""));
-        assertThat(secondPartLines[5], equalTo("blah blah blah"));
+        assertThat(secondPartLines[4], equalTo("blah blah blah"));
 
         String[] thirdPartLines = parts.get(2);
         assertThat(thirdPartLines[1], containsString("name=\"*isIncomplete*\""));
@@ -211,7 +211,7 @@ public abstract class OpenRosaPostRequestTest {
         secondPartLines = parts.get(1);
         assertThat(secondPartLines[1], containsString("name=\"" + attachment2.getName() + "\""));
         assertThat(secondPartLines[1], containsString("filename=\"" + attachment2.getName() + "\""));
-        assertThat(secondPartLines[5], equalTo("blah2 blah2 blah2"));
+        assertThat(secondPartLines[4], equalTo("blah2 blah2 blah2"));
     }
 
     @Test

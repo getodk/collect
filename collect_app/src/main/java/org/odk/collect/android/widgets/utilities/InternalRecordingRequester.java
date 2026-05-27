@@ -1,5 +1,7 @@
 package org.odk.collect.android.widgets.utilities;
 
+import static org.odk.collect.android.widgets.utilities.BindAttributes.QUALITY;
+
 import androidx.activity.ComponentActivity;
 
 import org.javarosa.form.api.FormEntryPrompt;
@@ -23,10 +25,10 @@ public class InternalRecordingRequester implements RecordingRequester {
     @Override
     public void requestRecording(FormEntryPrompt prompt) {
         permissionsProvider.requestRecordAudioPermission(activity, () -> {
-            String quality = FormEntryPromptUtils.getBindAttribute(prompt, "quality");
-            if (quality != null && quality.equals("voice-only")) {
+            String quality = FormEntryPromptUtils.getBindAttribute(prompt, QUALITY);
+            if (quality != null && quality.equals(BindAttributes.Quality.VOICE_ONLY.getValue())) {
                 audioRecorder.start(prompt.getIndex(), Output.AMR);
-            } else if (quality != null && quality.equals("low")) {
+            } else if (quality != null && quality.equals(BindAttributes.Quality.LOW.getValue())) {
                 audioRecorder.start(prompt.getIndex(), Output.AAC_LOW);
             } else {
                 audioRecorder.start(prompt.getIndex(), Output.AAC);

@@ -58,7 +58,7 @@ public class AnnotateWidget extends BaseImageWidget {
     }
 
     @Override
-    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
+    protected View onCreateWidgetView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = AnnotateWidgetBinding.inflate(((Activity) context).getLayoutInflater());
         errorTextView = binding.errorMessage;
         imageView = binding.image;

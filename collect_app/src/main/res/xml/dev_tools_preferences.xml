@@ -15,4 +15,9 @@
         android:summary="@string/debug_filters_summary"
         app:iconSpaceReserved="false" />
 
+    <SwitchPreferenceCompat
+        android:key="zxing_scanning"
+        android:title="@string/use_zxing_for_barcode_scanning"
+        app:iconSpaceReserved="false" />
+
 </PreferenceScreen>

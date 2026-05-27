@@ -1,7 +1,5 @@
 package org.odk.collect.android.benchmark
 
-import android.app.Application
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.blankOrNullString
@@ -13,22 +11,11 @@ import org.junit.runner.RunWith
 import org.odk.collect.android.benchmark.support.Benchmarker
 import org.odk.collect.android.benchmark.support.benchmark
 import org.odk.collect.android.support.TestDependencies
-import org.odk.collect.android.support.pages.FirstLaunchPage
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
-import org.odk.collect.android.test.BuildConfig.ENTITIES_FILTER_TEST_PROJECT_URL
-import org.odk.collect.strings.R
-
-/**
- * Benchmarks the performance of entity follow up forms. [ENTITIES_FILTER_TEST_PROJECT_URL] should
- * be set to a project that contains the "100k Entities Filter" form.
- *
- * Devices that currently pass:
- * - Fairphone 3
- * - Pixel 3
- *
- */
+import org.odk.collect.android.test.BuildConfig.ENTITIES_FILTER_PROJECT_URL
+import org.odk.collect.android.test.BuildConfig.THOUSAND_MEDIA_FILE_ENTITY_LIST_PROJECT_URL
 
 @RunWith(AndroidJUnit4::class)
 class EntitiesBenchmarkTest {
@@ -38,20 +25,29 @@ class EntitiesBenchmarkTest {
     @get:Rule
     var chain: RuleChain = chain(TestDependencies(true)).around(rule)
 
+    /**
+     * Benchmarks the performance of entity follow up forms. [ENTITIES_FILTER_PROJECT_URL] should
+     * be set to a project that contains the "100k Entities Filter" benchmark form and the
+     * "entities_100k" entity list.
+     *
+     * Devices that currently pass:
+     * - Fairphone 3
+     * - Pixel 3
+     *
+     */
     @Test
-    fun run() {
+    fun oneHundredThousandEntities() {
         assertThat(
-            "Need to set ENTITIES_FILTER_TEST_PROJECT_URL before running!",
-            ENTITIES_FILTER_TEST_PROJECT_URL,
+            "Need to set ENTITIES_FILTER_PROJECT_URL before running!",
+            ENTITIES_FILTER_PROJECT_URL,
             not(blankOrNullString())
         )
-        clearAndroidCache()
 
         val benchmarker = Benchmarker()
 
         rule.startAtFirstLaunch()
             .clickManuallyEnterProjectDetails()
-            .inputUrl(ENTITIES_FILTER_TEST_PROJECT_URL)
+            .inputUrl(ENTITIES_FILTER_PROJECT_URL)
             .addProject()
 
             // Populate http cache and recreate project
@@ -61,10 +57,9 @@ class EntitiesBenchmarkTest {
             .openProjectSettingsDialog()
             .clickSettings()
             .clickProjectManagement()
-            .clickOnDeleteProject()
-            .clickOnTextInDialog(R.string.yes, FirstLaunchPage())
+            .deleteLastProject()
             .clickManuallyEnterProjectDetails()
-            .inputUrl(ENTITIES_FILTER_TEST_PROJECT_URL)
+            .inputUrl(ENTITIES_FILTER_PROJECT_URL)
             .addProject()
 
             .clickGetBlankForm()
@@ -97,10 +92,50 @@ class EntitiesBenchmarkTest {
 
         benchmarker.assertResults()
     }
-}
 
-private fun clearAndroidCache() {
-    val application = ApplicationProvider.getApplicationContext<Application>()
-    application.cacheDir.deleteRecursively()
-    application.cacheDir.mkdir()
+    /**
+     * Benchmarks the performance of updating forms with entity lists and many media files.
+     * [THOUSAND_MEDIA_FILE_ENTITY_LIST_PROJECT_URL] should be set to a project that contains the
+     * "1000-media-files-entity-list" form.
+     *
+     * This scenario could also arise when updating a form that has a single new/updated non-entity
+     * media file, but in practice this will probably be most common with entity forms as the list
+     * will always force a media file update.
+     *
+     * Devices that currently pass:
+     * - Fairphone 3
+     */
+    @Test
+    fun oneThousandMediaFilesWithEntityList() {
+        assertThat(
+            "Need to set THOUSAND_MEDIA_FILE_ENTITY_LIST_PROJECT_URL before running!",
+            THOUSAND_MEDIA_FILE_ENTITY_LIST_PROJECT_URL,
+            not(blankOrNullString())
+        )
+
+        val benchmarker = Benchmarker()
+
+        rule.startAtFirstLaunch()
+            .clickManuallyEnterProjectDetails()
+            .inputUrl(THOUSAND_MEDIA_FILE_ENTITY_LIST_PROJECT_URL)
+            .addProject()
+
+            // Download all forms
+            .clickGetBlankForm()
+            .clickGetSelected()
+            .clickOKOnDialog(MainMenuPage())
+
+            .clickGetBlankForm()
+            .benchmark(
+                "Redownloading a form with 1k media files and entity list when there are no updates",
+                5,
+                benchmarker
+            ) {
+                it
+                    .clickGetSelected()
+                    .clickOKOnDialog(MainMenuPage())
+            }
+
+        benchmarker.assertResults()
+    }
 }

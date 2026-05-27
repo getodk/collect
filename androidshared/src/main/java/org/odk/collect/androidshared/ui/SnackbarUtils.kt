@@ -19,7 +19,10 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import com.google.android.material.R
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import org.odk.collect.androidshared.data.Consumable
@@ -28,36 +31,14 @@ import org.odk.collect.androidshared.data.Consumable
  * Convenience wrapper around Android's [Snackbar] API.
  */
 object SnackbarUtils {
+
+    @JvmStatic
+    val alertStore = AlertStore()
+
+    const val DURATION_SHORT = 3500
+    const val DURATION_LONG = 5500
+
     private var lastSnackbar: Snackbar? = null
-
-    @JvmStatic
-    @JvmOverloads
-    fun showShortSnackbar(
-        parentView: View,
-        message: String,
-        anchorView: View? = null,
-        action: Action? = null,
-        displayDismissButton: Boolean = false
-    ) {
-        return showSnackbar(parentView, message, 3500, anchorView, action, displayDismissButton)
-    }
-
-    @JvmStatic
-    fun showLongSnackbar(parentView: View, snackbarDetails: SnackbarDetails) {
-        showLongSnackbar(parentView, snackbarDetails.text, action = snackbarDetails.action)
-    }
-
-    @JvmStatic
-    @JvmOverloads
-    fun showLongSnackbar(
-        parentView: View,
-        message: String,
-        anchorView: View? = null,
-        action: Action? = null,
-        displayDismissButton: Boolean = false
-    ) {
-        return showSnackbar(parentView, message, 5500, anchorView, action, displayDismissButton)
-    }
 
     /**
      * Displays snackbar with {@param message} and multi-line message enabled.
@@ -67,70 +48,104 @@ object SnackbarUtils {
      * @param message               The text to show. Can be formatted text.
      * @param displayDismissButton  True if the dismiss button should be displayed, false otherwise.
      */
-    private fun showSnackbar(
+    @JvmStatic
+    @JvmOverloads
+    fun showSnackbar(
         parentView: View,
         message: String,
         duration: Int,
-        anchorView: View?,
+        anchorView: View? = null,
         action: Action? = null,
-        displayDismissButton: Boolean
+        displayDismissButton: Boolean = false,
+        onDismiss: () -> Unit = {}
     ) {
         if (message.isBlank()) {
             return
         }
 
-        lastSnackbar?.dismiss()
-        lastSnackbar = Snackbar.make(parentView, message.trim(), duration).apply {
-            val textView =
-                view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
-            textView.isSingleLine = false
+        val snackbar = make(
+            parentView,
+            message,
+            duration,
+            anchorView,
+            action,
+            displayDismissButton,
+            onDismiss
+        )
 
-            if (anchorView?.visibility != View.GONE) {
-                this.anchorView = anchorView
-            }
-
-            if (displayDismissButton) {
-                view.findViewById<Button>(com.google.android.material.R.id.snackbar_action).let {
-                    val dismissButton = ImageView(view.context).apply {
-                        setImageResource(org.odk.collect.androidshared.R.drawable.ic_close_24)
-                        setOnClickListener {
-                            dismiss()
-                        }
-                        contentDescription =
-                            context.getString(org.odk.collect.strings.R.string.close_snackbar)
-                    }
-
-                    val params = LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.WRAP_CONTENT,
-                        LinearLayout.LayoutParams.MATCH_PARENT
-                    )
-                    params.setMargins(16, 0, 0, 0)
-
-                    (it.parent as ViewGroup).addView(dismissButton, params)
-                }
-            }
-
-            if (action != null) {
-                setAction(action.text) {
-                    action.listener.invoke()
-                    dismiss()
-                }
-            }
-        }.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
-            override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                super.onDismissed(transientBottomBar, event)
-                lastSnackbar = null
-            }
-        })
-        lastSnackbar?.show()
+        show(snackbar)
     }
+
+    fun show(snackbar: Snackbar) {
+        if (snackbar != lastSnackbar) {
+            lastSnackbar?.dismiss()
+        }
+
+        snackbar.show()
+
+        lastSnackbar = snackbar
+        val message = snackbar.view.findViewById<TextView>(R.id.snackbar_text).text.toString()
+        alertStore.register(message)
+    }
+
+    fun make(
+        parentView: View,
+        message: String,
+        duration: Int,
+        anchorView: View? = null,
+        action: Action? = null,
+        displayDismissButton: Boolean = false,
+        onDismiss: () -> Unit = {}
+    ): Snackbar = Snackbar.make(parentView, message.trim(), duration).apply {
+        val textView =
+            view.findViewById<TextView>(R.id.snackbar_text)
+        textView.isSingleLine = false
+
+        if (anchorView?.visibility != View.GONE) {
+            this.anchorView = anchorView
+        }
+
+        if (displayDismissButton) {
+            view.findViewById<Button>(R.id.snackbar_action).let {
+                val dismissButton = ImageView(view.context).apply {
+                    setImageResource(org.odk.collect.androidshared.R.drawable.ic_close_24)
+                    setOnClickListener {
+                        dismiss()
+                    }
+                    contentDescription =
+                        context.getString(org.odk.collect.strings.R.string.close_snackbar)
+                }
+
+                val params = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT
+                )
+                params.setMargins(16, 0, 0, 0)
+
+                (it.parent as ViewGroup).addView(dismissButton, params)
+            }
+        }
+
+        if (action != null) {
+            setAction(action.text) {
+                action.beforeDismiss.invoke()
+                dismiss()
+            }
+        }
+    }.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
+        override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+            super.onDismissed(transientBottomBar, event)
+            onDismiss()
+            lastSnackbar = null
+        }
+    })
 
     data class SnackbarDetails @JvmOverloads constructor(
         val text: String,
         val action: Action? = null
     )
 
-    data class Action(val text: String, val listener: () -> Unit)
+    data class Action(val text: String, val beforeDismiss: () -> Unit = {})
 
     abstract class SnackbarPresenterObserver<T : Any?>(private val parentView: View) :
         Observer<Consumable<T>?> {
@@ -139,9 +154,22 @@ object SnackbarUtils {
 
         override fun onChanged(consumable: Consumable<T>?) {
             if (consumable != null && !consumable.isConsumed()) {
-                showLongSnackbar(parentView, getSnackbarDetails(consumable.value))
+                showSnackbar(
+                    parentView,
+                    getSnackbarDetails(consumable.value).text,
+                    DURATION_LONG,
+                    action = getSnackbarDetails(consumable.value).action
+                )
                 consumable.consume()
             }
         }
+    }
+
+    fun <T : Any?> LiveData<Consumable<T>?>.showSnackbar(lifecycleOwner: LifecycleOwner, parentView: View, details: (T) -> SnackbarDetails) {
+        observe(lifecycleOwner, object : SnackbarPresenterObserver<T>(parentView) {
+            override fun getSnackbarDetails(value: T): SnackbarDetails {
+                return details(value)
+            }
+        })
     }
 }

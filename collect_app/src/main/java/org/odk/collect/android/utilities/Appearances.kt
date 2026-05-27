@@ -91,6 +91,14 @@ object Appearances {
     const val MASKED = "masked"
     const val COUNTER = "counter"
     const val MULTILINE = "multiline"
+    const val VERTICAL = "vertical"
+    const val NO_TICKS = "no-ticks"
+
+    /**
+     * The timed grid widget is experimental and may be modified or removed without notice. If you are
+     * interested in this functionality, please describe your use case at https://forum.getodk.org
+     */
+    const val X_TIMED_GRID = "x-timed-grid"
 
     // Get appearance hint and clean it up so it is lower case, without the search function and never null.
     @JvmStatic
@@ -207,5 +215,15 @@ object Appearances {
     fun isMultiline(prompt: FormEntryPrompt): Boolean {
         val appearance = getSanitizedAppearanceHint(prompt)
         return appearance.contains(MULTILINE)
+    }
+
+    @JvmStatic
+    fun isQuick(prompt: FormEntryPrompt): Boolean {
+        return if (prompt.controlType == Constants.CONTROL_SELECT_ONE) {
+            val appearance = getSanitizedAppearanceHint(prompt)
+            appearance.contains(QUICK)
+        } else {
+            false
+        }
     }
 }

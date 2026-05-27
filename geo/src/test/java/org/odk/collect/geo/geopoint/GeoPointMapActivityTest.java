@@ -39,7 +39,7 @@ import org.odk.collect.maps.MapPoint;
 import org.odk.collect.maps.layers.ReferenceLayerRepository;
 import org.odk.collect.settings.InMemSettingsProvider;
 import org.odk.collect.settings.SettingsProvider;
-import org.odk.collect.webpage.ExternalWebPageHelper;
+import org.odk.collect.webpage.WebPageService;
 import org.robolectric.shadows.ShadowApplication;
 
 import java.util.List;
@@ -88,7 +88,7 @@ public class GeoPointMapActivityTest {
 
                     @NonNull
                     @Override
-                    public ExternalWebPageHelper providesExternalWebPageHelper() {
+                    public WebPageService providesWebPageService() {
                         return mock();
                     }
                 })
@@ -157,7 +157,7 @@ public class GeoPointMapActivityTest {
     }
 
     @Test
-    public void passingRetainMockAccuracyExtra_showSetItOnLocationClient() {
+    public void passingRetainMockAccuracyExtra_updatesMapFragmentState() {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GeoPointMapActivity.class);
         intent.putExtra(EXTRA_RETAIN_MOCK_ACCURACY, true);
         launcherRule.launch(intent);

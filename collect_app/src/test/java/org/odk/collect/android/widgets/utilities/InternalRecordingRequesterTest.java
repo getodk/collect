@@ -2,6 +2,7 @@ package org.odk.collect.android.widgets.utilities;
 
 import androidx.activity.ComponentActivity;
 import androidx.lifecycle.MutableLiveData;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.javarosa.form.api.FormEntryPrompt;
@@ -31,6 +32,7 @@ public class InternalRecordingRequesterTest {
 
     @Before
     public void setup() {
+        ApplicationProvider.getApplicationContext().setTheme(com.google.android.material.R.style.Theme_MaterialComponents);
         ComponentActivity activity = Robolectric.buildActivity(ComponentActivity.class).get();
         when(audioRecorder.getCurrentSession()).thenReturn(new MutableLiveData<>(null));
 

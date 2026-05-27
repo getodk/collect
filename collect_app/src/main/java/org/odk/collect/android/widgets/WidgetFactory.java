@@ -18,10 +18,10 @@ import static org.odk.collect.android.utilities.Appearances.MAPS;
 import static org.odk.collect.android.utilities.Appearances.PLACEMENT_MAP;
 import static org.odk.collect.android.utilities.Appearances.hasAppearance;
 
-import android.app.Activity;
 import android.content.Context;
 import android.hardware.SensorManager;
 
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
 
 import org.javarosa.core.model.Constants;
@@ -31,10 +31,12 @@ import org.odk.collect.android.formentry.PrinterWidgetViewModel;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.geo.MapConfiguratorProvider;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.QuestionMediaManager;
+import org.odk.collect.android.widgets.arbitraryfile.ArbitraryFileWidget;
+import org.odk.collect.android.widgets.arbitraryfile.ExArbitraryFileWidget;
+import org.odk.collect.android.widgets.barcode.BarcodeWidget;
 import org.odk.collect.android.widgets.datetime.DateTimeWidget;
 import org.odk.collect.android.widgets.datetime.DateWidget;
 import org.odk.collect.android.widgets.datetime.TimeWidget;
@@ -55,7 +57,6 @@ import org.odk.collect.android.widgets.range.RangeIntegerWidget;
 import org.odk.collect.android.widgets.range.RangePickerDecimalWidget;
 import org.odk.collect.android.widgets.range.RangePickerIntegerWidget;
 import org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester;
-import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.odk.collect.android.widgets.utilities.AudioRecorderRecordingStatusHandler;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 import org.odk.collect.android.widgets.utilities.FileRequester;
@@ -64,11 +65,14 @@ import org.odk.collect.android.widgets.utilities.RecordingRequester;
 import org.odk.collect.android.widgets.utilities.RecordingRequesterProvider;
 import org.odk.collect.android.widgets.utilities.StringRequester;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
+import org.odk.collect.android.widgets.video.ExVideoWidget;
+import org.odk.collect.android.widgets.video.VideoWidget;
 import org.odk.collect.androidshared.system.CameraUtils;
 import org.odk.collect.androidshared.system.IntentLauncherImpl;
+import org.odk.collect.audioclips.AudioPlayer;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.permissions.PermissionsProvider;
-import org.odk.collect.webpage.ExternalWebPageHelper;
+import org.odk.collect.webpage.CustomTabsWebPageService;
 
 /**
  * Convenience class that handles creation of widgets.
@@ -79,7 +83,7 @@ public class WidgetFactory {
 
     private static final String PICKER_APPEARANCE = "picker";
 
-    private final Activity activity;
+    private final FragmentActivity activity;
     private final boolean useExternalRecorder;
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final QuestionMediaManager questionMediaManager;
@@ -92,9 +96,8 @@ public class WidgetFactory {
     private final FileRequester fileRequester;
     private final StringRequester stringRequester;
     private final FormController formController;
-    private final AdvanceToNextListener advanceToNextListener;
 
-    public WidgetFactory(Activity activity,
+    public WidgetFactory(FragmentActivity activity,
                          boolean useExternalRecorder,
                          WaitingForDataRegistry waitingForDataRegistry,
                          QuestionMediaManager questionMediaManager,
@@ -106,8 +109,7 @@ public class WidgetFactory {
                          LifecycleOwner viewLifecycle,
                          FileRequester fileRequester,
                          StringRequester stringRequester,
-                         FormController formController,
-                         AdvanceToNextListener advanceToNextListener
+                         FormController formController
     ) {
         this.activity = activity;
         this.useExternalRecorder = useExternalRecorder;
@@ -122,7 +124,6 @@ public class WidgetFactory {
         this.fileRequester = fileRequester;
         this.stringRequester = stringRequester;
         this.formController = formController;
-        this.advanceToNextListener = advanceToNextListener;
     }
 
     public QuestionWidget createWidgetFromPrompt(FormEntryPrompt prompt, PermissionsProvider permissionsProvider) {
@@ -176,15 +177,15 @@ public class WidgetFactory {
                         }
                         break;
                     case Constants.DATATYPE_GEOSHAPE:
-                        questionWidget = new GeoShapeWidget(activity, questionDetails, waitingForDataRegistry,
+                        questionWidget = new GeoShapeWidget(activity, questionDetails,
                                 new ActivityGeoDataRequester(permissionsProvider, activity), dependencies);
                         break;
                     case Constants.DATATYPE_GEOTRACE:
-                        questionWidget = new GeoTraceWidget(activity, questionDetails, waitingForDataRegistry,
+                        questionWidget = new GeoTraceWidget(activity, questionDetails,
                                 MapConfiguratorProvider.getConfigurator(), new ActivityGeoDataRequester(permissionsProvider, activity), dependencies);
                         break;
                     case Constants.DATATYPE_BARCODE:
-                        questionWidget = new BarcodeWidget(activity, questionDetails, waitingForDataRegistry, new CameraUtils(), dependencies);
+                        questionWidget = new BarcodeWidget(activity, questionDetails, dependencies, waitingForDataRegistry, new CameraUtils());
                         break;
                     case Constants.DATATYPE_TEXT:
                         String query = prompt.getQuestion().getAdditionalAttribute(null, "query");
@@ -197,7 +198,7 @@ public class WidgetFactory {
                         } else if (appearance.contains(Appearances.NUMBERS)) {
                             questionWidget = new StringNumberWidget(activity, questionDetails, dependencies);
                         } else if (appearance.equals(Appearances.URL)) {
-                            questionWidget = new UrlWidget(activity, questionDetails, new ExternalWebPageHelper(), dependencies);
+                            questionWidget = new UrlWidget(activity, questionDetails, CustomTabsWebPageService.INSTANCE, dependencies);
                         } else {
                             questionWidget = new StringWidget(activity, questionDetails, dependencies);
                         }
@@ -209,9 +210,9 @@ public class WidgetFactory {
                 break;
             case Constants.CONTROL_FILE_CAPTURE:
                 if (appearance.startsWith(Appearances.EX)) {
-                    questionWidget = new ExArbitraryFileWidget(activity, questionDetails, questionMediaManager, waitingForDataRegistry, fileRequester, dependencies);
+                    questionWidget = new ExArbitraryFileWidget(activity, questionDetails, dependencies, questionMediaManager, waitingForDataRegistry, fileRequester);
                 } else {
-                    questionWidget = new ArbitraryFileWidget(activity, questionDetails, questionMediaManager, waitingForDataRegistry, dependencies);
+                    questionWidget = new ArbitraryFileWidget(activity, questionDetails, dependencies, questionMediaManager, waitingForDataRegistry);
                 }
                 break;
             case Constants.CONTROL_IMAGE_CHOOSE:
@@ -243,9 +244,9 @@ public class WidgetFactory {
                 break;
             case Constants.CONTROL_VIDEO_CAPTURE:
                 if (appearance.startsWith(Appearances.EX)) {
-                    questionWidget = new ExVideoWidget(activity, questionDetails, questionMediaManager, waitingForDataRegistry, fileRequester, dependencies);
+                    questionWidget = new ExVideoWidget(activity, questionDetails, dependencies, questionMediaManager, waitingForDataRegistry, fileRequester);
                 } else {
-                    questionWidget = new VideoWidget(activity, questionDetails, questionMediaManager, waitingForDataRegistry, dependencies);
+                    questionWidget = new VideoWidget(activity, questionDetails, dependencies, questionMediaManager, waitingForDataRegistry);
                 }
                 break;
             case Constants.CONTROL_SELECT_ONE:
@@ -264,6 +265,8 @@ public class WidgetFactory {
                     questionWidget = new LabelWidget(activity, questionDetails, formEntryViewModel, dependencies);
                 } else if (appearance.contains(Appearances.IMAGE_MAP)) {
                     questionWidget = new SelectMultiImageMapWidget(activity, questionDetails, formEntryViewModel, dependencies);
+                } else if (appearance.startsWith(Appearances.X_TIMED_GRID)) {
+                    questionWidget = new TimedGridWidget(activity, questionDetails, dependencies, formEntryViewModel);
                 } else {
                     questionWidget = new SelectMultiWidget(activity, questionDetails, formEntryViewModel, dependencies);
                 }
@@ -283,14 +286,14 @@ public class WidgetFactory {
                             if (prompt.getAppearanceHint() != null && prompt.getAppearanceHint().contains(PICKER_APPEARANCE)) {
                                 questionWidget = new RangePickerIntegerWidget(activity, questionDetails, dependencies);
                             } else {
-                                questionWidget = new RangeIntegerWidget(activity, questionDetails, dependencies);
+                                questionWidget = new RangeIntegerWidget(activity, questionDetails, formEntryViewModel, dependencies);
                             }
                             break;
                         case Constants.DATATYPE_DECIMAL:
                             if (prompt.getAppearanceHint() != null && prompt.getAppearanceHint().contains(PICKER_APPEARANCE)) {
                                 questionWidget = new RangePickerDecimalWidget(activity, questionDetails, dependencies);
                             } else {
-                                questionWidget = new RangeDecimalWidget(activity, questionDetails, dependencies);
+                                questionWidget = new RangeDecimalWidget(activity, questionDetails, formEntryViewModel, dependencies);
                             }
                             break;
                         default:
@@ -325,7 +328,7 @@ public class WidgetFactory {
         } else if (appearance.contains(Appearances.IMAGE_MAP)) {
             questionWidget = new SelectOneImageMapWidget(activity, questionDetails, isQuick, formEntryViewModel, dependencies);
         } else if (appearance.contains(Appearances.MAP)) {
-            questionWidget = new SelectOneFromMapWidget(activity, questionDetails, isQuick, advanceToNextListener, dependencies);
+            questionWidget = new SelectOneFromMapWidget(activity, questionDetails, dependencies);
         } else {
             questionWidget = new SelectOneWidget(activity, questionDetails, isQuick, formController, formEntryViewModel, dependencies);
         }

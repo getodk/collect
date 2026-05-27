@@ -1,5 +1,7 @@
 package org.odk.collect.async
 
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import androidx.work.Constraints
 import androidx.work.Data
 import androidx.work.ExistingPeriodicWorkPolicy
@@ -25,20 +27,57 @@ class CoroutineAndWorkManagerScheduler(
         workManager
     ) // Needed for Java construction
 
+    override fun immediate(
+        tag: String,
+        spec: TaskSpec,
+        inputData: Map<String, String>,
+        notificationInfo: NotificationInfo
+    ) {
+        val workManagerInputData = Data.Builder()
+            .putString(TaskSpecWorker.DATA_TASK_SPEC_CLASS, spec.javaClass.name)
+            .putBoolean(TaskSpecWorker.FOREGROUND, true)
+            .putString(TaskSpecWorker.FOREGROUND_NOTIFICATION_CHANNEL, notificationInfo.channel)
+            .putString(
+                TaskSpecWorker.FOREGROUND_NOTIFICATION_CHANNEL_NAME,
+                notificationInfo.channelName
+            )
+            .putInt(TaskSpecWorker.FOREGROUND_NOTIFICATION_TITLE, notificationInfo.title)
+            .putInt(TaskSpecWorker.FOREGROUND_NOTIFICATION_ID, notificationInfo.id)
+            .putAll(inputData)
+            .build()
+
+        val workRequest = OneTimeWorkRequest.Builder(TaskSpecWorker::class.java)
+            .addTag(tag)
+            .setInputData(workManagerInputData)
+            .build()
+        workManager.beginUniqueWork(tag, ExistingWorkPolicy.REPLACE, workRequest).enqueue()
+    }
+
     override fun networkDeferred(
         tag: String,
         spec: TaskSpec,
         inputData: Map<String, String>,
         networkConstraint: Scheduler.NetworkType?
     ) {
-        val constraintNetworkType = when (networkConstraint) {
+        val networkRequest = NetworkRequest.Builder().apply {
+            addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+
+            when (networkConstraint) {
+                Scheduler.NetworkType.WIFI -> addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+                Scheduler.NetworkType.CELLULAR -> addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
+                else -> Unit
+            }
+        }.build()
+
+        val networkType = when (networkConstraint) {
             Scheduler.NetworkType.WIFI -> NetworkType.UNMETERED
             Scheduler.NetworkType.CELLULAR -> NetworkType.METERED
             else -> NetworkType.CONNECTED
         }
 
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(constraintNetworkType)
+        val constraints = Constraints
+            .Builder()
+            .setRequiredNetworkRequest(networkRequest, networkType)
             .build()
 
         val workManagerInputData = Data.Builder()

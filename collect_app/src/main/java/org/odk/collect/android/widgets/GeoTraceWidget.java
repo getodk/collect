@@ -21,47 +21,42 @@ import android.util.TypedValue;
 import android.view.View;
 
 import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.databinding.GeotraceQuestionBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.maps.MapConfigurator;
 import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
-import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
-import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
+import org.odk.collect.maps.MapConfigurator;
 
 /**
  * GeoTraceWidget allows the user to collect a trace of GPS points as the
  * device moves along a path.
  */
 @SuppressLint("ViewConstructor")
-public class GeoTraceWidget extends QuestionWidget implements WidgetDataReceiver {
+public class GeoTraceWidget extends QuestionWidget {
     GeotraceQuestionBinding binding;
 
-    private final WaitingForDataRegistry waitingForDataRegistry;
     private final MapConfigurator mapConfigurator;
     private final GeoDataRequester geoDataRequester;
 
-    public GeoTraceWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry,
+    public GeoTraceWidget(Context context, QuestionDetails questionDetails,
                           MapConfigurator mapConfigurator, GeoDataRequester geoDataRequester, Dependencies dependencies) {
         super(context, dependencies, questionDetails);
         render();
 
-        this.waitingForDataRegistry = waitingForDataRegistry;
         this.mapConfigurator = mapConfigurator;
         this.geoDataRequester = geoDataRequester;
     }
 
     @Override
-    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
+    protected View onCreateWidgetView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = GeotraceQuestionBinding.inflate(((Activity) context).getLayoutInflater());
 
         binding.geoAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
         binding.simpleButton.setOnClickListener(v -> {
             if (mapConfigurator.isAvailable(context)) {
-                geoDataRequester.requestGeoTrace(prompt, getAnswerText(), waitingForDataRegistry);
+                geoDataRequester.requestGeoPoly(prompt);
             } else {
                 mapConfigurator.showUnavailableMessage(context);
             }
@@ -92,7 +87,7 @@ public class GeoTraceWidget extends QuestionWidget implements WidgetDataReceiver
 
     @Override
     public IAnswerData getAnswer() {
-        return getAnswerText().isEmpty() ? null : new StringData(getAnswerText());
+        return getFormEntryPrompt().getAnswerValue();
     }
 
     @Override
@@ -102,29 +97,12 @@ public class GeoTraceWidget extends QuestionWidget implements WidgetDataReceiver
     }
 
     @Override
-    public void clearAnswer() {
-        binding.geoAnswerText.setText(null);
-        binding.geoAnswerText.setVisibility(GONE);
-        binding.simpleButton.setText(org.odk.collect.strings.R.string.get_line);
-        widgetValueChanged();
-    }
+    public void clearAnswer() {}
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
         binding.simpleButton.cancelLongPress();
         binding.geoAnswerText.cancelLongPress();
-    }
-
-    @Override
-    public void setData(Object answer) {
-        binding.geoAnswerText.setText(answer.toString());
-        binding.geoAnswerText.setVisibility(binding.geoAnswerText.getText().toString().isBlank() ? GONE : VISIBLE);
-        binding.simpleButton.setText(answer.toString().isEmpty() ? org.odk.collect.strings.R.string.get_line : org.odk.collect.strings.R.string.view_or_change_line);
-        widgetValueChanged();
-    }
-
-    private String getAnswerText() {
-        return binding.geoAnswerText.getText().toString();
     }
 }

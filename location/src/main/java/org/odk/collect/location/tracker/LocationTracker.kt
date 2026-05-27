@@ -1,5 +1,6 @@
 package org.odk.collect.location.tracker
 
+import kotlinx.coroutines.flow.StateFlow
 import org.odk.collect.location.Location
 
 /**
@@ -8,11 +9,14 @@ import org.odk.collect.location.Location
 interface LocationTracker {
 
     /**
-     * The last location tracked. Will return `null` if a location hasn't been determined
-     * or [LocationTracker.start] hasn't been called yet.
+     * Will be `null` if a location hasn't been determined or [LocationTracker.start] hasn't been
+     * called yet.
      */
-    fun getCurrentLocation(): Location?
+    fun getLocation(): StateFlow<Location?>
 
+    /**
+     * @param updateInterval requested (not guaranteed) interval for location updates
+     */
     fun start(retainMockAccuracy: Boolean, updateInterval: Long? = null)
     fun start(retainMockAccuracy: Boolean) = start(retainMockAccuracy, null)
     fun start(updateInterval: Long?) = start(false, updateInterval)
@@ -22,4 +26,14 @@ interface LocationTracker {
      * Stops tracking location. Does not reset the value returned by [LocationTracker.getCurrentLocation].
      */
     fun stop()
+
+    /**
+     * Allows another location provider to provide a location for this [LocationTracker] before
+     * [start] is called.
+     */
+    fun warm(location: Location?)
+}
+
+fun LocationTracker.getCurrentLocation(): Location? {
+    return this.getLocation().value
 }

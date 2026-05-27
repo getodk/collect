@@ -46,7 +46,7 @@ import org.odk.collect.maps.markers.MarkerDescription;
 import org.odk.collect.maps.markers.MarkerIconDescription;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.strings.localization.LocalizedActivity;
-import org.odk.collect.webpage.ExternalWebPageHelper;
+import org.odk.collect.webpage.WebPageService;
 
 import javax.inject.Inject;
 
@@ -93,7 +93,7 @@ public class GeoPointMapActivity extends LocalizedActivity {
     SettingsProvider settingsProvider;
 
     @Inject
-    ExternalWebPageHelper externalWebPageHelper;
+    WebPageService webPageService;
 
     private MapFragment map;
     private int featureId = -1;  // will be a positive featureId once map is ready
@@ -134,7 +134,7 @@ public class GeoPointMapActivity extends LocalizedActivity {
         ((GeoDependencyComponentProvider) getApplication()).getGeoDependencyComponent().inject(this);
         getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()
                 .forClass(MapFragment.class, () -> (Fragment) mapFragmentFactory.createMapFragment())
-                .forClass(OfflineMapLayersPickerBottomSheetDialogFragment.class, () -> new OfflineMapLayersPickerBottomSheetDialogFragment(getActivityResultRegistry(), referenceLayerRepository, scheduler, settingsProvider, externalWebPageHelper))
+                .forClass(OfflineMapLayersPickerBottomSheetDialogFragment.class, () -> new OfflineMapLayersPickerBottomSheetDialogFragment(getActivityResultRegistry(), referenceLayerRepository, scheduler, settingsProvider, webPageService))
                 .build()
         );
         super.onCreate(savedInstanceState);
@@ -396,7 +396,7 @@ public class GeoPointMapActivity extends LocalizedActivity {
     /** Places the marker and enables the button to remove it. */
     private void placeMarker(@NonNull MapPoint point) {
         map.clearFeatures();
-        featureId = map.addMarker(new MarkerDescription(point, intentDraggable && !intentReadOnly && !isPointLocked, MapFragment.CENTER, new MarkerIconDescription(org.odk.collect.icons.R.drawable.ic_map_point)));
+        featureId = map.addMarker(new MarkerDescription(point, intentDraggable && !intentReadOnly && !isPointLocked, MapFragment.CENTER, new MarkerIconDescription.DrawableResource(org.odk.collect.icons.R.drawable.ic_map_point)));
         if (!intentReadOnly) {
             clearButton.setEnabled(true);
         }

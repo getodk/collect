@@ -15,13 +15,11 @@ import org.odk.collect.entities.javarosa.parse.EntityXFormParserFactory
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.metadata.PropertyManager
 import org.odk.collect.projects.ProjectDependencyFactory
-import org.odk.collect.settings.SettingsProvider
 
 class JavaRosaInitializer(
     private val propertyManager: PropertyManager,
     private val projectsDataService: ProjectsDataService,
-    private val entitiesRepositoryProvider: ProjectDependencyFactory<EntitiesRepository>,
-    private val settingsProvider: SettingsProvider
+    private val entitiesRepositoryProvider: ProjectDependencyFactory<EntitiesRepository>
 ) {
 
     fun initialize() {
@@ -43,9 +41,7 @@ class JavaRosaInitializer(
 
         // Configure default parser factory
         val entityXFormParserFactory =
-            EntityXFormParserFactory(
-                XFormParserFactory()
-            )
+            EntityXFormParserFactory(XFormParserFactory())
         val dynamicPreloadXFormParserFactory =
             DynamicPreloadXFormParserFactory(entityXFormParserFactory)
 

@@ -14,7 +14,7 @@ import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.settings.SettingsProvider
-import org.odk.collect.webpage.ExternalWebPageHelper
+import org.odk.collect.webpage.WebPageService
 
 class CollectGeoDependencyModule(
     private val appDependencyComponent: AppDependencyComponent
@@ -54,7 +54,7 @@ class CollectGeoDependencyModule(
         return appDependencyComponent.settingsProvider()
     }
 
-    override fun providesExternalWebPageHelper(): ExternalWebPageHelper {
-        return appDependencyComponent.externalWebPageHelper()
+    override fun providesWebPageService(): WebPageService {
+        return appDependencyComponent.webPageService()
     }
 }

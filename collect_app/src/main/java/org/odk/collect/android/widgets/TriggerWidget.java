@@ -43,7 +43,7 @@ public class TriggerWidget extends QuestionWidget {
     }
 
     @Override
-    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerTextSize) {
+    protected View onCreateWidgetView(Context context, FormEntryPrompt prompt, int answerTextSize) {
         ViewGroup answerView = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.trigger_widget_answer, null);
 
         triggerButton = answerView.findViewById(R.id.check_box);

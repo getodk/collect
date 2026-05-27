@@ -16,6 +16,7 @@ import org.odk.collect.android.preferences.dialogs.ServerAuthDialogFragment
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.androidshared.ui.ObviousProgressBar
 import org.odk.collect.androidshared.ui.SnackbarUtils
+import org.odk.collect.androidshared.ui.SnackbarUtils.DURATION_SHORT
 import org.odk.collect.async.network.NetworkStateProvider
 import org.odk.collect.lists.EmptyListView
 import org.odk.collect.lists.RecyclerViewUtils
@@ -100,7 +101,7 @@ class BlankFormListActivity : LocalizedActivity(), OnFormItemClickListener {
 
         viewModel.syncResult.observe(this) { result ->
             if (result != null) {
-                SnackbarUtils.showShortSnackbar(findViewById(R.id.form_list), result)
+                SnackbarUtils.showSnackbar(findViewById(R.id.form_list), result, DURATION_SHORT)
             }
         }
 

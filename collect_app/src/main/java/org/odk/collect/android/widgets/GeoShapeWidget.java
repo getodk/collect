@@ -20,40 +20,33 @@ import android.util.TypedValue;
 import android.view.View;
 
 import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
-
 import org.odk.collect.android.databinding.GeoshapeQuestionBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
-import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 @SuppressLint("ViewConstructor")
-public class GeoShapeWidget extends QuestionWidget implements WidgetDataReceiver {
+public class GeoShapeWidget extends QuestionWidget {
     GeoshapeQuestionBinding binding;
 
-    private final WaitingForDataRegistry waitingForDataRegistry;
     private final GeoDataRequester geoDataRequester;
 
-    public GeoShapeWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry,
+    public GeoShapeWidget(Context context, QuestionDetails questionDetails,
                           GeoDataRequester geoDataRequester, Dependencies dependencies) {
         super(context, dependencies, questionDetails);
         render();
 
-        this.waitingForDataRegistry = waitingForDataRegistry;
         this.geoDataRequester = geoDataRequester;
     }
 
     @Override
-    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
+    protected View onCreateWidgetView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = GeoshapeQuestionBinding.inflate(((Activity) context).getLayoutInflater());
 
         binding.geoAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
-        binding.simpleButton.setOnClickListener(v ->
-                geoDataRequester.requestGeoShape(prompt, getAnswerText(), waitingForDataRegistry));
+        binding.simpleButton.setOnClickListener(v -> geoDataRequester.requestGeoPoly(prompt));
 
         String stringAnswer = GeoWidgetUtils.getGeoPolyAnswerToDisplay(prompt.getAnswerText());
         binding.geoAnswerText.setText(stringAnswer);
@@ -80,16 +73,11 @@ public class GeoShapeWidget extends QuestionWidget implements WidgetDataReceiver
 
     @Override
     public IAnswerData getAnswer() {
-        return getAnswerText().isEmpty() ? null : new StringData(getAnswerText());
+        return getFormEntryPrompt().getAnswerValue();
     }
 
     @Override
-    public void clearAnswer() {
-        binding.geoAnswerText.setText(null);
-        binding.geoAnswerText.setVisibility(GONE);
-        binding.simpleButton.setText(org.odk.collect.strings.R.string.get_polygon);
-        widgetValueChanged();
-    }
+    public void clearAnswer() {}
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
@@ -102,17 +90,5 @@ public class GeoShapeWidget extends QuestionWidget implements WidgetDataReceiver
         super.cancelLongPress();
         binding.simpleButton.cancelLongPress();
         binding.geoAnswerText.cancelLongPress();
-    }
-
-    @Override
-    public void setData(Object answer) {
-        binding.geoAnswerText.setText(answer.toString());
-        binding.geoAnswerText.setVisibility(binding.geoAnswerText.getText().toString().isBlank() ? GONE : VISIBLE);
-        binding.simpleButton.setText(answer.toString().isEmpty() ? org.odk.collect.strings.R.string.get_polygon : org.odk.collect.strings.R.string.view_or_change_polygon);
-        widgetValueChanged();
-    }
-
-    private String getAnswerText() {
-        return binding.geoAnswerText.getText().toString();
     }
 }

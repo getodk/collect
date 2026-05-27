@@ -95,15 +95,13 @@ public interface LocationClient {
     boolean isMonitoringLocation();
 
     /**
-     * Sets the LocationClient's updateInterval (how often we would like updates) and fastestUpdateInterval
-     * (for throttling updates that come at a faster interval).
+     * Sets the LocationClient's updateInterval (how often we would like updates).
      * <p>
      * Implementations that don't offer this feature should do nothing here.
      *
-     * @param updateInterval        How often we would like updates from the LocationClient (inexact).
-     * @param fastestUpdateInterval The minimum interval between updates (exact).
+     * @param updateInterval How often we would like updates from the LocationClient (inexact).
      */
-    void setUpdateIntervals(long updateInterval, long fastestUpdateInterval);
+    void setUpdateInterval(long updateInterval);
 
     /**
      * An interface for listening to status changes on a LocaitonClient.

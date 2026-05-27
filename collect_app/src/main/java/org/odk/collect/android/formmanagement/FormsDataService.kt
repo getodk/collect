@@ -3,6 +3,7 @@ package org.odk.collect.android.formmanagement
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import org.odk.collect.android.formmanagement.download.FormDownloadException
 import org.odk.collect.android.formmanagement.download.ServerFormDownloader
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer
@@ -18,7 +19,6 @@ import org.odk.collect.projects.ProjectDependencyFactory
 import org.odk.collect.settings.keys.ProjectKeys
 import java.io.File
 import java.util.function.Supplier
-import java.util.stream.Collectors
 
 class FormsDataService(
     appState: AppState,
@@ -32,6 +32,11 @@ class FormsDataService(
         projectDependencies.formsRepository.all
     }
 
+    private val formsCount by qualifiedData(DataKeys.FORMS_COUNT, 0) { projectId ->
+        val projectDependencies = projectDependencyModuleFactory.create(projectId)
+        projectDependencies.formsRepository.all.filter { !it.isDeleted }.size
+    }
+
     private val syncing by qualifiedData(DataKeys.SYNC_STATUS_SYNCING, false)
     private val serverError by qualifiedData<FormSourceException?>(DataKeys.SYNC_STATUS_ERROR, null)
     private val diskError by qualifiedData<String?>(DataKeys.DISK_ERROR, null)
@@ -39,6 +44,8 @@ class FormsDataService(
     fun getForms(projectId: String): Flow<List<Form>> {
         return forms.flow(projectId)
     }
+
+    fun getFormsCount(projectId: String): StateFlow<Int> = formsCount.flow(projectId)
 
     fun isSyncing(projectId: String): LiveData<Boolean> {
         return syncing.flow(projectId).asLiveData()
@@ -103,15 +110,14 @@ class FormsDataService(
             if (acquiredLock) {
                 syncWithStorage(projectId)
 
-                val serverFormsDetailsFetcher = serverFormsDetailsFetcher(projectDependencies)
                 val formDownloader = formDownloader(projectDependencies, clock)
 
                 try {
-                    val serverForms: List<ServerFormDetails> =
-                        serverFormsDetailsFetcher.fetchFormDetails()
-                    val updatedForms =
-                        serverForms.stream().filter { obj: ServerFormDetails -> obj.isUpdated }
-                            .collect(Collectors.toList())
+                    val serverForms = ServerFormUseCases.fetchFormDetails(
+                        projectDependencies.formsRepository,
+                        projectDependencies.formSource
+                    )
+                    val updatedForms = serverForms.filter { it.isUpdated() }
                     if (updatedForms.isNotEmpty()) {
                         if (projectDependencies.generalSettings.getBoolean(ProjectKeys.KEY_AUTOMATIC_UPDATE)) {
                             val results = ServerFormUseCases.downloadForms(
@@ -138,21 +144,25 @@ class FormsDataService(
      * the project's form list.
      */
     @JvmOverloads
-    fun matchFormsWithServer(projectId: String, notify: Boolean = true): Boolean {
+    fun matchFormsWithServer(
+        projectId: String,
+        notify: Boolean = true,
+        isStopped: (() -> Boolean) = { false }
+    ): Boolean {
         val projectDependencies = projectDependencyModuleFactory.create(projectId)
         return projectDependencies.formsLock.withLock { acquiredLock ->
             if (acquiredLock) {
                 startSync(projectId)
                 syncWithStorage(projectId)
 
-                val serverFormsDetailsFetcher = serverFormsDetailsFetcher(projectDependencies)
                 val formDownloader = formDownloader(projectDependencies, clock)
 
                 val serverFormsSynchronizer = ServerFormsSynchronizer(
-                    serverFormsDetailsFetcher,
+                    { repository, source -> ServerFormUseCases.fetchFormDetails(repository, source) },
                     projectDependencies.formsRepository,
                     projectDependencies.instancesRepository,
-                    formDownloader
+                    formDownloader,
+                    projectDependencies.formSource
                 )
 
                 val exception = try {
@@ -165,6 +175,8 @@ class FormsDataService(
                 } catch (e: FormSourceException) {
                     if (notify) {
                         notifier.onSync(e, projectId)
+                    } else if (isStopped()) {
+                        notifier.onSyncStopped(projectId)
                     }
 
                     e
@@ -227,14 +239,5 @@ private fun formDownloader(
         clock,
         projectDependencyModule.entitiesRepository,
         projectDependencyModule.entitySource
-    )
-}
-
-private fun serverFormsDetailsFetcher(
-    projectDependencyModule: ProjectDependencyModule
-): ServerFormsDetailsFetcher {
-    return ServerFormsDetailsFetcher(
-        projectDependencyModule.formsRepository,
-        projectDependencyModule.formSource
     )
 }

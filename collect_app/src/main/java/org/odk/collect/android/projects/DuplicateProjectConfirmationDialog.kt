@@ -1,6 +1,7 @@
 package org.odk.collect.android.projects
 
 import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -16,6 +17,7 @@ class DuplicateProjectConfirmationDialog : DialogFragment() {
     interface DuplicateProjectConfirmationListener {
         fun createProject(settingsJson: String)
         fun switchToProject(uuid: String)
+        fun cancel()
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -36,6 +38,11 @@ class DuplicateProjectConfirmationDialog : DialogFragment() {
                 }
             }
             .create()
+    }
+
+    override fun onCancel(dialog: DialogInterface) {
+        super.onCancel(dialog)
+        listener.cancel()
     }
 }
 

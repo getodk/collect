@@ -3,6 +3,7 @@ package org.odk.collect.android.feature.external
 import android.content.Intent
 import android.content.Intent.EXTRA_SHORTCUT_INTENT
 import android.content.Intent.EXTRA_SHORTCUT_NAME
+import android.os.Build
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -62,5 +63,13 @@ class AndroidShortcutsTest {
         val formId = ContentProviderUtils.getFormDatabaseId("DEMO", "one_question")
         assertThat(shortcutTargetIntent.action, equalTo(Intent.ACTION_EDIT))
         assertThat(shortcutTargetIntent.data, equalTo(FormsContract.getUri("DEMO", formId)))
+
+        // Check we're using ShortcutManager.createShortcutResultIntent on Android 16+
+        if (Build.VERSION.SDK_INT >= 36) {
+            assertThat(
+                shortcutIntent.hasExtra("android.content.pm.extra.PIN_ITEM_REQUEST"),
+                equalTo(true)
+            )
+        }
     }
 }

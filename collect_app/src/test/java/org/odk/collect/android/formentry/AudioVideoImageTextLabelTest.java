@@ -26,7 +26,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.support.WidgetTestActivity;
 import org.odk.collect.android.utilities.MediaUtils;
-import org.odk.collect.android.widgets.support.FakeAudioPlayer;
+import org.odk.collect.testshared.FakeAudioPlayer;
 import org.odk.collect.audioclips.Clip;
 import org.odk.collect.imageloader.ImageLoader;
 

@@ -6,6 +6,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import org.odk.collect.android.R
+import org.odk.collect.android.application.CollectComposeThemeProvider
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.utilities.FileProvider
@@ -21,7 +22,7 @@ import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.strings.localization.LocalizedActivity
 import javax.inject.Inject
 
-class QRCodeTabsActivity : LocalizedActivity() {
+class QRCodeTabsActivity : LocalizedActivity(), CollectComposeThemeProvider {
     @Inject
     lateinit var qrCodeGenerator: QRCodeGenerator
 
