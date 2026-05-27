@@ -1076,6 +1076,30 @@ class GeoPolyFragmentTest {
         }
     }
 
+    @Test
+    fun placedPolylinesAreNotClickable() {
+        launcherRule.launchInContainer {
+            GeoPolyFragment({ OnBackPressedDispatcher() })
+        }
+
+        startInput(R.id.placement_mode)
+        map.click(MapPoint(1.0, 1.0))
+        assertThat(map.getPolyLines()[0].clickable, equalTo(false))
+    }
+
+    @Test
+    fun placedPolygonsAreNotClickable() {
+        launcherRule.launchInContainer {
+            GeoPolyFragment(
+                outputMode = OutputMode.GEOSHAPE,
+                onBackPressedDispatcher = { OnBackPressedDispatcher() })
+        }
+
+        startInput(R.id.placement_mode)
+        map.click(MapPoint(1.0, 1.0))
+        assertThat(map.getPolygons()[0].clickable, equalTo(false))
+    }
+
     private fun overrideDependencies(mapFragment: MapFragment) {
         val application = ApplicationProvider.getApplicationContext<RobolectricApplication>()
         application.geoDependencyComponent = DaggerGeoDependencyComponent.builder()

@@ -308,7 +308,8 @@ class GeoPolyFragment @JvmOverloads constructor(
                     draggable = !readOnly,
                     strokeColor = color,
                     fillColor = color,
-                    highlightLastPoint = isValid
+                    highlightLastPoint = isValid,
+                    clickable = false
                 )
 
                 if (featureId == -1) {
@@ -321,7 +322,8 @@ class GeoPolyFragment @JvmOverloads constructor(
                     points,
                     draggable = !readOnly,
                     strokeColor = color,
-                    highlightLastPoint = isValid
+                    highlightLastPoint = isValid,
+                    clickable = false
                 )
 
                 if (featureId == -1) {
