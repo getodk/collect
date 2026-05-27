@@ -150,7 +150,7 @@
 
     <style name="Theme.Collect.SplashScreen" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/colorSurface</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_screen_icon</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/s_time_logo</item>
         <item name="postSplashScreenTheme">@style/Theme.Collect</item>
     </style>
 

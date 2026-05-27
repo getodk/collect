@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/collect_app_name"
-                android:src="@drawable/odk_logo"
+                android:src="@drawable/s_time_logo"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
