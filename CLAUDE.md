@@ -82,6 +82,50 @@ Each module follows a standard layout: `src/main/java/…`, `src/test/…`, `src
 
 `com.sopami.collect.android` (overridden from upstream's `org.odk.collect.android`). Provider authority references in `AndroidManifest.xml` use `${applicationId}` to stay in sync automatically.
 
+## Versioning
+
+S-TIME Collect uses two independent version identifiers:
+
+| Identifier | Where | Format | Example |
+|---|---|---|---|
+| `versionCode` | `gradle.properties` | Integer, strictly increasing | `5116` |
+| `versionName` | Auto from `git describe` | `vYYYY.MM` tag | `v2026.05` |
+
+### Version naming convention
+
+Releases follow a **year.month** scheme: `vYYYY.MM` (e.g., `v2026.05` for May 2026).
+
+### Release checklist
+
+1. **Bump `versionCode`** in `gradle.properties` — must be greater than the last Play Store upload (current baseline: `5116`).
+2. **Create a release branch:**
+   ```bash
+   git checkout -b chore/release-vYYYY.MM
+   ```
+3. **Commit `gradle.properties`:**
+   ```bash
+   git add gradle.properties
+   git commit -m "chore: bump versionCode to XXXX for release vYYYY.MM"
+   ```
+4. **Tag the commit:**
+   ```bash
+   git tag vYYYY.MM
+   ```
+   This makes `versionName` resolve to a clean `vYYYY.MM` string in the Play Store listing.
+5. **Push branch and tag:**
+   ```bash
+   git push -u origin chore/release-vYYYY.MM
+   git push origin vYYYY.MM
+   ```
+6. **Open a PR**, get it merged, then build the signed AAB from Android Studio (**Build > Generate Signed Bundle / APK… > Android App Bundle > release**).
+7. Upload the `.aab` to Google Play Console under `com.sopami.collect.android`.
+
+> **Note:** `collect_app/release/` is gitignored — never commit build artifacts.
+
+### Android Studio requirement
+
+AGP 8.13.0 (used by this project) requires **Android Studio Narwhal (2025.2.1)** or later. Older versions will fail Gradle sync with an AGP compatibility error.
+
 ## Development workflow
 
 **Never push directly to `master`.** All changes must go through a branch and pull request.
@@ -96,8 +140,37 @@ git checkout -b <type>/<short-description>
 
 ### Pushing and opening a PR
 
+Before pushing, ask yourself:
+
+> **Does this change need a new Play Store release?**
+> - `fix/` or `feat/` branches that are ready for users → **yes**, follow the steps below before pushing
+> - `chore/`, `sync/`, or internal-only changes → **no**, skip to the push command
+
+If yes — bump the version and tag the commit:
+
+```bash
+# 1. Increment versionCode in gradle.properties (e.g. 5116 → 5117)
+# 2. Stage and commit it
+git add gradle.properties
+git commit -m "chore: bump versionCode to XXXX for release vYYYY.MM"
+
+# 3. Tag the commit with the release version
+git tag vYYYY.MM
+
+# 4. Push branch and tag
+git push -u origin <branch-name>
+git push origin vYYYY.MM
+```
+
+If no — just push:
+
 ```bash
 git push -u origin <branch-name>
+```
+
+Then open the PR:
+
+```bash
 gh pr create --title "..." --body "..."
 ```
 

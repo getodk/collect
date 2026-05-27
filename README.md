@@ -231,54 +231,61 @@ Devices that @getodk/testers have available for testing are as follows:
 * Huawei Y560-L01 1GB - Android 5.1
 
 ## Creating signed releases for Google Play Store
-Maintainers keep a folder with a clean checkout of the code and use [jenv.be](https://www.jenv.be) in that folder to ensure compilation with Java 17.
 
-### Release prerequisites:
+> This section applies to **S-TIME Collect** (`com.sopami.collect.android`), Sopami's branded fork. See `CLAUDE.md` for full context.
 
-- a`local.properties` file in the root folder with the following:
+### Versioning
+
+S-TIME Collect releases follow a **year.month** naming scheme:
+
+| Identifier | Location | Convention | Example |
+|---|---|---|---|
+| `versionCode` | `gradle.properties` | Integer, strictly increasing per upload | `5116` |
+| `versionName` | Auto from `git describe` | `vYYYY.MM` git tag | `v2026.05` |
+
+### Prerequisites
+
+- **Android Studio Narwhal (2025.2.1)** or later (required for AGP 8.13.0)
+- The release keystore file and its passwords
+- A `secrets.properties` file at the repo root (gitignored — never commit it):
   ```
-  sdk.dir=/path/to/android/sdk
+  RELEASE_STORE_FILE=/absolute/path/to/stime-collect.keystore
+  RELEASE_STORE_PASSWORD=your-store-password
+  RELEASE_KEY_ALIAS=your-key-alias
+  RELEASE_KEY_PASSWORD=your-key-password
   ```
 
-- the keystore file and passwords
+### When to create a new version
 
-- a `secrets.properties` file in the root project folder folder with the following:
-  ```
-  // secrets.properties
-  RELEASE_STORE_FILE=/path/to/collect.keystore
-  RELEASE_STORE_PASSWORD=secure-store-password
-  RELEASE_KEY_ALIAS=key-alias
-  RELEASE_KEY_PASSWORD=secure-alias-password
-  ```
+Before opening any PR, ask:
 
-- a `google-services.json` file in the `collect_app/src/odkCollectRelease` folder. The contents of the file are similar to the contents of `collect_app/src/google-services.json`.
+> **Does this change need a new Play Store release?**
+> - `fix/` or `feat/` branches ready for users → **yes**, follow the steps below before pushing
+> - `chore/`, `sync/`, or internal-only changes → **no**, skip the version bump
 
-### Release checklist:
+### Release steps
 
-- update translations
-- make sure CI is green for the chosen commit
-- run `./gradlew releaseCheck`. If successful, a signed release will be at `collect_app/build/outputs/apk` (with an old version name)
-- verify a basic "happy path": scan a QR code to configure a new project, get a blank form, fill it, open the form map (confirms that the Google Maps key is correct), send form
-- run `./benchmark.sh` with a real device connected to verify performance
-  - To run benchmarks a project will need to be set up in Central with the benchmark forms and app users. The forms and entities needed for that are available [here](https://drive.google.com/drive/folders/1dPLvDY0LhVX-5qTUEs6EDoraDnLpUS0g?usp=drive_link).
-- verify new APK can be installed as update to previous version and that above "happy path" works in that case also
-- create and publish scheduled forum post with release description
-- write Play Store release notes, include link to forum post
-- when creating a major release:
-  - Tag the commit for the release (`vX.X.0`)
-  - Run `./create-release.sh <last release version code> <release tag>`
-- when creating a patch release:
-  - Tag the commit for the patch release (`vX.X.X`)
-  - (If beta has started for next release) Tag the commit for the beta release (`vX.X.X-beta.X`)
-  - Run `./create-release.sh <last release version code> <patch release tag> <beta release tag>`
-- when creating a beta release:
-  - Tag the commit for the beta release (`vX.X.X-beta.X`)
-  - Run `./create-release.sh <last release version code> <beta release tag>`
-- add a release to Github [here](https://github.com/getodk/collect/releases), generate release notes and attach the APK
-- upload APK(s) to Play Store
-  - When creating a hotfix, the beta APK should be uploaded second as it will have a higher version code
-- backup dependencies for the release by downloading the `vX.X.X.tar` artifact from the `create_dependency_backup` job on Circle CI (for the release commit) and then uploading it to [this folder](https://drive.google.com/drive/folders/1_tMKBFLdhzFZF9GKNeob4FbARjdfbtJu?usp=share_link)
-- backup a self signed release APK by downloading the `selfSignedRelease.apk` from the `build_release` job on Circle CI (for the release commit) and then upload to [this folder](https://drive.google.com/drive/folders/1pbbeNaMTziFhtZmedOs0If3BeYu3Ex5x?usp=share_link)
+1. **Bump `versionCode`** in `gradle.properties` (must exceed the last uploaded value).
+
+2. **Create a release branch, commit, tag, and push:**
+   ```bash
+   git checkout -b chore/release-vYYYY.MM
+   git add gradle.properties
+   git commit -m "chore: bump versionCode to XXXX for release vYYYY.MM"
+   git tag vYYYY.MM
+   git push -u origin chore/release-vYYYY.MM
+   git push origin vYYYY.MM
+   ```
+
+3. **Open a PR** and merge into `master` (never push directly to `master`).
+
+6. **Build the signed AAB** in Android Studio:
+   **Build > Generate Signed Bundle / APK… > Android App Bundle > release**
+   Output: `collect_app/build/outputs/bundle/release/STIME-Collect-release.aab`
+
+7. **Upload to Google Play Console** → S-TIME Collect (`com.sopami.collect.android`) → Production → Create new release → upload `.aab` → Start rollout.
+
+> **Note:** `collect_app/release/` is gitignored. Do not commit build artifacts.
 
 ## Compiling a previous release using backed-up dependencies
 

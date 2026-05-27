@@ -16,6 +16,7 @@ secrets.properties
 # built application files
 *.apk
 *.ap_
+collect_app/release/
 
 # files for the Dalvik VM
 *.dex
