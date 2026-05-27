@@ -34,6 +34,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.fakes.FakePermissionsProvider;
 import org.odk.collect.android.utilities.Appearances;
+import org.odk.collect.android.widgets.geo.GeoPolyDialogFragment;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.odk.collect.geo.geopoint.GeoPointActivity;
 import org.odk.collect.geo.geopoint.GeoPointMapActivity;

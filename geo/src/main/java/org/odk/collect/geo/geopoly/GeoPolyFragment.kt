@@ -26,12 +26,16 @@ import org.odk.collect.async.Scheduler
 import org.odk.collect.geo.GeoActivityUtils.requireLocationPermissions
 import org.odk.collect.geo.GeoDependencyComponentProvider
 import org.odk.collect.geo.GeoUtils
+import org.odk.collect.geo.GeoUtils.showData
+import org.odk.collect.geo.GeoUtils.showItemLoading
 import org.odk.collect.geo.GeoUtils.toMapPoint
 import org.odk.collect.geo.R
 import org.odk.collect.geo.databinding.GeopolyLayoutBinding
 import org.odk.collect.geo.geopoint.LocationAccuracy.Improving
 import org.odk.collect.geo.geopoint.LocationAccuracy.Unacceptable
 import org.odk.collect.geo.geopoly.GeoPolySettingsDialogFragment.SettingsDialogCallback
+import org.odk.collect.geo.items.MappableData
+import org.odk.collect.geo.items.MappableItemsDelegate
 import org.odk.collect.location.Location
 import org.odk.collect.location.tracker.LocationTracker
 import org.odk.collect.maps.traces.LineDescription
@@ -54,7 +58,8 @@ class GeoPolyFragment @JvmOverloads constructor(
     val readOnly: Boolean = false,
     val retainMockAccuracy: Boolean = false,
     val inputPolygon: List<MapPoint> = emptyList(),
-    val invalidMessage: LiveData<DisplayString?> = MutableLiveData(null)
+    val invalidMessage: LiveData<DisplayString?> = MutableLiveData(null),
+    val mappableData: MappableData? = null
 ) : Fragment(R.layout.geopoly_layout), SettingsDialogCallback {
 
     @Inject
@@ -110,6 +115,7 @@ class GeoPolyFragment @JvmOverloads constructor(
     }
 
     private val currentLocationDelegate = CurrentLocationDelegate()
+    private val mappableItemsDelegate = MappableItemsDelegate(background = true, clickable = false)
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -138,6 +144,10 @@ class GeoPolyFragment @JvmOverloads constructor(
 
         viewModel.points.asLiveData().observe(this) {
             setChangeResult(it)
+        }
+
+        if (mappableData != null) {
+            showItemLoading(mappableData)
         }
     }
 
@@ -298,7 +308,8 @@ class GeoPolyFragment @JvmOverloads constructor(
                     draggable = !readOnly,
                     strokeColor = color,
                     fillColor = color,
-                    highlightLastPoint = isValid
+                    highlightLastPoint = isValid,
+                    clickable = false
                 )
 
                 if (featureId == -1) {
@@ -311,7 +322,8 @@ class GeoPolyFragment @JvmOverloads constructor(
                     points,
                     draggable = !readOnly,
                     strokeColor = color,
-                    highlightLastPoint = isValid
+                    highlightLastPoint = isValid,
+                    clickable = false
                 )
 
                 if (featureId == -1) {
@@ -322,6 +334,10 @@ class GeoPolyFragment @JvmOverloads constructor(
             }
 
             updateUi()
+        }
+
+        if (mappableData != null) {
+            map.showData(mappableData, mappableItemsDelegate)
         }
     }
 

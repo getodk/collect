@@ -70,7 +70,7 @@ class EntityFormFinalizationProcessor : FormEntryFinalizationProcessor {
                 val entityFieldRef = entityBindRef.contextualize(entityGroupRef)
 
                 val element = mainInstance.resolveReference(entityFieldRef)
-                if (element.isRelevant) {
+                if (element != null && element.isRelevant) {
                     val value = element.value?.uncast()?.string ?: ""
                     saveTo.value to value
                 } else {

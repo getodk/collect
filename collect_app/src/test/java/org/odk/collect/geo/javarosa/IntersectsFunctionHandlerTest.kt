@@ -25,7 +25,6 @@ class IntersectsFunctionHandlerTest {
     @Test
     fun `returns false when input is empty`() {
         val scenario = Scenario.init(
-            "Intersects form",
             html(
                 head(
                     title("Intersects form"),
@@ -59,7 +58,6 @@ class IntersectsFunctionHandlerTest {
     @Test
     fun `returns true when input is intersecting trace`() {
         val scenario = Scenario.init(
-            "Intersects form",
             html(
                 head(
                     title("Intersects form"),
@@ -97,7 +95,6 @@ class IntersectsFunctionHandlerTest {
     @Test
     fun `throws exception when input is a non-geo string`() {
         val scenario = Scenario.init(
-            "Intersects form",
             html(
                 head(
                     title("Intersects form"),
@@ -139,7 +136,6 @@ class IntersectsFunctionHandlerTest {
         val expected = XPathTypeMismatchException::class.java
         try {
             Scenario.init(
-                "Intersects form",
                 html(
                     head(
                         title("Intersects form"),

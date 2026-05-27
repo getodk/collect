@@ -6,6 +6,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 import org.odk.collect.android.R;
 import org.odk.collect.testshared.AssertionFramework;
+import org.odk.collect.testshared.WaitFor;
 
 public class FormEndPage extends Page<FormEndPage> {
 
@@ -36,12 +37,13 @@ public class FormEndPage extends Page<FormEndPage> {
     }
 
     public <D extends Page<D>> D clickFinalize(D destination) {
-        return clickOnString(org.odk.collect.strings.R.string.finalize, destination, AssertionFramework.COMPOSE);
+        return WaitFor.waitFor(() -> {
+            return clickOnString(org.odk.collect.strings.R.string.finalize, destination, AssertionFramework.COMPOSE);
+        });
     }
 
     public MainMenuPage clickFinalize() {
-        clickFinalize(new MainMenuPage());
-        return new MainMenuPage();
+        return clickFinalize(new MainMenuPage());
     }
 
     public FormEndPage clickFinalizeWithError(String errorMsg) {

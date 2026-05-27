@@ -8,7 +8,9 @@ data class LineDescription(
     private val strokeWidth: String? = null,
     private val strokeColor: Int? = null,
     override val highlightLastPoint: Boolean = false,
-    val draggable: Boolean = false
+    val draggable: Boolean = false,
+    override val background: Boolean = false,
+    override val clickable: Boolean = true
 ) : TraceDescription {
     override fun getStrokeWidth(): Float {
         return try {

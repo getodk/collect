@@ -12,10 +12,17 @@ sealed interface MarkerIconDescription {
         val drawable: Int,
         private val color: Int? = null,
         private val symbol: String? = null,
-        override val background: Boolean = false
+        override val background: Boolean = false,
+        val clickable: Boolean = true
     ) : MarkerIconDescription {
 
-        constructor(drawable: Int, color: String?, symbol: String?) : this(drawable, color?.sanitizeToColorInt(), symbol)
+        constructor(
+            drawable: Int,
+            color: String?,
+            symbol: String?,
+            background: Boolean = false,
+            clickable: Boolean = true
+        ) : this(drawable, color?.sanitizeToColorInt(), symbol, background, clickable)
 
         fun getColor(): Int? = color
 

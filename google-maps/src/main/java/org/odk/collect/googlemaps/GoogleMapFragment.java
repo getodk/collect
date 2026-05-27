@@ -541,13 +541,6 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
             return null;
         }
 
-        int index;
-        if (markerDescription.getIconDescription().getBackground()) {
-            index = 1;
-        } else {
-            index = 2;
-        }
-
         // A Marker's position is a LatLng with just latitude and longitude
         // fields.  We need to store the point's altitude and standard
         // deviation values somewhere, so they go in the marker's snippet.
@@ -557,8 +550,18 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
             .draggable(markerDescription.isDraggable())
             .icon(getBitmapDescriptor(context, markerDescription.getIconDescription()))
             .anchor(getIconAnchorValueX(markerDescription.getIconAnchor()), getIconAnchorValueY(markerDescription.getIconAnchor()))  // center the icon on the position
-            .zIndex(index)
+            .zIndex(getZIndex(markerDescription.getIconDescription().getBackground()))
         );
+    }
+
+    private static int getZIndex(boolean background) {
+        int index;
+        if (background) {
+            index = 1;
+        } else {
+            index = 2;
+        }
+        return index;
     }
 
     private static float getIconAnchorValueX(MapFragment.IconAnchor iconAnchor) {
@@ -718,10 +721,10 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
             } else if (polyline == null) {
                 polyline = map.addPolyline(new PolylineOptions()
                         .color(lineDescription.getStrokeColor())
-                        .zIndex(1)
+                        .zIndex(getZIndex(lineDescription.getBackground()))
                         .width(lineDescription.getStrokeWidth())
                         .addAll(latLngs)
-                        .clickable(true)
+                        .clickable(lineDescription.getClickable())
                 );
             } else {
                 polyline.setPoints(latLngs);
@@ -816,9 +819,10 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
             } else if (polyline == null) {
                 polyline = map.addPolyline(new PolylineOptions()
                     .color(lineDescription.getStrokeColor())
-                    .zIndex(1)
+                    .zIndex(getZIndex(lineDescription.getBackground()))
                     .width(lineDescription.getStrokeWidth())
                     .addAll(latLngs)
+                    .clickable(lineDescription.getClickable())
                 );
             } else {
                 polyline.setPoints(latLngs);
@@ -900,10 +904,11 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
             } else if (polygon == null) {
                 polygon = map.addPolygon(new PolygonOptions()
                         .strokeColor(polygonDescription.getStrokeColor())
-                        .zIndex(1)
+                        .zIndex(getZIndex(polygonDescription.getBackground()))
                         .strokeWidth(polygonDescription.getStrokeWidth())
                         .fillColor(polygonDescription.getFillColor())
                         .addAll(latLngs)
+                        .clickable(polygonDescription.getClickable())
                 );
             } else {
                 polygon.setPoints(latLngs);
@@ -948,7 +953,8 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
                     .strokeColor(polygonDescription.getStrokeColor())
                     .strokeWidth(polygonDescription.getStrokeWidth())
                     .fillColor(polygonDescription.getFillColor())
-                    .clickable(true)
+                    .zIndex(getZIndex(polygonDescription.getBackground()))
+                    .clickable(polygonDescription.getClickable())
             );
         }
 

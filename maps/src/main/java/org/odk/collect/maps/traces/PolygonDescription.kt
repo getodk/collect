@@ -10,7 +10,9 @@ data class PolygonDescription(
     private val strokeColor: Int? = null,
     private val fillColor: Int? = null,
     override val highlightLastPoint: Boolean = false,
-    val draggable: Boolean = false
+    val draggable: Boolean = false,
+    override val background: Boolean = false,
+    override val clickable: Boolean = true
 ) : TraceDescription {
     override fun getStrokeWidth(): Float {
         return try {

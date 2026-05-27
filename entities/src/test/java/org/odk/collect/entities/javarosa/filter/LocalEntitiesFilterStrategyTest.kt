@@ -72,7 +72,6 @@ class LocalEntitiesFilterStrategyTest {
         entitiesRepository.save("things", Entity.New("thing2", "Thing 2"))
 
         val scenario = Scenario.init(
-            "Secondary instance form",
             html(
                 head(
                     title("Secondary instance form"),
@@ -107,7 +106,6 @@ class LocalEntitiesFilterStrategyTest {
         entitiesRepository.save("things", Entity.New("thing2", "Thing 2"))
 
         val scenario = Scenario.init(
-            "Secondary instance form",
             html(
                 head(
                     title("Secondary instance form"),
@@ -145,7 +143,6 @@ class LocalEntitiesFilterStrategyTest {
         )
 
         Scenario.init(
-            "Secondary instance form",
             html(
                 head(
                     title("Secondary instance form"),
@@ -178,7 +175,6 @@ class LocalEntitiesFilterStrategyTest {
         entitiesRepository.addList("things")
 
         val scenario = Scenario.init(
-            "Secondary instance form",
             html(
                 head(
                     title("Secondary instance form"),
@@ -212,7 +208,6 @@ class LocalEntitiesFilterStrategyTest {
         entitiesRepository.save("things", Entity.New("thing", "Thing"))
 
         val scenario = Scenario.init(
-            "Secondary instance form",
             html(
                 head(
                     title("Secondary instance form"),
@@ -244,7 +239,6 @@ class LocalEntitiesFilterStrategyTest {
     @Test
     fun `does not effect name queries on non entity instances`() {
         val scenario = Scenario.init(
-            "Secondary instance form",
             html(
                 head(
                     title("Secondary instance form"),
@@ -278,7 +272,6 @@ class LocalEntitiesFilterStrategyTest {
     @Test
     fun `works correctly with filtering on a repeat`() {
         val scenario = Scenario.init(
-            "Count people underage",
             html(
                 head(
                     title("Count people underage"),
@@ -335,7 +328,6 @@ class LocalEntitiesFilterStrategyTest {
         )
 
         val scenario = Scenario.init(
-            "Secondary instance form",
             html(
                 head(
                     title("Secondary instance form"),
@@ -388,7 +380,6 @@ class LocalEntitiesFilterStrategyTest {
         )
 
         val scenario = Scenario.init(
-            "Secondary instance form",
             html(
                 head(
                     title("Secondary instance form"),
@@ -432,7 +423,6 @@ class LocalEntitiesFilterStrategyTest {
         )
 
         val scenario = Scenario.init(
-            "Secondary instance form",
             html(
                 head(
                     title("Secondary instance form"),
@@ -468,7 +458,6 @@ class LocalEntitiesFilterStrategyTest {
         entitiesRepository.save("things", Entity.New("thing1", "Thing1"))
 
         val scenario = Scenario.init(
-            "Secondary instance form",
             html(
                 head(
                     title("Secondary instance form"),
@@ -505,7 +494,6 @@ class LocalEntitiesFilterStrategyTest {
         entitiesRepository.save("things", Entity.New("thing1", "Thing1", version = 2))
 
         val scenario = Scenario.init(
-            "Secondary instance form",
             html(
                 head(
                     title("Secondary instance form"),
@@ -562,7 +550,6 @@ class LocalEntitiesFilterStrategyTest {
         )
 
         val scenario = Scenario.init(
-            "Secondary instance form",
             html(
                 head(
                     title("Secondary instance form"),
@@ -600,7 +587,6 @@ class LocalEntitiesFilterStrategyTest {
         entitiesRepository.save("things", Entity.New("thing1", "Thing1"))
 
         val scenario = Scenario.init(
-            "Secondary instance form",
             html(
                 head(
                     title("Secondary instance form"),
@@ -641,7 +627,6 @@ class LocalEntitiesFilterStrategyTest {
         entitiesRepository.save("things", Entity.New("thing1", "Thing1"))
 
         val scenario = Scenario.init(
-            "Secondary instance form",
             html(
                 head(
                     title("Secondary instance form"),
@@ -684,7 +669,6 @@ class LocalEntitiesFilterStrategyTest {
         entitiesRepository.save("things", Entity.New("thing1", "Thing1"))
 
         val scenario = Scenario.init(
-            "Secondary instance form",
             html(
                 head(
                     title("Secondary instance form"),
@@ -722,7 +706,6 @@ class LocalEntitiesFilterStrategyTest {
         entitiesRepository.save("things", Entity.New("thing1", "Thing1"))
 
         val scenario = Scenario.init(
-            "Secondary instance form",
             html(
                 head(
                     title("Secondary instance form"),
