@@ -31,9 +31,11 @@ interface MapConfigurator {
     /** Constructs any preference widgets that are specific to this map implementation.  */
     fun createPrefs(context: Context, settings: Settings): List<Preference>
 
+    @Deprecated("Pref keys should be constants owned by the MapFragment modules")
     /** Gets the set of keys for preferences that should be watched for changes.  */
     val prefKeys: Collection<String>
 
+    @Deprecated("This should be handled by MapFragment implementations")
     /** Packs map-related preferences into a Bundle for MapFragment.applyConfig().  */
     fun buildConfig(prefs: Settings): Bundle
 
