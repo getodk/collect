@@ -34,7 +34,7 @@ object LocalEntityUseCases {
                     if (existing != null) {
                         saveUpdatedEntity(formEntity, existing, entitiesRepository)
                     } else {
-                        Analytics.log(AnalyticsEvents.ENTITY_FAILURE, "failure_code", "UPDATE_NO_MATCH")
+                        Analytics.log(AnalyticsEvents.ENTITY_UPDATE_NO_MATCH, "form")
                     }
                 }
 
@@ -81,8 +81,7 @@ object LocalEntityUseCases {
                 "Entities",
                 "Failed to create dataset=${formEntity.dataset}, id=${formEntity.id}, label=${formEntity.label}"
             )
-
-            Analytics.log(AnalyticsEvents.ENTITY_FAILURE, "failure_code", "CREATE_NO_LABEL")
+            Analytics.log(AnalyticsEvents.ENTITY_CREATE_NO_LABEL, "form")
         }
     }
 

@@ -85,9 +85,9 @@ class EntityFormFinalizationProcessor : FormEntryFinalizationProcessor {
             FormEntity(action, dataset, id, label, fields)
         } else {
             if (id.isNullOrBlank()) {
-                Analytics.log(AnalyticsEvents.ENTITY_FAILURE, "failure_code", "NO_ID")
+                Analytics.log(AnalyticsEvents.ENTITY_WITH_NO_ID, "form")
             } else {
-                Analytics.log(AnalyticsEvents.ENTITY_FAILURE, "failure_code", "INVALID_ID")
+                Analytics.log(AnalyticsEvents.INVALID_ENTITY, "form")
             }
             null
         }
