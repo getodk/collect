@@ -24,10 +24,6 @@ public class MapConfiguratorProvider {
     private static SourceOption[] sourceOptions;
     private static final String USGS_URL_BASE =
         "https://basemap.nationalmap.gov/arcgis/rest/services";
-    private static final String OSM_COPYRIGHT = "© OpenStreetMap contributors";
-    private static final String CARTO_COPYRIGHT = "© CARTO";
-    private static final String CARTO_ATTRIBUTION = OSM_COPYRIGHT + ", " + CARTO_COPYRIGHT;
-    private static final String USGS_ATTRIBUTION = "Map services and data available from U.S. Geological Survey,\nNational Geospatial Program.";
 
     private MapConfiguratorProvider() {
 

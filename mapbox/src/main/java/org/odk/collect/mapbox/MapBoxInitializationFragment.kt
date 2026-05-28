@@ -37,7 +37,7 @@ class MapBoxInitializationFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val rootView = inflater.inflate(R.layout.mapbox_fragment_layout, container, false)
+        val rootView = inflater.inflate(R.layout.mapbox_initialization_fragment_layout, container, false)
         initMapBox(rootView)
         return rootView
     }

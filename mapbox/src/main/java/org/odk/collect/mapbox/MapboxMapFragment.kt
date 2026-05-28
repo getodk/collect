@@ -51,6 +51,7 @@ import com.mapbox.maps.plugin.gestures.addOnScaleListener
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.odk.collect.androidshared.utils.ScreenUtils
+import org.odk.collect.mapbox.databinding.MapboxMapFragmentLayoutBinding
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragment.ErrorListener
 import org.odk.collect.maps.MapFragment.FeatureListener
@@ -70,13 +71,14 @@ import org.odk.collect.maps.markers.MarkerIconDescription
 import org.odk.collect.maps.traces.LineDescription
 import org.odk.collect.maps.traces.PolygonDescription
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.settings.keys.ProjectKeys.KEY_MAPBOX_MAP_STYLE
 import org.odk.collect.shared.injection.ObjectProviderHost
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
 
-class MapboxMapFragment(private val configuration: String) :
+class MapboxMapFragment(configuration: String) :
     MapViewModelMapFragment(),
     OnMapClickListener,
     OnMapLongClickListener {
@@ -114,12 +116,16 @@ class MapboxMapFragment(private val configuration: String) :
     }
 
     private val settingsProvider: SettingsProvider by lazy {
-        (requireActivity().applicationContext as ObjectProviderHost).getObjectProvider().provide(SettingsProvider::class.java)
+        (requireActivity().applicationContext as ObjectProviderHost).getObjectProvider()
+            .provide(SettingsProvider::class.java)
     }
 
     private val referenceLayerRepository: ReferenceLayerRepository by lazy {
-        (requireActivity().applicationContext as ObjectProviderHost).getObjectProvider().provide(ReferenceLayerRepository::class.java)
+        (requireActivity().applicationContext as ObjectProviderHost).getObjectProvider()
+            .provide(ReferenceLayerRepository::class.java)
     }
+
+    private val configuration = configurations.getValue(configuration)
 
     override fun init(readyListener: ReadyListener?, errorListener: ErrorListener?) {
         mapReadyListener = readyListener
@@ -137,7 +143,8 @@ class MapboxMapFragment(private val configuration: String) :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        AppInitializer.getInstance(requireContext()).initializeComponent(MapboxMapsInitializer::class.java)
+        AppInitializer.getInstance(requireContext())
+            .initializeComponent(MapboxMapsInitializer::class.java)
     }
 
     override fun onCreateView(
@@ -145,7 +152,9 @@ class MapboxMapFragment(private val configuration: String) :
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        mapView = MapView(inflater.context).apply {
+        val binding = MapboxMapFragmentLayoutBinding.inflate(inflater, container, false)
+
+        mapView = binding.map.apply {
             compass.position = Gravity.TOP or Gravity.START
             compass.marginTop = 36f
             compass.marginBottom = 36f
@@ -164,7 +173,8 @@ class MapboxMapFragment(private val configuration: String) :
                     override fun onScaleBegin(detector: StandardScaleGestureDetector) = Unit
 
                     override fun onScaleEnd(detector: StandardScaleGestureDetector) {
-                        val center = MapPoint(cameraState.center.latitude(), cameraState.center.longitude())
+                        val center =
+                            MapPoint(cameraState.center.latitude(), cameraState.center.longitude())
                         getMapViewModel().onUserZoom(center, cameraState.zoom)
                     }
                 })
@@ -173,7 +183,8 @@ class MapboxMapFragment(private val configuration: String) :
                     override fun onMoveBegin(detector: MoveGestureDetector) = Unit
 
                     override fun onMoveEnd(detector: MoveGestureDetector) {
-                        val center = MapPoint(cameraState.center.latitude(), cameraState.center.longitude())
+                        val center =
+                            MapPoint(cameraState.center.latitude(), cameraState.center.longitude())
                         getMapViewModel().onUserMove(center, cameraState.zoom)
                     }
                 })
@@ -238,7 +249,12 @@ class MapboxMapFragment(private val configuration: String) :
             }
         })
 
-        return mapView
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val binding = MapboxMapFragmentLayoutBinding.bind(view)
+        binding.attribution.text = configuration.attribution
     }
 
     override fun onDestroy() {
@@ -590,6 +606,13 @@ class MapboxMapFragment(private val configuration: String) :
     }
 
     companion object {
-        const val KEY_STYLE_URL = "STYLE_URL"
+        private class Configuration(val attribution: String? = null)
+
+        private val configurations = mapOf(
+            ProjectKeys.BASEMAP_SOURCE_MAPBOX to Configuration(),
+            ProjectKeys.BASEMAP_SOURCE_OSM to Configuration("© OpenStreetMap contributors"),
+            ProjectKeys.BASEMAP_SOURCE_USGS to Configuration("Map services and data available from U.S. Geological Survey, National Geospatial Program."),
+            ProjectKeys.BASEMAP_SOURCE_CARTO to Configuration("© OpenStreetMap contributors, © CARTO"),
+        )
     }
 }
