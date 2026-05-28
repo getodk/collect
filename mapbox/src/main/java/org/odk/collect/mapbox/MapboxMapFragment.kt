@@ -101,7 +101,7 @@ class MapboxMapFragment(configuration: String) :
     private var featureDragEndListener: FeatureListener? = null
     private var tileServer: TileHttpServer? = null
     private var referenceLayerFile: File? = null
-    private var topStyleLayerId: String? = null
+    private var styleLayer: String? = null
 
     private val _mapViewModel by viewModels<MapViewModel> {
         viewModelFactory {
@@ -216,6 +216,7 @@ class MapboxMapFragment(configuration: String) :
         }
 
         getMapViewModel().getReferenceLayer().observe(viewLifecycleOwner) {
+            referenceLayerFile = it
             loadStyle()
         }
 
@@ -265,9 +266,9 @@ class MapboxMapFragment(configuration: String) :
 
     private fun loadStyle() {
         mapboxMap.loadStyleUri(styleUrl) {
-            if (topStyleLayerId == null) {
+            if (styleLayer == null) {
                 // remember the id of the top style layer
-                topStyleLayerId = it.styleLayers.last().id
+                styleLayer = it.styleLayers.last().id
             }
             loadReferenceOverlay()
         }
@@ -594,8 +595,8 @@ class MapboxMapFragment(configuration: String) :
     }
 
     private fun addOverlayLayer(layer: Layer) {
-        topStyleLayerId?.let {
-            mapboxMap.getStyle()?.addLayerAbove(layer, topStyleLayerId)
+        styleLayer?.let {
+            mapboxMap.getStyle()?.addLayerAbove(layer, styleLayer)
         }
     }
 
