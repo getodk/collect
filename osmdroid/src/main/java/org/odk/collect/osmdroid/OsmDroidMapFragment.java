@@ -134,7 +134,8 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment {
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
                 return (T) new MapViewModel(
                         settingsProvider.getUnprotectedSettings(),
-                        settingsProvider.getMetaSettings()
+                        settingsProvider.getMetaSettings(),
+                        referenceLayerRepository
                 );
             }
         };

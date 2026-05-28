@@ -2,6 +2,7 @@ package org.odk.collect.googlemaps;
 
 import static org.odk.collect.androidshared.ui.PrefUtils.createListPref;
 import static org.odk.collect.androidshared.ui.PrefUtils.getInt;
+import static java.util.Collections.emptySet;
 import static kotlin.collections.SetsKt.setOf;
 
 import android.content.Context;
@@ -89,16 +90,13 @@ public class GoogleMapConfigurator implements MapConfigurator {
     }
 
     @Override public Set<String> getPrefKeys() {
-        return prefKey.isEmpty() ? setOf(ProjectKeys.KEY_REFERENCE_LAYER) :
-                setOf(prefKey, ProjectKeys.KEY_REFERENCE_LAYER);
+        return prefKey.isEmpty() ? emptySet() : setOf(prefKey);
     }
 
     @Override public Bundle buildConfig(Settings prefs) {
         Bundle config = new Bundle();
         config.putInt(GoogleMapFragment.KEY_MAP_TYPE,
             getInt(ProjectKeys.KEY_GOOGLE_MAP_STYLE, GoogleMap.MAP_TYPE_NORMAL, prefs));
-        config.putString(GoogleMapFragment.KEY_REFERENCE_LAYER,
-            prefs.getString(ProjectKeys.KEY_REFERENCE_LAYER));
         return config;
     }
 

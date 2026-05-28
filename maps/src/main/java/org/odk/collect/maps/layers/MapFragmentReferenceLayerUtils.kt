@@ -12,6 +12,13 @@ object MapFragmentReferenceLayerUtils {
         layerRepository: ReferenceLayerRepository
     ): File? {
         val filePath = config.getString(MapFragment.KEY_REFERENCE_LAYER)
+        return getReferenceLayerFile(filePath, layerRepository)
+    }
+
+    fun getReferenceLayerFile(
+        filePath: String?,
+        layerRepository: ReferenceLayerRepository
+    ): File? {
         return if (filePath != null) {
             val referenceLayer = layerRepository.get(filePath)
             referenceLayer?.file

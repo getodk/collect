@@ -105,7 +105,8 @@ class MapboxMapFragment :
             addInitializer(MapViewModel::class) {
                 MapViewModel(
                     settingsProvider.getUnprotectedSettings(),
-                    settingsProvider.getMetaSettings()
+                    settingsProvider.getMetaSettings(),
+                    referenceLayerRepository
                 )
             }
         }
