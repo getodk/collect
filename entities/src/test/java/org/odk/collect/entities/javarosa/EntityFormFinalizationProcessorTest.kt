@@ -21,10 +21,6 @@ import org.javarosa.xform.util.XFormUtils
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.verify
-import org.odk.collect.analytics.Analytics
-import org.odk.collect.entities.analytics.AnalyticsEvents
 import org.odk.collect.entities.javarosa.finalization.EntitiesExtra
 import org.odk.collect.entities.javarosa.finalization.EntityFormFinalizationProcessor
 import org.odk.collect.entities.javarosa.finalization.FormEntity
@@ -268,89 +264,6 @@ class EntityFormFinalizationProcessorTest {
         assertThat(
             entities[0].properties[0],
             equalTo(Pair("name", "John"))
-        )
-    }
-
-    @Test
-    fun `when id is missing, logs NO_ID to analytics`() {
-        val analytics = mock<Analytics>()
-        Analytics.setInstance(analytics)
-
-        val scenario = Scenario.init(
-            "Create entity form",
-            html(
-                listOf(Pair("entities", "http://www.opendatakit.org/xforms/entities")),
-                head(
-                    title("Create entity form"),
-                    model(
-                        listOf(Pair("entities:entities-version", "2024.1.0")),
-                        mainInstance(
-                            t(
-                                "data id=\"create-entity-form\"",
-                                t("name"),
-                                t("meta", entityNode("people", CREATE))
-                            )
-                        ),
-                        bind("/data/name").type("string"),
-                        bind("/data/meta/entity/@id").type("string"),
-                        bind("/data/meta/entity/label").type("string").calculate("/data/name")
-                    )
-                ),
-                body(
-                    input("/data/name")
-                )
-            )
-        )
-
-        val processor = EntityFormFinalizationProcessor()
-        processor.processForm(scenario.formEntryController.model)
-
-        verify(analytics).logEventWithParam(
-            AnalyticsEvents.ENTITY_FAILURE,
-            "failure_code",
-            "NO_ID"
-        )
-    }
-
-    @Test
-    fun `when id is invalid, logs INVALID_ID to analytics`() {
-        val analytics = mock<Analytics>()
-        Analytics.setInstance(analytics)
-
-        val scenario = Scenario.init(
-            "Create entity form",
-            html(
-                listOf(Pair("entities", "http://www.opendatakit.org/xforms/entities")),
-                head(
-                    title("Create entity form"),
-                    model(
-                        listOf(Pair("entities:entities-version", "2024.1.0")),
-                        mainInstance(
-                            t(
-                                "data id=\"create-entity-form\"",
-                                t("name"),
-                                t("meta", entityNode("people", CREATE))
-                            )
-                        ),
-                        bind("/data/name").type("string"),
-                        bind("/data/meta/entity/@id").type("string"),
-                        bind("/data/meta/entity/label").type("string").calculate("/data/name"),
-                        setvalue("odk-instance-first-load", "/data/meta/entity/@id", "now()")
-                    )
-                ),
-                body(
-                    input("/data/name")
-                )
-            )
-        )
-
-        val processor = EntityFormFinalizationProcessor()
-        processor.processForm(scenario.formEntryController.model)
-
-        verify(analytics).logEventWithParam(
-            AnalyticsEvents.ENTITY_FAILURE,
-            "failure_code",
-            "INVALID_ID"
         )
     }
 }

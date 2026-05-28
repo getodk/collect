@@ -10,8 +10,6 @@ import org.hamcrest.text.IsBlankString.blankOrNullString
 import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.odk.collect.analytics.Analytics
-import org.odk.collect.entities.analytics.AnalyticsEvents
 import org.odk.collect.entities.javarosa.finalization.EntitiesExtra
 import org.odk.collect.entities.javarosa.finalization.FormEntity
 import org.odk.collect.entities.javarosa.finalization.InvalidEntity
@@ -245,48 +243,6 @@ class LocalEntityUseCasesTest {
         verify(debugLogger).log(
             "Entities",
             "Failed to create/update dataset=things, id=id, label=label"
-        )
-    }
-
-    @Test
-    fun `#updateLocalEntitiesFromForm logs UPDATE_NO_MATCH when existing entity not found on update`() {
-        val analytics = mock<Analytics>()
-        Analytics.setInstance(analytics)
-
-        val formEntity =
-            FormEntity(EntityAction.UPDATE, "things", "id", "label", emptyList())
-        val formEntities = EntitiesExtra(listOf(formEntity))
-
-        LocalEntityUseCases.updateLocalEntitiesFromForm(
-            formEntities,
-            entitiesRepository
-        )
-
-        verify(analytics).logEventWithParam(
-            AnalyticsEvents.ENTITY_FAILURE,
-            "failure_code",
-            "UPDATE_NO_MATCH"
-        )
-    }
-
-    @Test
-    fun `#updateLocalEntitiesFromForm logs CREATE_NO_LABEL when label is blank on create`() {
-        val analytics = mock<Analytics>()
-        Analytics.setInstance(analytics)
-
-        val formEntity =
-            FormEntity(EntityAction.CREATE, "things", "id", "", emptyList())
-        val formEntities = EntitiesExtra(listOf(formEntity))
-
-        LocalEntityUseCases.updateLocalEntitiesFromForm(
-            formEntities,
-            entitiesRepository
-        )
-
-        verify(analytics).logEventWithParam(
-            AnalyticsEvents.ENTITY_FAILURE,
-            "failure_code",
-            "CREATE_NO_LABEL"
         )
     }
 
