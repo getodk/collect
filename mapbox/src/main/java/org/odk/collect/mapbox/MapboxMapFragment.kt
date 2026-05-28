@@ -76,7 +76,7 @@ import timber.log.Timber
 import java.io.File
 import java.io.IOException
 
-class MapboxMapFragment :
+class MapboxMapFragment(private val configuration: String) :
     MapViewModelMapFragment(),
     OnMapClickListener,
     OnMapLongClickListener {

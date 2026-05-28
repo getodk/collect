@@ -11,7 +11,7 @@ object MapboxClassInstanceCreator {
     @JvmStatic
     fun isMapboxAvailable(): Boolean {
         return try {
-            getClass(MAP_FRAGMENT)
+            Class.forName(MAP_FRAGMENT)
             System.loadLibrary("mapbox-common")
             true
         } catch (e: Throwable) {
@@ -19,23 +19,24 @@ object MapboxClassInstanceCreator {
         }
     }
 
-    fun createMapboxMapFragment(): MapFragment {
-        return createClassInstance(MAP_FRAGMENT)
+    fun createMapboxMapFragment(configuration: String): MapFragment {
+        return Class.forName(MAP_FRAGMENT)
+            .getConstructor(String::class.java)
+            .newInstance(configuration) as MapFragment
     }
 
     @JvmStatic
     fun createMapBoxInitializationFragment(): Fragment {
-        return createClassInstance("org.odk.collect.mapbox.MapBoxInitializationFragment")
+        return Class.forName("org.odk.collect.mapbox.MapBoxInitializationFragment")
+            .getConstructor()
+            .newInstance() as Fragment
     }
 
     @JvmStatic
-    fun createMapboxMapConfigurator(): MapConfigurator {
-        return createClassInstance("org.odk.collect.mapbox.MapboxMapConfigurator")
+    fun createMapboxMapConfigurator(configuration: String): MapConfigurator {
+        return Class.forName("org.odk.collect.mapbox.MapboxMapConfigurator")
+            .getConstructor(String::class.java)
+            .newInstance(configuration) as MapConfigurator
     }
 
-    private fun <T> createClassInstance(className: String): T {
-        return getClass(className).newInstance() as T
-    }
-
-    private fun getClass(className: String): Class<*> = Class.forName(className)
 }
