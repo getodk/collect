@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Handler
 import com.google.android.gms.maps.MapView
 import org.odk.collect.android.geo.MapConfiguratorProvider
-import org.odk.collect.osmdroid.OsmDroidInitializer
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.utilities.UserAgentProvider
@@ -54,7 +53,6 @@ class MapsInitializer @Inject constructor(
                 // This has to happen on the main thread but we might call `initialize` from tests
                 MapView(context).onCreate(null)
             }
-            OsmDroidInitializer.initialize(userAgentProvider.userAgent)
         } catch (ignore: Exception) {
             // ignored
         } catch (ignore: Error) {
