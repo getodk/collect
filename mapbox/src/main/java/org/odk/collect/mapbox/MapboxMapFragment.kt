@@ -19,14 +19,20 @@ import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.Style
 import com.mapbox.maps.dsl.cameraOptions
 import com.mapbox.maps.extension.style.layers.Layer
+import com.mapbox.maps.extension.style.layers.addLayer
 import com.mapbox.maps.extension.style.layers.addLayerAbove
+import com.mapbox.maps.extension.style.layers.addLayerAt
 import com.mapbox.maps.extension.style.layers.generated.LineLayer
 import com.mapbox.maps.extension.style.layers.generated.RasterLayer
+import com.mapbox.maps.extension.style.layers.generated.rasterLayer
+import com.mapbox.maps.extension.style.layers.getLayer
 import com.mapbox.maps.extension.style.sources.Source
 import com.mapbox.maps.extension.style.sources.TileSet
 import com.mapbox.maps.extension.style.sources.addSource
 import com.mapbox.maps.extension.style.sources.generated.RasterSource
+import com.mapbox.maps.extension.style.sources.generated.Scheme
 import com.mapbox.maps.extension.style.sources.generated.VectorSource
+import com.mapbox.maps.extension.style.sources.generated.rasterSource
 import com.mapbox.maps.extension.style.sources.getSource
 import com.mapbox.maps.loader.MapboxMapsInitializer
 import com.mapbox.maps.plugin.animation.MapAnimationOptions.Companion.mapAnimationOptions
@@ -253,11 +259,6 @@ class MapboxMapFragment(configuration: String) :
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val binding = MapboxMapFragmentLayoutBinding.bind(view)
-        binding.attribution.text = configuration.attribution
-    }
-
     override fun onDestroy() {
         tileServer?.destroy()
         MarkerIconCreator.clearCache()
@@ -265,12 +266,34 @@ class MapboxMapFragment(configuration: String) :
     }
 
     private fun loadStyle() {
-        mapboxMap.loadStyleUri(styleUrl) {
-            if (styleLayer == null) {
-                // remember the id of the top style layer
-                styleLayer = it.styleLayers.last().id
+        if (configuration.rasterUrl != null) {
+            mapboxMap.loadStyleUri("") { style ->
+                val tileSet = TileSet.Builder("2.2.0", listOf(configuration.rasterUrl))
+                    .attribution(configuration.attribution ?: "")
+                    .scheme(Scheme.XYZ)
+                    .build()
+
+                if (style.getSource("basemap_source") == null) {
+                    style.addSource(
+                        rasterSource("basemap_source") {
+                            tileSet(tileSet)
+                            tileSize(256)
+                        }
+                    )
+                }
+
+                if (style.getLayer("basemap_layer") == null) {
+                    style.addLayer(rasterLayer("basemap_layer", "basemap_source") {})
+                    styleLayer = "basemap_layer"
+                }
+
+                loadReferenceOverlay()
             }
-            loadReferenceOverlay()
+        } else {
+            mapboxMap.loadStyleUri(styleUrl) {
+                styleLayer = it.styleLayers.last().id
+                loadReferenceOverlay()
+            }
         }
     }
 
@@ -607,11 +630,11 @@ class MapboxMapFragment(configuration: String) :
     }
 
     companion object {
-        private class Configuration(val attribution: String? = null)
+        private class Configuration(val attribution: String? = null, val rasterUrl: String? = null)
 
         private val configurations = mapOf(
             ProjectKeys.BASEMAP_SOURCE_MAPBOX to Configuration(),
-            ProjectKeys.BASEMAP_SOURCE_OSM to Configuration("© OpenStreetMap contributors"),
+            ProjectKeys.BASEMAP_SOURCE_OSM to Configuration("© OpenStreetMap contributors", "https://tile.openstreetmap.org/{z}/{x}/{y}.png"),
             ProjectKeys.BASEMAP_SOURCE_USGS to Configuration("Map services and data available from U.S. Geological Survey, National Geospatial Program."),
             ProjectKeys.BASEMAP_SOURCE_CARTO to Configuration("© OpenStreetMap contributors, © CARTO"),
         )
