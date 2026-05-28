@@ -80,6 +80,7 @@ import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.settings.keys.ProjectKeys.KEY_MAPBOX_MAP_STYLE
 import org.odk.collect.shared.injection.ObjectProviderHost
+import org.odk.collect.shared.settings.Settings
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
@@ -89,7 +90,7 @@ class MapboxMapFragment(configuration: String) :
     OnMapClickListener,
     OnMapLongClickListener {
 
-    private lateinit var styleUrl: String
+    private lateinit var settings: Settings
     private lateinit var mapView: MapView
     private lateinit var mapboxMap: MapboxMap
 
@@ -217,13 +218,13 @@ class MapboxMapFragment(configuration: String) :
         }
 
         getMapViewModel().getSettings(setOf(KEY_MAPBOX_MAP_STYLE)).observe(viewLifecycleOwner) {
-            styleUrl = it.getString(KEY_MAPBOX_MAP_STYLE) ?: Style.MAPBOX_STREETS
-            loadStyle()
+            settings = it
+            loadStyle(settings)
         }
 
         getMapViewModel().getReferenceLayer().observe(viewLifecycleOwner) {
             referenceLayerFile = it
-            loadStyle()
+            loadStyle(settings)
         }
 
         getMapViewModel().zoom.observe(viewLifecycleOwner, object : ZoomObserver() {
@@ -265,39 +266,51 @@ class MapboxMapFragment(configuration: String) :
         super.onDestroy()
     }
 
-    private fun loadStyle() {
-        if (configuration.rasterUrl != null) {
-            mapboxMap.loadStyleUri("") { style ->
-                val tileSet = TileSet.Builder("2.2.0", listOf(configuration.rasterUrl))
-                    .attribution(configuration.attribution ?: "")
-                    .scheme(Scheme.XYZ)
-                    .build()
+    private fun loadStyle(settings: Settings) {
+        val uri = if (configuration.uri != null) {
+            configuration.uri
+        } else if (configuration.setting != null) {
+            configuration.uris.getValue(settings.getString(configuration.setting)!!)
+        } else {
+            throw IllegalArgumentException("Invalid Configuration!")
+        }
 
-                if (style.getSource("basemap_source") == null) {
-                    style.addSource(
-                        rasterSource("basemap_source") {
-                            tileSet(tileSet)
-                            tileSize(256)
-                        }
-                    )
-                }
+        when (uri) {
+            is BasemapUri.Raster -> {
+                mapboxMap.loadStyleUri("") { style ->
+                    val tileSet = TileSet.Builder("2.2.0", listOf(uri.value))
+                        .attribution(configuration.attribution ?: "")
+                        .scheme(Scheme.XYZ)
+                        .build()
 
-                if (style.getLayer("basemap_layer") == null) {
-                    if (style.styleLayers.isEmpty()) {
-                        style.addLayer(rasterLayer("basemap_layer", "basemap_source") {})
-                    } else {
-                        style.addLayerAt(rasterLayer("basemap_layer", "basemap_source") {}, 0)
+                    if (style.getSource("basemap_source") == null) {
+                        style.addSource(
+                            rasterSource("basemap_source") {
+                                tileSet(tileSet)
+                                tileSize(256)
+                            }
+                        )
                     }
 
-                    styleLayer = "basemap_layer"
-                }
+                    if (style.getLayer("basemap_layer") == null) {
+                        if (style.styleLayers.isEmpty()) {
+                            style.addLayer(rasterLayer("basemap_layer", "basemap_source") {})
+                        } else {
+                            style.addLayerAt(rasterLayer("basemap_layer", "basemap_source") {}, 0)
+                        }
 
-                loadReferenceOverlay()
+                        styleLayer = "basemap_layer"
+                    }
+
+                    loadReferenceOverlay()
+                }
             }
-        } else {
-            mapboxMap.loadStyleUri(styleUrl) {
-                styleLayer = it.styleLayers.last().id
-                loadReferenceOverlay()
+
+            is BasemapUri.Mapbox -> {
+                mapboxMap.loadStyleUri(uri.value) {
+                    styleLayer = it.styleLayers.last().id
+                    loadReferenceOverlay()
+                }
             }
         }
     }
@@ -635,13 +648,51 @@ class MapboxMapFragment(configuration: String) :
     }
 
     companion object {
-        private class Configuration(val attribution: String? = null, val rasterUrl: String? = null)
+        private class Configuration(
+            val attribution: String? = null,
+            val uri: BasemapUri? = null,
+            val setting: String? = null,
+            val uris: Map<String, BasemapUri> = emptyMap()
+        )
+
+        private sealed class BasemapUri(val value: String) {
+            class Raster(uri: String) : BasemapUri(uri)
+            class Mapbox(uri: String) : BasemapUri(uri)
+        }
 
         private val configurations = mapOf(
-            ProjectKeys.BASEMAP_SOURCE_MAPBOX to Configuration(),
-            ProjectKeys.BASEMAP_SOURCE_OSM to Configuration("© OpenStreetMap contributors", "https://tile.openstreetmap.org/{z}/{x}/{y}.png"),
-            ProjectKeys.BASEMAP_SOURCE_USGS to Configuration("Map services and data available from U.S. Geological Survey, National Geospatial Program."),
-            ProjectKeys.BASEMAP_SOURCE_CARTO to Configuration("© OpenStreetMap contributors, © CARTO"),
+            ProjectKeys.BASEMAP_SOURCE_MAPBOX to Configuration(
+                setting = KEY_MAPBOX_MAP_STYLE,
+                uris = mapOf(
+                    Style.MAPBOX_STREETS to BasemapUri.Mapbox(Style.MAPBOX_STREETS),
+                    Style.LIGHT to BasemapUri.Mapbox(Style.LIGHT),
+                    Style.DARK to BasemapUri.Mapbox(Style.DARK),
+                    Style.SATELLITE to BasemapUri.Mapbox(Style.SATELLITE),
+                    Style.SATELLITE_STREETS to BasemapUri.Mapbox(Style.SATELLITE_STREETS),
+                    Style.OUTDOORS to BasemapUri.Mapbox(Style.OUTDOORS)
+                )
+            ),
+            ProjectKeys.BASEMAP_SOURCE_OSM to Configuration(
+                attribution = "© OpenStreetMap contributors",
+                uri = BasemapUri.Raster("https://tile.openstreetmap.org/{z}/{x}/{y}.png")
+            ),
+            ProjectKeys.BASEMAP_SOURCE_USGS to Configuration(
+                attribution = "Map services and data available from U.S. Geological Survey, National Geospatial Program.",
+                setting = ProjectKeys.KEY_USGS_MAP_STYLE,
+                uris = mapOf(
+                    "topographic" to BasemapUri.Raster("https://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer/tile/{z}/{y}/{x}"),
+                    "hybrid" to BasemapUri.Raster("https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryTopo/MapServer/tile/{z}/{y}/{x}"),
+                    "satellite" to BasemapUri.Raster("https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer/tile/{z}/{y}/{x}")
+                )
+            ),
+            ProjectKeys.BASEMAP_SOURCE_CARTO to Configuration(
+                attribution = "© OpenStreetMap contributors, © CARTO",
+                setting = ProjectKeys.KEY_CARTO_MAP_STYLE,
+                uris = mapOf(
+                    "positron" to BasemapUri.Raster("http://1.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"),
+                    "dark_matter" to BasemapUri.Raster("http://1.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png")
+                )
+            ),
         )
     }
 }

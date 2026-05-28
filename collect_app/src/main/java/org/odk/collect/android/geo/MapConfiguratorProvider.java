@@ -22,8 +22,6 @@ import java.util.ArrayList;
 public class MapConfiguratorProvider {
 
     private static SourceOption[] sourceOptions;
-    private static final String USGS_URL_BASE =
-        "https://basemap.nationalmap.gov/arcgis/rest/services";
 
     private MapConfiguratorProvider() {
 
