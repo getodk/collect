@@ -62,7 +62,6 @@ import org.odk.collect.maps.MapViewModelMapFragment
 import org.odk.collect.maps.Zoom
 import org.odk.collect.maps.ZoomObserver
 import org.odk.collect.maps.circles.CircleDescription
-import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils.getReferenceLayerFile
 import org.odk.collect.maps.layers.MbtilesFile
 import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.maps.markers.MarkerDescription
@@ -81,6 +80,7 @@ class MapboxMapFragment :
     OnMapClickListener,
     OnMapLongClickListener {
 
+    private lateinit var styleUrl: String
     private lateinit var mapView: MapView
     private lateinit var mapboxMap: MapboxMap
 
@@ -204,6 +204,10 @@ class MapboxMapFragment :
             onConfigChanged(newConfig)
         }
 
+        getMapViewModel().getReferenceLayer().observe(viewLifecycleOwner) {
+            loadStyle()
+        }
+
         getMapViewModel().zoom.observe(viewLifecycleOwner, object : ZoomObserver() {
             override fun onZoomToPoint(zoom: Zoom.Point) {
                 moveOrAnimateCamera(zoom.point, zoom.animate, zoom.level)
@@ -244,8 +248,11 @@ class MapboxMapFragment :
     }
 
     private fun onConfigChanged(config: Bundle) {
-        val styleUrl = config.getString(KEY_STYLE_URL) ?: Style.MAPBOX_STREETS
-        referenceLayerFile = getReferenceLayerFile(config, referenceLayerRepository)
+        styleUrl = config.getString(KEY_STYLE_URL) ?: Style.MAPBOX_STREETS
+        loadStyle()
+    }
+
+    private fun loadStyle() {
         mapboxMap.loadStyleUri(styleUrl) {
             if (topStyleLayerId == null) {
                 // remember the id of the top style layer

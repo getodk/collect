@@ -20,6 +20,7 @@ import org.odk.collect.shared.settings.Settings;
 
 import java.io.File;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -69,16 +70,13 @@ public class MapboxMapConfigurator implements MapConfigurator {
     }
 
     @Override public Set<String> getPrefKeys() {
-        return prefKey.isEmpty() ? setOf(ProjectKeys.KEY_REFERENCE_LAYER) :
-                setOf(prefKey, ProjectKeys.KEY_REFERENCE_LAYER);
+        return prefKey.isEmpty() ? new HashSet<>() : setOf(prefKey);
     }
 
     @Override public Bundle buildConfig(Settings prefs) {
         Bundle config = new Bundle();
         config.putString(MapboxMapFragment.KEY_STYLE_URL,
             prefs.getString(ProjectKeys.KEY_MAPBOX_MAP_STYLE));
-        config.putString(MapboxMapFragment.KEY_REFERENCE_LAYER,
-            prefs.getString(ProjectKeys.KEY_REFERENCE_LAYER));
         return config;
     }
 
