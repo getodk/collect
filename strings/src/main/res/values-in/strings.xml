@@ -413,12 +413,7 @@
   <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
    These strings are only being used to preserve compatibility with pre-existing
     tile caches, and are not shown in the UI.-->
-  <string name="openmap_usgs_topo">USGS National Map Topo</string>
-  <string name="openmap_usgs_sat">Peta Nasional Gabungan USGS</string>
-  <string name="openmap_usgs_img">Citra Peta Nasional USGS</string>
-  <string name="openmap_cartodb_positron">CartoDB Positron</string>
-  <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
-  <string name="basemap">Peta dasar</string>
+    <string name="basemap">Peta dasar</string>
   <string name="basemap_source">Sumber</string>
   <string name="basemap_source_unavailable">Maaf, peta dasar %s tidak tersedia pada perangkat ini. Silakan pilih peta dasar lainnya di Pengaturan &gt; Peta.</string>
   <string name="map_style_label">Gaya peta %s</string>

@@ -386,12 +386,7 @@
   <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
    These strings are only being used to preserve compatibility with pre-existing
     tile caches, and are not shown in the UI.-->
-  <string name="openmap_usgs_topo">یو ایس جی ایس نیشنل میپ ٹوپو </string>
-  <string name="openmap_usgs_sat">یو ایس جی ایس نیشنل میپ ہائبرڈ </string>
-  <string name="openmap_usgs_img">یو ایس جی ایس نیشنل میپ امیجری </string>
-  <string name="openmap_cartodb_positron">کارٹو ڈی بی پوزٹران</string>
-  <string name="openmap_cartodb_darkmatter">کارٹو ڈی ڈی ڈارک میٹر</string>
-  <string name="basemap">بیس میپ</string>
+    <string name="basemap">بیس میپ</string>
   <string name="basemap_source">ذریعہ</string>
   <string name="basemap_source_unavailable">ہم معذرت خواہ ہیں کہ اس فون پہ basemaps %s موجود نہیں ہیں۔ براہ مہربانی سیٹنگز &gt; Maps میں سے کوئی اور basemap منتخب کریں۔</string>
   <string name="map_style_label">%s میپ کا سٹائل</string>

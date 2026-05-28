@@ -414,12 +414,7 @@
   <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
    These strings are only being used to preserve compatibility with pre-existing
     tile caches, and are not shown in the UI.-->
-  <string name="openmap_usgs_topo">Mapa Topográfico Nacional USGS</string>
-  <string name="openmap_usgs_sat">Mapa Híbrido Nacional USGS</string>
-  <string name="openmap_usgs_img">Mapa de Imagem Nacional USGS</string>
-  <string name="openmap_cartodb_positron">Positron CartoDB</string>
-  <string name="openmap_cartodb_darkmatter">Matéria Escura CartoDB</string>
-  <string name="basemap">Mapa base</string>
+    <string name="basemap">Mapa base</string>
   <string name="basemap_source">Fonte</string>
   <string name="basemap_source_unavailable">Desculpe, %s mapas base não estão disponíveis nesse dispositivo. Por favor, escolha outro mapa base em Configurações &gt; Mapas.</string>
   <string name="map_style_label">estilo do mapa %s</string>

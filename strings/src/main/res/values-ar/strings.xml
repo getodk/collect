@@ -382,12 +382,7 @@
   <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
    These strings are only being used to preserve compatibility with pre-existing
     tile caches, and are not shown in the UI.-->
-  <string name="openmap_usgs_topo">خرطة البنية</string>
-  <string name="openmap_usgs_sat">خريطة وطنية هجين USGS</string>
-  <string name="openmap_usgs_img">صور الخريطة الوطنية USGS</string>
-  <string name="openmap_cartodb_positron">خريطة CartoDB</string>
-  <string name="openmap_cartodb_darkmatter">خريطة CartoDB</string>
-  <string name="basemap">الخريطة الأساسية</string>
+    <string name="basemap">الخريطة الأساسية</string>
   <string name="basemap_source">المصدر</string>
   <string name="map_style_label">%s نمط الخريطة</string>
   <string name="streets">الطرق</string>

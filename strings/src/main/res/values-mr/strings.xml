@@ -234,10 +234,7 @@
   <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
    These strings are only being used to preserve compatibility with pre-existing
     tile caches, and are not shown in the UI.-->
-  <string name="openmap_usgs_topo">यूएसजीएस राष्ट्रीय नकाशा टोपो</string>
-  <string name="openmap_cartodb_positron">कार्टो डीबी पॉझिट्रॉन</string>
-  <string name="openmap_cartodb_darkmatter">कार्टो डीबी गडद बाब</string>
-  <string name="basemap">बेसमॅप</string>
+    <string name="basemap">बेसमॅप</string>
   <string name="streets">रस्ते</string>
   <string name="terrain">भूप्रदेश</string>
   <string name="hybrid">संकरित</string>

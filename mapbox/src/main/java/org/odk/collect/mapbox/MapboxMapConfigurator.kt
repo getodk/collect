@@ -100,8 +100,8 @@ class MapboxMapConfigurator(configuration: String) : MapConfigurator {
                 R.string.basemap_source_carto,
                 ProjectKeys.KEY_CARTO_MAP_STYLE,
                 arrayOf(
-                    MapboxUrlOption("positron", R.string.openmap_cartodb_positron),
-                    MapboxUrlOption("dark_matter", R.string.openmap_cartodb_darkmatter),
+                    MapboxUrlOption("positron", R.string.carto_map_style_positron),
+                    MapboxUrlOption("dark_matter", R.string.carto_map_style_dark_matter),
                 )
             )
         )
