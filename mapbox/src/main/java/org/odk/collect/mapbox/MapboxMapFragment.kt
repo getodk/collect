@@ -70,6 +70,7 @@ import org.odk.collect.maps.markers.MarkerIconDescription
 import org.odk.collect.maps.traces.LineDescription
 import org.odk.collect.maps.traces.PolygonDescription
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.keys.ProjectKeys.KEY_MAPBOX_MAP_STYLE
 import org.odk.collect.shared.injection.ObjectProviderHost
 import timber.log.Timber
 import java.io.File
@@ -198,10 +199,9 @@ class MapboxMapFragment :
             mapReadyListener!!.onReady(this)
         }
 
-        val mapConfigurator = MapboxMapConfigurator()
-        getMapViewModel().getSettings(mapConfigurator.prefKeys).observe(viewLifecycleOwner) {
-            val newConfig = mapConfigurator.buildConfig(it)
-            onConfigChanged(newConfig)
+        getMapViewModel().getSettings(setOf(KEY_MAPBOX_MAP_STYLE)).observe(viewLifecycleOwner) {
+            styleUrl = it.getString(KEY_MAPBOX_MAP_STYLE) ?: Style.MAPBOX_STREETS
+            loadStyle()
         }
 
         getMapViewModel().getReferenceLayer().observe(viewLifecycleOwner) {
@@ -245,11 +245,6 @@ class MapboxMapFragment :
         tileServer?.destroy()
         MarkerIconCreator.clearCache()
         super.onDestroy()
-    }
-
-    private fun onConfigChanged(config: Bundle) {
-        styleUrl = config.getString(KEY_STYLE_URL) ?: Style.MAPBOX_STREETS
-        loadStyle()
     }
 
     private fun loadStyle() {

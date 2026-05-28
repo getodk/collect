@@ -1,10 +1,6 @@
 package org.odk.collect.mapbox;
 
-import static org.odk.collect.settings.keys.ProjectKeys.KEY_MAPBOX_MAP_STYLE;
-import static kotlin.collections.SetsKt.setOf;
-
 import android.content.Context;
-import android.os.Bundle;
 
 import androidx.preference.Preference;
 
@@ -20,28 +16,18 @@ import org.odk.collect.shared.settings.Settings;
 
 import java.io.File;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class MapboxMapConfigurator implements MapConfigurator {
-    private final String prefKey;
-    private final int sourceLabelId;
-    private final MapboxUrlOption[] options;
-
-    /** Constructs a configurator with a few Mapbox style URL options to choose from. */
-    public MapboxMapConfigurator() {
-        this.prefKey = KEY_MAPBOX_MAP_STYLE;
-        this.sourceLabelId = org.odk.collect.strings.R.string.basemap_source_mapbox;
-        this.options = new MapboxUrlOption[]{
-                new MapboxUrlOption(Style.MAPBOX_STREETS, org.odk.collect.strings.R.string.streets),
-                new MapboxUrlOption(Style.LIGHT, org.odk.collect.strings.R.string.light),
-                new MapboxUrlOption(Style.DARK, org.odk.collect.strings.R.string.dark),
-                new MapboxUrlOption(Style.SATELLITE, org.odk.collect.strings.R.string.satellite),
-                new MapboxUrlOption(Style.SATELLITE_STREETS, org.odk.collect.strings.R.string.hybrid),
-                new MapboxUrlOption(Style.OUTDOORS, org.odk.collect.strings.R.string.outdoors)
-        };
-    }
+    private final int sourceLabelId = org.odk.collect.strings.R.string.basemap_source_mapbox;
+    private final MapboxUrlOption[] options = {
+            new MapboxUrlOption(Style.MAPBOX_STREETS, org.odk.collect.strings.R.string.streets),
+            new MapboxUrlOption(Style.LIGHT, org.odk.collect.strings.R.string.light),
+            new MapboxUrlOption(Style.DARK, org.odk.collect.strings.R.string.dark),
+            new MapboxUrlOption(Style.SATELLITE, org.odk.collect.strings.R.string.satellite),
+            new MapboxUrlOption(Style.SATELLITE_STREETS, org.odk.collect.strings.R.string.hybrid),
+            new MapboxUrlOption(Style.OUTDOORS, org.odk.collect.strings.R.string.outdoors)
+    };
 
     @Override public boolean isAvailable(Context context) {
         /*
@@ -65,20 +51,10 @@ public class MapboxMapConfigurator implements MapConfigurator {
         String prefTitle = context.getString(
             org.odk.collect.strings.R.string.map_style_label, context.getString(sourceLabelId));
         return Collections.singletonList(PrefUtils.createListPref(
-            context, prefKey, prefTitle, labelIds, values, settings
+            context, ProjectKeys.KEY_MAPBOX_MAP_STYLE, prefTitle, labelIds, values, settings
         ));
     }
 
-    @Override public Set<String> getPrefKeys() {
-        return prefKey.isEmpty() ? new HashSet<>() : setOf(prefKey);
-    }
-
-    @Override public Bundle buildConfig(Settings prefs) {
-        Bundle config = new Bundle();
-        config.putString(MapboxMapFragment.KEY_STYLE_URL,
-            prefs.getString(ProjectKeys.KEY_MAPBOX_MAP_STYLE));
-        return config;
-    }
 
     @Override public boolean supportsLayer(File file) {
         // MapboxMapFragment supports any file that MbtilesFile can read.

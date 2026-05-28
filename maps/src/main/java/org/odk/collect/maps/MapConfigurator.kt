@@ -34,10 +34,15 @@ interface MapConfigurator {
     @Deprecated("Pref keys should be constants owned by the MapFragment modules")
     /** Gets the set of keys for preferences that should be watched for changes.  */
     val prefKeys: Collection<String>
+        get() {
+            TODO()
+        }
 
     @Deprecated("This should be handled by MapFragment implementations")
     /** Packs map-related preferences into a Bundle for MapFragment.applyConfig().  */
-    fun buildConfig(prefs: Settings): Bundle
+    fun buildConfig(prefs: Settings): Bundle {
+        TODO()
+    }
 
     /**
      * Returns true if map fragments obtained from this MapConfigurator are
