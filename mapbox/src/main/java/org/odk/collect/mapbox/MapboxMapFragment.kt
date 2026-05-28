@@ -283,7 +283,12 @@ class MapboxMapFragment(configuration: String) :
                 }
 
                 if (style.getLayer("basemap_layer") == null) {
-                    style.addLayer(rasterLayer("basemap_layer", "basemap_source") {})
+                    if (style.styleLayers.isEmpty()) {
+                        style.addLayer(rasterLayer("basemap_layer", "basemap_source") {})
+                    } else {
+                        style.addLayerAt(rasterLayer("basemap_layer", "basemap_source") {}, 0)
+                    }
+
                     styleLayer = "basemap_layer"
                 }
 
