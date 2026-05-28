@@ -7,7 +7,6 @@ import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_OSM;
 import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_USGS;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_BASEMAP_SOURCE;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_CARTO_MAP_STYLE;
-import static org.odk.collect.settings.keys.ProjectKeys.KEY_GOOGLE_MAP_STYLE;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_USGS_MAP_STYLE;
 import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
 
@@ -15,12 +14,9 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.maps.GoogleMap;
-
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.application.MapboxClassInstanceCreator;
 import org.odk.collect.googlemaps.GoogleMapConfigurator;
-import org.odk.collect.googlemaps.GoogleMapConfigurator.GoogleMapTypeOption;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.maps.MapConfigurator;
 import org.odk.collect.osmdroid.OsmDroidMapConfigurator;
@@ -55,14 +51,7 @@ public class MapConfiguratorProvider {
 
         ArrayList<SourceOption> sourceOptions = new ArrayList<>();
 
-        GoogleMapConfigurator googleMapsConfigurator = new GoogleMapConfigurator(
-                KEY_GOOGLE_MAP_STYLE, org.odk.collect.strings.R.string.basemap_source_google,
-                new GoogleMapTypeOption(GoogleMap.MAP_TYPE_NORMAL, org.odk.collect.strings.R.string.streets),
-                new GoogleMapTypeOption(GoogleMap.MAP_TYPE_TERRAIN, org.odk.collect.strings.R.string.terrain),
-                new GoogleMapTypeOption(GoogleMap.MAP_TYPE_HYBRID, org.odk.collect.strings.R.string.hybrid),
-                new GoogleMapTypeOption(GoogleMap.MAP_TYPE_SATELLITE, org.odk.collect.strings.R.string.satellite)
-        );
-
+        GoogleMapConfigurator googleMapsConfigurator = new GoogleMapConfigurator();
         if (googleMapsConfigurator.isAvailable(context)) {
             sourceOptions.add(new SourceOption(BASEMAP_SOURCE_GOOGLE, org.odk.collect.strings.R.string.basemap_source_google,
                     googleMapsConfigurator

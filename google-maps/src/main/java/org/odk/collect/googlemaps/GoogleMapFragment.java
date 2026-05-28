@@ -14,6 +14,8 @@
 
 package org.odk.collect.googlemaps;
 
+import static com.google.android.gms.common.util.CollectionUtils.setOf;
+import static org.odk.collect.androidshared.ui.PrefUtils.getInt;
 import static org.odk.collect.googlemaps.MapPointExt.toLatLng;
 import static org.odk.collect.maps.traces.TraceDescriptionKt.getMarkersForPoints;
 
@@ -51,10 +53,8 @@ import com.google.android.gms.maps.model.TileOverlayOptions;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.androidshared.ui.ToastUtils;
-import org.odk.collect.googlemaps.GoogleMapConfigurator.GoogleMapTypeOption;
 import org.odk.collect.googlemaps.circles.CircleFeature;
 import org.odk.collect.googlemaps.scaleview.MapScaleView;
-import org.odk.collect.maps.MapConfigurator;
 import org.odk.collect.maps.MapFragment;
 import org.odk.collect.maps.MapPoint;
 import org.odk.collect.maps.MapViewModel;
@@ -171,11 +171,11 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
 
 
             loadReferenceOverlay();
-
-            MapConfigurator configurator = createConfigurator();
-            getMapViewModel().getSettings(configurator.getPrefKeys()).observe(getViewLifecycleOwner(), settings -> {
-                Bundle newConfig = configurator.buildConfig(settings);
-                onConfigChanged(newConfig);
+            getMapViewModel().getSettings(setOf(ProjectKeys.KEY_GOOGLE_MAP_STYLE)).observe(getViewLifecycleOwner(), settings -> {
+                mapType = getInt(ProjectKeys.KEY_GOOGLE_MAP_STYLE, GoogleMap.MAP_TYPE_NORMAL, settings);
+                if (map != null) {
+                    map.setMapType(mapType);
+                }
             });
 
             getMapViewModel().getReferenceLayer().observe(getViewLifecycleOwner(), referenceLayer -> {
@@ -617,24 +617,6 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
         return BitmapDescriptorCache.getBitmapDescriptor(context, markerIconDescription);
     }
 
-    private void onConfigChanged(Bundle config) {
-        mapType = config.getInt(KEY_MAP_TYPE, GoogleMap.MAP_TYPE_NORMAL);
-        if (map != null) {
-            map.setMapType(mapType);
-        }
-    }
-
-    private MapConfigurator createConfigurator() {
-        return new GoogleMapConfigurator(
-                ProjectKeys.KEY_GOOGLE_MAP_STYLE, org.odk.collect.strings.R.string.basemap_source_google,
-                new GoogleMapTypeOption(GoogleMap.MAP_TYPE_NORMAL, org.odk.collect.strings.R.string.streets),
-                new GoogleMapTypeOption(GoogleMap.MAP_TYPE_TERRAIN, org.odk.collect.strings.R.string.terrain),
-                new GoogleMapTypeOption(GoogleMap.MAP_TYPE_HYBRID, org.odk.collect.strings.R.string.hybrid),
-                new GoogleMapTypeOption(GoogleMap.MAP_TYPE_SATELLITE, org.odk.collect.strings.R.string.satellite)
-        );
-    }
-
-    @NonNull
     @Override
     public MapViewModel getMapViewModel() {
         return new ViewModelProvider(this, new ViewModelProvider.Factory() {
