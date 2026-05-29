@@ -29,7 +29,7 @@ class MapsInitializer @Inject constructor(
         val availableBaseMaps = MapConfiguratorProvider.getIds()
         val baseMapSetting =
             settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_BASEMAP_SOURCE)
-        if (!availableBaseMaps.contains(baseMapSetting)) {
+        if (!availableBaseMaps.contains(baseMapSetting) && availableBaseMaps.isNotEmpty()) {
             settingsProvider.getUnprotectedSettings().save(
                 ProjectKeys.KEY_BASEMAP_SOURCE,
                 availableBaseMaps[0]
