@@ -7,6 +7,7 @@ import org.odk.collect.entities.analytics.AnalyticsEvents
 import org.odk.collect.entities.javarosa.finalization.EntitiesExtra
 import org.odk.collect.entities.javarosa.finalization.FormEntity
 import org.odk.collect.entities.javarosa.parse.EntitySchema
+import org.odk.collect.entities.javarosa.parse.isV4UUID
 import org.odk.collect.entities.javarosa.spec.EntityAction
 import org.odk.collect.entities.server.EntitySource
 import org.odk.collect.entities.storage.EntitiesRepository
@@ -26,34 +27,43 @@ object LocalEntityUseCases {
         debugLogger: DebugLogger? = null
     ) {
         formEntities?.entities?.forEach { formEntity ->
-            when (formEntity.action) {
-                EntityAction.CREATE -> saveNewEntity(formEntity, entitiesRepository, debugLogger)
+            if (formEntity.id.isV4UUID()) {
+                when (formEntity.action) {
+                    EntityAction.CREATE -> saveNewEntity(formEntity, entitiesRepository, debugLogger)
 
-                EntityAction.UPDATE -> {
-                    val existing = entitiesRepository.findEntityById(formEntity.dataset, formEntity.id)
-                    if (existing != null) {
-                        saveUpdatedEntity(formEntity, existing, entitiesRepository)
-                    } else {
-                        Analytics.log(AnalyticsEvents.ENTITY_UPDATE_NO_MATCH, "form")
+                    EntityAction.UPDATE -> {
+                        val existing = entitiesRepository.findEntityById(formEntity.dataset, formEntity.id)
+                        if (existing != null) {
+                            saveUpdatedEntity(formEntity, existing, entitiesRepository)
+                        } else {
+                            debugLogger?.log(
+                                "Entities",
+                                "Failed to create update=${formEntity.dataset}, id=${formEntity.id}, label=${formEntity.label}"
+                            )
+                            Analytics.log(AnalyticsEvents.ENTITY_UPDATE_NO_MATCH, "form")
+                        }
+                    }
+
+                    EntityAction.UPSERT -> {
+                        val existing = entitiesRepository.findEntityById(formEntity.dataset, formEntity.id)
+                        if (existing == null) {
+                            saveNewEntity(formEntity, entitiesRepository, debugLogger)
+                        } else {
+                            saveUpdatedEntity(formEntity, existing, entitiesRepository)
+                        }
                     }
                 }
-
-                EntityAction.UPSERT -> {
-                    val existing = entitiesRepository.findEntityById(formEntity.dataset, formEntity.id)
-                    if (existing == null) {
-                        saveNewEntity(formEntity, entitiesRepository, debugLogger)
-                    } else {
-                        saveUpdatedEntity(formEntity, existing, entitiesRepository)
-                    }
+            } else {
+                debugLogger?.log(
+                    "Entities",
+                    "Failed to create/update dataset=${formEntity.dataset}, id=${formEntity.id}, label=${formEntity.label}"
+                )
+                if (formEntity.id.isNullOrBlank()) {
+                    Analytics.log(AnalyticsEvents.ENTITY_WITH_NO_ID, "form")
+                } else {
+                    Analytics.log(AnalyticsEvents.INVALID_ENTITY, "form")
                 }
             }
-        }
-
-        formEntities?.invalidEntities?.forEach {
-            debugLogger?.log(
-                "Entities",
-                "Failed to create/update dataset=${it.dataset}, id=${it.id}, label=${it.label}"
-            )
         }
     }
 
@@ -68,7 +78,7 @@ object LocalEntityUseCases {
                 entitiesRepository.save(
                     formEntity.dataset,
                     Entity.New(
-                        formEntity.id,
+                        formEntity.id!!,
                         formEntity.label,
                         1,
                         formEntity.properties,
