@@ -6,16 +6,18 @@ import com.mapbox.maps.Style
 import org.odk.collect.androidshared.system.OpenGLVersionChecker.isOpenGLv3Supported
 import org.odk.collect.androidshared.ui.PrefUtils
 import org.odk.collect.androidshared.ui.ToastUtils.showLongToast
+import org.odk.collect.mapbox.MapboxMapFragment
 import org.odk.collect.maps.MapConfigurator
 import org.odk.collect.maps.layers.MbtilesFile
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.settings.Settings
 import org.odk.collect.strings.R
 import java.io.File
+import kotlin.collections.toIntArray
 
-class MapboxMapConfigurator(configuration: String) : MapConfigurator {
+class MapboxMapConfigurator(private val configuration: Configuration) : MapConfigurator {
 
-    private val configuration = configurations.getValue(configuration)
+    constructor(configuration: String) : this(Configurations.all.getValue(configuration))
 
     override fun isAvailable(context: Context): Boolean {
         /*
@@ -35,17 +37,17 @@ class MapboxMapConfigurator(configuration: String) : MapConfigurator {
     }
 
     override fun createPrefs(context: Context, settings: Settings): List<Preference> {
-        return if (configuration.settingsKey != null) {
+        return if (configuration.styleSetting != null) {
             listOf<Preference>(
                 PrefUtils.createListPref(
                     context,
-                    configuration.settingsKey,
+                    configuration.styleSetting,
                     context.getString(
                         R.string.map_style_label,
                         context.getString(configuration.name)
                     ),
-                    configuration.options.map { it.labelId }.toIntArray(),
-                    configuration.options.map { it.url }.toTypedArray(),
+                    configuration.styleOptions.map { it.value.name }.toIntArray(),
+                    configuration.styleOptions.map { it.key }.toTypedArray(),
                     settings
                 )
             )
@@ -62,48 +64,5 @@ class MapboxMapConfigurator(configuration: String) : MapConfigurator {
     override fun getDisplayName(file: File): String {
         val name = MbtilesFile.readName(file)
         return if (name != null) name else file.getName()
-    }
-
-    private class MapboxConfiguration(
-        val name: Int,
-        val settingsKey: String?,
-        val options: Array<MapboxUrlOption> = emptyArray()
-    )
-
-    private class MapboxUrlOption(val url: String, val labelId: Int)
-
-    companion object {
-        private val configurations = mapOf(
-            ProjectKeys.BASEMAP_SOURCE_MAPBOX to MapboxConfiguration(
-                R.string.basemap_source_mapbox,
-                ProjectKeys.KEY_MAPBOX_MAP_STYLE,
-                arrayOf(
-                    MapboxUrlOption(Style.MAPBOX_STREETS, R.string.streets),
-                    MapboxUrlOption(Style.LIGHT, R.string.light),
-                    MapboxUrlOption(Style.DARK, R.string.dark),
-                    MapboxUrlOption(Style.SATELLITE, R.string.satellite),
-                    MapboxUrlOption(Style.SATELLITE_STREETS, R.string.hybrid),
-                    MapboxUrlOption(Style.OUTDOORS, R.string.outdoors)
-                )
-            ),
-            ProjectKeys.BASEMAP_SOURCE_OSM to MapboxConfiguration(R.string.basemap_source_osm, null),
-            ProjectKeys.BASEMAP_SOURCE_USGS to MapboxConfiguration(
-                R.string.basemap_source_usgs,
-                ProjectKeys.KEY_USGS_MAP_STYLE,
-                arrayOf(
-                    MapboxUrlOption("topographic", R.string.topographic),
-                    MapboxUrlOption("hybrid", R.string.hybrid),
-                    MapboxUrlOption("satellite", R.string.satellite),
-                )
-            ),
-            ProjectKeys.BASEMAP_SOURCE_CARTO to MapboxConfiguration(
-                R.string.basemap_source_carto,
-                ProjectKeys.KEY_CARTO_MAP_STYLE,
-                arrayOf(
-                    MapboxUrlOption("positron", R.string.carto_map_style_positron),
-                    MapboxUrlOption("dark_matter", R.string.carto_map_style_dark_matter),
-                )
-            )
-        )
     }
 }

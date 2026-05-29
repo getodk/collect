@@ -267,8 +267,8 @@ class MapboxMapFragment(private val configuration: Configuration) :
     private fun loadStyle(settings: Settings) {
         val uri = if (configuration.uri != null) {
             configuration.uri
-        } else if (configuration.setting != null) {
-            configuration.uris.getValue(settings.getString(configuration.setting)!!)
+        } else if (configuration.styleSetting != null) {
+            configuration.styleOptions.getValue(settings.getString(configuration.styleSetting)!!)
         } else {
             throw IllegalArgumentException("Invalid Configuration!")
         }
