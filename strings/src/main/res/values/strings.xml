@@ -521,11 +521,11 @@
     <string name="light" tools:ignore="UnusedResources">Light</string>
     <string name="dark" tools:ignore="UnusedResources">Dark</string>
     <string name="outdoors" tools:ignore="UnusedResources">Outdoors</string>
-    <string name="topographic">Topographic</string>
+    <string name="topographic" tools:ignore="UnusedResources">Topographic</string>
     <string name="google_play_services_error_occured">Unable to access Google Maps. Is Google Play Services installed?</string>
 
-    <string name="carto_map_style_positron">Positron</string>
-    <string name="carto_map_style_dark_matter">Dark Matter</string>
+    <string name="carto_map_style_positron" tools:ignore="UnusedResources">Positron</string>
+    <string name="carto_map_style_dark_matter" tools:ignore="UnusedResources">Dark Matter</string>
 
     <!-- Title for the offline layer section of settings-->
     <string name="offline_layer">Offline layers</string>
