@@ -276,7 +276,7 @@ class MapboxMapFragment(private val configuration: Configuration) :
         when (uri) {
             is BasemapUri.Raster -> {
                 mapboxMap.loadStyleUri("") { style ->
-                    val tileSet = TileSet.Builder("2.2.0", listOf(uri.value))
+                    val tileSet = TileSet.Builder("2.1.0", listOf(uri.value))
                         .attribution(configuration.attribution ?: "")
                         .scheme(Scheme.XYZ)
                         .build()
@@ -285,7 +285,6 @@ class MapboxMapFragment(private val configuration: Configuration) :
                         style.addSource(
                             rasterSource("basemap_source") {
                                 tileSet(tileSet)
-                                tileSize(256)
                             }
                         )
                     }
