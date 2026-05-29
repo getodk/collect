@@ -16,7 +16,6 @@ import com.mapbox.geojson.Point
 import com.mapbox.maps.EdgeInsets
 import com.mapbox.maps.MapView
 import com.mapbox.maps.MapboxMap
-import com.mapbox.maps.Style
 import com.mapbox.maps.dsl.cameraOptions
 import com.mapbox.maps.extension.style.layers.Layer
 import com.mapbox.maps.extension.style.layers.addLayer
@@ -77,7 +76,6 @@ import org.odk.collect.maps.markers.MarkerIconDescription
 import org.odk.collect.maps.traces.LineDescription
 import org.odk.collect.maps.traces.PolygonDescription
 import org.odk.collect.settings.SettingsProvider
-import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.settings.keys.ProjectKeys.KEY_MAPBOX_MAP_STYLE
 import org.odk.collect.shared.injection.ObjectProviderHost
 import org.odk.collect.shared.settings.Settings
@@ -85,10 +83,12 @@ import timber.log.Timber
 import java.io.File
 import java.io.IOException
 
-class MapboxMapFragment(configuration: String) :
+class MapboxMapFragment(private val configuration: Configuration) :
     MapViewModelMapFragment(),
     OnMapClickListener,
     OnMapLongClickListener {
+
+    constructor(configuration: String) : this(Configurations.all.getValue(configuration))
 
     private lateinit var settings: Settings
     private lateinit var mapView: MapView
@@ -131,8 +131,6 @@ class MapboxMapFragment(configuration: String) :
         (requireActivity().applicationContext as ObjectProviderHost).getObjectProvider()
             .provide(ReferenceLayerRepository::class.java)
     }
-
-    private val configuration = configurations.getValue(configuration)
 
     override fun init(readyListener: ReadyListener?, errorListener: ErrorListener?) {
         mapReadyListener = readyListener
@@ -645,54 +643,5 @@ class MapboxMapFragment(configuration: String) :
         if (mapboxMap.getStyle()?.getSource(source.sourceId) == null) {
             mapboxMap.getStyle()?.addSource(source)
         }
-    }
-
-    companion object {
-        private class Configuration(
-            val attribution: String? = null,
-            val uri: BasemapUri? = null,
-            val setting: String? = null,
-            val uris: Map<String, BasemapUri> = emptyMap()
-        )
-
-        private sealed class BasemapUri(val value: String) {
-            class Raster(uri: String) : BasemapUri(uri)
-            class Mapbox(uri: String) : BasemapUri(uri)
-        }
-
-        private val configurations = mapOf(
-            ProjectKeys.BASEMAP_SOURCE_MAPBOX to Configuration(
-                setting = KEY_MAPBOX_MAP_STYLE,
-                uris = mapOf(
-                    Style.MAPBOX_STREETS to BasemapUri.Mapbox(Style.MAPBOX_STREETS),
-                    Style.LIGHT to BasemapUri.Mapbox(Style.LIGHT),
-                    Style.DARK to BasemapUri.Mapbox(Style.DARK),
-                    Style.SATELLITE to BasemapUri.Mapbox(Style.SATELLITE),
-                    Style.SATELLITE_STREETS to BasemapUri.Mapbox(Style.SATELLITE_STREETS),
-                    Style.OUTDOORS to BasemapUri.Mapbox(Style.OUTDOORS)
-                )
-            ),
-            ProjectKeys.BASEMAP_SOURCE_OSM to Configuration(
-                attribution = "© OpenStreetMap contributors",
-                uri = BasemapUri.Raster("https://tile.openstreetmap.org/{z}/{x}/{y}.png")
-            ),
-            ProjectKeys.BASEMAP_SOURCE_USGS to Configuration(
-                attribution = "Map services and data available from U.S. Geological Survey, National Geospatial Program.",
-                setting = ProjectKeys.KEY_USGS_MAP_STYLE,
-                uris = mapOf(
-                    "topographic" to BasemapUri.Raster("https://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer/tile/{z}/{y}/{x}"),
-                    "hybrid" to BasemapUri.Raster("https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryTopo/MapServer/tile/{z}/{y}/{x}"),
-                    "satellite" to BasemapUri.Raster("https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer/tile/{z}/{y}/{x}")
-                )
-            ),
-            ProjectKeys.BASEMAP_SOURCE_CARTO to Configuration(
-                attribution = "© OpenStreetMap contributors, © CARTO",
-                setting = ProjectKeys.KEY_CARTO_MAP_STYLE,
-                uris = mapOf(
-                    "positron" to BasemapUri.Raster("http://1.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"),
-                    "dark_matter" to BasemapUri.Raster("http://1.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png")
-                )
-            ),
-        )
     }
 }
