@@ -13,11 +13,22 @@ class MapFragmentFactoryImpl(private val settingsProvider: SettingsProvider) : M
     override fun createMapFragment(): MapFragment {
         val settings = settingsProvider.getUnprotectedSettings()
         val basemapSource = settings.getString(KEY_BASEMAP_SOURCE)
-        return when {
-            basemapSource == ProjectKeys.BASEMAP_SOURCE_GOOGLE -> GoogleMapFragment()
-            else -> MapboxClassInstanceCreator.createMapboxMapFragment(
+        return if (isMapbox(basemapSource)) {
+            MapboxClassInstanceCreator.createMapboxMapFragment(
                 basemapSource ?: ProjectKeys.BASEMAP_SOURCE_MAPBOX
             )
+        } else {
+            GoogleMapFragment()
+        }
+    }
+
+    private fun isMapbox(source: String?): Boolean {
+        return when (source) {
+            ProjectKeys.BASEMAP_SOURCE_MAPBOX -> true
+            ProjectKeys.BASEMAP_SOURCE_OSM -> true
+            ProjectKeys.BASEMAP_SOURCE_USGS -> true
+            ProjectKeys.BASEMAP_SOURCE_CARTO -> true
+            else -> false
         }
     }
 }

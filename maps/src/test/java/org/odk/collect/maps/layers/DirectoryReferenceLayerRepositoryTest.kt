@@ -1,7 +1,6 @@
 package org.odk.collect.maps.layers
 
 import android.content.Context
-import android.os.Bundle
 import androidx.preference.Preference
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.contains
@@ -264,13 +263,6 @@ class DirectoryReferenceLayerRepositoryTest {
         }
 
         override fun createPrefs(context: Context, settings: Settings): MutableList<Preference> {
-            TODO("Not yet implemented")
-        }
-
-        override val prefKeys: Collection<String>
-            get() = TODO("Not yet implemented")
-
-        override fun buildConfig(prefs: Settings): Bundle {
             TODO("Not yet implemented")
         }
     }
