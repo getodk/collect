@@ -12,7 +12,6 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.odk.collect.entities.javarosa.finalization.EntitiesExtra
 import org.odk.collect.entities.javarosa.finalization.FormEntity
-import org.odk.collect.entities.javarosa.finalization.InvalidEntity
 import org.odk.collect.entities.javarosa.parse.EntitySchema
 import org.odk.collect.entities.javarosa.spec.EntityAction
 import org.odk.collect.entities.server.EntitySource
@@ -37,7 +36,7 @@ class LocalEntityUseCasesTest {
         entitiesRepository.addList("things")
 
         val formEntity =
-            FormEntity(EntityAction.CREATE, "things", "id", "label", listOf("property" to "value"))
+            FormEntity(EntityAction.CREATE, "things", UUID.randomUUID().toString(), "label", listOf("property" to "value"))
         val formEntities = EntitiesExtra(listOf(formEntity))
         LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
 
@@ -50,20 +49,9 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
-    fun `#updateLocalEntitiesFromForm does not save a new entity on create if label is blank`() {
+    fun `#updateLocalEntitiesFromForm does not save a new entity on create if id is not a valid UUID`() {
         entitiesRepository.addList("things")
 
-        val formEntity =
-            FormEntity(EntityAction.CREATE, "things", "id", "", listOf("property" to "value"))
-        val formEntities = EntitiesExtra(listOf(formEntity))
-        LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
-
-        val entities = entitiesRepository.query("things")
-        assertThat(entities.size, equalTo(0))
-    }
-
-    @Test
-    fun `#updateLocalEntitiesFromForm does not save a new entity on create if the list doesn't already exist`() {
         val formEntity =
             FormEntity(EntityAction.CREATE, "things", "id", "label", listOf("property" to "value"))
         val formEntities = EntitiesExtra(listOf(formEntity))
@@ -74,7 +62,31 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
-    fun `#updateLocalEntitiesFromForm increments version on update`() {
+    fun `#updateLocalEntitiesFromForm does not save a new entity on create if label is blank`() {
+        entitiesRepository.addList("things")
+
+        val formEntity =
+            FormEntity(EntityAction.CREATE, "things", UUID.randomUUID().toString(), "", listOf("property" to "value"))
+        val formEntities = EntitiesExtra(listOf(formEntity))
+        LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
+
+        val entities = entitiesRepository.query("things")
+        assertThat(entities.size, equalTo(0))
+    }
+
+    @Test
+    fun `#updateLocalEntitiesFromForm does not save a new entity on create if the list doesn't already exist`() {
+        val formEntity =
+            FormEntity(EntityAction.CREATE, "things", UUID.randomUUID().toString(), "label", listOf("property" to "value"))
+        val formEntities = EntitiesExtra(listOf(formEntity))
+        LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
+
+        val entities = entitiesRepository.query("things")
+        assertThat(entities.size, equalTo(0))
+    }
+
+    @Test
+    fun `#updateLocalEntitiesFromForm does not update an entity if id in not a valid UUID`() {
         entitiesRepository.save(
             "things",
             Entity.New(
@@ -85,7 +97,30 @@ class LocalEntityUseCasesTest {
         )
 
         val formEntity =
-            FormEntity(EntityAction.UPDATE, "things", "id", "label", emptyList())
+            FormEntity(EntityAction.UPDATE, "things", "id", "new_label", emptyList())
+        val formEntities = EntitiesExtra(listOf(formEntity))
+
+        LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
+        val entities = entitiesRepository.query("things")
+        assertThat(entities.size, equalTo(1))
+        assertThat(entities[0].label, equalTo("label"))
+        assertThat(entities[0].version, equalTo(1))
+    }
+
+    @Test
+    fun `#updateLocalEntitiesFromForm increments version on update`() {
+        val id = UUID.randomUUID().toString()
+        entitiesRepository.save(
+            "things",
+            Entity.New(
+                id,
+                "label",
+                version = 1
+            )
+        )
+
+        val formEntity =
+            FormEntity(EntityAction.UPDATE, "things", id, "label", emptyList())
         val formEntities = EntitiesExtra(listOf(formEntity))
 
         LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
@@ -96,10 +131,11 @@ class LocalEntityUseCasesTest {
 
     @Test
     fun `#updateLocalEntitiesFromForm updates properties on update`() {
+        val id = UUID.randomUUID().toString()
         entitiesRepository.save(
             "things",
             Entity.New(
-                "id",
+                id,
                 "label",
                 version = 1,
                 properties = listOf("prop" to "value")
@@ -107,7 +143,7 @@ class LocalEntityUseCasesTest {
         )
 
         val formEntity =
-            FormEntity(EntityAction.UPDATE, "things", "id", "label", listOf("prop" to "value 2"))
+            FormEntity(EntityAction.UPDATE, "things", id, "label", listOf("prop" to "value 2"))
         val formEntities = EntitiesExtra(listOf(formEntity))
 
         LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
@@ -119,10 +155,11 @@ class LocalEntityUseCasesTest {
 
     @Test
     fun `#updateLocalEntitiesFromForm updates properties and does not change label on update if label is blank`() {
+        val id = UUID.randomUUID().toString()
         entitiesRepository.save(
             "things",
             Entity.New(
-                "id",
+                id,
                 "label",
                 version = 1,
                 properties = listOf("prop" to "value")
@@ -130,7 +167,7 @@ class LocalEntityUseCasesTest {
         )
 
         val formEntity =
-            FormEntity(EntityAction.UPDATE, "things", "id", " ", listOf("prop" to "value 2"))
+            FormEntity(EntityAction.UPDATE, "things", id, " ", listOf("prop" to "value 2"))
         val formEntities = EntitiesExtra(listOf(formEntity))
 
         LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
@@ -146,7 +183,7 @@ class LocalEntityUseCasesTest {
         entitiesRepository.addList("things")
 
         val formEntity =
-            FormEntity(EntityAction.UPSERT, "things", "id", "label", listOf("property" to "value"))
+            FormEntity(EntityAction.UPSERT, "things", UUID.randomUUID().toString(), "label", listOf("property" to "value"))
         val formEntities = EntitiesExtra(listOf(formEntity))
 
         LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
@@ -163,7 +200,7 @@ class LocalEntityUseCasesTest {
         entitiesRepository.addList("things")
 
         val formEntity =
-            FormEntity(EntityAction.UPSERT, "things", "id", "", listOf("property" to "value"))
+            FormEntity(EntityAction.UPSERT, "things", UUID.randomUUID().toString(), "", listOf("property" to "value"))
         val formEntities = EntitiesExtra(listOf(formEntity))
 
         LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
@@ -173,17 +210,18 @@ class LocalEntityUseCasesTest {
 
     @Test
     fun `#updateLocalEntitiesFromForm updates an existing entity on upsert if it exists`() {
+        val id = UUID.randomUUID().toString()
         entitiesRepository.save(
             "things",
             Entity.New(
-                "id",
+                id,
                 "label",
                 version = 1
             )
         )
 
         val formEntity =
-            FormEntity(EntityAction.UPSERT, "things", "id", "new label", emptyList())
+            FormEntity(EntityAction.UPSERT, "things", id, "new label", emptyList())
         val formEntities = EntitiesExtra(listOf(formEntity))
 
         LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
@@ -207,7 +245,7 @@ class LocalEntityUseCasesTest {
         )
 
         val formEntity =
-            FormEntity(EntityAction.UPDATE, "things", "id", "label", emptyList())
+            FormEntity(EntityAction.UPDATE, "things", UUID.randomUUID().toString(), "label", emptyList())
         val formEntities = EntitiesExtra(listOf(formEntity))
 
         LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
@@ -220,7 +258,7 @@ class LocalEntityUseCasesTest {
     @Test
     fun `#updateLocalEntitiesFromForm does not save updated entity that doesn't already exist`() {
         val formEntity =
-            FormEntity(EntityAction.UPDATE, "things", "1", "1", emptyList())
+            FormEntity(EntityAction.UPDATE, "things", UUID.randomUUID().toString(), "1", emptyList())
         val formEntities = EntitiesExtra(listOf(formEntity))
         entitiesRepository.addList("things")
 
@@ -231,8 +269,17 @@ class LocalEntityUseCasesTest {
     @Test
     fun `#updateLocalEntitiesFromForm logs invalid entities`() {
         val debugLogger = mock<DebugLogger>()
+        val id = UUID.randomUUID().toString()
+        val formEntity1 =
+            FormEntity(EntityAction.CREATE, "things", "", "label", emptyList())
+        val formEntity2 =
+            FormEntity(EntityAction.CREATE, "things", "id", "label", emptyList())
+        val formEntity3 =
+            FormEntity(EntityAction.CREATE, "things", id, "", emptyList())
+        val formEntity4 =
+            FormEntity(EntityAction.UPDATE, "things", id, "", emptyList())
         val formEntities =
-            EntitiesExtra(emptyList(), listOf(InvalidEntity("things", "id", "label")))
+            EntitiesExtra(listOf(formEntity1, formEntity2, formEntity3, formEntity4))
 
         LocalEntityUseCases.updateLocalEntitiesFromForm(
             formEntities,
@@ -240,9 +287,23 @@ class LocalEntityUseCasesTest {
             debugLogger
         )
 
-        verify(debugLogger).log(
+        verify(debugLogger).logWithAnalytics(
             "Entities",
-            "Failed to create/update dataset=things, id=id, label=label"
+            "Failed to create/update dataset=things, id=, label=label",
+            "EntityWithNoId",
+            "form"
+        )
+        verify(debugLogger).logWithAnalytics(
+            "Entities",
+            "Failed to create/update dataset=things, id=id, label=label",
+            "EntityWithInvalidId",
+            "form"
+        )
+        verify(debugLogger).logWithAnalytics(
+            "Entities",
+            "Failed to update dataset=things, id=$id, label=",
+            "EntityUpdateNoMatch",
+            "form"
         )
     }
 
