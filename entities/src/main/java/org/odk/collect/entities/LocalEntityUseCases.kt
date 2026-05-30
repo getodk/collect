@@ -2,7 +2,6 @@ package org.odk.collect.entities
 
 import org.apache.commons.csv.CSVRecord
 import org.javarosa.core.model.instance.SecondaryInstanceCSVParserBuilder
-import org.odk.collect.analytics.Analytics
 import org.odk.collect.entities.analytics.AnalyticsEvents
 import org.odk.collect.entities.javarosa.finalization.EntitiesExtra
 import org.odk.collect.entities.javarosa.finalization.FormEntity
@@ -53,7 +52,7 @@ object LocalEntityUseCases {
                 val event = if (formEntity.id.isNullOrBlank()) {
                     AnalyticsEvents.ENTITY_WITH_NO_ID
                 } else {
-                    AnalyticsEvents.INVALID_ENTITY
+                    AnalyticsEvents.ENTITY_WITH_INVALID_ID
                 }
 
                 debugLogger?.logInvalidEntity(event, formEntity)

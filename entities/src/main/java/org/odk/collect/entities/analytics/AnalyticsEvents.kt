@@ -19,5 +19,5 @@ object AnalyticsEvents {
     /**
      * Tracks how often an entity is defined in a form but has an invalid ID (not a V4 UUID).
      */
-    const val INVALID_ENTITY = "InvalidEntity"
+    const val ENTITY_WITH_INVALID_ID = "EntityWithInvalidId"
 }
