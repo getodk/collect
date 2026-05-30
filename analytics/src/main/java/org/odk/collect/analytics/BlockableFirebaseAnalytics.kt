@@ -5,7 +5,7 @@ import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 
-class BlockableFirebaseAnalytics(application: Application) : Analytics {
+class BlockableFirebaseAnalytics(application: Application, private val crashReports: Boolean) : Analytics {
     private val firebaseAnalytics = FirebaseAnalytics.getInstance(application)
     private val crashlytics = FirebaseCrashlytics.getInstance()
 
@@ -29,7 +29,9 @@ class BlockableFirebaseAnalytics(application: Application) : Analytics {
 
     override fun setAnalyticsCollectionEnabled(isAnalyticsEnabled: Boolean) {
         firebaseAnalytics.setAnalyticsCollectionEnabled(isAnalyticsEnabled)
-        crashlytics.setCrashlyticsCollectionEnabled(isAnalyticsEnabled)
+        if (!crashReports) {
+            crashlytics.isCrashlyticsCollectionEnabled = isAnalyticsEnabled
+        }
     }
 
     override fun setUserProperty(name: String, value: String) {

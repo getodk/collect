@@ -2,6 +2,7 @@ package org.odk.collect.android.application.initialization
 
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.version.VersionInformation
+import org.odk.collect.androidshared.system.TamperDetector
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
 
