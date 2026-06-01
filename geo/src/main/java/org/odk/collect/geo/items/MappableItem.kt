@@ -57,6 +57,6 @@ data class IconifiedText(val icon: Int?, val text: String)
 enum class Status { ERRORS, NO_ERRORS }
 
 interface MappableData {
-    fun getMappableItems(): LiveData<List<MappableItem>?>
+    fun getMappableItems(): LiveData<List<MappableItem>>
     fun isLoading(): NonNullLiveData<Boolean>
 }

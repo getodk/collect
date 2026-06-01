@@ -24,7 +24,7 @@ class SelectOneFromMapData(
 
     private val mapTitle = MutableLiveData(prompt.longText)
     private val itemCount = MutableNonNullLiveData(0)
-    private val items = MutableLiveData<List<MappableItem>?>(null)
+    private val items = MutableLiveData<List<MappableItem>>(emptyList())
     private val isLoading = MutableNonNullLiveData(true)
 
     init {
@@ -77,7 +77,7 @@ class SelectOneFromMapData(
         return mappableItem.id == selectedIndex?.toLong()
     }
 
-    override fun getMappableItems(): LiveData<List<MappableItem>?> {
+    override fun getMappableItems(): LiveData<List<MappableItem>> {
         return items
     }
 }

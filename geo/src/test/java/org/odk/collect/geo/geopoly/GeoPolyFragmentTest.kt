@@ -1159,7 +1159,7 @@ private class FakeMappableData(private val items: List<MappableItem>) : Mappable
 
     private val _isLoading = MutableNonNullLiveData(isLoading)
 
-    override fun getMappableItems(): LiveData<List<MappableItem>?> {
+    override fun getMappableItems(): LiveData<List<MappableItem>> {
         return MutableLiveData(items)
     }
 

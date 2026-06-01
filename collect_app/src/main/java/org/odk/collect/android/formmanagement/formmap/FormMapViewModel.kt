@@ -40,7 +40,7 @@ class FormMapViewModel(
     private var _form: Form? = null
 
     private val mapTitle = MutableLiveData<String?>()
-    private var mappableItems = MutableLiveData<List<MappableItem>>(null)
+    private var mappableItems = MutableLiveData<List<MappableItem>>(emptyList())
     private var itemCount = MutableNonNullLiveData(0)
     private val isLoading = MutableNonNullLiveData(false)
 
@@ -60,7 +60,7 @@ class FormMapViewModel(
         return false
     }
 
-    override fun getMappableItems(): LiveData<List<MappableItem>?> {
+    override fun getMappableItems(): LiveData<List<MappableItem>> {
         return mappableItems
     }
 
