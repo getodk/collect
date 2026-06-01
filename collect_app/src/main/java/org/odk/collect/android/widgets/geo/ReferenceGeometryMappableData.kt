@@ -12,7 +12,7 @@ import org.odk.collect.async.Scheduler
 import org.odk.collect.geo.items.MappableData
 import org.odk.collect.geo.items.MappableItem
 
-class ReferenceGeometryMappableDate(
+class ReferenceGeometryMappableData(
     scheduler: Scheduler,
     prompt: FormEntryPrompt,
     private val selectChoiceLoader: SelectChoiceLoader,
