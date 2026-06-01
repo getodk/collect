@@ -53,7 +53,9 @@ sealed class MappableItem {
     ) : MappableItem()
 }
 
-data class IconifiedText(val icon: Int?, val text: DisplayString)
+data class IconifiedText(val icon: Int?, val text: DisplayString) {
+    constructor(icon: Int?, text: String) : this(icon, DisplayString.Raw(text))
+}
 
 enum class Status { ERRORS, NO_ERRORS }
 

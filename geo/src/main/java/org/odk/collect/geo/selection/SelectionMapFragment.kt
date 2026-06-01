@@ -229,7 +229,7 @@ class SelectionMapFragment(
     private fun updateCounts(binding: SelectionMapLayoutBinding) {
         binding.geometryStatus.text = getString(
             org.odk.collect.strings.R.string.select_item_count,
-            selectionMapData.getItemType(),
+            selectionMapData.getItemType().getString(requireContext()),
             itemCount,
             featureCount
         )

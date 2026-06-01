@@ -36,6 +36,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
+import org.odk.collect.androidshared.ui.DisplayString
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.async.Scheduler
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
@@ -81,7 +82,7 @@ class SelectionMapFragmentTest {
     private val data = mock<SelectionMapData> {
         on { isLoading() } doReturn MutableNonNullLiveData(false)
         on { getMapTitle() } doReturn MutableLiveData("")
-        on { getItemType() } doReturn "Things"
+        on { getItemType() } doReturn DisplayString.Raw("Things")
         on { getItemCount() } doReturn MutableNonNullLiveData(0)
         on { getMappableItems() } doReturn MutableLiveData(emptyList())
         on { isSelected(any()) } doReturn false
