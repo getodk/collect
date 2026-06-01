@@ -46,7 +46,6 @@ class SelectOneFromMapDialogFragment(viewModelFactory: ViewModelProvider.Factory
             viewModelFactory {
                 addInitializer(SelectOneFromMapData::class) {
                     SelectOneFromMapData(
-                        this@SelectOneFromMapDialogFragment.resources,
                         scheduler,
                         prompt,
                         selectChoiceLoader,

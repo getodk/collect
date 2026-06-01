@@ -7,7 +7,6 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.work.WorkManager
@@ -36,6 +35,7 @@ import org.odk.collect.android.widgets.support.FormElementFixtures.selectChoice
 import org.odk.collect.android.widgets.support.FormElementFixtures.treeElement
 import org.odk.collect.android.widgets.support.NoOpMapFragment
 import org.odk.collect.android.widgets.utilities.WidgetAnswerDialogFragment.Companion.ARG_FORM_INDEX
+import org.odk.collect.androidshared.ui.DisplayString
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.async.Scheduler
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
@@ -83,7 +83,6 @@ class SelectOneFromMapDialogFragmentTest {
         on { loadSelectChoices(prompt) } doAnswer { prompt.selectChoices }
     }
 
-    private val application = ApplicationProvider.getApplicationContext<Application>()
     private val scheduler = FakeScheduler()
 
     private val viewModelFactory = object : ViewModelProvider.Factory {
@@ -201,7 +200,7 @@ class SelectOneFromMapDialogFragmentTest {
                             largeIcon = R.drawable.ic_map_marker_with_hole_big,
                             action = IconifiedText(
                                 R.drawable.ic_save,
-                                application.getString(org.odk.collect.strings.R.string.select_item)
+                                DisplayString.Resource(org.odk.collect.strings.R.string.select_item)
                             )
                         ),
                         MappableItem.Point(
@@ -217,7 +216,7 @@ class SelectOneFromMapDialogFragmentTest {
                             largeIcon = R.drawable.ic_map_marker_with_hole_big,
                             action = IconifiedText(
                                 R.drawable.ic_save,
-                                application.getString(org.odk.collect.strings.R.string.select_item)
+                                DisplayString.Resource(org.odk.collect.strings.R.string.select_item)
                             )
                         )
                     )

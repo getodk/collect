@@ -62,7 +62,7 @@ internal class SelectionSummarySheet(context: Context, attrs: AttributeSet?) :
                 LayoutInflater.from(context).inflate(R.layout.property, binding.properties, false)
             )
 
-            property.text.text = it.text
+            property.text.text = it.text.getString(context)
 
             if (it.icon != null) {
                 property.icon.setImageDrawable(ContextCompat.getDrawable(context, it.icon))
@@ -75,7 +75,7 @@ internal class SelectionSummarySheet(context: Context, attrs: AttributeSet?) :
         }
 
         item.action?.let {
-            binding.action.text = it.text
+            binding.action.text = it.text.getString(context)
 
             if (it.icon != null) {
                 binding.action.icon = ContextCompat.getDrawable(context, it.icon)

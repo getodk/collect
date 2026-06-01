@@ -8,6 +8,7 @@ import org.odk.collect.android.widgets.items.GeoSelectChoiceElements.MARKER_SYMB
 import org.odk.collect.android.widgets.items.GeoSelectChoiceElements.STROKE
 import org.odk.collect.android.widgets.items.GeoSelectChoiceElements.STROKE_WIDTH
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils
+import org.odk.collect.androidshared.ui.DisplayString
 import org.odk.collect.entities.javarosa.parse.EntitySchema
 import org.odk.collect.geo.geopoly.GeoPolyUtils.parseGeometry
 import org.odk.collect.geo.items.IconifiedText
@@ -36,7 +37,7 @@ object MappableItemsParser {
                             val properties = selectChoice.additionalChildren.filterNot {
                                 FILTERED_PROPERTIES.contains(it.first)
                             }.map {
-                                IconifiedText(null, "${it.first}: ${it.second}")
+                                IconifiedText(null, DisplayString.Raw("${it.first}: ${it.second}"))
                             }
 
                             if (points.size == 1) {

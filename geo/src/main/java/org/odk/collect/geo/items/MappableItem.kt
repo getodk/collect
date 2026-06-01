@@ -2,6 +2,7 @@ package org.odk.collect.geo.items
 
 import androidx.lifecycle.LiveData
 import org.odk.collect.androidshared.livedata.NonNullLiveData
+import org.odk.collect.androidshared.ui.DisplayString
 import org.odk.collect.maps.MapPoint
 
 sealed class MappableItem {
@@ -52,7 +53,7 @@ sealed class MappableItem {
     ) : MappableItem()
 }
 
-data class IconifiedText(val icon: Int?, val text: String)
+data class IconifiedText(val icon: Int?, val text: DisplayString)
 
 enum class Status { ERRORS, NO_ERRORS }
 

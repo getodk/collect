@@ -19,6 +19,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPS
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_HIDDEN
 import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
+import org.odk.collect.androidshared.ui.DisplayString
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.androidshared.ui.multiclicksafe.setMultiClickSafeOnClickListener
@@ -413,7 +414,7 @@ internal class SelectedMappableItemViewModel : ViewModel() {
 
 interface SelectionMapData : MappableData {
     fun getMapTitle(): LiveData<String?>
-    fun getItemType(): String
+    fun getItemType(): DisplayString
     fun getItemCount(): NonNullLiveData<Int>
 
     fun isSelected(mappableItem: MappableItem): Boolean

@@ -1,6 +1,5 @@
 package org.odk.collect.android.widgets.items
 
-import android.content.res.Resources
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,6 +7,7 @@ import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.androidshared.livedata.NonNullLiveData
+import org.odk.collect.androidshared.ui.DisplayString
 import org.odk.collect.async.Scheduler
 import org.odk.collect.geo.items.IconifiedText
 import org.odk.collect.geo.items.MappableItem
@@ -15,7 +15,6 @@ import org.odk.collect.geo.selection.SelectionMapData
 import org.odk.collect.icons.R
 
 class SelectOneFromMapData(
-    private val resources: Resources,
     scheduler: Scheduler,
     prompt: FormEntryPrompt,
     private val selectChoiceLoader: SelectChoiceLoader,
@@ -46,7 +45,7 @@ class SelectOneFromMapData(
         val options = MappableItemsParser.Options(
             action = IconifiedText(
                 R.drawable.ic_save,
-                resources.getString(org.odk.collect.strings.R.string.select_item)
+                DisplayString.Resource(org.odk.collect.strings.R.string.select_item)
             )
         )
         val mappableItems =
@@ -63,8 +62,8 @@ class SelectOneFromMapData(
         return mapTitle
     }
 
-    override fun getItemType(): String {
-        return resources.getString(org.odk.collect.strings.R.string.choices)
+    override fun getItemType(): DisplayString {
+        return DisplayString.Resource(org.odk.collect.strings.R.string.choices)
     }
 
     override fun getItemCount(): NonNullLiveData<Int> {
