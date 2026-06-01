@@ -30,7 +30,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class FormMapViewModel(
-    private val resources: Resources,
+    @Deprecated("Should not pass Resources to ViewModel") private val resources: Resources,
     private val formId: Long,
     private val formsRepository: FormsRepository,
     private val instancesRepository: InstancesRepository,
