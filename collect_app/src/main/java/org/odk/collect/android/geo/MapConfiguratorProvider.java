@@ -18,6 +18,7 @@ import org.odk.collect.googlemaps.GoogleMapConfigurator;
 import org.odk.collect.maps.MapConfigurator;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MapConfiguratorProvider {
 
@@ -62,6 +63,10 @@ public class MapConfiguratorProvider {
             ));
         }
 
+        initOptions(sourceOptions);
+    }
+
+    public static void initOptions(List<SourceOption> sourceOptions) {
         MapConfiguratorProvider.sourceOptions = sourceOptions.toArray(new SourceOption[]{});
     }
 
@@ -122,12 +127,12 @@ public class MapConfiguratorProvider {
         return Collect.getInstance();
     }
 
-    private static class SourceOption {
+    public static class SourceOption {
         private final String id;  // preference value to store
         private final int labelId;  // string resource ID
         private final MapConfigurator cftor;
 
-        private SourceOption(String id, int labelId, MapConfigurator cftor) {
+        public SourceOption(String id, int labelId, MapConfigurator cftor) {
             this.id = id;
             this.labelId = labelId;
             this.cftor = cftor;

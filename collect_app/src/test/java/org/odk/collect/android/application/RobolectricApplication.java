@@ -2,18 +2,30 @@ package org.odk.collect.android.application;
 
 import static android.os.Environment.MEDIA_MOUNTED;
 import static org.robolectric.Shadows.shadowOf;
+import static java.util.Arrays.asList;
 
+import android.content.Context;
 import android.os.StrictMode;
 
+import androidx.preference.Preference;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.work.Configuration;
 import androidx.work.WorkManager;
 
-import org.odk.collect.db.sqlite.DatabaseConnection;
+import org.jetbrains.annotations.NotNull;
+import org.odk.collect.android.geo.MapConfiguratorProvider;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 import org.odk.collect.crashhandler.CrashHandler;
+import org.odk.collect.db.sqlite.DatabaseConnection;
+import org.odk.collect.maps.MapConfigurator;
+import org.odk.collect.shared.settings.Settings;
+import org.odk.collect.strings.R.string;
 import org.robolectric.shadows.ShadowApplication;
 import org.robolectric.shadows.ShadowEnvironment;
+
+import java.io.File;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author James Knight
@@ -61,5 +73,32 @@ public class RobolectricApplication extends Collect implements CollectComposeThe
                 .permitCustomSlowCalls()
                 .build()
         );
+
+        MapConfiguratorProvider.initOptions(asList(new MapConfiguratorProvider.SourceOption("fake-map", string.maps, new MapConfigurator() {
+            @Override
+            public boolean isAvailable(@NotNull Context context) {
+                return true;
+            }
+
+            @Override
+            public void showUnavailableMessage(@NotNull Context context) {
+
+            }
+
+            @Override
+            public @NotNull List<@NotNull Preference> createPrefs(@NotNull Context context, @NotNull Settings settings) {
+                return Collections.emptyList();
+            }
+
+            @Override
+            public boolean supportsLayer(@NotNull File file) {
+                return true;
+            }
+
+            @Override
+            public @NotNull String getDisplayName(@NotNull File file) {
+                return "";
+            }
+        })));
     }
 }
