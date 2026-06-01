@@ -28,8 +28,6 @@ class SelectOneFromMapData(
     private val isLoading = MutableNonNullLiveData(true)
 
     init {
-        isLoading.value = true
-
         scheduler.immediate(
             background = {
                 loadItemsFromChoices(prompt)
