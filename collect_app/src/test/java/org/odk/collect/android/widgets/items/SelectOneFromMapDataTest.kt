@@ -1,8 +1,6 @@
 package org.odk.collect.android.widgets.items
 
-import android.app.Application
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -171,7 +169,6 @@ class SelectOneFromMapDataTest {
             .withSelectChoiceText(emptyMap())
             .build()
 
-        val resources = ApplicationProvider.getApplicationContext<Application>().resources
         val data = SelectOneFromMapData(
             scheduler,
             prompt,
@@ -467,7 +464,6 @@ class SelectOneFromMapDataTest {
     }
 
     private fun loadDataForPrompt(prompt: FormEntryPrompt): SelectOneFromMapData {
-        val resources = ApplicationProvider.getApplicationContext<Application>().resources
         val data = SelectOneFromMapData(
             scheduler,
             prompt,
