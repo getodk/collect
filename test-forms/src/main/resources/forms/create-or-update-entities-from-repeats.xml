@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:entities="http://www.opendatakit.org/xforms/entities">
+	<h:head>
+		<h:title>Create or update entities from repeats</h:title>
+		<model odk:xforms-version="1.0.0" entities:entities-version="2024.1.0">
+			<instance>
+				<data id="create_or_update_entities_from_repeats" version="1">
+					<people>
+						<action/>
+						<person/>
+						<name/>
+						<meta>
+							<entity dataset="people" create="1" update="1" id="" baseVersion="" trunkVersion="" branchId="">
+								<label/>
+							</entity>
+						</meta>
+					</people>
+					<meta>
+						<instanceID/>
+					</meta>
+				</data>
+			</instance>
+
+			<instance id="people" src="jr://file-csv/people.csv"/>
+
+			<bind nodeset="/data/people/action" type="string"/>
+			<bind nodeset="/data/people/person" type="string" relevant="../action = 'update'"/>
+			<bind nodeset="/data/people/name" type="string" entities:saveto="full_name"/>
+            <bind nodeset="/data/people/meta/entity/@create" calculate=" ../../../action  = 'create'" readonly="true()" type="string"/>
+            <bind nodeset="/data/people/meta/entity/@update" calculate=" ../../../action  = 'update'" readonly="true()" type="string"/>
+
+			<bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
+
+			<bind nodeset="/data/people/meta/entity/@id" type="string" calculate="if(../../../action = 'create', uuid(), ../../../person)"/>
+			<bind calculate="../../../name" nodeset="/data/people/meta/entity/label" type="string"/>
+			<bind nodeset="/data/people/meta/entity/@baseVersion" calculate="if(../../../action = 'update', instance('people')/root/item[name=current()/../../../person]/__version, uuid())" type="string"/>
+			<bind nodeset="/data/people/meta/entity/@trunkVersion" calculate="if(../../../action = 'update', instance('people')/root/item[name=current()/../../../person]/__trunkVersion, uuid())" type="string"/>
+			<bind nodeset="/data/people/meta/entity/@branchId" calculate="if(../../../action = 'update', instance('people')/root/item[name=current()/../../../person]/__branchId, uuid())" type="string"/>
+		</model>
+	</h:head>
+	<h:body>
+		<group ref="/data/people">
+			<label>People</label>
+			<repeat nodeset="/data/people">
+				<select1 ref="/data/people/action">
+					<label>What do you want to do?</label>
+					<item>
+						<label>Create entity</label>
+						<value>create</value>
+					</item>
+					<item>
+						<label>Update entity</label>
+						<value>update</value>
+					</item>
+				</select1>
+				<select1 ref="/data/people/person">
+					<label>Select person</label>
+					<itemset nodeset="instance('people')/root/item">
+						<value ref="name"/>
+						<label ref="label"/>
+					</itemset>
+				</select1>
+				<input ref="/data/people/name">
+					<label>Name</label>
+				</input>
+			</repeat>
+		</group>
+	</h:body>
+</h:html>
