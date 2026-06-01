@@ -26,69 +26,65 @@ object MappableItemsParser {
             val geometry = selectChoice.getChild(GEOMETRY)
 
             if (geometry != null) {
-                try {
-                    val points = parseGeometry(geometry)
-                    if (points.isNotEmpty()) {
-                        val withinBounds = points.all {
-                            GeoWidgetUtils.isWithinMapBounds(it)
+                val points = parseGeometry(geometry)
+                if (points.isNotEmpty()) {
+                    val withinBounds = points.all {
+                        GeoWidgetUtils.isWithinMapBounds(it)
+                    }
+
+                    if (withinBounds) {
+                        val properties = selectChoice.additionalChildren.filterNot {
+                            FILTERED_PROPERTIES.contains(it.first)
+                        }.map {
+                            IconifiedText(null, DisplayString.Raw("${it.first}: ${it.second}"))
                         }
 
-                        if (withinBounds) {
-                            val properties = selectChoice.additionalChildren.filterNot {
-                                FILTERED_PROPERTIES.contains(it.first)
-                            }.map {
-                                IconifiedText(null, DisplayString.Raw("${it.first}: ${it.second}"))
-                            }
+                        if (points.size == 1) {
+                            val markerColor =
+                                getPropertyValue(selectChoice, MARKER_COLOR)
+                            val markerSymbol =
+                                getPropertyValue(selectChoice, MARKER_SYMBOL)
 
-                            if (points.size == 1) {
-                                val markerColor =
-                                    getPropertyValue(selectChoice, MARKER_COLOR)
-                                val markerSymbol =
-                                    getPropertyValue(selectChoice, MARKER_SYMBOL)
-
-                                MappableItem.Point(
-                                    index.toLong(),
-                                    translator(selectChoice),
-                                    properties,
-                                    point = points[0],
-                                    smallIcon = if (markerSymbol.isNullOrBlank()) R.drawable.ic_map_marker_with_hole_small else R.drawable.ic_map_marker_small,
-                                    largeIcon = if (markerSymbol.isNullOrBlank()) R.drawable.ic_map_marker_with_hole_big else R.drawable.ic_map_marker_big,
-                                    color = markerColor ?: options.color,
-                                    symbol = markerSymbol,
-                                    action = options.action
-                                )
-                            } else if (points.first() != points.last()) {
-                                MappableItem.Line(
-                                    index.toLong(),
-                                    translator(selectChoice),
-                                    properties,
-                                    points = points,
-                                    strokeWidth = getPropertyValue(selectChoice, STROKE_WIDTH),
-                                    strokeColor = getPropertyValue(selectChoice, STROKE)
-                                        ?: options.color,
-                                    action = options.action
-                                )
-                            } else {
-                                MappableItem.Polygon(
-                                    index.toLong(),
-                                    translator(selectChoice),
-                                    properties,
-                                    points = points,
-                                    strokeWidth = getPropertyValue(selectChoice, STROKE_WIDTH),
-                                    strokeColor = getPropertyValue(selectChoice, STROKE)
-                                        ?: options.color,
-                                    fillColor = getPropertyValue(selectChoice, FILL)
-                                        ?: options.color,
-                                    action = options.action
-                                )
-                            }
+                            MappableItem.Point(
+                                index.toLong(),
+                                translator(selectChoice),
+                                properties,
+                                point = points[0],
+                                smallIcon = if (markerSymbol.isNullOrBlank()) R.drawable.ic_map_marker_with_hole_small else R.drawable.ic_map_marker_small,
+                                largeIcon = if (markerSymbol.isNullOrBlank()) R.drawable.ic_map_marker_with_hole_big else R.drawable.ic_map_marker_big,
+                                color = markerColor ?: options.color,
+                                symbol = markerSymbol,
+                                action = options.action
+                            )
+                        } else if (points.first() != points.last()) {
+                            MappableItem.Line(
+                                index.toLong(),
+                                translator(selectChoice),
+                                properties,
+                                points = points,
+                                strokeWidth = getPropertyValue(selectChoice, STROKE_WIDTH),
+                                strokeColor = getPropertyValue(selectChoice, STROKE)
+                                    ?: options.color,
+                                action = options.action
+                            )
                         } else {
-                            null
+                            MappableItem.Polygon(
+                                index.toLong(),
+                                translator(selectChoice),
+                                properties,
+                                points = points,
+                                strokeWidth = getPropertyValue(selectChoice, STROKE_WIDTH),
+                                strokeColor = getPropertyValue(selectChoice, STROKE)
+                                    ?: options.color,
+                                fillColor = getPropertyValue(selectChoice, FILL)
+                                    ?: options.color,
+                                action = options.action
+                            )
                         }
                     } else {
                         null
                     }
-                } catch (_: NumberFormatException) {
+                } else {
                     null
                 }
             } else {
