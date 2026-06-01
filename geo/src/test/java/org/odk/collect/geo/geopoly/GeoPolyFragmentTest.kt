@@ -1148,18 +1148,16 @@ class GeoPolyFragmentTest {
 private val DEFAULT_RECORDING_INTERVAL =
     INTERVAL_OPTIONS[GeoPolyFragment.DEFAULT_INTERVAL_INDEX].toLong() * 1000
 
-private class FakeMappableData(private val items: List<MappableItem>) : MappableData {
+private class FakeMappableData(items: List<MappableItem>) : MappableData {
 
-    var isLoading = false
-        set(value) {
-            _isLoading.value = value
-            field = value
-        }
-
-    private val _isLoading = MutableNonNullLiveData(isLoading)
+    private val _items = MutableLiveData(items)
+    private val _isLoading = MutableNonNullLiveData(false)
+    var isLoading
+        get() = _isLoading.value
+        set(value) { _isLoading.value = value }
 
     override fun getMappableItems(): LiveData<List<MappableItem>> {
-        return MutableLiveData(items)
+        return _items
     }
 
     override fun isLoading(): NonNullLiveData<Boolean> {
