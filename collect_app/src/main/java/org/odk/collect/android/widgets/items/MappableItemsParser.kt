@@ -100,7 +100,7 @@ object MappableItemsParser {
         return selectChoice.additionalChildren.firstOrNull { it.first == propertyName }?.second
     }
 
-    private val FILTERED_PROPERTIES = arrayOf(
+    private val FILTERED_PROPERTIES = setOf(
         GEOMETRY,
         MARKER_COLOR,
         MARKER_SYMBOL,
