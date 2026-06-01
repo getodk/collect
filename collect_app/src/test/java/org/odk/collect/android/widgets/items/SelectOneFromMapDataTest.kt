@@ -179,7 +179,7 @@ class SelectOneFromMapDataTest {
             null
         )
         assertThat(data.isLoading().value, equalTo(true))
-        assertThat(data.getMappableItems().value, equalTo(null))
+        assertThat(data.getMappableItems().value, equalTo(emptyList()))
 
         scheduler.runBackground()
         assertThat(data.isLoading().value, equalTo(true))

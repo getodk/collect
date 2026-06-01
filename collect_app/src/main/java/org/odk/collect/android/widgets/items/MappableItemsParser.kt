@@ -21,7 +21,7 @@ object MappableItemsParser {
         options: Options,
         translator: (SelectChoice) -> String
     ): List<MappableItem> {
-        return choices.foldIndexed(emptyList()) { index, list, selectChoice ->
+        return choices.mapIndexedNotNull { index, selectChoice ->
             val geometry = selectChoice.getChild(GEOMETRY)
 
             if (geometry != null) {
@@ -45,7 +45,7 @@ object MappableItemsParser {
                                 val markerSymbol =
                                     getPropertyValue(selectChoice, MARKER_SYMBOL)
 
-                                list + MappableItem.Point(
+                                MappableItem.Point(
                                     index.toLong(),
                                     translator(selectChoice),
                                     properties,
@@ -57,7 +57,7 @@ object MappableItemsParser {
                                     action = options.action
                                 )
                             } else if (points.first() != points.last()) {
-                                list + MappableItem.Line(
+                                MappableItem.Line(
                                     index.toLong(),
                                     translator(selectChoice),
                                     properties,
@@ -68,7 +68,7 @@ object MappableItemsParser {
                                     action = options.action
                                 )
                             } else {
-                                list + MappableItem.Polygon(
+                                MappableItem.Polygon(
                                     index.toLong(),
                                     translator(selectChoice),
                                     properties,
@@ -82,16 +82,16 @@ object MappableItemsParser {
                                 )
                             }
                         } else {
-                            list
+                            null
                         }
                     } else {
-                        list
+                        null
                     }
                 } catch (_: NumberFormatException) {
-                    list
+                    null
                 }
             } else {
-                list
+                null
             }
         }
     }
