@@ -68,6 +68,8 @@ import timber.log.Timber;
 
 public abstract class QuestionWidget extends FrameLayout implements Widget {
 
+    public static Boolean longPressClear = true;
+
     private final FormEntryPrompt formEntryPrompt;
     private final AudioVideoImageTextLabel audioVideoImageTextLabel;
     protected final QuestionDetails questionDetails;
@@ -133,7 +135,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
         errorLayout = findViewById(R.id.error_message_container);
         setupGuidanceTextAndLayout(helpTextLayout.findViewById(R.id.guidance_text_view), formEntryPrompt);
 
-        if (context instanceof Activity && !questionDetails.isReadOnly()) {
+        if (longPressClear && context instanceof Activity && !questionDetails.isReadOnly()) {
             registerToClearAnswerOnLongPress((Activity) context, this);
         }
 

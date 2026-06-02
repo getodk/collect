@@ -16,6 +16,7 @@ import org.odk.collect.android.R
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.ProjectSettingsPage
+import org.odk.collect.android.support.rules.EnableQuestionWidgetLongPressRule
 import org.odk.collect.android.support.rules.FormEntryActivityTestRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
 import org.odk.collect.androidtest.RecordedIntentsRule
@@ -29,6 +30,7 @@ class FieldListUpdateTest {
     @get:Rule
     var copyFormChain: RuleChain = chain()
         .around(RecordedIntentsRule())
+        .around(EnableQuestionWidgetLongPressRule())
         .around(rule)
 
     @Test
