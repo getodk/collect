@@ -7,6 +7,7 @@ import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.odk.collect.android.support.StubOpenRosaServer.EntityListItem
 import org.odk.collect.android.support.TestDependencies
+import org.odk.collect.android.support.pages.FormEndPage
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain
@@ -107,6 +108,38 @@ class EntityFormCreateUpdateTest {
 
             // 3. Verify update
             .startBlankForm("One Question Entity Upsert")
+            .clickOnText("Update entity")
+            .swipeToNextQuestion("Select person")
+            .assertTexts("Romulus Roy", "Logan Roy")
+            .assertTextDoesNotExist("Roman Roy")
+    }
+
+    @Test
+    fun fillingEntityCreateOrUpdateFromRepeatsForm_createsAndUpdatesEntitiesForFollowUpForms() {
+        testDependencies.server.addForm(
+            "create-or-update-entities-from-repeats.xml",
+            listOf(EntityListItem("people.csv"))
+        )
+
+        rule.withProject(testDependencies.server.url, matchExactly = true)
+            // 1. Create a new entity and update the existing one
+            .startBlankForm("Create or update entities from repeats")
+            .clickOnText("Create entity")
+            .swipeToNextQuestion("Name")
+            .answerQuestion("Name", "Logan Roy")
+            .swipeToNextQuestionWithRepeatGroup("People")
+            .clickOnAdd(FormEntryPage("Create or update entities from repeats"))
+            .clickOnText("Update entity")
+            .swipeToNextQuestion("Select person")
+            .clickOnText("Roman Roy")
+            .swipeToNextQuestion("Name")
+            .answerQuestion("Name", "Romulus Roy")
+            .swipeToNextQuestionWithRepeatGroup("People")
+            .clickOnDoNotAdd(FormEndPage("Create or update entities from repeats"))
+            .clickFinalize()
+
+            // 2. Verify creation and update
+            .startBlankForm("Create or update entities from repeats")
             .clickOnText("Update entity")
             .swipeToNextQuestion("Select person")
             .assertTexts("Romulus Roy", "Logan Roy")
