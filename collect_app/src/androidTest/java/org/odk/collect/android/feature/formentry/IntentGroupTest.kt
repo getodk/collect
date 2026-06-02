@@ -16,6 +16,7 @@
 package org.odk.collect.android.feature.formentry
 
 import android.app.Activity
+import android.app.Application
 import android.app.Instrumentation
 import android.content.ClipData
 import android.content.Context
@@ -25,6 +26,7 @@ import android.os.Bundle
 import android.os.Environment
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.junit4.createEmptyComposeRule
+import androidx.compose.ui.test.onNodeWithText
 import androidx.core.content.FileProvider
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
@@ -272,6 +274,15 @@ class IntentGroupTest {
     }
 
     private fun assertImageWidgetWithoutAnswer() {
+        val context = ApplicationProvider.getApplicationContext<Application>()
+        composeRule
+            .onNodeWithText(context.getString(R.string.capture_image))
+            .assertDoesNotExist()
+
+        composeRule
+            .onNodeWithText(context.getString(R.string.choose_image))
+            .assertDoesNotExist()
+
         composeRule
             .onNodeWithClickLabel(R.string.open_file)
             .assertDoesNotExist()
@@ -296,6 +307,15 @@ class IntentGroupTest {
 
     @OptIn(ExperimentalTestApi::class)
     private fun assertImageWidgetWithAnswer() {
+        val context = ApplicationProvider.getApplicationContext<Application>()
+        composeRule
+            .onNodeWithText(context.getString(R.string.capture_image))
+            .assertDoesNotExist()
+
+        composeRule
+            .onNodeWithText(context.getString(R.string.choose_image))
+            .assertDoesNotExist()
+
         composeRule.waitUntilAtLeastOneExists(hasClickLabel(R.string.open_file))
     }
 
