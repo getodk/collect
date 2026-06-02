@@ -7,16 +7,20 @@ import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import coil3.ImageLoader
+import coil3.SingletonImageLoader
+import coil3.imageDecoderEnabled
 import net.bytebuddy.utility.RandomString
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
+import org.hamcrest.Matchers.notNullValue
 import org.javarosa.core.model.Constants
 import org.javarosa.core.model.data.StringData
+import org.junit.After
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.spy
-import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
@@ -34,29 +38,36 @@ import java.io.File
 class ImageWidgetTest : FileWidgetTest<ImageWidget>() {
     @get:Rule
     val composeRule = createAndroidComposeRule<WidgetTestActivity>()
-
-    private var currentFile: File? = null
     private lateinit var fileAnswerDelegate: FileAnswerDelegate
-
-    private val fakeQuestionMediaManager = object : FakeQuestionMediaManager() {
-        override fun getAnswerFile(fileName: String): File? {
-            return currentFile
-        }
-    }
-    private val mediaWidgetAnswerViewModel = MediaWidgetAnswerViewModel(mock(), fakeQuestionMediaManager, mock())
+    private val questionMediaManager = FakeQuestionMediaManager()
+    private val mediaWidgetAnswerViewModel = MediaWidgetAnswerViewModel(mock(), questionMediaManager, mock())
     private val dependencies = QuestionWidget.Dependencies(
         null,
         mediaWidgetAnswerViewModel
     )
 
+    @Before
+    fun setup() {
+        SingletonImageLoader.setUnsafe { context ->
+            ImageLoader.Builder(context)
+                .imageDecoderEnabled(false)
+                .build()
+        }
+    }
+
+    @After
+    fun teardown() {
+        SingletonImageLoader.reset()
+    }
+
     override fun createWidget(): ImageWidget {
-        fileAnswerDelegate = spy(FileAnswerDelegate(fakeQuestionMediaManager, formEntryPrompt))
+        fileAnswerDelegate = FileAnswerDelegate(questionMediaManager, formEntryPrompt)
         whenever(formEntryPrompt.controlType).thenReturn(Constants.CONTROL_IMAGE_CHOOSE)
 
         return ImageWidget(
             composeRule.activity,
             QuestionDetails(formEntryPrompt, readOnlyOverride),
-            fakeQuestionMediaManager,
+            questionMediaManager,
             FakeWaitingForDataRegistry(),
             TempFiles.getPathInTempDir(),
             dependencies,
@@ -70,13 +81,19 @@ class ImageWidgetTest : FileWidgetTest<ImageWidget>() {
     @Test
     override fun settingANewAnswerShouldCallDeleteMediaToRemoveTheOldFile() {
         super.settingANewAnswerShouldRemoveTheOldAnswer()
-        verify(fileAnswerDelegate).deleteFile()
+
+        val promptIndex = formEntryPrompt.index.toString()
+        assertThat(questionMediaManager.originalFiles[promptIndex], equalTo(formEntryPrompt.answerText))
+        assertThat(questionMediaManager.recentFiles[promptIndex], notNullValue())
     }
 
     @Test
     override fun callingClearAnswerShouldCallDeleteMediaAndRemoveTheExistingAnswer() {
         super.callingClearShouldRemoveTheExistingAnswer()
-        verify(fileAnswerDelegate).deleteFile()
+
+        val promptIndex = formEntryPrompt.index.toString()
+        assertThat(questionMediaManager.originalFiles[promptIndex], equalTo(formEntryPrompt.answerText))
+        assertThat(questionMediaManager.recentFiles[promptIndex], equalTo(null))
     }
 
     override fun getNextAnswer(): StringData {
@@ -152,10 +169,10 @@ class ImageWidgetTest : FileWidgetTest<ImageWidget>() {
 
     @Test
     fun `when prompt has current answer shows in image view`() {
-        currentFile = File.createTempFile("current", ".bmp")
+        val file = questionMediaManager.addAnswerFile(File.createTempFile("current", ".png"))
 
         formEntryPrompt = MockFormEntryPromptBuilder(formEntryPrompt)
-            .withAnswerDisplayText("current.bmp")
+            .withAnswerDisplayText(file.name)
             .build()
 
         createWidget()
@@ -166,9 +183,6 @@ class ImageWidgetTest : FileWidgetTest<ImageWidget>() {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun `when the answer image cannot be loaded shows error message`() {
-        val imageFile = File("non_existent_file.bmp")
-        currentFile = imageFile
-
         formEntryPrompt = MockFormEntryPromptBuilder(formEntryPrompt)
             .withAnswerDisplayText("non_existent_file.bmp")
             .build()
