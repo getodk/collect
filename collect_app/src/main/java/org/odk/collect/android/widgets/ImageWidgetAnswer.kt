@@ -1,7 +1,6 @@
 package org.odk.collect.android.widgets
 
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
