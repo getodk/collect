@@ -7,9 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.view.View
 import android.widget.Toast
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
 import org.javarosa.core.model.data.IAnswerData
 import org.javarosa.form.api.FormEntryPrompt
@@ -42,7 +39,6 @@ class ImageWidget @JvmOverloads constructor(
     private val dependencies: Dependencies,
     private val fileAnswerDelegate: FileAnswerDelegate = FileAnswerDelegate(questionMediaManager, questionDetails.prompt)
 ) : QuestionWidget(context, dependencies, questionDetails), FileWidget, WidgetDataReceiver {
-    private var binaryName by mutableStateOf(fileAnswerDelegate.binaryName)
     private val selfie: Boolean = Appearances.isFrontCameraAppearance(formEntryPrompt)
 
     init { render() }
@@ -57,7 +53,7 @@ class ImageWidget @JvmOverloads constructor(
                 ImageWidgetContent(
                     dependencies.mediaWidgetAnswerViewModel,
                     formEntryPrompt,
-                    binaryName,
+                    fileAnswerDelegate.binaryName,
                     readOnly,
                     newImagesOnly,
                     buttonFontSize,
@@ -75,7 +71,6 @@ class ImageWidget @JvmOverloads constructor(
 
     override fun clearAnswer() {
         fileAnswerDelegate.deleteFile()
-        binaryName = null
         widgetValueChanged()
     }
 
@@ -84,8 +79,7 @@ class ImageWidget @JvmOverloads constructor(
     }
 
     override fun setData(answer: Any) {
-        fileAnswerDelegate.setData(answer) {
-            binaryName = it
+        if (fileAnswerDelegate.setData(answer)) {
             widgetValueChanged()
         }
     }

@@ -43,14 +43,13 @@ class FileAnswerDelegateTest {
     }
 
     @Test
-    fun `setData() with valid file updates binary name and calls questionMediaManager`() {
+    fun `setData() with valid file updates binary name and returns true`() {
         val file = File.createTempFile("new_image", ".jpg")
-        var answerChangedName: String? = null
 
-        delegate.setData(file) { answerChangedName = it }
+        val changed = delegate.setData(file)
 
+        assertThat(changed, equalTo(true))
         assertThat(delegate.binaryName, equalTo(file.name))
-        assertThat(answerChangedName, equalTo(file.name))
         assertThat(questionMediaManager.recentFiles[prompt.index.toString()], equalTo(file.absolutePath))
     }
 
@@ -63,29 +62,26 @@ class FileAnswerDelegateTest {
         val delegate = FileAnswerDelegate(questionMediaManager, promptWithAnswer)
 
         val file = File.createTempFile("new_image", ".jpg")
-        delegate.setData(file) {}
+        delegate.setData(file)
 
         assertThat(questionMediaManager.originalFiles["1"], equalTo("old_image.jpg"))
     }
 
     @Test
-    fun `setData() does nothing and logs error when file does not exist`() {
+    fun `setData() does nothing and returns false when file does not exist`() {
         val file = File("non_existent_file")
-        var answerChanged = false
 
-        delegate.setData(file) { answerChanged = true }
+        val changed = delegate.setData(file)
 
+        assertThat(changed, equalTo(false))
         assertThat(delegate.binaryName, nullValue())
-        assertThat(answerChanged, equalTo(false))
     }
 
     @Test
-    fun `setData() does nothing when data is not a file`() {
-        var answerChanged = false
+    fun `setData() does nothing and returns false when data is not a file`() {
+        val changed = delegate.setData("not a file")
 
-        delegate.setData("not a file") { answerChanged = true }
-
+        assertThat(changed, equalTo(false))
         assertThat(delegate.binaryName, nullValue())
-        assertThat(answerChanged, equalTo(false))
     }
 }
