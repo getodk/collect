@@ -32,7 +32,7 @@ import org.odk.collect.android.javarosawrapper.ValidationResult
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.widgets.geo.GeoPolyDialogFragment
-import org.odk.collect.android.widgets.geo.ReferenceGeometryMappableDate
+import org.odk.collect.android.widgets.geo.ReferenceGeometryMappableData
 import org.odk.collect.android.widgets.items.GeoSelectChoiceElements
 import org.odk.collect.android.widgets.support.FormElementFixtures.selectChoice
 import org.odk.collect.android.widgets.support.FormElementFixtures.treeElement
@@ -618,14 +618,14 @@ class GeoPolyDialogFragmentTest {
 
             val point = mappableItems[0] as MappableItem.Point
             assertThat(point.point, equalTo(MapPoint(12.0, -1.0, 305.0)))
-            assertThat(point.color, equalTo(ReferenceGeometryMappableDate.ITEM_COLOR))
+            assertThat(point.color, equalTo(ReferenceGeometryMappableData.ITEM_COLOR))
 
             val line = mappableItems[1] as MappableItem.Line
             assertThat(
                 line.points,
                 equalTo(listOf(MapPoint(12.0, -1.0, 3.0, 4.0), MapPoint(12.1, -1.0, 3.0, 4.0)))
             )
-            assertThat(line.strokeColor, equalTo(ReferenceGeometryMappableDate.ITEM_COLOR))
+            assertThat(line.strokeColor, equalTo(ReferenceGeometryMappableData.ITEM_COLOR))
 
             val polygon = mappableItems[2] as MappableItem.Polygon
             assertThat(
@@ -638,8 +638,8 @@ class GeoPolyDialogFragmentTest {
                     )
                 )
             )
-            assertThat(polygon.strokeColor, equalTo(ReferenceGeometryMappableDate.ITEM_COLOR))
-            assertThat(polygon.fillColor, equalTo(ReferenceGeometryMappableDate.ITEM_COLOR))
+            assertThat(polygon.strokeColor, equalTo(ReferenceGeometryMappableData.ITEM_COLOR))
+            assertThat(polygon.fillColor, equalTo(ReferenceGeometryMappableData.ITEM_COLOR))
         }
     }
 

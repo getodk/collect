@@ -73,10 +73,10 @@ class GeoPolyDialogFragment(
             else -> throw IllegalArgumentException()
         }
 
-        val referenceGeometryMappableDate by viewModels<ReferenceGeometryMappableDate> {
+        val referenceGeometryMappableData by viewModels<ReferenceGeometryMappableData> {
             viewModelFactory {
-                addInitializer(ReferenceGeometryMappableDate::class) {
-                    ReferenceGeometryMappableDate(scheduler, prompt, selectChoiceLoader)
+                addInitializer(ReferenceGeometryMappableData::class) {
+                    ReferenceGeometryMappableData(scheduler, prompt, selectChoiceLoader)
                 }
             }
         }
@@ -98,7 +98,7 @@ class GeoPolyDialogFragment(
                     null
                 }
             },
-            mappableData = referenceGeometryMappableDate
+            mappableData = referenceGeometryMappableData
         )
     }
 

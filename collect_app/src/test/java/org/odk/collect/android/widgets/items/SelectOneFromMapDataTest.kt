@@ -1,8 +1,6 @@
 package org.odk.collect.android.widgets.items
 
-import android.app.Application
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -14,6 +12,7 @@ import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.widgets.support.FormElementFixtures.selectChoice
 import org.odk.collect.android.widgets.support.FormElementFixtures.treeElement
 import org.odk.collect.android.widgets.support.FormEntryPromptSelectChoiceLoader
+import org.odk.collect.androidshared.ui.DisplayString
 import org.odk.collect.androidtest.getOrAwaitValue
 import org.odk.collect.entities.javarosa.parse.EntitySchema
 import org.odk.collect.geo.items.IconifiedText
@@ -160,7 +159,7 @@ class SelectOneFromMapDataTest {
         val data = loadDataForPrompt(prompt)
         val properties = data.getMappableItems().value!![0].properties
         assertThat(properties.size, equalTo(1))
-        assertThat(properties[0], equalTo(IconifiedText(null, "property: blah")))
+        assertThat(properties[0], equalTo(IconifiedText(null, DisplayString.Raw("property: blah"))))
     }
 
     @Test
@@ -170,16 +169,14 @@ class SelectOneFromMapDataTest {
             .withSelectChoiceText(emptyMap())
             .build()
 
-        val resources = ApplicationProvider.getApplicationContext<Application>().resources
         val data = SelectOneFromMapData(
-            resources,
             scheduler,
             prompt,
             FormEntryPromptSelectChoiceLoader(),
             null
         )
         assertThat(data.isLoading().value, equalTo(true))
-        assertThat(data.getMappableItems().value, equalTo(null))
+        assertThat(data.getMappableItems().value, equalTo(emptyList()))
 
         scheduler.runBackground()
         assertThat(data.isLoading().value, equalTo(true))
@@ -467,9 +464,7 @@ class SelectOneFromMapDataTest {
     }
 
     private fun loadDataForPrompt(prompt: FormEntryPrompt): SelectOneFromMapData {
-        val resources = ApplicationProvider.getApplicationContext<Application>().resources
         val data = SelectOneFromMapData(
-            resources,
             scheduler,
             prompt,
             FormEntryPromptSelectChoiceLoader(),

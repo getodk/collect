@@ -12,6 +12,7 @@ import org.odk.collect.android.instancemanagement.showAsEditable
 import org.odk.collect.android.instancemanagement.userVisibleInstanceName
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.androidshared.livedata.NonNullLiveData
+import org.odk.collect.androidshared.ui.DisplayString
 import org.odk.collect.async.Scheduler
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.FormsRepository
@@ -29,7 +30,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class FormMapViewModel(
-    private val resources: Resources,
+    @Deprecated("Should not pass Resources to ViewModel") private val resources: Resources,
     private val formId: Long,
     private val formsRepository: FormsRepository,
     private val instancesRepository: InstancesRepository,
@@ -40,7 +41,7 @@ class FormMapViewModel(
     private var _form: Form? = null
 
     private val mapTitle = MutableLiveData<String?>()
-    private var mappableItems = MutableLiveData<List<MappableItem>>(null)
+    private var mappableItems = MutableLiveData<List<MappableItem>>(emptyList())
     private var itemCount = MutableNonNullLiveData(0)
     private val isLoading = MutableNonNullLiveData(false)
 
@@ -48,8 +49,8 @@ class FormMapViewModel(
         return mapTitle
     }
 
-    override fun getItemType(): String {
-        return resources.getString(org.odk.collect.strings.R.string.saved_forms)
+    override fun getItemType(): DisplayString {
+        return DisplayString.Resource(org.odk.collect.strings.R.string.saved_forms)
     }
 
     override fun getItemCount(): NonNullLiveData<Int> {
@@ -60,7 +61,7 @@ class FormMapViewModel(
         return false
     }
 
-    override fun getMappableItems(): LiveData<List<MappableItem>?> {
+    override fun getMappableItems(): LiveData<List<MappableItem>> {
         return mappableItems
     }
 
@@ -175,7 +176,7 @@ class FormMapViewModel(
     private fun createViewAction(): IconifiedText {
         return IconifiedText(
             R.drawable.ic_visibility,
-            resources.getString(org.odk.collect.strings.R.string.view_data)
+            DisplayString.Resource(org.odk.collect.strings.R.string.view_data)
         )
     }
 
@@ -185,7 +186,7 @@ class FormMapViewModel(
 
         return IconifiedText(
             if (canEditSaved) org.odk.collect.icons.R.drawable.ic_edit else R.drawable.ic_visibility,
-            resources.getString(if (canEditSaved) org.odk.collect.strings.R.string.edit_data else org.odk.collect.strings.R.string.view_data)
+            DisplayString.Resource(if (canEditSaved) org.odk.collect.strings.R.string.edit_data else org.odk.collect.strings.R.string.view_data)
         )
     }
 

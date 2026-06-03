@@ -12,14 +12,14 @@ import org.odk.collect.async.Scheduler
 import org.odk.collect.geo.items.MappableData
 import org.odk.collect.geo.items.MappableItem
 
-class ReferenceGeometryMappableDate(
+class ReferenceGeometryMappableData(
     scheduler: Scheduler,
     prompt: FormEntryPrompt,
     private val selectChoiceLoader: SelectChoiceLoader,
 ) : ViewModel(), MappableData {
 
     private val trackableWorker = TrackableWorker(scheduler)
-    private val items = MutableLiveData<List<MappableItem>?>()
+    private val items = MutableLiveData<List<MappableItem>>(emptyList())
 
     init {
         trackableWorker.immediate(
@@ -38,7 +38,7 @@ class ReferenceGeometryMappableDate(
         )
     }
 
-    override fun getMappableItems(): LiveData<List<MappableItem>?> {
+    override fun getMappableItems(): LiveData<List<MappableItem>> {
         return items
     }
 

@@ -10,6 +10,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.android.R
 import org.odk.collect.android.instancemanagement.userVisibleInstanceName
+import org.odk.collect.androidshared.ui.DisplayString
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.formstest.FormUtils
@@ -115,7 +116,7 @@ class FormMapViewModelTest {
             largeIcon = R.drawable.ic_room_form_state_incomplete_48dp,
             action = IconifiedText(
                 org.odk.collect.icons.R.drawable.ic_edit,
-                application.getString(org.odk.collect.strings.R.string.edit_data)
+                DisplayString.Resource(org.odk.collect.strings.R.string.edit_data)
             ),
             info = formatDate(
                 org.odk.collect.strings.R.string.saved_on_date_at_time,
@@ -154,7 +155,7 @@ class FormMapViewModelTest {
             largeIcon = R.drawable.ic_room_form_state_incomplete_48dp,
             action = IconifiedText(
                 org.odk.collect.icons.R.drawable.ic_edit,
-                application.getString(org.odk.collect.strings.R.string.edit_data)
+                DisplayString.Resource(org.odk.collect.strings.R.string.edit_data)
             ),
             info = formatDate(
                 org.odk.collect.strings.R.string.saved_on_date_at_time,
@@ -193,7 +194,7 @@ class FormMapViewModelTest {
             largeIcon = R.drawable.ic_room_form_state_incomplete_48dp,
             action = IconifiedText(
                 org.odk.collect.icons.R.drawable.ic_edit,
-                application.getString(org.odk.collect.strings.R.string.edit_data)
+                DisplayString.Resource(org.odk.collect.strings.R.string.edit_data)
             ),
             info = formatDate(
                 org.odk.collect.strings.R.string.saved_on_date_at_time,
@@ -232,7 +233,7 @@ class FormMapViewModelTest {
             largeIcon = R.drawable.ic_room_form_state_incomplete_48dp,
             action = IconifiedText(
                 org.odk.collect.icons.R.drawable.ic_edit,
-                application.getString(org.odk.collect.strings.R.string.edit_data)
+                DisplayString.Resource(org.odk.collect.strings.R.string.edit_data)
             ),
             info = formatDate(
                 org.odk.collect.strings.R.string.saved_on_date_at_time,
@@ -271,7 +272,7 @@ class FormMapViewModelTest {
             largeIcon = R.drawable.ic_room_form_state_complete_48dp,
             action = IconifiedText(
                 R.drawable.ic_visibility,
-                application.getString(org.odk.collect.strings.R.string.view_data)
+                DisplayString.Resource(org.odk.collect.strings.R.string.view_data)
             ),
             info = formatDate(
                 org.odk.collect.strings.R.string.finalized_on_date_at_time,
@@ -311,7 +312,7 @@ class FormMapViewModelTest {
             largeIcon = R.drawable.ic_room_form_state_complete_48dp,
             action = IconifiedText(
                 R.drawable.ic_visibility,
-                application.getString(org.odk.collect.strings.R.string.view_data)
+                DisplayString.Resource(org.odk.collect.strings.R.string.view_data)
             ),
             info = formatDate(
                 org.odk.collect.strings.R.string.finalized_on_date_at_time,
@@ -387,7 +388,7 @@ class FormMapViewModelTest {
             largeIcon = R.drawable.ic_room_form_state_submitted_48dp,
             action = IconifiedText(
                 R.drawable.ic_visibility,
-                application.getString(org.odk.collect.strings.R.string.view_data)
+                DisplayString.Resource(org.odk.collect.strings.R.string.view_data)
             ),
             info = formatDate(
                 org.odk.collect.strings.R.string.sent_on_date_at_time,
@@ -425,7 +426,7 @@ class FormMapViewModelTest {
             largeIcon = R.drawable.ic_room_form_state_submission_failed_48dp,
             action = IconifiedText(
                 R.drawable.ic_visibility,
-                application.getString(org.odk.collect.strings.R.string.view_data)
+                DisplayString.Resource(org.odk.collect.strings.R.string.view_data)
             ),
             info = formatDate(
                 org.odk.collect.strings.R.string.sending_failed_on_date_at_time,
@@ -506,11 +507,11 @@ class FormMapViewModelTest {
 
         val viewModel = createViewModel(form)
         assertThat(viewModel.isLoading().value, equalTo(false))
-        assertThat(viewModel.getMappableItems().value, equalTo(null))
+        assertThat(viewModel.getMappableItems().value, equalTo(emptyList()))
 
         viewModel.load()
         assertThat(viewModel.isLoading().value, equalTo(true))
-        assertThat(viewModel.getMappableItems().value, equalTo(null))
+        assertThat(viewModel.getMappableItems().value, equalTo(emptyList()))
 
         scheduler.runBackground()
         scheduler.runForeground()

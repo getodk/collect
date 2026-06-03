@@ -9,14 +9,13 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.RootMatchers.isDialog
-import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.hamcrest.MatcherAssert
+import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.not
 import org.hamcrest.Matchers.notNullValue
@@ -1057,7 +1056,7 @@ class GeoPolyFragmentTest {
             GeoPolyFragment({ OnBackPressedDispatcher() }, mappableData = mappableData)
         }.onFragment {
             val dialogClass = MaterialProgressDialogFragment::class.java
-            MatcherAssert.assertThat(
+            assertThat(
                 getFragmentByClass(it.childFragmentManager, dialogClass),
                 nullValue()
             )
@@ -1149,18 +1148,16 @@ class GeoPolyFragmentTest {
 private val DEFAULT_RECORDING_INTERVAL =
     INTERVAL_OPTIONS[GeoPolyFragment.DEFAULT_INTERVAL_INDEX].toLong() * 1000
 
-private class FakeMappableData(private val items: List<MappableItem>) : MappableData {
+private class FakeMappableData(items: List<MappableItem>) : MappableData {
 
-    var isLoading = false
-        set(value) {
-            _isLoading.value = value
-            field = value
-        }
+    private val _items = MutableLiveData(items)
+    private val _isLoading = MutableNonNullLiveData(false)
+    var isLoading
+        get() = _isLoading.value
+        set(value) { _isLoading.value = value }
 
-    private val _isLoading = MutableNonNullLiveData(isLoading)
-
-    override fun getMappableItems(): LiveData<List<MappableItem>?> {
-        return MutableLiveData(items)
+    override fun getMappableItems(): LiveData<List<MappableItem>> {
+        return _items
     }
 
     override fun isLoading(): NonNullLiveData<Boolean> {

@@ -19,6 +19,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPS
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_HIDDEN
 import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
+import org.odk.collect.androidshared.ui.DisplayString
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.androidshared.ui.multiclicksafe.setMultiClickSafeOnClickListener
@@ -228,7 +229,7 @@ class SelectionMapFragment(
     private fun updateCounts(binding: SelectionMapLayoutBinding) {
         binding.geometryStatus.text = getString(
             org.odk.collect.strings.R.string.select_item_count,
-            selectionMapData.getItemType(),
+            selectionMapData.getItemType().getString(requireContext()),
             itemCount,
             featureCount
         )
@@ -413,7 +414,7 @@ internal class SelectedMappableItemViewModel : ViewModel() {
 
 interface SelectionMapData : MappableData {
     fun getMapTitle(): LiveData<String?>
-    fun getItemType(): String
+    fun getItemType(): DisplayString
     fun getItemCount(): NonNullLiveData<Int>
 
     fun isSelected(mappableItem: MappableItem): Boolean

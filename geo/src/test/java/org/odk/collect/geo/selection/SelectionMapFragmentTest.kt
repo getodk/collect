@@ -36,6 +36,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
+import org.odk.collect.androidshared.ui.DisplayString
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.async.Scheduler
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
@@ -81,7 +82,7 @@ class SelectionMapFragmentTest {
     private val data = mock<SelectionMapData> {
         on { isLoading() } doReturn MutableNonNullLiveData(false)
         on { getMapTitle() } doReturn MutableLiveData("")
-        on { getItemType() } doReturn "Things"
+        on { getItemType() } doReturn DisplayString.Raw("Things")
         on { getItemCount() } doReturn MutableNonNullLiveData(0)
         on { getMappableItems() } doReturn MutableLiveData(emptyList())
         on { isSelected(any()) } doReturn false
@@ -321,7 +322,7 @@ class SelectionMapFragmentTest {
     fun `does not zoom to fit all items again when they change`() {
         val originalItems =
             listOf(MappableItemsFixtures.actionMappablePoint().copy(id = 0, point = MapPoint(40.0, 0.0)))
-        val itemsLiveData: MutableLiveData<List<MappableItem>?> =
+        val itemsLiveData: MutableLiveData<List<MappableItem>> =
             MutableLiveData(originalItems)
         whenever(data.getMappableItems()).thenReturn(itemsLiveData)
 
@@ -338,7 +339,7 @@ class SelectionMapFragmentTest {
     @Test
     fun `does not zoom to fit all items if map already has center`() {
         val items = listOf(MappableItemsFixtures.actionMappablePoint().copy(id = 0, point = MapPoint(40.0, 0.0)))
-        val itemsLiveData: MutableLiveData<List<MappableItem>?> =
+        val itemsLiveData: MutableLiveData<List<MappableItem>> =
             MutableLiveData(items)
         whenever(data.getMappableItems()).thenReturn(itemsLiveData)
 
@@ -425,7 +426,7 @@ class SelectionMapFragmentTest {
     fun `does not zoom to current location when items change`() {
         val originalItems =
             listOf(MappableItemsFixtures.actionMappablePoint().copy(id = 0, point = MapPoint(40.0, 0.0)))
-        val itemsLiveData: MutableLiveData<List<MappableItem>?> =
+        val itemsLiveData: MutableLiveData<List<MappableItem>> =
             MutableLiveData(originalItems)
         whenever(data.getMappableItems()).thenReturn(itemsLiveData)
 
