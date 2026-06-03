@@ -40,8 +40,4 @@ class FileAnswerDelegate(
             Timber.e(Error("FileAnswerDelegate.setData must receive a File object, but received ${objectData.javaClass.name}"))
         }
     }
-
-    fun getFile(binaryName: String?): File? {
-        return questionMediaManager.getAnswerFile(binaryName)
-    }
 }

@@ -88,12 +88,4 @@ class FileAnswerDelegateTest {
         assertThat(delegate.binaryName, nullValue())
         assertThat(answerChanged, equalTo(false))
     }
-
-    @Test
-    fun `getFile() returns file from questionMediaManager`() {
-        val file = File.createTempFile("image", ".jpg")
-        val answerFile = questionMediaManager.addAnswerFile(file)
-
-        assertThat(delegate.getFile(file.name), equalTo(answerFile))
-    }
 }
