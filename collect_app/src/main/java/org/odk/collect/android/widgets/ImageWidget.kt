@@ -93,10 +93,10 @@ class ImageWidget @JvmOverloads constructor(
                     val intent = Intent(context, CaptureSelfieActivity::class.java).apply {
                         putExtra(CaptureSelfieActivity.EXTRA_TMP_PATH, StoragePathProvider().getOdkDirPath(StorageSubdirectory.CACHE))
                     }
-                    launchActivityForResult(intent, RequestCodes.MEDIA_FILE_PATH, org.odk.collect.strings.R.string.capture_image)
+                    launchActivityForResult(intent, RequestCodes.MEDIA_FILE_PATH, string.capture_image)
                 } else {
                     val intent = ImageCaptureIntentCreator.imageCaptureIntent(formEntryPrompt, context, tmpImageFilePath)
-                    launchActivityForResult(intent, RequestCodes.IMAGE_CAPTURE, org.odk.collect.strings.R.string.capture_image)
+                    launchActivityForResult(intent, RequestCodes.IMAGE_CAPTURE, string.capture_image)
                 }
             }
         })
@@ -116,7 +116,7 @@ class ImageWidget @JvmOverloads constructor(
         } catch (_: ActivityNotFoundException) {
             Toast.makeText(
                 context,
-                context.getString(org.odk.collect.strings.R.string.activity_not_found, context.getString(errorStringResource)),
+                context.getString(string.activity_not_found, context.getString(errorStringResource)),
                 Toast.LENGTH_SHORT
             ).show()
             waitingForDataRegistry.cancelWaitingForData()
