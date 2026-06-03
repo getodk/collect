@@ -29,6 +29,7 @@ import org.odk.collect.androidshared.system.CameraUtils
 import org.odk.collect.androidshared.ui.ComposeThemeProvider.Companion.setContextThemedContent
 import org.odk.collect.selfiecamera.CaptureSelfieActivity
 import org.odk.collect.permissions.PermissionListener
+import org.odk.collect.strings.R.string
 import java.util.Locale
 
 @SuppressLint("ViewConstructor")
@@ -111,7 +112,7 @@ class ImageWidget @JvmOverloads constructor(
         val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
             type = "image/*"
         }
-        launchActivityForResult(intent, RequestCodes.IMAGE_CHOOSER, org.odk.collect.strings.R.string.choose_image)
+        launchActivityForResult(intent, RequestCodes.IMAGE_CHOOSER, string.choose_image)
     }
 
     private fun launchActivityForResult(intent: Intent, requestCode: Int, errorStringResource: Int) {
