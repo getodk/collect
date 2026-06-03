@@ -17,6 +17,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import org.javarosa.core.model.Constants
 import org.javarosa.form.api.FormEntryPrompt
+import org.odk.collect.android.widgets.image.ImageWidgetAnswer
 import org.odk.collect.android.widgets.video.VideoWidgetAnswer
 import org.odk.collect.icons.R
 

@@ -1,4 +1,4 @@
-package org.odk.collect.android.widgets.utilities
+package org.odk.collect.android.widgets.image
 
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo

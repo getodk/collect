@@ -1,4 +1,4 @@
-package org.odk.collect.android.widgets.utilities
+package org.odk.collect.android.widgets.image
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

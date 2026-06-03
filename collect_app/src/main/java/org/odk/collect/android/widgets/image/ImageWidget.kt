@@ -1,4 +1,4 @@
-package org.odk.collect.android.widgets
+package org.odk.collect.android.widgets.image
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -16,9 +16,9 @@ import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.utilities.Appearances
 import org.odk.collect.android.utilities.ApplicationConstants.RequestCodes
 import org.odk.collect.android.utilities.QuestionMediaManager
+import org.odk.collect.android.widgets.QuestionWidget
 import org.odk.collect.android.widgets.interfaces.FileWidget
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver
-import org.odk.collect.android.widgets.utilities.FileAnswerDelegate
 import org.odk.collect.android.widgets.utilities.ImageCaptureIntentCreator
 import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry

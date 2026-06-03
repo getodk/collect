@@ -1,4 +1,4 @@
-package org.odk.collect.android.widgets
+package org.odk.collect.android.widgets.image
 
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.material3.MaterialTheme
@@ -14,6 +14,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import coil3.compose.AsyncImage
+import org.odk.collect.android.widgets.MediaWidgetAnswerViewModel
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 
 @Composable

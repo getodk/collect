@@ -40,6 +40,7 @@ import org.odk.collect.android.widgets.barcode.BarcodeWidget;
 import org.odk.collect.android.widgets.datetime.DateTimeWidget;
 import org.odk.collect.android.widgets.datetime.DateWidget;
 import org.odk.collect.android.widgets.datetime.TimeWidget;
+import org.odk.collect.android.widgets.image.ImageWidget;
 import org.odk.collect.android.widgets.items.LabelWidget;
 import org.odk.collect.android.widgets.items.LikertWidget;
 import org.odk.collect.android.widgets.items.ListMultiWidget;
