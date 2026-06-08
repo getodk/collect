@@ -9,6 +9,7 @@ import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.OkDialog
 import org.odk.collect.android.support.rules.CollectTestRule
+import org.odk.collect.android.support.rules.EnableQuestionWidgetLongPressRule
 import org.odk.collect.android.support.rules.TestRuleChain
 
 @RunWith(AndroidJUnit4::class)
@@ -17,7 +18,9 @@ class CatchFormDesignExceptionsTest {
     private val rule = CollectTestRule()
 
     @get:Rule
-    val ruleChain: RuleChain = TestRuleChain.chain().around(rule)
+    val ruleChain: RuleChain = TestRuleChain.chain()
+        .around(EnableQuestionWidgetLongPressRule())
+        .around(rule)
 
     @Test // https://github.com/getodk/collect/issues/4750
     fun whenFormHasFatalErrors_explanationDialogShouldBeDisplayedAndSurviveActivityRecreationAndTheFormShouldBeClosedAfterClickingOK() {

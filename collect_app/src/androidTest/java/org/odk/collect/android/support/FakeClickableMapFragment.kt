@@ -112,7 +112,7 @@ class FakeClickableMapFragment : Fragment(), MapFragment {
         var done = false
 
         Handler(Looper.getMainLooper()).post {
-            featureClickListener?.onFeature(featureId)
+            featureClickListener!!.onFeature(featureId)
             done = true
         }
 

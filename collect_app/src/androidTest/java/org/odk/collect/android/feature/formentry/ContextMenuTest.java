@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.rules.BlankFormTestRule;
+import org.odk.collect.android.support.rules.EnableQuestionWidgetLongPressRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 
 public class ContextMenuTest {
@@ -14,6 +15,7 @@ public class ContextMenuTest {
 
     @Rule
     public RuleChain copyFormChain = TestRuleChain.chain()
+            .around(new EnableQuestionWidgetLongPressRule())
             .around(activityTestRule);
 
     @Test
