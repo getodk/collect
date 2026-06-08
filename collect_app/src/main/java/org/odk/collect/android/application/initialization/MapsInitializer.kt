@@ -6,14 +6,12 @@ import com.google.android.gms.maps.MapView
 import org.odk.collect.android.geo.MapConfiguratorProvider
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
-import org.odk.collect.utilities.UserAgentProvider
 import timber.log.Timber
 import javax.inject.Inject
 
 class MapsInitializer @Inject constructor(
     private val context: Context,
-    private val settingsProvider: SettingsProvider,
-    private val userAgentProvider: UserAgentProvider
+    private val settingsProvider: SettingsProvider
 ) {
 
     fun initialize() {
