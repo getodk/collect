@@ -87,7 +87,7 @@ class Configuration(
     val styleOptions: Map<String, StyleOption> = emptyMap()
 )
 
-class StyleOption(val name: Int, uri: BasemapUri)
+class StyleOption(val name: Int, val uri: BasemapUri)
 
 sealed class BasemapUri(val value: String) {
     class Raster(uri: String) : BasemapUri(uri)
