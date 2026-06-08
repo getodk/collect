@@ -56,7 +56,6 @@ import com.mapbox.maps.plugin.gestures.addOnScaleListener
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.odk.collect.androidshared.utils.ScreenUtils
-import org.odk.collect.mapbox.databinding.MapboxMapFragmentLayoutBinding
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragment.ErrorListener
 import org.odk.collect.maps.MapFragment.FeatureListener
@@ -157,9 +156,7 @@ class MapboxMapFragment(private val configuration: Configuration) :
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = MapboxMapFragmentLayoutBinding.inflate(inflater, container, false)
-
-        mapView = binding.map.apply {
+        mapView = MapView(requireContext()).apply {
             compass.position = Gravity.TOP or Gravity.START
             compass.marginTop = 36f
             compass.marginBottom = 36f
@@ -255,7 +252,7 @@ class MapboxMapFragment(private val configuration: Configuration) :
             }
         })
 
-        return binding.root
+        return mapView
     }
 
     override fun onDestroy() {
