@@ -37,7 +37,7 @@ private class ResetStateStatement(
     private fun setTestState() {
         MultiClickGuard.test = true
         DecoratedBarcodeView.test = true
-        QuestionWidget.longPressClear = false
+        QuestionWidget.longPressMenuEnabled = false
         ToastUtils.alertStore.enabled = true
         SnackbarUtils.alertStore.enabled = true
         BottomSheetBehavior.DRAGGING_ENABLED = false
