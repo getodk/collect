@@ -2,18 +2,14 @@ package org.odk.collect.mapbox
 
 import android.content.Context
 import androidx.preference.Preference
-import com.mapbox.maps.Style
 import org.odk.collect.androidshared.system.OpenGLVersionChecker.isOpenGLv3Supported
 import org.odk.collect.androidshared.ui.PrefUtils
 import org.odk.collect.androidshared.ui.ToastUtils.showLongToast
-import org.odk.collect.mapbox.MapboxMapFragment
 import org.odk.collect.maps.MapConfigurator
 import org.odk.collect.maps.layers.MbtilesFile
-import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.settings.Settings
 import org.odk.collect.strings.R
 import java.io.File
-import kotlin.collections.toIntArray
 
 class MapboxMapConfigurator(private val configuration: Configuration) : MapConfigurator {
 
