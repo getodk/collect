@@ -27,7 +27,7 @@ The purpose of this document is to give anyone who reads it a quick overview  of
 * App uses [Material 3 Theming](https://m3.material.io/foundations/customization) so [Material components](https://material.io/components?platform=android) are preferred over custom or platform ones.
 * Dagger2 is used to inject "black box" objects such as Activity and just uses a very basic setup
 * Http is handled using OkHttp3 and https client abstractions are generally wrapped in Android's AsyncTask
-* Geo activities use three engines (Mapbox, osmdroid, Google Maps) depending on the selected basemap
+* Geo activities use two engines (Mapbox or Google Maps) depending on the selected basemap
 * Code goes through static analysis using CheckStyle, PMD, ktlint and Android Lint
 * Forms get into the app from two different sources (Open Rosa servers and disk) but the logic for this is disparate and they don't sit behind a common interface
 * Instances are linked to the forms they are instances of through formid and version. However, the same formid and version combination could represent multiple forms in storage

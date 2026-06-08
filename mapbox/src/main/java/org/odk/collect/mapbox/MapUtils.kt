@@ -63,8 +63,8 @@ object MapUtils {
         return MapPoint(pointAnnotation.point.latitude(), pointAnnotation.point.longitude(), 0.0, 0.0)
     }
 
-    // To ensure consistent stroke width across map platforms like Mapbox, Google, and OSM,
-    // the value for Mapbox needs to be divided by 3.
+    // To ensure consistent stroke width across map platforms like Mapbox etc., the value for
+    // Mapbox needs to be divided by 3.
     fun convertStrokeWidth(traceDescription: TraceDescription): Double {
         return (traceDescription.getStrokeWidth() / 3).toDouble()
     }

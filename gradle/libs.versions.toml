@@ -57,7 +57,6 @@ playServicesMaps = { group = "com.google.android.gms", name = "play-services-map
 playServicesLocation = { group = "com.google.android.gms", name = "play-services-location", version = "21.3.0" }
 playServicesOssLicenses = { group = "com.google.android.gms", name = "play-services-oss-licenses", version = "17.4.0" }
 mapboxAndroidSdk = { group = "com.mapbox.maps", name = "android-ndk27", version = "10.19.1" } # Check if https://github.com/mapbox/mapbox-maps-android/issues/2389#issuecomment-2432018812 no longer takes place before upgrading
-osmdroid = { group = "org.osmdroid", name = "osmdroid-android", version = "6.1.20" }
 okHttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp3" }
 okHttpTls = { group = "com.squareup.okhttp3", name = "okhttp-tls", version.ref = "okhttp3" }
 okHttpDigest = { group = "io.github.rburgst", name = "okhttp-digest", version = "3.1.1" }
