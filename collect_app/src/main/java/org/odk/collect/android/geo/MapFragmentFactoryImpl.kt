@@ -24,10 +24,11 @@ class MapFragmentFactoryImpl(private val settingsProvider: SettingsProvider) : M
 
     private fun isMapbox(source: String?): Boolean {
         return when (source) {
-            ProjectKeys.BASEMAP_SOURCE_MAPBOX -> true
-            ProjectKeys.BASEMAP_SOURCE_OSM -> true
-            ProjectKeys.BASEMAP_SOURCE_USGS -> true
+            ProjectKeys.BASEMAP_SOURCE_MAPBOX,
+            ProjectKeys.BASEMAP_SOURCE_OSM,
+            ProjectKeys.BASEMAP_SOURCE_USGS,
             ProjectKeys.BASEMAP_SOURCE_CARTO -> true
+
             else -> false
         }
     }
