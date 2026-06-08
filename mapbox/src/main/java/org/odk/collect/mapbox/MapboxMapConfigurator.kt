@@ -59,6 +59,6 @@ class MapboxMapConfigurator(private val configuration: Configuration) : MapConfi
 
     override fun getDisplayName(file: File): String {
         val name = MbtilesFile.readName(file)
-        return if (name != null) name else file.getName()
+        return name ?: file.name
     }
 }
