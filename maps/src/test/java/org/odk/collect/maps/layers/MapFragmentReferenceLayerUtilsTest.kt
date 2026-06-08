@@ -23,7 +23,7 @@ class MapFragmentReferenceLayerUtilsTest {
         config.putString(MapFragment.KEY_REFERENCE_LAYER, null)
         assertNull(
             MapFragmentReferenceLayerUtils.getReferenceLayerFile(
-                config,
+                config.getString(MapFragment.KEY_REFERENCE_LAYER),
                 DirectoryReferenceLayerRepository(layersPath, "", mock())
             )
         )
@@ -36,7 +36,7 @@ class MapFragmentReferenceLayerUtilsTest {
         config.putString(MapFragment.KEY_REFERENCE_LAYER, "blah")
         assertNull(
             MapFragmentReferenceLayerUtils.getReferenceLayerFile(
-                config,
+                config.getString(MapFragment.KEY_REFERENCE_LAYER),
                 DirectoryReferenceLayerRepository(layersPath, "", mock())
             )
         )
@@ -59,7 +59,7 @@ class MapFragmentReferenceLayerUtilsTest {
 
         assertNotNull(
             MapFragmentReferenceLayerUtils.getReferenceLayerFile(
-                config,
+                config.getString(MapFragment.KEY_REFERENCE_LAYER),
                 DirectoryReferenceLayerRepository(layersPath, "") { mapConfigurator }
             )
         )
