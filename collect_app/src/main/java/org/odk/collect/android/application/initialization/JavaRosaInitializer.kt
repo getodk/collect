@@ -1,6 +1,7 @@
 package org.odk.collect.android.application.initialization
 
 import org.javarosa.core.model.CoreModelModule
+import org.javarosa.core.reference.ReferenceManager
 import org.javarosa.core.services.PrototypeManager
 import org.javarosa.core.util.JavaRosaCoreModule
 import org.javarosa.model.xform.XFormsModule
@@ -8,6 +9,7 @@ import org.javarosa.xform.parse.XFormParser
 import org.javarosa.xform.parse.XFormParserFactory
 import org.javarosa.xform.util.XFormUtils
 import org.odk.collect.android.dynamicpreload.DynamicPreloadXFormParserFactory
+import org.odk.collect.android.javarosawrapper.ReferenceManagerMediaFileRepository
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.entities.javarosa.intance.LocalEntitiesExternalInstanceParserFactory
@@ -49,6 +51,7 @@ class JavaRosaInitializer(
 
         val localEntitiesExternalInstanceParserFactory = LocalEntitiesExternalInstanceParserFactory(
             { entitiesRepositoryProvider.create(projectsDataService.requireCurrentProject().uuid) },
+            ReferenceManagerMediaFileRepository(ReferenceManager.instance()),
             { true }
         )
 
