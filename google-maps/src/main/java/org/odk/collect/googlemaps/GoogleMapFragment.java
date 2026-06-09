@@ -14,7 +14,6 @@
 
 package org.odk.collect.googlemaps;
 
-import static com.google.android.gms.common.util.CollectionUtils.setOf;
 import static org.odk.collect.androidshared.ui.PrefUtils.getInt;
 import static org.odk.collect.googlemaps.MapPointExt.toLatLng;
 import static org.odk.collect.maps.traces.TraceDescriptionKt.getMarkersForPoints;
@@ -72,6 +71,7 @@ import org.odk.collect.settings.keys.ProjectKeys;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -171,7 +171,7 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
 
 
             loadReferenceOverlay();
-            getMapViewModel().getSettings(setOf(ProjectKeys.KEY_GOOGLE_MAP_STYLE)).observe(getViewLifecycleOwner(), settings -> {
+            getMapViewModel().getSettings(Collections.singleton(ProjectKeys.KEY_GOOGLE_MAP_STYLE)).observe(getViewLifecycleOwner(), settings -> {
                 mapType = getInt(ProjectKeys.KEY_GOOGLE_MAP_STYLE, GoogleMap.MAP_TYPE_NORMAL, settings);
                 if (map != null) {
                     map.setMapType(mapType);
