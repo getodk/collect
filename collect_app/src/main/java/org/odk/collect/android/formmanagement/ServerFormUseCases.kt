@@ -178,6 +178,8 @@ object ServerFormUseCases {
                         entitiesRepository,
                         mediaFile
                     )
+
+                    tempMediaFile.delete()
                 } else {
                     val existingForm = formsRepository.getAllByFormIdAndVersion(
                         formToDownload.formId,
