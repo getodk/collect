@@ -51,8 +51,7 @@ class JavaRosaInitializer(
 
         val localEntitiesExternalInstanceParserFactory = LocalEntitiesExternalInstanceParserFactory(
             { entitiesRepositoryProvider.create(projectsDataService.requireCurrentProject().uuid) },
-            ReferenceManagerMediaFileRepository(ReferenceManager.instance()),
-            { true }
+            ReferenceManagerMediaFileRepository(ReferenceManager.instance())
         )
 
         XFormUtils.setExternalInstanceParserFactory(localEntitiesExternalInstanceParserFactory)

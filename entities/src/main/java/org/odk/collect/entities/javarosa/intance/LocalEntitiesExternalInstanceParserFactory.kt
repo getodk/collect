@@ -7,18 +7,13 @@ import org.odk.collect.forms.FormMediaFileRepository
 
 class LocalEntitiesExternalInstanceParserFactory(
     private val entitiesRepositoryProvider: () -> EntitiesRepository,
-    private val mediaFileRepository: FormMediaFileRepository,
-    private val enabled: () -> Boolean
+    private val mediaFileRepository: FormMediaFileRepository
 ) : ExternalInstanceParserFactory {
     override fun getExternalInstanceParser(): ExternalInstanceParser {
-        val parser = ExternalInstanceParser()
-
-        if (enabled()) {
-            parser.addInstanceProvider(
+        return ExternalInstanceParser().apply {
+            addInstanceProvider(
                 LocalEntitiesInstanceProvider(entitiesRepositoryProvider, mediaFileRepository)
             )
         }
-
-        return parser
     }
 }

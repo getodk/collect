@@ -52,8 +52,7 @@ class ExternalCsvVsEntityListTest {
         XFormUtils.setExternalInstanceParserFactory(
             LocalEntitiesExternalInstanceParserFactory(
                 { entitiesRepository },
-                ReferenceManagerMediaFileRepository(ReferenceManager.instance()),
-                { true }
+                ReferenceManagerMediaFileRepository(ReferenceManager.instance())
             )
         )
     }
