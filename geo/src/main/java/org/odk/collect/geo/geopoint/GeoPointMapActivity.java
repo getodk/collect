@@ -75,7 +75,6 @@ public class GeoPointMapActivity extends LocalizedActivity {
 
     public static final String IS_DRAGGED_KEY = "is_dragged";
     public static final String CAPTURE_LOCATION_KEY = "capture_location";
-    public static final String FOUND_FIRST_LOCATION_KEY = "found_first_location";
     public static final String SET_CLEAR_KEY = "set_clear";
     public static final String POINT_FROM_INTENT_KEY = "point_from_intent";
     public static final String INTENT_READ_ONLY_KEY = "intent_read_only";
@@ -86,7 +85,6 @@ public class GeoPointMapActivity extends LocalizedActivity {
     public static final String ZOOM_BUTTON_ENABLED_KEY = "zoom_button_enabled";
     public static final String CLEAR_BUTTON_ENABLED_KEY = "clear_button_enabled";
     public static final String LOCATION_STATUS_VISIBILITY_KEY = "location_status_visibility";
-    public static final String LOCATION_INFO_VISIBILITY_KEY = "location_info_visibility";
 
     public static final String EXTRA_LOCATION = "gp";
     public static final String MARKER_COLOR = "#52C268";
