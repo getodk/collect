@@ -14,13 +14,14 @@
 package org.odk.collect.geo.geopoint
 
 import android.annotation.SuppressLint
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.Window
 import android.widget.ImageButton
+import androidx.core.graphics.toColorInt
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
+import org.odk.collect.androidshared.system.BundleExt.getParcelableExtraCompat
 import org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing
 import org.odk.collect.androidshared.ui.EdgeToEdge.setView
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
@@ -39,9 +40,6 @@ import org.odk.collect.geo.geopoint.LocationAccuracy.Improving
 import org.odk.collect.location.tracker.LocationTracker
 import org.odk.collect.location.tracker.getCurrentLocation
 import org.odk.collect.maps.MapFragment
-import org.odk.collect.maps.MapFragment.FeatureListener
-import org.odk.collect.maps.MapFragment.PointListener
-import org.odk.collect.maps.MapFragment.ReadyListener
 import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.addMarker
@@ -54,16 +52,9 @@ import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.strings.localization.LocalizedActivity
 import org.odk.collect.webpage.WebPageService
 import timber.log.Timber.Forest.e
-import java.util.Arrays
 import javax.inject.Inject
 
-/**
- * Allow the user to indicate a location by placing a marker on a map, either
- * by touching a point on the map or by tapping a button to place the marker
- * at the current location (obtained from GPS or other location sensors).
- */
 class GeoPointMapActivity : LocalizedActivity() {
-    protected var previousState: Bundle? = null
 
     @Inject
     lateinit var mapFragmentFactory: MapFragmentFactory
@@ -82,6 +73,8 @@ class GeoPointMapActivity : LocalizedActivity() {
 
     @Inject
     lateinit var locationTracker: LocationTracker
+
+    private var previousState: Bundle? = null
 
     private var map: MapFragment? = null
     private var featureId = -1 // will be a positive featureId once map is ready
@@ -127,21 +120,20 @@ class GeoPointMapActivity : LocalizedActivity() {
     private val currentLocationDelegate = CurrentLocationDelegate()
 
     public override fun onCreate(savedInstanceState: Bundle?) {
-        (getApplication() as GeoDependencyComponentProvider).geoDependencyComponent.inject(this)
-        getSupportFragmentManager().setFragmentFactory(
-            FragmentFactoryBuilder()
-                .forClass(MapFragment::class.java) { mapFragmentFactory!!.createMapFragment() as Fragment }
-                .forClass(OfflineMapLayersPickerBottomSheetDialogFragment::class.java) {
-                    OfflineMapLayersPickerBottomSheetDialogFragment(
-                        activityResultRegistry,
-                        referenceLayerRepository!!,
-                        scheduler!!,
-                        settingsProvider!!,
-                        webPageService!!
-                    )
-                }
-                .build()
-        )
+        (application as GeoDependencyComponentProvider).geoDependencyComponent.inject(this)
+        supportFragmentManager.fragmentFactory = FragmentFactoryBuilder()
+            .forClass(MapFragment::class.java) { mapFragmentFactory.createMapFragment() as Fragment }
+            .forClass(OfflineMapLayersPickerBottomSheetDialogFragment::class.java) {
+                OfflineMapLayersPickerBottomSheetDialogFragment(
+                    activityResultRegistry,
+                    referenceLayerRepository,
+                    scheduler,
+                    settingsProvider,
+                    webPageService
+                )
+            }
+            .build()
+
         super.onCreate(savedInstanceState)
 
         requireLocationPermissions(this)
@@ -158,15 +150,16 @@ class GeoPointMapActivity : LocalizedActivity() {
             return
         }
 
-        locationStatus = findViewById<AccuracyStatusView>(R.id.status_section)
-        placeMarkerButton = findViewById<ImageButton>(R.id.place_marker)
-        zoomButton = findViewById<ImageButton?>(R.id.zoom)
+        locationStatus = findViewById(R.id.status_section)
+        placeMarkerButton = findViewById(R.id.place_marker)
+        zoomButton = findViewById(R.id.zoom)
 
         val mapFragment: MapFragment =
             (findViewById<View?>(R.id.map_container) as FragmentContainerView).getFragment()
         mapFragment.init(
-            ReadyListener { newMapFragment: MapFragment -> this.initMap(newMapFragment) },
-            MapFragment.ErrorListener { this.finish() })
+            { newMapFragment: MapFragment -> this.initMap(newMapFragment) },
+            { this.finish() }
+        )
     }
 
     override fun onSaveInstanceState(state: Bundle) {
@@ -193,10 +186,10 @@ class GeoPointMapActivity : LocalizedActivity() {
         state.putBoolean(IS_POINT_LOCKED_KEY, isPointLocked)
 
         // UI state
-        state.putBoolean(PLACE_MARKER_BUTTON_ENABLED_KEY, placeMarkerButton!!.isEnabled())
-        state.putBoolean(ZOOM_BUTTON_ENABLED_KEY, zoomButton!!.isEnabled())
-        state.putBoolean(CLEAR_BUTTON_ENABLED_KEY, clearButton!!.isEnabled())
-        state.putInt(LOCATION_STATUS_VISIBILITY_KEY, locationStatus!!.getVisibility())
+        state.putBoolean(PLACE_MARKER_BUTTON_ENABLED_KEY, placeMarkerButton!!.isEnabled)
+        state.putBoolean(ZOOM_BUTTON_ENABLED_KEY, zoomButton!!.isEnabled)
+        state.putBoolean(CLEAR_BUTTON_ENABLED_KEY, clearButton!!.isEnabled)
+        state.putInt(LOCATION_STATUS_VISIBILITY_KEY, locationStatus!!.visibility)
     }
 
     fun returnLocation() {
@@ -220,52 +213,50 @@ class GeoPointMapActivity : LocalizedActivity() {
     @SuppressLint("MissingPermission") // Permission handled in Constructor
     fun initMap(newMapFragment: MapFragment?) {
         map = newMapFragment
-        map!!.setDragEndListener(FeatureListener { draggedFeatureId: Int ->
+        map!!.setDragEndListener { draggedFeatureId: Int ->
             this.onDragEnd(
                 draggedFeatureId
             )
-        })
-        map!!.setLongPressListener(PointListener { point: MapPoint -> this.onLongPress(point) })
+        }
+        map!!.setLongPressListener { point: MapPoint -> this.onLongPress(point) }
 
         val acceptLocation = findViewById<ImageButton>(R.id.accept_location)
-        acceptLocation.setOnClickListener(View.OnClickListener { v: View? -> returnLocation() })
+        acceptLocation.setOnClickListener { returnLocation() }
 
-        placeMarkerButton!!.setEnabled(false)
-        placeMarkerButton!!.setOnClickListener(View.OnClickListener { v: View? ->
-            val currentLocation = locationTracker!!.getCurrentLocation()
+        placeMarkerButton!!.isEnabled = false
+        placeMarkerButton!!.setOnClickListener {
+            val currentLocation = locationTracker.getCurrentLocation()
             if (currentLocation != null) {
                 val mapPoint = currentLocation.toMapPoint()
                 placeMarker(mapPoint)
                 zoomToMarker(true)
             }
-        })
+        }
 
         // Focuses on marked location
-        zoomButton!!.setEnabled(false)
-        zoomButton!!.setOnClickListener(View.OnClickListener { v: View? ->
-            currentLocationDelegate.zoomToCurrentLocation(
-                map!!
-            )
-        })
+        zoomButton!!.isEnabled = false
+        zoomButton!!.setOnClickListener {
+            currentLocationDelegate.zoomToCurrentLocation(map!!)
+        }
 
         // Menu Layer Toggle
-        findViewById<View?>(R.id.layer_menu).setOnClickListener(View.OnClickListener { v: View? ->
-            showIfNotShowing<OfflineMapLayersPickerBottomSheetDialogFragment>(
+        findViewById<View>(R.id.layer_menu).setOnClickListener {
+            showIfNotShowing(
                 OfflineMapLayersPickerBottomSheetDialogFragment::class.java,
-                getSupportFragmentManager()
+                supportFragmentManager
             )
-        })
+        }
 
-        clearButton = findViewById<ImageButton>(R.id.clear)
-        clearButton!!.setEnabled(false)
-        clearButton!!.setOnClickListener(View.OnClickListener { v: View? ->
+        clearButton = findViewById(R.id.clear)
+        clearButton!!.isEnabled = false
+        clearButton!!.setOnClickListener {
             clear()
-            locationStatus!!.setVisibility(View.VISIBLE)
+            locationStatus!!.visibility = View.VISIBLE
             pointFromIntent = false
-        })
+        }
 
         val intent = getIntent()
-        if (intent != null && intent.getExtras() != null) {
+        if (intent != null && intent.extras != null) {
             intentDraggable = intent.getBooleanExtra(EXTRA_DRAGGABLE_ONLY, false)
             if (!intentDraggable) {
                 // Not Draggable, set text for Map else leave as placement-map text
@@ -276,23 +267,23 @@ class GeoPointMapActivity : LocalizedActivity() {
             intentReadOnly = intent.getBooleanExtra(EXTRA_READ_ONLY, false)
             if (intentReadOnly) {
                 captureLocation = true
-                clearButton!!.setEnabled(false)
+                clearButton!!.isEnabled = false
             }
 
             if (intent.hasExtra(EXTRA_LOCATION)) {
-                val point = intent.getParcelableExtra<MapPoint?>(EXTRA_LOCATION)
+                val point = intent.extras?.getParcelableExtraCompat<MapPoint>(EXTRA_LOCATION)
 
                 // If the point is initially set from the intent, the "place marker"
                 // button, dragging, and long-pressing are all initially disabled.
                 // To enable them, the user must clear the marker and add a new one.
                 isPointLocked = true
                 placeMarker(point!!)
-                placeMarkerButton!!.setEnabled(false)
+                placeMarkerButton!!.isEnabled = false
 
                 captureLocation = true
                 pointFromIntent = true
-                locationStatus!!.setVisibility(View.GONE)
-                zoomButton!!.setEnabled(true)
+                locationStatus!!.visibility = View.GONE
+                zoomButton!!.isEnabled = true
                 zoomToMarker(false)
             }
         }
@@ -303,16 +294,15 @@ class GeoPointMapActivity : LocalizedActivity() {
 
         val retainMockAccuracy = getIntent().getBooleanExtra(EXTRA_RETAIN_MOCK_ACCURACY, false)
         map!!.showCurrentLocation(
-            locationTracker!!,
+            locationTracker,
             currentLocationDelegate,
             retainMockAccuracy
         ) { mapPoint: MapPoint? ->
             onLocationChanged(mapPoint)
-            Unit
         }
     }
 
-    protected fun restoreFromInstanceState(state: Bundle) {
+    private fun restoreFromInstanceState(state: Bundle) {
         isDragged = state.getBoolean(IS_DRAGGED_KEY, false)
         captureLocation = state.getBoolean(CAPTURE_LOCATION_KEY, false)
         setClear = state.getBoolean(SET_CLEAR_KEY, false)
@@ -322,7 +312,7 @@ class GeoPointMapActivity : LocalizedActivity() {
         isPointLocked = state.getBoolean(IS_POINT_LOCKED_KEY, false)
 
         // Restore the marker and dialog after the flags, because they use some of them.
-        val point = state.getParcelable<MapPoint?>(POINT_KEY)
+        val point = state.getParcelableExtraCompat<MapPoint>(POINT_KEY)
         if (point != null) {
             placeMarker(point)
         }
@@ -336,24 +326,24 @@ class GeoPointMapActivity : LocalizedActivity() {
         intentDraggable = state.getBoolean(INTENT_DRAGGABLE_KEY, false)
         isPointLocked = state.getBoolean(IS_POINT_LOCKED_KEY, false)
 
-        placeMarkerButton!!.setEnabled(state.getBoolean(PLACE_MARKER_BUTTON_ENABLED_KEY, false))
-        zoomButton!!.setEnabled(state.getBoolean(ZOOM_BUTTON_ENABLED_KEY, false))
-        clearButton!!.setEnabled(state.getBoolean(CLEAR_BUTTON_ENABLED_KEY, false))
+        placeMarkerButton!!.isEnabled = state.getBoolean(PLACE_MARKER_BUTTON_ENABLED_KEY, false)
+        zoomButton!!.isEnabled = state.getBoolean(ZOOM_BUTTON_ENABLED_KEY, false)
+        clearButton!!.isEnabled = state.getBoolean(CLEAR_BUTTON_ENABLED_KEY, false)
 
-        locationStatus!!.setVisibility(state.getInt(LOCATION_STATUS_VISIBILITY_KEY, View.GONE))
+        locationStatus!!.visibility = state.getInt(LOCATION_STATUS_VISIBILITY_KEY, View.GONE)
     }
 
     fun onLocationChanged(point: MapPoint?) {
         if (setClear) {
-            placeMarkerButton!!.setEnabled(true)
+            placeMarkerButton!!.isEnabled = true
         }
 
         if (point != null) {
-            enableZoomButton(true)
+            enableZoomButton()
 
             if (!captureLocation && !setClear) {
                 placeMarker(point)
-                placeMarkerButton!!.setEnabled(true)
+                placeMarkerButton!!.isEnabled = true
             }
 
             locationStatus!!.accuracy = Improving(point.accuracy.toFloat())
@@ -382,14 +372,14 @@ class GeoPointMapActivity : LocalizedActivity() {
     fun onLongPress(point: MapPoint) {
         if (intentDraggable && !intentReadOnly && !isPointLocked) {
             placeMarker(point)
-            enableZoomButton(true)
+            enableZoomButton()
             isDragged = true
         }
     }
 
-    private fun enableZoomButton(shouldEnable: Boolean) {
+    private fun enableZoomButton() {
         if (zoomButton != null) {
-            zoomButton!!.setEnabled(shouldEnable)
+            zoomButton!!.isEnabled = true
         }
     }
 
@@ -398,10 +388,10 @@ class GeoPointMapActivity : LocalizedActivity() {
     }
 
     private fun clear() {
-        map!!.clearFeatures(Arrays.asList<Int>(featureId))
+        map!!.clearFeatures(listOf(featureId))
         featureId = -1
-        clearButton!!.setEnabled(false)
-        placeMarkerButton!!.setEnabled(true)
+        clearButton!!.isEnabled = false
+        placeMarkerButton!!.isEnabled = true
 
         isPointLocked = false
         isDragged = false
@@ -416,14 +406,14 @@ class GeoPointMapActivity : LocalizedActivity() {
         this.location = point
 
         if (featureId != -1) {
-            map!!.clearFeatures(Arrays.asList<Int>(featureId))
+            map!!.clearFeatures(listOf(featureId))
         }
 
         val iconDescription = MarkerIconDescription.DrawableResource(
-            org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_big, Color.parseColor(
-                MARKER_COLOR
-            )
+            org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_big,
+            MARKER_COLOR.toColorInt()
         )
+
         featureId = map!!.addMarker(
             MarkerDescription(
                 point,
@@ -433,7 +423,7 @@ class GeoPointMapActivity : LocalizedActivity() {
             )
         )
         if (!intentReadOnly) {
-            clearButton!!.setEnabled(true)
+            clearButton!!.isEnabled = true
         }
         captureLocation = true
         setClear = false
