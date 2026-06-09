@@ -19,41 +19,21 @@ ant.condition(property: 'os', value: 'unix') {
     os(family: 'unix')
 }
 
-// Build numbers were manually set until 1067
-def LEGACY_BUILD_NUMBER_OFFSET = 1067
-
-// Based on http://stackoverflow.com/questions/17097263#24121734
-def getMasterCommitCount = { ->
+def getVersionName = { ->
     try {
-        def stdout = new ByteArrayOutputStream()
-        exec {
+        return providers.exec {
             switch (ant.properties.os) {
                 case 'windows':
-                    commandLine 'cmd', '/c', 'git', 'rev-list', '--first-parent', '--count', 'master'
+                    commandLine 'cmd', '/c', 'git', 'describe', '--tags', '--dirty', '--always'
                     break
                 case 'unix':
-                    commandLine 'git', 'rev-list', '--first-parent', '--count', 'master'
+                    commandLine 'git', 'describe', '--tags', '--dirty', '--always'
                     break
             }
-            standardOutput = stdout
-        }
-        return Integer.parseInt(stdout.toString().trim())
-    } catch (ignored) {
-        return -1
+        }.getStandardOutput().getAsText().get().trim()
+    } catch (Exception ignored) {
+        return "v0"
     }
-}
-
-def getVersionName = { ->
-    return providers.exec {
-        switch (ant.properties.os) {
-            case 'windows':
-                commandLine 'cmd', '/c', 'git', 'describe', '--tags', '--dirty', '--always'
-                break
-            case 'unix':
-                commandLine 'git', 'describe', '--tags', '--dirty', '--always'
-                break
-        }
-    }.getStandardOutput().getAsText().get().trim()
 }
 
 def secrets = getSecrets()
