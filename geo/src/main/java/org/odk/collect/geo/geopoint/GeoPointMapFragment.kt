@@ -14,6 +14,7 @@
 package org.odk.collect.geo.geopoint
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -116,9 +117,11 @@ class GeoPointMapFragment : Fragment() {
 
     private val currentLocationDelegate = CurrentLocationDelegate()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        (requireActivity().application as GeoDependencyComponentProvider).geoDependencyComponent
-            .inject(this)
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        (context.applicationContext as GeoDependencyComponentProvider)
+            .geoDependencyComponent.inject(this)
+
         childFragmentManager.fragmentFactory = FragmentFactoryBuilder()
             .forClass(MapFragment::class.java) { mapFragmentFactory.createMapFragment() as Fragment }
             .forClass(OfflineMapLayersPickerBottomSheetDialogFragment::class.java) {
@@ -131,9 +134,10 @@ class GeoPointMapFragment : Fragment() {
                 )
             }
             .build()
+    }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         previousState = savedInstanceState
     }
 
