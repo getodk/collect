@@ -168,6 +168,7 @@ import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.datetime.DateTimeWidget;
 import org.odk.collect.android.widgets.datetime.pickers.CustomDatePickerDialog;
 import org.odk.collect.android.widgets.datetime.pickers.CustomTimePickerDialog;
+import org.odk.collect.android.widgets.geo.GeoPointMapDialogFragment;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.items.SelectOneFromMapDialogFragment;
 import org.odk.collect.android.widgets.utilities.ExternalAppRecordingRequester;
@@ -451,6 +452,7 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
                 .forClass(BackgroundAudioPermissionDialogFragment.class, () -> new BackgroundAudioPermissionDialogFragment(viewModelFactory))
                 .forClass(SelectOneFromMapDialogFragment.class, () -> new SelectOneFromMapDialogFragment(viewModelFactory))
                 .forClass(GeoPolyDialogFragment.class, () -> new GeoPolyDialogFragment(viewModelFactory, scheduler))
+                .forClass(GeoPointMapDialogFragment.class, () -> new GeoPointMapDialogFragment(viewModelFactory))
                 .forClass(RangePickerDialogFragment.class, () -> new RangePickerDialogFragment(viewModelFactory))
                 .build());
 
