@@ -21,13 +21,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.core.graphics.toColorInt
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
 import org.odk.collect.androidshared.system.BundleExt.getParcelableExtraCompat
 import org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.async.Scheduler
-import org.odk.collect.externalapp.ExternalAppUtils.returnSingleValue
 import org.odk.collect.geo.GeoDependencyComponentProvider
 import org.odk.collect.geo.GeoUtils.showCurrentLocation
 import org.odk.collect.geo.GeoUtils.toMapPoint
@@ -152,7 +152,7 @@ class GeoPointMapFragment(
             (view.findViewById<View?>(R.id.map_container) as FragmentContainerView).getFragment()
         mapFragment.init(
             { newMapFragment: MapFragment -> this.initMap(newMapFragment) },
-            { requireActivity().finish() }
+            { cancel() }
         )
     }
 
@@ -196,9 +196,12 @@ class GeoPointMapFragment(
         }
 
         if (result != null) {
-            returnSingleValue(requireActivity(), result)
+            parentFragmentManager.setFragmentResult(
+                REQUEST_GEOPOINT,
+                bundleOf(RESULT_GEOPOINT to result)
+            )
         } else {
-            requireActivity().finish()
+            cancel()
         }
     }
 
@@ -339,6 +342,10 @@ class GeoPointMapFragment(
         )
     }
 
+    private fun cancel() {
+        getParentFragmentManager().setFragmentResult(REQUEST_GEOPOINT, Bundle.EMPTY)
+    }
+
     fun onDragEnd(draggedFeatureId: Int) {
         if (draggedFeatureId == featureId) {
             isDragged = true
@@ -423,5 +430,7 @@ class GeoPointMapFragment(
         const val LOCATION_STATUS_VISIBILITY_KEY: String = "location_status_visibility"
 
         const val MARKER_COLOR: String = "#52C268"
+        const val REQUEST_GEOPOINT: String = "geopoint"
+        const val RESULT_GEOPOINT: String = "geopoint"
     }
 }

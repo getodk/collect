@@ -20,6 +20,7 @@ import org.odk.collect.androidshared.ui.EdgeToEdge.setView
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.ToastUtils.showShortToast
 import org.odk.collect.async.Scheduler
+import org.odk.collect.externalapp.ExternalAppUtils.returnSingleValue
 import org.odk.collect.geo.Constants.EXTRA_DRAGGABLE_ONLY
 import org.odk.collect.geo.Constants.EXTRA_READ_ONLY
 import org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY
@@ -77,6 +78,18 @@ class GeoPointMapActivity : LocalizedActivity() {
             showShortToast(org.odk.collect.strings.R.string.google_play_services_error_occured)
             finish()
             return
+        }
+
+        supportFragmentManager.setFragmentResultListener(
+            GeoPointMapFragment.REQUEST_GEOPOINT,
+            this
+        ) { _, result ->
+            val geopoint = result.getString(GeoPointMapFragment.RESULT_GEOPOINT)
+            if (geopoint != null) {
+                returnSingleValue(this, geopoint)
+            } else {
+                finish()
+            }
         }
     }
 
