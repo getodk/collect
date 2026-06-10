@@ -31,7 +31,6 @@ import org.odk.collect.android.injection.config.CollectDrawDependencyModule;
 import org.odk.collect.android.injection.config.CollectEntitiesDependencyModule;
 import org.odk.collect.android.injection.config.CollectGeoDependencyModule;
 import org.odk.collect.android.injection.config.CollectGoogleMapsDependencyModule;
-import org.odk.collect.android.injection.config.CollectOsmDroidDependencyModule;
 import org.odk.collect.android.injection.config.CollectProjectsDependencyModule;
 import org.odk.collect.android.injection.config.CollectSelfieCameraDependencyModule;
 import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
@@ -66,9 +65,6 @@ import org.odk.collect.location.LocationDependencyComponent;
 import org.odk.collect.location.LocationDependencyComponentProvider;
 import org.odk.collect.location.LocationDependencyModule;
 import org.odk.collect.maps.layers.ReferenceLayerRepository;
-import org.odk.collect.osmdroid.DaggerOsmDroidDependencyComponent;
-import org.odk.collect.osmdroid.OsmDroidDependencyComponent;
-import org.odk.collect.osmdroid.OsmDroidDependencyComponentProvider;
 import org.odk.collect.projects.DaggerProjectsDependencyComponent;
 import org.odk.collect.projects.ProjectsDependencyComponent;
 import org.odk.collect.projects.ProjectsDependencyComponentProvider;
@@ -92,7 +88,6 @@ public class Collect extends Application implements
         AudioRecorderDependencyComponentProvider,
         ProjectsDependencyComponentProvider,
         GeoDependencyComponentProvider,
-        OsmDroidDependencyComponentProvider,
         StateStore,
         ObjectProviderHost,
         EntitiesDependencyComponentProvider,
@@ -113,7 +108,6 @@ public class Collect extends Application implements
     private AudioRecorderDependencyComponent audioRecorderDependencyComponent;
     private ProjectsDependencyComponent projectsDependencyComponent;
     private GeoDependencyComponent geoDependencyComponent;
-    private OsmDroidDependencyComponent osmDroidDependencyComponent;
     private EntitiesDependencyComponent entitiesDependencyComponent;
     private SelfieCameraDependencyComponent selfieCameraDependencyComponent;
     private GoogleMapsDependencyComponent googleMapsDependencyComponent;
@@ -270,18 +264,6 @@ public class Collect extends Application implements
         }
 
         return geoDependencyComponent;
-    }
-
-    @NonNull
-    @Override
-    public OsmDroidDependencyComponent getOsmDroidDependencyComponent() {
-        if (osmDroidDependencyComponent == null) {
-            osmDroidDependencyComponent = DaggerOsmDroidDependencyComponent.builder()
-                    .osmDroidDependencyModule(new CollectOsmDroidDependencyModule(applicationComponent))
-                    .build();
-        }
-
-        return osmDroidDependencyComponent;
     }
 
     @NonNull

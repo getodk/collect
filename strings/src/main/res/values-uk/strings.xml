@@ -309,12 +309,7 @@
   <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
    These strings are only being used to preserve compatibility with pre-existing
     tile caches, and are not shown in the UI.-->
-  <string name="openmap_usgs_topo">USGS топографічна національна карта</string>
-  <string name="openmap_usgs_sat">USGS Національна мапа Гібрид</string>
-  <string name="openmap_usgs_img">USGS Національна мапа Картинки</string>
-  <string name="openmap_cartodb_positron">CartoDB Positron</string>
-  <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
-  <string name="basemap">Базова мапа</string>
+    <string name="basemap">Базова мапа</string>
   <string name="streets">Вулиці</string>
   <string name="terrain">Ландшафт</string>
   <string name="hybrid">Змішана</string>

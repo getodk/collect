@@ -4,29 +4,37 @@ import org.odk.collect.android.application.MapboxClassInstanceCreator
 import org.odk.collect.googlemaps.GoogleMapFragment
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory
-import org.odk.collect.osmdroid.OsmDroidMapFragment
 import org.odk.collect.settings.SettingsProvider
-import org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_CARTO
-import org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_MAPBOX
-import org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_OSM
-import org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_USGS
+import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.settings.keys.ProjectKeys.KEY_BASEMAP_SOURCE
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 
 class MapFragmentFactoryImpl(private val settingsProvider: SettingsProvider) : MapFragmentFactory {
 
     override fun createMapFragment(): MapFragment {
         val settings = settingsProvider.getUnprotectedSettings()
-
-        return when {
-            isBasemapOSM(settings.getString(KEY_BASEMAP_SOURCE)) -> OsmDroidMapFragment()
-            settings.getString(KEY_BASEMAP_SOURCE) == BASEMAP_SOURCE_MAPBOX -> MapboxClassInstanceCreator.createMapboxMapFragment()
-            else -> GoogleMapFragment()
+        val basemapSource = settings.getString(KEY_BASEMAP_SOURCE)
+        return if (isMapbox(basemapSource)) {
+            MapboxClassInstanceCreator.createMapboxMapFragment(basemapSource)
+        } else {
+            GoogleMapFragment()
         }
     }
 
-    private fun isBasemapOSM(basemap: String?): Boolean {
-        return basemap == BASEMAP_SOURCE_OSM ||
-            basemap == BASEMAP_SOURCE_USGS ||
-            basemap == BASEMAP_SOURCE_CARTO
+    @OptIn(ExperimentalContracts::class)
+    private fun isMapbox(source: String?): Boolean {
+        contract {
+            returns(true) implies (source != null)
+        }
+
+        return when (source) {
+            ProjectKeys.BASEMAP_SOURCE_MAPBOX,
+            ProjectKeys.BASEMAP_SOURCE_OSM,
+            ProjectKeys.BASEMAP_SOURCE_USGS,
+            ProjectKeys.BASEMAP_SOURCE_CARTO -> true
+
+            else -> false
+        }
     }
 }

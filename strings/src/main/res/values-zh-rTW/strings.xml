@@ -401,12 +401,7 @@
   <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
    These strings are only being used to preserve compatibility with pre-existing
     tile caches, and are not shown in the UI.-->
-  <string name="openmap_usgs_topo">USGS地形圖</string>
-  <string name="openmap_usgs_sat">USGS混合地圖</string>
-  <string name="openmap_usgs_img">USGS影像地圖</string>
-  <string name="openmap_cartodb_positron">CartoDB Positron</string>
-  <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
-  <string name="basemap">底圖</string>
+    <string name="basemap">底圖</string>
   <string name="basemap_source">來源</string>
   <string name="basemap_source_unavailable">抱歉, %s 此設備上沒有底圖。請在「設置」中選擇另一個底圖 &gt;  地圖.</string>
   <string name="map_style_label">%s 地圖樣式</string>

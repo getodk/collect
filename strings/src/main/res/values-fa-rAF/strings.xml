@@ -360,8 +360,7 @@
   <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
    These strings are only being used to preserve compatibility with pre-existing
     tile caches, and are not shown in the UI.-->
-  <string name="openmap_usgs_topo">نقشه ملی USGS Topo</string>
-  <string name="basemap">نقشه اصلی</string>
+    <string name="basemap">نقشه اصلی</string>
   <string name="basemap_source">منبع</string>
   <string name="basemap_source_unavailable">متأسفیم، %s نقشه پایه در این دستگاه موجود نیست. لطفاً نقشه پایه دیگری را در تنظیمات &gt; نقشه ها.</string>
   <string name="map_style_label">%s سبک نقشه</string>

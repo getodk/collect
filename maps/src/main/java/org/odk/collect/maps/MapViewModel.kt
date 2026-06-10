@@ -4,12 +4,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
+import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils
+import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.settings.keys.MetaKeys.LAST_KNOWN_ZOOM_LEVEL
+import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.settings.Settings
+import java.io.File
 
 class MapViewModel(
     private val unprotectedSettings: Settings,
-    private val metaSettings: Settings
+    private val metaSettings: Settings,
+    private val referenceLayerRepository: ReferenceLayerRepository
 ) : ViewModel(),
     Settings.OnSettingChangeListener {
 
@@ -31,7 +37,8 @@ class MapViewModel(
     }
 
     fun zoomTo(boundingBox: List<MapPoint>, scaleFactor: Double, animate: Boolean) {
-        _zoom.value = Zoom.Box(boundingBox, scaleFactor, _zoom.value?.level ?: DEFAULT_ZOOM, animate)
+        _zoom.value =
+            Zoom.Box(boundingBox, scaleFactor, _zoom.value?.level ?: DEFAULT_ZOOM, animate)
     }
 
     fun zoomToCurrentLocation(location: MapPoint?) {
@@ -72,6 +79,15 @@ class MapViewModel(
                     this.value = unprotectedSettings
                 }
             }
+        }
+    }
+
+    fun getReferenceLayer(): LiveData<File?> {
+        return getSettings(listOf(ProjectKeys.KEY_REFERENCE_LAYER)).map {
+            MapFragmentReferenceLayerUtils.getReferenceLayerFile(
+                it.getString(ProjectKeys.KEY_REFERENCE_LAYER),
+                referenceLayerRepository
+            )
         }
     }
 

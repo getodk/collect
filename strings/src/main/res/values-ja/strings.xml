@@ -353,12 +353,7 @@
   <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
    These strings are only being used to preserve compatibility with pre-existing
     tile caches, and are not shown in the UI.-->
-  <string name="openmap_usgs_topo">USGS National Map Topo</string>
-  <string name="openmap_usgs_sat">USGS ナショナルマップ ハイブリッド</string>
-  <string name="openmap_usgs_img">USGS ナショナルマップ画像</string>
-  <string name="openmap_cartodb_positron">CartoDB ポジトロン</string>
-  <string name="openmap_cartodb_darkmatter">CartoDB ダークマター</string>
-  <string name="basemap">基本地図</string>
+    <string name="basemap">基本地図</string>
   <string name="basemap_source">ソース</string>
   <string name="map_style_label">%s 地図スタイル</string>
   <string name="streets">道路</string>

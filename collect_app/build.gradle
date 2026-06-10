@@ -274,7 +274,6 @@ dependencies {
     }
     implementation project(':external-app')
     implementation project(':maps')
-    implementation project(':osmdroid')
     implementation project(':entities')
     implementation project(':crash-handler')
     implementation project(':selfie-camera')

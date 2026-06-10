@@ -378,11 +378,7 @@
   <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
    These strings are only being used to preserve compatibility with pre-existing
     tile caches, and are not shown in the UI.-->
-  <string name="openmap_usgs_topo">Национальная карта USGS: топографическая</string>
-  <string name="openmap_usgs_sat">Национальная карта USGS: спутниковая</string>
-  <string name="openmap_usgs_img">Национальная карта USGS: съёмка с воздуха</string>
-  <string name="openmap_cartodb_darkmatter">CartoDB Тёмная материя</string>
-  <string name="basemap">Подложка</string>
+    <string name="basemap">Подложка</string>
   <string name="basemap_source">Источник</string>
   <string name="basemap_source_unavailable">К сожалению, базовые карты %s недоступны на этом устройстве. Выберите другую базовую карту в разделе Настройки &gt; Карты.</string>
   <string name="map_style_label">%s стиль карты</string>

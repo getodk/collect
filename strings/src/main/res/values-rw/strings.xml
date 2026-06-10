@@ -355,12 +355,7 @@ N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</strin
   <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
    These strings are only being used to preserve compatibility with pre-existing
     tile caches, and are not shown in the UI.-->
-  <string name="openmap_usgs_topo">USGS National Map Topo</string>
-  <string name="openmap_usgs_sat">USGS National Map Hybrid</string>
-  <string name="openmap_usgs_img">USGS National Map Imagery</string>
-  <string name="openmap_cartodb_positron">CartoDB Position</string>
-  <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
-  <string name="basemap">Indangamimerere igaragaza amakuru.</string>
+    <string name="basemap">Indangamimerere igaragaza amakuru.</string>
   <string name="basemap_source">Aho byatangiriye</string>
   <string name="map_style_label">1%s imiterere ya ikarita</string>
   <string name="streets">Imihanda</string>

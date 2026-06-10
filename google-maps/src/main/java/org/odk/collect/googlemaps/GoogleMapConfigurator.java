@@ -1,13 +1,11 @@
 package org.odk.collect.googlemaps;
 
 import static org.odk.collect.androidshared.ui.PrefUtils.createListPref;
-import static org.odk.collect.androidshared.ui.PrefUtils.getInt;
-import static kotlin.collections.SetsKt.setOf;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_GOOGLE_MAP_STYLE;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.os.Bundle;
 
 import androidx.preference.Preference;
 
@@ -19,25 +17,20 @@ import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.maps.MapConfigurator;
 import org.odk.collect.maps.layers.MbtilesFile;
 import org.odk.collect.maps.layers.MbtilesFile.LayerType;
-import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.shared.settings.Settings;
 
 import java.io.File;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 public class GoogleMapConfigurator implements MapConfigurator {
-    private final String prefKey;
-    private final int sourceLabelId;
-    private final GoogleMapTypeOption[] options;
-
-    /** Constructs a configurator with a few Google map type options to choose from. */
-    public GoogleMapConfigurator(String prefKey, int sourceLabelId, GoogleMapTypeOption... options) {
-        this.prefKey = prefKey;
-        this.sourceLabelId = sourceLabelId;
-        this.options = options;
-    }
+    private final int sourceLabelId = org.odk.collect.strings.R.string.basemap_source_google;
+    private final GoogleMapTypeOption[] options = {
+            new GoogleMapTypeOption(GoogleMap.MAP_TYPE_NORMAL, org.odk.collect.strings.R.string.streets),
+            new GoogleMapTypeOption(GoogleMap.MAP_TYPE_TERRAIN, org.odk.collect.strings.R.string.terrain),
+            new GoogleMapTypeOption(GoogleMap.MAP_TYPE_HYBRID, org.odk.collect.strings.R.string.hybrid),
+            new GoogleMapTypeOption(GoogleMap.MAP_TYPE_SATELLITE, org.odk.collect.strings.R.string.satellite)
+    };
 
     @Override public boolean isAvailable(Context context) {
         try {
@@ -84,22 +77,8 @@ public class GoogleMapConfigurator implements MapConfigurator {
         String prefTitle = context.getString(
             org.odk.collect.strings.R.string.map_style_label, context.getString(sourceLabelId));
         return Collections.singletonList(createListPref(
-            context, prefKey, prefTitle, labelIds, values, settings
+            context, KEY_GOOGLE_MAP_STYLE, prefTitle, labelIds, values, settings
         ));
-    }
-
-    @Override public Set<String> getPrefKeys() {
-        return prefKey.isEmpty() ? setOf(ProjectKeys.KEY_REFERENCE_LAYER) :
-                setOf(prefKey, ProjectKeys.KEY_REFERENCE_LAYER);
-    }
-
-    @Override public Bundle buildConfig(Settings prefs) {
-        Bundle config = new Bundle();
-        config.putInt(GoogleMapFragment.KEY_MAP_TYPE,
-            getInt(ProjectKeys.KEY_GOOGLE_MAP_STYLE, GoogleMap.MAP_TYPE_NORMAL, prefs));
-        config.putString(GoogleMapFragment.KEY_REFERENCE_LAYER,
-            prefs.getString(ProjectKeys.KEY_REFERENCE_LAYER));
-        return config;
     }
 
     @Override public boolean supportsLayer(File file) {

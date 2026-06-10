@@ -6,38 +6,23 @@ import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_MAPBOX;
 import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_OSM;
 import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_USGS;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_BASEMAP_SOURCE;
-import static org.odk.collect.settings.keys.ProjectKeys.KEY_CARTO_MAP_STYLE;
-import static org.odk.collect.settings.keys.ProjectKeys.KEY_GOOGLE_MAP_STYLE;
-import static org.odk.collect.settings.keys.ProjectKeys.KEY_USGS_MAP_STYLE;
-import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
 
 import android.content.Context;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.maps.GoogleMap;
-
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.application.MapboxClassInstanceCreator;
-import org.odk.collect.googlemaps.GoogleMapConfigurator;
-import org.odk.collect.googlemaps.GoogleMapConfigurator.GoogleMapTypeOption;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.googlemaps.GoogleMapConfigurator;
 import org.odk.collect.maps.MapConfigurator;
-import org.odk.collect.osmdroid.OsmDroidMapConfigurator;
-import org.odk.collect.osmdroid.OsmDroidMapConfigurator.WmsOption;
-import org.odk.collect.osmdroid.WebMapService;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MapConfiguratorProvider {
 
     private static SourceOption[] sourceOptions;
-    private static final String USGS_URL_BASE =
-        "https://basemap.nationalmap.gov/arcgis/rest/services";
-    private static final String OSM_COPYRIGHT = "© OpenStreetMap contributors";
-    private static final String CARTO_COPYRIGHT = "© CARTO";
-    private static final String CARTO_ATTRIBUTION = OSM_COPYRIGHT + ", " + CARTO_COPYRIGHT;
-    private static final String USGS_ATTRIBUTION = "Map services and data available from U.S. Geological Survey,\nNational Geospatial Program.";
 
     private MapConfiguratorProvider() {
 
@@ -55,14 +40,7 @@ public class MapConfiguratorProvider {
 
         ArrayList<SourceOption> sourceOptions = new ArrayList<>();
 
-        GoogleMapConfigurator googleMapsConfigurator = new GoogleMapConfigurator(
-                KEY_GOOGLE_MAP_STYLE, org.odk.collect.strings.R.string.basemap_source_google,
-                new GoogleMapTypeOption(GoogleMap.MAP_TYPE_NORMAL, org.odk.collect.strings.R.string.streets),
-                new GoogleMapTypeOption(GoogleMap.MAP_TYPE_TERRAIN, org.odk.collect.strings.R.string.terrain),
-                new GoogleMapTypeOption(GoogleMap.MAP_TYPE_HYBRID, org.odk.collect.strings.R.string.hybrid),
-                new GoogleMapTypeOption(GoogleMap.MAP_TYPE_SATELLITE, org.odk.collect.strings.R.string.satellite)
-        );
-
+        GoogleMapConfigurator googleMapsConfigurator = new GoogleMapConfigurator();
         if (googleMapsConfigurator.isAvailable(context)) {
             sourceOptions.add(new SourceOption(BASEMAP_SOURCE_GOOGLE, org.odk.collect.strings.R.string.basemap_source_google,
                     googleMapsConfigurator
@@ -71,49 +49,24 @@ public class MapConfiguratorProvider {
 
         if (isMapboxSupported()) {
             sourceOptions.add(new SourceOption(BASEMAP_SOURCE_MAPBOX, org.odk.collect.strings.R.string.basemap_source_mapbox,
-                    MapboxClassInstanceCreator.createMapboxMapConfigurator()
+                    MapboxClassInstanceCreator.createMapboxMapConfigurator(BASEMAP_SOURCE_MAPBOX)
+            ));
+
+            sourceOptions.add(new SourceOption(BASEMAP_SOURCE_OSM, org.odk.collect.strings.R.string.basemap_source_osm,
+                    MapboxClassInstanceCreator.createMapboxMapConfigurator(BASEMAP_SOURCE_OSM)
+            ));
+            sourceOptions.add(new SourceOption(BASEMAP_SOURCE_USGS, org.odk.collect.strings.R.string.basemap_source_usgs,
+                    MapboxClassInstanceCreator.createMapboxMapConfigurator(BASEMAP_SOURCE_USGS)
+            ));
+            sourceOptions.add(new SourceOption(BASEMAP_SOURCE_CARTO, org.odk.collect.strings.R.string.basemap_source_carto,
+                    MapboxClassInstanceCreator.createMapboxMapConfigurator(BASEMAP_SOURCE_CARTO)
             ));
         }
 
-        sourceOptions.add(new SourceOption(BASEMAP_SOURCE_OSM, org.odk.collect.strings.R.string.basemap_source_osm,
-                new OsmDroidMapConfigurator(
-                        new WebMapService(
-                                "Mapnik", 0, 19, 256, OSM_COPYRIGHT,
-                                "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
-                        )
-                )
-        ));
-        sourceOptions.add(new SourceOption(BASEMAP_SOURCE_USGS, org.odk.collect.strings.R.string.basemap_source_usgs,
-                new OsmDroidMapConfigurator(
-                        KEY_USGS_MAP_STYLE, org.odk.collect.strings.R.string.basemap_source_usgs,
-                        new WmsOption("topographic", org.odk.collect.strings.R.string.topographic, new WebMapService(
-                                getLocalizedString(getApplication(), org.odk.collect.strings.R.string.openmap_usgs_topo), 0, 18, 256, USGS_ATTRIBUTION,
-                                USGS_URL_BASE + "/USGSTopo/MapServer/tile/{z}/{y}/{x}"
-                        )),
-                        new WmsOption("hybrid", org.odk.collect.strings.R.string.hybrid, new WebMapService(
-                                getLocalizedString(getApplication(), org.odk.collect.strings.R.string.openmap_usgs_sat), 0, 18, 256, USGS_ATTRIBUTION,
-                                USGS_URL_BASE + "/USGSImageryTopo/MapServer/tile/{z}/{y}/{x}"
-                        )),
-                        new WmsOption("satellite", org.odk.collect.strings.R.string.satellite, new WebMapService(
-                                getLocalizedString(getApplication(), org.odk.collect.strings.R.string.openmap_usgs_img), 0, 18, 256, USGS_ATTRIBUTION,
-                                USGS_URL_BASE + "/USGSImageryOnly/MapServer/tile/{z}/{y}/{x}"
-                        ))
-                )
-        ));
-        sourceOptions.add(new SourceOption(BASEMAP_SOURCE_CARTO, org.odk.collect.strings.R.string.basemap_source_carto,
-                new OsmDroidMapConfigurator(
-                        KEY_CARTO_MAP_STYLE, org.odk.collect.strings.R.string.basemap_source_carto,
-                        new WmsOption("positron", org.odk.collect.strings.R.string.carto_map_style_positron, new WebMapService(
-                                getLocalizedString(getApplication(), org.odk.collect.strings.R.string.openmap_cartodb_positron), 0, 18, 256, CARTO_ATTRIBUTION,
-                                "http://1.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
-                        )),
-                        new WmsOption("dark_matter", org.odk.collect.strings.R.string.carto_map_style_dark_matter, new WebMapService(
-                                getLocalizedString(getApplication(), org.odk.collect.strings.R.string.openmap_cartodb_darkmatter), 0, 18, 256, CARTO_ATTRIBUTION,
-                                "http://1.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png"
-                        ))
-                )
-        ));
+        initOptions(sourceOptions);
+    }
 
+    public static void initOptions(List<SourceOption> sourceOptions) {
         MapConfiguratorProvider.sourceOptions = sourceOptions.toArray(new SourceOption[]{});
     }
 
@@ -174,12 +127,12 @@ public class MapConfiguratorProvider {
         return Collect.getInstance();
     }
 
-    private static class SourceOption {
+    public static class SourceOption {
         private final String id;  // preference value to store
         private final int labelId;  // string resource ID
         private final MapConfigurator cftor;
 
-        private SourceOption(String id, int labelId, MapConfigurator cftor) {
+        public SourceOption(String id, int labelId, MapConfigurator cftor) {
             this.id = id;
             this.labelId = labelId;
             this.cftor = cftor;

@@ -4,17 +4,14 @@ import android.content.Context
 import android.os.Handler
 import com.google.android.gms.maps.MapView
 import org.odk.collect.android.geo.MapConfiguratorProvider
-import org.odk.collect.osmdroid.OsmDroidInitializer
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
-import org.odk.collect.utilities.UserAgentProvider
 import timber.log.Timber
 import javax.inject.Inject
 
 class MapsInitializer @Inject constructor(
     private val context: Context,
-    private val settingsProvider: SettingsProvider,
-    private val userAgentProvider: UserAgentProvider
+    private val settingsProvider: SettingsProvider
 ) {
 
     fun initialize() {
@@ -30,7 +27,7 @@ class MapsInitializer @Inject constructor(
         val availableBaseMaps = MapConfiguratorProvider.getIds()
         val baseMapSetting =
             settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_BASEMAP_SOURCE)
-        if (!availableBaseMaps.contains(baseMapSetting)) {
+        if (!availableBaseMaps.contains(baseMapSetting) && availableBaseMaps.isNotEmpty()) {
             settingsProvider.getUnprotectedSettings().save(
                 ProjectKeys.KEY_BASEMAP_SOURCE,
                 availableBaseMaps[0]
@@ -54,7 +51,6 @@ class MapsInitializer @Inject constructor(
                 // This has to happen on the main thread but we might call `initialize` from tests
                 MapView(context).onCreate(null)
             }
-            OsmDroidInitializer.initialize(userAgentProvider.userAgent)
         } catch (ignore: Exception) {
             // ignored
         } catch (ignore: Error) {

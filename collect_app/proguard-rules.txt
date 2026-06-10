@@ -1,7 +1,6 @@
 -dontwarn com.google.**
 -dontwarn au.com.bytecode.**
 -dontwarn org.joda.time.**
--dontwarn org.osmdroid.**
 -dontwarn org.xmlpull.v1.**
 -dontwarn org.hamcrest.**
 -dontwarn com.rarepebble.**

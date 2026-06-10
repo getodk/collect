@@ -312,12 +312,7 @@
   <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
    These strings are only being used to preserve compatibility with pre-existing
     tile caches, and are not shown in the UI.-->
-  <string name="openmap_usgs_topo">USGS National Map Topo</string>
-  <string name="openmap_usgs_sat">USGS nationell hybridkarta</string>
-  <string name="openmap_usgs_img">USGS nationell satellitkarta</string>
-  <string name="openmap_cartodb_positron">CartoDB Positron</string>
-  <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
-  <string name="basemap">Grundkarta</string>
+    <string name="basemap">Grundkarta</string>
   <string name="basemap_source">Källa</string>
   <string name="map_style_label">%s kartstil</string>
   <string name="streets">Streets</string>

@@ -333,12 +333,7 @@
   <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
    These strings are only being used to preserve compatibility with pre-existing
     tile caches, and are not shown in the UI.-->
-  <string name="openmap_usgs_topo">USGS నేషనల్ మ్యాప్ టోపో</string>
-  <string name="openmap_usgs_sat">USGS నేషనల్ మ్యాప్ హైబ్రిడ్</string>
-  <string name="openmap_usgs_img">USGS నేషనల్ మ్యాప్ ఇమేజరీ</string>
-  <string name="openmap_cartodb_positron">కార్టోడిబి పోసిట్రాన్</string>
-  <string name="openmap_cartodb_darkmatter">కార్టోడిబి డార్క్ మేటర్</string>
-  <string name="basemap">బేస్ మ్యాప్</string>
+    <string name="basemap">బేస్ మ్యాప్</string>
   <string name="basemap_source">ఆధారం</string>
   <string name="map_style_label">%s మ్యాప్ శైలి</string>
   <string name="streets">స్ట్రీట్స్</string>

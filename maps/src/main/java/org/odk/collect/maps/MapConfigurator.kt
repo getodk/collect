@@ -1,7 +1,6 @@
 package org.odk.collect.maps
 
 import android.content.Context
-import android.os.Bundle
 import androidx.preference.Preference
 import org.odk.collect.shared.settings.Settings
 import java.io.File
@@ -30,12 +29,6 @@ interface MapConfigurator {
 
     /** Constructs any preference widgets that are specific to this map implementation.  */
     fun createPrefs(context: Context, settings: Settings): List<Preference>
-
-    /** Gets the set of keys for preferences that should be watched for changes.  */
-    val prefKeys: Collection<String>
-
-    /** Packs map-related preferences into a Bundle for MapFragment.applyConfig().  */
-    fun buildConfig(prefs: Settings): Bundle
 
     /**
      * Returns true if map fragments obtained from this MapConfigurator are
