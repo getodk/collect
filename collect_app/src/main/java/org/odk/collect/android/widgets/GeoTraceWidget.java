@@ -26,7 +26,6 @@ import org.odk.collect.android.databinding.GeotraceQuestionBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
-import org.odk.collect.maps.MapConfigurator;
 
 /**
  * GeoTraceWidget allows the user to collect a trace of GPS points as the
@@ -36,15 +35,12 @@ import org.odk.collect.maps.MapConfigurator;
 public class GeoTraceWidget extends QuestionWidget {
     GeotraceQuestionBinding binding;
 
-    private final MapConfigurator mapConfigurator;
     private final GeoDataRequester geoDataRequester;
 
-    public GeoTraceWidget(Context context, QuestionDetails questionDetails,
-                          MapConfigurator mapConfigurator, GeoDataRequester geoDataRequester, Dependencies dependencies) {
+    public GeoTraceWidget(Context context, QuestionDetails questionDetails, GeoDataRequester geoDataRequester, Dependencies dependencies) {
         super(context, dependencies, questionDetails);
         render();
 
-        this.mapConfigurator = mapConfigurator;
         this.geoDataRequester = geoDataRequester;
     }
 
@@ -55,11 +51,7 @@ public class GeoTraceWidget extends QuestionWidget {
         binding.geoAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
         binding.simpleButton.setOnClickListener(v -> {
-            if (mapConfigurator.isAvailable(context)) {
-                geoDataRequester.requestGeoPoly(prompt);
-            } else {
-                mapConfigurator.showUnavailableMessage(context);
-            }
+            geoDataRequester.requestGeoPoly(prompt);
         });
 
         String stringAnswer = GeoWidgetUtils.getGeoPolyAnswerToDisplay(prompt.getAnswerText());
