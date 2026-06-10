@@ -184,7 +184,7 @@ class GeoPointMapFragment(
         state.putInt(LOCATION_STATUS_VISIBILITY_KEY, locationStatus!!.visibility)
     }
 
-    fun returnLocation() {
+    private fun returnLocation() {
         var result: String? = null
 
         if (setClear || (readOnly && featureId == -1)) {
@@ -206,7 +206,7 @@ class GeoPointMapFragment(
     }
 
     @SuppressLint("MissingPermission") // Permission handled in Constructor
-    fun initMap(newMapFragment: MapFragment?) {
+    private fun initMap(newMapFragment: MapFragment?) {
         map = newMapFragment
         map!!.setDragEndListener { draggedFeatureId: Int ->
             this.onDragEnd(draggedFeatureId)
@@ -315,7 +315,7 @@ class GeoPointMapFragment(
         locationStatus!!.visibility = state.getInt(LOCATION_STATUS_VISIBILITY_KEY, View.GONE)
     }
 
-    fun onLocationChanged(point: MapPoint?) {
+    private fun onLocationChanged(point: MapPoint?) {
         if (setClear) {
             placeMarkerButton!!.isEnabled = true
         }
@@ -332,7 +332,7 @@ class GeoPointMapFragment(
         }
     }
 
-    fun formatResult(point: MapPoint): String {
+    private fun formatResult(point: MapPoint): String {
         return String.format(
             "%s %s %s %s",
             point.latitude,
@@ -346,7 +346,7 @@ class GeoPointMapFragment(
         getParentFragmentManager().setFragmentResult(REQUEST_GEOPOINT, Bundle.EMPTY)
     }
 
-    fun onDragEnd(draggedFeatureId: Int) {
+    private fun onDragEnd(draggedFeatureId: Int) {
         if (draggedFeatureId == featureId) {
             isDragged = true
             captureLocation = true
@@ -355,7 +355,7 @@ class GeoPointMapFragment(
         }
     }
 
-    fun onLongPress(point: MapPoint) {
+    private fun onLongPress(point: MapPoint) {
         if (draggable && !readOnly && !isPointLocked) {
             placeMarker(point)
             enableZoomButton()
@@ -369,7 +369,7 @@ class GeoPointMapFragment(
         }
     }
 
-    fun zoomToMarker(animate: Boolean) {
+    private fun zoomToMarker(animate: Boolean) {
         map!!.zoomToPoint(map!!.getMarkerPoint(featureId), animate)
     }
 
