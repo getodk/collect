@@ -2,7 +2,6 @@ package org.odk.collect.android.injection.config
 
 import org.odk.collect.android.entities.EntitiesRepositoryProvider
 import org.odk.collect.android.formmanagement.OpenRosaClientProvider
-import org.odk.collect.android.projects.FileDebugLogger
 import org.odk.collect.android.projects.ProjectDependencyModule
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.storage.StoragePaths
@@ -10,9 +9,10 @@ import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.utilities.SavepointsRepositoryProvider
+import org.odk.collect.entities.debug.EntitiesDebugLogger
 import org.odk.collect.projects.ProjectDependencyFactory
 import org.odk.collect.settings.SettingsProvider
-import org.odk.collect.shared.DebugLogger
+import org.odk.collect.shared.debug.DebugLogger
 import java.io.File
 import javax.inject.Inject
 
@@ -46,6 +46,6 @@ class ProjectDependencyModuleFactory @Inject constructor(
 private class DebugLoggerFactory(private val storagePathProvider: ProjectDependencyFactory<StoragePaths>) :
     ProjectDependencyFactory<DebugLogger> {
     override fun create(projectId: String): DebugLogger {
-        return FileDebugLogger(File(storagePathProvider.create(projectId).rootDir, "debug.log"))
+        return EntitiesDebugLogger(File(storagePathProvider.create(projectId).rootDir, "debug.log"))
     }
 }

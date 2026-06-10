@@ -2,7 +2,7 @@ package org.odk.collect.entities
 
 import org.apache.commons.csv.CSVRecord
 import org.javarosa.core.model.instance.SecondaryInstanceCSVParserBuilder
-import org.odk.collect.entities.analytics.AnalyticsEvents
+import org.odk.collect.entities.debug.EntityEvent
 import org.odk.collect.entities.javarosa.finalization.EntitiesExtra
 import org.odk.collect.entities.javarosa.finalization.FormEntity
 import org.odk.collect.entities.javarosa.parse.EntitySchema
@@ -13,7 +13,7 @@ import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
 import org.odk.collect.entities.storage.findEntityById
 import org.odk.collect.forms.MediaFile
-import org.odk.collect.shared.DebugLogger
+import org.odk.collect.shared.debug.DebugLogger
 import java.io.File
 import java.util.UUID
 
@@ -35,7 +35,7 @@ object LocalEntityUseCases {
                         if (existing != null) {
                             saveUpdatedEntity(formEntity, existing, entitiesRepository)
                         } else {
-                            debugLogger?.logInvalidEntity(AnalyticsEvents.ENTITY_UPDATE_NO_MATCH, formEntity)
+                            debugLogger?.log(EntityEvent.UpdateNoMatch(formEntity))
                         }
                     }
 
@@ -50,12 +50,12 @@ object LocalEntityUseCases {
                 }
             } else {
                 val event = if (formEntity.id.isNullOrBlank()) {
-                    AnalyticsEvents.ENTITY_WITH_NO_ID
+                    EntityEvent.NoId(formEntity)
                 } else {
-                    AnalyticsEvents.ENTITY_WITH_INVALID_ID
+                    EntityEvent.InvalidId(formEntity)
                 }
 
-                debugLogger?.logInvalidEntity(event, formEntity)
+                debugLogger?.log(event)
             }
         }
     }
@@ -80,7 +80,7 @@ object LocalEntityUseCases {
                 )
             }
         } else {
-            debugLogger?.logInvalidEntity(AnalyticsEvents.ENTITY_CREATE_NO_LABEL, formEntity)
+            debugLogger?.log(EntityEvent.CreateNoLabel(formEntity))
         }
     }
 
@@ -231,15 +231,4 @@ private fun <T> Map<String, T>.removeReservedProperties(): Map<String, T> {
     return filterNot {
         it.key == EntitySchema.ID || it.key == EntitySchema.LABEL || it.key.startsWith("__")
     }
-}
-
-private fun DebugLogger.logInvalidEntity(event: String, formEntity: FormEntity) {
-    val action = when (event) {
-        AnalyticsEvents.ENTITY_CREATE_NO_LABEL -> "create"
-        AnalyticsEvents.ENTITY_UPDATE_NO_MATCH -> "update"
-        else -> "create/update"
-    }
-    val message = "Failed to $action dataset=${formEntity.dataset}, id=${formEntity.id}, label=${formEntity.label}"
-
-    this.logWithAnalytics("Entities", message, event, "form")
 }

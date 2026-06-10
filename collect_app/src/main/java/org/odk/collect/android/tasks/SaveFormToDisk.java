@@ -62,7 +62,7 @@ import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.maps.MapPoint;
-import org.odk.collect.shared.DebugLogger;
+import org.odk.collect.shared.debug.DebugLogger;
 import org.odk.collect.shared.files.FileExt;
 
 import java.io.File;

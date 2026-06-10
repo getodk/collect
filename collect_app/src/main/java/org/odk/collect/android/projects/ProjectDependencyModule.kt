@@ -10,7 +10,7 @@ import org.odk.collect.forms.instances.InstancesRepository
 import org.odk.collect.forms.savepoints.SavepointsRepository
 import org.odk.collect.projects.ProjectDependencyFactory
 import org.odk.collect.projects.projectDependency
-import org.odk.collect.shared.DebugLogger
+import org.odk.collect.shared.debug.DebugLogger
 import org.odk.collect.shared.settings.Settings
 
 /**

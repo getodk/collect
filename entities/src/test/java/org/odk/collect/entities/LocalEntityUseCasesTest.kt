@@ -10,6 +10,7 @@ import org.hamcrest.text.IsBlankString.blankOrNullString
 import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
+import org.odk.collect.entities.debug.EntityEvent
 import org.odk.collect.entities.javarosa.finalization.EntitiesExtra
 import org.odk.collect.entities.javarosa.finalization.FormEntity
 import org.odk.collect.entities.javarosa.parse.EntitySchema
@@ -20,7 +21,7 @@ import org.odk.collect.entities.storage.Entity
 import org.odk.collect.entities.storage.EntityList
 import org.odk.collect.entities.storage.InMemEntitiesRepository
 import org.odk.collect.formstest.FormFixtures
-import org.odk.collect.shared.DebugLogger
+import org.odk.collect.shared.debug.DebugLogger
 import org.odk.collect.shared.Query
 import org.odk.collect.shared.TempFiles
 import java.io.File
@@ -287,24 +288,10 @@ class LocalEntityUseCasesTest {
             debugLogger
         )
 
-        verify(debugLogger).logWithAnalytics(
-            "Entities",
-            "Failed to create/update dataset=things, id=, label=label",
-            "EntityWithNoId",
-            "form"
-        )
-        verify(debugLogger).logWithAnalytics(
-            "Entities",
-            "Failed to create/update dataset=things, id=id, label=label",
-            "EntityWithInvalidId",
-            "form"
-        )
-        verify(debugLogger).logWithAnalytics(
-            "Entities",
-            "Failed to update dataset=things, id=$id, label=",
-            "EntityUpdateNoMatch",
-            "form"
-        )
+        verify(debugLogger).log(EntityEvent.NoId(formEntity1))
+        verify(debugLogger).log(EntityEvent.InvalidId(formEntity2))
+        verify(debugLogger).log(EntityEvent.CreateNoLabel(formEntity3))
+        verify(debugLogger).log(EntityEvent.UpdateNoMatch(formEntity4))
     }
 
     @Test
