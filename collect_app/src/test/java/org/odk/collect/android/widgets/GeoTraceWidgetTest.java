@@ -2,11 +2,8 @@ package org.odk.collect.android.widgets;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.odk.collect.android.widgets.support.GeoWidgetHelpers.stringFromDoubleList;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnly;
@@ -25,20 +22,16 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
-import org.odk.collect.maps.MapConfigurator;
 
 @RunWith(AndroidJUnit4.class)
 public class GeoTraceWidgetTest {
     private final String answer = stringFromDoubleList();
 
     private GeoDataRequester geoDataRequester;
-    private MapConfigurator mapConfigurator;
 
     @Before
     public void setup() {
         geoDataRequester = mock(GeoDataRequester.class);
-        mapConfigurator = mock(MapConfigurator.class);
-        when(mapConfigurator.isAvailable(any())).thenReturn(true);
     }
 
     @Test
@@ -103,18 +96,6 @@ public class GeoTraceWidgetTest {
     }
 
     @Test
-    public void buttonClick_whenMapConfiguratorIsUnavailable_doesNotRequestGeoTrace() {
-        FormEntryPrompt prompt = promptWithAnswer(null);
-        GeoTraceWidget widget = createWidget(prompt);
-
-        when(mapConfigurator.isAvailable(widget.getContext())).thenReturn(false);
-        widget.binding.simpleButton.performClick();
-
-        verify(geoDataRequester, never()).requestGeoPoly(prompt);
-        verify(mapConfigurator).showUnavailableMessage(widget.getContext());
-    }
-
-    @Test
     public void buttonClick_whenMapConfiguratorIsAvailable_requestsGeoTrace() {
         FormEntryPrompt prompt = promptWithAnswer(null);
         GeoTraceWidget widget = createWidget(prompt);
@@ -135,6 +116,6 @@ public class GeoTraceWidgetTest {
 
     private GeoTraceWidget createWidget(FormEntryPrompt prompt) {
         return new GeoTraceWidget(widgetTestActivity(), new QuestionDetails(prompt),
-                mapConfigurator, geoDataRequester, widgetDependencies());
+                geoDataRequester, widgetDependencies());
     }
 }
