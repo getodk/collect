@@ -15,13 +15,19 @@ package org.odk.collect.geo.geopoint
 
 import android.os.Bundle
 import android.view.Window
+import org.odk.collect.androidshared.system.BundleExt.getParcelableExtraCompat
 import org.odk.collect.androidshared.ui.EdgeToEdge.setView
+import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.ToastUtils.showShortToast
 import org.odk.collect.async.Scheduler
+import org.odk.collect.geo.Constants.EXTRA_DRAGGABLE_ONLY
+import org.odk.collect.geo.Constants.EXTRA_READ_ONLY
+import org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY
 import org.odk.collect.geo.GeoActivityUtils.requireLocationPermissions
 import org.odk.collect.geo.GeoDependencyComponentProvider
 import org.odk.collect.geo.R
 import org.odk.collect.maps.MapFragmentFactory
+import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.strings.localization.LocalizedActivity
@@ -48,6 +54,16 @@ class GeoPointMapActivity : LocalizedActivity() {
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         (application as GeoDependencyComponentProvider).geoDependencyComponent.inject(this)
+        supportFragmentManager.fragmentFactory = FragmentFactoryBuilder()
+            .forClass(GeoPointMapFragment::class) {
+                GeoPointMapFragment(
+                    inputPoint = intent.extras?.getParcelableExtraCompat<MapPoint>(EXTRA_LOCATION),
+                    draggable = intent.getBooleanExtra(EXTRA_DRAGGABLE_ONLY, false),
+                    readOnly = intent.getBooleanExtra(EXTRA_READ_ONLY, false),
+                    retainMockAccuracy = intent.getBooleanExtra(EXTRA_RETAIN_MOCK_ACCURACY, false)
+                )
+            }
+            .build()
 
         super.onCreate(savedInstanceState)
 

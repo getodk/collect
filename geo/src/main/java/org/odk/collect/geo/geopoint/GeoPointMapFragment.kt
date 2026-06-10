@@ -28,14 +28,10 @@ import org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.async.Scheduler
 import org.odk.collect.externalapp.ExternalAppUtils.returnSingleValue
-import org.odk.collect.geo.Constants.EXTRA_DRAGGABLE_ONLY
-import org.odk.collect.geo.Constants.EXTRA_READ_ONLY
-import org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY
 import org.odk.collect.geo.GeoDependencyComponentProvider
 import org.odk.collect.geo.GeoUtils.showCurrentLocation
 import org.odk.collect.geo.GeoUtils.toMapPoint
 import org.odk.collect.geo.R
-import org.odk.collect.geo.geopoint.GeoPointMapActivity.Companion.EXTRA_LOCATION
 import org.odk.collect.geo.geopoint.LocationAccuracy.Improving
 import org.odk.collect.location.tracker.LocationTracker
 import org.odk.collect.location.tracker.getCurrentLocation
@@ -52,7 +48,12 @@ import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.webpage.WebPageService
 import javax.inject.Inject
 
-class GeoPointMapFragment : Fragment() {
+class GeoPointMapFragment(
+    private val inputPoint: MapPoint?,
+    private val draggable: Boolean,
+    private val readOnly: Boolean,
+    private val retainMockAccuracy: Boolean,
+) : Fragment() {
 
     @Inject
     lateinit var mapFragmentFactory: MapFragmentFactory
@@ -99,16 +100,6 @@ class GeoPointMapFragment : Fragment() {
      * True if the current point came from the intent.
      */
     private var pointFromIntent = false
-
-    /**
-     * True if the intent requested for the point to be read-only.
-     */
-    private var intentReadOnly = false
-
-    /**
-     * True if the intent requested for the marker to be draggable.
-     */
-    private var intentDraggable = false
 
     /**
      * While true, the point cannot be moved by dragging or long-pressing.
@@ -184,8 +175,6 @@ class GeoPointMapFragment : Fragment() {
         state.putBoolean(CAPTURE_LOCATION_KEY, captureLocation)
         state.putBoolean(SET_CLEAR_KEY, setClear)
         state.putBoolean(POINT_FROM_INTENT_KEY, pointFromIntent)
-        state.putBoolean(INTENT_READ_ONLY_KEY, intentReadOnly)
-        state.putBoolean(INTENT_DRAGGABLE_KEY, intentDraggable)
         state.putBoolean(IS_POINT_LOCKED_KEY, isPointLocked)
 
         // UI state
@@ -198,9 +187,9 @@ class GeoPointMapFragment : Fragment() {
     fun returnLocation() {
         var result: String? = null
 
-        if (setClear || (intentReadOnly && featureId == -1)) {
+        if (setClear || (readOnly && featureId == -1)) {
             result = ""
-        } else if (isDragged || intentReadOnly || pointFromIntent) {
+        } else if (isDragged || readOnly || pointFromIntent) {
             result = formatResult(map!!.getMarkerPoint(featureId)!!)
         } else if (location != null) {
             result = formatResult(location!!)
@@ -257,45 +246,36 @@ class GeoPointMapFragment : Fragment() {
             pointFromIntent = false
         }
 
-        val intent = requireActivity().intent
-        if (intent != null && intent.extras != null) {
-            intentDraggable = intent.getBooleanExtra(EXTRA_DRAGGABLE_ONLY, false)
-            if (!intentDraggable) {
-                // Not Draggable, set text for Map else leave as placement-map text
-                locationStatus!!.title =
-                    getString(org.odk.collect.strings.R.string.geopoint_no_draggable_instruction)
-            }
+        if (!draggable) {
+            // Not Draggable, set text for Map else leave as placement-map text
+            locationStatus!!.title =
+                getString(org.odk.collect.strings.R.string.geopoint_no_draggable_instruction)
+        }
 
-            intentReadOnly = intent.getBooleanExtra(EXTRA_READ_ONLY, false)
-            if (intentReadOnly) {
-                captureLocation = true
-                clearButton!!.isEnabled = false
-            }
+        if (readOnly) {
+            captureLocation = true
+            clearButton!!.isEnabled = false
+        }
 
-            if (intent.hasExtra(EXTRA_LOCATION)) {
-                val point = intent.extras?.getParcelableExtraCompat<MapPoint>(EXTRA_LOCATION)
+        if (inputPoint != null) {
+            // If the point is initially set, the "place marker"
+            // button, dragging, and long-pressing are all initially disabled.
+            // To enable them, the user must clear the marker and add a new one.
+            isPointLocked = true
+            placeMarker(inputPoint)
+            placeMarkerButton!!.isEnabled = false
 
-                // If the point is initially set from the intent, the "place marker"
-                // button, dragging, and long-pressing are all initially disabled.
-                // To enable them, the user must clear the marker and add a new one.
-                isPointLocked = true
-                placeMarker(point!!)
-                placeMarkerButton!!.isEnabled = false
-
-                captureLocation = true
-                pointFromIntent = true
-                locationStatus!!.visibility = View.GONE
-                zoomButton!!.isEnabled = true
-                zoomToMarker(false)
-            }
+            captureLocation = true
+            pointFromIntent = true
+            locationStatus!!.visibility = View.GONE
+            zoomButton!!.isEnabled = true
+            zoomToMarker(false)
         }
 
         if (previousState != null) {
             restoreFromInstanceState(previousState!!)
         }
 
-        val retainMockAccuracy =
-            requireActivity().intent?.getBooleanExtra(EXTRA_RETAIN_MOCK_ACCURACY, false) ?: false
         map!!.showCurrentLocation(
             locationTracker,
             currentLocationDelegate,
@@ -310,8 +290,6 @@ class GeoPointMapFragment : Fragment() {
         captureLocation = state.getBoolean(CAPTURE_LOCATION_KEY, false)
         setClear = state.getBoolean(SET_CLEAR_KEY, false)
         pointFromIntent = state.getBoolean(POINT_FROM_INTENT_KEY, false)
-        intentReadOnly = state.getBoolean(INTENT_READ_ONLY_KEY, false)
-        intentDraggable = state.getBoolean(INTENT_DRAGGABLE_KEY, false)
         isPointLocked = state.getBoolean(IS_POINT_LOCKED_KEY, false)
 
         // Restore the marker and dialog after the flags, because they use some of them.
@@ -325,8 +303,6 @@ class GeoPointMapFragment : Fragment() {
         captureLocation = state.getBoolean(CAPTURE_LOCATION_KEY, false)
         setClear = state.getBoolean(SET_CLEAR_KEY, false)
         pointFromIntent = state.getBoolean(POINT_FROM_INTENT_KEY, false)
-        intentReadOnly = state.getBoolean(INTENT_READ_ONLY_KEY, false)
-        intentDraggable = state.getBoolean(INTENT_DRAGGABLE_KEY, false)
         isPointLocked = state.getBoolean(IS_POINT_LOCKED_KEY, false)
 
         placeMarkerButton!!.isEnabled = state.getBoolean(PLACE_MARKER_BUTTON_ENABLED_KEY, false)
@@ -373,7 +349,7 @@ class GeoPointMapFragment : Fragment() {
     }
 
     fun onLongPress(point: MapPoint) {
-        if (intentDraggable && !intentReadOnly && !isPointLocked) {
+        if (draggable && !readOnly && !isPointLocked) {
             placeMarker(point)
             enableZoomButton()
             isDragged = true
@@ -420,12 +396,12 @@ class GeoPointMapFragment : Fragment() {
         featureId = map!!.addMarker(
             MarkerDescription(
                 point,
-                intentDraggable && !intentReadOnly && !isPointLocked,
+                draggable && !readOnly && !isPointLocked,
                 MapFragment.IconAnchor.BOTTOM,
                 iconDescription
             )
         )
-        if (!intentReadOnly) {
+        if (!readOnly) {
             clearButton!!.isEnabled = true
         }
         captureLocation = true
@@ -439,8 +415,6 @@ class GeoPointMapFragment : Fragment() {
         const val CAPTURE_LOCATION_KEY: String = "capture_location"
         const val SET_CLEAR_KEY: String = "set_clear"
         const val POINT_FROM_INTENT_KEY: String = "point_from_intent"
-        const val INTENT_READ_ONLY_KEY: String = "intent_read_only"
-        const val INTENT_DRAGGABLE_KEY: String = "intent_draggable"
         const val IS_POINT_LOCKED_KEY: String = "is_point_locked"
 
         const val PLACE_MARKER_BUTTON_ENABLED_KEY: String = "place_marker_button_enabled"
