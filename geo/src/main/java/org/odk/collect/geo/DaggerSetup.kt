@@ -10,7 +10,6 @@ import dagger.Provides
 import org.odk.collect.async.Scheduler
 import org.odk.collect.geo.geopoint.GeoPointActivity
 import org.odk.collect.geo.geopoint.GeoPointDialogFragment
-import org.odk.collect.geo.geopoint.GeoPointMapActivity
 import org.odk.collect.geo.geopoint.GeoPointMapFragment
 import org.odk.collect.geo.geopoint.GeoPointViewModelFactory
 import org.odk.collect.geo.geopoint.LocationTrackerGeoPointViewModel
@@ -45,7 +44,6 @@ interface GeoDependencyComponent {
         fun build(): GeoDependencyComponent
     }
 
-    fun inject(geoPointMapActivity: GeoPointMapActivity)
     fun inject(geoPointDialogFragment: GeoPointDialogFragment)
     fun inject(geoPointActivity: GeoPointActivity)
     fun inject(selectionMapFragment: SelectionMapFragment)
