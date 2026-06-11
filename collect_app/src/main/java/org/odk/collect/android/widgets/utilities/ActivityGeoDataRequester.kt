@@ -27,7 +27,6 @@ class ActivityGeoDataRequester(
 
     override fun requestGeoPoint(
         prompt: FormEntryPrompt,
-        answerText: String?,
         waitingForDataRegistry: WaitingForDataRegistry
     ) {
         permissionsProvider.requestEnabledLocationPermissions(

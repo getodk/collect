@@ -58,7 +58,7 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
         if (prompt.isReadOnly()) {
             binding.simpleButton.setVisibility(GONE);
         } else {
-            binding.simpleButton.setOnClickListener(v -> geoDataRequester.requestGeoPoint(prompt, answerText, waitingForDataRegistry));
+            binding.simpleButton.setOnClickListener(v -> geoDataRequester.requestGeoPoint(prompt, waitingForDataRegistry));
         }
 
         answerText = prompt.getAnswerText();

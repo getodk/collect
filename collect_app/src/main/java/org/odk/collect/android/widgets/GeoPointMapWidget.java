@@ -57,7 +57,7 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
 
         binding.geoAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
-        binding.simpleButton.setOnClickListener(v -> geoDataRequester.requestGeoPoint(prompt, answerText, waitingForDataRegistry));
+        binding.simpleButton.setOnClickListener(v -> geoDataRequester.requestGeoPoint(prompt, waitingForDataRegistry));
 
         answerText = prompt.getAnswerText();
         String answerToDisplay = GeoWidgetUtils.getGeoPointAnswerToDisplay(getContext(), answerText);
