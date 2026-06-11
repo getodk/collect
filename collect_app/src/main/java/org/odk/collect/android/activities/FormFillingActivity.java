@@ -161,6 +161,7 @@ import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.SavepointsRepositoryProvider;
+import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.widgets.GeoShapeWidget;
 import org.odk.collect.android.widgets.GeoTraceWidget;
 import org.odk.collect.android.widgets.MediaWidgetAnswerViewModel;
@@ -366,6 +367,9 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
 
     @Inject
     public ProjectDependencyModuleFactory projectDependencyModuleFactory;
+
+    @Inject
+    public SoftKeyboardController softKeyboardController;
 
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
@@ -1860,6 +1864,8 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
             } else {
                 view.setFocus(this);
             }
+        } else {
+            softKeyboardController.hideSoftKeyboard(currentView);
         }
     }
 
