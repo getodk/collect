@@ -49,10 +49,10 @@ import org.odk.collect.webpage.WebPageService
 import javax.inject.Inject
 
 class GeoPointMapFragment(
-    private val inputPoint: MapPoint?,
-    private val draggable: Boolean,
-    private val readOnly: Boolean,
-    private val retainMockAccuracy: Boolean,
+    val inputPoint: MapPoint?,
+    val draggable: Boolean,
+    val readOnly: Boolean,
+    val retainMockAccuracy: Boolean,
 ) : Fragment() {
 
     @Inject

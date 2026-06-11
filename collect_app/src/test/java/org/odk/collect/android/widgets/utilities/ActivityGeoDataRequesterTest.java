@@ -104,30 +104,6 @@ public class ActivityGeoDataRequesterTest {
         assertThat(bundle.getFloat(GeoPointActivity.EXTRA_UNACCEPTABLE_ACCURACY_THRESHOLD), equalTo(ActivityGeoDataRequester.DEFAULT_UNACCEPTABLE_ACCURACY_THRESHOLD));
     }
 
-//    @Test
-//    public void requestGeoPoint_whenAnswerIsPresent_addsToIntent() {
-//        activityGeoDataRequester.requestGeoPoint(prompt, waitingForDataRegistry);
-//        Intent startedIntent = shadowActivity.getNextStartedActivity();
-//
-//        assertEquals(startedIntent.getComponent(), new ComponentName(testActivity, GeoPointActivity.class));
-//        assertEquals(shadowActivity.getNextStartedActivityForResult().requestCode, LOCATION_CAPTURE);
-//
-//        Bundle bundle = startedIntent.getExtras();
-//        assertThat(bundle.getParcelable(GeoPointMapActivity.EXTRA_LOCATION), equalTo(new MapPoint(1.0, 2.0, 3, 4)));
-//    }
-
-//    @Test
-//    public void requestGeoPoint_whenAnswerIsPresentButInvalid_doesNotAddToIntent() {
-//        activityGeoDataRequester.requestGeoPoint(prompt, waitingForDataRegistry);
-//        Intent startedIntent = shadowActivity.getNextStartedActivity();
-//
-//        assertEquals(startedIntent.getComponent(), new ComponentName(testActivity, GeoPointActivity.class));
-//        assertEquals(shadowActivity.getNextStartedActivityForResult().requestCode, LOCATION_CAPTURE);
-//
-//        Bundle bundle = startedIntent.getExtras();
-//        assertThat(bundle.getParcelable(GeoPointMapActivity.EXTRA_LOCATION), equalTo(null));
-//    }
-
     @Test
     public void whenWidgetHasAccuracyValue_requestGeoPoint_launchesCorrectIntent() {
         when(questionDef.getAdditionalAttribute(null, "accuracyThreshold")).thenReturn("10");
@@ -183,55 +159,6 @@ public class ActivityGeoDataRequesterTest {
         Bundle bundle = startedIntent.getExtras();
         assertThat(bundle.getFloat(GeoPointActivity.EXTRA_UNACCEPTABLE_ACCURACY_THRESHOLD), equalTo(ActivityGeoDataRequester.DEFAULT_UNACCEPTABLE_ACCURACY_THRESHOLD));
     }
-
-//    @Test
-//    public void whenWidgetHasMapsAppearance_requestGeoPoint_launchesCorrectIntent() {
-//        when(prompt.getAppearanceHint()).thenReturn(Appearances.MAPS);
-//
-//        activityGeoDataRequester.requestGeoPoint(prompt, waitingForDataRegistry);
-//        Intent startedIntent = shadowActivity.getNextStartedActivity();
-//
-//        assertEquals(startedIntent.getComponent(), new ComponentName(testActivity, GeoPointMapActivity.class));
-//        assertEquals(shadowActivity.getNextStartedActivityForResult().requestCode, LOCATION_CAPTURE);
-//
-//        Bundle bundle = startedIntent.getExtras();
-//        assertThat(bundle.getDoubleArray(GeoPointMapActivity.EXTRA_LOCATION), equalTo(null));
-//        assertThat(bundle.getBoolean(EXTRA_READ_ONLY), equalTo(false));
-//        assertThat(bundle.getBoolean(EXTRA_DRAGGABLE_ONLY), equalTo((Object) false));
-//    }
-//
-//    @Test
-//    public void whenWidgetHasMapsAppearance_andIsReadOnly_requestGeoPoint_launchesCorrectIntent() {
-//        when(prompt.getAppearanceHint()).thenReturn(Appearances.MAPS);
-//
-//        when(prompt.isReadOnly()).thenReturn(true);
-//        activityGeoDataRequester.requestGeoPoint(prompt, waitingForDataRegistry);
-//        Intent startedIntent = shadowActivity.getNextStartedActivity();
-//
-//        assertEquals(startedIntent.getComponent(), new ComponentName(testActivity, GeoPointMapActivity.class));
-//        assertEquals(shadowActivity.getNextStartedActivityForResult().requestCode, LOCATION_CAPTURE);
-//
-//        Bundle bundle = startedIntent.getExtras();
-//        assertThat(bundle.getDoubleArray(GeoPointMapActivity.EXTRA_LOCATION), equalTo(null));
-//        assertThat(bundle.getBoolean(EXTRA_READ_ONLY), equalTo(true));
-//        assertThat(bundle.getBoolean(EXTRA_DRAGGABLE_ONLY), equalTo((Object) false));
-//    }
-//
-//    @Test
-//    public void whenWidgetHasPlacementMapAppearance_requestGeoPoint_launchesCorrectIntent() {
-//        when(prompt.getAppearanceHint()).thenReturn(Appearances.PLACEMENT_MAP);
-//
-//        activityGeoDataRequester.requestGeoPoint(prompt, waitingForDataRegistry);
-//        Intent startedIntent = shadowActivity.getNextStartedActivity();
-//
-//        assertEquals(startedIntent.getComponent(), new ComponentName(testActivity, GeoPointMapActivity.class));
-//        assertEquals(shadowActivity.getNextStartedActivityForResult().requestCode, LOCATION_CAPTURE);
-//
-//        Bundle bundle = startedIntent.getExtras();
-//        assertThat(bundle.getDoubleArray(GeoPointMapActivity.EXTRA_LOCATION), equalTo(null));
-//        assertThat(bundle.getBoolean(EXTRA_READ_ONLY), equalTo(false));
-//        assertThat(bundle.getBoolean(EXTRA_DRAGGABLE_ONLY), equalTo((Object) true));
-//    }
 
     @Test
     public void requestGeoTrace_opensDialog() {
