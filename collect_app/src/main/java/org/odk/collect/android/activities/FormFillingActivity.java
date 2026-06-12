@@ -1846,9 +1846,7 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
             }
             swipeHandler.setBeenSwiped(false);
             return;
-        }
-
-        if (validationResult instanceof SuccessValidationResult) {
+        } else if (validationResult instanceof SuccessValidationResult) {
             SnackbarUtils.showSnackbar(
                     findViewById(R.id.llParent),
                     getString(org.odk.collect.strings.R.string.success_form_validation),
