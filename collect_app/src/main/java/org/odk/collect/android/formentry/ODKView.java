@@ -579,8 +579,13 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
 
     public void focusToTopOf(@Nullable QuestionWidget qw) {
         if (qw != null && widgets.contains(qw)) {
-            findViewById(R.id.odk_view_container).scrollTo(0, qw.getTop());
-            qw.setFocus(getContext());
+            // This can be called synchronously just after the view has been added (before it has
+            // been laid out), in which case qw.getTop() would still be 0 and we'd scroll to the
+            // top instead of to the widget. Defer the scroll so it runs once layout has happened.
+            post(() -> {
+                findViewById(R.id.odk_view_container).scrollTo(0, qw.getTop());
+                qw.setFocus(getContext());
+            });
         }
     }
 
