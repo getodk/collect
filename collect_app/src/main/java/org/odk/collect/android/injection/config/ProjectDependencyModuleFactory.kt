@@ -10,6 +10,7 @@ import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.utilities.SavepointsRepositoryProvider
 import org.odk.collect.entities.debug.EntitiesDebugLogger
+import org.odk.collect.entities.debug.EntityEvent
 import org.odk.collect.projects.ProjectDependencyFactory
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.shared.debug.DebugLogger
@@ -44,8 +45,8 @@ class ProjectDependencyModuleFactory @Inject constructor(
 }
 
 private class DebugLoggerFactory(private val storagePathProvider: ProjectDependencyFactory<StoragePaths>) :
-    ProjectDependencyFactory<DebugLogger> {
-    override fun create(projectId: String): DebugLogger {
+    ProjectDependencyFactory<DebugLogger<EntityEvent>> {
+    override fun create(projectId: String): DebugLogger<EntityEvent> {
         return EntitiesDebugLogger(File(storagePathProvider.create(projectId).rootDir, "debug.log"))
     }
 }

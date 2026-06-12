@@ -23,7 +23,7 @@ object LocalEntityUseCases {
     fun updateLocalEntitiesFromForm(
         formEntities: EntitiesExtra?,
         entitiesRepository: EntitiesRepository,
-        debugLogger: DebugLogger? = null
+        debugLogger: DebugLogger<EntityEvent>? = null
     ) {
         formEntities?.entities?.forEach { formEntity ->
             if (formEntity.id.isV4UUID()) {
@@ -63,7 +63,7 @@ object LocalEntityUseCases {
     private fun saveNewEntity(
         formEntity: FormEntity,
         entitiesRepository: EntitiesRepository,
-        debugLogger: DebugLogger? = null
+        debugLogger: DebugLogger<EntityEvent>? = null
     ) {
         if (formEntity.label.isNotBlank()) {
             val list = entitiesRepository.getList(formEntity.dataset)

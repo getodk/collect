@@ -269,7 +269,7 @@ class LocalEntityUseCasesTest {
 
     @Test
     fun `#updateLocalEntitiesFromForm logs invalid entities`() {
-        val debugLogger = mock<DebugLogger>()
+        val debugLogger = mock<DebugLogger<EntityEvent>>()
         val id = UUID.randomUUID().toString()
         val formEntity1 =
             FormEntity(EntityAction.CREATE, "things", "", "label", emptyList())

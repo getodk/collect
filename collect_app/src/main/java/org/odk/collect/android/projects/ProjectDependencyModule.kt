@@ -2,6 +2,7 @@ package org.odk.collect.android.projects
 
 import org.odk.collect.android.storage.StoragePaths
 import org.odk.collect.android.utilities.ChangeLocks
+import org.odk.collect.entities.debug.EntityEvent
 import org.odk.collect.entities.server.EntitySource
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.forms.FormSource
@@ -28,7 +29,7 @@ data class ProjectDependencyModule(
     private val savepointsRepositoryFactory: ProjectDependencyFactory<SavepointsRepository>,
     private val entitiesRepositoryFactory: ProjectDependencyFactory<EntitiesRepository>,
     private val entitySourceFactory: ProjectDependencyFactory<EntitySource>,
-    private val debugLoggerFactory: ProjectDependencyFactory<DebugLogger>
+    private val debugLoggerFactory: ProjectDependencyFactory<DebugLogger<EntityEvent>>
 ) {
     val generalSettings by projectDependency(projectId, settingsFactory)
     val formsRepository by projectDependency(projectId, formsRepositoryFactory)

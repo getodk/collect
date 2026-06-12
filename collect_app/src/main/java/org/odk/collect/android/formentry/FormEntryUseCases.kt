@@ -17,6 +17,7 @@ import org.odk.collect.android.javarosawrapper.JavaRosaFormController
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.android.utilities.FormUtils
 import org.odk.collect.entities.LocalEntityUseCases
+import org.odk.collect.entities.debug.EntityEvent
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.FormsRepository
@@ -124,7 +125,7 @@ object FormEntryUseCases {
         formController: FormController,
         instancesRepository: InstancesRepository,
         entitiesRepository: EntitiesRepository,
-        debugLogger: DebugLogger
+        debugLogger: DebugLogger<EntityEvent>
     ): Instance? {
         val instance =
             getInstanceFromFormController(formController, instancesRepository)!!
@@ -159,7 +160,7 @@ object FormEntryUseCases {
         formController: FormController,
         instancesRepository: InstancesRepository,
         entitiesRepository: EntitiesRepository,
-        debugLogger: DebugLogger
+        debugLogger: DebugLogger<EntityEvent>
     ): Instance? {
         formController.finalizeForm()
 
