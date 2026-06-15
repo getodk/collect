@@ -97,7 +97,7 @@ class GeoPointMapFragment(
     private var setClear = false
 
     /**
-     * True if the current point came from the intent.
+     * True if the current point was not via interacting with the UI
      */
     private var hasInputPoint = false
 
