@@ -24,7 +24,7 @@ import androidx.core.graphics.toColorInt
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
-import org.odk.collect.androidshared.system.BundleExt.getParcelableCompat
+import org.odk.collect.androidshared.system.getParcelableCompat
 import org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.async.Scheduler
