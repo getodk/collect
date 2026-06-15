@@ -9,6 +9,7 @@
 -dontwarn java.beans.**
 
 -keep class org.kxml2.** { *; }
+-keep class org.xmlpull.v1.** { *; }
 -keep class com.google.android.gms.oss.licenses.** { *; }
 -keep class org.odk.collect.android.logic.actions.**
 -keep class android.support.v7.widget.** { *; }
