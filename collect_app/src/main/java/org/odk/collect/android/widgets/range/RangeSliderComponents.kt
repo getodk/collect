@@ -171,28 +171,6 @@ fun RangeSliderTrack(
 }
 
 @Composable
-fun RangeSliderThumb(
-    orientation: Orientation,
-    modifier: Modifier = Modifier
-) {
-    val sliderThumbContentDescription = stringResource(org.odk.collect.strings.R.string.slider_thumb)
-
-    Box(
-        modifier = modifier
-            .then(
-                if (orientation == Orientation.Horizontal) {
-                    Modifier.width(THUMB_THICKNESS).height(THUMB_LENGTH)
-                } else {
-                    Modifier.width(THUMB_LENGTH).height(THUMB_THICKNESS)
-                }
-            )
-            .clip(CircleShape)
-            .background(MaterialTheme.colorScheme.primary)
-            .semantics { contentDescription = sliderThumbContentDescription }
-    )
-}
-
-@Composable
 fun RangeSliderEdgeLabels(
     orientation: Orientation,
     labelStart: String,
@@ -327,6 +305,4 @@ private fun positionToValue(
 }
 
 private val TRACK_THICKNESS = 20.dp
-private val THUMB_LENGTH = 40.dp
-private val THUMB_THICKNESS = 6.dp
 private val INTERACTIVE_SIZE = 48.dp
