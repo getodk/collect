@@ -24,7 +24,7 @@ import androidx.core.graphics.toColorInt
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
-import org.odk.collect.androidshared.system.BundleExt.getParcelableExtraCompat
+import org.odk.collect.androidshared.system.BundleExt.getParcelableCompat
 import org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.async.Scheduler
@@ -296,7 +296,7 @@ class GeoPointMapFragment(
         isPointLocked = state.getBoolean(IS_POINT_LOCKED_KEY, false)
 
         // Restore the marker and dialog after the flags, because they use some of them.
-        val point = state.getParcelableExtraCompat<MapPoint>(POINT_KEY)
+        val point = state.getParcelableCompat<MapPoint>(POINT_KEY)
         if (point != null) {
             placeMarker(point)
         }

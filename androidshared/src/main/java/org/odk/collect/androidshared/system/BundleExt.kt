@@ -6,7 +6,7 @@ import androidx.core.os.BundleCompat
 
 object BundleExt {
 
-    inline fun <reified T : Parcelable> Bundle.getParcelableExtraCompat(name: String): T? {
+    inline fun <reified T : Parcelable> Bundle.getParcelableCompat(name: String): T? {
         return BundleCompat.getParcelable(this, name, T::class.java)
     }
 }
