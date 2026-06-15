@@ -161,6 +161,7 @@ import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.SavepointsRepositoryProvider;
+import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.widgets.GeoShapeWidget;
 import org.odk.collect.android.widgets.GeoTraceWidget;
 import org.odk.collect.android.widgets.MediaWidgetAnswerViewModel;
@@ -366,6 +367,9 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
 
     @Inject
     public ProjectDependencyModuleFactory projectDependencyModuleFactory;
+
+    @Inject
+    public SoftKeyboardController softKeyboardController;
 
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
@@ -643,27 +647,6 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
                 });
             }
         });
-    }
-
-    private void handleValidationResult(ValidationResult validationResult) {
-        if (validationResult instanceof FailedValidationResult failedValidationResult) {
-            String errorMessage = failedValidationResult.getCustomErrorMessage();
-            if (errorMessage == null) {
-                errorMessage = getString(failedValidationResult.getDefaultErrorMessage());
-            }
-            ODKView view = getCurrentViewIfODKView();
-            if (view != null) {
-                view.setErrorForQuestionWithIndex(failedValidationResult.getIndex(), errorMessage);
-            }
-            swipeHandler.setBeenSwiped(false);
-        } else if (validationResult instanceof SuccessValidationResult) {
-            SnackbarUtils.showSnackbar(
-                    findViewById(R.id.llParent),
-                    getString(org.odk.collect.strings.R.string.success_form_validation),
-                    SnackbarUtils.DURATION_LONG,
-                    findViewById(R.id.buttonholder)
-            );
-        }
     }
 
     private void formControllerAvailable(@NonNull FormController formController, @NonNull Form form, @Nullable Instance instance) {
@@ -1852,17 +1835,35 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
         CurrentFormIndex index = formEntryViewModel.getCurrentIndex().getValue();
         ValidationResult validationResult = index.getValidationResult();
 
-        if (validationResult != null) {
-            handleValidationResult(validationResult);
-        } else {
+        if (validationResult instanceof FailedValidationResult failedValidationResult) {
+            String errorMessage = failedValidationResult.getCustomErrorMessage();
+            if (errorMessage == null) {
+                errorMessage = getString(failedValidationResult.getDefaultErrorMessage());
+            }
             ODKView view = getCurrentViewIfODKView();
             if (view != null) {
-                if (index.getQuestionIndex() != null) {
-                    view.focusToTopOf(index.getQuestionIndex());
-                } else {
-                    view.setFocus(this);
-                }
+                view.setErrorForQuestionWithIndex(failedValidationResult.getIndex(), errorMessage);
             }
+            swipeHandler.setBeenSwiped(false);
+            return;
+        } else if (validationResult instanceof SuccessValidationResult) {
+            SnackbarUtils.showSnackbar(
+                    findViewById(R.id.llParent),
+                    getString(org.odk.collect.strings.R.string.success_form_validation),
+                    SnackbarUtils.DURATION_LONG,
+                    findViewById(R.id.buttonholder)
+            );
+        }
+
+        ODKView view = getCurrentViewIfODKView();
+        if (view != null) {
+            if (index.getQuestionIndex() != null) {
+                view.focusToTopOf(index.getQuestionIndex());
+            } else {
+                view.setFocus(this);
+            }
+        } else {
+            softKeyboardController.hideSoftKeyboard(currentView);
         }
     }
 
