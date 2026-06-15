@@ -343,7 +343,7 @@ class GeoPointMapFragment(
     }
 
     private fun cancel() {
-        getParentFragmentManager().setFragmentResult(REQUEST_GEOPOINT, Bundle.EMPTY)
+        parentFragmentManager.setFragmentResult(REQUEST_GEOPOINT, Bundle.EMPTY)
     }
 
     private fun onDragEnd(draggedFeatureId: Int) {
