@@ -99,7 +99,7 @@ class GeoPointMapFragment(
     /**
      * True if the current point came from the intent.
      */
-    private var pointFromIntent = false
+    private var hasInputPoint = false
 
     /**
      * While true, the point cannot be moved by dragging or long-pressing.
@@ -174,7 +174,7 @@ class GeoPointMapFragment(
         state.putBoolean(IS_DRAGGED_KEY, isDragged)
         state.putBoolean(CAPTURE_LOCATION_KEY, captureLocation)
         state.putBoolean(SET_CLEAR_KEY, setClear)
-        state.putBoolean(POINT_FROM_INTENT_KEY, pointFromIntent)
+        state.putBoolean(HAS_INPUT_POINT_KEY, hasInputPoint)
         state.putBoolean(IS_POINT_LOCKED_KEY, isPointLocked)
 
         // UI state
@@ -189,7 +189,7 @@ class GeoPointMapFragment(
 
         if (setClear || (readOnly && featureId == -1)) {
             result = ""
-        } else if (isDragged || readOnly || pointFromIntent) {
+        } else if (isDragged || readOnly || hasInputPoint) {
             result = formatResult(map!!.getMarkerPoint(featureId)!!)
         } else if (location != null) {
             result = formatResult(location!!)
@@ -246,7 +246,7 @@ class GeoPointMapFragment(
         clearButton!!.setOnClickListener {
             clear()
             locationStatus!!.visibility = View.VISIBLE
-            pointFromIntent = false
+            hasInputPoint = false
         }
 
         if (!draggable) {
@@ -269,7 +269,7 @@ class GeoPointMapFragment(
             placeMarkerButton!!.isEnabled = false
 
             captureLocation = true
-            pointFromIntent = true
+            hasInputPoint = true
             locationStatus!!.visibility = View.GONE
             zoomButton!!.isEnabled = true
             zoomToMarker(false)
@@ -292,7 +292,7 @@ class GeoPointMapFragment(
         isDragged = state.getBoolean(IS_DRAGGED_KEY, false)
         captureLocation = state.getBoolean(CAPTURE_LOCATION_KEY, false)
         setClear = state.getBoolean(SET_CLEAR_KEY, false)
-        pointFromIntent = state.getBoolean(POINT_FROM_INTENT_KEY, false)
+        hasInputPoint = state.getBoolean(HAS_INPUT_POINT_KEY, false)
         isPointLocked = state.getBoolean(IS_POINT_LOCKED_KEY, false)
 
         // Restore the marker and dialog after the flags, because they use some of them.
@@ -305,7 +305,7 @@ class GeoPointMapFragment(
         isDragged = state.getBoolean(IS_DRAGGED_KEY, false)
         captureLocation = state.getBoolean(CAPTURE_LOCATION_KEY, false)
         setClear = state.getBoolean(SET_CLEAR_KEY, false)
-        pointFromIntent = state.getBoolean(POINT_FROM_INTENT_KEY, false)
+        hasInputPoint = state.getBoolean(HAS_INPUT_POINT_KEY, false)
         isPointLocked = state.getBoolean(IS_POINT_LOCKED_KEY, false)
 
         placeMarkerButton!!.isEnabled = state.getBoolean(PLACE_MARKER_BUTTON_ENABLED_KEY, false)
@@ -421,7 +421,7 @@ class GeoPointMapFragment(
         const val IS_DRAGGED_KEY: String = "is_dragged"
         const val CAPTURE_LOCATION_KEY: String = "capture_location"
         const val SET_CLEAR_KEY: String = "set_clear"
-        const val POINT_FROM_INTENT_KEY: String = "point_from_intent"
+        const val HAS_INPUT_POINT_KEY: String = "has_input_point"
         const val IS_POINT_LOCKED_KEY: String = "is_point_locked"
 
         const val PLACE_MARKER_BUTTON_ENABLED_KEY: String = "place_marker_button_enabled"
