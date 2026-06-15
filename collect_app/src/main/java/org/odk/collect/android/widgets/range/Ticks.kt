@@ -15,22 +15,29 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun Tick(isEdgeTick: Boolean = true) {
-    val tickWidth = 4.dp
-
-    if (isEdgeTick) {
-        Spacer(modifier = Modifier.size(tickWidth))
-    } else {
-        val sliderTickContentDescription = stringResource(org.odk.collect.strings.R.string.slider_tick)
-
-        Box(
-            modifier = Modifier
-                .size(tickWidth)
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.onPrimary)
-                .semantics {
-                    contentDescription = sliderTickContentDescription
-                }
-        )
+fun Ticks(ticks: Int) {
+    repeat(ticks) { index ->
+        if (index == 0 || index == ticks - 1) {
+            Spacer(modifier = Modifier.size(TICK_WIDTH))
+        } else {
+            Tick()
+        }
     }
 }
+
+@Composable
+private fun Tick() {
+    val sliderTickContentDescription = stringResource(org.odk.collect.strings.R.string.slider_tick)
+
+    Box(
+        modifier = Modifier
+            .size(TICK_WIDTH)
+            .clip(CircleShape)
+            .background(MaterialTheme.colorScheme.onPrimary)
+            .semantics {
+                contentDescription = sliderTickContentDescription
+            }
+    )
+}
+
+private val TICK_WIDTH = 4.dp

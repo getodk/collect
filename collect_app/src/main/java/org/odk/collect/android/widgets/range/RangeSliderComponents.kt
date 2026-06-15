@@ -138,9 +138,7 @@ fun RangeSliderTrack(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    repeat(ticks) { index ->
-                        Tick(isEdgeTick = index == 0 || index == ticks - 1)
-                    }
+                    Ticks(ticks)
                 }
             } else {
                 Column(
@@ -148,9 +146,7 @@ fun RangeSliderTrack(
                     verticalArrangement = Arrangement.SpaceBetween,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    repeat(ticks) { index ->
-                        Tick(isEdgeTick = index == 0 || index == ticks - 1)
-                    }
+                    Ticks(ticks)
                 }
             }
         }
