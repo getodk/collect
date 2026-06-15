@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>longListOfQuestionsWithRequiredOneAtTheEnd</h:title>
+        <model>
+            <instance>
+                <data id="longListOfQuestionsWithRequiredOneAtTheEnd">
+                    <group>
+                        <text1/>
+                        <text2/>
+                        <text3/>
+                        <text4/>
+                        <text5/>
+                        <text6/>
+                        <text7/>
+                        <text8/>
+                        <text9/>
+                        <text10/>
+                    </group>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+            <bind nodeset="/data/group/text1" type="string"/>
+            <bind nodeset="/data/group/text2" type="string"/>
+            <bind nodeset="/data/group/text3" type="string"/>
+            <bind nodeset="/data/group/text4" type="string"/>
+            <bind nodeset="/data/group/text5" type="string"/>
+            <bind nodeset="/data/group/text6" type="string"/>
+            <bind nodeset="/data/group/text7" type="string"/>
+            <bind nodeset="/data/group/text8" type="string"/>
+            <bind nodeset="/data/group/text9" type="string"/>
+            <bind nodeset="/data/group/text10" required="true()" type="string"/>
+            <bind calculate="concat('uuid:', uuid())" nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
+        </model>
+    </h:head>
+    <h:body>
+        <group appearance="field-list" ref="/data/group">
+            <input ref="/data/group/text1">
+                <label>Question 1</label>
+            </input>
+            <input ref="/data/group/text2">
+                <label>Question 2</label>
+            </input>
+            <input ref="/data/group/text3">
+                <label>Question 3</label>
+            </input>
+            <input ref="/data/group/text4">
+                <label>Question 4</label>
+            </input>
+            <input ref="/data/group/text5">
+                <label>Question 5</label>
+            </input>
+            <input ref="/data/group/text6">
+                <label>Question 6</label>
+            </input>
+            <input ref="/data/group/text7">
+                <label>Question 7</label>
+            </input>
+            <input ref="/data/group/text8">
+                <label>Question 8</label>
+            </input>
+            <input ref="/data/group/text9">
+                <label>Question 9</label>
+            </input>
+            <select1 ref="/data/group/text10">
+                <label>Question 10</label>
+                <item>
+                    <label>Option A</label>
+                    <value>a</value>
+                </item>
+                <item>
+                    <label>Option B</label>
+                    <value>b</value>
+                </item>
+            </select1>
+        </group>
+    </h:body>
+</h:html>
