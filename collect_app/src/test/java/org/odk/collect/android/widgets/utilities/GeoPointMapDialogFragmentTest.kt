@@ -7,11 +7,13 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
+import org.hamcrest.Matchers.notNullValue
 import org.javarosa.core.model.data.GeoPointData
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.odk.collect.android.formentry.FormEntryViewModel
@@ -19,11 +21,19 @@ import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.utilities.Appearances
 import org.odk.collect.android.widgets.geo.GeoPointMapDialogFragment
+import org.odk.collect.android.widgets.geo.ReferenceGeometryMappableData
+import org.odk.collect.android.widgets.items.GeoSelectChoiceElements
+import org.odk.collect.android.widgets.support.FormElementFixtures.selectChoice
+import org.odk.collect.android.widgets.support.FormElementFixtures.treeElement
 import org.odk.collect.android.widgets.utilities.WidgetAnswerDialogFragment.Companion.ARG_FORM_INDEX
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.geo.GeoUtils.toMapPoint
 import org.odk.collect.geo.geopoint.GeoPointMapFragment
+import org.odk.collect.geo.items.MappableItem
+import org.odk.collect.maps.MapPoint
+import org.odk.collect.testshared.FakeScheduler
+import org.odk.collect.testshared.getOrAwaitValue
 
 @RunWith(AndroidJUnit4::class)
 class GeoPointMapDialogFragmentTest {
@@ -31,7 +41,10 @@ class GeoPointMapDialogFragmentTest {
     private var prompt = MockFormEntryPromptBuilder().build()
     private val formEntryViewModel = mock<FormEntryViewModel> {
         on { getQuestionPrompt(prompt.index) } doReturn prompt
+        on { loadSelectChoices(prompt) } doAnswer { prompt.selectChoices }
     }
+
+    private val scheduler = FakeScheduler()
 
     private val viewModelFactory = object : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
@@ -47,7 +60,7 @@ class GeoPointMapDialogFragmentTest {
         FragmentScenarioLauncherRule(
             FragmentFactoryBuilder()
                 .forClass(GeoPointMapDialogFragment::class) {
-                    GeoPointMapDialogFragment(viewModelFactory)
+                    GeoPointMapDialogFragment(viewModelFactory, scheduler)
                 }.build()
         )
 
@@ -110,6 +123,84 @@ class GeoPointMapDialogFragmentTest {
             bundleOf(ARG_FORM_INDEX to prompt.index)
         ) {
             assertThat(it.readOnly, equalTo(true))
+        }
+    }
+
+    @Test
+    fun `configures GeoPointMapFragment with MappableData`() {
+        val selectChoices = listOf(
+            selectChoice(
+                value = "a",
+                item = treeElement(
+                    children = listOf(
+                        treeElement(
+                            GeoSelectChoiceElements.GEOMETRY,
+                            "12.0 -1.0 305 0"
+                        )
+                    )
+                )
+            ),
+            selectChoice(
+                value = "b",
+                item = treeElement(
+                    children = listOf(
+                        treeElement(
+                            GeoSelectChoiceElements.GEOMETRY,
+                            "12.0 -1.0 3 4; 12.1 -1.0 3 4"
+                        )
+                    )
+                )
+            ),
+            selectChoice(
+                value = "c",
+                item = treeElement(
+                    children = listOf(
+                        treeElement(
+                            GeoSelectChoiceElements.GEOMETRY,
+                            "12.0 -1.0 3 4; 12.1 -1.0 3 4; 12.0 -1.0 3 4"
+                        )
+                    )
+                )
+            )
+        )
+
+        prompt = MockFormEntryPromptBuilder(prompt)
+            .withSelectChoices(selectChoices)
+            .build()
+
+        launcherRule.launchAndAssertOnChild<GeoPointMapFragment>(
+            GeoPointMapDialogFragment::class,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ) {
+            scheduler.flush()
+            assertThat(it.mappableData, notNullValue())
+            val mappableItems = it.mappableData!!.getMappableItems().getOrAwaitValue()
+            assertThat(mappableItems.size, equalTo(3))
+
+            val point = mappableItems[0] as MappableItem.Point
+            assertThat(point.point, equalTo(MapPoint(12.0, -1.0, 305.0)))
+            assertThat(point.color, equalTo(ReferenceGeometryMappableData.ITEM_COLOR))
+
+            val line = mappableItems[1] as MappableItem.Line
+            assertThat(
+                line.points,
+                equalTo(listOf(MapPoint(12.0, -1.0, 3.0, 4.0), MapPoint(12.1, -1.0, 3.0, 4.0)))
+            )
+            assertThat(line.strokeColor, equalTo(ReferenceGeometryMappableData.ITEM_COLOR))
+
+            val polygon = mappableItems[2] as MappableItem.Polygon
+            assertThat(
+                polygon.points,
+                equalTo(
+                    listOf(
+                        MapPoint(12.0, -1.0, 3.0, 4.0),
+                        MapPoint(12.1, -1.0, 3.0, 4.0),
+                        MapPoint(12.0, -1.0, 3.0, 4.0)
+                    )
+                )
+            )
+            assertThat(polygon.strokeColor, equalTo(ReferenceGeometryMappableData.ITEM_COLOR))
+            assertThat(polygon.fillColor, equalTo(ReferenceGeometryMappableData.ITEM_COLOR))
         }
     }
 }
