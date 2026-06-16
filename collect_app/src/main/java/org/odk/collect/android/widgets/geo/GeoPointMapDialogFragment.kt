@@ -10,14 +10,14 @@ import org.odk.collect.android.utilities.FormEntryPromptUtils
 import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader
 import org.odk.collect.android.widgets.utilities.BindAttributes
 import org.odk.collect.android.widgets.utilities.WidgetAnswerDialogFragment
-import org.odk.collect.async.Scheduler
+import org.odk.collect.async.DispatcherProvider
 import org.odk.collect.geo.GeoUtils.parseGeometryPoint
 import org.odk.collect.geo.GeoUtils.toMapPoint
 import org.odk.collect.geo.geopoint.GeoPointMapFragment
 
 class GeoPointMapDialogFragment(
     viewModelFactory: ViewModelProvider.Factory,
-    private val scheduler: Scheduler
+    private val dispatcherProvider: DispatcherProvider
 ) :
     WidgetAnswerDialogFragment<GeoPointMapFragment>(
         GeoPointMapFragment::class,
@@ -54,7 +54,7 @@ class GeoPointMapDialogFragment(
         val referenceGeometryMappableData by viewModels<ReferenceGeometryMappableData> {
             viewModelFactory {
                 addInitializer(ReferenceGeometryMappableData::class) {
-                    ReferenceGeometryMappableData(scheduler, prompt, selectChoiceLoader)
+                    ReferenceGeometryMappableData(dispatcherProvider, prompt, selectChoiceLoader)
                 }
             }
         }

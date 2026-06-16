@@ -27,6 +27,7 @@ import org.odk.collect.android.widgets.support.FormElementFixtures.selectChoice
 import org.odk.collect.android.widgets.support.FormElementFixtures.treeElement
 import org.odk.collect.android.widgets.utilities.WidgetAnswerDialogFragment.Companion.ARG_FORM_INDEX
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
+import org.odk.collect.androidtest.TestDispatcherProvider
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.geo.GeoUtils.toMapPoint
 import org.odk.collect.geo.geopoint.GeoPointMapFragment
@@ -44,7 +45,7 @@ class GeoPointMapDialogFragmentTest {
         on { loadSelectChoices(prompt) } doAnswer { prompt.selectChoices }
     }
 
-    private val scheduler = FakeScheduler()
+    private val dispatcherProvider = TestDispatcherProvider()
 
     private val viewModelFactory = object : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
@@ -60,7 +61,7 @@ class GeoPointMapDialogFragmentTest {
         FragmentScenarioLauncherRule(
             FragmentFactoryBuilder()
                 .forClass(GeoPointMapDialogFragment::class) {
-                    GeoPointMapDialogFragment(viewModelFactory, scheduler)
+                    GeoPointMapDialogFragment(viewModelFactory, dispatcherProvider)
                 }.build()
         )
 
@@ -172,7 +173,7 @@ class GeoPointMapDialogFragmentTest {
             GeoPointMapDialogFragment::class,
             bundleOf(ARG_FORM_INDEX to prompt.index)
         ) {
-            scheduler.flush()
+            dispatcherProvider.flush()
             assertThat(it.mappableData, notNullValue())
             val mappableItems = it.mappableData!!.getMappableItems().getOrAwaitValue()
             assertThat(mappableItems.size, equalTo(3))
