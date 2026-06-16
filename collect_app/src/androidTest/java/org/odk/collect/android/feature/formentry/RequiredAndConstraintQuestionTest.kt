@@ -95,6 +95,21 @@ class RequiredAndConstraintQuestionTest {
     }
 
     @Test
+    // The required question we scroll to is intentionally NOT a text question. A text question
+    // contains an EditText that requests focus, and that requestFocus makes the framework
+    // automatically scroll it into view - which would mask a broken scroll and let this test pass
+    // even when the scrolling is broken. A non-text question (here select_one) has no such
+    // focusable input, so it actually verifies that we scroll to the question ourselves.
+    fun validatingFormByPressingValidateInOptionsMenu_scrollsToTheQuestionWithError_whenItIsAtTheEndOfALongFieldList() {
+        rule.startAtMainMenu()
+            .copyForm("longListOfQuestionsWithRequiredOneAtTheEnd.xml")
+            .startBlankForm("longListOfQuestionsWithRequiredOneAtTheEnd")
+            .clickOptionsIcon()
+            .clickOnString(R.string.validate, FormEntryPage("longListOfQuestionsWithRequiredOneAtTheEnd"))
+            .assertQuestion("Question 10", true)
+    }
+
+    @Test
     fun validatingFormByPressingValidateInOptionsMenuOnFormEndScreen_displaysSuccessMessage() {
         rule.startAtMainMenu()
             .copyForm("required_question_with_custom_error_message.xml")

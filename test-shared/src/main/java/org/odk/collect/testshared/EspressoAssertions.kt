@@ -11,6 +11,7 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.matcher.ViewMatchers.Visibility.VISIBLE
 import androidx.test.espresso.matcher.ViewMatchers.hasSibling
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
 import org.hamcrest.CoreMatchers.not
@@ -42,7 +43,7 @@ object EspressoAssertions {
             onView(withSibling)
         }
 
-        onView.check(matches(not(doesNotExist())))
+        onView.check(matches(isDisplayed()))
     }
 
     fun assertEnabled(
