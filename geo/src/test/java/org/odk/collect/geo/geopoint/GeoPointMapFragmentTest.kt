@@ -25,8 +25,11 @@ import org.odk.collect.geo.GeoUtils.toMapPoint
 import org.odk.collect.geo.R
 import org.odk.collect.geo.support.FakeLocationTracker
 import org.odk.collect.geo.support.FakeMapFragment
+import org.odk.collect.geo.support.FakeMappableData
 import org.odk.collect.geo.support.MapFragmentAssertions.hasZoomedToCurrentLocation
 import org.odk.collect.geo.support.MapFragmentAssertions.showsCurrentLocation
+import org.odk.collect.geo.support.MapFragmentAssertions.showsMappableData
+import org.odk.collect.geo.support.MappableItemsFixtures
 import org.odk.collect.geo.support.RobolectricApplication
 import org.odk.collect.location.Location
 import org.odk.collect.location.tracker.LocationTracker
@@ -230,6 +233,23 @@ class GeoPointMapFragmentTest {
         EspressoAssertions.assertDisabled(withContentDescription(string.record_geopoint))
         EspressoInteractions.clickOn(withContentDescription(string.clear))
         EspressoAssertions.assertEnabled(withContentDescription(string.record_geopoint))
+    }
+
+    @Test
+    fun `shows items from mappable data`() {
+        val mappableData = FakeMappableData(
+            listOf(
+                MappableItemsFixtures.point(),
+                MappableItemsFixtures.actionMappableLine(),
+                MappableItemsFixtures.actionMappablePolygon()
+            )
+        )
+
+        launcherRule.launchInContainer {
+            GeoPointMapFragment(null, false, false, false, mappableData)
+        }
+
+        assertThat(map, showsMappableData(mappableData, background = true, clickable = false))
     }
 
     private fun overrideDependencies(mapFragment: MapFragment) {

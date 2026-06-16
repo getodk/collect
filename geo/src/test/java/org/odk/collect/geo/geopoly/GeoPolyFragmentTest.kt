@@ -47,6 +47,7 @@ import org.odk.collect.geo.items.MappableItem
 import org.odk.collect.geo.support.AccuracyStatusViewMatcher.Companion.hasAccuracy
 import org.odk.collect.geo.support.FakeLocationTracker
 import org.odk.collect.geo.support.FakeMapFragment
+import org.odk.collect.geo.support.FakeMappableData
 import org.odk.collect.geo.support.MapFragmentAssertions.hasZoomedToCurrentLocation
 import org.odk.collect.geo.support.MapFragmentAssertions.showsCurrentLocation
 import org.odk.collect.geo.support.MapFragmentAssertions.showsMappableData
@@ -1147,20 +1148,3 @@ class GeoPolyFragmentTest {
 
 private val DEFAULT_RECORDING_INTERVAL =
     INTERVAL_OPTIONS[GeoPolyFragment.DEFAULT_INTERVAL_INDEX].toLong() * 1000
-
-private class FakeMappableData(items: List<MappableItem>) : MappableData {
-
-    private val _items = MutableLiveData(items)
-    private val _isLoading = MutableNonNullLiveData(false)
-    var isLoading
-        get() = _isLoading.value
-        set(value) { _isLoading.value = value }
-
-    override fun getMappableItems(): LiveData<List<MappableItem>> {
-        return _items
-    }
-
-    override fun isLoading(): NonNullLiveData<Boolean> {
-        return _isLoading
-    }
-}
