@@ -76,6 +76,7 @@ class VideoWidget(
         }
     }
 
+    @Deprecated("Should be replaced by FileAnswerDelegate")
     override fun deleteFile() {
         questionMediaManager.deleteAnswerFile(
             formEntryPrompt.getIndex().toString(),
@@ -89,10 +90,12 @@ class VideoWidget(
         widgetValueChanged()
     }
 
+    @Deprecated("Should be replaced by FileAnswerDelegate")
     override fun getAnswer(): IAnswerData? {
         return binaryName?.let { StringData(it) }
     }
 
+    @Deprecated("Should be replaced by FileAnswerDelegate")
     override fun setData(answer: Any) {
         if (binaryName != null) {
             deleteFile()
