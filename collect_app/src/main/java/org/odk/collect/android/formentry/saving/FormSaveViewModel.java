@@ -40,7 +40,7 @@ import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.forms.savepoints.SavepointsRepository;
 import org.odk.collect.material.MaterialProgressDialogFragment;
-import org.odk.collect.shared.DebugLogger;
+import org.odk.collect.shared.debug.DebugLogger;
 import org.odk.collect.shared.strings.Md5;
 import org.odk.collect.utilities.Result;
 

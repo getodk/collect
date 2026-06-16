@@ -48,6 +48,7 @@ dependencies {
     implementation(project(":strings"))
     implementation(project(":shared"))
     implementation(project(":androidshared"))
+    implementation(project(":analytics"))
     implementation(project(":material"))
     implementation(project(":async"))
     implementation(project(":lists"))

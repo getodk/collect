@@ -6,7 +6,6 @@ import org.javarosa.form.api.FormEntryFinalizationProcessor
 import org.javarosa.form.api.FormEntryModel
 import org.odk.collect.entities.javarosa.parse.EntityFormExtra
 import org.odk.collect.entities.javarosa.parse.SaveTo
-import org.odk.collect.entities.javarosa.parse.isV4UUID
 import org.odk.collect.entities.javarosa.spec.EntityAction
 import org.odk.collect.entities.javarosa.spec.EntityFormParser
 
@@ -37,12 +36,7 @@ class EntityFormFinalizationProcessor : FormEntryFinalizationProcessor {
                         mainInstance
                     )
 
-                    if (entity != null) {
-                        extra.copy(entities = extra.entities + entity)
-                    } else {
-                        val invalidEntity = InvalidEntity(dataset, id, label)
-                        extra.copy(invalidEntities = extra.invalidEntities + invalidEntity)
-                    }
+                    extra.copy(entities = extra.entities + entity)
                 } else {
                     extra
                 }
@@ -60,7 +54,7 @@ class EntityFormFinalizationProcessor : FormEntryFinalizationProcessor {
         saveTos: List<SaveTo>,
         action: EntityAction,
         mainInstance: FormInstance
-    ): FormEntity? {
+    ): FormEntity {
         val entityGroupRef = elementRef.getParentRef().getParentRef()
         val fields = saveTos.mapNotNull { saveTo ->
             if (!entityGroupRef.genericize().equals(saveTo.entityGroupReference)) {
@@ -79,10 +73,6 @@ class EntityFormFinalizationProcessor : FormEntryFinalizationProcessor {
             }
         }
 
-        return if (id.isV4UUID()) {
-            FormEntity(action, dataset, id, label, fields)
-        } else {
-            null
-        }
+        return FormEntity(action, dataset, id, label, fields)
     }
 }

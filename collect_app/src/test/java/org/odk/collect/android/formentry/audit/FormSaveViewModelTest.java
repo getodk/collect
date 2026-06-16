@@ -49,7 +49,7 @@ import org.odk.collect.forms.savepoints.SavepointsRepository;
 import org.odk.collect.formstest.InMemInstancesRepository;
 import org.odk.collect.formstest.InMemSavepointsRepository;
 import org.odk.collect.projects.Project;
-import org.odk.collect.shared.DebugLogger;
+import org.odk.collect.shared.debug.DebugLogger;
 import org.odk.collect.shared.TempFiles;
 import org.odk.collect.testshared.FakeScheduler;
 import org.odk.collect.utilities.Result;

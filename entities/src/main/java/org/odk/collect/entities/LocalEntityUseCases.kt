@@ -2,16 +2,18 @@ package org.odk.collect.entities
 
 import org.apache.commons.csv.CSVRecord
 import org.javarosa.core.model.instance.SecondaryInstanceCSVParserBuilder
+import org.odk.collect.entities.debug.EntityEvent
 import org.odk.collect.entities.javarosa.finalization.EntitiesExtra
 import org.odk.collect.entities.javarosa.finalization.FormEntity
 import org.odk.collect.entities.javarosa.parse.EntitySchema
+import org.odk.collect.entities.javarosa.parse.isV4UUID
 import org.odk.collect.entities.javarosa.spec.EntityAction
 import org.odk.collect.entities.server.EntitySource
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
 import org.odk.collect.entities.storage.findEntityById
 import org.odk.collect.forms.MediaFile
-import org.odk.collect.shared.DebugLogger
+import org.odk.collect.shared.debug.DebugLogger
 import java.io.File
 import java.util.UUID
 
@@ -21,42 +23,47 @@ object LocalEntityUseCases {
     fun updateLocalEntitiesFromForm(
         formEntities: EntitiesExtra?,
         entitiesRepository: EntitiesRepository,
-        debugLogger: DebugLogger? = null
+        debugLogger: DebugLogger<EntityEvent>? = null
     ) {
         formEntities?.entities?.forEach { formEntity ->
-            when (formEntity.action) {
-                EntityAction.CREATE -> saveNewEntity(formEntity, entitiesRepository, debugLogger)
+            if (formEntity.id.isV4UUID()) {
+                when (formEntity.action) {
+                    EntityAction.CREATE -> saveNewEntity(formEntity, entitiesRepository, debugLogger)
 
-                EntityAction.UPDATE -> {
-                    val existing = entitiesRepository.findEntityById(formEntity.dataset, formEntity.id)
-                    if (existing != null) {
-                        saveUpdatedEntity(formEntity, existing, entitiesRepository)
+                    EntityAction.UPDATE -> {
+                        val existing = entitiesRepository.findEntityById(formEntity.dataset, formEntity.id)
+                        if (existing != null) {
+                            saveUpdatedEntity(formEntity, existing, entitiesRepository)
+                        } else {
+                            debugLogger?.log(EntityEvent.UpdateNoMatch(formEntity))
+                        }
+                    }
+
+                    EntityAction.UPSERT -> {
+                        val existing = entitiesRepository.findEntityById(formEntity.dataset, formEntity.id)
+                        if (existing == null) {
+                            saveNewEntity(formEntity, entitiesRepository, debugLogger)
+                        } else {
+                            saveUpdatedEntity(formEntity, existing, entitiesRepository)
+                        }
                     }
                 }
-
-                EntityAction.UPSERT -> {
-                    val existing = entitiesRepository.findEntityById(formEntity.dataset, formEntity.id)
-                    if (existing == null) {
-                        saveNewEntity(formEntity, entitiesRepository, debugLogger)
-                    } else {
-                        saveUpdatedEntity(formEntity, existing, entitiesRepository)
-                    }
+            } else {
+                val event = if (formEntity.id.isNullOrBlank()) {
+                    EntityEvent.NoId(formEntity)
+                } else {
+                    EntityEvent.InvalidId(formEntity)
                 }
+
+                debugLogger?.log(event)
             }
-        }
-
-        formEntities?.invalidEntities?.forEach {
-            debugLogger?.log(
-                "Entities",
-                "Failed to create/update dataset=${it.dataset}, id=${it.id}, label=${it.label}"
-            )
         }
     }
 
     private fun saveNewEntity(
         formEntity: FormEntity,
         entitiesRepository: EntitiesRepository,
-        debugLogger: DebugLogger? = null
+        debugLogger: DebugLogger<EntityEvent>? = null
     ) {
         if (formEntity.label.isNotBlank()) {
             val list = entitiesRepository.getList(formEntity.dataset)
@@ -64,7 +71,7 @@ object LocalEntityUseCases {
                 entitiesRepository.save(
                     formEntity.dataset,
                     Entity.New(
-                        formEntity.id,
+                        formEntity.id!!,
                         formEntity.label,
                         1,
                         formEntity.properties,
@@ -73,10 +80,7 @@ object LocalEntityUseCases {
                 )
             }
         } else {
-            debugLogger?.log(
-                "Entities",
-                "Failed to create dataset=${formEntity.dataset}, id=${formEntity.id}, label=${formEntity.label}"
-            )
+            debugLogger?.log(EntityEvent.CreateNoLabel(formEntity))
         }
     }
 
