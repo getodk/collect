@@ -6,7 +6,6 @@ import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry
 interface GeoDataRequester {
     fun requestGeoPoint(
         prompt: FormEntryPrompt,
-        answerText: String?,
         waitingForDataRegistry: WaitingForDataRegistry
     )
 

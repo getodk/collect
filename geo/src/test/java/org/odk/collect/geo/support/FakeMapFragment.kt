@@ -217,10 +217,6 @@ class FakeMapFragment(private val ready: Boolean = false) : Fragment(), MapFragm
         return hasCenter
     }
 
-    fun isRetainMockAccuracy(): Boolean {
-        return retainMockAccuracy
-    }
-
     fun clickOnFeature(index: Int) {
         featureClickListener!!.onFeature(featureIds[index])
     }

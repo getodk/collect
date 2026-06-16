@@ -3,10 +3,6 @@
 
     <application>
         <activity
-            android:name=".geopoint.GeoPointMapActivity"
-            android:theme="@style/Theme.MaterialComponents" />
-
-        <activity
             android:name=".geopoint.GeoPointActivity"
             android:theme="@style/Theme.MaterialComponents" />
     </application>
