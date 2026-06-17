@@ -8,6 +8,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.notNullValue
+import org.javarosa.core.model.Constants
 import org.javarosa.core.model.data.GeoPointData
 import org.junit.Before
 import org.junit.Rule
@@ -16,6 +17,7 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 import org.odk.collect.android.formentry.FormEntryViewModel
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
@@ -31,6 +33,7 @@ import org.odk.collect.androidtest.TestDispatcherProvider
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.geo.GeoUtils.toMapPoint
 import org.odk.collect.geo.geopoint.GeoPointMapFragment
+import org.odk.collect.geo.geopoly.GeoPolyFragment
 import org.odk.collect.geo.items.MappableItem
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.testshared.FakeScheduler
@@ -202,6 +205,68 @@ class GeoPointMapDialogFragmentTest {
             )
             assertThat(polygon.strokeColor, equalTo(ReferenceGeometryMappableData.ITEM_COLOR))
             assertThat(polygon.fillColor, equalTo(ReferenceGeometryMappableData.ITEM_COLOR))
+        }
+    }
+
+    @Test
+    fun `sets GeoPointData answer when REQUEST_GEOPOINT is returned`() {
+        prompt = MockFormEntryPromptBuilder(prompt)
+            .withDataType(Constants.DATATYPE_GEOTRACE)
+            .build()
+
+        val answer = "0.0 0.0 1.0 1.0"
+        launcherRule.launch(
+            GeoPointMapDialogFragment::class.java,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ).onFragment {
+            it.childFragmentManager.setFragmentResult(
+                GeoPointMapFragment.REQUEST_GEOPOINT,
+                bundleOf(GeoPointMapFragment.RESULT_GEOPOINT to answer)
+            )
+        }
+
+        verify(formEntryViewModel).answerQuestion(
+            prompt.index,
+            GeoPointData(doubleArrayOf(0.0, 0.0, 1.0, 1.0))
+        )
+    }
+
+    @Test
+    fun `dismisses when REQUEST_GEOPOINT is returned`() {
+        prompt = MockFormEntryPromptBuilder(prompt)
+            .withDataType(Constants.DATATYPE_GEOTRACE)
+            .build()
+
+        val answer = "0.0 0.0 1.0 1.0"
+        launcherRule.launch(
+            GeoPointMapDialogFragment::class.java,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ).onFragment {
+            it.childFragmentManager.setFragmentResult(
+                GeoPointMapFragment.REQUEST_GEOPOINT,
+                bundleOf(GeoPointMapFragment.RESULT_GEOPOINT to answer)
+            )
+
+            assertThat(it.dialog!!.isShowing, equalTo(false))
+        }
+    }
+
+    @Test
+    fun `dismisses when REQUEST_GEOPOINT is returned without an answer`() {
+        prompt = MockFormEntryPromptBuilder(prompt)
+            .withDataType(Constants.DATATYPE_GEOTRACE)
+            .build()
+
+        launcherRule.launch(
+            GeoPointMapDialogFragment::class.java,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ).onFragment {
+            it.childFragmentManager.setFragmentResult(
+                GeoPointMapFragment.REQUEST_GEOPOINT,
+                bundleOf()
+            )
+
+            assertThat(it.dialog!!.isShowing, equalTo(false))
         }
     }
 }
