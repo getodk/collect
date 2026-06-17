@@ -74,9 +74,10 @@ class MapViewModel(
 
     fun getSettings(keys: Collection<String>): LiveData<Settings> {
         return MediatorLiveData<Settings>().apply {
+            value = unprotectedSettings
             addSource(lastSettingsKeyChange) {
-                if (it == null || keys.contains(it)) {
-                    this.value = unprotectedSettings
+                if (keys.contains(it)) {
+                    value = unprotectedSettings
                 }
             }
         }
