@@ -170,11 +170,11 @@ import org.odk.collect.android.widgets.datetime.DateTimeWidget;
 import org.odk.collect.android.widgets.datetime.pickers.CustomDatePickerDialog;
 import org.odk.collect.android.widgets.datetime.pickers.CustomTimePickerDialog;
 import org.odk.collect.android.widgets.geo.GeoPointMapDialogFragment;
+import org.odk.collect.android.widgets.geo.GeoPolyDialogFragment;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.items.SelectOneFromMapDialogFragment;
 import org.odk.collect.android.widgets.utilities.ExternalAppRecordingRequester;
 import org.odk.collect.android.widgets.utilities.FormControllerWaitingForDataRegistry;
-import org.odk.collect.android.widgets.geo.GeoPolyDialogFragment;
 import org.odk.collect.android.widgets.utilities.InternalRecordingRequester;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.androidshared.system.IntentLauncher;
@@ -185,6 +185,7 @@ import org.odk.collect.androidshared.ui.DialogUtils;
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder;
 import org.odk.collect.androidshared.ui.SnackbarUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
+import org.odk.collect.async.DefaultDispatcherProvider;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audioclips.AudioPlayer;
 import org.odk.collect.audioclips.AudioPlayerFactory;
@@ -449,14 +450,15 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
                 projectDependencyModuleFactory
         );
 
+        DefaultDispatcherProvider dispatcherProvider = new DefaultDispatcherProvider();
         this.getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()
                 .forClass(AudioRecordingControllerFragment.class, () -> new AudioRecordingControllerFragment(viewModelFactory))
                 .forClass(SaveFormProgressDialogFragment.class, () -> new SaveFormProgressDialogFragment(viewModelFactory))
                 .forClass(DeleteRepeatDialogFragment.class, () -> new DeleteRepeatDialogFragment(viewModelFactory))
                 .forClass(BackgroundAudioPermissionDialogFragment.class, () -> new BackgroundAudioPermissionDialogFragment(viewModelFactory))
                 .forClass(SelectOneFromMapDialogFragment.class, () -> new SelectOneFromMapDialogFragment(viewModelFactory))
-                .forClass(GeoPolyDialogFragment.class, () -> new GeoPolyDialogFragment(viewModelFactory, scheduler))
-                .forClass(GeoPointMapDialogFragment.class, () -> new GeoPointMapDialogFragment(viewModelFactory))
+                .forClass(GeoPolyDialogFragment.class, () -> new GeoPolyDialogFragment(viewModelFactory, dispatcherProvider))
+                .forClass(GeoPointMapDialogFragment.class, () -> new GeoPointMapDialogFragment(viewModelFactory, dispatcherProvider))
                 .forClass(RangePickerDialogFragment.class, () -> new RangePickerDialogFragment(viewModelFactory))
                 .build());
 

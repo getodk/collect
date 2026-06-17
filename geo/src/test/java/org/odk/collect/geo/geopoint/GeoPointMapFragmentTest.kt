@@ -1,6 +1,7 @@
 package org.odk.collect.geo.geopoint
 
 import android.app.Application
+import androidx.activity.OnBackPressedDispatcher
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -11,6 +12,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.not
+import org.hamcrest.Matchers.notNullValue
+import org.hamcrest.Matchers.nullValue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -23,10 +26,14 @@ import org.odk.collect.geo.DaggerGeoDependencyComponent
 import org.odk.collect.geo.GeoDependencyModule
 import org.odk.collect.geo.GeoUtils.toMapPoint
 import org.odk.collect.geo.R
+import org.odk.collect.geo.geopoly.GeoPolyFragment
 import org.odk.collect.geo.support.FakeLocationTracker
 import org.odk.collect.geo.support.FakeMapFragment
+import org.odk.collect.geo.support.FakeMappableData
 import org.odk.collect.geo.support.MapFragmentAssertions.hasZoomedToCurrentLocation
 import org.odk.collect.geo.support.MapFragmentAssertions.showsCurrentLocation
+import org.odk.collect.geo.support.MapFragmentAssertions.showsMappableData
+import org.odk.collect.geo.support.MappableItemsFixtures
 import org.odk.collect.geo.support.RobolectricApplication
 import org.odk.collect.location.Location
 import org.odk.collect.location.tracker.LocationTracker
@@ -35,12 +42,14 @@ import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.circles.CurrentLocationDelegate
 import org.odk.collect.maps.layers.ReferenceLayerRepository
+import org.odk.collect.material.MaterialProgressDialogFragment
 import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.strings.R.string
 import org.odk.collect.testshared.EspressoAssertions
 import org.odk.collect.testshared.EspressoInteractions
 import org.odk.collect.testshared.FragmentResultRecorder
+import org.odk.collect.testshared.RobolectricHelpers.getFragmentByClass
 import org.odk.collect.webpage.WebPageService
 import org.robolectric.Shadows
 
@@ -230,6 +239,51 @@ class GeoPointMapFragmentTest {
         EspressoAssertions.assertDisabled(withContentDescription(string.record_geopoint))
         EspressoInteractions.clickOn(withContentDescription(string.clear))
         EspressoAssertions.assertEnabled(withContentDescription(string.record_geopoint))
+    }
+
+    @Test
+    fun `shows items from mappable data`() {
+        val mappableData = FakeMappableData(
+            listOf(
+                MappableItemsFixtures.point(),
+                MappableItemsFixtures.actionMappableLine(),
+                MappableItemsFixtures.actionMappablePolygon()
+            )
+        )
+
+        launcherRule.launchInContainer {
+            GeoPointMapFragment(null, false, false, false, mappableData)
+        }
+
+        assertThat(map, showsMappableData(mappableData, background = true, clickable = false))
+    }
+
+    @Test
+    fun `shows progress while loading mappable items`() {
+        val mappableData = FakeMappableData(emptyList())
+        mappableData.isLoading = false
+
+        launcherRule.launchInContainer {
+            GeoPointMapFragment(null, false, false, false, mappableData)
+        }.onFragment {
+            val dialogClass = MaterialProgressDialogFragment::class.java
+            assertThat(
+                getFragmentByClass(it.childFragmentManager, dialogClass),
+                nullValue()
+            )
+
+            mappableData.isLoading = true
+            assertThat(
+                getFragmentByClass(it.childFragmentManager, dialogClass),
+                notNullValue()
+            )
+
+            mappableData.isLoading = false
+            assertThat(
+                getFragmentByClass(it.childFragmentManager, dialogClass),
+                nullValue()
+            )
+        }
     }
 
     private fun overrideDependencies(mapFragment: MapFragment) {

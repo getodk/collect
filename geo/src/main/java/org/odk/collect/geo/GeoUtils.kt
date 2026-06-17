@@ -143,7 +143,7 @@ object GeoUtils {
 
     fun Fragment.showItemLoading(mappableData: MappableData) {
         MaterialProgressDialogFragment.showOn(
-            this,
+            viewLifecycleOwner,
             mappableData.isLoading(),
             childFragmentManager
         ) {

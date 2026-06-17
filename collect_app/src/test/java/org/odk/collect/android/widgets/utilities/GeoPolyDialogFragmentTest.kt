@@ -41,6 +41,7 @@ import org.odk.collect.android.widgets.utilities.WidgetAnswerDialogFragment.Comp
 import org.odk.collect.android.widgets.viewmodels.QuestionViewModel
 import org.odk.collect.androidshared.ui.DisplayString
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
+import org.odk.collect.androidtest.TestDispatcherProvider
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.geo.geopoly.GeoPolyFragment
 import org.odk.collect.geo.geopoly.GeoPolyFragment.OutputMode
@@ -74,14 +75,14 @@ class GeoPolyDialogFragmentTest {
         }
     }
 
-    private val scheduler = FakeScheduler()
+    private val dispatcherProvider = TestDispatcherProvider()
 
     @get:Rule
     val launcherRule =
         FragmentScenarioLauncherRule(
             FragmentFactoryBuilder()
                 .forClass(GeoPolyDialogFragment::class) {
-                    GeoPolyDialogFragment(viewModelFactory, scheduler)
+                    GeoPolyDialogFragment(viewModelFactory, dispatcherProvider)
                 }.build()
         )
 
@@ -611,7 +612,7 @@ class GeoPolyDialogFragmentTest {
             GeoPolyDialogFragment::class,
             bundleOf(ARG_FORM_INDEX to prompt.index)
         ) {
-            scheduler.flush()
+            dispatcherProvider.flush()
             assertThat(it.mappableData, notNullValue())
             val mappableItems = it.mappableData!!.getMappableItems().getOrAwaitValue()
             assertThat(mappableItems!!.size, equalTo(3))

@@ -30,9 +30,14 @@ import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.async.Scheduler
 import org.odk.collect.geo.GeoDependencyComponentProvider
 import org.odk.collect.geo.GeoUtils.showCurrentLocation
+import org.odk.collect.geo.GeoUtils.showData
+import org.odk.collect.geo.GeoUtils.showItemLoading
 import org.odk.collect.geo.GeoUtils.toMapPoint
 import org.odk.collect.geo.R
 import org.odk.collect.geo.geopoint.LocationAccuracy.Improving
+import org.odk.collect.geo.items.MappableData
+import org.odk.collect.geo.items.MappableItem
+import org.odk.collect.geo.items.MappableItemsDelegate
 import org.odk.collect.location.tracker.LocationTracker
 import org.odk.collect.location.tracker.getCurrentLocation
 import org.odk.collect.maps.MapFragment
@@ -53,6 +58,7 @@ class GeoPointMapFragment(
     val draggable: Boolean,
     val readOnly: Boolean,
     val retainMockAccuracy: Boolean,
+    val mappableData: MappableData? = null
 ) : Fragment() {
 
     @Inject
@@ -107,6 +113,7 @@ class GeoPointMapFragment(
     private var isPointLocked = false
 
     private val currentLocationDelegate = CurrentLocationDelegate()
+    private val mappableItemsDelegate = MappableItemsDelegate(background = true, clickable = false)
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -154,6 +161,10 @@ class GeoPointMapFragment(
             { newMapFragment: MapFragment -> this.initMap(newMapFragment) },
             { cancel() }
         )
+
+        if (mappableData != null) {
+            showItemLoading(mappableData)
+        }
     }
 
     override fun onSaveInstanceState(state: Bundle) {
@@ -285,6 +296,10 @@ class GeoPointMapFragment(
             retainMockAccuracy
         ) { mapPoint: MapPoint? ->
             onLocationChanged(mapPoint)
+        }
+
+        if (mappableData != null) {
+            (map as MapFragment).showData(mappableData, mappableItemsDelegate)
         }
     }
 

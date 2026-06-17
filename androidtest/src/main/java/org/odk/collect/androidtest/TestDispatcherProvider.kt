@@ -1,13 +1,17 @@
 package org.odk.collect.androidtest
 
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestScope
 import org.odk.collect.async.DispatcherProvider
 
 class TestDispatcherProvider : DispatcherProvider {
-    override val foreground = StandardTestDispatcher()
-    override val background = StandardTestDispatcher()
+    private val testScope = TestScope()
+    private val scheduler = testScope.testScheduler
 
-    fun runBackground() {
-        background.scheduler.advanceUntilIdle()
+    override val foreground = StandardTestDispatcher(scheduler = scheduler)
+    override val background = StandardTestDispatcher(scheduler = scheduler)
+
+    fun flush() {
+        scheduler.advanceUntilIdle()
     }
 }

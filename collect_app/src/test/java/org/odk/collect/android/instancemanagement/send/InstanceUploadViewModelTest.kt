@@ -123,7 +123,7 @@ class InstanceUploadViewModelTest {
             "Waiting"
         )
         viewModel.upload(listOf(instance1.dbId, instance2.dbId))
-        dispatcherProvider.runBackground()
+        dispatcherProvider.flush()
 
         assertThat(submittedInstances.containsAll(listOf(instance1.dbId)), equalTo(true))
         assertThat(instancesRepository.get(instance1.dbId)!!.deletedDate, notNullValue())

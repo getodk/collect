@@ -17,13 +17,13 @@ import org.odk.collect.android.widgets.utilities.AdditionalAttributes
 import org.odk.collect.android.widgets.utilities.BindAttributes
 import org.odk.collect.android.widgets.utilities.WidgetAnswerDialogFragment
 import org.odk.collect.androidshared.ui.DisplayString
-import org.odk.collect.async.Scheduler
+import org.odk.collect.async.DispatcherProvider
 import org.odk.collect.geo.GeoUtils.toMapPoint
 import org.odk.collect.geo.geopoly.GeoPolyFragment
 
 class GeoPolyDialogFragment(
     viewModelFactory: ViewModelProvider.Factory,
-    private val scheduler: Scheduler
+    private val dispatcherProvider: DispatcherProvider
 ) :
     WidgetAnswerDialogFragment<GeoPolyFragment>(
         GeoPolyFragment::class,
@@ -76,7 +76,7 @@ class GeoPolyDialogFragment(
         val referenceGeometryMappableData by viewModels<ReferenceGeometryMappableData> {
             viewModelFactory {
                 addInitializer(ReferenceGeometryMappableData::class) {
-                    ReferenceGeometryMappableData(scheduler, prompt, selectChoiceLoader)
+                    ReferenceGeometryMappableData(dispatcherProvider, prompt, selectChoiceLoader)
                 }
             }
         }

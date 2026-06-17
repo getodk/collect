@@ -127,8 +127,6 @@ class SelectionMapFragment(
             ToastUtils.showLongToast(org.odk.collect.strings.R.string.not_granted_permission)
             requireActivity().finish()
         }
-
-        showItemLoading(selectionMapData)
     }
 
     override fun onCreateView(
@@ -158,6 +156,7 @@ class SelectionMapFragment(
         }
 
         setUpSummarySheet(binding)
+        showItemLoading(selectionMapData)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

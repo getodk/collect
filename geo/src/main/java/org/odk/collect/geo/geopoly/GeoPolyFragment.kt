@@ -145,10 +145,6 @@ class GeoPolyFragment @JvmOverloads constructor(
         viewModel.points.asLiveData().observe(this) {
             setChangeResult(it)
         }
-
-        if (mappableData != null) {
-            showItemLoading(mappableData)
-        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -173,6 +169,10 @@ class GeoPolyFragment @JvmOverloads constructor(
 
         viewModel.fixedAlerts.showSnackbar(viewLifecycleOwner, view) {
             SnackbarUtils.SnackbarDetails(getString(string.error_fixed))
+        }
+
+        if (mappableData != null) {
+            showItemLoading(mappableData)
         }
     }
 
