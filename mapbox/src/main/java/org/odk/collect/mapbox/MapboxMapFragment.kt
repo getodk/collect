@@ -37,10 +37,12 @@ import com.mapbox.maps.loader.MapboxMapsInitializer
 import com.mapbox.maps.plugin.animation.MapAnimationOptions.Companion.mapAnimationOptions
 import com.mapbox.maps.plugin.animation.flyTo
 import com.mapbox.maps.plugin.annotation.annotations
+import com.mapbox.maps.plugin.annotation.generated.CircleAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationManager
+import com.mapbox.maps.plugin.annotation.generated.createCircleAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.createPolygonAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.createPolylineAnnotationManager
@@ -96,6 +98,7 @@ class MapboxMapFragment(private val configuration: Configuration) :
     private lateinit var pointAnnotationManager: PointAnnotationManager
     private lateinit var polylineAnnotationManager: PolylineAnnotationManager
     private lateinit var polygonAnnotationManager: PolygonAnnotationManager
+    private lateinit var circleAnnotationManager: CircleAnnotationManager
     private var mapReadyListener: ReadyListener? = null
 
     private var nextFeatureId = 1
@@ -199,6 +202,10 @@ class MapboxMapFragment(private val configuration: Configuration) :
         polygonAnnotationManager = mapView
             .annotations
             .createPolygonAnnotationManager()
+
+        circleAnnotationManager = mapView
+            .annotations
+            .createCircleAnnotationManager()
 
         pointAnnotationManager = mapView
             .annotations
@@ -464,14 +471,24 @@ class MapboxMapFragment(private val configuration: Configuration) :
     }
 
     override fun addCircle(circleDescription: CircleDescription): Int {
-        return -1
+        val featureId = nextFeatureId++
+        addCircle(featureId, circleDescription)
+        return featureId
     }
 
     override fun updateCircle(
         featureId: Int,
         circleDescription: CircleDescription
     ) {
+        features[featureId]?.dispose()
+        addCircle(featureId, circleDescription)
+    }
 
+    private fun addCircle(
+        featureId: Int,
+        circleDescription: CircleDescription
+    ) {
+        features[featureId] = CircleFeature(mapboxMap, circleAnnotationManager, circleDescription)
     }
 
     override fun getPolyPoints(featureId: Int): List<MapPoint> {
