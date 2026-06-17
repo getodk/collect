@@ -31,6 +31,7 @@ import org.odk.collect.async.Scheduler
 import org.odk.collect.geo.GeoDependencyComponentProvider
 import org.odk.collect.geo.GeoUtils.showCurrentLocation
 import org.odk.collect.geo.GeoUtils.showData
+import org.odk.collect.geo.GeoUtils.showItemLoading
 import org.odk.collect.geo.GeoUtils.toMapPoint
 import org.odk.collect.geo.R
 import org.odk.collect.geo.geopoint.LocationAccuracy.Improving
@@ -160,6 +161,10 @@ class GeoPointMapFragment(
             { newMapFragment: MapFragment -> this.initMap(newMapFragment) },
             { cancel() }
         )
+
+        if (mappableData != null) {
+            showItemLoading(mappableData)
+        }
     }
 
     override fun onSaveInstanceState(state: Bundle) {
