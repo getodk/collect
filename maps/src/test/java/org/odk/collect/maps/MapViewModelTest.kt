@@ -5,10 +5,11 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.odk.collect.androidtest.getOrAwaitValue
+import org.odk.collect.androidtest.recordValues
 import org.odk.collect.maps.layers.InMemReferenceLayerRepository
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.settings.InMemSettings
-import org.odk.collect.shared.settings.Settings
 
 @RunWith(AndroidJUnit4::class)
 class MapViewModelTest {
@@ -21,10 +22,7 @@ class MapViewModelTest {
 
     @Test
     fun `getSettings delivers current settings on subscription`() {
-        var observed: Settings? = null
-        viewModel.getSettings(setOf(ProjectKeys.KEY_MAPBOX_MAP_STYLE)).observeForever {
-            observed = it
-        }
+        val observed = viewModel.getSettings(setOf(ProjectKeys.KEY_MAPBOX_MAP_STYLE)).getOrAwaitValue()
 
         assertThat(observed, equalTo(unprotectedSettings))
     }
@@ -33,35 +31,26 @@ class MapViewModelTest {
     fun `getSettings delivers current settings on subscription even after a different key changed`() {
         viewModel.onSettingChanged(ProjectKeys.KEY_REFERENCE_LAYER)
 
-        var observed: Settings? = null
-        viewModel.getSettings(setOf(ProjectKeys.KEY_MAPBOX_MAP_STYLE)).observeForever {
-            observed = it
-        }
+        val observed = viewModel.getSettings(setOf(ProjectKeys.KEY_MAPBOX_MAP_STYLE)).getOrAwaitValue()
 
         assertThat(observed, equalTo(unprotectedSettings))
     }
 
     @Test
     fun `getSettings re-delivers settings when a requested key changes`() {
-        var deliveries = 0
-        viewModel.getSettings(setOf(ProjectKeys.KEY_MAPBOX_MAP_STYLE)).observeForever {
-            deliveries++
+        viewModel.getSettings(setOf(ProjectKeys.KEY_MAPBOX_MAP_STYLE)).recordValues { settings ->
+            viewModel.onSettingChanged(ProjectKeys.KEY_MAPBOX_MAP_STYLE)
+
+            assertThat(settings.size, equalTo(2))
         }
-
-        viewModel.onSettingChanged(ProjectKeys.KEY_MAPBOX_MAP_STYLE)
-
-        assertThat(deliveries, equalTo(2))
     }
 
     @Test
     fun `getSettings does not re-deliver settings when an unrelated key changes`() {
-        var deliveries = 0
-        viewModel.getSettings(setOf(ProjectKeys.KEY_MAPBOX_MAP_STYLE)).observeForever {
-            deliveries++
+        viewModel.getSettings(setOf(ProjectKeys.KEY_MAPBOX_MAP_STYLE)).recordValues { settings ->
+            viewModel.onSettingChanged(ProjectKeys.KEY_REFERENCE_LAYER)
+
+            assertThat(settings.size, equalTo(1))
         }
-
-        viewModel.onSettingChanged(ProjectKeys.KEY_REFERENCE_LAYER)
-
-        assertThat(deliveries, equalTo(1))
     }
 }
