@@ -7,6 +7,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import org.javarosa.core.model.data.IAnswerData
 import org.javarosa.core.model.data.IntegerData
 import org.javarosa.form.api.FormEntryPrompt
@@ -36,7 +37,7 @@ class RangeIntegerWidget(
 
     override fun onCreateWidgetView(context: Context, prompt: FormEntryPrompt, answerFontSize: Int): View {
         return ComposeView(context).apply {
-            setContextThemedContent {
+            setContextThemedContent(ViewCompositionStrategy.Default) {
                 RangeSlider(
                     value = rangeSliderState.sliderValue,
                     valueLabel = rangeSliderState.valueLabel,

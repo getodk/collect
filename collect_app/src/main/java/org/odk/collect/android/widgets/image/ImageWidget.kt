@@ -8,6 +8,7 @@ import android.content.Intent
 import android.view.View
 import android.widget.Toast
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import org.javarosa.core.model.data.IAnswerData
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.formentry.questions.QuestionDetails
@@ -49,7 +50,7 @@ class ImageWidget @JvmOverloads constructor(
         val buttonFontSize = QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.BODY_LARGE)
 
         return ComposeView(context).apply {
-            setContextThemedContent {
+            setContextThemedContent(ViewCompositionStrategy.Default) {
                 ImageWidgetContent(
                     dependencies.mediaWidgetAnswerViewModel,
                     formEntryPrompt,

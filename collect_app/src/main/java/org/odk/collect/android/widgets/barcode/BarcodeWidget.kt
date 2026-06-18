@@ -8,6 +8,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import com.google.zxing.integration.android.IntentIntegrator
 import org.javarosa.core.model.data.IAnswerData
 import org.javarosa.core.model.data.StringData
@@ -47,7 +48,7 @@ class BarcodeWidget(
             val isAnswerHidden = hasAppearance(formEntryPrompt, Appearances.HIDDEN_ANSWER)
             val buttonFontSize = QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.BODY_LARGE)
 
-            setContextThemedContent {
+            setContextThemedContent(ViewCompositionStrategy.Default) {
                 BarcodeWidgetContent(
                     dependencies.mediaWidgetAnswerViewModel,
                     formEntryPrompt,

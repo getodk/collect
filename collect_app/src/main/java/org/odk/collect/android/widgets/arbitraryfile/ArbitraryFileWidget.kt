@@ -8,6 +8,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.utilities.ApplicationConstants
@@ -39,7 +40,7 @@ class ArbitraryFileWidget(
             val readOnly = questionDetails.isReadOnly
             val buttonFontSize = QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.BODY_LARGE)
 
-            setContextThemedContent {
+            setContextThemedContent(ViewCompositionStrategy.Default) {
                 ArbitraryFileWidgetContent(
                     dependencies.mediaWidgetAnswerViewModel,
                     formEntryPrompt,
