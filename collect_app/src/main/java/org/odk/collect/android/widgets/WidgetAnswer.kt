@@ -19,6 +19,7 @@ import org.javarosa.core.model.Constants
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.widgets.image.ImageWidgetAnswer
 import org.odk.collect.android.widgets.video.VideoWidgetAnswer
+import org.odk.collect.androidshared.system.ContextExt.getActivity
 import org.odk.collect.icons.R
 
 @Composable
@@ -79,7 +80,7 @@ fun WidgetAnswer(
                     answer,
                     fontSize,
                     if (summaryView) Arrangement.Start else Arrangement.Center,
-                    { mediaWidgetAnswerViewModel.openFile(context, answer) },
+                    { mediaWidgetAnswerViewModel.openFile(context.getActivity(), answer) },
                     onLongClick,
                     stringResource(org.odk.collect.strings.R.string.open_file)
                 )

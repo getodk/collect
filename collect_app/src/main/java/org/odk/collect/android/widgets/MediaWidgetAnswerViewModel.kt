@@ -1,5 +1,6 @@
 package org.odk.collect.android.widgets
 
+import android.app.Activity
 import android.content.Context
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
@@ -35,10 +36,10 @@ class MediaWidgetAnswerViewModel(
         return questionMediaManager.getAnswerFile(answer)
     }
 
-    fun openFile(context: Context, answer: String?, mimeType: String? = null) {
+    fun openFile(activity: Activity, answer: String?, mimeType: String? = null) {
         val file = questionMediaManager.getAnswerFile(answer)
         if (file != null) {
-            mediaUtils.openFile(context, file, mimeType)
+            mediaUtils.openFile(activity, file, mimeType)
         }
     }
 }

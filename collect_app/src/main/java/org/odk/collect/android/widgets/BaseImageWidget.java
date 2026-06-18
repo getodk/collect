@@ -40,6 +40,7 @@ import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
+import org.odk.collect.androidshared.system.ContextExt;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 import org.odk.collect.imageloader.GlideImageLoader;
 
@@ -172,7 +173,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
 
         @Override
         public void clickImage(String context) {
-            mediaUtils.openFile(getContext(), questionMediaManager.getAnswerFile(binaryName),
+            mediaUtils.openFile(ContextExt.getActivity(getContext()), questionMediaManager.getAnswerFile(binaryName),
                     "image/*");
         }
     }

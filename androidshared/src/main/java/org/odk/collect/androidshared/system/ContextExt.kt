@@ -2,6 +2,7 @@ package org.odk.collect.androidshared.system
 
 import android.app.Activity
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.res.Configuration
 import android.util.TypedValue
 import androidx.annotation.AttrRes
@@ -24,5 +25,17 @@ object ContextExt {
     fun Context.isDarkTheme(): Boolean {
         val uiMode: Int = this.resources.configuration.uiMode
         return (uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
+    }
+
+    @JvmStatic
+    fun Context.getActivity(): Activity {
+        var context: Context = this
+        while (context is ContextWrapper) {
+            if (context is Activity) {
+                return context
+            }
+            context = context.baseContext
+        }
+        throw IllegalStateException("Context is not associated with an Activity: $this")
     }
 }

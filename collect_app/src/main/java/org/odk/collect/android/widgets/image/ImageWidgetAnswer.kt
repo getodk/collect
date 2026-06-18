@@ -15,6 +15,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import coil3.compose.AsyncImage
 import org.odk.collect.android.widgets.MediaWidgetAnswerViewModel
+import org.odk.collect.androidshared.system.ContextExt.getActivity
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 
 @Composable
@@ -48,7 +49,7 @@ fun ImageWidgetAnswer(
                     .combinedClickable(
                         onClick = {
                             if (MultiClickGuard.allowClick()) {
-                                mediaWidgetAnswerViewModel.openFile(context, answer, "image/*")
+                                mediaWidgetAnswerViewModel.openFile(context.getActivity(), answer, "image/*")
                             }
                         },
                         onLongClick = onLongClick,
