@@ -6,6 +6,7 @@ import com.mapbox.maps.extension.style.layers.properties.generated.IconAnchor
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
+import org.odk.collect.maps.MapConsts
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.traces.TraceDescription
@@ -23,7 +24,7 @@ object MapUtils {
                 .withPoint(Point.fromLngLat(markerDescription.point.longitude, markerDescription.point.latitude, markerDescription.point.altitude))
                 .withIconImage(markerDescription.iconDescription.toBitmap(context))
                 .withIconSize(1.0)
-                .withSymbolSortKey(10.0)
+                .withSymbolSortKey(MapConsts.getZIndex(markerDescription.iconDescription.background).toDouble())
                 .withDraggable(markerDescription.isDraggable)
                 .withTextOpacity(0.0)
                 .withIconAnchor(getIconAnchorValue(markerDescription.iconAnchor))
@@ -40,7 +41,7 @@ object MapUtils {
                 .withPoint(Point.fromLngLat(it.point.longitude, it.point.latitude, it.point.altitude))
                 .withIconImage(it.iconDescription.toBitmap(context))
                 .withIconSize(1.0)
-                .withSymbolSortKey(10.0)
+                .withSymbolSortKey(MapConsts.getZIndex(it.iconDescription.background).toDouble())
                 .withDraggable(it.isDraggable)
                 .withTextOpacity(0.0)
                 .withIconAnchor(getIconAnchorValue(it.iconAnchor))

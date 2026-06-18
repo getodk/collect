@@ -54,6 +54,7 @@ import org.jetbrains.annotations.NotNull;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.googlemaps.circles.CircleFeature;
 import org.odk.collect.googlemaps.scaleview.MapScaleView;
+import org.odk.collect.maps.MapConsts;
 import org.odk.collect.maps.MapFragment;
 import org.odk.collect.maps.MapPoint;
 import org.odk.collect.maps.MapViewModel;
@@ -582,18 +583,8 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
                 .draggable(markerDescription.isDraggable())
                 .icon(getBitmapDescriptor(context, markerDescription.getIconDescription()))
                 .anchor(getIconAnchorValueX(markerDescription.getIconAnchor()), getIconAnchorValueY(markerDescription.getIconAnchor()))  // center the icon on the position
-                .zIndex(getZIndex(markerDescription.getIconDescription().getBackground()))
+                .zIndex(MapConsts.getZIndex(markerDescription.getIconDescription().getBackground()))
         );
-    }
-
-    private static int getZIndex(boolean background) {
-        int index;
-        if (background) {
-            index = 1;
-        } else {
-            index = 2;
-        }
-        return index;
     }
 
     private static float getIconAnchorValueX(MapFragment.IconAnchor iconAnchor) {
@@ -744,7 +735,7 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
             } else if (polyline == null) {
                 polyline = map.addPolyline(new PolylineOptions()
                         .color(lineDescription.getStrokeColor())
-                        .zIndex(getZIndex(lineDescription.getBackground()))
+                        .zIndex(MapConsts.getZIndex(lineDescription.getBackground()))
                         .width(lineDescription.getStrokeWidth())
                         .addAll(latLngs)
                         .clickable(lineDescription.getClickable())
@@ -842,7 +833,7 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
             } else if (polyline == null) {
                 polyline = map.addPolyline(new PolylineOptions()
                         .color(lineDescription.getStrokeColor())
-                        .zIndex(getZIndex(lineDescription.getBackground()))
+                        .zIndex(MapConsts.getZIndex(lineDescription.getBackground()))
                         .width(lineDescription.getStrokeWidth())
                         .addAll(latLngs)
                     .clickable(lineDescription.getClickable())
@@ -927,7 +918,7 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
             } else if (polygon == null) {
                 polygon = map.addPolygon(new PolygonOptions()
                         .strokeColor(polygonDescription.getStrokeColor())
-                        .zIndex(getZIndex(polygonDescription.getBackground()))
+                        .zIndex(MapConsts.getZIndex(polygonDescription.getBackground()))
                         .strokeWidth(polygonDescription.getStrokeWidth())
                         .fillColor(polygonDescription.getFillColor())
                         .addAll(latLngs)
@@ -976,7 +967,7 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
                     .strokeColor(polygonDescription.getStrokeColor())
                     .strokeWidth(polygonDescription.getStrokeWidth())
                     .fillColor(polygonDescription.getFillColor())
-                    .zIndex(getZIndex(polygonDescription.getBackground()))
+                    .zIndex(MapConsts.getZIndex(polygonDescription.getBackground()))
                     .clickable(polygonDescription.getClickable())
             );
         }

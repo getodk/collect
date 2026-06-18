@@ -7,6 +7,7 @@ import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationOptions
+import org.odk.collect.maps.MapConsts
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.traces.PolygonDescription
@@ -28,6 +29,7 @@ class StaticPolygonFeature(
             .withPoints(listOf(mapboxPoints))
             .withFillOutlineColor(polygonDescription.getStrokeColor())
             .withFillColor(polygonDescription.getFillColor())
+            .withFillSortKey(MapConsts.getZIndex(polygonDescription.background).toDouble())
     )
 
     private val polylineAnnotation = polylineAnnotationManager.create(
@@ -35,6 +37,7 @@ class StaticPolygonFeature(
             .withPoints(mapboxPoints)
             .withLineColor(polygonDescription.getStrokeColor())
             .withLineWidth(MapUtils.convertStrokeWidth(polygonDescription))
+            .withLineSortKey(MapConsts.getZIndex(polygonDescription.background).toDouble())
     )
 
     private var polygonClickListener: OnPolygonAnnotationClickListener? = null
