@@ -42,7 +42,7 @@ class ExArbitraryFileWidget(
             val readOnly = questionDetails.isReadOnly
             val buttonFontSize = QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.BODY_LARGE)
 
-            setContextThemedContent(ViewCompositionStrategy.Default) {
+            setContextThemedContent(ViewCompositionStrategy.DisposeOnDetachedFromWindowOrReleasedFromPool) {
                 ExArbitraryFileWidgetContent(
                     dependencies.mediaWidgetAnswerViewModel,
                     formEntryPrompt,

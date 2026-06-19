@@ -48,7 +48,7 @@ class ExVideoWidget(
         val buttonFontSize = QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.BODY_LARGE)
 
         return ComposeView(context).apply {
-            setContextThemedContent(ViewCompositionStrategy.Default) {
+            setContextThemedContent(ViewCompositionStrategy.DisposeOnDetachedFromWindowOrReleasedFromPool) {
                 ExVideoWidgetContent(
                     dependencies.mediaWidgetAnswerViewModel,
                     formEntryPrompt,

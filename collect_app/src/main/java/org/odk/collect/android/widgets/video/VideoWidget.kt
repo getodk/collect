@@ -52,7 +52,7 @@ class VideoWidget(
         val buttonFontSize = QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.BODY_LARGE)
 
         return ComposeView(context).apply {
-            setContextThemedContent(ViewCompositionStrategy.Default) {
+            setContextThemedContent(ViewCompositionStrategy.DisposeOnDetachedFromWindowOrReleasedFromPool) {
                 VideoWidgetContent(
                     dependencies.mediaWidgetAnswerViewModel,
                     formEntryPrompt,

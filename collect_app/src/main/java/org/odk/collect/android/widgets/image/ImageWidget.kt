@@ -49,7 +49,7 @@ class ImageWidget(
         val buttonFontSize = QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.BODY_LARGE)
 
         return ComposeView(context).apply {
-            setContextThemedContent(ViewCompositionStrategy.Default) {
+            setContextThemedContent(ViewCompositionStrategy.DisposeOnDetachedFromWindowOrReleasedFromPool) {
                 ImageWidgetContent(
                     dependencies.mediaWidgetAnswerViewModel,
                     formEntryPrompt,

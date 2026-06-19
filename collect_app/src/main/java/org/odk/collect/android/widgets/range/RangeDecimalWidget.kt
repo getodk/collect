@@ -40,7 +40,7 @@ class RangeDecimalWidget(
 
     override fun onCreateWidgetView(context: Context, prompt: FormEntryPrompt, answerFontSize: Int): View {
         return ComposeView(context).apply {
-            setContextThemedContent(ViewCompositionStrategy.Default) {
+            setContextThemedContent(ViewCompositionStrategy.DisposeOnDetachedFromWindowOrReleasedFromPool) {
                 RangeSlider(
                     value = rangeSliderState.sliderValue,
                     valueLabel = rangeSliderState.valueLabel,

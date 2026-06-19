@@ -40,7 +40,7 @@ class ArbitraryFileWidget(
             val readOnly = questionDetails.isReadOnly
             val buttonFontSize = QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.BODY_LARGE)
 
-            setContextThemedContent(ViewCompositionStrategy.Default) {
+            setContextThemedContent(ViewCompositionStrategy.DisposeOnDetachedFromWindowOrReleasedFromPool) {
                 ArbitraryFileWidgetContent(
                     dependencies.mediaWidgetAnswerViewModel,
                     formEntryPrompt,
