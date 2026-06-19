@@ -86,11 +86,6 @@ import timber.log.Timber
 import java.io.File
 import java.io.IOException
 
-private const val POLYLINE_ANNOTATION_LAYER_ID = "polyline_annotation_layer"
-private const val POLYGON_ANNOTATION_LAYER_ID = "polygon_annotation_layer"
-private const val CIRCLE_ANNOTATION_LAYER_ID = "circle_annotation_layer"
-private const val POINT_ANNOTATION_LAYER_ID = "point_annotation_layer"
-
 class MapboxMapFragment(private val configuration: Configuration) :
     MapViewModelMapFragment(),
     OnMapClickListener,
@@ -677,5 +672,12 @@ class MapboxMapFragment(private val configuration: Configuration) :
         if (mapboxMap.getStyle()?.getSource(source.sourceId) == null) {
             mapboxMap.getStyle()?.addSource(source)
         }
+    }
+
+    companion object {
+        private const val POLYLINE_ANNOTATION_LAYER_ID = "polyline_annotation_layer"
+        private const val POLYGON_ANNOTATION_LAYER_ID = "polygon_annotation_layer"
+        private const val CIRCLE_ANNOTATION_LAYER_ID = "circle_annotation_layer"
+        private const val POINT_ANNOTATION_LAYER_ID = "point_annotation_layer"
     }
 }
