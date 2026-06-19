@@ -27,7 +27,7 @@ import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.support.WidgetTestActivity
 import org.odk.collect.android.widgets.MediaWidgetAnswerViewModel
 import org.odk.collect.android.widgets.QuestionWidget
-import org.odk.collect.android.widgets.base.FileWidgetTest
+import org.odk.collect.android.widgets.base.BinaryWidgetTest
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry
 import org.odk.collect.androidtest.onNodeWithClickLabel
@@ -36,7 +36,7 @@ import org.odk.collect.strings.R.string
 import org.robolectric.Shadows.shadowOf
 import java.io.File
 
-class ImageWidgetTest : FileWidgetTest<ImageWidget>() {
+class ImageWidgetTest : BinaryWidgetTest<ImageWidget, StringData>() {
     @get:Rule
     val composeRule = createAndroidComposeRule<WidgetTestActivity>()
     private lateinit var fileAnswerDelegate: FileAnswerDelegate
@@ -79,8 +79,16 @@ class ImageWidgetTest : FileWidgetTest<ImageWidget>() {
         }
     }
 
+    override fun getNextAnswer(): StringData {
+        return StringData(RandomString.make())
+    }
+
+    override fun createBinaryData(answerData: StringData): Any {
+        return TempFiles.createTempFileWithName(answerData.displayText)
+    }
+
     @Test
-    override fun settingANewAnswerShouldCallDeleteMediaToRemoveTheOldFile() {
+    fun `setting a new answer removes the old file and keeps the new one`() {
         super.settingANewAnswerShouldRemoveTheOldAnswer()
 
         val promptIndex = formEntryPrompt.index.toString()
@@ -89,16 +97,12 @@ class ImageWidgetTest : FileWidgetTest<ImageWidget>() {
     }
 
     @Test
-    override fun callingClearAnswerShouldCallDeleteMediaAndRemoveTheExistingAnswer() {
+    fun `clearing the answer removes the existing answer and its file`() {
         super.callingClearShouldRemoveTheExistingAnswer()
 
         val promptIndex = formEntryPrompt.index.toString()
         assertThat(questionMediaManager.originalFiles[promptIndex], equalTo(formEntryPrompt.answerText))
         assertThat(questionMediaManager.recentFiles[promptIndex], equalTo(null))
-    }
-
-    override fun getNextAnswer(): StringData {
-        return StringData(RandomString.make())
     }
 
     @Test

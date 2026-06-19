@@ -18,7 +18,6 @@ import org.odk.collect.android.utilities.Appearances
 import org.odk.collect.android.utilities.ApplicationConstants.RequestCodes
 import org.odk.collect.android.utilities.QuestionMediaManager
 import org.odk.collect.android.widgets.QuestionWidget
-import org.odk.collect.android.widgets.interfaces.FileWidget
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver
 import org.odk.collect.android.widgets.utilities.ImageCaptureIntentCreator
 import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils
@@ -39,7 +38,7 @@ class ImageWidget @JvmOverloads constructor(
     private val tmpImageFilePath: String,
     private val dependencies: Dependencies,
     private val fileAnswerDelegate: FileAnswerDelegate = FileAnswerDelegate(questionMediaManager, questionDetails.prompt)
-) : QuestionWidget(context, dependencies, questionDetails), FileWidget, WidgetDataReceiver {
+) : QuestionWidget(context, dependencies, questionDetails), WidgetDataReceiver {
     private val selfie: Boolean = Appearances.isFrontCameraAppearance(formEntryPrompt)
 
     init { render() }
@@ -73,10 +72,6 @@ class ImageWidget @JvmOverloads constructor(
     override fun clearAnswer() {
         fileAnswerDelegate.deleteFile()
         widgetValueChanged()
-    }
-
-    override fun deleteFile() {
-        fileAnswerDelegate.deleteFile()
     }
 
     override fun setData(answer: Any) {
