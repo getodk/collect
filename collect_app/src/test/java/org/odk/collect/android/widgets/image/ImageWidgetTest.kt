@@ -39,7 +39,6 @@ import java.io.File
 class ImageWidgetTest : BinaryWidgetTest<ImageWidget, StringData>() {
     @get:Rule
     val composeRule = createAndroidComposeRule<WidgetTestActivity>()
-    private lateinit var fileAnswerDelegate: FileAnswerDelegate
     private val questionMediaManager = FakeQuestionMediaManager()
     private val mediaWidgetAnswerViewModel = MediaWidgetAnswerViewModel(mock(), questionMediaManager, mock())
     private val dependencies = QuestionWidget.Dependencies(
@@ -62,7 +61,6 @@ class ImageWidgetTest : BinaryWidgetTest<ImageWidget, StringData>() {
     }
 
     override fun createWidget(): ImageWidget {
-        fileAnswerDelegate = FileAnswerDelegate(questionMediaManager, formEntryPrompt)
         whenever(formEntryPrompt.controlType).thenReturn(Constants.CONTROL_IMAGE_CHOOSE)
 
         return ImageWidget(
@@ -71,8 +69,7 @@ class ImageWidgetTest : BinaryWidgetTest<ImageWidget, StringData>() {
             questionMediaManager,
             FakeWaitingForDataRegistry(),
             TempFiles.getPathInTempDir(),
-            dependencies,
-            fileAnswerDelegate
+            dependencies
         ).also {
             widgetInComposeActivity(composeRule, it)
             activity = composeRule.activity

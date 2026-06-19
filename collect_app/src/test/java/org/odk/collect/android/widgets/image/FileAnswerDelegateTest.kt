@@ -1,24 +1,32 @@
 package org.odk.collect.android.widgets.image
 
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.nullValue
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
+import org.mockito.kotlin.verify
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
+import org.odk.collect.android.widgets.QuestionWidget
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager
 import java.io.File
 
+@RunWith(AndroidJUnit4::class)
 class FileAnswerDelegateTest {
     private val questionMediaManager = FakeQuestionMediaManager()
     private val prompt = MockFormEntryPromptBuilder().build()
-    private val delegate = FileAnswerDelegate(questionMediaManager, prompt)
+    private val widget = mock<QuestionWidget>()
+    private val delegate = FileAnswerDelegate(widget, questionMediaManager, prompt)
 
     @Test
     fun `getAnswer() returns StringData with binary name when answer is present`() {
         val promptWithAnswer = MockFormEntryPromptBuilder()
             .withAnswerDisplayText("image.jpg")
             .build()
-        val delegate = FileAnswerDelegate(questionMediaManager, promptWithAnswer)
+        val delegate = FileAnswerDelegate(widget, questionMediaManager, promptWithAnswer)
 
         assertThat(delegate.getAnswer()?.value, equalTo("image.jpg" as Any))
     }
@@ -29,28 +37,29 @@ class FileAnswerDelegateTest {
     }
 
     @Test
-    fun `deleteFile() clears binary name and calls questionMediaManager`() {
+    fun `deleteFile() clears binary name, calls questionMediaManager and notifies the widget`() {
         val promptWithAnswer = MockFormEntryPromptBuilder()
             .withAnswerDisplayText("image.jpg")
             .withIndex("1")
             .build()
-        val delegate = FileAnswerDelegate(questionMediaManager, promptWithAnswer)
+        val delegate = FileAnswerDelegate(widget, questionMediaManager, promptWithAnswer)
 
         delegate.deleteFile()
 
         assertThat(delegate.binaryName, nullValue())
         assertThat(questionMediaManager.originalFiles["1"], equalTo("image.jpg"))
+        verify(widget).widgetValueChanged()
     }
 
     @Test
-    fun `setData() with valid file updates binary name and returns true`() {
+    fun `setData() with valid file updates binary name and notifies the widget`() {
         val file = File.createTempFile("new_image", ".jpg")
 
-        val changed = delegate.setData(file)
+        delegate.setData(file)
 
-        assertThat(changed, equalTo(true))
         assertThat(delegate.binaryName, equalTo(file.name))
         assertThat(questionMediaManager.recentFiles[prompt.index.toString()], equalTo(file.absolutePath))
+        verify(widget).widgetValueChanged()
     }
 
     @Test
@@ -59,7 +68,7 @@ class FileAnswerDelegateTest {
             .withAnswerDisplayText("old_image.jpg")
             .withIndex("1")
             .build()
-        val delegate = FileAnswerDelegate(questionMediaManager, promptWithAnswer)
+        val delegate = FileAnswerDelegate(widget, questionMediaManager, promptWithAnswer)
 
         val file = File.createTempFile("new_image", ".jpg")
         delegate.setData(file)
@@ -68,20 +77,20 @@ class FileAnswerDelegateTest {
     }
 
     @Test
-    fun `setData() does nothing and returns false when file does not exist`() {
+    fun `setData() does nothing and does not notify the widget when file does not exist`() {
         val file = File("non_existent_file")
 
-        val changed = delegate.setData(file)
+        delegate.setData(file)
 
-        assertThat(changed, equalTo(false))
         assertThat(delegate.binaryName, nullValue())
+        verify(widget, never()).widgetValueChanged()
     }
 
     @Test
-    fun `setData() does nothing and returns false when data is not a file`() {
-        val changed = delegate.setData("not a file")
+    fun `setData() does nothing and does not notify the widget when data is not a file`() {
+        delegate.setData("not a file")
 
-        assertThat(changed, equalTo(false))
         assertThat(delegate.binaryName, nullValue())
+        verify(widget, never()).widgetValueChanged()
     }
 }

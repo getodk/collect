@@ -30,16 +30,16 @@ import org.odk.collect.strings.R.string
 import java.util.Locale
 
 @SuppressLint("ViewConstructor")
-class ImageWidget @JvmOverloads constructor(
+class ImageWidget(
     context: Context,
     questionDetails: QuestionDetails,
-    private val questionMediaManager: QuestionMediaManager,
+    questionMediaManager: QuestionMediaManager,
     private val waitingForDataRegistry: WaitingForDataRegistry,
     private val tmpImageFilePath: String,
-    private val dependencies: Dependencies,
-    private val fileAnswerDelegate: FileAnswerDelegate = FileAnswerDelegate(questionMediaManager, questionDetails.prompt)
+    private val dependencies: Dependencies
 ) : QuestionWidget(context, dependencies, questionDetails), WidgetDataReceiver {
     private val selfie: Boolean = Appearances.isFrontCameraAppearance(formEntryPrompt)
+    private val fileAnswerDelegate = FileAnswerDelegate(this, questionMediaManager, questionDetails.prompt)
 
     init { render() }
 
@@ -71,13 +71,10 @@ class ImageWidget @JvmOverloads constructor(
 
     override fun clearAnswer() {
         fileAnswerDelegate.deleteFile()
-        widgetValueChanged()
     }
 
     override fun setData(answer: Any) {
-        if (fileAnswerDelegate.setData(answer)) {
-            widgetValueChanged()
-        }
+        fileAnswerDelegate.setData(answer)
     }
 
     override fun setOnLongClickListener(listener: OnLongClickListener?) {}
