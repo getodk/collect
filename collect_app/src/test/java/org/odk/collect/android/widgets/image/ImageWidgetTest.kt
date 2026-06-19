@@ -177,7 +177,7 @@ class ImageWidgetTest : BinaryWidgetTest<ImageWidget, StringData>() {
     }
 
     @Test
-    fun `when prompt has current answer shows in image view`() {
+    fun `when prompt has current answer shows image view`() {
         val file = questionMediaManager.addAnswerFile(File.createTempFile("current", ".png"))
 
         formEntryPrompt = MockFormEntryPromptBuilder(formEntryPrompt)
