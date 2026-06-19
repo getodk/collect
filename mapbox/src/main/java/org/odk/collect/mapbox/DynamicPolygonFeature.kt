@@ -101,6 +101,7 @@ internal class DynamicPolygonFeature(
                     .withPoints(listOf(points))
                     .withFillOutlineColor(polygonDescription.getStrokeColor())
                     .withFillColor(polygonDescription.getFillColor())
+                    .withFillSortKey(MapUtils.sortKey(polygonDescription.background))
             ).also {
                 polygonAnnotationManager.update(it)
             }
@@ -116,6 +117,7 @@ internal class DynamicPolygonFeature(
                     .withPoints(points + points.first())
                     .withLineColor(polygonDescription.getStrokeColor())
                     .withLineWidth(MapUtils.convertStrokeWidth(polygonDescription))
+                    .withLineSortKey(MapUtils.sortKey(polygonDescription.background))
             ).also {
                 polylineAnnotationManager.update(it)
             }

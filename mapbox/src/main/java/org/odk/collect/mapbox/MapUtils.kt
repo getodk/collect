@@ -23,7 +23,7 @@ object MapUtils {
                 .withPoint(Point.fromLngLat(markerDescription.point.longitude, markerDescription.point.latitude, markerDescription.point.altitude))
                 .withIconImage(markerDescription.iconDescription.toBitmap(context))
                 .withIconSize(1.0)
-                .withSymbolSortKey(10.0)
+                .withSymbolSortKey(sortKey(markerDescription.iconDescription.background))
                 .withDraggable(markerDescription.isDraggable)
                 .withTextOpacity(0.0)
                 .withIconAnchor(getIconAnchorValue(markerDescription.iconAnchor))
@@ -40,13 +40,17 @@ object MapUtils {
                 .withPoint(Point.fromLngLat(it.point.longitude, it.point.latitude, it.point.altitude))
                 .withIconImage(it.iconDescription.toBitmap(context))
                 .withIconSize(1.0)
-                .withSymbolSortKey(10.0)
+                .withSymbolSortKey(sortKey(it.iconDescription.background))
                 .withDraggable(it.isDraggable)
                 .withTextOpacity(0.0)
                 .withIconAnchor(getIconAnchorValue(it.iconAnchor))
         }
 
         return pointAnnotationManager.create(pointAnnotationOptionsList)
+    }
+
+    fun sortKey(background: Boolean): Double {
+        return if (background) 1.0 else 2.0
     }
 
     private fun getIconAnchorValue(iconAnchor: MapFragment.IconAnchor): IconAnchor {

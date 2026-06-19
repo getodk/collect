@@ -28,6 +28,7 @@ class StaticPolygonFeature(
             .withPoints(listOf(mapboxPoints))
             .withFillOutlineColor(polygonDescription.getStrokeColor())
             .withFillColor(polygonDescription.getFillColor())
+            .withFillSortKey(MapUtils.sortKey(polygonDescription.background))
     )
 
     private val polylineAnnotation = polylineAnnotationManager.create(
@@ -35,37 +36,43 @@ class StaticPolygonFeature(
             .withPoints(mapboxPoints)
             .withLineColor(polygonDescription.getStrokeColor())
             .withLineWidth(MapUtils.convertStrokeWidth(polygonDescription))
+            .withLineSortKey(MapUtils.sortKey(polygonDescription.background))
     )
 
-    private val polygonClickListener = OnPolygonAnnotationClickListener { annotation ->
-        if (annotation.id == polygonAnnotation.id) {
-            featureClickListener?.onFeature(featureId)
-            true
-        } else {
-            false
-        }
-    }.also {
-        polygonAnnotationManager.addClickListener(it)
-    }
+    private var polygonClickListener: OnPolygonAnnotationClickListener? = null
+    private var polylineClickListener: OnPolylineAnnotationClickListener? = null
 
-    private val polylineClickListener = OnPolylineAnnotationClickListener { annotation ->
-        if (annotation.id == polylineAnnotation.id) {
-            featureClickListener?.onFeature(featureId)
-            true
-        } else {
-            false
+    init {
+        if (polygonDescription.clickable && featureClickListener != null) {
+            polygonClickListener = OnPolygonAnnotationClickListener { annotation ->
+                if (annotation.id == polygonAnnotation.id) {
+                    featureClickListener.onFeature(featureId)
+                    true
+                } else {
+                    false
+                }
+            }.also(polygonAnnotationManager::addClickListener)
+
+            polylineClickListener = OnPolylineAnnotationClickListener { annotation ->
+                if (annotation.id == polylineAnnotation.id) {
+                    featureClickListener.onFeature(featureId)
+                    true
+                } else {
+                    false
+                }
+            }.also(polylineAnnotationManager::addClickListener)
         }
-    }.also(polylineAnnotationManager::addClickListener)
+    }
 
     override fun dispose() {
         polygonAnnotationManager.run {
             delete(polygonAnnotation)
-            removeClickListener(polygonClickListener)
+            polygonClickListener?.let(::removeClickListener)
         }
 
         polylineAnnotationManager.run {
             delete(polylineAnnotation)
-            removeClickListener(polylineClickListener)
+            polylineClickListener?.let(::removeClickListener)
         }
     }
 }

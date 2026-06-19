@@ -93,6 +93,7 @@ internal class DynamicPolyLineFeature(
                     .withPoints(points)
                     .withLineColor(lineDescription.getStrokeColor())
                     .withLineWidth(MapUtils.convertStrokeWidth(lineDescription))
+                    .withLineSortKey(MapUtils.sortKey(lineDescription.background))
             ).also {
                 polylineAnnotationManager.update(it)
             }

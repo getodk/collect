@@ -1,6 +1,7 @@
 package org.odk.collect.mapbox
 
 import com.mapbox.geojson.Point
+import com.mapbox.maps.plugin.annotation.generated.OnPolylineAnnotationClickListener
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationOptions
@@ -13,10 +14,11 @@ internal class StaticPolyLineFeature(
     private val polylineAnnotationManager: PolylineAnnotationManager,
     private val featureId: Int,
     private val featureClickListener: MapFragment.FeatureListener?,
-    private val lineDescription: LineDescription
+    lineDescription: LineDescription
 ) : LineFeature {
     override val points = mutableListOf<MapPoint>()
     private var polylineAnnotation: PolylineAnnotation? = null
+    private var clickListener: OnPolylineAnnotationClickListener? = null
 
     init {
         lineDescription.points.forEach {
@@ -39,20 +41,23 @@ internal class StaticPolyLineFeature(
                     .withPoints(points)
                     .withLineColor(lineDescription.getStrokeColor())
                     .withLineWidth(MapUtils.convertStrokeWidth(lineDescription))
+                    .withLineSortKey(MapUtils.sortKey(lineDescription.background))
             ).also {
                 polylineAnnotationManager.update(it)
             }
         }
 
-        polylineAnnotationManager.addClickListener { annotation ->
-            polylineAnnotation?.let {
-                if (annotation.id == it.id && featureClickListener != null) {
-                    featureClickListener.onFeature(featureId)
-                    true
-                } else {
-                    false
-                }
-            } ?: false
+        if (lineDescription.clickable && featureClickListener != null) {
+            clickListener = OnPolylineAnnotationClickListener { annotation ->
+                polylineAnnotation?.let {
+                    if (annotation.id == it.id) {
+                        featureClickListener.onFeature(featureId)
+                        true
+                    } else {
+                        false
+                    }
+                } ?: false
+            }.also(polylineAnnotationManager::addClickListener)
         }
     }
 
@@ -60,6 +65,7 @@ internal class StaticPolyLineFeature(
         polylineAnnotation?.let {
             polylineAnnotationManager.delete(it)
         }
+        clickListener?.let(polylineAnnotationManager::removeClickListener)
         points.clear()
     }
 }

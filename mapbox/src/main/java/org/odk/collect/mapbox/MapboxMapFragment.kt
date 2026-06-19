@@ -21,6 +21,7 @@ import com.mapbox.maps.extension.style.layers.Layer
 import com.mapbox.maps.extension.style.layers.addLayer
 import com.mapbox.maps.extension.style.layers.addLayerAbove
 import com.mapbox.maps.extension.style.layers.addLayerAt
+import com.mapbox.maps.extension.style.layers.addLayerBelow
 import com.mapbox.maps.extension.style.layers.generated.LineLayer
 import com.mapbox.maps.extension.style.layers.generated.RasterLayer
 import com.mapbox.maps.extension.style.layers.generated.rasterLayer
@@ -36,11 +37,14 @@ import com.mapbox.maps.extension.style.sources.getSource
 import com.mapbox.maps.loader.MapboxMapsInitializer
 import com.mapbox.maps.plugin.animation.MapAnimationOptions.Companion.mapAnimationOptions
 import com.mapbox.maps.plugin.animation.flyTo
+import com.mapbox.maps.plugin.annotation.AnnotationConfig
 import com.mapbox.maps.plugin.annotation.annotations
+import com.mapbox.maps.plugin.annotation.generated.CircleAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationManager
+import com.mapbox.maps.plugin.annotation.generated.createCircleAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.createPolygonAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.createPolylineAnnotationManager
@@ -96,6 +100,7 @@ class MapboxMapFragment(private val configuration: Configuration) :
     private lateinit var pointAnnotationManager: PointAnnotationManager
     private lateinit var polylineAnnotationManager: PolylineAnnotationManager
     private lateinit var polygonAnnotationManager: PolygonAnnotationManager
+    private lateinit var circleAnnotationManager: CircleAnnotationManager
     private var mapReadyListener: ReadyListener? = null
 
     private var nextFeatureId = 1
@@ -107,7 +112,7 @@ class MapboxMapFragment(private val configuration: Configuration) :
     private var featureDragEndListener: FeatureListener? = null
     private var tileServer: TileHttpServer? = null
     private var referenceLayerFile: File? = null
-    private var styleLayer: String? = null
+    private var basemapTopLayer: String? = null
 
     private val _mapViewModel by viewModels<MapViewModel> {
         viewModelFactory {
@@ -194,15 +199,19 @@ class MapboxMapFragment(private val configuration: Configuration) :
 
         polylineAnnotationManager = mapView
             .annotations
-            .createPolylineAnnotationManager()
+            .createPolylineAnnotationManager(AnnotationConfig(layerId = POLYLINE_ANNOTATION_LAYER_ID))
 
         polygonAnnotationManager = mapView
             .annotations
-            .createPolygonAnnotationManager()
+            .createPolygonAnnotationManager(AnnotationConfig(layerId = POLYGON_ANNOTATION_LAYER_ID))
+
+        circleAnnotationManager = mapView
+            .annotations
+            .createCircleAnnotationManager(AnnotationConfig(layerId = CIRCLE_ANNOTATION_LAYER_ID))
 
         pointAnnotationManager = mapView
             .annotations
-            .createPointAnnotationManager()
+            .createPointAnnotationManager(AnnotationConfig(layerId = POINT_ANNOTATION_LAYER_ID))
 
         moveOrAnimateCamera(MapFragment.INITIAL_CENTER, false, MapFragment.INITIAL_ZOOM.toDouble())
 
@@ -293,7 +302,7 @@ class MapboxMapFragment(private val configuration: Configuration) :
                             style.addLayerAt(rasterLayer("basemap_layer", "basemap_source") {}, 0)
                         }
 
-                        styleLayer = "basemap_layer"
+                        basemapTopLayer = "basemap_layer"
                     }
 
                     loadReferenceOverlay()
@@ -302,7 +311,7 @@ class MapboxMapFragment(private val configuration: Configuration) :
 
             is BasemapUri.Mapbox -> {
                 mapboxMap.loadStyleUri(uri.value) {
-                    styleLayer = it.styleLayers.last().id
+                    basemapTopLayer = it.styleLayers.last().id
                     loadReferenceOverlay()
                 }
             }
@@ -464,14 +473,24 @@ class MapboxMapFragment(private val configuration: Configuration) :
     }
 
     override fun addCircle(circleDescription: CircleDescription): Int {
-        return -1
+        val featureId = nextFeatureId++
+        addCircle(featureId, circleDescription)
+        return featureId
     }
 
     override fun updateCircle(
         featureId: Int,
         circleDescription: CircleDescription
     ) {
+        features[featureId]?.dispose()
+        addCircle(featureId, circleDescription)
+    }
 
+    private fun addCircle(
+        featureId: Int,
+        circleDescription: CircleDescription
+    ) {
+        features[featureId] = CircleFeature(mapboxMap, circleAnnotationManager, circleDescription)
     }
 
     override fun getPolyPoints(featureId: Int): List<MapPoint> {
@@ -630,8 +649,22 @@ class MapboxMapFragment(private val configuration: Configuration) :
     }
 
     private fun addOverlayLayer(layer: Layer) {
-        styleLayer?.let {
-            mapboxMap.getStyle()?.addLayerAbove(layer, styleLayer)
+        val style = mapboxMap.getStyle() ?: return
+
+        // styleLayers is ordered bottom (index 0) to top. Insert the reference overlay below the
+        // lowest annotation layer currently in the style so it ends up below every feature,
+        // regardless of the order the annotation managers were created in.
+        val lowestAnnotationLayer = style.styleLayers.firstOrNull {
+            it.id == POLYLINE_ANNOTATION_LAYER_ID ||
+                it.id == POLYGON_ANNOTATION_LAYER_ID ||
+                it.id == CIRCLE_ANNOTATION_LAYER_ID ||
+                it.id == POINT_ANNOTATION_LAYER_ID
+        }?.id
+
+        if (lowestAnnotationLayer != null) {
+            style.addLayerBelow(layer, lowestAnnotationLayer)
+        } else {
+            basemapTopLayer?.let { style.addLayerAbove(layer, it) }
         }
     }
 
@@ -639,5 +672,12 @@ class MapboxMapFragment(private val configuration: Configuration) :
         if (mapboxMap.getStyle()?.getSource(source.sourceId) == null) {
             mapboxMap.getStyle()?.addSource(source)
         }
+    }
+
+    companion object {
+        private const val POLYLINE_ANNOTATION_LAYER_ID = "polyline_annotation_layer"
+        private const val POLYGON_ANNOTATION_LAYER_ID = "polygon_annotation_layer"
+        private const val CIRCLE_ANNOTATION_LAYER_ID = "circle_annotation_layer"
+        private const val POINT_ANNOTATION_LAYER_ID = "point_annotation_layer"
     }
 }
