@@ -24,30 +24,28 @@ class CrashHandler(private val processKiller: Runnable = Runnable { exitProcess(
         return getPreferences(context).contains(KEY_CRASH) || conditionFailure != null
     }
 
-    @JvmOverloads
-    fun getCrashView(context: Context, onErrorDismissed: Runnable? = null): CrashView? {
-        val preferences = getPreferences(context)
-
-        return if (conditionFailure != null) {
-            val crashMessage = conditionFailure
-
-            createCrashView(context).also {
-                it.setCrash(context.getString(org.odk.collect.strings.R.string.cant_start_app), crashMessage) {
-                    processKiller.run()
+    fun getCrash(context: Context): Crash? {
+        return conditionFailure.let {
+            if (it != null) {
+                Crash.ConditionFailure(it)
+            } else {
+                val preferences = getPreferences(context)
+                val crashMessage = preferences.getString(KEY_CRASH, null)
+                if (crashMessage != null) {
+                    Crash.Normal(crashMessage)
+                } else {
+                    null
                 }
             }
-        } else if (preferences.contains(KEY_CRASH)) {
-            val crashMessage = preferences.getString(KEY_CRASH, null)
-
-            createCrashView(context).also {
-                it.setCrash(context.getString(org.odk.collect.strings.R.string.crash_last_run), crashMessage) {
-                    preferences.edit().remove(KEY_CRASH).apply()
-                    onErrorDismissed?.run()
-                }
-            }
-        } else {
-            null
         }
+    }
+
+    fun dismissCrash(context: Context) {
+        getPreferences(context).edit().remove(KEY_CRASH).apply()
+    }
+
+    fun getCrashView(context: Context, onErrorDismissed: Runnable? = null): CrashView? {
+        return getCrashView(this, context, processKiller, onErrorDismissed)
     }
 
     private fun checkConditions(runnable: Runnable): Boolean {
@@ -58,10 +56,6 @@ class CrashHandler(private val processKiller: Runnable = Runnable { exitProcess(
             conditionFailure = t.message ?: ""
             false
         }
-    }
-
-    private fun createCrashView(context: Context): CrashView {
-        return CrashView(context)
     }
 
     /**
@@ -121,4 +115,44 @@ class CrashHandler(private val processKiller: Runnable = Runnable { exitProcess(
             originalHandler = null
         }
     }
+}
+
+@JvmOverloads
+fun getCrashView(
+    crashHandler: CrashHandler,
+    context: Context,
+    processKiller: Runnable = Runnable { exitProcess(0) },
+    onErrorDismissed: Runnable? = null
+): CrashView? {
+    return when (val crash = crashHandler.getCrash(context)) {
+        is Crash.ConditionFailure -> {
+            CrashView(context).also {
+                it.setCrash(
+                    context.getString(org.odk.collect.strings.R.string.cant_start_app),
+                    crash.message
+                ) {
+                    processKiller.run()
+                }
+            }
+        }
+
+        is Crash.Normal -> {
+            CrashView(context).also {
+                it.setCrash(
+                    context.getString(org.odk.collect.strings.R.string.crash_last_run),
+                    crash.message
+                ) {
+                    crashHandler.dismissCrash(context)
+                    onErrorDismissed?.run()
+                }
+            }
+        }
+
+        null -> null
+    }
+}
+
+sealed class Crash {
+    data class ConditionFailure(val message: String) : Crash()
+    data class Normal(val message: String) : Crash()
 }
