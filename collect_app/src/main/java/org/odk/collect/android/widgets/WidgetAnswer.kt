@@ -28,7 +28,7 @@ fun WidgetAnswer(
     prompt: FormEntryPrompt,
     answer: String?,
     fontSize: Int? = null,
-    summaryView: Boolean = false,
+    compact: Boolean = false,
     mediaWidgetAnswerViewModel: MediaWidgetAnswerViewModel,
     onClick: () -> Unit = {},
     onLongClick: () -> Unit = {}
@@ -42,7 +42,7 @@ fun WidgetAnswer(
                         ImageVector.vectorResource(R.drawable.ic_baseline_barcode_scanner_white_24),
                         answer,
                         fontSize,
-                        if (summaryView) Arrangement.Start else Arrangement.Center,
+                        if (compact) Arrangement.Start else Arrangement.Center,
                         onClick,
                         onLongClick
                     )
@@ -51,14 +51,14 @@ fun WidgetAnswer(
                         null,
                         answer,
                         fontSize,
-                        if (summaryView) Arrangement.Start else Arrangement.Center,
+                        if (compact) Arrangement.Start else Arrangement.Center,
                         onClick,
                         onLongClick
                     )
                 }
             }
             Constants.CONTROL_IMAGE_CHOOSE -> ImageWidgetAnswer(
-                if (summaryView) {
+                if (compact) {
                     modifier
                         .height(200.dp)
                         .wrapContentWidth(Alignment.Start)
@@ -66,7 +66,7 @@ fun WidgetAnswer(
                     modifier.fillMaxWidth()
                 },
                 answer,
-                if (summaryView) ContentScale.Fit else ContentScale.FillWidth,
+                if (compact) ContentScale.Fit else ContentScale.FillWidth,
                 mediaWidgetAnswerViewModel,
                 onLongClick
             )
@@ -79,7 +79,7 @@ fun WidgetAnswer(
                     Icons.Default.AttachFile,
                     answer,
                     fontSize,
-                    if (summaryView) Arrangement.Start else Arrangement.Center,
+                    if (compact) Arrangement.Start else Arrangement.Center,
                     { mediaWidgetAnswerViewModel.openFile(context.getActivity(), answer) },
                     onLongClick,
                     stringResource(org.odk.collect.strings.R.string.open_file)
@@ -90,7 +90,7 @@ fun WidgetAnswer(
                 null,
                 answer,
                 fontSize,
-                if (summaryView) Arrangement.Start else Arrangement.Center,
+                if (compact) Arrangement.Start else Arrangement.Center,
                 onClick,
                 onLongClick
             )
