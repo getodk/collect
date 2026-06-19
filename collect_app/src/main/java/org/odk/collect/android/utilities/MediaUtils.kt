@@ -14,7 +14,6 @@
 package org.odk.collect.android.utilities
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import org.odk.collect.android.BuildConfig
 import org.odk.collect.androidshared.system.IntentLauncher
@@ -39,16 +38,16 @@ class MediaUtils(private val intentLauncher: IntentLauncher, private val content
         FileUtils.deleteAndReport(File(imageFile))
     }
 
-    fun openFile(context: Context, file: File, expectedMimeType: String?) {
+    fun openFile(activity: Activity, file: File, expectedMimeType: String?) {
         if (!file.exists()) {
-            val errorMsg: String = context.getString(org.odk.collect.strings.R.string.file_missing, file)
+            val errorMsg: String = activity.getString(org.odk.collect.strings.R.string.file_missing, file)
             Timber.d("File %s is missing", file)
             ToastUtils.showLongToast(errorMsg)
             return
         }
 
         val contentUri = contentUriProvider.getUriForFile(
-            context,
+            activity,
             BuildConfig.APPLICATION_ID + ".provider",
             file
         )
@@ -64,10 +63,10 @@ class MediaUtils(private val intentLauncher: IntentLauncher, private val content
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         }
 
-        intentLauncher.launch(context, intent) {
-            val message = context.getString(
+        intentLauncher.launch(activity, intent) {
+            val message = activity.getString(
                 org.odk.collect.strings.R.string.activity_not_found,
-                context.getString(org.odk.collect.strings.R.string.open_file)
+                activity.getString(org.odk.collect.strings.R.string.open_file)
             )
             ToastUtils.showLongToast(message)
             Timber.w(message)

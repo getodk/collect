@@ -35,7 +35,7 @@ class HierarchyListItemView(context: Context, layoutResId: Int) : FrameLayout(co
                     modifier = Modifier.padding(top = marginStandard()),
                     prompt = item.formEntryPrompt,
                     answer = item.secondaryText,
-                    summaryView = true,
+                    compact = true,
                     mediaWidgetAnswerViewModel = mediaWidgetAnswerViewModel,
                     onClick = onCLick
                 )

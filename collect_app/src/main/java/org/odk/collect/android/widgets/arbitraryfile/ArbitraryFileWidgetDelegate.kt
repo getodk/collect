@@ -6,6 +6,7 @@ import org.odk.collect.android.utilities.QuestionMediaManager
 import timber.log.Timber
 import java.io.File
 
+@Deprecated("Should be replaced by FileAnswerDelegate")
 class ArbitraryFileWidgetDelegate(
     private val questionMediaManager: QuestionMediaManager
 ) {

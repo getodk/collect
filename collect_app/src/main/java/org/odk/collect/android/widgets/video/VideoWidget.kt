@@ -12,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import org.javarosa.core.model.data.IAnswerData
 import org.javarosa.core.model.data.StringData
 import org.javarosa.form.api.FormEntryPrompt
@@ -51,7 +52,7 @@ class VideoWidget(
         val buttonFontSize = QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.BODY_LARGE)
 
         return ComposeView(context).apply {
-            setContextThemedContent {
+            setContextThemedContent(ViewCompositionStrategy.DisposeOnDetachedFromWindowOrReleasedFromPool) {
                 VideoWidgetContent(
                     dependencies.mediaWidgetAnswerViewModel,
                     formEntryPrompt,
@@ -76,6 +77,7 @@ class VideoWidget(
         }
     }
 
+    @Deprecated("Should be replaced by FileAnswerDelegate")
     override fun deleteFile() {
         questionMediaManager.deleteAnswerFile(
             formEntryPrompt.getIndex().toString(),
@@ -89,10 +91,12 @@ class VideoWidget(
         widgetValueChanged()
     }
 
+    @Deprecated("Should be replaced by FileAnswerDelegate")
     override fun getAnswer(): IAnswerData? {
         return binaryName?.let { StringData(it) }
     }
 
+    @Deprecated("Should be replaced by FileAnswerDelegate")
     override fun setData(answer: Any) {
         if (binaryName != null) {
             deleteFile()

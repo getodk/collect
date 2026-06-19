@@ -324,13 +324,22 @@ abstract class Page<T : Page<T>> {
         return FormHierarchyPage(formName)
     }
 
-    fun clickOnText(text: String): T {
-        EspressoInteractions.clickOn(
-            allOf(
-                withText(text),
-                withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)
-            )
-        )
+    @JvmOverloads
+    fun clickOnText(text: String, assertionFramework: AssertionFramework = AssertionFramework.ESPRESSO): T {
+        when (assertionFramework) {
+            AssertionFramework.ESPRESSO -> {
+                EspressoInteractions.clickOn(
+                    allOf(
+                        withText(text),
+                        withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)
+                    )
+                )
+            }
+
+            AssertionFramework.COMPOSE -> {
+                ComposeInteractions.clickOn(composeRule!!, hasText(text))
+            }
+        }
         return this as T
     }
 

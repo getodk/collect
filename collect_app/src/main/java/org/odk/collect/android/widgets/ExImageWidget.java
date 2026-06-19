@@ -18,6 +18,7 @@ import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.FileRequester;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
+import org.odk.collect.androidshared.system.ContextExt;
 import org.odk.collect.androidshared.ui.ToastUtils;
 
 import java.io.File;
@@ -53,7 +54,7 @@ public class ExImageWidget extends QuestionWidget implements FileWidget, WidgetD
 
         binding.launchExternalAppButton.setVisibility(questionDetails.isReadOnly() ? GONE : VISIBLE);
         binding.launchExternalAppButton.setOnClickListener(view -> launchExternalApp());
-        binding.imageView.setOnClickListener(view -> mediaUtils.openFile(getContext(), answerFile, "image/*"));
+        binding.imageView.setOnClickListener(view -> mediaUtils.openFile(ContextExt.getActivity(getContext()), answerFile, "image/*"));
         if (answerFile != null) {
             displayImage();
         } else {
