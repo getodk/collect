@@ -14,7 +14,6 @@ import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationOptions
-import org.odk.collect.maps.MapConsts
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.traces.PolygonDescription
@@ -102,7 +101,7 @@ internal class DynamicPolygonFeature(
                     .withPoints(listOf(points))
                     .withFillOutlineColor(polygonDescription.getStrokeColor())
                     .withFillColor(polygonDescription.getFillColor())
-                    .withFillSortKey(MapConsts.getZIndex(polygonDescription.background).toDouble())
+                    .withFillSortKey(MapUtils.sortKey(polygonDescription.background))
             ).also {
                 polygonAnnotationManager.update(it)
             }
@@ -118,7 +117,7 @@ internal class DynamicPolygonFeature(
                     .withPoints(points + points.first())
                     .withLineColor(polygonDescription.getStrokeColor())
                     .withLineWidth(MapUtils.convertStrokeWidth(polygonDescription))
-                    .withLineSortKey(MapConsts.getZIndex(polygonDescription.background).toDouble())
+                    .withLineSortKey(MapUtils.sortKey(polygonDescription.background))
             ).also {
                 polylineAnnotationManager.update(it)
             }
