@@ -119,13 +119,6 @@ class MapboxMapFragment(private val configuration: Configuration) :
     private var referenceLayerFile: File? = null
     private var basemapTopLayer: String? = null
 
-    private val annotationLayerIds = setOf(
-        POLYLINE_ANNOTATION_LAYER_ID,
-        POLYGON_ANNOTATION_LAYER_ID,
-        CIRCLE_ANNOTATION_LAYER_ID,
-        POINT_ANNOTATION_LAYER_ID
-    )
-
     private val _mapViewModel by viewModels<MapViewModel> {
         viewModelFactory {
             addInitializer(MapViewModel::class) {
@@ -666,7 +659,12 @@ class MapboxMapFragment(private val configuration: Configuration) :
         // styleLayers is ordered bottom (index 0) to top. Insert the reference overlay below the
         // lowest annotation layer currently in the style so it ends up below every feature,
         // regardless of the order the annotation managers were created in.
-        val lowestAnnotationLayer = style.styleLayers.firstOrNull { it.id in annotationLayerIds }?.id
+        val lowestAnnotationLayer = style.styleLayers.firstOrNull {
+            it.id == POLYLINE_ANNOTATION_LAYER_ID ||
+                it.id == POLYGON_ANNOTATION_LAYER_ID ||
+                it.id == CIRCLE_ANNOTATION_LAYER_ID ||
+                it.id == POINT_ANNOTATION_LAYER_ID
+        }?.id
 
         if (lowestAnnotationLayer != null) {
             style.addLayerBelow(layer, lowestAnnotationLayer)
