@@ -25,7 +25,13 @@ class CircleFeature(
                     circleDescription.center.latitude
                 )
             )
-            .withCircleRadius(pixelRadius(lastRenderedZoom))
+            .withCircleRadius(
+                mapboxMap.convertMetersToPixels(
+                    circleDescription.radius.toDouble(),
+                    circleDescription.center.latitude,
+                    lastRenderedZoom
+                )
+            )
             .withCircleColor(circleDescription.getFillColor())
             .withCircleStrokeColor(circleDescription.getStrokeColor())
             .withCircleStrokeWidth(1.0)
@@ -48,15 +54,16 @@ class CircleFeature(
             return
         }
         lastRenderedZoom = zoom
-        circleAnnotation.circleRadius = pixelRadius(zoom)
+        circleAnnotation.circleRadius = mapboxMap.convertMetersToPixels(
+            circleDescription.radius.toDouble(),
+            circleDescription.center.latitude,
+            zoom
+        )
         circleAnnotationManager.update(circleAnnotation)
     }
+}
 
-    private fun pixelRadius(zoom: Double): Double {
-        // CircleAnnotation's radius is in screen pixels but CircleDescription.radius is in metres, so
-        // convert using Mapbox's own metres-per-pixel for the circle's latitude at the given zoom.
-        val metersPerPixel =
-            mapboxMap.getMetersPerPixelAtLatitude(circleDescription.center.latitude, zoom)
-        return circleDescription.radius.toDouble() / metersPerPixel
-    }
+private fun MapboxMap.convertMetersToPixels(meters: Double, latitude: Double, zoom: Double): Double {
+    val metersPerPixel = getMetersPerPixelAtLatitude(latitude, zoom)
+    return meters / metersPerPixel
 }
