@@ -44,10 +44,6 @@ class CrashHandler(private val processKiller: Runnable = Runnable { exitProcess(
         getPreferences(context).edit().remove(KEY_CRASH).apply()
     }
 
-    fun getCrashView(context: Context, onErrorDismissed: Runnable? = null): CrashView? {
-        return getCrashView(this, context, processKiller, onErrorDismissed)
-    }
-
     private fun checkConditions(runnable: Runnable): Boolean {
         return try {
             runnable.run()

@@ -5,6 +5,7 @@ import androidx.activity.OnBackPressedCallback
 import org.odk.collect.android.mainmenu.MainMenuActivity
 import org.odk.collect.androidshared.ui.EdgeToEdge.setView
 import org.odk.collect.crashhandler.CrashHandler
+import org.odk.collect.crashhandler.getCrashView
 import org.odk.collect.strings.localization.LocalizedActivity
 
 class CrashHandlerActivity : LocalizedActivity() {
@@ -13,7 +14,7 @@ class CrashHandlerActivity : LocalizedActivity() {
         super.onCreate(savedInstanceState)
 
         val crashHandler = CrashHandler.getInstance(this)!!
-        val crashView = crashHandler.getCrashView(this) {
+        val crashView = getCrashView(crashHandler, this) {
             ActivityUtils.startActivityAndCloseAllOthers(this, MainMenuActivity::class.java)
         }
 
