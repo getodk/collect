@@ -145,7 +145,9 @@ class ImageWidgetTest : FileWidgetTest<ImageWidget>() {
 
     @Test
     override fun usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
-        whenever(formEntryPrompt.isReadOnly).thenReturn(true)
+        formEntryPrompt = MockFormEntryPromptBuilder(formEntryPrompt)
+            .withReadOnly(true)
+            .build()
         createWidget()
 
         composeRule.onNodeWithClickLabel(activity.getString(string.capture_image)).assertDoesNotExist()
@@ -155,7 +157,9 @@ class ImageWidgetTest : FileWidgetTest<ImageWidget>() {
     @Test
     fun `when read-only override option is used should all clickable elements be disabled`() {
         readOnlyOverride = true
-        whenever(formEntryPrompt.isReadOnly).thenReturn(false)
+        formEntryPrompt = MockFormEntryPromptBuilder(formEntryPrompt)
+            .withReadOnly(false)
+            .build()
         createWidget()
 
         composeRule.onNodeWithClickLabel(activity.getString(string.capture_image)).assertDoesNotExist()
