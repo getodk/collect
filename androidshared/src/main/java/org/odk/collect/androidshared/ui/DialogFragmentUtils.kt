@@ -61,6 +61,9 @@ object DialogFragmentUtils {
                 fragmentManager.executePendingTransactions()
             } catch (e: IllegalStateException) {
                 Timber.w(e)
+            } catch (e: android.view.WindowManager.BadTokenException) {
+                // Catch dialogs getting shown after an Activity has been closed
+                Timber.w(e)
             }
         }
     }
