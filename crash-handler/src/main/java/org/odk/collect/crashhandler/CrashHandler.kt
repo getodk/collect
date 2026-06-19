@@ -8,8 +8,6 @@ import kotlin.system.exitProcess
 
 class CrashHandler(private val processKiller: Runnable = Runnable { exitProcess(0) }) {
 
-    var createMockViews = false
-
     private var conditionFailure: String? = null
 
     fun launchApp(conditionsCheck: Runnable, onSuccess: Runnable? = null) {
@@ -63,11 +61,7 @@ class CrashHandler(private val processKiller: Runnable = Runnable { exitProcess(
     }
 
     private fun createCrashView(context: Context): CrashView {
-        return if (createMockViews) {
-            MockCrashView(context)
-        } else {
-            CrashView(context)
-        }
+        return CrashView(context)
     }
 
     /**
