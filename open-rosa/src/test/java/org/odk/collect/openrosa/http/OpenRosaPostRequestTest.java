@@ -7,6 +7,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.isA;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.fail;
 import static java.util.Arrays.asList;
 
@@ -22,10 +23,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InterruptedIOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.zip.GZIPOutputStream;
 
@@ -241,6 +244,47 @@ public abstract class OpenRosaPostRequestTest {
         assertThat(mockWebServer.getRequestCount(), equalTo(2));
         assertThat(response, notNullValue());
         assertThat(response.getResponseCode(), equalTo(500));
+    }
+
+    @Test
+    public void whenCanceledBeforeUpload_doesNotMakeRequest() {
+        URI uri = mockWebServer.url("/blah").uri();
+
+        assertThrows(
+                InterruptedIOException.class,
+                () -> subject.uploadSubmissionAndFiles(
+                        createTempFile("<node>content</node>"),
+                        new ArrayList<>(),
+                        uri,
+                        null,
+                        0,
+                        () -> true
+                )
+        );
+
+        assertThat(mockWebServer.getRequestCount(), equalTo(0));
+    }
+
+    @Test
+    public void whenCanceledDuringUpload_abortsRequest() {
+        mockWebServer.enqueue(new MockResponse().setResponseCode(201));
+
+        // Not canceled for the initial loop check, then canceled once the body starts streaming.
+        AtomicInteger checks = new AtomicInteger(0);
+
+        URI uri = mockWebServer.url("/blah").uri();
+
+        assertThrows(
+                InterruptedIOException.class,
+                () -> subject.uploadSubmissionAndFiles(
+                        createTempFile("<node>content</node>"),
+                        new ArrayList<>(),
+                        uri,
+                        null,
+                        0,
+                        () -> checks.getAndIncrement() > 0
+                )
+        );
     }
 
     private File createTempFile(String content) throws Exception {
