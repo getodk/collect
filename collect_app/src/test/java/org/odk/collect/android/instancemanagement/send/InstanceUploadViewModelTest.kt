@@ -68,10 +68,13 @@ class InstanceUploadViewModelTest {
                 instance: Instance,
                 deviceId: String?,
                 overrideURL: String?,
-                referrer: String
+                referrer: String,
+                isCancelled: () -> Boolean
             ): String {
                 viewModel.cancel()
-                Thread.sleep(1000)
+                if (isCancelled()) {
+                    throw FormUploadInterruptedException()
+                }
 
                 submittedInstances.add(instance.dbId)
                 instancesRepository.save(
@@ -174,10 +177,14 @@ class InstanceUploadViewModelTest {
                 instance: Instance,
                 deviceId: String?,
                 overrideURL: String?,
-                referrer: String
+                referrer: String,
+                isCancelled: () -> Boolean
             ): String {
                 if (++progress == 2) {
                     viewModel.cancel()
+                }
+                if (isCancelled()) {
+                    throw FormUploadInterruptedException()
                 }
 
                 submittedInstances.add(instance.dbId)

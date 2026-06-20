@@ -1,8 +1,7 @@
 package org.odk.collect.android.instancemanagement.send
 
 import kotlinx.coroutines.currentCoroutineContext
-import kotlinx.coroutines.ensureActive
-import kotlinx.coroutines.runInterruptible
+import kotlinx.coroutines.isActive
 import org.odk.collect.android.instancemanagement.InstanceDeleter
 import org.odk.collect.android.projects.ProjectDependencyModule
 import org.odk.collect.android.utilities.InstanceAutoDeleteChecker
@@ -37,7 +36,7 @@ class InstanceSubmitter(
         val sortedInstances = toUpload.sortedBy { it.finalizationDate }
         for (instance in sortedInstances) {
             try {
-                val resultMessage = instanceUploader.uploadOneSubmission(projectId, instance, deviceId, null, "")
+                val resultMessage = instanceUploader.uploadOneSubmission(projectId, instance, deviceId, null, "") { false }
                 uploadResults.add(InstanceUploadResult.Success(instance, resultMessage))
 
                 deleteInstance(instance, formsRepository, instancesRepository, generalSettings, null)
@@ -72,17 +71,19 @@ class InstanceSubmitter(
         val uploadResults = mutableListOf<InstanceUploadResult>()
         val deviceId = propertyManager.getSingularProperty(PROPMGR_DEVICE_ID)
 
+        val coroutineContext = currentCoroutineContext()
+        val isCancelled = { !coroutineContext.isActive }
+
         val sortedInstances = toUpload.sortedBy { it.finalizationDate }
         for ((index, instance) in sortedInstances.withIndex()) {
-            currentCoroutineContext().ensureActive()
             onProgress(index + 1, sortedInstances.size)
 
             try {
-                val resultMessage = runInterruptible {
-                    instanceUploader.uploadOneSubmission(projectId, instance, deviceId, overrideURL, referrer)
-                }
+                val resultMessage = instanceUploader.uploadOneSubmission(projectId, instance, deviceId, overrideURL, referrer, isCancelled)
                 uploadResults.add(InstanceUploadResult.Success(instance, resultMessage ?: defaultSuccessMessage))
                 deleteInstance(instance, formsRepository, instancesRepository, generalSettings, externalDeleteAfterUpload)
+            } catch (_: FormUploadInterruptedException) {
+                break
             } catch (e: FormUploadException) {
                 Timber.d(e)
                 uploadResults.add(InstanceUploadResult.Error(instance, e))
