@@ -44,8 +44,13 @@ class OpenRosaServerInstanceUploader(
         instance: Instance,
         deviceId: String?,
         overrideURL: String?,
-        referrer: String
+        referrer: String,
+        isCancelled: () -> Boolean
     ): String? {
+        if (isCancelled()) {
+            throw FormUploadInterruptedException()
+        }
+
         val projectDependencyModule = projectDependencyFactory.create(projectId)
         val unprotectedSettings = projectDependencyModule.generalSettings
         val instancesRepository = projectDependencyModule.instancesRepository
@@ -169,6 +174,10 @@ class OpenRosaServerInstanceUploader(
             ?: throw FormUploadException("Error reading files to upload")
 
         val messageParser = ResponseMessageParser()
+
+        if (isCancelled()) {
+            throw FormUploadInterruptedException()
+        }
 
         try {
             val uri = URI.create(submissionUri.toString())
