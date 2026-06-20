@@ -26,7 +26,7 @@ class InstanceUploadViewModelTest {
     private lateinit var viewModel: InstanceUploadViewModel
 
     @Test
-    fun `instance is not submitted when upload process is canceled during execution`() {
+    fun `instance is not submitted when upload is canceled`() {
         val form = FormFixtures.form("1")
         val formsRepository = InMemFormsRepository().apply {
             save(form)
@@ -121,7 +121,7 @@ class InstanceUploadViewModelTest {
     }
 
     @Test
-    fun `submitted instances are deleted when upload process is canceled during execution`() {
+    fun `instances uploaded before cancellation get deleted`() {
         val form = FormFixtures.form("1")
         val formsRepository = InMemFormsRepository().apply {
             save(form)
