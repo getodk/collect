@@ -15,7 +15,10 @@ import org.odk.collect.shared.strings.Md5;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InterruptedIOException;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.util.Date;
@@ -23,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import okhttp3.Headers;
 import okhttp3.MediaType;
@@ -31,6 +35,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+import okio.BufferedSink;
 import timber.log.Timber;
 
 public class OkHttpConnection implements OpenRosaHttpInterface {
@@ -138,17 +143,27 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     @NonNull
     @Override
     public HttpPostResult uploadSubmissionAndFiles(@NonNull File submissionFile, @NonNull List<File> fileList, @NonNull URI uri, @Nullable HttpCredentialsInterface credentials, @NonNull long contentLength) throws Exception {
+        return uploadSubmissionAndFiles(submissionFile, fileList, uri, credentials, contentLength, () -> false);
+    }
+
+    @NonNull
+    @Override
+    public HttpPostResult uploadSubmissionAndFiles(@NonNull File submissionFile, @NonNull List<File> fileList, @NonNull URI uri, @Nullable HttpCredentialsInterface credentials, @NonNull long contentLength, @NonNull Supplier<Boolean> isCancelled) throws Exception {
         HttpPostResult postResult = null;
 
         boolean first = true;
         int fileIndex = 0;
         int lastFileIndex;
         while (fileIndex < fileList.size() || first) {
+            if (isCancelled.get()) {
+                throw new InterruptedIOException("Upload canceled");
+            }
+
             lastFileIndex = fileIndex;
             first = false;
             long byteCount = 0L;
 
-            RequestBody requestBody = RequestBody.create(MediaType.parse(HTTP_CONTENT_TYPE_TEXT_XML), submissionFile);
+            RequestBody requestBody = cancellableRequestBody(MediaType.parse(HTTP_CONTENT_TYPE_TEXT_XML), submissionFile, isCancelled);
 
             MultipartBody.Builder multipartBuilder = new MultipartBody.Builder()
                     .setType(MultipartBody.FORM)
@@ -162,7 +177,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
 
                 String contentType = fileToContentTypeMapper.map(file.getName());
 
-                RequestBody fileRequestBody = RequestBody.create(MediaType.parse(contentType), file);
+                RequestBody fileRequestBody = cancellableRequestBody(MediaType.parse(contentType), file, isCancelled);
                 multipartBuilder.addPart(MultipartBody.Part.createFormData(file.getName(), file.getName(), fileRequestBody));
 
                 byteCount += file.length();
@@ -216,6 +231,40 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
         discardEntityBytes(response);
 
         return postResult;
+    }
+
+    /**
+     * Wraps a file in a {@link RequestBody} that streams it in chunks and aborts the upload (by
+     * throwing {@link InterruptedIOException}) as soon as {@code isCancelled} starts returning
+     * {@code true}. This mirrors the cancellable download in {@code FileUtils.interuptablyWriteFile}
+     * so an in-progress submission can be stopped mid-transfer.
+     */
+    private static RequestBody cancellableRequestBody(MediaType contentType, File file, @NonNull Supplier<Boolean> isCancelled) {
+        return new RequestBody() {
+            @Override
+            public MediaType contentType() {
+                return contentType;
+            }
+
+            @Override
+            public long contentLength() {
+                return file.length();
+            }
+
+            @Override
+            public void writeTo(@NonNull BufferedSink sink) throws IOException {
+                byte[] buffer = new byte[IOUtils.DEFAULT_BUFFER_SIZE];
+                try (InputStream inputStream = new FileInputStream(file)) {
+                    int read;
+                    while ((read = inputStream.read(buffer)) != -1) {
+                        if (isCancelled.get()) {
+                            throw new InterruptedIOException("Upload canceled");
+                        }
+                        sink.write(buffer, 0, read);
+                    }
+                }
+            }
+        };
     }
 
     /**

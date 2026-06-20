@@ -187,7 +187,7 @@ class OpenRosaServerInstanceUploader(
                     uri,
                     webCredentialsUtils.getCredentials(uri),
                     contentLength
-                )
+            ) { isCancelled() }
 
             val responseCode = postResult.responseCode
             messageParser.setMessageResponse(postResult.httpResponse)
@@ -212,6 +212,9 @@ class OpenRosaServerInstanceUploader(
             }
 
         } catch (e: Exception) {
+            if (isCancelled()) {
+                throw FormUploadInterruptedException()
+            }
             throw FormUploadException(e.message ?: e.toString())
         }
 
