@@ -17,7 +17,14 @@ class CrashHandler {
     }
 
     fun registerCrash(context: Context, crash: Throwable) {
-        getPreferences(context).edit().putString(KEY_CRASH, crash.message ?: "").apply()
+        val message = if (crash is OutOfMemoryError) {
+            context.getString(org.odk.collect.strings.R.string.crash_oom_description)
+        } else {
+            crash.message ?: ""
+        }
+
+
+        getPreferences(context).edit().putString(KEY_CRASH, message).apply()
     }
 
     fun hasCrashed(context: Context): Boolean {

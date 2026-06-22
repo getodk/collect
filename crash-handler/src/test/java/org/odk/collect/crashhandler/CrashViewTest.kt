@@ -31,6 +31,22 @@ class CrashViewTest {
     @Test
     fun getCrashView_whenThereHasBeenACrashRegistered_returnsViewWithCrashDetails() {
         val crashHandler = createCrashHandler()
+        crashHandler.registerCrash(context, OutOfMemoryError())
+
+        val view = getCrashView(crashHandler, context)
+        assertThat(
+            view!!.findViewById<TextView>(R.id.title).text,
+            equalTo(context.getString(org.odk.collect.strings.R.string.crash_last_run))
+        )
+        assertThat(
+            view.findViewById<TextView>(R.id.message).text,
+            equalTo(context.getString(org.odk.collect.strings.R.string.crash_oom_description))
+        )
+    }
+
+    @Test
+    fun getCrashView_whenOOMIsRegistered_showsSpecificMessage() {
+        val crashHandler = createCrashHandler()
         crashHandler.registerCrash(context, RuntimeException("crash!"))
 
         val view = getCrashView(crashHandler, context)
