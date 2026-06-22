@@ -6,7 +6,7 @@ import org.odk.collect.androidshared.data.getState
 import java.lang.Thread.UncaughtExceptionHandler
 import kotlin.system.exitProcess
 
-class CrashHandler(private val processKiller: Runnable = Runnable { exitProcess(0) }) {
+class CrashHandler {
 
     private var conditionFailure: String? = null
 

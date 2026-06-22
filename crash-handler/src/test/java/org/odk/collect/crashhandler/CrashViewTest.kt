@@ -151,5 +151,5 @@ class CrashViewTest {
         verify(processKiller).run()
     }
 
-    private fun createCrashHandler() = CrashHandler(processKiller)
+    private fun createCrashHandler() = CrashHandler()
 }

@@ -1,13 +1,10 @@
 package org.odk.collect.crashhandler
 
 import android.content.Context
-import android.view.View
-import android.widget.TextView
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
-import org.hamcrest.Matchers.notNullValue
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
@@ -20,8 +17,6 @@ class CrashHandlerTest {
     private val context = ApplicationProvider.getApplicationContext<Context>().also {
         it.setTheme(com.google.android.material.R.style.Theme_MaterialComponents)
     }
-
-    private val processKiller = mock<Runnable>()
 
     @Test
     fun hasCrashed_whenThereAreNoCrashesRegistered_andNoConditionsFailed_returnsFalse() {
@@ -64,5 +59,5 @@ class CrashHandlerTest {
         verify(onSuccess, never()).run()
     }
 
-    private fun createCrashHandler() = CrashHandler(processKiller)
+    private fun createCrashHandler() = CrashHandler()
 }
