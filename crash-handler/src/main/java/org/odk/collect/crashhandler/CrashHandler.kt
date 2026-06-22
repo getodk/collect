@@ -2,6 +2,7 @@ package org.odk.collect.crashhandler
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.google.gson.Gson
 import org.odk.collect.androidshared.data.getState
 import java.lang.Thread.UncaughtExceptionHandler
 import kotlin.system.exitProcess
@@ -17,14 +18,7 @@ class CrashHandler {
     }
 
     fun registerCrash(context: Context, crash: Throwable) {
-        val message = if (crash is OutOfMemoryError) {
-            context.getString(org.odk.collect.strings.R.string.crash_oom_description)
-        } else {
-            crash.message ?: ""
-        }
-
-
-        getPreferences(context).edit().putString(KEY_CRASH, message).apply()
+        getPreferences(context).edit().putString(KEY_CRASH, crash.toJsonCrash()).apply()
     }
 
     fun hasCrashed(context: Context): Boolean {
@@ -36,13 +30,7 @@ class CrashHandler {
             if (it != null) {
                 Crash.ConditionFailure(it)
             } else {
-                val preferences = getPreferences(context)
-                val crashMessage = preferences.getString(KEY_CRASH, null)
-                if (crashMessage != null) {
-                    Crash.Normal(crashMessage)
-                } else {
-                    null
-                }
+                getPreferences(context).getString(KEY_CRASH, null).parseCrash()
             }
         }
     }
@@ -139,11 +127,17 @@ fun getCrashView(
             }
         }
 
-        is Crash.Normal -> {
+        is Crash.Normal, is Crash.OutOfMemory -> {
+            val message = if (crash is Crash.Normal) {
+                crash.message
+            } else {
+                context.getString(org.odk.collect.strings.R.string.crash_oom_description)
+            }
+
             CrashView(context).also {
                 it.setCrash(
                     context.getString(org.odk.collect.strings.R.string.crash_last_run),
-                    crash.message
+                    message
                 ) {
                     crashHandler.dismissCrash(context)
                     onErrorDismissed?.run()
@@ -156,6 +150,31 @@ fun getCrashView(
 }
 
 sealed class Crash {
-    data class ConditionFailure(val message: String) : Crash()
-    data class Normal(val message: String) : Crash()
+    class ConditionFailure(val message: String) : Crash()
+    class Normal(val message: String) : Crash()
+    object OutOfMemory : Crash()
+}
+
+private data class JsonCrash(val outOfMemory: Boolean, val message: String)
+
+private fun Throwable.toJsonCrash(): String? {
+    return Gson().toJson(
+        JsonCrash(
+            outOfMemory = this is OutOfMemoryError,
+            message = this.message ?: ""
+        )
+    )
+}
+
+private fun String?.parseCrash(): Crash? {
+    return if (this != null) {
+        val jsonCrash = Gson().fromJson(this, JsonCrash::class.java)
+        if (jsonCrash.outOfMemory) {
+            Crash.OutOfMemory
+        } else {
+            Crash.Normal(jsonCrash.message)
+        }
+    } else {
+        null
+    }
 }
