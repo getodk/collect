@@ -69,7 +69,6 @@ class InstanceUploadViewModel(
                 }
 
             clearTemporaryCredentials()
-            instancesDataService.update(projectId)
             _state.postValue(UploadState.Completed(uploadResults))
         }
     }
