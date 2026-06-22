@@ -51,7 +51,6 @@ class InstanceUploadViewModel(
                 instancesToUpload,
                 referrer,
                 externalUrl,
-                true,
                 externalDeleteAfterUpload,
                 defaultSuccessMessage,
             ) { current, total ->
