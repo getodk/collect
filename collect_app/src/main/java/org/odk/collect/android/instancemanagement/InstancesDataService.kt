@@ -1,6 +1,8 @@
 package org.odk.collect.android.instancemanagement
 
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.isActive
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.analytics.AnalyticsUtils
@@ -221,12 +223,12 @@ class InstancesDataService(
         instances: List<Instance>,
         referrer: String,
         overrideURL: String?,
-        cancelAfterAuthException: Boolean,
         externalDeleteAfterUpload: Boolean?,
         defaultSuccessMessage: String,
         onProgress: (current: Int, total: Int) -> Unit = { _, _ -> }
     ): List<InstanceUploadResult> {
         val projectDependencyModule = projectDependencyModuleFactory.create(projectId)
+        val coroutineContext = currentCoroutineContext()
 
         return projectDependencyModule.instancesLock.withLockSuspend { acquiredLock: Boolean ->
             if (acquiredLock) {
@@ -235,10 +237,11 @@ class InstancesDataService(
                     instances,
                     referrer,
                     overrideURL,
-                    cancelAfterAuthException,
-                    externalDeleteAfterUpload,
-                    defaultSuccessMessage,
-                    onProgress
+                    cancelAfterAuthException = true,
+                    externalDeleteAfterUpload = externalDeleteAfterUpload,
+                    defaultSuccessMessage = defaultSuccessMessage,
+                    isCancelled = { !coroutineContext.isActive },
+                    onProgress = onProgress
                 )
 
                 logResults(projectDependencyModule.formsRepository, result, auto = false)
