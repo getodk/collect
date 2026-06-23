@@ -2,11 +2,11 @@ package org.odk.collect.crashhandler
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.core.content.edit
 import com.google.gson.Gson
 import org.odk.collect.androidshared.data.getState
 import java.lang.Thread.UncaughtExceptionHandler
 import kotlin.system.exitProcess
-import androidx.core.content.edit
 
 class CrashHandler {
 
@@ -19,7 +19,12 @@ class CrashHandler {
     }
 
     fun registerCrash(context: Context, crash: Throwable) {
-        getPreferences(context).edit { putString(KEY_CRASH, crash.toJsonCrash()) }
+        val serializedCrash = SerializedCrash(
+            outOfMemory = crash is OutOfMemoryError,
+            message = crash.message ?: ""
+        )
+
+        getPreferences(context).edit { putString(KEY_CRASH, serializedCrash.encode()) }
     }
 
     fun hasCrashed(context: Context): Boolean {
@@ -31,7 +36,16 @@ class CrashHandler {
             if (it != null) {
                 Crash.ConditionFailure(it)
             } else {
-                getPreferences(context).getString(KEY_CRASH, null).parseCrash()
+                val serializedCrash =
+                    SerializedCrash.decode(getPreferences(context).getString(KEY_CRASH, null))
+                if (serializedCrash == null) {
+                    null
+                } else if (serializedCrash.outOfMemory) {
+                    Crash.OutOfMemory
+                } else {
+                    Crash.Normal(serializedCrash.message)
+                }
+
             }
         }
     }
@@ -156,26 +170,18 @@ sealed class Crash {
     object OutOfMemory : Crash()
 }
 
-private data class JsonCrash(val outOfMemory: Boolean, val message: String)
+private class SerializedCrash(val outOfMemory: Boolean, val message: String) {
+    fun encode(): String {
+        return Gson().toJson(this)
+    }
 
-private fun Throwable.toJsonCrash(): String? {
-    return Gson().toJson(
-        JsonCrash(
-            outOfMemory = this is OutOfMemoryError,
-            message = this.message ?: ""
-        )
-    )
-}
-
-private fun String?.parseCrash(): Crash? {
-    return if (this != null) {
-        val jsonCrash = Gson().fromJson(this, JsonCrash::class.java)
-        if (jsonCrash.outOfMemory) {
-            Crash.OutOfMemory
-        } else {
-            Crash.Normal(jsonCrash.message)
+    companion object {
+        fun decode(string: String?): SerializedCrash? {
+            return if (string != null) {
+                Gson().fromJson(string, SerializedCrash::class.java)
+            } else {
+                null
+            }
         }
-    } else {
-        null
     }
 }
