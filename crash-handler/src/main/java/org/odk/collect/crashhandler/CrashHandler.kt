@@ -3,7 +3,6 @@ package org.odk.collect.crashhandler
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import com.google.gson.Gson
 import org.odk.collect.androidshared.data.getState
 import java.lang.Thread.UncaughtExceptionHandler
 import kotlin.system.exitProcess
@@ -168,20 +167,4 @@ sealed class Crash {
     class ConditionFailure(val message: String) : Crash()
     class Normal(val message: String) : Crash()
     object OutOfMemory : Crash()
-}
-
-private class SerializedCrash(val outOfMemory: Boolean, val message: String) {
-    fun encode(): String {
-        return Gson().toJson(this)
-    }
-
-    companion object {
-        fun decode(string: String?): SerializedCrash? {
-            return if (string != null) {
-                Gson().fromJson(string, SerializedCrash::class.java)
-            } else {
-                null
-            }
-        }
-    }
 }
