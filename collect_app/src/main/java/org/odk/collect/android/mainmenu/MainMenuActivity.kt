@@ -18,6 +18,7 @@ import org.odk.collect.android.utilities.ThemeUtils
 import org.odk.collect.androidshared.ui.EdgeToEdge.setView
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.crashhandler.CrashHandler
+import org.odk.collect.crashhandler.hasCrashed
 import org.odk.collect.mobiledevicemanagement.MDMConfigObserver
 import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.settings.SettingsProvider

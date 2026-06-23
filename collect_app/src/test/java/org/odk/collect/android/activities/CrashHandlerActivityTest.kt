@@ -11,6 +11,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.androidtest.ActivityScenarioLauncherRule
 import org.odk.collect.crashhandler.CrashHandler
+import org.odk.collect.crashhandler.hasCrashed
 
 @RunWith(AndroidJUnit4::class)
 class CrashHandlerActivityTest {

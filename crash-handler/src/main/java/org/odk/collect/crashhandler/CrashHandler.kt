@@ -26,10 +26,6 @@ class CrashHandler {
         getPreferences(context).edit { putString(KEY_CRASH, serializedCrash.encode()) }
     }
 
-    fun hasCrashed(context: Context): Boolean {
-        return getPreferences(context).contains(KEY_CRASH) || conditionFailure != null
-    }
-
     fun getCrash(context: Context): Crash? {
         return conditionFailure.let {
             if (it != null) {
@@ -161,6 +157,10 @@ fun getCrashView(
 
         null -> null
     }
+}
+
+fun CrashHandler.hasCrashed(context: Context): Boolean {
+    return getCrash(context) != null
 }
 
 sealed class Crash {
