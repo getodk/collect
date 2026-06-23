@@ -6,6 +6,7 @@ import com.google.gson.Gson
 import org.odk.collect.androidshared.data.getState
 import java.lang.Thread.UncaughtExceptionHandler
 import kotlin.system.exitProcess
+import androidx.core.content.edit
 
 class CrashHandler {
 
@@ -18,7 +19,7 @@ class CrashHandler {
     }
 
     fun registerCrash(context: Context, crash: Throwable) {
-        getPreferences(context).edit().putString(KEY_CRASH, crash.toJsonCrash()).apply()
+        getPreferences(context).edit { putString(KEY_CRASH, crash.toJsonCrash()) }
     }
 
     fun hasCrashed(context: Context): Boolean {
@@ -36,7 +37,7 @@ class CrashHandler {
     }
 
     fun dismissCrash(context: Context) {
-        getPreferences(context).edit().remove(KEY_CRASH).apply()
+        getPreferences(context).edit { remove(KEY_CRASH) }
     }
 
     private fun checkConditions(runnable: Runnable): Boolean {
