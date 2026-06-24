@@ -19,8 +19,8 @@ object MappableItemsParser {
 
     fun parseChoices(
         choices: List<SelectChoice>,
-        options: Options,
-        translator: (SelectChoice) -> String
+        options: Options = Options(),
+        translator: (SelectChoice) -> String = { it.value }
     ): List<MappableItem> {
         return choices.mapIndexedNotNull { index, selectChoice ->
             val geometry = selectChoice.getChild(GEOMETRY)
@@ -52,34 +52,35 @@ object MappableItemsParser {
                                 point = points[0],
                                 smallIcon = if (markerSymbol.isNullOrBlank()) R.drawable.ic_map_marker_with_hole_small else R.drawable.ic_map_marker_small,
                                 largeIcon = if (markerSymbol.isNullOrBlank()) R.drawable.ic_map_marker_with_hole_big else R.drawable.ic_map_marker_big,
-                                color = markerColor ?: options.color,
+                                color = if (!markerColor.isNullOrBlank()) markerColor else options.color,
                                 symbol = markerSymbol,
                                 action = options.action
                             )
-                        } else if (points.first() != points.last()) {
-                            MappableItem.Line(
-                                index.toLong(),
-                                translator(selectChoice),
-                                properties,
-                                points = points,
-                                strokeWidth = getPropertyValue(selectChoice, STROKE_WIDTH),
-                                strokeColor = getPropertyValue(selectChoice, STROKE)
-                                    ?: options.color,
-                                action = options.action
-                            )
                         } else {
-                            MappableItem.Polygon(
-                                index.toLong(),
-                                translator(selectChoice),
-                                properties,
-                                points = points,
-                                strokeWidth = getPropertyValue(selectChoice, STROKE_WIDTH),
-                                strokeColor = getPropertyValue(selectChoice, STROKE)
-                                    ?: options.color,
-                                fillColor = getPropertyValue(selectChoice, FILL)
-                                    ?: options.color,
-                                action = options.action
-                            )
+                            val strokeColor = getPropertyValue(selectChoice, STROKE)
+                            if (points.first() != points.last()) {
+                                MappableItem.Line(
+                                    index.toLong(),
+                                    translator(selectChoice),
+                                    properties,
+                                    points = points,
+                                    strokeWidth = getPropertyValue(selectChoice, STROKE_WIDTH),
+                                    strokeColor = if (!strokeColor.isNullOrBlank()) strokeColor else options.color,
+                                    action = options.action
+                                )
+                            } else {
+                                val fillColor = getPropertyValue(selectChoice, FILL)
+                                MappableItem.Polygon(
+                                    index.toLong(),
+                                    translator(selectChoice),
+                                    properties,
+                                    points = points,
+                                    strokeWidth = getPropertyValue(selectChoice, STROKE_WIDTH),
+                                    strokeColor = if (!strokeColor.isNullOrBlank()) strokeColor else options.color,
+                                    fillColor = if (!fillColor.isNullOrBlank()) fillColor else options.color,
+                                    action = options.action
+                                )
+                            }
                         }
                     } else {
                         null
