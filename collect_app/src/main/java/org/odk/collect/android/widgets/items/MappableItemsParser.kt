@@ -14,6 +14,7 @@ import org.odk.collect.geo.geopoly.GeoPolyUtils.parseGeometry
 import org.odk.collect.geo.items.IconifiedText
 import org.odk.collect.geo.items.MappableItem
 import org.odk.collect.icons.R
+import org.odk.collect.maps.MapPoint
 
 object MappableItemsParser {
 
@@ -40,45 +41,25 @@ object MappableItemsParser {
                         }
 
                         if (points.size == 1) {
-                            val markerColor =
-                                getPropertyValue(selectChoice, MARKER_COLOR)
-                            val markerSymbol =
-                                getPropertyValue(selectChoice, MARKER_SYMBOL)
-
-                            MappableItem.Point(
-                                index.toLong(),
-                                translator(selectChoice),
-                                properties,
-                                point = points[0],
-                                smallIcon = if (markerSymbol.isNullOrBlank()) R.drawable.ic_map_marker_with_hole_small else R.drawable.ic_map_marker_small,
-                                largeIcon = if (markerSymbol.isNullOrBlank()) R.drawable.ic_map_marker_with_hole_big else R.drawable.ic_map_marker_big,
-                                color = if (!markerColor.isNullOrBlank()) markerColor else options.color,
-                                symbol = markerSymbol,
-                                action = options.action
-                            )
+                            parsePoint(selectChoice, index, translator, properties, points, options)
                         } else {
-                            val strokeColor = getPropertyValue(selectChoice, STROKE)
                             if (points.first() != points.last()) {
-                                MappableItem.Line(
-                                    index.toLong(),
-                                    translator(selectChoice),
+                                parsePolygon(
+                                    selectChoice,
+                                    index,
+                                    translator,
                                     properties,
-                                    points = points,
-                                    strokeWidth = getPropertyValue(selectChoice, STROKE_WIDTH),
-                                    strokeColor = if (!strokeColor.isNullOrBlank()) strokeColor else options.color,
-                                    action = options.action
+                                    points,
+                                    options
                                 )
                             } else {
-                                val fillColor = getPropertyValue(selectChoice, FILL)
-                                MappableItem.Polygon(
-                                    index.toLong(),
-                                    translator(selectChoice),
+                                parseLine(
+                                    selectChoice,
+                                    index,
+                                    translator,
                                     properties,
-                                    points = points,
-                                    strokeWidth = getPropertyValue(selectChoice, STROKE_WIDTH),
-                                    strokeColor = if (!strokeColor.isNullOrBlank()) strokeColor else options.color,
-                                    fillColor = if (!fillColor.isNullOrBlank()) fillColor else options.color,
-                                    action = options.action
+                                    points,
+                                    options
                                 )
                             }
                         }
@@ -92,6 +73,74 @@ object MappableItemsParser {
                 null
             }
         }
+    }
+
+    private fun parseLine(
+        selectChoice: SelectChoice,
+        index: Int,
+        translator: (SelectChoice) -> String,
+        properties: List<IconifiedText>,
+        points: List<MapPoint>,
+        options: Options
+    ): MappableItem.Polygon {
+        val strokeColor = getPropertyValue(selectChoice, STROKE)
+        val fillColor = getPropertyValue(selectChoice, FILL)
+        return MappableItem.Polygon(
+            index.toLong(),
+            translator(selectChoice),
+            properties,
+            points = points,
+            strokeWidth = getPropertyValue(selectChoice, STROKE_WIDTH),
+            strokeColor = if (!strokeColor.isNullOrBlank()) strokeColor else options.color,
+            fillColor = if (!fillColor.isNullOrBlank()) fillColor else options.color,
+            action = options.action
+        )
+    }
+
+    private fun parsePolygon(
+        selectChoice: SelectChoice,
+        index: Int,
+        translator: (SelectChoice) -> String,
+        properties: List<IconifiedText>,
+        points: List<MapPoint>,
+        options: Options
+    ): MappableItem.Line {
+        val strokeColor = getPropertyValue(selectChoice, STROKE)
+        return MappableItem.Line(
+            index.toLong(),
+            translator(selectChoice),
+            properties,
+            points = points,
+            strokeWidth = getPropertyValue(selectChoice, STROKE_WIDTH),
+            strokeColor = if (!strokeColor.isNullOrBlank()) strokeColor else options.color,
+            action = options.action
+        )
+    }
+
+    private fun parsePoint(
+        selectChoice: SelectChoice,
+        index: Int,
+        translator: (SelectChoice) -> String,
+        properties: List<IconifiedText>,
+        points: List<MapPoint>,
+        options: Options
+    ): MappableItem.Point {
+        val markerColor =
+            getPropertyValue(selectChoice, MARKER_COLOR)
+        val markerSymbol =
+            getPropertyValue(selectChoice, MARKER_SYMBOL)
+
+        return MappableItem.Point(
+            index.toLong(),
+            translator(selectChoice),
+            properties,
+            point = points[0],
+            smallIcon = if (markerSymbol.isNullOrBlank()) R.drawable.ic_map_marker_with_hole_small else R.drawable.ic_map_marker_small,
+            largeIcon = if (markerSymbol.isNullOrBlank()) R.drawable.ic_map_marker_with_hole_big else R.drawable.ic_map_marker_big,
+            color = if (!markerColor.isNullOrBlank()) markerColor else options.color,
+            symbol = markerSymbol,
+            action = options.action
+        )
     }
 
     private fun getPropertyValue(selectChoice: SelectChoice, propertyName: String): String? {
