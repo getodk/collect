@@ -44,6 +44,8 @@ dependencies {
     implementation(project(":androidshared"))
     implementation(project(":strings"))
     implementation(libs.androidMaterial)
+    implementation(libs.gson)
+
     testImplementation(libs.junit)
     testImplementation(libs.hamcrest)
     testImplementation(libs.mockitoKotlin)

@@ -11,17 +11,13 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.androidtest.ActivityScenarioLauncherRule
 import org.odk.collect.crashhandler.CrashHandler
-import org.odk.collect.crashhandler.MockCrashView
-import org.odk.collect.testshared.ActivityExt.getContextView
+import org.odk.collect.crashhandler.hasCrashed
 
 @RunWith(AndroidJUnit4::class)
 class CrashHandlerActivityTest {
 
     private val context = ApplicationProvider.getApplicationContext<Context>()
-    private val crashHandler = CrashHandler.getInstance(context)!!.also {
-        it.createMockViews = true
-    }
-
+    private val crashHandler = CrashHandler.getInstance(context)!!
     @get:Rule
     val launcherRule = ActivityScenarioLauncherRule()
 
@@ -29,24 +25,16 @@ class CrashHandlerActivityTest {
     fun `pressing back dismisses crash view`() {
         crashHandler.registerCrash(context, RuntimeException("BAM"))
 
-        launcherRule.launch(CrashHandlerActivity::class.java).onActivity {
-            val crashView = it.getContextView<MockCrashView>()
-            assertThat(crashView.wasDismissed, equalTo(false))
-
+        val scenario = launcherRule.launch(CrashHandlerActivity::class.java)
+        scenario.onActivity {
             it.onBackPressedDispatcher.onBackPressed()
-
-            assertThat(crashView.wasDismissed, equalTo(true))
         }
+
+        assertThat(crashHandler.hasCrashed(context), equalTo(false))
     }
 
-    /**
-     * This wouldn't ideally happen, but there are scenarios where the Activity is recreated after
-     * "ok" is created due to how Android's themed resources work - setting a theme that's different
-     * from the system (which happens in [MainMenuActivity]) can cause even finishing Activity
-     * objects to be recreated.
-     */
     @Test
-    fun `finishes if crash view is null`() {
+    fun `finishes if there's no crash`() {
         assertThat(launcherRule.launch(CrashHandlerActivity::class.java).state, equalTo(Lifecycle.State.DESTROYED))
     }
 }

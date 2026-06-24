@@ -2,13 +2,12 @@ package org.odk.collect.crashhandler
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.core.content.edit
 import org.odk.collect.androidshared.data.getState
 import java.lang.Thread.UncaughtExceptionHandler
 import kotlin.system.exitProcess
 
-class CrashHandler(private val processKiller: Runnable = Runnable { exitProcess(0) }) {
-
-    var createMockViews = false
+class CrashHandler {
 
     private var conditionFailure: String? = null
 
@@ -19,37 +18,35 @@ class CrashHandler(private val processKiller: Runnable = Runnable { exitProcess(
     }
 
     fun registerCrash(context: Context, crash: Throwable) {
-        getPreferences(context).edit().putString(KEY_CRASH, crash.message ?: "").apply()
+        val serializedCrash = SerializedCrash(
+            outOfMemory = crash is OutOfMemoryError,
+            message = crash.message ?: ""
+        )
+
+        getPreferences(context).edit { putString(KEY_CRASH, serializedCrash.encode()) }
     }
 
-    fun hasCrashed(context: Context): Boolean {
-        return getPreferences(context).contains(KEY_CRASH) || conditionFailure != null
-    }
-
-    @JvmOverloads
-    fun getCrashView(context: Context, onErrorDismissed: Runnable? = null): CrashView? {
-        val preferences = getPreferences(context)
-
-        return if (conditionFailure != null) {
-            val crashMessage = conditionFailure
-
-            createCrashView(context).also {
-                it.setCrash(context.getString(org.odk.collect.strings.R.string.cant_start_app), crashMessage) {
-                    processKiller.run()
+    fun getCrash(context: Context): Crash? {
+        return conditionFailure.let {
+            if (it != null) {
+                Crash.ConditionFailure(it)
+            } else {
+                val serializedCrash =
+                    SerializedCrash.decode(getPreferences(context).getString(KEY_CRASH, null))
+                if (serializedCrash == null) {
+                    null
+                } else if (serializedCrash.outOfMemory) {
+                    Crash.OutOfMemory
+                } else {
+                    Crash.Normal(serializedCrash.message)
                 }
-            }
-        } else if (preferences.contains(KEY_CRASH)) {
-            val crashMessage = preferences.getString(KEY_CRASH, null)
 
-            createCrashView(context).also {
-                it.setCrash(context.getString(org.odk.collect.strings.R.string.crash_last_run), crashMessage) {
-                    preferences.edit().remove(KEY_CRASH).apply()
-                    onErrorDismissed?.run()
-                }
             }
-        } else {
-            null
         }
+    }
+
+    fun dismissCrash(context: Context) {
+        getPreferences(context).edit { remove(KEY_CRASH) }
     }
 
     private fun checkConditions(runnable: Runnable): Boolean {
@@ -59,14 +56,6 @@ class CrashHandler(private val processKiller: Runnable = Runnable { exitProcess(
         } catch (t: Throwable) {
             conditionFailure = t.message ?: ""
             false
-        }
-    }
-
-    private fun createCrashView(context: Context): CrashView {
-        return if (createMockViews) {
-            MockCrashView(context)
-        } else {
-            CrashView(context)
         }
     }
 
@@ -127,4 +116,55 @@ class CrashHandler(private val processKiller: Runnable = Runnable { exitProcess(
             originalHandler = null
         }
     }
+}
+
+@JvmOverloads
+fun getCrashView(
+    crashHandler: CrashHandler,
+    context: Context,
+    processKiller: Runnable = Runnable { exitProcess(0) },
+    onErrorDismissed: Runnable? = null
+): CrashView? {
+    return when (val crash = crashHandler.getCrash(context)) {
+        is Crash.ConditionFailure -> {
+            CrashView(context).also {
+                it.setCrash(
+                    context.getString(org.odk.collect.strings.R.string.cant_start_app),
+                    crash.message
+                ) {
+                    processKiller.run()
+                }
+            }
+        }
+
+        is Crash.Normal, is Crash.OutOfMemory -> {
+            val message = if (crash is Crash.Normal) {
+                crash.message
+            } else {
+                context.getString(org.odk.collect.strings.R.string.crash_oom_description)
+            }
+
+            CrashView(context).also {
+                it.setCrash(
+                    context.getString(org.odk.collect.strings.R.string.crash_last_run),
+                    message
+                ) {
+                    crashHandler.dismissCrash(context)
+                    onErrorDismissed?.run()
+                }
+            }
+        }
+
+        null -> null
+    }
+}
+
+fun CrashHandler.hasCrashed(context: Context): Boolean {
+    return getCrash(context) != null
+}
+
+sealed class Crash {
+    class ConditionFailure(val message: String) : Crash()
+    class Normal(val message: String) : Crash()
+    object OutOfMemory : Crash()
 }

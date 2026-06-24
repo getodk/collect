@@ -1276,6 +1276,9 @@
     <string name="crash_last_run">There was a crash last time the app was running!</string>
     <string name="cant_start_app">Cannot start the app!</string>
 
+    <!-- Message shown when the app crashed due to running out of memory last time it was run. -->
+    <string name="crash_oom_description">Your device ran out of memory. Try closing other apps and reopening the form. If the problem continues, the form or its data may be too large or complex for this device. Please contact the person who asked you to use the form.</string>
+
     <!--
     ##############################################
     # Google Drive deprecation
