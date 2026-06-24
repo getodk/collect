@@ -1,20 +1,14 @@
 package org.odk.collect.android.widgets
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AttachFile
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.unit.dp
 import org.javarosa.core.model.Constants
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.widgets.image.ImageWidgetAnswer
@@ -57,19 +51,7 @@ fun WidgetAnswer(
                     )
                 }
             }
-            Constants.CONTROL_IMAGE_CHOOSE -> ImageWidgetAnswer(
-                if (compact) {
-                    modifier
-                        .height(200.dp)
-                        .wrapContentWidth(Alignment.Start)
-                } else {
-                    modifier.fillMaxWidth()
-                },
-                answer,
-                if (compact) ContentScale.Fit else ContentScale.FillWidth,
-                mediaWidgetAnswerViewModel,
-                onLongClick
-            )
+            Constants.CONTROL_IMAGE_CHOOSE -> ImageWidgetAnswer(modifier, answer, mediaWidgetAnswerViewModel, onLongClick)
             Constants.CONTROL_VIDEO_CAPTURE -> VideoWidgetAnswer(modifier, answer, mediaWidgetAnswerViewModel, onLongClick)
             Constants.CONTROL_FILE_CAPTURE -> {
                 val context = LocalContext.current
