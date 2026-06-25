@@ -13,6 +13,7 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ImageCompressionController;
 import org.odk.collect.android.widgets.BaseImageWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
+import org.odk.collect.android.widgets.image.ImageWidget;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.settings.SettingsProvider;
 
@@ -52,7 +53,7 @@ public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
             QuestionWidget questionWidget = formFillingActivity.get().getWidgetWaitingForBinaryData();
 
             // apply image conversion if the widget is an image widget
-            if (questionWidget instanceof BaseImageWidget) {
+            if (questionWidget instanceof BaseImageWidget || questionWidget instanceof ImageWidget) {
                 String imageSizeMode = settingsProvider.getUnprotectedSettings().getString(KEY_IMAGE_SIZE);
                 imageCompressionController.execute(newFile.getPath(), questionWidget, formFillingActivity.get(), imageSizeMode);
             }
