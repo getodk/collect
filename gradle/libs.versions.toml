@@ -101,6 +101,7 @@ jsoup = { group = "org.jsoup", name = "jsoup", version = "1.22.1" }
 mlkit-barcodescanning = { group = "com.google.android.gms", name = "play-services-mlkit-barcode-scanning", version = "18.3.1" }
 runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata" }
 coil = { group = "io.coil-kt.coil3", name = "coil-compose", version = "3.4.0" }
+coil-gif = { group = "io.coil-kt.coil3", name = "coil-gif", version = "3.4.0" }
 
 # Test dependencies
 junit = { group = "junit", name = "junit", version = "4.13.2" }
