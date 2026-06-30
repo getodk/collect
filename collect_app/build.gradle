@@ -350,6 +350,7 @@ dependencies {
     implementation(libs.androidXComposeMaterialIcons)
     implementation(libs.androidXComposePreview)
     implementation(libs.coil)
+    implementation(libs.coil.gif)
 
     testImplementation project(':forms-test')
 

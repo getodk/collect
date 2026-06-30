@@ -56,6 +56,7 @@ class ApplicationInitializer(
         ).initialize()
         mapsInitializer.initialize()
         JavaRosaInitializer(propertyManager, projectsDataService, entitiesRepositoryProvider).initialize()
+        CoilInitializer().initialize()
     }
 
     private fun initializeFrameworks() {
