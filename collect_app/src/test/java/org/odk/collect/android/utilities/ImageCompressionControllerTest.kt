@@ -11,7 +11,6 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
-import org.odk.collect.android.widgets.QuestionWidget
 import org.odk.collect.androidshared.bitmap.ImageCompressor
 
 @RunWith(AndroidJUnit4::class)
@@ -19,9 +18,6 @@ class ImageCompressionControllerTest {
 
     private val context = ApplicationProvider.getApplicationContext<Application>()
     private val formEntryPrompt = mock<FormEntryPrompt>()
-    private val questionWidget = mock<QuestionWidget>().also {
-        whenever(it.formEntryPrompt).thenReturn(formEntryPrompt)
-    }
     private val treeElement = mock<TreeElement>().also {
         whenever(it.attributeValue).thenReturn("123")
         whenever(it.name).thenReturn("max-pixels")
@@ -34,7 +30,7 @@ class ImageCompressionControllerTest {
     fun `when 'max-pixels' is not specified on a form level and expected image size in setting is 'original_image_size', image compression should not be triggered`() {
         whenever(formEntryPrompt.bindAttributes).thenReturn(emptyList())
 
-        imageCompressionController.execute("/path", questionWidget, context, "original_image_size")
+        imageCompressionController.execute("/path", formEntryPrompt, context, "original_image_size")
 
         verifyNoInteractions(imageCompressor)
     }
@@ -43,7 +39,7 @@ class ImageCompressionControllerTest {
     fun `when 'max-pixels' is not specified on a form level and expected image size in setting is 'very_small', image compression should be triggered for 640px`() {
         whenever(formEntryPrompt.bindAttributes).thenReturn(emptyList())
 
-        imageCompressionController.execute("/path", questionWidget, context, "very_small")
+        imageCompressionController.execute("/path", formEntryPrompt, context, "very_small")
 
         verify(imageCompressor).execute("/path", 640)
     }
@@ -52,7 +48,7 @@ class ImageCompressionControllerTest {
     fun `when 'max-pixels' is not specified on a form level and expected image size in setting is 'small', image compression should be triggered for 1024px`() {
         whenever(formEntryPrompt.bindAttributes).thenReturn(emptyList())
 
-        imageCompressionController.execute("/path", questionWidget, context, "small")
+        imageCompressionController.execute("/path", formEntryPrompt, context, "small")
 
         verify(imageCompressor).execute("/path", 1024)
     }
@@ -61,7 +57,7 @@ class ImageCompressionControllerTest {
     fun `when 'max-pixels' is not specified on a form level and expected image size in setting is 'medium', image compression should be triggered for 2048px`() {
         whenever(formEntryPrompt.bindAttributes).thenReturn(emptyList())
 
-        imageCompressionController.execute("/path", questionWidget, context, "medium")
+        imageCompressionController.execute("/path", formEntryPrompt, context, "medium")
 
         verify(imageCompressor).execute("/path", 2048)
     }
@@ -70,7 +66,7 @@ class ImageCompressionControllerTest {
     fun `when 'max-pixels' is not specified on a form level and expected image size in setting is 'large', image compression should be triggered for 3072px`() {
         whenever(formEntryPrompt.bindAttributes).thenReturn(emptyList())
 
-        imageCompressionController.execute("/path", questionWidget, context, "large")
+        imageCompressionController.execute("/path", formEntryPrompt, context, "large")
 
         verify(imageCompressor).execute("/path", 3072)
     }
@@ -79,7 +75,7 @@ class ImageCompressionControllerTest {
     fun `when 'max-pixels' is specified on a form level and expected image size in setting is 'original_image_size', image compression should be triggered for value stored in 'max-pixels'`() {
         whenever(formEntryPrompt.bindAttributes).thenReturn(listOf(treeElement))
 
-        imageCompressionController.execute("/path", questionWidget, context, "original_image_size")
+        imageCompressionController.execute("/path", formEntryPrompt, context, "original_image_size")
 
         verify(imageCompressor).execute("/path", 123)
     }
@@ -88,7 +84,7 @@ class ImageCompressionControllerTest {
     fun `when 'max-pixels' is specified on a form level and expected image size in setting is 'very_small', image compression should be triggered and the value stored in for value stored in 'max-pixels' should take precedence`() {
         whenever(formEntryPrompt.bindAttributes).thenReturn(listOf(treeElement))
 
-        imageCompressionController.execute("/path", questionWidget, context, "very_small")
+        imageCompressionController.execute("/path", formEntryPrompt, context, "very_small")
 
         verify(imageCompressor).execute("/path", 123)
     }
@@ -97,7 +93,7 @@ class ImageCompressionControllerTest {
     fun `when 'max-pixels' is specified on a form level and expected image size in setting is 'small', image compression should be triggered and the value stored in for value stored in 'max-pixels' should take precedence`() {
         whenever(formEntryPrompt.bindAttributes).thenReturn(listOf(treeElement))
 
-        imageCompressionController.execute("/path", questionWidget, context, "small")
+        imageCompressionController.execute("/path", formEntryPrompt, context, "small")
 
         verify(imageCompressor).execute("/path", 123)
     }
@@ -106,7 +102,7 @@ class ImageCompressionControllerTest {
     fun `when 'max-pixels' is specified on a form level and expected image size in setting is 'medium', image compression should be triggered and the value stored in for value stored in 'max-pixels' should take precedence`() {
         whenever(formEntryPrompt.bindAttributes).thenReturn(listOf(treeElement))
 
-        imageCompressionController.execute("/path", questionWidget, context, "medium")
+        imageCompressionController.execute("/path", formEntryPrompt, context, "medium")
 
         verify(imageCompressor).execute("/path", 123)
     }
@@ -115,7 +111,7 @@ class ImageCompressionControllerTest {
     fun `when 'max-pixels' is specified on a form level and expected image size in setting is 'large', image compression should be triggered and the value stored in for value stored in 'max-pixels' should take precedence`() {
         whenever(formEntryPrompt.bindAttributes).thenReturn(listOf(treeElement))
 
-        imageCompressionController.execute("/path", questionWidget, context, "large")
+        imageCompressionController.execute("/path", formEntryPrompt, context, "large")
 
         verify(imageCompressor).execute("/path", 123)
     }
@@ -125,7 +121,7 @@ class ImageCompressionControllerTest {
         whenever(treeElement.attributeValue).thenReturn("123.5")
         whenever(formEntryPrompt.bindAttributes).thenReturn(listOf(treeElement))
 
-        imageCompressionController.execute("/path", questionWidget, context, "original_image_size")
+        imageCompressionController.execute("/path", formEntryPrompt, context, "original_image_size")
 
         verifyNoInteractions(imageCompressor)
     }
@@ -135,7 +131,7 @@ class ImageCompressionControllerTest {
         whenever(treeElement.attributeValue).thenReturn("123.5")
         whenever(formEntryPrompt.bindAttributes).thenReturn(listOf(treeElement))
 
-        imageCompressionController.execute("/path", questionWidget, context, "very_small")
+        imageCompressionController.execute("/path", formEntryPrompt, context, "very_small")
 
         verify(imageCompressor).execute("/path", 640)
     }
@@ -145,7 +141,7 @@ class ImageCompressionControllerTest {
         whenever(treeElement.attributeValue).thenReturn("123.5")
         whenever(formEntryPrompt.bindAttributes).thenReturn(listOf(treeElement))
 
-        imageCompressionController.execute("/path", questionWidget, context, "small")
+        imageCompressionController.execute("/path", formEntryPrompt, context, "small")
 
         verify(imageCompressor).execute("/path", 1024)
     }
@@ -155,7 +151,7 @@ class ImageCompressionControllerTest {
         whenever(treeElement.attributeValue).thenReturn("123.5")
         whenever(formEntryPrompt.bindAttributes).thenReturn(listOf(treeElement))
 
-        imageCompressionController.execute("/path", questionWidget, context, "medium")
+        imageCompressionController.execute("/path", formEntryPrompt, context, "medium")
 
         verify(imageCompressor).execute("/path", 2048)
     }
@@ -165,7 +161,7 @@ class ImageCompressionControllerTest {
         whenever(treeElement.attributeValue).thenReturn("123.5")
         whenever(formEntryPrompt.bindAttributes).thenReturn(listOf(treeElement))
 
-        imageCompressionController.execute("/path", questionWidget, context, "large")
+        imageCompressionController.execute("/path", formEntryPrompt, context, "large")
 
         verify(imageCompressor).execute("/path", 3072)
     }
