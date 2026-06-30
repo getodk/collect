@@ -1,13 +1,8 @@
 package org.odk.collect.android.application.initialization
 
 import android.app.Application
-import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.startup.AppInitializer
-import coil3.ImageLoader
-import coil3.SingletonImageLoader
-import coil3.gif.AnimatedImageDecoder
-import coil3.gif.GifDecoder
 import net.danlew.android.joda.JodaTimeInitializer
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.BuildConfig
@@ -61,6 +56,7 @@ class ApplicationInitializer(
         ).initialize()
         mapsInitializer.initialize()
         JavaRosaInitializer(propertyManager, projectsDataService, entitiesRepositoryProvider).initialize()
+        CoilInitializer().initialize()
     }
 
     private fun initializeFrameworks() {
@@ -68,21 +64,6 @@ class ApplicationInitializer(
         initializeLogging()
         AppInitializer.getInstance(context).initializeComponent(JodaTimeInitializer::class.java)
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
-        initializeImageLoader()
-    }
-
-    private fun initializeImageLoader() {
-        SingletonImageLoader.setSafe { context ->
-            ImageLoader.Builder(context)
-                .components {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                        add(AnimatedImageDecoder.Factory())
-                    } else {
-                        add(GifDecoder.Factory())
-                    }
-                }
-                .build()
-        }
     }
 
     private fun initializeLocale() {
