@@ -17,7 +17,8 @@
         android:id="@+id/map_container"
         android:name="org.odk.collect.maps.MapFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/status_section" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
