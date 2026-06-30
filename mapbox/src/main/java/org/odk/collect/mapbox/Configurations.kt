@@ -68,11 +68,11 @@ object Configurations {
             styleOptions = mapOf(
                 "positron" to StyleOption(
                     name = R.string.carto_map_style_positron,
-                    BasemapUri.Raster("http://1.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png")
+                    BasemapUri.Raster("https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png")
                 ),
                 "dark_matter" to StyleOption(
                     name = R.string.carto_map_style_dark_matter,
-                    BasemapUri.Raster("http://1.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png")
+                    BasemapUri.Raster("https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png")
                 )
             )
         ),
