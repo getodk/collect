@@ -16,77 +16,106 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.odk.collect.android.storage.StoragePathProvider
-import org.odk.collect.android.support.StorageUtils
-import org.odk.collect.android.support.rules.FormEntryActivityTestRule
+import org.odk.collect.android.support.TestDependencies
+import org.odk.collect.android.support.pages.SendFinalizedFormPage
+import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
 import org.odk.collect.androidtest.RecordedIntentsRule
 import org.odk.collect.draw.DrawActivity
-import org.odk.collect.testshared.WaitFor.waitFor
 import org.odk.collect.strings.R.string
 import org.odk.collect.testshared.AssertionFramework
 import java.io.File
 import java.io.FileOutputStream
 
 class ImageCompressionTest {
-    private val rule = FormEntryActivityTestRule()
+    private val testDependencies = TestDependencies()
+    private val rule = CollectTestRule(useDemoProject = false)
 
     @get:Rule
-    var chain: RuleChain = chain()
+    val chain: RuleChain = chain(testDependencies)
         .around(RecordedIntentsRule())
         .around(rule)
 
     @Test
     fun imageWidget_scalesCapturedImageDownToMaxPixels() {
-        rule
-            .setUpProjectAndCopyForm("image-compression.xml")
-            .fillNewForm("image-compression.xml", "image-compression")
+        rule.withProject(testDependencies.server, "image-compression.xml")
+            .startBlankForm("image-compression")
             .also {
                 stubCaptureReturningImage(hasAction(MediaStore.ACTION_IMAGE_CAPTURE), 2000)
-            }.clickOnString(string.capture_image, AssertionFramework.COMPOSE)
+            }
+            .clickOnString(string.capture_image, AssertionFramework.COMPOSE)
+            .clickGoToArrow()
+            .clickGoToEnd()
+            .clickFinalize()
+            .clickSendFinalizedForm(1)
+            .clickSelectAll()
+            .clickSendSelected()
+            .clickOK(SendFinalizedFormPage())
 
-        assertSavedImageWasScaledTo(1000)
+        assertSubmittedImageWasScaledTo(1000)
     }
 
     @Test
     fun annotateWidget_scalesCapturedImageDownToMaxPixels() {
-        rule
-            .setUpProjectAndCopyForm("image-compression.xml")
-            .fillNewForm("image-compression.xml", "image-compression")
+        rule.withProject(testDependencies.server, "image-compression.xml")
+            .startBlankForm("image-compression")
             .swipeToNextQuestion("Annotate")
             .also {
                 stubCaptureReturningImage(hasAction(MediaStore.ACTION_IMAGE_CAPTURE), 2000)
-            }.clickOnString(string.capture_image)
+            }
+            .clickOnString(string.capture_image)
+            .clickGoToArrow()
+            .clickGoToEnd()
+            .clickFinalize()
+            .clickSendFinalizedForm(1)
+            .clickSelectAll()
+            .clickSendSelected()
+            .clickOK(SendFinalizedFormPage())
 
-        assertSavedImageWasScaledTo(1000)
+        assertSubmittedImageWasScaledTo(1000)
     }
 
     @Test
     fun drawWidget_scalesCapturedImageDownToMaxPixels() {
-        rule
-            .setUpProjectAndCopyForm("image-compression.xml")
-            .fillNewForm("image-compression.xml", "image-compression")
+        rule.withProject(testDependencies.server, "image-compression.xml")
+            .startBlankForm("image-compression")
             .swipeToNextQuestion("Annotate")
             .swipeToNextQuestion("Draw")
             .also {
                 stubCaptureReturningImage(hasComponent(DrawActivity::class.java.name), 2000)
-            }.clickOnString(string.draw_image)
+            }
+            .clickOnString(string.draw_image)
+            .clickGoToArrow()
+            .clickGoToEnd()
+            .clickFinalize()
+            .clickSendFinalizedForm(1)
+            .clickSelectAll()
+            .clickSendSelected()
+            .clickOK(SendFinalizedFormPage())
 
-        assertSavedImageWasScaledTo(1000)
+        assertSubmittedImageWasScaledTo(1000)
     }
 
     @Test
     fun signatureWidget_scalesCapturedImageDownToMaxPixels() {
-        rule
-            .setUpProjectAndCopyForm("image-compression.xml")
-            .fillNewForm("image-compression.xml", "image-compression")
+        rule.withProject(testDependencies.server, "image-compression.xml")
+            .startBlankForm("image-compression")
             .swipeToNextQuestion("Annotate")
             .swipeToNextQuestion("Draw")
             .swipeToNextQuestion("Signature")
             .also {
                 stubCaptureReturningImage(hasComponent(DrawActivity::class.java.name), 2000)
-            }.clickOnString(string.sign_button)
+            }
+            .clickOnString(string.sign_button)
+            .clickGoToArrow()
+            .clickGoToEnd()
+            .clickFinalize()
+            .clickSendFinalizedForm(1)
+            .clickSelectAll()
+            .clickSendSelected()
+            .clickOK(SendFinalizedFormPage())
 
-        assertSavedImageWasScaledTo(1000)
+        assertSubmittedImageWasScaledTo(1000)
     }
 
     private fun stubCaptureReturningImage(captureIntent: Matcher<Intent>, longEdge: Int) {
@@ -99,14 +128,13 @@ class ImageCompressionTest {
         )
     }
 
-    private fun assertSavedImageWasScaledTo(longEdge: Int) {
-        waitFor {
-            val instanceDir = File(StorageUtils.getInstancesDirPath()).listFiles()!!.single()
-            val image = instanceDir.listFiles()!!.single { it.extension.equals("jpg", ignoreCase = true) }
-
-            val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
-            BitmapFactory.decodeFile(image.absolutePath, options)
-            assertThat(maxOf(options.outWidth, options.outHeight), equalTo(longEdge))
+    private fun assertSubmittedImageWasScaledTo(longEdge: Int) {
+        val image = testDependencies.server.submittedMediaFiles.single {
+            it.extension.equals("jpg", ignoreCase = true)
         }
+
+        val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+        BitmapFactory.decodeFile(image.absolutePath, options)
+        assertThat(maxOf(options.outWidth, options.outHeight), equalTo(longEdge))
     }
 }
