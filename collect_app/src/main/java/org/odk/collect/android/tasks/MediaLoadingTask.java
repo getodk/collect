@@ -5,15 +5,14 @@ import static org.odk.collect.settings.keys.ProjectKeys.KEY_IMAGE_SIZE;
 import android.net.Uri;
 import android.os.AsyncTask;
 
+import org.javarosa.core.model.Constants;
 import org.odk.collect.android.activities.FormFillingActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.utilities.ContentUriHelper;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ImageCompressionController;
-import org.odk.collect.android.widgets.BaseImageWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
-import org.odk.collect.android.widgets.image.ImageWidget;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.settings.SettingsProvider;
 
@@ -52,8 +51,8 @@ public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
             FileUtils.saveAnswerFileFromUri(uris[0], newFile, Collect.getInstance());
             QuestionWidget questionWidget = formFillingActivity.get().getWidgetWaitingForBinaryData();
 
-            // apply image conversion if the widget is an image widget
-            if (questionWidget instanceof BaseImageWidget || questionWidget instanceof ImageWidget) {
+            // apply image conversion if the question is an image question
+            if (questionWidget.getFormEntryPrompt().getControlType() == Constants.CONTROL_IMAGE_CHOOSE) {
                 String imageSizeMode = settingsProvider.getUnprotectedSettings().getString(KEY_IMAGE_SIZE);
                 imageCompressionController.execute(newFile.getPath(), questionWidget.getFormEntryPrompt(), formFillingActivity.get(), imageSizeMode);
             }
