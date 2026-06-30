@@ -41,10 +41,10 @@ class ImageCompressionTest {
             .setUpProjectAndCopyForm("image-compression.xml")
             .fillNewForm("image-compression.xml", "image-compression")
             .also {
-                stubCaptureReturningImage(hasAction(MediaStore.ACTION_IMAGE_CAPTURE))
+                stubCaptureReturningImage(hasAction(MediaStore.ACTION_IMAGE_CAPTURE), 2000)
             }.clickOnString(string.capture_image, AssertionFramework.COMPOSE)
 
-        assertSavedImageWasScaledDownToMaxPixels()
+        assertSavedImageWasScaledTo(1000)
     }
 
     @Test
@@ -54,10 +54,10 @@ class ImageCompressionTest {
             .fillNewForm("image-compression.xml", "image-compression")
             .swipeToNextQuestion("Annotate")
             .also {
-                stubCaptureReturningImage(hasAction(MediaStore.ACTION_IMAGE_CAPTURE))
+                stubCaptureReturningImage(hasAction(MediaStore.ACTION_IMAGE_CAPTURE), 2000)
             }.clickOnString(string.capture_image)
 
-        assertSavedImageWasScaledDownToMaxPixels()
+        assertSavedImageWasScaledTo(1000)
     }
 
     @Test
@@ -68,10 +68,10 @@ class ImageCompressionTest {
             .swipeToNextQuestion("Annotate")
             .swipeToNextQuestion("Draw")
             .also {
-                stubCaptureReturningImage(hasComponent(DrawActivity::class.java.name))
+                stubCaptureReturningImage(hasComponent(DrawActivity::class.java.name), 2000)
             }.clickOnString(string.draw_image)
 
-        assertSavedImageWasScaledDownToMaxPixels()
+        assertSavedImageWasScaledTo(1000)
     }
 
     @Test
@@ -83,15 +83,14 @@ class ImageCompressionTest {
             .swipeToNextQuestion("Draw")
             .swipeToNextQuestion("Signature")
             .also {
-                stubCaptureReturningImage(hasComponent(DrawActivity::class.java.name))
+                stubCaptureReturningImage(hasComponent(DrawActivity::class.java.name), 2000)
             }.clickOnString(string.sign_button)
 
-        assertSavedImageWasScaledDownToMaxPixels()
+        assertSavedImageWasScaledTo(1000)
     }
 
-    private fun stubCaptureReturningImage(captureIntent: Matcher<Intent>) {
-        // Long edge (2000) is twice the form's max image size, so it should be scaled down to 1000.
-        val bitmap = Bitmap.createBitmap(2000, 1000, Bitmap.Config.ARGB_8888)
+    private fun stubCaptureReturningImage(captureIntent: Matcher<Intent>, longEdge: Int) {
+        val bitmap = Bitmap.createBitmap(longEdge, longEdge / 2, Bitmap.Config.ARGB_8888)
         val tmpImage = File(StoragePathProvider().getTmpImageFilePath())
         FileOutputStream(tmpImage).use { bitmap.compress(Bitmap.CompressFormat.JPEG, 90, it) }
 
@@ -100,14 +99,14 @@ class ImageCompressionTest {
         )
     }
 
-    private fun assertSavedImageWasScaledDownToMaxPixels() {
+    private fun assertSavedImageWasScaledTo(longEdge: Int) {
         waitFor {
             val instanceDir = File(StorageUtils.getInstancesDirPath()).listFiles()!!.single()
             val image = instanceDir.listFiles()!!.single { it.extension.equals("jpg", ignoreCase = true) }
 
             val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
             BitmapFactory.decodeFile(image.absolutePath, options)
-            assertThat(maxOf(options.outWidth, options.outHeight), equalTo(1000))
+            assertThat(maxOf(options.outWidth, options.outHeight), equalTo(longEdge))
         }
     }
 }
