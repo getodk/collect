@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.Bitmap.CompressFormat
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
+import android.util.Size
 import androidx.exifinterface.media.ExifInterface
 import timber.log.Timber
 import java.io.File
@@ -22,6 +23,33 @@ object ImageFileUtils {
         ExifInterface.ORIENTATION_ROTATE_180,
         ExifInterface.ORIENTATION_ROTATE_270
     )
+
+    /**
+     * Returns the dimensions of the image in [imageFile] as it should be displayed, i.e. with any
+     * EXIF orientation applied so that images rotated by 90 or 270 degrees have their stored width
+     * and height swapped. Returns null when the dimensions can't be read.
+     */
+    @JvmStatic
+    fun getImageDisplayDimensions(imageFile: File): Size? {
+        val options = BitmapFactory.Options().also { it.inJustDecodeBounds = true }
+        BitmapFactory.decodeFile(imageFile.absolutePath, options)
+        if (options.outWidth <= 0 || options.outHeight <= 0) {
+            return null
+        }
+
+        val rotationDegrees = try {
+            ExifInterface(imageFile).rotationDegrees
+        } catch (e: IOException) {
+            Timber.w(e)
+            0
+        }
+
+        return if (rotationDegrees == 90 || rotationDegrees == 270) {
+            Size(options.outHeight, options.outWidth)
+        } else {
+            Size(options.outWidth, options.outHeight)
+        }
+    }
 
     @JvmStatic
     fun saveBitmapToFile(bitmap: Bitmap?, path: String) {

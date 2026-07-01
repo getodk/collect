@@ -1,6 +1,7 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -27,6 +28,7 @@ import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.odk.collect.android.widgets.support.SynchronousImageLoader;
 import org.odk.collect.imageloader.ImageLoader;
 import org.odk.collect.shared.TempFiles;
+import org.robolectric.shadows.ShadowBitmapFactory;
 import org.robolectric.shadows.ShadowToast;
 
 import java.io.File;
@@ -327,5 +329,43 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
         assertComponentEquals(activity, DrawActivity.class, intent);
         assertExtraEquals(DrawActivity.OPTION, DrawActivity.OPTION_ANNOTATE, intent);
         assertThat(intent.hasExtra(DrawActivity.REF_IMAGE), is(false));
+    }
+
+    @Test
+    public void whenDefaultImageIsPortrait_launchesDrawActivityInPortrait() throws Exception {
+        assertDrawActivityOrientationForDefaultImage(100, 200, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    }
+
+    @Test
+    public void whenDefaultImageIsLandscape_launchesDrawActivityInLandscape() throws Exception {
+        assertDrawActivityOrientationForDefaultImage(200, 100, ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+    }
+
+    private void assertDrawActivityOrientationForDefaultImage(int width, int height, int expectedOrientation) throws Exception {
+        File file = File.createTempFile("default", ".bmp");
+        String imagePath = file.getAbsolutePath();
+        ShadowBitmapFactory.provideWidthAndHeightHints(imagePath, width, height);
+
+        ReferenceManager referenceManager = setupFakeReferenceManager(singletonList(
+                new Pair<>(DrawWidgetTest.DEFAULT_IMAGE_ANSWER, imagePath)
+        ));
+        CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
+            @Override
+            public ReferenceManager providesReferenceManager() {
+                return referenceManager;
+            }
+
+            @Override
+            public ImageLoader providesImageLoader() {
+                return new SynchronousImageLoader();
+            }
+        });
+
+        formEntryPrompt = new MockFormEntryPromptBuilder()
+                .withAnswerDisplayText(DrawWidgetTest.DEFAULT_IMAGE_ANSWER)
+                .build();
+
+        Intent intent = getIntentLaunchedByClick(R.id.annotate_button);
+        assertExtraEquals(DrawActivity.SCREEN_ORIENTATION, expectedOrientation, intent);
     }
 }
