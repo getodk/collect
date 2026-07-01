@@ -243,7 +243,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
     }
 
     @Nullable
-    private File getFile() {
+    protected File getFile() {
         if (binaryName == null) {
             return null;
         }

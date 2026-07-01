@@ -68,7 +68,8 @@ public class AnnotateWidget extends BaseImageWidget {
             binding.chooseButton.setVisibility(View.GONE);
         }
 
-        if (binaryName == null || binding.image.getVisibility() == GONE) {
+        File baseImage = getFile();
+        if (baseImage == null || !baseImage.exists()) {
             binding.annotateButton.setEnabled(false);
         }
 
