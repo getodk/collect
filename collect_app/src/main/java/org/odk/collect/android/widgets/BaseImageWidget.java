@@ -132,22 +132,20 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
         imageView.setVisibility(View.GONE);
         errorTextView.setVisibility(View.GONE);
 
-        if (binaryName != null) {
-            File f = getFile();
-            if (f != null && f.exists()) {
-                imageView.setVisibility(View.VISIBLE);
-                imageLoader.loadImage(imageView, f, ImageView.ScaleType.FIT_CENTER, new GlideImageLoader.ImageLoaderCallback() {
-                    @Override
-                    public void onLoadFailed() {
-                        imageView.setVisibility(View.GONE);
-                        errorTextView.setVisibility(View.VISIBLE);
-                    }
+        File file = questionMediaManager.getExistingAnswerFile(binaryName);
+        if (file != null) {
+            imageView.setVisibility(View.VISIBLE);
+            imageLoader.loadImage(imageView, file, ImageView.ScaleType.FIT_CENTER, new GlideImageLoader.ImageLoaderCallback() {
+                @Override
+                public void onLoadFailed() {
+                    imageView.setVisibility(View.GONE);
+                    errorTextView.setVisibility(View.VISIBLE);
+                }
 
-                    @Override
-                    public void onLoadSucceeded() {
-                    }
-                });
-            }
+                @Override
+                public void onLoadSucceeded() {
+                }
+            });
         }
     }
 
@@ -266,17 +264,13 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
             return null;
         }
 
-        File file = questionMediaManager.getAnswerFile(binaryName);
-        if ((file == null || !file.exists()) && doesSupportDefaultValues()) {
+        File answerFile = questionMediaManager.getExistingAnswerFile(binaryName);
+        if (answerFile == null && doesSupportDefaultValues()) {
             String filePath = getDefaultFilePath();
-            if (filePath != null) {
-                return new File(getDefaultFilePath());
-            } else {
-                return null;
-            }
+            return filePath != null ? new File(filePath) : null;
         }
 
-        return file;
+        return answerFile;
     }
 
     private String getDefaultFilePath() {
