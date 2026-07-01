@@ -19,6 +19,12 @@ public interface QuestionMediaManager {
     @Nullable
     File getAnswerFile(String fileName);
 
+    @Nullable
+    default File getExistingAnswerFile(String fileName) {
+        File file = getAnswerFile(fileName);
+        return file != null && file.exists() ? file : null;
+    }
+
     void deleteAnswerFile(String questionIndex, String fileName);
 
     void replaceAnswerFile(String questionIndex, String fileName);
