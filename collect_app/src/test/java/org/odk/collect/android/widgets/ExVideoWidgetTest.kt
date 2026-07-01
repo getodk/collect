@@ -127,7 +127,7 @@ class ExVideoWidgetTest : FileWidgetTest<ExVideoWidget>() {
     @Test
     fun whenClickingOnPlayButton_shouldFileViewerByCalled() {
         whenever(formEntryPrompt.getAnswerText()).thenReturn(initialAnswer.displayText)
-        whenever(questionMediaManager.getAnswerFile(initialAnswer.displayText)).thenReturn(File(initialAnswer.displayText))
+        whenever(questionMediaManager.getExistingAnswerFile(initialAnswer.displayText)).thenReturn(File(initialAnswer.displayText))
         createWidget()
         composeRule.onNodeWithClickLabel(activity.getString(string.play_video)).performClick()
 

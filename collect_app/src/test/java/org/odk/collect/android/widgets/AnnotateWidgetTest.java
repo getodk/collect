@@ -193,7 +193,7 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
     }
 
     @Test
-    public void whenPromptHasDefaultAnswer_showsInImageView() throws Exception {
+    public void whenPromptHasDefaultAnswer_hideImageViewAndErrorMessageButKeepAnnotateButtonEnabled() throws Exception {
         String imagePath = File.createTempFile("default", ".bmp").getAbsolutePath();
 
         ReferenceManager referenceManager = setupFakeReferenceManager(singletonList(
@@ -217,12 +217,10 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
 
         AnnotateWidget widget = createWidget();
         ImageView imageView = widget.getImageView();
-        assertThat(imageView.getVisibility(), is(View.VISIBLE));
-        Drawable drawable = imageView.getDrawable();
-        assertThat(drawable, notNullValue());
-
-        String loadedPath = shadowOf(((BitmapDrawable) drawable).getBitmap()).getCreatedFromPath();
-        assertThat(loadedPath, equalTo(imagePath));
+        assertThat(imageView.getVisibility(), is(View.GONE));
+        assertThat(imageView.getDrawable(), nullValue());
+        assertThat(widget.getErrorTextView().getVisibility(), is(View.GONE));
+        assertThat(widget.binding.annotateButton.isEnabled(), is(true));
     }
 
     @Test
