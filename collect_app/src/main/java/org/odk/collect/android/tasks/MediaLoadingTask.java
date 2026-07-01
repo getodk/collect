@@ -2,6 +2,7 @@ package org.odk.collect.android.tasks;
 
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_IMAGE_SIZE;
 
+import android.annotation.SuppressLint;
 import android.net.Uri;
 import android.os.AsyncTask;
 
@@ -42,6 +43,7 @@ public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
         DaggerUtils.getComponent(this.formFillingActivity.get()).inject(this);
     }
 
+    @SuppressLint("WrongThread")
     @Override
     protected File doInBackground(Uri... uris) {
         if (instanceFile != null) {
