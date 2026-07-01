@@ -2,13 +2,11 @@ package org.odk.collect.geo.geopoint
 
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
-import org.odk.collect.analytics.Analytics
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.externalapp.ExternalAppUtils
 import org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY
 import org.odk.collect.geo.GeoDependencyComponentProvider
 import org.odk.collect.geo.GeoUtils
-import org.odk.collect.geo.analytics.AnalyticsEvents
 import org.odk.collect.strings.localization.LocalizedActivity
 import javax.inject.Inject
 
@@ -27,7 +25,6 @@ class GeoPointActivity : LocalizedActivity(), GeoPointDialogFragment.Listener {
 
         viewModel.acceptedLocation.observe(this) {
             if (it != null) {
-                Analytics.log(AnalyticsEvents.SAVE_POINT_AUTO)
                 ExternalAppUtils.returnSingleValue(this, GeoUtils.formatLocationResultString(it))
             }
         }
