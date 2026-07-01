@@ -23,7 +23,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,7 +39,6 @@ import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
-import org.odk.collect.androidshared.system.ContextExt;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 import org.odk.collect.imageloader.GlideImageLoader;
 
@@ -53,8 +51,6 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
     protected ImageView imageView;
     protected String binaryName;
     protected TextView errorTextView;
-    protected LinearLayout answerLayout;
-
     protected ImageClickHandler imageClickHandler;
     protected ExternalImageCaptureHandler imageCaptureHandler;
 
@@ -165,18 +161,6 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
     }
 
     /**
-     * Class to implement launching of viewing an image Activity
-     */
-    protected class ViewImageClickHandler implements ImageClickHandler {
-
-        @Override
-        public void clickImage(String context) {
-            mediaUtils.openFile(ContextExt.getActivity(getContext()), questionMediaManager.getAnswerFile(binaryName),
-                    "image/*");
-        }
-    }
-
-    /**
      * Class to implement launching of drawing image Activity when clicked
      */
     protected class DrawImageClickHandler implements ImageClickHandler {
@@ -265,7 +249,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
         }
 
         File answerFile = questionMediaManager.getExistingAnswerFile(binaryName);
-        if (answerFile == null && doesSupportDefaultValues()) {
+        if (answerFile == null) {
             String filePath = getDefaultFilePath();
             return filePath != null ? new File(filePath) : null;
         }
@@ -282,8 +266,6 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
 
         return null;
     }
-
-    protected abstract boolean doesSupportDefaultValues();
 
     public ImageView getImageView() {
         return imageView;
