@@ -68,7 +68,7 @@ public class AnnotateWidget extends BaseImageWidget {
             binding.chooseButton.setVisibility(View.GONE);
         }
 
-        File baseImage = getFile();
+        File baseImage = getAnswerOrDefaultImageFile();
         if (baseImage == null || !baseImage.exists()) {
             binding.annotateButton.setEnabled(false);
         }
@@ -101,7 +101,7 @@ public class AnnotateWidget extends BaseImageWidget {
     }
 
     private boolean isBaseImagePortrait() {
-        File baseImage = getFile();
+        File baseImage = getAnswerOrDefaultImageFile();
         if (baseImage == null || !baseImage.exists()) {
             return false;
         }
