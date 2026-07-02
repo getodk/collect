@@ -82,7 +82,7 @@ class VideoWidgetTest : FileWidgetTest<VideoWidget>() {
 
         val newFile = createTempFile(createTempDir())
         getWidget()!!.setData(newFile)
-        whenever(questionMediaManager.getAnswerFile(newFile.name)).thenReturn(newFile)
+        whenever(questionMediaManager.getExistingAnswerFile(newFile.name)).thenReturn(newFile)
 
         composeRule.onNodeWithClickLabel(activity.getString(string.play_video)).performClick()
         verify(mediaUtils).openFile(any(), any(), any<String>())

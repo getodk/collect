@@ -21,7 +21,7 @@ class MediaWidgetAnswerViewModel(
     fun getFrame(answer: String?, context: Context): StateFlow<ImageBitmap?> {
         val bitmapState = MutableStateFlow<ImageBitmap?>(null)
 
-        val file = questionMediaManager.getAnswerFile(answer)
+        val file = questionMediaManager.getExistingAnswerFile(answer)
         if (file != null) {
             scheduler.immediate {
                 val thumbnail = file.getVideoThumbnail(context)?.asImageBitmap()
@@ -33,11 +33,11 @@ class MediaWidgetAnswerViewModel(
     }
 
     fun getImage(answer: String?): File? {
-        return questionMediaManager.getAnswerFile(answer)
+        return questionMediaManager.getExistingAnswerFile(answer)
     }
 
     fun openFile(activity: Activity, answer: String?, mimeType: String? = null) {
-        val file = questionMediaManager.getAnswerFile(answer)
+        val file = questionMediaManager.getExistingAnswerFile(answer)
         if (file != null) {
             mediaUtils.openFile(activity, file, mimeType)
         }

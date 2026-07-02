@@ -22,8 +22,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
+import android.util.Size;
 import android.view.View;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.databinding.AnnotateWidgetBinding;
@@ -34,6 +33,7 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.utilities.ImageCaptureIntentCreator;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
+import org.odk.collect.androidshared.bitmap.ImageFileUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import java.io.File;
 import java.util.Locale;
@@ -68,9 +68,7 @@ public class AnnotateWidget extends BaseImageWidget {
             binding.chooseButton.setVisibility(View.GONE);
         }
 
-        if (binaryName == null || binding.image.getVisibility() == GONE) {
-            binding.annotateButton.setEnabled(false);
-        }
+        updateButtonStates();
 
         binding.captureButton.setOnClickListener(v -> getPermissionsProvider().requestCameraPermission((Activity) getContext(), () -> {
             Intent intent = ImageCaptureIntentCreator.imageCaptureIntent(getFormEntryPrompt(), getContext(), tmpImageFilePath);
@@ -91,27 +89,28 @@ public class AnnotateWidget extends BaseImageWidget {
 
     @Override
     public Intent addExtrasToIntent(Intent intent) {
-        Bitmap bmp = null;
-        if (binding.image.getDrawable() != null) {
-            bmp = ((BitmapDrawable) binding.image.getDrawable()).getBitmap();
-        }
-
-        int screenOrientation =  bmp != null && bmp.getHeight() > bmp.getWidth() ?
-                SCREEN_ORIENTATION_PORTRAIT : SCREEN_ORIENTATION_LANDSCAPE;
+        int screenOrientation = isBaseImagePortrait()
+                ? SCREEN_ORIENTATION_PORTRAIT
+                : SCREEN_ORIENTATION_LANDSCAPE;
 
         intent.putExtra(DrawActivity.SCREEN_ORIENTATION, screenOrientation);
         return intent;
     }
 
-    @Override
-    protected boolean doesSupportDefaultValues() {
-        return true;
+    private boolean isBaseImagePortrait() {
+        File baseImage = getAnswerOrDefaultImageFile();
+        if (baseImage == null || !baseImage.exists()) {
+            return false;
+        }
+
+        Size dimensions = ImageFileUtils.getImageDisplayDimensions(baseImage);
+        return dimensions != null && dimensions.getHeight() > dimensions.getWidth();
     }
 
     @Override
     public void clearAnswer() {
         super.clearAnswer();
-        binding.annotateButton.setEnabled(false);
+        updateButtonStates();
         binding.captureButton.setText(getContext().getString(org.odk.collect.strings.R.string.capture_image));
     }
 
@@ -139,8 +138,26 @@ public class AnnotateWidget extends BaseImageWidget {
                 ToastUtils.showLongToast(org.odk.collect.strings.R.string.gif_not_supported);
             } else {
                 super.setData(newImageObj);
-                binding.annotateButton.setEnabled(binaryName != null);
+                updateButtonStates();
             }
         }
+    }
+
+    private void updateButtonStates() {
+        boolean isDefaultImage = isDefaultImage();
+        boolean isAnswerImage = questionMediaManager.getExistingAnswerFile(binaryName) != null;
+
+        binding.annotateButton.setEnabled(isDefaultImage || isAnswerImage);
+        binding.captureButton.setEnabled(!isDefaultImage);
+        binding.chooseButton.setEnabled(!isDefaultImage);
+    }
+
+    private boolean isDefaultImage() {
+        if (binaryName == null || !binaryName.startsWith("jr://images/")) {
+            return false;
+        }
+
+        File file = getAnswerOrDefaultImageFile();
+        return file != null && file.exists();
     }
 }

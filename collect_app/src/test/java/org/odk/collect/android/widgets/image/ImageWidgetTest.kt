@@ -10,6 +10,7 @@ import androidx.compose.ui.test.performClick
 import coil3.ImageLoader
 import coil3.SingletonImageLoader
 import coil3.imageDecoderEnabled
+import coil3.request.ErrorResult
 import net.bytebuddy.utility.RandomString
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -189,11 +190,31 @@ class ImageWidgetTest : BinaryWidgetTest<ImageWidget, StringData>() {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun `when the answer image cannot be loaded shows error message`() {
+        SingletonImageLoader.setUnsafe { context ->
+            ImageLoader.Builder(context)
+                .components {
+                    add { chain -> ErrorResult(null, chain.request, Throwable()) }
+                }
+                .build()
+        }
+
+        val file = questionMediaManager.addAnswerFile(File.createTempFile("current", ".png"))
         formEntryPrompt = MockFormEntryPromptBuilder(formEntryPrompt)
-            .withAnswerDisplayText("non_existent_file.bmp")
+            .withAnswerDisplayText(file.name)
             .build()
 
         createWidget()
         composeRule.waitUntilAtLeastOneExists(hasText(activity.getString(string.selected_invalid_image)))
+    }
+
+    @Test
+    fun `when the answer is a default image shows neither the image nor an error message`() {
+        formEntryPrompt = MockFormEntryPromptBuilder(formEntryPrompt)
+            .withAnswerDisplayText("jr://images/default.png")
+            .build()
+
+        createWidget()
+        composeRule.onNodeWithClickLabel(activity.getString(string.open_file)).assertDoesNotExist()
+        composeRule.onNodeWithText(activity.getString(string.selected_invalid_image)).assertDoesNotExist()
     }
 }
