@@ -309,8 +309,9 @@ abstract class Page<T : Page<T>> {
         return destination
     }
 
-    fun clickOnString(stringID: Int): T {
-        clickOnText(getTranslatedString(stringID))
+    @JvmOverloads
+    fun clickOnString(stringID: Int, assertionFramework: AssertionFramework = AssertionFramework.ESPRESSO): T {
+        clickOnText(getTranslatedString(stringID), assertionFramework)
         return this as T
     }
 
