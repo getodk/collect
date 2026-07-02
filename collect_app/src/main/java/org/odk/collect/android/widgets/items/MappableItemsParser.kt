@@ -44,7 +44,7 @@ object MappableItemsParser {
                             parsePoint(selectChoice, index, translator, properties, points, options)
                         } else {
                             if (points.first() != points.last()) {
-                                parsePolygon(
+                                parseLine(
                                     selectChoice,
                                     index,
                                     translator,
@@ -53,7 +53,7 @@ object MappableItemsParser {
                                     options
                                 )
                             } else {
-                                parseLine(
+                                parsePolygon(
                                     selectChoice,
                                     index,
                                     translator,
@@ -75,7 +75,7 @@ object MappableItemsParser {
         }
     }
 
-    private fun parseLine(
+    private fun parsePolygon(
         selectChoice: SelectChoice,
         index: Int,
         translator: (SelectChoice) -> String,
@@ -97,7 +97,7 @@ object MappableItemsParser {
         )
     }
 
-    private fun parsePolygon(
+    private fun parseLine(
         selectChoice: SelectChoice,
         index: Int,
         translator: (SelectChoice) -> String,
