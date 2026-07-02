@@ -55,7 +55,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
     protected ExternalImageCaptureHandler imageCaptureHandler;
 
     private final WaitingForDataRegistry waitingForDataRegistry;
-    private final QuestionMediaManager questionMediaManager;
+    protected final QuestionMediaManager questionMediaManager;
     protected final String tmpImageFilePath;
 
     public BaseImageWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager,

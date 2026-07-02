@@ -68,10 +68,7 @@ public class AnnotateWidget extends BaseImageWidget {
             binding.chooseButton.setVisibility(View.GONE);
         }
 
-        File baseImage = getAnswerOrDefaultImageFile();
-        if (baseImage == null || !baseImage.exists()) {
-            binding.annotateButton.setEnabled(false);
-        }
+        updateButtonStates();
 
         binding.captureButton.setOnClickListener(v -> getPermissionsProvider().requestCameraPermission((Activity) getContext(), () -> {
             Intent intent = ImageCaptureIntentCreator.imageCaptureIntent(getFormEntryPrompt(), getContext(), tmpImageFilePath);
@@ -113,7 +110,7 @@ public class AnnotateWidget extends BaseImageWidget {
     @Override
     public void clearAnswer() {
         super.clearAnswer();
-        binding.annotateButton.setEnabled(false);
+        updateButtonStates();
         binding.captureButton.setText(getContext().getString(org.odk.collect.strings.R.string.capture_image));
     }
 
@@ -141,8 +138,26 @@ public class AnnotateWidget extends BaseImageWidget {
                 ToastUtils.showLongToast(org.odk.collect.strings.R.string.gif_not_supported);
             } else {
                 super.setData(newImageObj);
-                binding.annotateButton.setEnabled(binaryName != null);
+                updateButtonStates();
             }
         }
+    }
+
+    private void updateButtonStates() {
+        boolean isDefaultImage = isDefaultImage();
+        boolean isAnswerImage = questionMediaManager.getExistingAnswerFile(binaryName) != null;
+
+        binding.annotateButton.setEnabled(isDefaultImage || isAnswerImage);
+        binding.captureButton.setEnabled(!isDefaultImage);
+        binding.chooseButton.setEnabled(!isDefaultImage);
+    }
+
+    private boolean isDefaultImage() {
+        if (binaryName == null || !binaryName.startsWith("jr://images/")) {
+            return false;
+        }
+
+        File file = getAnswerOrDefaultImageFile();
+        return file != null && file.exists();
     }
 }

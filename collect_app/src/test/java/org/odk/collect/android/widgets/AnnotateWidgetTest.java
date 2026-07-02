@@ -206,11 +206,6 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
             public ReferenceManager providesReferenceManager() {
                 return referenceManager;
             }
-
-            @Override
-            public ImageLoader providesImageLoader() {
-                return new SynchronousImageLoader();
-            }
         });
 
         formEntryPrompt = new MockFormEntryPromptBuilder()
@@ -223,6 +218,54 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
         assertThat(imageView.getDrawable(), nullValue());
         assertThat(widget.getErrorTextView().getVisibility(), is(View.GONE));
         assertThat(widget.binding.annotateButton.isEnabled(), is(true));
+    }
+
+    @Test
+    public void whenPromptHasDefaultAnswer_disableCaptureAndChooseButtonsButKeepAnnotateButtonEnabled() throws Exception {
+        String imagePath = File.createTempFile("default", ".bmp").getAbsolutePath();
+
+        ReferenceManager referenceManager = setupFakeReferenceManager(singletonList(
+                new Pair<>(DrawWidgetTest.DEFAULT_IMAGE_ANSWER, imagePath)
+        ));
+        CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
+            @Override
+            public ReferenceManager providesReferenceManager() {
+                return referenceManager;
+            }
+        });
+
+        formEntryPrompt = new MockFormEntryPromptBuilder()
+                .withAnswerDisplayText(DrawWidgetTest.DEFAULT_IMAGE_ANSWER)
+                .build();
+
+        AnnotateWidget widget = createWidget();
+        assertThat(widget.binding.captureButton.isEnabled(), is(false));
+        assertThat(widget.binding.chooseButton.isEnabled(), is(false));
+        assertThat(widget.binding.annotateButton.isEnabled(), is(true));
+    }
+
+    @Test
+    public void whenPromptHasCurrentAnswer_enableAllButtons() throws Exception {
+        String imagePath = File.createTempFile("current", ".bmp").getAbsolutePath();
+        currentFile = new File(imagePath);
+
+        formEntryPrompt = new MockFormEntryPromptBuilder()
+                .withAnswerDisplayText(DrawWidgetTest.USER_SPECIFIED_IMAGE_ANSWER)
+                .build();
+
+        AnnotateWidget widget = createWidget();
+        assertThat(widget.binding.captureButton.isEnabled(), is(true));
+        assertThat(widget.binding.chooseButton.isEnabled(), is(true));
+        assertThat(widget.binding.annotateButton.isEnabled(), is(true));
+    }
+
+    @Test
+    public void whenThereIsNoAnswer_enableCaptureAndChooseButtonsButDisableAnnotateButton() {
+        AnnotateWidget widget = createWidget();
+
+        assertThat(widget.binding.captureButton.isEnabled(), is(true));
+        assertThat(widget.binding.chooseButton.isEnabled(), is(true));
+        assertThat(widget.binding.annotateButton.isEnabled(), is(false));
     }
 
     @Test
