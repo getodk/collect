@@ -54,9 +54,7 @@ object EspressoInteractions {
      */
     fun clickOn(view: Matcher<View>, root: Matcher<Root>? = null, assertion: () -> Unit) {
         clickOn(view, root)
-        WaitFor.waitFor {
-            assertion()
-        }
+        assertion()
     }
 
     /**
