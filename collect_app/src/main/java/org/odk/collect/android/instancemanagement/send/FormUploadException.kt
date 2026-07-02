@@ -47,3 +47,10 @@ class FormUploadAuthRequestedException(
     message: String,
     val authRequestingServer: Uri
 ) : FormUploadException(message)
+
+/**
+ * Thrown to indicate that an upload was interrupted because the submission attempt was cancelled.
+ * Unlike other [FormUploadException]s this should not be reported to the user as an error - it
+ * simply stops the current submission attempt.
+ */
+class FormUploadInterruptedException : FormUploadException("Upload interrupted")

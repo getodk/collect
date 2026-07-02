@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import org.odk.collect.android.instancemanagement.InstancesDataService
 import org.odk.collect.android.utilities.WebCredentialsUtils
@@ -52,10 +51,8 @@ class InstanceUploadViewModel(
                 instancesToUpload,
                 referrer,
                 externalUrl,
-                true,
                 externalDeleteAfterUpload,
                 defaultSuccessMessage,
-                { coroutineContext.ensureActive() }
             ) { current, total ->
                 _state.postValue(UploadState.Progress(current, total))
             }
@@ -71,7 +68,6 @@ class InstanceUploadViewModel(
                 }
 
             clearTemporaryCredentials()
-            instancesDataService.update(projectId)
             _state.postValue(UploadState.Completed(uploadResults))
         }
     }

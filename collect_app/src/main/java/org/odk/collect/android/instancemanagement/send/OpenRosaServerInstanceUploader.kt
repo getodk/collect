@@ -41,8 +41,13 @@ class OpenRosaServerInstanceUploader(
         instance: Instance,
         deviceId: String?,
         overrideURL: String?,
-        referrer: String
+        referrer: String,
+        isCancelled: () -> Boolean
     ): String? {
+        if (isCancelled()) {
+            throw FormUploadInterruptedException()
+        }
+
         val projectDependencyModule = projectDependencyFactory.create(projectId)
         val unprotectedSettings = projectDependencyModule.generalSettings
         val instancesRepository = projectDependencyModule.instancesRepository
@@ -167,6 +172,10 @@ class OpenRosaServerInstanceUploader(
 
         val messageParser = ResponseMessageParser()
 
+        if (isCancelled()) {
+            throw FormUploadInterruptedException()
+        }
+
         try {
             val uri = URI.create(submissionUri.toString())
             val postResult = httpInterface.uploadSubmissionAndFiles(
@@ -175,7 +184,7 @@ class OpenRosaServerInstanceUploader(
                     uri,
                     webCredentialsUtils.getCredentials(uri),
                     contentLength
-                )
+            ) { isCancelled() }
 
             val responseCode = postResult.responseCode
             messageParser.setMessageResponse(postResult.httpResponse)
@@ -200,6 +209,9 @@ class OpenRosaServerInstanceUploader(
             }
 
         } catch (e: Exception) {
+            if (isCancelled()) {
+                throw FormUploadInterruptedException()
+            }
             throw FormUploadException(e.message ?: e.toString())
         }
 

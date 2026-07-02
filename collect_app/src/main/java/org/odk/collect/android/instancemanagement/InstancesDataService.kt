@@ -1,6 +1,8 @@
 package org.odk.collect.android.instancemanagement
 
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.isActive
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.application.Collect
@@ -213,32 +215,34 @@ class InstancesDataService(
         }
     }
 
-    fun sendInstances(
+    suspend fun sendInstances(
         projectId: String,
         instances: List<Instance>,
         referrer: String,
         overrideURL: String?,
-        cancelAfterAuthException: Boolean,
         externalDeleteAfterUpload: Boolean?,
         defaultSuccessMessage: String,
-        ensureActive: () -> Unit,
         onProgress: (current: Int, total: Int) -> Unit = { _, _ -> }
     ): List<InstanceUploadResult> {
         val projectDependencyModule = projectDependencyModuleFactory.create(projectId)
+        val coroutineContext = currentCoroutineContext()
 
-        return projectDependencyModule.instancesLock.withLock { acquiredLock: Boolean ->
+        return projectDependencyModule.instancesLock.withLockSuspend { acquiredLock: Boolean ->
             if (acquiredLock) {
-                instanceSubmitter.submitInstances(
+                val result = instanceSubmitter.submitInstances(
                     projectId,
                     instances,
                     referrer,
                     overrideURL,
-                    cancelAfterAuthException,
-                    externalDeleteAfterUpload,
-                    defaultSuccessMessage,
-                    ensureActive,
-                    onProgress
+                    cancelAfterAuthException = true,
+                    externalDeleteAfterUpload = externalDeleteAfterUpload,
+                    defaultSuccessMessage = defaultSuccessMessage,
+                    isCancelled = { !coroutineContext.isActive },
+                    onProgress = onProgress
                 )
+                update(projectId)
+
+                result
             } else {
                 emptyList()
             }
