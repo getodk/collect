@@ -53,8 +53,8 @@ object EspressoInteractions {
      * [click]).
      */
     fun clickOn(view: Matcher<View>, root: Matcher<Root>? = null, assertion: () -> Unit) {
-        tryAgainOnFail {
-            clickOn(view, root)
+        clickOn(view, root)
+        WaitFor.waitFor {
             assertion()
         }
     }
