@@ -17,6 +17,7 @@ package org.odk.collect.draw
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -27,6 +28,7 @@ import android.view.View
 import org.odk.collect.androidshared.bitmap.ImageFileUtils
 import java.io.File
 import javax.inject.Inject
+import androidx.core.graphics.withTranslation
 
 class DrawView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
 
@@ -50,7 +52,6 @@ class DrawView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
 
     private var canvas = Canvas()
     private var currentPath = Path()
-    private var offscreenPath = Path()
     private var valueX = 0f
     private var valueY = 0f
 
@@ -60,13 +61,16 @@ class DrawView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
     val bitmapWidth: Int
         get() = bitmap.width
 
+    private val displayScale: Float
+        get() = minOf(width.toFloat() / bitmap.width, height.toFloat() / bitmap.height)
+
     // Centered horizontally
-    private val bitmapLeft: Int
-        get() = (width - bitmap.width) / 2
+    private val displayLeft: Float
+        get() = (width - bitmap.width * displayScale) / 2f
 
     // Centered vertically
-    private val bitmapTop: Int
-        get() = (height - bitmap.height) / 2
+    private val displayTop: Float
+        get() = (height - bitmap.height * displayScale) / 2f
 
     private var isSignature = false
 
@@ -79,7 +83,12 @@ class DrawView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
     }
 
     override fun onDraw(canvas: Canvas) {
-        drawOnCanvas(canvas, bitmapLeft.toFloat(), bitmapTop.toFloat())
+        canvas.drawColor(0xFFAAAAAA.toInt())
+        canvas.withTranslation(displayLeft, displayTop) {
+            scale(displayScale, displayScale)
+            drawBitmap(bitmap, 0f, 0f, Paint(Paint.DITHER_FLAG))
+            drawPath(currentPath, paint)
+        }
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -123,22 +132,23 @@ class DrawView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
         canvas.drawPath(currentPath, paint)
     }
 
+    private fun toBitmapX(x: Float) = (x - displayLeft) / displayScale
+    private fun toBitmapY(y: Float) = (y - displayTop) / displayScale
+
     private fun touchStart(x: Float, y: Float) {
+        paint.strokeWidth = 10f / displayScale
         currentPath.reset()
-        currentPath.moveTo(x, y)
-        offscreenPath.reset()
-        offscreenPath.moveTo(x - bitmapLeft, y - bitmapTop)
+        currentPath.moveTo(toBitmapX(x), toBitmapY(y))
         valueX = x
         valueY = y
     }
 
     private fun touchMove(x: Float, y: Float) {
-        currentPath.quadTo(valueX, valueY, (x + valueX) / 2, (y + valueY) / 2)
-        offscreenPath.quadTo(
-            valueX - bitmapLeft,
-            valueY - bitmapTop,
-            (x + valueX) / 2 - bitmapLeft,
-            (y + valueY) / 2 - bitmapTop
+        currentPath.quadTo(
+            toBitmapX(valueX),
+            toBitmapY(valueY),
+            toBitmapX((x + valueX) / 2),
+            toBitmapY((y + valueY) / 2)
         )
         valueX = x
         valueY = y
@@ -146,13 +156,12 @@ class DrawView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
 
     private fun touchUp() {
         if (currentPath.isEmpty) {
-            canvas.drawPoint(valueX, valueY, paint)
+            canvas.drawPoint(toBitmapX(valueX), toBitmapY(valueY), paint)
         } else {
-            currentPath.lineTo(valueX, valueY)
-            offscreenPath.lineTo(valueX - bitmapLeft, valueY - bitmapTop)
+            currentPath.lineTo(toBitmapX(valueX), toBitmapY(valueY))
 
             // commit the path to our offscreen
-            canvas.drawPath(offscreenPath, paint)
+            canvas.drawPath(currentPath, paint)
         }
         // kill this so we don't double draw
         currentPath.reset()
@@ -174,7 +183,7 @@ class DrawView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
     private fun resetImage(width: Int, height: Int) {
         val backgroundBitmapFile = File(imagePath)
         if (backgroundBitmapFile.exists()) {
-            bitmap = ImageFileUtils.getBitmapScaledToDisplay(backgroundBitmapFile, height, width, true)!!
+            bitmap = ImageFileUtils.getBitmap(backgroundBitmapFile.absolutePath, BitmapFactory.Options())!!
                 .copy(Bitmap.Config.ARGB_8888, true)
             canvas = Canvas(bitmap)
         } else {
