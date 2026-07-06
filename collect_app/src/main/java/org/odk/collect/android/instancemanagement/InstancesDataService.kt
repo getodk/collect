@@ -7,11 +7,11 @@ import org.odk.collect.android.application.Collect
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler
 import org.odk.collect.android.formentry.FormEntryUseCases
 import org.odk.collect.android.formmanagement.CollectFormEntryControllerFactory
+import org.odk.collect.android.instancemanagement.send.InstanceSubmitter
+import org.odk.collect.android.instancemanagement.send.InstanceUploadResult
 import org.odk.collect.android.instancemanagement.send.autosend.FormAutoSendMode
 import org.odk.collect.android.instancemanagement.send.autosend.InstanceAutoSendFetcher
 import org.odk.collect.android.instancemanagement.send.autosend.getAutoSendMode
-import org.odk.collect.android.instancemanagement.send.InstanceSubmitter
-import org.odk.collect.android.instancemanagement.send.InstanceUploadResult
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.projects.ProjectDependencyModule
 import org.odk.collect.android.state.DataKeys
@@ -238,7 +238,9 @@ class InstancesDataService(
                     defaultSuccessMessage,
                     ensureActive,
                     onProgress
-                )
+                ).also {
+                    logResults(it)
+                }
             } else {
                 emptyList()
             }
@@ -258,6 +260,8 @@ class InstancesDataService(
 
                 if (toUpload.isNotEmpty()) {
                     val uploadResults = instanceSubmitter.submitInstances(projectId, toUpload)
+                    logResults(uploadResults)
+
                     notifier.onSubmission(uploadResults, projectDependencyModule.projectId)
                     update(projectId)
 
@@ -288,6 +292,12 @@ class InstancesDataService(
             projectDependencyModule.instancesRepository,
             projectDependencyModule.formsRepository
         )
+    }
+
+    private fun logResults(uploadResults: List<InstanceUploadResult>) {
+        uploadResults.filterIsInstance<InstanceUploadResult.Success>().forEach {
+            Analytics.log(AnalyticsEvents.SUBMISSION)
+        }
     }
 }
 
