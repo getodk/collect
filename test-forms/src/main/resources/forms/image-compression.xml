@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<h:html
+    xmlns="http://www.w3.org/2002/xforms"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:jr="http://openrosa.org/javarosa"
+    xmlns:orx="http://openrosa.org/xforms"
+    xmlns:odk="http://www.opendatakit.org/xforms">
+    <h:head>
+        <h:title>image-compression</h:title>
+        <model odk:xforms-version="1.0.0">
+            <instance>
+                <data id="image-compression">
+                    <image/>
+                    <annotate/>
+                    <draw/>
+                    <signature/>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+            <bind nodeset="/data/image" type="binary" orx:max-pixels="1000"/>
+            <bind nodeset="/data/annotate" type="binary" orx:max-pixels="1000"/>
+            <bind nodeset="/data/draw" type="binary" orx:max-pixels="1000"/>
+            <bind nodeset="/data/signature" type="binary" orx:max-pixels="1000"/>
+            <bind nodeset="/data/meta/instanceID" type="string" readonly="true()" jr:preload="uid"/>
+        </model>
+    </h:head>
+    <h:body>
+        <upload mediatype="image/*" ref="/data/image">
+            <label>Image</label>
+        </upload>
+        <upload appearance="annotate" mediatype="image/*" ref="/data/annotate">
+            <label>Annotate</label>
+        </upload>
+        <upload appearance="draw" mediatype="image/*" ref="/data/draw">
+            <label>Draw</label>
+        </upload>
+        <upload appearance="signature" mediatype="image/*" ref="/data/signature">
+            <label>Signature</label>
+        </upload>
+    </h:body>
+</h:html>

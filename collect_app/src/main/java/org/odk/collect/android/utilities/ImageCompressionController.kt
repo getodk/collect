@@ -1,20 +1,20 @@
 package org.odk.collect.android.utilities
 
 import android.content.Context
+import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.R
-import org.odk.collect.android.widgets.QuestionWidget
 import org.odk.collect.androidshared.bitmap.ImageCompressor
 import timber.log.Timber
 
 class ImageCompressionController(private val imageCompressor: ImageCompressor) {
     fun execute(
         imagePath: String,
-        questionWidget: QuestionWidget,
+        prompt: FormEntryPrompt,
         context: Context,
         imageSizeMode: String
     ) {
         var maxPixels: Int?
-        maxPixels = getMaxPixelsFromFormIfDefined(questionWidget)
+        maxPixels = getMaxPixelsFromFormIfDefined(prompt)
         if (maxPixels == null) {
             maxPixels = getMaxPixelsFromSettings(context, imageSizeMode)
         }
@@ -23,8 +23,8 @@ class ImageCompressionController(private val imageCompressor: ImageCompressor) {
         }
     }
 
-    private fun getMaxPixelsFromFormIfDefined(questionWidget: QuestionWidget): Int? {
-        for (bindAttribute in questionWidget.formEntryPrompt.bindAttributes) {
+    private fun getMaxPixelsFromFormIfDefined(prompt: FormEntryPrompt): Int? {
+        for (bindAttribute in prompt.bindAttributes) {
             if ("max-pixels" == bindAttribute.name && ApplicationConstants.Namespaces.XML_OPENROSA_NAMESPACE == bindAttribute.namespace) {
                 try {
                     return bindAttribute.attributeValue?.toInt()

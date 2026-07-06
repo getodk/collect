@@ -34,6 +34,7 @@ class StubOpenRosaServer : OpenRosaHttpInterface {
      * A list of submitted forms, maintained in the original order of submission, with the oldest forms appearing first.
      */
     private val submittedForms: MutableList<File> = mutableListOf()
+    private val submittedAttachments: MutableList<File> = mutableListOf()
     private val deletedEntities: MutableList<String> = mutableListOf()
     private var includeIntegrityUrl = false
 
@@ -43,6 +44,9 @@ class StubOpenRosaServer : OpenRosaHttpInterface {
 
     val submissions: List<File>
         get() = submittedForms
+
+    val submittedMediaFiles: List<File>
+        get() = submittedAttachments
 
     var accesses = 0
         private set
@@ -135,6 +139,7 @@ class StubOpenRosaServer : OpenRosaHttpInterface {
             return HttpPostResult("", 401, "")
         } else if (uri.path == OpenRosaConstants.SUBMISSION) {
             submittedForms.add(submissionFile)
+            submittedAttachments.addAll(fileList)
             return HttpPostResult("", 201, "")
         } else {
             return HttpPostResult("", 404, "")
