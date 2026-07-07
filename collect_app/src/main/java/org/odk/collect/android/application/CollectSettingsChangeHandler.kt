@@ -2,13 +2,11 @@ package org.odk.collect.android.application
 
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.analytics.AnalyticsEvents
-import org.odk.collect.android.analytics.AnalyticsUtils
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler
 import org.odk.collect.android.formmanagement.FormsDataService
 import org.odk.collect.metadata.PropertyManager
 import org.odk.collect.settings.importing.SettingsChangeHandler
 import org.odk.collect.settings.keys.ProjectKeys
-import org.odk.collect.shared.strings.Md5
 import org.odk.collect.shared.strings.Md5.getMd5Hash
 import java.io.ByteArrayInputStream
 
@@ -51,7 +49,14 @@ class CollectSettingsChangeHandler(
         val upperCaseURL = url.uppercase()
         val scheme = upperCaseURL.split(":".toRegex()).toTypedArray()[0]
         val urlHash = getMd5Hash(ByteArrayInputStream(url.toByteArray()))
-        Analytics.log(AnalyticsEvents.SET_SERVER, scheme + " " + getHostFromUrl(url), urlHash!!)
+
+        Analytics.log(
+            AnalyticsEvents.SET_SERVER,
+            mapOf(
+                "action" to scheme + " " + getHostFromUrl(url),
+                "label" to (urlHash ?: "")
+            )
+        )
     }
 
     private fun getHostFromUrl(url: String?): String {
