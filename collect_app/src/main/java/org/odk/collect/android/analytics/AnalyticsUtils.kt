@@ -2,6 +2,7 @@ package org.odk.collect.android.analytics
 
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.javarosawrapper.FormController
+import org.odk.collect.forms.Form
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.settings.Settings
 import org.odk.collect.shared.strings.Md5.getMd5Hash
@@ -51,6 +52,10 @@ object AnalyticsUtils {
             host = "ODK Cloud"
         }
         return host
+    }
+
+    fun getFormHash(form: Form): String {
+        return getFormHash(form.formId, form.displayName)
     }
 
     private fun getFormHash(formController: FormController?): String {

@@ -37,6 +37,10 @@ interface Analytics {
             instance.logEventWithParam(event, key, value)
         }
 
+        fun log(event: String, params: Map<String, String>) {
+            instance.logEventWithParams(event, params)
+        }
+
         @JvmStatic
         fun setParam(key: String, value: String) {
             params[key] = value
