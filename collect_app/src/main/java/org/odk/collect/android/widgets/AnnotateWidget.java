@@ -31,6 +31,7 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
+import org.odk.collect.android.utilities.QuestionMediaManagerKt;
 import org.odk.collect.android.widgets.utilities.ImageCaptureIntentCreator;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.androidshared.bitmap.ImageFileUtils;
@@ -145,7 +146,7 @@ public class AnnotateWidget extends BaseImageWidget {
 
     private void updateButtonStates() {
         boolean isDefaultImage = isDefaultImage();
-        boolean isAnswerImage = questionMediaManager.getExistingAnswerFile(binaryName) != null;
+        boolean isAnswerImage = QuestionMediaManagerKt.getExistingAnswerFile(questionMediaManager, binaryName) != null;
 
         binding.annotateButton.setEnabled(isDefaultImage || isAnswerImage);
         binding.captureButton.setEnabled(!isDefaultImage);

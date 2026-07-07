@@ -36,6 +36,7 @@ import org.odk.collect.draw.DrawActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.QuestionMediaManager;
+import org.odk.collect.android.utilities.QuestionMediaManagerKt;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
@@ -128,7 +129,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
         imageView.setVisibility(View.GONE);
         errorTextView.setVisibility(View.GONE);
 
-        File file = questionMediaManager.getExistingAnswerFile(binaryName);
+        File file = QuestionMediaManagerKt.getExistingAnswerFile(questionMediaManager, binaryName);
         if (file != null) {
             imageView.setVisibility(View.VISIBLE);
             imageLoader.loadImage(imageView, file, ImageView.ScaleType.FIT_CENTER, new GlideImageLoader.ImageLoaderCallback() {
@@ -248,7 +249,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
             return null;
         }
 
-        File answerFile = questionMediaManager.getExistingAnswerFile(binaryName);
+        File answerFile = QuestionMediaManagerKt.getExistingAnswerFile(questionMediaManager, binaryName);
         if (answerFile == null) {
             String filePath = getDefaultFilePath();
             return filePath != null ? new File(filePath) : null;

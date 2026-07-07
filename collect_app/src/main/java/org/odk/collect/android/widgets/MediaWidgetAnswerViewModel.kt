@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import org.odk.collect.android.utilities.MediaUtils
 import org.odk.collect.android.utilities.QuestionMediaManager
+import org.odk.collect.android.utilities.getExistingAnswerFile
 import org.odk.collect.androidshared.utils.getVideoThumbnail
 import org.odk.collect.async.Scheduler
 import java.io.File
