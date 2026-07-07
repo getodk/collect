@@ -29,31 +29,6 @@ object AnalyticsUtils {
         Analytics.log(event, "server", getServerHash(generalSettings)!!)
     }
 
-    fun logServerConfiguration(url: String) {
-        val upperCaseURL = url.uppercase()
-        val scheme = upperCaseURL.split(":".toRegex()).toTypedArray()[0]
-        val urlHash = getMd5Hash(ByteArrayInputStream(url.toByteArray()))
-        Analytics.log(AnalyticsEvents.SET_SERVER, scheme + " " + getHostFromUrl(url), urlHash!!)
-    }
-
-    private fun getHostFromUrl(url: String?): String {
-        if (url == null || url.isEmpty()) {
-            return ""
-        }
-        val upperCaseURL = url.uppercase()
-        var host = "Other"
-        if (upperCaseURL.contains("APPSPOT")) {
-            host = "Appspot"
-        } else if (upperCaseURL.contains("KOBOTOOLBOX.ORG") || upperCaseURL.contains("HUMANITARIANRESPONSE.INFO")) {
-            host = "Kobo"
-        } else if (upperCaseURL.contains("ONA.IO")) {
-            host = "Ona"
-        } else if (upperCaseURL.contains("GETODK.CLOUD")) {
-            host = "ODK Cloud"
-        }
-        return host
-    }
-
     fun getFormHash(form: Form): String {
         return getFormHash(form.formId, form.displayName)
     }
