@@ -299,9 +299,7 @@ abstract class Page<T : Page<T>> {
 
             AssertionFramework.COMPOSE -> {
                 ComposeInteractions.clickOn(composeRule!!, hasText(getTranslatedString(stringID))) {
-                    waitFor {
-                        destination.assertOnPage()
-                    }
+                    destination.assertOnPage()
                 }
             }
         }
