@@ -239,7 +239,7 @@ class InstancesDataService(
                     ensureActive,
                     onProgress
                 ).also {
-                    logResults(it)
+                    logResults(it, auto = false)
                 }
             } else {
                 emptyList()
@@ -260,7 +260,7 @@ class InstancesDataService(
 
                 if (toUpload.isNotEmpty()) {
                     val uploadResults = instanceSubmitter.submitInstances(projectId, toUpload)
-                    logResults(uploadResults)
+                    logResults(uploadResults, auto = true)
 
                     notifier.onSubmission(uploadResults, projectDependencyModule.projectId)
                     update(projectId)
@@ -294,9 +294,15 @@ class InstancesDataService(
         )
     }
 
-    private fun logResults(uploadResults: List<InstanceUploadResult>) {
+    private fun logResults(uploadResults: List<InstanceUploadResult>, auto: Boolean) {
         uploadResults.filterIsInstance<InstanceUploadResult.Success>().forEach {
-            Analytics.log(AnalyticsEvents.SUBMISSION)
+            val action = if (auto) {
+                "HTTP auto"
+            } else {
+                "HTTP"
+            }
+
+            Analytics.log(AnalyticsEvents.SUBMISSION, "action", action)
         }
     }
 }
