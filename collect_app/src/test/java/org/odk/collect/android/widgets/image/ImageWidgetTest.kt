@@ -208,7 +208,7 @@ class ImageWidgetTest : BinaryWidgetTest<ImageWidget, StringData>() {
     }
 
     @Test
-    fun `when the answer is a default image shows neither the image nor an error message`() {
+    fun `when the answer is a reference shows neither the image nor an error message`() {
         formEntryPrompt = MockFormEntryPromptBuilder(formEntryPrompt)
             .withAnswerDisplayText("jr://images/default.png")
             .build()

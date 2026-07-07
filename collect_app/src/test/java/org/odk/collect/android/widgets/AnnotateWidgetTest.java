@@ -195,11 +195,11 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
     }
 
     @Test
-    public void whenPromptHasDefaultAnswer_hideImageViewAndErrorMessageButKeepAnnotateButtonEnabled() throws Exception {
+    public void whenAnswerIsAReference_hideImageViewAndErrorMessageButKeepAnnotateButtonEnabled() throws Exception {
         String imagePath = File.createTempFile("default", ".bmp").getAbsolutePath();
 
         ReferenceManager referenceManager = setupFakeReferenceManager(singletonList(
-                new Pair<>(DrawWidgetTest.DEFAULT_IMAGE_ANSWER, imagePath)
+                new Pair<>(DrawWidgetTest.REFERENCE_URI, imagePath)
         ));
         CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
             @Override
@@ -209,7 +209,7 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
         });
 
         formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withAnswerDisplayText(DrawWidgetTest.DEFAULT_IMAGE_ANSWER)
+                .withAnswerDisplayText(DrawWidgetTest.REFERENCE_URI)
                 .build();
 
         AnnotateWidget widget = createWidget();
@@ -221,11 +221,11 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
     }
 
     @Test
-    public void whenPromptHasDefaultAnswer_disableCaptureAndChooseButtonsButKeepAnnotateButtonEnabled() throws Exception {
+    public void whenAnswerIsAReference_disableCaptureAndChooseButtonsButKeepAnnotateButtonEnabled() throws Exception {
         String imagePath = File.createTempFile("default", ".bmp").getAbsolutePath();
 
         ReferenceManager referenceManager = setupFakeReferenceManager(singletonList(
-                new Pair<>(DrawWidgetTest.DEFAULT_IMAGE_ANSWER, imagePath)
+                new Pair<>(DrawWidgetTest.REFERENCE_URI, imagePath)
         ));
         CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
             @Override
@@ -235,7 +235,7 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
         });
 
         formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withAnswerDisplayText(DrawWidgetTest.DEFAULT_IMAGE_ANSWER)
+                .withAnswerDisplayText(DrawWidgetTest.REFERENCE_URI)
                 .build();
 
         AnnotateWidget widget = createWidget();
@@ -298,11 +298,11 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
     public void markupButtonShouldBeDisabledIfImageAbsent() throws Exception {
         String badPath = "bad_path";
         overrideReferenceManager(setupFakeReferenceManager(singletonList(
-                new Pair<>(DrawWidgetTest.DEFAULT_IMAGE_ANSWER, badPath)
+                new Pair<>(DrawWidgetTest.REFERENCE_URI, badPath)
         )));
 
         formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withAnswerDisplayText(DrawWidgetTest.DEFAULT_IMAGE_ANSWER)
+                .withAnswerDisplayText(DrawWidgetTest.REFERENCE_URI)
                 .build();
 
         assertThat(getWidget().binding.annotateButton.isEnabled(), is(false));
@@ -315,12 +315,12 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
     }
 
     @Test
-    public void whenPromptHasDefaultAnswer_passUriToDrawActivity() throws Exception {
+    public void whenAnswerIsAReference_passUriToDrawActivity() throws Exception {
         File file = File.createTempFile("default", ".bmp");
         String imagePath = file.getAbsolutePath();
 
         ReferenceManager referenceManager = setupFakeReferenceManager(singletonList(
-                new Pair<>(DrawWidgetTest.DEFAULT_IMAGE_ANSWER, imagePath)
+                new Pair<>(DrawWidgetTest.REFERENCE_URI, imagePath)
         ));
         CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
             @Override
@@ -335,7 +335,7 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
         });
 
         formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withAnswerDisplayText(DrawWidgetTest.DEFAULT_IMAGE_ANSWER)
+                .withAnswerDisplayText(DrawWidgetTest.REFERENCE_URI)
                 .build();
 
         Intent intent = getIntentLaunchedByClick(R.id.annotate_button);
@@ -345,9 +345,9 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
     }
 
     @Test
-    public void whenPromptHasDefaultAnswerThatDoesNotExist_doNotPassUriToDrawActivity() throws Exception {
+    public void whenAnswerIsAReferenceThatDoesNotExist_doNotPassUriToDrawActivity() throws Exception {
         ReferenceManager referenceManager = setupFakeReferenceManager(singletonList(
-                new Pair<>(DrawWidgetTest.DEFAULT_IMAGE_ANSWER, "/something")
+                new Pair<>(DrawWidgetTest.REFERENCE_URI, "/something")
         ));
         CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
             @Override
@@ -357,7 +357,7 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
         });
 
         formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withAnswerDisplayText(DrawWidgetTest.DEFAULT_IMAGE_ANSWER)
+                .withAnswerDisplayText(DrawWidgetTest.REFERENCE_URI)
                 .build();
 
         Intent intent = getIntentLaunchedByClick(R.id.annotate_button);
@@ -375,22 +375,22 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
     }
 
     @Test
-    public void whenDefaultImageIsPortrait_launchesDrawActivityInPortrait() throws Exception {
-        assertDrawActivityOrientationForDefaultImage(100, 200, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    public void whenReferenceImageIsPortrait_launchesDrawActivityInPortrait() throws Exception {
+        assertDrawActivityOrientationForReferenceImage(100, 200, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
     @Test
-    public void whenDefaultImageIsLandscape_launchesDrawActivityInLandscape() throws Exception {
-        assertDrawActivityOrientationForDefaultImage(200, 100, ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+    public void whenReferenceImageIsLandscape_launchesDrawActivityInLandscape() throws Exception {
+        assertDrawActivityOrientationForReferenceImage(200, 100, ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     }
 
-    private void assertDrawActivityOrientationForDefaultImage(int width, int height, int expectedOrientation) throws Exception {
+    private void assertDrawActivityOrientationForReferenceImage(int width, int height, int expectedOrientation) throws Exception {
         File file = File.createTempFile("default", ".bmp");
         String imagePath = file.getAbsolutePath();
         ShadowBitmapFactory.provideWidthAndHeightHints(imagePath, width, height);
 
         ReferenceManager referenceManager = setupFakeReferenceManager(singletonList(
-                new Pair<>(DrawWidgetTest.DEFAULT_IMAGE_ANSWER, imagePath)
+                new Pair<>(DrawWidgetTest.REFERENCE_URI, imagePath)
         ));
         CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
             @Override
@@ -405,7 +405,7 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
         });
 
         formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withAnswerDisplayText(DrawWidgetTest.DEFAULT_IMAGE_ANSWER)
+                .withAnswerDisplayText(DrawWidgetTest.REFERENCE_URI)
                 .build();
 
         Intent intent = getIntentLaunchedByClick(R.id.annotate_button);

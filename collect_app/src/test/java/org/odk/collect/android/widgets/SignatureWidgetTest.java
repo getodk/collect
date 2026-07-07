@@ -124,11 +124,11 @@ public class SignatureWidgetTest extends FileWidgetTest<SignatureWidget> {
     }
 
     @Test
-    public void whenPromptHasDefaultAnswer_hideImageViewAndErrorMessage() throws Exception {
+    public void whenAnswerIsAReference_hideImageViewAndErrorMessage() throws Exception {
         String imagePath = File.createTempFile("default", ".bmp").getAbsolutePath();
 
         ReferenceManager referenceManager = setupFakeReferenceManager(singletonList(
-                new Pair<>(DrawWidgetTest.DEFAULT_IMAGE_ANSWER, imagePath)
+                new Pair<>(DrawWidgetTest.REFERENCE_URI, imagePath)
         ));
         CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
             @Override
@@ -143,7 +143,7 @@ public class SignatureWidgetTest extends FileWidgetTest<SignatureWidget> {
         });
 
         formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withAnswerDisplayText(DrawWidgetTest.DEFAULT_IMAGE_ANSWER)
+                .withAnswerDisplayText(DrawWidgetTest.REFERENCE_URI)
                 .build();
 
         SignatureWidget widget = createWidget();
@@ -180,12 +180,12 @@ public class SignatureWidgetTest extends FileWidgetTest<SignatureWidget> {
     }
 
     @Test
-    public void whenPromptHasDefaultAnswer_passUriToDrawActivity() throws Exception {
+    public void whenAnswerIsAReference_passUriToDrawActivity() throws Exception {
         File file = File.createTempFile("default", ".bmp");
         String imagePath = file.getAbsolutePath();
 
         ReferenceManager referenceManager = setupFakeReferenceManager(singletonList(
-                new Pair<>(DrawWidgetTest.DEFAULT_IMAGE_ANSWER, imagePath)
+                new Pair<>(DrawWidgetTest.REFERENCE_URI, imagePath)
         ));
         CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
             @Override
@@ -200,7 +200,7 @@ public class SignatureWidgetTest extends FileWidgetTest<SignatureWidget> {
         });
 
         formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withAnswerDisplayText(DrawWidgetTest.DEFAULT_IMAGE_ANSWER)
+                .withAnswerDisplayText(DrawWidgetTest.REFERENCE_URI)
                 .build();
 
         Intent intent = getIntentLaunchedByClick(R.id.sign_button);
@@ -210,9 +210,9 @@ public class SignatureWidgetTest extends FileWidgetTest<SignatureWidget> {
     }
 
     @Test
-    public void whenPromptHasDefaultAnswerThatDoesNotExist_doNotPassUriToDrawActivity() throws Exception {
+    public void whenAnswerIsAReferenceThatDoesNotExist_doNotPassUriToDrawActivity() throws Exception {
         ReferenceManager referenceManager = setupFakeReferenceManager(singletonList(
-                new Pair<>(DrawWidgetTest.DEFAULT_IMAGE_ANSWER, "/something")
+                new Pair<>(DrawWidgetTest.REFERENCE_URI, "/something")
         ));
         CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
             @Override
@@ -222,7 +222,7 @@ public class SignatureWidgetTest extends FileWidgetTest<SignatureWidget> {
         });
 
         formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withAnswerDisplayText(DrawWidgetTest.DEFAULT_IMAGE_ANSWER)
+                .withAnswerDisplayText(DrawWidgetTest.REFERENCE_URI)
                 .build();
 
         Intent intent = getIntentLaunchedByClick(R.id.sign_button);
