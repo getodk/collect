@@ -26,6 +26,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import org.odk.collect.androidshared.bitmap.ImageFileUtils
+import org.odk.collect.androidshared.utils.calculateInSampleSize
 import java.io.File
 import javax.inject.Inject
 import androidx.core.graphics.withTranslation
@@ -183,7 +184,10 @@ class DrawView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
     private fun resetImage(width: Int, height: Int) {
         val backgroundBitmapFile = File(imagePath)
         if (backgroundBitmapFile.exists()) {
-            bitmap = ImageFileUtils.getBitmap(backgroundBitmapFile.absolutePath, BitmapFactory.Options())!!
+            val options = BitmapFactory.Options()
+            options.inSampleSize = backgroundBitmapFile.calculateInSampleSize(4096)
+
+            bitmap = ImageFileUtils.getBitmap(backgroundBitmapFile.absolutePath, options)!!
                 .copy(Bitmap.Config.ARGB_8888, true)
             canvas = Canvas(bitmap)
         } else {
