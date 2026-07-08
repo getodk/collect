@@ -6,16 +6,20 @@ import java.util.concurrent.Callable
 
 object WaitFor {
 
+    /**
+     * Runs [assertion] repeatedly until no [Exception] is thrown or the [timeout] expires. The
+     * [assertion] will always be run at least twice - this accounts for the actual run time
+     * taking the full [timeout] period.
+     */
     @JvmStatic
-    fun <T> waitFor(callable: Callable<T>): T {
+    fun <T> waitFor(timeout: Long = 5 * TimeInMs.ONE_SECOND, assertion: Callable<T>): T {
         var failure: Throwable? = null
         val startTime = System.currentTimeMillis()
         var checks = 0
 
-        // Try for 5 seconds or at least 2 checks
-        while ((System.currentTimeMillis() - startTime) < (5 * TimeInMs.ONE_SECOND) || checks < 2) {
+        while ((System.currentTimeMillis() - startTime) < (timeout) || checks < 2) {
             failure = try {
-                return callable.call()
+                return assertion.call()
             } catch (throwable: Exception) {
                 throwable
             } catch (throwable: AssertionFailedError) {
