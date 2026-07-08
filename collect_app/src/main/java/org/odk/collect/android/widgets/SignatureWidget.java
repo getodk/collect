@@ -67,11 +67,6 @@ public class SignatureWidget extends BaseImageWidget {
     }
 
     @Override
-    protected boolean doesSupportDefaultValues() {
-        return true;
-    }
-
-    @Override
     public void clearAnswer() {
         super.clearAnswer();
         binding.signButton.setText(getContext().getString(org.odk.collect.strings.R.string.sign_button));

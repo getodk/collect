@@ -1,6 +1,7 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -27,6 +28,7 @@ import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.odk.collect.android.widgets.support.SynchronousImageLoader;
 import org.odk.collect.imageloader.ImageLoader;
 import org.odk.collect.shared.TempFiles;
+import org.robolectric.shadows.ShadowBitmapFactory;
 import org.robolectric.shadows.ShadowToast;
 
 import java.io.File;
@@ -193,36 +195,77 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
     }
 
     @Test
-    public void whenPromptHasDefaultAnswer_showsInImageView() throws Exception {
+    public void whenAnswerIsAReference_hideImageViewAndErrorMessageButKeepAnnotateButtonEnabled() throws Exception {
         String imagePath = File.createTempFile("default", ".bmp").getAbsolutePath();
 
         ReferenceManager referenceManager = setupFakeReferenceManager(singletonList(
-                new Pair<>(DrawWidgetTest.DEFAULT_IMAGE_ANSWER, imagePath)
+                new Pair<>(DrawWidgetTest.REFERENCE_URI, imagePath)
         ));
         CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
             @Override
             public ReferenceManager providesReferenceManager() {
                 return referenceManager;
             }
-
-            @Override
-            public ImageLoader providesImageLoader() {
-                return new SynchronousImageLoader();
-            }
         });
 
         formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withAnswerDisplayText(DrawWidgetTest.DEFAULT_IMAGE_ANSWER)
+                .withAnswerDisplayText(DrawWidgetTest.REFERENCE_URI)
                 .build();
 
         AnnotateWidget widget = createWidget();
         ImageView imageView = widget.getImageView();
-        assertThat(imageView.getVisibility(), is(View.VISIBLE));
-        Drawable drawable = imageView.getDrawable();
-        assertThat(drawable, notNullValue());
+        assertThat(imageView.getVisibility(), is(View.GONE));
+        assertThat(imageView.getDrawable(), nullValue());
+        assertThat(widget.getErrorTextView().getVisibility(), is(View.GONE));
+        assertThat(widget.binding.annotateButton.isEnabled(), is(true));
+    }
 
-        String loadedPath = shadowOf(((BitmapDrawable) drawable).getBitmap()).getCreatedFromPath();
-        assertThat(loadedPath, equalTo(imagePath));
+    @Test
+    public void whenAnswerIsAReference_disableCaptureAndChooseButtonsButKeepAnnotateButtonEnabled() throws Exception {
+        String imagePath = File.createTempFile("default", ".bmp").getAbsolutePath();
+
+        ReferenceManager referenceManager = setupFakeReferenceManager(singletonList(
+                new Pair<>(DrawWidgetTest.REFERENCE_URI, imagePath)
+        ));
+        CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
+            @Override
+            public ReferenceManager providesReferenceManager() {
+                return referenceManager;
+            }
+        });
+
+        formEntryPrompt = new MockFormEntryPromptBuilder()
+                .withAnswerDisplayText(DrawWidgetTest.REFERENCE_URI)
+                .build();
+
+        AnnotateWidget widget = createWidget();
+        assertThat(widget.binding.captureButton.isEnabled(), is(false));
+        assertThat(widget.binding.chooseButton.isEnabled(), is(false));
+        assertThat(widget.binding.annotateButton.isEnabled(), is(true));
+    }
+
+    @Test
+    public void whenPromptHasCurrentAnswer_enableAllButtons() throws Exception {
+        String imagePath = File.createTempFile("current", ".bmp").getAbsolutePath();
+        currentFile = new File(imagePath);
+
+        formEntryPrompt = new MockFormEntryPromptBuilder()
+                .withAnswerDisplayText(DrawWidgetTest.USER_SPECIFIED_IMAGE_ANSWER)
+                .build();
+
+        AnnotateWidget widget = createWidget();
+        assertThat(widget.binding.captureButton.isEnabled(), is(true));
+        assertThat(widget.binding.chooseButton.isEnabled(), is(true));
+        assertThat(widget.binding.annotateButton.isEnabled(), is(true));
+    }
+
+    @Test
+    public void whenThereIsNoAnswer_enableCaptureAndChooseButtonsButDisableAnnotateButton() {
+        AnnotateWidget widget = createWidget();
+
+        assertThat(widget.binding.captureButton.isEnabled(), is(true));
+        assertThat(widget.binding.chooseButton.isEnabled(), is(true));
+        assertThat(widget.binding.annotateButton.isEnabled(), is(false));
     }
 
     @Test
@@ -255,11 +298,11 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
     public void markupButtonShouldBeDisabledIfImageAbsent() throws Exception {
         String badPath = "bad_path";
         overrideReferenceManager(setupFakeReferenceManager(singletonList(
-                new Pair<>(DrawWidgetTest.DEFAULT_IMAGE_ANSWER, badPath)
+                new Pair<>(DrawWidgetTest.REFERENCE_URI, badPath)
         )));
 
         formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withAnswerDisplayText(DrawWidgetTest.DEFAULT_IMAGE_ANSWER)
+                .withAnswerDisplayText(DrawWidgetTest.REFERENCE_URI)
                 .build();
 
         assertThat(getWidget().binding.annotateButton.isEnabled(), is(false));
@@ -272,12 +315,12 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
     }
 
     @Test
-    public void whenPromptHasDefaultAnswer_passUriToDrawActivity() throws Exception {
+    public void whenAnswerIsAReference_passUriToDrawActivity() throws Exception {
         File file = File.createTempFile("default", ".bmp");
         String imagePath = file.getAbsolutePath();
 
         ReferenceManager referenceManager = setupFakeReferenceManager(singletonList(
-                new Pair<>(DrawWidgetTest.DEFAULT_IMAGE_ANSWER, imagePath)
+                new Pair<>(DrawWidgetTest.REFERENCE_URI, imagePath)
         ));
         CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
             @Override
@@ -292,7 +335,7 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
         });
 
         formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withAnswerDisplayText(DrawWidgetTest.DEFAULT_IMAGE_ANSWER)
+                .withAnswerDisplayText(DrawWidgetTest.REFERENCE_URI)
                 .build();
 
         Intent intent = getIntentLaunchedByClick(R.id.annotate_button);
@@ -302,9 +345,9 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
     }
 
     @Test
-    public void whenPromptHasDefaultAnswerThatDoesNotExist_doNotPassUriToDrawActivity() throws Exception {
+    public void whenAnswerIsAReferenceThatDoesNotExist_doNotPassUriToDrawActivity() throws Exception {
         ReferenceManager referenceManager = setupFakeReferenceManager(singletonList(
-                new Pair<>(DrawWidgetTest.DEFAULT_IMAGE_ANSWER, "/something")
+                new Pair<>(DrawWidgetTest.REFERENCE_URI, "/something")
         ));
         CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
             @Override
@@ -314,7 +357,7 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
         });
 
         formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withAnswerDisplayText(DrawWidgetTest.DEFAULT_IMAGE_ANSWER)
+                .withAnswerDisplayText(DrawWidgetTest.REFERENCE_URI)
                 .build();
 
         Intent intent = getIntentLaunchedByClick(R.id.annotate_button);
@@ -329,5 +372,43 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
         assertComponentEquals(activity, DrawActivity.class, intent);
         assertExtraEquals(DrawActivity.OPTION, DrawActivity.OPTION_ANNOTATE, intent);
         assertThat(intent.hasExtra(DrawActivity.REF_IMAGE), is(false));
+    }
+
+    @Test
+    public void whenReferenceImageIsPortrait_launchesDrawActivityInPortrait() throws Exception {
+        assertDrawActivityOrientationForReferenceImage(100, 200, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    }
+
+    @Test
+    public void whenReferenceImageIsLandscape_launchesDrawActivityInLandscape() throws Exception {
+        assertDrawActivityOrientationForReferenceImage(200, 100, ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+    }
+
+    private void assertDrawActivityOrientationForReferenceImage(int width, int height, int expectedOrientation) throws Exception {
+        File file = File.createTempFile("default", ".bmp");
+        String imagePath = file.getAbsolutePath();
+        ShadowBitmapFactory.provideWidthAndHeightHints(imagePath, width, height);
+
+        ReferenceManager referenceManager = setupFakeReferenceManager(singletonList(
+                new Pair<>(DrawWidgetTest.REFERENCE_URI, imagePath)
+        ));
+        CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
+            @Override
+            public ReferenceManager providesReferenceManager() {
+                return referenceManager;
+            }
+
+            @Override
+            public ImageLoader providesImageLoader() {
+                return new SynchronousImageLoader();
+            }
+        });
+
+        formEntryPrompt = new MockFormEntryPromptBuilder()
+                .withAnswerDisplayText(DrawWidgetTest.REFERENCE_URI)
+                .build();
+
+        Intent intent = getIntentLaunchedByClick(R.id.annotate_button);
+        assertExtraEquals(DrawActivity.SCREEN_ORIENTATION, expectedOrientation, intent);
     }
 }

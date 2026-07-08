@@ -19,6 +19,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.util.Size
 import androidx.exifinterface.media.ExifInterface
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -126,6 +127,25 @@ class ImageFileUtilsTest {
         assertEquals(Color.RED, image.getPixel(0, 0))
         assertEquals(Color.GREEN, image.getPixel(0, 1))
         verifyNoExifOrientationInDestinationFile(destinationFile.absolutePath)
+    }
+
+    @Test
+    fun getImageDisplayDimensions_withoutExifOrientation_returnsStoredDimensions() {
+        saveTestBitmapToFile(sourceFile.absolutePath, null)
+
+        val dimensions = ImageFileUtils.getImageDisplayDimensions(sourceFile)
+
+        assertEquals(Size(1, 2), dimensions)
+    }
+
+    @Test
+    fun getImageDisplayDimensions_withRotatingExifOrientation_returnsSwappedDimensions() {
+        attributes[ExifInterface.TAG_ORIENTATION] = ExifInterface.ORIENTATION_ROTATE_90.toString()
+        saveTestBitmapToFile(sourceFile.absolutePath, attributes)
+
+        val dimensions = ImageFileUtils.getImageDisplayDimensions(sourceFile)
+
+        assertEquals(Size(2, 1), dimensions)
     }
 
     /**

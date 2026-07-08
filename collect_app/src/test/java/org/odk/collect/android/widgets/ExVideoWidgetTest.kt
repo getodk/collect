@@ -31,6 +31,7 @@ import org.odk.collect.androidshared.system.IntentLauncher
 import org.odk.collect.androidtest.onNodeWithClickLabel
 import org.odk.collect.strings.R.string
 import org.robolectric.shadows.ShadowToast
+import org.odk.collect.shared.TempFiles
 import java.io.File
 import java.io.IOException
 
@@ -127,7 +128,7 @@ class ExVideoWidgetTest : FileWidgetTest<ExVideoWidget>() {
     @Test
     fun whenClickingOnPlayButton_shouldFileViewerByCalled() {
         whenever(formEntryPrompt.getAnswerText()).thenReturn(initialAnswer.displayText)
-        whenever(questionMediaManager.getAnswerFile(initialAnswer.displayText)).thenReturn(File(initialAnswer.displayText))
+        whenever(questionMediaManager.getAnswerFile(initialAnswer.displayText)).thenReturn(TempFiles.createTempFile())
         createWidget()
         composeRule.onNodeWithClickLabel(activity.getString(string.play_video)).performClick()
 
