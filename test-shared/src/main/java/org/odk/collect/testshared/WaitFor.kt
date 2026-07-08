@@ -12,6 +12,7 @@ object WaitFor {
      * taking the full [timeout] period.
      */
     @JvmStatic
+    @JvmOverloads
     fun <T> waitFor(timeout: Long = 5 * TimeInMs.ONE_SECOND, assertion: Callable<T>): T {
         var failure: Throwable? = null
         val startTime = System.currentTimeMillis()

@@ -11,16 +11,16 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.odk.collect.android.R
 import org.odk.collect.testshared.AssertionFramework
+import org.odk.collect.testshared.WaitFor
 import org.odk.collect.testshared.WaitFor.waitFor
 import java.util.concurrent.Callable
 
 class FormHierarchyPage(private val formName: String) : Page<FormHierarchyPage>() {
     override fun assertOnPage(): FormHierarchyPage {
         // Make sure we've left the fill blank form screen
-        waitFor(Callable {
+        waitFor {
             onView(withId(R.id.menu_goto)).check(doesNotExist())
-            null
-        } as Callable<*>)
+        }
 
         assertToolbarTitle(formName)
         assertText(org.odk.collect.strings.R.string.jump_to_beginning)
