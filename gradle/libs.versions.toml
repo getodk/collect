@@ -1,5 +1,5 @@
 [versions]
-compileSdk = "36"
+compileSdk = "37"
 minSdk = "26"
 targetSdk = "36"
 lifecycle = "2.11.0"
