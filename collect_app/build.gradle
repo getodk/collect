@@ -347,7 +347,7 @@ dependencies {
     implementation(composeBom)
     implementation(libs.androidXComposeMaterial)
     implementation(libs.androidXConstraintLayoutCompose)
-    implementation(libs.androidXComposeMaterialIcons)
+    implementation(libs.androidXComposeMaterialIconsExtended)
     implementation(libs.androidXComposePreview)
     implementation(libs.coil)
     implementation(libs.coil.gif)
