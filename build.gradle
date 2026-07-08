@@ -17,6 +17,7 @@ buildscript {
         classpath libs.firebaseCrashlyticsGradle
         classpath libs.kotlinGradlePlugin
         classpath libs.ktlintGradle
+        classpath libs.gradleVersionsPlugin
         classpath libs.navigationSafeArgsGradlePlugin
         classpath libs.ossLicensesPlugin
     }
@@ -68,6 +69,8 @@ allprojects {
 configurations.all {
     transitive = true
 }
+
+apply from: 'config/dependency_updates.gradle'
 
 task checkCode(type: GradleBuild) {
     tasks = ['pmd', 'ktlintCheck', 'checkstyle', 'lintDebug']

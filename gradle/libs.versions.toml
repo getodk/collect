@@ -22,6 +22,7 @@ gradle = { group = "com.android.tools.build", name = "gradle", version = "9.0.0"
 kotlinGradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlinStdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
 ktlintGradle = { group = "org.jlleitschuh.gradle", name = "ktlint-gradle", version = "14.0.1" }
+gradleVersionsPlugin = { group = "com.github.ben-manes", name = "gradle-versions-plugin", version = "0.54.0" }
 ossLicensesPlugin = { group = "com.google.android.gms", name = "oss-licenses-plugin", version = "0.10.10" }
 desugar = { group = "com.android.tools", name = "desugar_jdk_libs", version = "2.1.5" }
 androidxStartup = { group = "androidx.startup", name = "startup-runtime", version = "1.2.0" }

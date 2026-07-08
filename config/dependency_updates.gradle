@@ -1,0 +1,64 @@
+// Dependency update policy: `./gradlew dependencyUpdates` only suggests stable versions
+// that are at least 14 days old.
+//
+// The main threat we guard against is supply-chain attacks: a compromised maintainer
+// account or poisoned artifact published as a fresh release. Such releases are typically
+// spotted and yanked within days, so a short quarantine keeps them out of the report
+// before anyone adopts them. Requiring stable releases avoids the same risk from
+// pre-release channels.
+//
+// The cost is that a genuine bugfix is also held back for 14 days, but that only delays
+// its appearance in the report - the task never applies updates, so an urgent fix can
+// still be bumped by hand at any time.
+
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.TimeUnit
+
+if (!project.hasProperty("runDependencyUpdates")) {
+    tasks.register("dependencyUpdates", Exec) {
+        def gradlew = System.getProperty("os.name").toLowerCase().contains("windows") ? "gradlew.bat" : "./gradlew"
+        commandLine gradlew, "dependencyUpdates", "--no-parallel", "-PrunDependencyUpdates=true"
+    }
+    return
+}
+
+apply plugin: "com.github.ben-manes.versions"
+
+def REPOS = [
+    "https://dl.google.com/android/maven2",
+    "https://repo1.maven.org/maven2",
+    "https://plugins.gradle.org/m2",
+    "https://jitpack.io"
+]
+
+def isStable = { String version ->
+    def stableKeyword = ["RELEASE", "FINAL", "GA"].any { version.toUpperCase().contains(it) }
+    return stableKeyword || version ==~ /^[0-9.v-]+(-r)?$/
+}
+
+def ageCache = new ConcurrentHashMap()
+def isOldEnough = { candidate ->
+    ageCache.computeIfAbsent("$candidate.group:$candidate.module:$candidate.version") {
+        def path = "${candidate.group.replace('.', '/')}/$candidate.module/$candidate.version/$candidate.module-${candidate.version}.pom"
+        for (repo in REPOS) {
+            HttpURLConnection connection = null
+            try {
+                connection = (HttpURLConnection) new URL("$repo/$path").openConnection()
+                connection.requestMethod = "HEAD"
+                connection.connectTimeout = 5000
+                connection.readTimeout = 5000
+                if (connection.responseCode == 200 && connection.lastModified > 0) {
+                    return connection.lastModified <= System.currentTimeMillis() - TimeUnit.DAYS.toMillis(14)
+                }
+            } catch (IOException ignored) {
+            } finally {
+                connection?.disconnect()
+            }
+        }
+        return false
+    }
+}
+
+tasks.named("dependencyUpdates").configure {
+    rejectVersionIf { !isStable(it.candidate.version) || !isOldEnough(it.candidate) }
+}
