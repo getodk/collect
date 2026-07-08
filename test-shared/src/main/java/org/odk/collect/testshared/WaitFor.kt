@@ -10,9 +10,10 @@ object WaitFor {
     fun <T> waitFor(callable: Callable<T>): T {
         var failure: Throwable? = null
         val startTime = System.currentTimeMillis()
+        var checks = 0
 
-        // Try for 5 seconds
-        while ((System.currentTimeMillis() - startTime) < (5 * TimeInMs.ONE_SECOND)) {
+        // Try for 5 seconds or at least 2 checks
+        while ((System.currentTimeMillis() - startTime) < (5 * TimeInMs.ONE_SECOND) || checks < 2) {
             failure = try {
                 return callable.call()
             } catch (throwable: Exception) {
@@ -24,6 +25,7 @@ object WaitFor {
             }
 
             Thread.sleep(10)
+            checks++
         }
 
         throw failure!!
