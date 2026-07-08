@@ -45,7 +45,6 @@ dependencies {
     implementation(project(":strings"))
     implementation(project(":shared"))
     implementation(project(":async"))
-    implementation(libs.kotlinStdlib)
     implementation(libs.androidxCoreKtx)
     implementation(libs.androidxLifecycleLivedataKtx)
     implementation(libs.androidMaterial)

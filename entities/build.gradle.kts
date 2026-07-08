@@ -55,7 +55,6 @@ dependencies {
     implementation(project(":forms"))
     implementation(project(":icons"))
 
-    implementation(libs.kotlinStdlib)
     implementation(libs.javarosa) {
         exclude(group = "joda-time")
         exclude(group = "org.hamcrest", module = "hamcrest-all")

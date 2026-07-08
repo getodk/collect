@@ -33,7 +33,6 @@ dependencies {
     coreLibraryDesugaring(libs.desugar)
 
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-    implementation(libs.kotlinStdlib)
     implementation(libs.androidxCoreKtx)
     implementation(libs.kotlinxCoroutinesAndroid)
     implementation(libs.androidxWorkRuntime)

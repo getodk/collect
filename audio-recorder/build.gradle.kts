@@ -40,7 +40,6 @@ dependencies {
     implementation(project(":strings"))
     implementation(project(":async"))
     implementation(project(":androidshared"))
-    implementation(libs.kotlinStdlib)
     implementation(libs.androidxCoreKtx)
     implementation(libs.androidxAppcompat)
     implementation(libs.androidxLifecycleLivedataKtx)

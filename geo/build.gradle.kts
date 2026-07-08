@@ -55,7 +55,6 @@ dependencies {
     implementation(project(":maps"))
     implementation(project(":material"))
     implementation(project(":web-page"))
-    implementation(libs.kotlinStdlib)
     implementation(libs.androidxAppcompat)
     implementation(libs.androidxLifecycleLivedataKtx)
     implementation(libs.timber)

@@ -20,7 +20,6 @@ firebaseCrashlyticsGradle = { group = "com.google.firebase", name = "firebase-cr
 googleServices = { group = "com.google.gms", name = "google-services", version = "4.5.0" }
 gradle = { group = "com.android.tools.build", name = "gradle", version = "9.2.1" }
 kotlinGradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
-kotlinStdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
 ktlintGradle = { group = "org.jlleitschuh.gradle", name = "ktlint-gradle", version = "14.2.0" }
 gradleVersionsPlugin = { group = "com.github.ben-manes", name = "gradle-versions-plugin", version = "0.54.0" }
 ossLicensesPlugin = { group = "com.google.android.gms", name = "oss-licenses-plugin", version = "0.12.0" }
