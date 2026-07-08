@@ -2,28 +2,28 @@
 compileSdk = "36"
 minSdk = "26"
 targetSdk = "36"
-lifecycle = "2.10.0"
-navigation = "2.9.7"
-work = "2.11.1"
+lifecycle = "2.11.0"
+navigation = "2.9.8"
+work = "2.11.2"
 androidxFragment = "1.8.9"
-okhttp3 = "5.3.2"
-dagger = "2.59.1"
-glide = "5.0.5"
-camerax = "1.5.3"
+okhttp3 = "5.4.0"
+dagger = "2.60"
+glide = "5.0.7"
+camerax = "1.6.1"
 espresso = "3.7.0"
-kotlin = "2.3.10"
-mockito = "5.21.0"
-coroutines="1.10.2"
+kotlin = "2.4.0"
+mockito = "5.23.0"
+coroutines="1.11.0"
 
 [libraries]
-firebaseCrashlyticsGradle = { group = "com.google.firebase", name = "firebase-crashlytics-gradle", version = "3.0.6" }
-googleServices = { group = "com.google.gms", name = "google-services", version = "4.4.4" }
-gradle = { group = "com.android.tools.build", name = "gradle", version = "9.0.0" }
+firebaseCrashlyticsGradle = { group = "com.google.firebase", name = "firebase-crashlytics-gradle", version = "3.0.7" }
+googleServices = { group = "com.google.gms", name = "google-services", version = "4.5.0" }
+gradle = { group = "com.android.tools.build", name = "gradle", version = "9.2.1" }
 kotlinGradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlinStdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
-ktlintGradle = { group = "org.jlleitschuh.gradle", name = "ktlint-gradle", version = "14.0.1" }
+ktlintGradle = { group = "org.jlleitschuh.gradle", name = "ktlint-gradle", version = "14.2.0" }
 gradleVersionsPlugin = { group = "com.github.ben-manes", name = "gradle-versions-plugin", version = "0.54.0" }
-ossLicensesPlugin = { group = "com.google.android.gms", name = "oss-licenses-plugin", version = "0.10.10" }
+ossLicensesPlugin = { group = "com.google.android.gms", name = "oss-licenses-plugin", version = "0.12.0" }
 desugar = { group = "com.android.tools", name = "desugar_jdk_libs", version = "2.1.5" }
 androidxStartup = { group = "androidx.startup", name = "startup-runtime", version = "1.2.0" }
 androidxLifecycleRuntimeKtx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
@@ -31,22 +31,22 @@ androidxLifecycleLivedataKtx = { group = "androidx.lifecycle", name = "lifecycle
 androidxLifecycleViewmodelKtx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 androidxLifecycleViewmodelCompose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 androidxViewpager2 = { group = "androidx.viewpager2", name = "viewpager2", version = "1.1.0" }
-androidxCoreKtx = { group = "androidx.core", name = "core-ktx", version = "1.17.0" }
-androidxBrowser = { group = "androidx.browser", name = "browser", version = "1.9.0" }
+androidxCoreKtx = { group = "androidx.core", name = "core-ktx", version = "1.19.0" }
+androidxBrowser = { group = "androidx.browser", name = "browser", version = "1.10.0" }
 androidxRecyclerview = { group = "androidx.recyclerview", name = "recyclerview", version = "1.4.0" }
 androidxNavigationFragmentKtx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation" }
 androidxNavigationUi = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigation" }
 navigationSafeArgsGradlePlugin = { group = "androidx.navigation", name = "navigation-safe-args-gradle-plugin", version.ref = "navigation" }
-androidxActivity = { group = "androidx.activity", name = "activity-ktx", version = "1.12.4" }
+androidxActivity = { group = "androidx.activity", name = "activity-ktx", version = "1.13.0" }
 androidxAppcompat = { group = "androidx.appcompat", name = "appcompat", version = "1.7.1" }
 androidxWorkRuntime = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "work" }
 androidxExinterface = { group = "androidx.exifinterface", name = "exifinterface", version = "1.4.2" }
 androidxPreferenceKtx = { group = "androidx.preference", name = "preference-ktx", version = "1.2.1" }
 androidxFragmentKtx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "androidxFragment" }
-androidMaterial = { group = "com.google.android.material", name = "material", version = "1.12.0" } # Check if https://github.com/getodk/collect/issues/6974 is still an issue before upgrading
+androidMaterial = { group = "com.google.android.material", name = "material", version = "1.14.0" }
 androidFlexbox = { group = "com.google.android.flexbox", name = "flexbox", version = "3.0.0" }
-androidxComposeBom = { group = "androidx.compose", name = "compose-bom", version = "2026.02.00" }
-androidXComposeMaterial = { group = "androidx.compose.material3", name = "material3" }
+androidxComposeBom = { group = "androidx.compose", name = "compose-bom", version = "2026.06.00" }
+androidXComposeMaterial = { group = "androidx.compose.material3", name = "material3", version = { strictly = "1.4.0" } } # Keep in sync with androidxComposeBom, forced because play-services-oss-licenses pulls in an alpha version
 androidXComposeMaterialIconsExtended = { group = "androidx.compose.material", name = "material-icons-extended" }
 androidXComposePreview = { group = "androidx.compose.ui", name = "ui-tooling-preview"}
 androidXComposeTooling = { group = "androidx.compose.ui", name = "ui-tooling"}
@@ -55,17 +55,17 @@ androidXComposeUiTestManifest = { group = "androidx.compose.ui", name = "ui-test
 androidXConstraintLayoutCompose = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version = "1.1.1" }
 androidXComposeMaterialIcons = { group = "androidx.compose.material", name = "material-icons-extended", version ="1.7.8"}
 playServicesMaps = { group = "com.google.android.gms", name = "play-services-maps", version = "20.0.0" }
-playServicesLocation = { group = "com.google.android.gms", name = "play-services-location", version = "21.3.0" }
-playServicesOssLicenses = { group = "com.google.android.gms", name = "play-services-oss-licenses", version = "17.4.0" }
+playServicesLocation = { group = "com.google.android.gms", name = "play-services-location", version = "21.4.0" }
+playServicesOssLicenses = { group = "com.google.android.gms", name = "play-services-oss-licenses", version = "17.5.1" }
 mapboxAndroidSdk = { group = "com.mapbox.maps", name = "android-ndk27", version = "10.19.1" } # Check if https://github.com/mapbox/mapbox-maps-android/issues/2389#issuecomment-2432018812 no longer takes place before upgrading
 okHttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp3" }
 okHttpTls = { group = "com.squareup.okhttp3", name = "okhttp-tls", version.ref = "okhttp3" }
 okHttpDigest = { group = "io.github.rburgst", name = "okhttp-digest", version = "3.1.1" }
 persianJodaTime = { group = "com.github.mohamadian", name = "persianjodatime", version = "1.2" }
-myanmarCalendar = { group = "com.github.chanmratekoko", name = "myanmar-calendar", version = "1.1.0.RELEASE" }
-danlewAndroidJoda = { group = "net.danlew", name = "android.joda", version = "2.14.0" }
+myanmarCalendar = { group = "com.github.chanmratekoko", name = "myanmar-calendar", version = "1.1.1.RELEASE" }
+danlewAndroidJoda = { group = "net.danlew", name = "android.joda", version = "2.14.2" }
 rarepebbleColorpicker = { group = "com.github.martin-stone", name = "hsv-alpha-color-picker-android", version = "3.1.0" }
-commonsIo = { group = "commons-io", name = "commons-io", version = "2.21.0" }
+commonsIo = { group = "commons-io", name = "commons-io", version = "2.22.0" }
 opencsv = { group = "com.opencsv", name = "opencsv", version = "5.12.0" }
 javarosa = { group = "org.getodk", name = "javarosa", version = "5.2.0-1c17b23-SNAPSHOT" } # Online
 # javarosa = { group = "org.getodk", name = "javarosa", version = "local" } # Local
@@ -82,15 +82,15 @@ glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "gl
 glideKsp = { group = "com.github.bumptech.glide", name = "ksp", version.ref = "glide" }
 caverockAndroidsvg = { group = "com.caverock", name = "androidsvg-aar", version = "1.4" }
 mp4parserMuxer = { group = "org.mp4parser", name = "muxer", version = "1.9.41" } # Check if https://github.com/getodk/collect/issues/5323 no longer takes place before upgrading
-json = { module = "org.json:json", version = "20251224" }
-gson = { group = "com.google.code.gson", name = "gson", version = "2.13.2" }
-firebaseAnalytics = { group = "com.google.firebase", name = "firebase-analytics", version = "23.0.0" }
-firebaseCrashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version = "20.0.4" }
+json = { module = "org.json:json", version = "20260522" }
+gson = { group = "com.google.code.gson", name = "gson", version = "2.14.0" }
+firebaseAnalytics = { group = "com.google.firebase", name = "firebase-analytics", version = "23.2.0" }
+firebaseCrashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version = "20.0.6" }
 leakcanary = { group = "com.squareup.leakcanary", name = "leakcanary-android", version = "2.14" }
 timber = { group = "com.jakewharton.timber", name = "timber", version = "5.0.1" }
-slf4jApi = { group = "org.slf4j", name = "slf4j-api", version = "2.0.17" }
+slf4jApi = { group = "org.slf4j", name = "slf4j-api", version = "2.0.18" }
 slf4jTimber = { group = "com.arcao", name = "slf4j-timber", version = "3.1" }
-jsonSchemaValidator = { group = "com.networknt", name = "json-schema-validator", version = "3.0.0" }
+jsonSchemaValidator = { group = "com.networknt", name = "json-schema-validator", version = "3.0.5" }
 splashscreen = { group = "androidx.core", name = "core-splashscreen", version = "1.2.0" }
 cameraxCore = { group = "androidx.camera", name = "camera-core", version.ref = "camerax" }
 cameraxView = { group = "androidx.camera", name = "camera-view", version.ref = "camerax" }
@@ -98,17 +98,17 @@ cameraxLifecycle = { group = "androidx.camera", name = "camera-lifecycle", versi
 cameraxCamera2 = { group = "androidx.camera", name = "camera-camera2", version.ref = "camerax" }
 cameraxVideo = { group = "androidx.camera", name = "camera-video", version.ref = "camerax" }
 camera-mlkit-vision = { group = "androidx.camera", name = "camera-mlkit-vision", version.ref = "camerax" }
-jsoup = { group = "org.jsoup", name = "jsoup", version = "1.22.1" }
+jsoup = { group = "org.jsoup", name = "jsoup", version = "1.22.2" }
 mlkit-barcodescanning = { group = "com.google.android.gms", name = "play-services-mlkit-barcode-scanning", version = "18.3.1" }
 runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata" }
-coil = { group = "io.coil-kt.coil3", name = "coil-compose", version = "3.4.0" }
-coil-gif = { group = "io.coil-kt.coil3", name = "coil-gif", version = "3.4.0" }
+coil = { group = "io.coil-kt.coil3", name = "coil-compose", version = "3.5.0" }
+coil-gif = { group = "io.coil-kt.coil3", name = "coil-gif", version = "3.5.0" }
 
 # Test dependencies
 junit = { group = "junit", name = "junit", version = "4.13.2" }
 mockitoAndroid = { group = "org.mockito", name = "mockito-android", version.ref = "mockito" }
 mockitoCore = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
-mockitoKotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version = "6.2.3" }
+mockitoKotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version = "6.3.0" }
 androidxFragmentTesting = { group = "androidx.fragment", name = "fragment-testing", version.ref = "androidxFragment" }
 androidxArchCoreTesting = { group = "androidx.arch.core", name = "core-testing", version = "2.2.0" }
 androidxWorkTesting = { group = "androidx.work", name = "work-testing", version.ref = "work" }
@@ -122,14 +122,14 @@ okhttp3Mockwebserver = { group = "com.squareup.okhttp3", name = "mockwebserver",
 hamcrest = { group = "org.hamcrest", name = "hamcrest", version = "3.0" }
 robolectric = { group = "org.robolectric", name = "robolectric", version = "4.16.1" }
 uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version = "2.3.0" }
-androidXComposeUiTest = { group = "androidx.compose.ui", name = "ui-test", version = "1.10.3" }
+androidXComposeUiTest = { group = "androidx.compose.ui", name = "ui-test", version = "1.11.3" }
 
 [plugins]
 androidApplication = { id = "com.android.application" }
 androidLibrary = { id = "com.android.library" }
 javaLibrary = { id = "java-library" }
 kotlinLibrary = { id = "kotlin" }
-kotlinKsp = { id = "com.google.devtools.ksp", version="2.3.5" }
+kotlinKsp = { id = "com.google.devtools.ksp", version="2.3.9" }
 kotlinParcelize = { id = "kotlin-parcelize" }
 safeargsKotlin = { id = "androidx.navigation.safeargs.kotlin" }
 safeargs = { id = "androidx.navigation.safeargs" }
