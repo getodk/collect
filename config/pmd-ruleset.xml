@@ -29,6 +29,7 @@
         <exclude name="UnusedAssignment" />
         <exclude name="UnusedPrivateMethod" />
         <exclude name="UseVarargs" />
+        <exclude name="UseStandardCharsets" />
         <exclude name="UseTryWithResources" />
     </rule>
 
@@ -55,6 +56,7 @@
         <exclude name="UnnecessaryFullyQualifiedName" />    <!-- Decided not to use in #6613 -->
         <exclude name="UnnecessaryCast" />
         <exclude name="UselessParentheses" />               <!-- Decided not to use in #1519 -->
+        <exclude name="VariableDeclarationUsageDistance" />
     </rule>
 
     <rule ref="category/java/design.xml">
@@ -123,12 +125,14 @@
         <exclude name="ReplaceJavaUtilDate" />
         <exclude name="ReturnEmptyCollectionRatherThanNull" />
         <exclude name="TestClassWithoutTestCases" />
+        <exclude name="WrongTestAnnotation" />
     </rule>
 
     <rule ref="category/java/multithreading.xml">
         <exclude name="AvoidSynchronizedAtMethodLevel" />
         <exclude name="AvoidSynchronizedStatement" />
         <exclude name="DoNotUseThreads" />
+        <exclude name="OverridingThreadRun" />
         <exclude name="UseConcurrentHashMap" />
     </rule>
 
