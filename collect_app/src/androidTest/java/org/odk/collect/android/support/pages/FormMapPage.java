@@ -1,6 +1,9 @@
 package org.odk.collect.android.support.pages;
 
 import org.odk.collect.android.support.FakeClickableMapFragment;
+import org.odk.collect.testshared.WaitFor;
+
+import java.util.concurrent.Callable;
 
 public class FormMapPage extends Page<FormMapPage> {
 
@@ -24,6 +27,10 @@ public class FormMapPage extends Page<FormMapPage> {
 
     public FormMapPage selectForm(FakeClickableMapFragment mapFragment, int index) {
         mapFragment.clickOnFeature(index);
+        WaitFor.waitFor((Callable<Object>) () -> {
+            return assertText(org.odk.collect.strings.R.string.edit_data);
+        });
+
         return this;
     }
 
