@@ -30,7 +30,6 @@ android {
 dependencies {
     coreLibraryDesugaring(libs.desugar)
 
-    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation(project(":androidshared"))
     implementation(project(":async"))
     implementation(libs.androidxActivity)

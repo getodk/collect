@@ -31,7 +31,6 @@ android {
 dependencies {
     coreLibraryDesugaring(libs.desugar)
 
-    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation(project(":async"))
     implementation(project(":audio-clips"))
     implementation(project(":shared"))
