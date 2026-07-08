@@ -2,6 +2,7 @@ package org.odk.collect.android.analytics
 
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.javarosawrapper.FormController
+import org.odk.collect.forms.Form
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.settings.Settings
 import org.odk.collect.shared.strings.Md5.getMd5Hash
@@ -28,29 +29,8 @@ object AnalyticsUtils {
         Analytics.log(event, "server", getServerHash(generalSettings)!!)
     }
 
-    fun logServerConfiguration(url: String) {
-        val upperCaseURL = url.uppercase()
-        val scheme = upperCaseURL.split(":".toRegex()).toTypedArray()[0]
-        val urlHash = getMd5Hash(ByteArrayInputStream(url.toByteArray()))
-        Analytics.log(AnalyticsEvents.SET_SERVER, scheme + " " + getHostFromUrl(url), urlHash!!)
-    }
-
-    private fun getHostFromUrl(url: String?): String {
-        if (url == null || url.isEmpty()) {
-            return ""
-        }
-        val upperCaseURL = url.uppercase()
-        var host = "Other"
-        if (upperCaseURL.contains("APPSPOT")) {
-            host = "Appspot"
-        } else if (upperCaseURL.contains("KOBOTOOLBOX.ORG") || upperCaseURL.contains("HUMANITARIANRESPONSE.INFO")) {
-            host = "Kobo"
-        } else if (upperCaseURL.contains("ONA.IO")) {
-            host = "Ona"
-        } else if (upperCaseURL.contains("GETODK.CLOUD")) {
-            host = "ODK Cloud"
-        }
-        return host
+    fun getFormHash(form: Form): String {
+        return getFormHash(form.formId, form.displayName)
     }
 
     private fun getFormHash(formController: FormController?): String {

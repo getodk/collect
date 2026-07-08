@@ -2,7 +2,7 @@ package org.odk.collect.analytics
 
 interface Analytics {
     fun logEvent(event: String)
-    fun logEventWithParam(event: String, key: String, value: String)
+    fun logEventWithParams(event: String, params: Map<String, String>)
     fun logNonFatal(throwable: Throwable)
     fun logMessage(message: String)
     fun setAnalyticsCollectionEnabled(isAnalyticsEnabled: Boolean)
@@ -37,6 +37,10 @@ interface Analytics {
             instance.logEventWithParam(event, key, value)
         }
 
+        fun log(event: String, params: Map<String, String>) {
+            instance.logEventWithParams(event, params)
+        }
+
         @JvmStatic
         fun setParam(key: String, value: String) {
             params[key] = value
@@ -55,4 +59,8 @@ interface Analytics {
             instance.logNonFatal(throwable)
         }
     }
+}
+
+fun Analytics.logEventWithParam(event: String, key: String, value: String) {
+    logEventWithParams(event, mapOf(key to value))
 }

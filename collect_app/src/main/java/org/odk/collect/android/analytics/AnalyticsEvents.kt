@@ -24,11 +24,6 @@ object AnalyticsEvents {
     const val OPEN_DELETED_INSTANCE = "OpenDeletedInstance"
 
     /**
-     * Tracks how often users switch between projects
-     */
-    const val SWITCH_PROJECT = "ProjectSwitch"
-
-    /**
      * Tracks how often users choose to try the demo project
      */
     const val TRY_DEMO = "ProjectCreateDemo"

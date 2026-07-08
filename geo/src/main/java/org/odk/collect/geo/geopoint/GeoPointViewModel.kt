@@ -5,11 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.map
-import org.odk.collect.analytics.Analytics.Companion.log
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.async.Scheduler
-import org.odk.collect.geo.analytics.AnalyticsEvents
 import org.odk.collect.location.Location
 import org.odk.collect.location.satellites.SatelliteInfoClient
 import org.odk.collect.location.tracker.LocationTracker
@@ -89,7 +87,7 @@ internal class LocationTrackerGeoPointViewModel(
     }
 
     override fun forceLocation() {
-        acceptLocation(trackerLocation.value!!, true)
+        acceptLocation(trackerLocation.value!!)
     }
 
     public override fun onCleared() {
@@ -102,36 +100,14 @@ internal class LocationTrackerGeoPointViewModel(
             trackerLocation.value = it
 
             if (it != null && it.accuracy <= accuracyThreshold) {
-                acceptLocation(it, false)
+                acceptLocation(it)
             }
         }
     }
 
-    private fun acceptLocation(location: Location, isManual: Boolean) {
+    private fun acceptLocation(location: Location) {
         if (acceptedLocation.value == null) {
             acceptedLocation.value = location
-
-            if (isManual) {
-                logSavePointManual(location)
-            } else {
-                log(AnalyticsEvents.SAVE_POINT_AUTO)
-            }
-        }
-    }
-
-    private fun logSavePointManual(location: Location) {
-        val event = if (System.currentTimeMillis() - startTime < 2000) {
-            AnalyticsEvents.SAVE_POINT_IMMEDIATE
-        } else {
-            AnalyticsEvents.SAVE_POINT_MANUAL
-        }
-
-        if (location.accuracy > 100) {
-            log(event, "accuracy", "unacceptable")
-        } else if (location.accuracy > 10) {
-            log(event, "accuracy", "poor")
-        } else {
-            log(event, "accuracy", "acceptable")
         }
     }
 }

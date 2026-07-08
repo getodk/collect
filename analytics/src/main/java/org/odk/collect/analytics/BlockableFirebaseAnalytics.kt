@@ -13,9 +13,15 @@ class BlockableFirebaseAnalytics(application: Application, private val crashRepo
         firebaseAnalytics.logEvent(event, null)
     }
 
-    override fun logEventWithParam(event: String, key: String, value: String) {
-        val bundle = Bundle()
-        bundle.putString(key, value)
+    override fun logEventWithParams(
+        event: String,
+        params: Map<String, String>
+    ) {
+        val bundle = params.entries.fold(Bundle()) { bundle, entry ->
+            bundle.putString(entry.key, entry.value)
+            bundle
+        }
+
         firebaseAnalytics.logEvent(event, bundle)
     }
 

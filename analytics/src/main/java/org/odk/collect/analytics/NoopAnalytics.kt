@@ -2,7 +2,7 @@ package org.odk.collect.analytics
 
 class NoopAnalytics : Analytics {
     override fun logEvent(event: String) {}
-    override fun logEventWithParam(event: String, key: String, value: String) {}
+    override fun logEventWithParams(event: String, params: Map<String, String>) {}
     override fun logNonFatal(throwable: Throwable) {}
     override fun logMessage(message: String) {}
     override fun setAnalyticsCollectionEnabled(isAnalyticsEnabled: Boolean) {}
