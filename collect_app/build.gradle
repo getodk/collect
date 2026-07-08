@@ -224,8 +224,6 @@ configurations.all {
         force 'org.objenesis:objenesis:2.6'
         force 'org.hamcrest:hamcrest:3.0'
     }
-    
-    transitive = true
 }
 
 dependencies {

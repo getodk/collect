@@ -66,10 +66,6 @@ allprojects {
     }
 }
 
-configurations.all {
-    transitive = true
-}
-
 apply from: 'config/dependency_updates.gradle'
 
 task checkCode(type: GradleBuild) {
