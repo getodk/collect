@@ -57,8 +57,6 @@ dependencies {
     implementation(project(":web-page"))
     implementation(libs.androidxAppcompat)
     implementation(libs.androidxLifecycleLivedataKtx)
-    implementation(libs.timber)
-    implementation(libs.playServicesLocation)
     implementation(libs.androidxFragmentKtx)
     implementation(libs.dagger)
     ksp(libs.daggerCompiler)

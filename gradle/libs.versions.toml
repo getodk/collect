@@ -94,7 +94,6 @@ cameraxCore = { group = "androidx.camera", name = "camera-core", version.ref = "
 cameraxView = { group = "androidx.camera", name = "camera-view", version.ref = "camerax" }
 cameraxLifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "camerax" }
 cameraxCamera2 = { group = "androidx.camera", name = "camera-camera2", version.ref = "camerax" }
-cameraxVideo = { group = "androidx.camera", name = "camera-video", version.ref = "camerax" }
 camera-mlkit-vision = { group = "androidx.camera", name = "camera-mlkit-vision", version.ref = "camerax" }
 jsoup = { group = "org.jsoup", name = "jsoup", version = "1.22.2" }
 mlkit-barcodescanning = { group = "com.google.android.gms", name = "play-services-mlkit-barcode-scanning", version = "18.3.1" }
