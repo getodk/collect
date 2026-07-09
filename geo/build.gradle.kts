@@ -75,7 +75,6 @@ dependencies {
     debugImplementation(project(":fragments-test"))
 
     testImplementation(project(":androidtest"))
-    testImplementation(project(":settings"))
     testImplementation(project(":test-shared"))
     testImplementation(libs.junit)
     testImplementation(libs.hamcrest)
