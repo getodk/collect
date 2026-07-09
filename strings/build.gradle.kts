@@ -47,7 +47,3 @@ dependencies {
     testImplementation(libs.androidxTestExtJunit)
     testImplementation(libs.robolectric)
 }
-
-repositories {
-    mavenCentral()
-}
