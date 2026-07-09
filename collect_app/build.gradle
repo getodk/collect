@@ -396,7 +396,7 @@ dependencies {
     androidTestImplementation libs.hamcrest
 
     debugImplementation project(':fragments-test')
-    debugImplementation(project(':test-shared',)) {
+    debugImplementation(project(':test-shared')) {
         exclude group: 'org.robolectric' // Some tests in `collect_app` don't work with newer Robolectric
     }
 
