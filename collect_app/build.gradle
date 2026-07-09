@@ -292,7 +292,7 @@ dependencies {
         exclude group: "com.android.support"
     }
     implementation libs.myanmarCalendar
-    implementation files('libs/bikram-sambat-1.8.0.jar')
+    implementation files('libs/bikram-sambat-1.8.1.jar')
     implementation libs.commonsIo
     implementation (libs.opencsv) {
         exclude group: 'commons-logging'
