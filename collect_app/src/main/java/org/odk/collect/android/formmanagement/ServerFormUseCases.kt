@@ -192,7 +192,7 @@ object ServerFormUseCases {
                     }
                 }
 
-                /**
+                /*
                  * Ensures local offline Entities are cleaned up when they have been deleted on the server.
                  *
                  * Normally this cleanup is triggered during sync as part of a full update with the server

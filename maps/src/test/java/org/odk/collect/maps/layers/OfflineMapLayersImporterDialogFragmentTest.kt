@@ -26,8 +26,8 @@ import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.shared.TempFiles
 import org.odk.collect.strings.R
 import org.odk.collect.strings.localization.getLocalizedQuantityString
-import org.odk.collect.testshared.FakeScheduler
 import org.odk.collect.testshared.EspressoInteractions
+import org.odk.collect.testshared.FakeScheduler
 import org.odk.collect.testshared.RecyclerViewMatcher
 import org.odk.collect.testshared.RecyclerViewMatcher.Companion.withRecyclerView
 import org.odk.collect.testshared.RobolectricHelpers

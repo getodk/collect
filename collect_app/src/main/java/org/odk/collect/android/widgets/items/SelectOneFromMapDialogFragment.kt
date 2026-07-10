@@ -68,4 +68,3 @@ class SelectOneFromMapDialogFragment(viewModelFactory: ViewModelProvider.Factory
         const val ARG_SELECTED_INDEX = "selected_index"
     }
 }
-

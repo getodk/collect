@@ -40,8 +40,8 @@ import org.odk.collect.strings.R
 import org.odk.collect.testshared.ActivityControllerRule
 import org.odk.collect.testshared.AssertIntentsHelper
 import org.odk.collect.testshared.EspressoAssertions.assertVisible
-import org.odk.collect.testshared.FakeScheduler
 import org.odk.collect.testshared.EspressoInteractions
+import org.odk.collect.testshared.FakeScheduler
 import org.odk.collect.testshared.RobolectricHelpers.recreateWithProcessRestore
 import org.robolectric.Shadows.shadowOf
 import java.io.File

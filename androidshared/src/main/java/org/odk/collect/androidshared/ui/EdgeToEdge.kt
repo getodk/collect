@@ -60,7 +60,7 @@ object EdgeToEdge {
                     0
                 }
 
-                view.translationY  = -maxOf(windowInsets.keyboardSafeOffset(), anchorOffset).toFloat()
+                view.translationY = -maxOf(windowInsets.keyboardSafeOffset(), anchorOffset).toFloat()
             }
             windowInsets
         }

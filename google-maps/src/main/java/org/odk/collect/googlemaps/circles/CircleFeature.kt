@@ -36,7 +36,6 @@ class CircleFeature(circleDescription: CircleDescription, map: GoogleMap) :
     }
 
     override fun update() {
-
     }
 
     override fun dispose() {

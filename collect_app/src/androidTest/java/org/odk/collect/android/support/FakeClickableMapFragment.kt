@@ -48,7 +48,6 @@ class FakeClickableMapFragment : Fragment(), MapFragment {
         featureId: Int,
         markerDescription: MarkerDescription
     ) {
-
     }
 
     override fun addMarkers(markers: List<MarkerDescription>): List<Int> {
@@ -82,7 +81,6 @@ class FakeClickableMapFragment : Fragment(), MapFragment {
         featureId: Int,
         circleDescription: CircleDescription
     ) {
-
     }
 
     override fun getPolyPoints(featureId: Int): MutableList<MapPoint> {

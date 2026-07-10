@@ -16,7 +16,6 @@ import org.odk.collect.android.support.pages.OkDialog
 import org.odk.collect.android.support.pages.ProjectSettingsPage
 import org.odk.collect.android.support.pages.SendFinalizedFormPage
 import org.odk.collect.android.support.rules.CollectTestRule
-import org.odk.collect.android.support.rules.PageComposeRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
 import org.odk.collect.androidtest.RecordedIntentsRule
 
@@ -143,7 +142,7 @@ class SendFinalizedFormTest {
 
     @Test
     fun formsAreSentInOldestFirstOrderBasedOnFinalizationTime() {
-        /**
+        /*
          * Historically, the only timestamp we tracked for instances was the "last status changed" date.
          * However, this timestamp is updated any time the instance status changes—not only when a form
          * is finalized, but also, for example, when a submission attempt fails.

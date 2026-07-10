@@ -33,10 +33,8 @@ import org.odk.collect.androidtest.TestDispatcherProvider
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.geo.GeoUtils.toMapPoint
 import org.odk.collect.geo.geopoint.GeoPointMapFragment
-import org.odk.collect.geo.geopoly.GeoPolyFragment
 import org.odk.collect.geo.items.MappableItem
 import org.odk.collect.maps.MapPoint
-import org.odk.collect.testshared.FakeScheduler
 import org.odk.collect.testshared.getOrAwaitValue
 
 @RunWith(AndroidJUnit4::class)

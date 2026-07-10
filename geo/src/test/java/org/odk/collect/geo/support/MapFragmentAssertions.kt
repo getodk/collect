@@ -69,8 +69,8 @@ object MapFragmentAssertions {
                     markers.any {
                         val iconDescription = it.iconDescription
                         it.point == item.point &&
-                                (background == null || iconDescription.background == background) &&
-                                (clickable == null || iconDescription is MarkerIconDescription.DrawableResource && iconDescription.clickable == clickable)
+                            (background == null || iconDescription.background == background) &&
+                            (clickable == null || (iconDescription is MarkerIconDescription.DrawableResource && iconDescription.clickable == clickable))
                     }
                 }
             }
@@ -102,10 +102,10 @@ object MapFragmentAssertions {
                 return items.all { item ->
                     polyLines.any {
                         item.points == it.points &&
-                                (strokeWidth == null || it.getStrokeWidth() == strokeWidth) &&
-                                (strokeColor == null || it.getStrokeColor() == strokeColor) &&
-                                (background == null || it.background == background) &&
-                                (clickable == null || it.clickable == clickable)
+                            (strokeWidth == null || it.getStrokeWidth() == strokeWidth) &&
+                            (strokeColor == null || it.getStrokeColor() == strokeColor) &&
+                            (background == null || it.background == background) &&
+                            (clickable == null || it.clickable == clickable)
                     }
                 }
             }
@@ -137,11 +137,11 @@ object MapFragmentAssertions {
                 return items.all { item ->
                     polygons.any {
                         item.points == it.points &&
-                                (strokeWidth == null || it.getStrokeWidth() == strokeWidth) &&
-                                (strokeColor == null || it.getStrokeColor() == strokeColor) &&
-                                (fillColor == null || it.getFillColor() == fillColor) &&
-                                (background == null || it.background == background) &&
-                                (clickable == null || it.clickable == clickable)
+                            (strokeWidth == null || it.getStrokeWidth() == strokeWidth) &&
+                            (strokeColor == null || it.getStrokeColor() == strokeColor) &&
+                            (fillColor == null || it.getFillColor() == fillColor) &&
+                            (background == null || it.background == background) &&
+                            (clickable == null || it.clickable == clickable)
                     }
                 }
             }
