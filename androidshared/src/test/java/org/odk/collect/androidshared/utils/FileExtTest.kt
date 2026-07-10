@@ -12,26 +12,26 @@ import java.io.FileOutputStream
 @RunWith(AndroidJUnit4::class)
 class FileExtTest {
     @Test
-    fun `calculateInSampleSize returns 1 when both dimensions are within the limit`() {
-        assertThat(imageFile(80, 40).calculateInSampleSize(100), equalTo(1))
+    fun `calculateSampleSize returns 1 when both dimensions are within the limit`() {
+        assertThat(imageFile(80, 40).calculateSampleSize(100), equalTo(1))
     }
 
     @Test
-    fun `calculateInSampleSize returns 1 when both dimensions are exactly the limit`() {
-        assertThat(imageFile(100, 100).calculateInSampleSize(100), equalTo(1))
+    fun `calculateSampleSize returns 1 when both dimensions are exactly the limit`() {
+        assertThat(imageFile(100, 100).calculateSampleSize(100), equalTo(1))
     }
 
     @Test
-    fun `calculateInSampleSize returns the smallest power of 2 that brings the image within the limit`() {
+    fun `calculateSampleSize returns the smallest power of 2 that brings the image within the limit`() {
         // 500 / 4 = 125 still exceeds the limit, 500 / 8 = 62 does not
-        assertThat(imageFile(500, 375).calculateInSampleSize(100), equalTo(8))
-        assertThat(imageFile(375, 500).calculateInSampleSize(100), equalTo(8))
+        assertThat(imageFile(500, 375).calculateSampleSize(100), equalTo(8))
+        assertThat(imageFile(375, 500).calculateSampleSize(100), equalTo(8))
     }
 
     @Test
-    fun `calculateInSampleSize does not downsample when a dimension sits exactly on the limit`() {
+    fun `calculateSampleSize does not downsample when a dimension sits exactly on the limit`() {
         // 200 / 2 = 100 is within the limit, so it stops there rather than halving again
-        assertThat(imageFile(200, 200).calculateInSampleSize(100), equalTo(2))
+        assertThat(imageFile(200, 200).calculateSampleSize(100), equalTo(2))
     }
 
     private fun imageFile(width: Int, height: Int): File {

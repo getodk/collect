@@ -13,7 +13,7 @@ import java.io.File
  * that neither dimension of the decoded bitmap exceeds [maxDimension]. Only the image bounds
  * are read here, so no bitmap is allocated.
  */
-fun File.calculateInSampleSize(maxDimension: Int): Int {
+fun File.calculateSampleSize(maxDimension: Int): Int {
     val options = BitmapFactory.Options()
     options.inJustDecodeBounds = true
     BitmapFactory.decodeFile(absolutePath, options)
