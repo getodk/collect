@@ -11,9 +11,7 @@ import java.io.File
 /**
  * Calculates the [BitmapFactory.Options.inSampleSize] to use when decoding this image file so
  * that neither dimension of the decoded bitmap exceeds [maxDimension]. Only the image bounds
- * are read here, so no bitmap is allocated. Because [BitmapFactory.Options.inSampleSize] is a
- * power of 2, the decoded bitmap can end up smaller than [maxDimension] (an image just over
- * the limit will be halved), but it is never larger.
+ * are read here, so no bitmap is allocated.
  */
 fun File.calculateInSampleSize(maxDimension: Int): Int {
     val options = BitmapFactory.Options()
