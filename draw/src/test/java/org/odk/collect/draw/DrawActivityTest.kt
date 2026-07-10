@@ -118,4 +118,27 @@ internal class DrawActivityTest {
         assertThat(savedImage.width, equalTo(originalImage.width))
         assertThat(savedImage.height, equalTo(originalImage.height))
     }
+
+    @Test
+    @Config(qualifiers = "w400dp-h700dp-mdpi")
+    fun `saved image is downscaled when annotating an image that is too big to keep in memory`() {
+        val originalImage = Bitmap.createBitmap(100, 6000, Bitmap.Config.ARGB_8888)
+        val originalImageFile = TempFiles.createTempFile(".png")
+        ImageFileUtils.saveBitmapToFile(originalImage, originalImageFile.absolutePath)
+
+        val intent = Intent(getApplicationContext(), DrawActivity::class.java).apply {
+            putExtra(DrawActivity.SCREEN_ORIENTATION, 1)
+            putExtra(DrawActivity.OPTION, DrawActivity.OPTION_ANNOTATE)
+            putExtra(DrawActivity.REF_IMAGE, Uri.fromFile(originalImageFile))
+        }
+        launcherRule.launch<DrawActivity>(intent)
+
+        Espresso.pressBack()
+        EspressoInteractions.clickOn(withText(R.string.keep_changes), isDialog())
+        scheduler.flush()
+
+        val savedImage = BitmapFactory.decodeFile(imagePath)
+        assertThat(savedImage.width, equalTo(50))
+        assertThat(savedImage.height, equalTo(3000))
+    }
 }
