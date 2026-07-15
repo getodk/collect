@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.odk.collect.android.instancemanagement.InstancesDataService
 import org.odk.collect.android.utilities.WebCredentialsUtils
@@ -53,6 +54,7 @@ class InstanceUploadViewModel(
                 externalUrl,
                 externalDeleteAfterUpload,
                 defaultSuccessMessage,
+                isCancelled = { !isActive },
             ) { current, total ->
                 _state.postValue(UploadState.Progress(current, total))
             }

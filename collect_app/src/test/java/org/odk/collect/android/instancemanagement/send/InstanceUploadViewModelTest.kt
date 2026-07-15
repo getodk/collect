@@ -115,7 +115,7 @@ class InstanceUploadViewModelTest {
             "Waiting"
         )
         viewModel.upload(listOf(instance.dbId))
-        dispatcherProvider.runBackground()
+        dispatcherProvider.flush()
 
         assertThat(submittedInstances.isEmpty(), equalTo(true))
     }
