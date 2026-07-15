@@ -226,6 +226,34 @@ class InstancesDataServiceTest {
     }
 
     @Test
+    fun `#reset does not reset instances with an edit that can't be deleted before sending`() {
+        val formsRepository = projectDependencyModule.formsRepository
+        val form = formsRepository.save(FormFixtures.form())
+
+        val instancesRepository = projectDependencyModule.instancesRepository
+        val originalInstance = instancesRepository.save(
+            InstanceFixtures.instance(
+                form = form,
+                status = STATUS_SUBMITTED,
+                canDeleteBeforeSend = false
+            )
+        )
+        instancesRepository.save(
+            InstanceFixtures.instance(
+                form = form,
+                status = STATUS_COMPLETE,
+                canDeleteBeforeSend = false,
+                editOf = originalInstance.dbId,
+                editNumber = 1
+            )
+        )
+
+        instancesDataService.reset(projectDependencyModule.projectId)
+        val remainingInstances = instancesRepository.all
+        assertThat(remainingInstances.size, equalTo(2))
+    }
+
+    @Test
     fun `#update updates instances and counts`() {
         val instancesRepository = projectDependencyModule.instancesRepository
         instancesRepository.save(InstanceFixtures.instance(status = STATUS_COMPLETE))

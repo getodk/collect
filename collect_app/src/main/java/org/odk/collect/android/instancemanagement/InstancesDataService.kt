@@ -205,11 +205,8 @@ class InstancesDataService(
                 val grouped = instancesRepository.all.groupBy { it.editOf ?: it.dbId }
                 grouped.values.forEach { group ->
                     group.sortedByDescending { it.editNumber }
-                        .forEach {
-                            if (it.isDeletable()) {
-                                instancesRepository.delete(it.dbId)
-                            }
-                        }
+                        .takeWhile { it.isDeletable() }
+                        .forEach { instancesRepository.delete(it.dbId) }
                 }
                 update(projectId)
                 true
