@@ -25,11 +25,11 @@ internal class LocalEntitiesInstanceProvider(
         // deleted after import). So if a media file referenced by the instance's src exists,
         // it must be a plain attached CSV, which should be used instead of any same-named
         // entity list. Returning false lets JavaRosa parse the file directly.
-        if (mediaFileRepository.get(instanceSrc)?.exists() == true) {
-            return false
+        return if (mediaFileRepository.get(instanceSrc)?.exists() == true) {
+            false
+        } else {
+            createDataAdapter().supportsInstance(instanceId)
         }
-
-        return createDataAdapter().supportsInstance(instanceId)
     }
 
     private fun createDataAdapter() = LocalEntitiesInstanceAdapter(entitiesRepositoryProvider())
