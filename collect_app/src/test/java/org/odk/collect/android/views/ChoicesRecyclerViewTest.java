@@ -573,7 +573,7 @@ public class ChoicesRecyclerViewTest {
     }
 
     private void initRecyclerView(AbstractSelectListAdapter adapter, boolean isFlex) {
-        recyclerView.initRecyclerView(adapter, isFlex);
+        recyclerView.initRecyclerView(adapter, isFlex, 0);
         RobolectricHelpers.runLooper();
     }
 

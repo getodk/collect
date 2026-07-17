@@ -11,21 +11,31 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.flexbox.FlexboxLayoutManager
 import org.odk.collect.android.R
 import org.odk.collect.android.adapters.AbstractSelectListAdapter
-import org.odk.collect.androidshared.utils.ScreenUtils
 
 class ChoicesRecyclerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null
 ) : RecyclerView(context, attrs) {
 
-    fun initRecyclerView(adapter: AbstractSelectListAdapter, isFlex: Boolean) {
+    private var maxHeight = 0
+
+    fun initRecyclerView(adapter: AbstractSelectListAdapter, isFlex: Boolean, maxHeight: Int) {
+        this.maxHeight = maxHeight
         if (isFlex) {
             enableFlexboxLayout()
         } else {
             enableGridLayout(adapter.numColumns)
         }
         setAdapter(adapter)
-        adjustRecyclerViewSize(adapter)
+    }
+
+    override fun onMeasure(widthSpec: Int, heightSpec: Int) {
+        val boundedHeightSpec = if (maxHeight > 0) {
+            MeasureSpec.makeMeasureSpec(maxHeight, MeasureSpec.AT_MOST)
+        } else {
+            heightSpec
+        }
+        super.onMeasure(widthSpec, boundedHeightSpec)
     }
 
     private fun enableFlexboxLayout() {
@@ -51,28 +61,10 @@ class ChoicesRecyclerView @JvmOverloads constructor(
         addItemDecoration(divider)
     }
 
-    private fun adjustRecyclerViewSize(adapter: AbstractSelectListAdapter) {
-        if (adapter.itemCount > MAX_ITEMS_WITHOUT_SCREEN_BOUND) {
-            // Only let the RecyclerView take up 90% of the screen height in order to speed up loading if there are many items
-            layoutParams.height = (ScreenUtils.getScreenHeight(context) * 0.9).toInt()
-        }
-    }
-
     internal class FlexItemDecoration(private val margin: Int) : ItemDecoration() {
         override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: State) {
             outRect.bottom = margin
             outRect.right = margin
         }
-    }
-
-    companion object {
-        /**
-         * A list of choices can have thousands of items. To increase loading and scrolling performance,
-         * a RecyclerView is used. Because it is nested inside a ScrollView, by default, all of
-         * the RecyclerView's items are loaded and there is no performance benefit over a ListView.
-         * This constant is used to bound the number of items loaded. The value 40 was chosen because
-         * it is around the maximum number of elements that can be shown on a large tablet.
-         */
-        private const val MAX_ITEMS_WITHOUT_SCREEN_BOUND = 40
     }
 }

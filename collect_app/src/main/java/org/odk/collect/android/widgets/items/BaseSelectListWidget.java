@@ -22,6 +22,7 @@ import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader;
 import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.widgets.utilities.SearchQueryViewModel;
+import org.odk.collect.androidshared.utils.ScreenUtils;
 
 import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayableAudioURI;
 
@@ -41,7 +42,11 @@ public abstract class BaseSelectListWidget extends QuestionWidget implements Mul
         items = ItemsWidgetUtils.loadItemsAndHandleErrors(this, questionDetails.getPrompt(), selectChoiceLoader);
 
         logAnalytics(questionDetails);
-        binding.choicesRecyclerView.initRecyclerView(setUpAdapter(), Appearances.isFlexAppearance(getQuestionDetails().getPrompt()));
+        // Only let the list take up 90% of the screen height in order to speed up loading if there
+        // are many items, and so that when shown inline in a field-list group the user can still
+        // scroll to the questions below it.
+        int maxHeight = (int) (ScreenUtils.getScreenHeight(getContext()) * 0.9);
+        binding.choicesRecyclerView.initRecyclerView(setUpAdapter(), Appearances.isFlexAppearance(getQuestionDetails().getPrompt()), maxHeight);
         if (Appearances.isAutocomplete(getQuestionDetails().getPrompt())) {
             setUpSearchBox();
         }

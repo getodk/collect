@@ -152,7 +152,7 @@ public abstract class SelectMinimalDialog extends MaterialFullScreenDialogFragme
         viewModel.getSelectListAdapter().setContext(getActivity());
         AudioPlayer audioPlayer = audioPlayerFactory.create(requireActivity(), getViewLifecycleOwner());
         viewModel.getSelectListAdapter().setAudioPlayer(audioPlayer);
-        binding.choicesRecyclerView.initRecyclerView(viewModel.getSelectListAdapter(), viewModel.isFlex());
+        binding.choicesRecyclerView.initRecyclerView(viewModel.getSelectListAdapter(), viewModel.isFlex(), 0);
     }
 
     public void setListener(SelectMinimalDialogListener listener) {
