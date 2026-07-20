@@ -109,27 +109,31 @@ open class DatabaseConnection @JvmOverloads constructor(
 
         @JvmStatic
         fun cleanUp() {
-            val openHelpersToClear = mutableListOf<String>()
+            synchronized(openHelpers) {
+                val openHelpersToClear = mutableListOf<String>()
 
-            openHelpers.forEach { (databasePath, openHelper) ->
-                if (!File(databasePath).exists()) {
-                    openHelper.close()
-                    openHelpersToClear.add(databasePath)
+                openHelpers.forEach { (databasePath, openHelper) ->
+                    if (!File(databasePath).exists()) {
+                        openHelper.close()
+                        openHelpersToClear.add(databasePath)
+                    }
                 }
-            }
 
-            openHelpersToClear.forEach {
-                openHelpers.remove(it)
+                openHelpersToClear.forEach {
+                    openHelpers.remove(it)
+                }
             }
         }
 
         @JvmStatic
         fun closeAll() {
-            openHelpers.forEach { (_, openHelper) -> openHelper.close() }
-            openHelpers.clear()
+            synchronized(openHelpers) {
+                openHelpers.forEach { (_, openHelper) -> openHelper.close() }
+                openHelpers.clear()
 
-            toClose.forEach(SQLiteOpenHelper::close)
-            toClose.clear()
+                toClose.forEach(SQLiteOpenHelper::close)
+                toClose.clear()
+            }
         }
     }
 }
