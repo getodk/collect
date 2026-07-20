@@ -17,9 +17,10 @@ class ChoicesRecyclerView @JvmOverloads constructor(
     attrs: AttributeSet? = null
 ) : RecyclerView(context, attrs) {
 
-    private var maxHeight = 0
+    private var maxHeight: Int? = null
 
-    fun initRecyclerView(adapter: AbstractSelectListAdapter, isFlex: Boolean, maxHeight: Int) {
+    @JvmOverloads
+    fun initRecyclerView(adapter: AbstractSelectListAdapter, isFlex: Boolean, maxHeight: Int? = null) {
         this.maxHeight = maxHeight
         if (isFlex) {
             enableFlexboxLayout()
@@ -30,11 +31,9 @@ class ChoicesRecyclerView @JvmOverloads constructor(
     }
 
     override fun onMeasure(widthSpec: Int, heightSpec: Int) {
-        val boundedHeightSpec = if (maxHeight > 0) {
-            MeasureSpec.makeMeasureSpec(maxHeight, MeasureSpec.AT_MOST)
-        } else {
-            heightSpec
-        }
+        val boundedHeightSpec = maxHeight?.let {
+            MeasureSpec.makeMeasureSpec(it, MeasureSpec.AT_MOST)
+        } ?: heightSpec
         super.onMeasure(widthSpec, boundedHeightSpec)
     }
 
