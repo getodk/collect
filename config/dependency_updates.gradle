@@ -1,5 +1,7 @@
-// Dependency update policy: `./gradlew dependencyUpdates` only suggests stable versions
-// that are at least 14 days old.
+// Dependency update policy: `./gradlew dependencyUpdates --no-parallel` only suggests stable
+// versions that are at least 14 days old. `--no-parallel` is required because the
+// `dependencyUpdates` task does not support parallel project execution (and the build enables
+// it by default).
 //
 // The main threat we guard against is supply-chain attacks: a compromised maintainer
 // account or poisoned artifact published as a fresh release. Such releases are typically
@@ -13,14 +15,6 @@
 
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.TimeUnit
-
-if (!project.hasProperty("runDependencyUpdates")) {
-    tasks.register("dependencyUpdates", Exec) {
-        def gradlew = System.getProperty("os.name").toLowerCase().contains("windows") ? "gradlew.bat" : "./gradlew"
-        commandLine gradlew, "dependencyUpdates", "--no-parallel", "-PrunDependencyUpdates=true"
-    }
-    return
-}
 
 apply plugin: "com.github.ben-manes.versions"
 
