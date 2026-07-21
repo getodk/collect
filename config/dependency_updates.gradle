@@ -1,17 +1,5 @@
-// Dependency update policy: `./gradlew dependencyUpdates --no-parallel` only suggests stable
-// versions that are at least 14 days old. `--no-parallel` is required because the
-// `dependencyUpdates` task does not support parallel project execution (and the build enables
-// it by default).
-//
-// The main threat we guard against is supply-chain attacks: a compromised maintainer
-// account or poisoned artifact published as a fresh release. Such releases are typically
-// spotted and yanked within days, so a short quarantine keeps them out of the report
-// before anyone adopts them. Requiring stable releases avoids the same risk from
-// pre-release channels.
-//
-// The cost is that a genuine bugfix is also held back for 14 days, but that only delays
-// its appearance in the report - the task never applies updates, so an urgent fix can
-// still be bumped by hand at any time.
+// Configures `./gradlew dependencyUpdates` to only suggest stable versions that are at least
+// 14 days old. See the "Release cycle" section of the README for the policy and its rationale.
 
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.TimeUnit
