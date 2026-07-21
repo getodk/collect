@@ -535,8 +535,9 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
     @Nullable
     private MarkerFeature getFeature(Marker marker) {
         for (int featureId : features.keySet()) {
-            if (features.get(featureId).ownsMarker(marker)) {
-                return (MarkerFeature) features.get(featureId);
+            MapFeature mapFeature = features.get(featureId);
+            if (mapFeature instanceof MarkerFeature && mapFeature.ownsMarker(marker)) {
+                return (MarkerFeature) mapFeature;
             }
         }
 
