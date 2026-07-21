@@ -53,6 +53,14 @@ public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
             FileUtils.saveAnswerFileFromUri(uris[0], newFile, Collect.getInstance());
             QuestionWidget questionWidget = formFillingActivity.get().getWidgetWaitingForBinaryData();
 
+            // getWidgetWaitingForBinaryData() returns null when no widget on it is registered
+            // in the waitingForDataRegistry as waiting for data.
+            // This can happen if that state was lost before the result came back (e.g. the activity/view
+            // was recreated in the meantime), in which case there is nothing to attach the file to.
+            if (questionWidget == null) {
+                return null;
+            }
+
             // apply image conversion if the question is an image question
             if (questionWidget.getFormEntryPrompt().getControlType() == Constants.CONTROL_IMAGE_CHOOSE) {
                 String imageSizeMode = settingsProvider.getUnprotectedSettings().getString(KEY_IMAGE_SIZE);
