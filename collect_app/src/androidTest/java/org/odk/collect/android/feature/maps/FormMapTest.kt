@@ -79,7 +79,7 @@ class FormMapTest {
                     1
                 )
             )
-            .selectForm(mapFragment, 1)
+            .selectForm(mapFragment, 0)
             .clickEditSavedForm("Single geopoint")
             .clickOnQuestion("Name")
             .assertText("Foo")
