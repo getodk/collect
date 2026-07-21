@@ -714,10 +714,10 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
 
         public boolean isClickable() {
             MarkerIconDescription iconDescription = markerDescription.getIconDescription();
-            if (iconDescription instanceof MarkerIconDescription.TracePoint) {
-                return false;
-            } else {
+            if (iconDescription instanceof MarkerIconDescription.DrawableResource) {
                 return ((MarkerIconDescription.DrawableResource) iconDescription).getClickable();
+            } else {
+                return false;
             }
         }
 
