@@ -80,6 +80,7 @@ import java.util.stream.StreamSupport;
 
 import javax.inject.Inject;
 
+import kotlin.Pair;
 import timber.log.Timber;
 
 public class GoogleMapFragment extends MapViewModelMapFragment implements
@@ -396,10 +397,11 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        MarkerFeature markerFeature = getFeature(marker);
+        Pair<Integer, MarkerFeature> markerFeature = getFeature(marker);
+
         if (markerFeature != null) {
-            if (featureClickListener != null && markerFeature.isClickable()) {
-                featureClickListener.onFeature(getFeatureId(marker));
+            if (featureClickListener != null && markerFeature.getSecond().isClickable()) {
+                featureClickListener.onFeature(markerFeature.getFirst());
             } else {
                 onMapClick(marker.getPosition());
             }
@@ -533,11 +535,11 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
     }
 
     @Nullable
-    private MarkerFeature getFeature(Marker marker) {
+    private Pair<Integer, MarkerFeature> getFeature(Marker marker) {
         for (int featureId : features.keySet()) {
             MapFeature mapFeature = features.get(featureId);
             if (mapFeature instanceof MarkerFeature && mapFeature.ownsMarker(marker)) {
-                return (MarkerFeature) mapFeature;
+                return new Pair<>(featureId, (MarkerFeature) mapFeature);
             }
         }
 
