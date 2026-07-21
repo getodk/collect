@@ -47,10 +47,6 @@ public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
     @Override
     protected File doInBackground(Uri... uris) {
         if (instanceFile != null) {
-            String extension = ContentUriHelper.getFileExtensionFromUri(uris[0]);
-
-            File newFile = FileUtils.createDestinationMediaFile(instanceFile.getParent(), extension);
-            FileUtils.saveAnswerFileFromUri(uris[0], newFile, Collect.getInstance());
             QuestionWidget questionWidget = formFillingActivity.get().getWidgetWaitingForBinaryData();
 
             // getWidgetWaitingForBinaryData() returns null when no widget on it is registered
@@ -60,6 +56,11 @@ public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
             if (questionWidget == null) {
                 return null;
             }
+
+            String extension = ContentUriHelper.getFileExtensionFromUri(uris[0]);
+
+            File newFile = FileUtils.createDestinationMediaFile(instanceFile.getParent(), extension);
+            FileUtils.saveAnswerFileFromUri(uris[0], newFile, Collect.getInstance());
 
             // apply image conversion if the question is an image question
             if (questionWidget.getFormEntryPrompt().getControlType() == Constants.CONTROL_IMAGE_CHOOSE) {
