@@ -405,6 +405,8 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
             } else {
                 onMapClick(marker.getPosition());
             }
+        } else {
+            onMapClick(marker.getPosition());
         }
 
         return true;  // consume the event (no default zoom and popup behaviour)
