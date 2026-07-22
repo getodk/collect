@@ -27,12 +27,9 @@ import org.javarosa.core.model.data.IntegerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.instance.FormInstance;
 import org.javarosa.core.model.instance.TreeReference;
-import org.javarosa.model.xform.XPathReference;
-import org.javarosa.xpath.XPathNodeset;
 import org.javarosa.xpath.XPathParseTool;
 import org.javarosa.xpath.expr.XPathExpression;
 import org.javarosa.xpath.expr.XPathFuncExpr;
-import org.javarosa.xpath.expr.XPathPathExpr;
 import org.javarosa.xpath.parser.XPathSyntaxException;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalParamsException;
@@ -138,15 +135,7 @@ public final class ExternalAppsUtils {
             return text.endsWith("'") ? text.substring(1, text.length() - 1) : text.substring(1);
         }
 
-        FormDef formDef = formController.getFormDef();
-        FormInstance formInstance = formDef.getInstance();
-        EvaluationContext evaluationContext = new EvaluationContext(formDef.getEvaluationContext(), reference);
-        if (text.startsWith("/")) {
-            // treat this is an xpath
-            XPathPathExpr pathExpr = XPathReference.getPathExpr(text);
-            XPathNodeset xpathNodeset = pathExpr.eval(formInstance, evaluationContext);
-            return XPathFuncExpr.unpack(xpathNodeset);
-        } else if (text.equals("instanceProviderID()")) {
+        if (text.equals("instanceProviderID()")) {
             // instanceProviderID returns -1 if the current instance has not been saved to disk already
             String path = formController.getInstanceFile().getAbsolutePath();
 
@@ -157,11 +146,15 @@ public final class ExternalAppsUtils {
             }
 
             return instanceProviderID;
-        } else {
-            // treat this as a function
-            XPathExpression xpathExpression = XPathParseTool.parseXPath(text);
-            return xpathExpression.eval(formInstance, evaluationContext);
         }
+
+        // treat this as an xpath expression (absolute path, relative path or function)
+        FormDef formDef = formController.getFormDef();
+        FormInstance formInstance = formDef.getInstance();
+        EvaluationContext evaluationContext = new EvaluationContext(formDef.getEvaluationContext(), reference);
+        XPathExpression xpathExpression = XPathParseTool.parseXPath(text);
+        Object evalResult = xpathExpression.eval(formInstance, evaluationContext);
+        return XPathFuncExpr.unpack(evalResult);
     }
 
     public static StringData asStringData(Object value) {
