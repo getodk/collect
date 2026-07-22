@@ -22,6 +22,8 @@ import java.lang.ref.WeakReference;
 
 import javax.inject.Inject;
 
+import timber.log.Timber;
+
 public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
 
     private final File instanceFile;
@@ -54,6 +56,7 @@ public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
             // This can happen if that state was lost before the result came back (e.g. the activity/view
             // was recreated in the meantime), in which case there is nothing to attach the file to.
             if (questionWidget == null) {
+                Timber.e(new Error("MediaLoadingTask: no widget waiting for binary data - media file cannot be attached"));
                 return null;
             }
 
