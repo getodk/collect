@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
+import java.util.function.Supplier;
 
 public interface OpenRosaHttpInterface {
 
@@ -65,6 +66,21 @@ public interface OpenRosaHttpInterface {
                                             @NonNull URI uri,
                                             @NonNull HttpCredentialsInterface credentials,
                                             @NonNull long contentLength) throws Exception;
+
+    /**
+     * Variant of {@link #uploadSubmissionAndFiles} that aborts an in-progress upload when
+     * {@code isCancelled} starts returning {@code true}. The default delegates to the
+     * non-cancellable variant so existing implementations keep working.
+     */
+    @NonNull
+    default HttpPostResult uploadSubmissionAndFiles(@NonNull File submissionFile,
+                                                    @NonNull List<File> fileList,
+                                                    @NonNull URI uri,
+                                                    @NonNull HttpCredentialsInterface credentials,
+                                                    @NonNull long contentLength,
+                                                    @NonNull Supplier<Boolean> isCancelled) throws Exception {
+        return uploadSubmissionAndFiles(submissionFile, fileList, uri, credentials, contentLength);
+    }
 
     interface FileToContentTypeMapper {
 

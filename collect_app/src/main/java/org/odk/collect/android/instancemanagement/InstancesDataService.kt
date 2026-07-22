@@ -221,29 +221,31 @@ class InstancesDataService(
         instances: List<Instance>,
         referrer: String,
         overrideURL: String?,
-        cancelAfterAuthException: Boolean,
         externalDeleteAfterUpload: Boolean?,
         defaultSuccessMessage: String,
-        ensureActive: () -> Unit,
+        isCancelled: () -> Boolean,
         onProgress: (current: Int, total: Int) -> Unit = { _, _ -> }
     ): List<InstanceUploadResult> {
         val projectDependencyModule = projectDependencyModuleFactory.create(projectId)
 
         return projectDependencyModule.instancesLock.withLock { acquiredLock: Boolean ->
             if (acquiredLock) {
-                instanceSubmitter.submitInstances(
+                val result = instanceSubmitter.submitInstances(
                     projectId,
                     instances,
                     referrer,
                     overrideURL,
-                    cancelAfterAuthException,
-                    externalDeleteAfterUpload,
-                    defaultSuccessMessage,
-                    ensureActive,
-                    onProgress
-                ).also {
-                    logResults(projectDependencyModule.formsRepository, it, auto = false)
-                }
+                    cancelAfterAuthException = true,
+                    externalDeleteAfterUpload = externalDeleteAfterUpload,
+                    defaultSuccessMessage = defaultSuccessMessage,
+                    isCancelled = isCancelled,
+                    onProgress = onProgress
+                )
+
+                logResults(projectDependencyModule.formsRepository, result, auto = false)
+                update(projectId)
+
+                result
             } else {
                 emptyList()
             }

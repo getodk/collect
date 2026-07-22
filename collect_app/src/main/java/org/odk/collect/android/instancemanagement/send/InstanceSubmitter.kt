@@ -27,7 +27,7 @@ class InstanceSubmitter(
         cancelAfterAuthException: Boolean = false,
         externalDeleteAfterUpload: Boolean? = null,
         defaultSuccessMessage: String? = null,
-        ensureActive: () -> Unit = {},
+        isCancelled: () -> Boolean = { false },
         onProgress: (current: Int, total: Int) -> Unit = { _, _ -> }
     ): List<InstanceUploadResult> {
         val projectDependencyModule = projectDependencyFactory.create(projectId)
@@ -40,14 +40,14 @@ class InstanceSubmitter(
 
         val sortedInstances = toUpload.sortedBy { it.finalizationDate }
         for ((index, instance) in sortedInstances.withIndex()) {
-            ensureActive()
-            onProgress( index + 1, sortedInstances.size)
+            onProgress(index + 1, sortedInstances.size)
 
             try {
-                val resultMessage = instanceUploader.uploadOneSubmission(projectId, instance, deviceId, overrideURL, referrer)
+                val resultMessage = instanceUploader.uploadOneSubmission(projectId, instance, deviceId, overrideURL, referrer, isCancelled)
                 uploadResults.add(InstanceUploadResult.Success(instance, resultMessage ?: defaultSuccessMessage))
-
                 deleteInstance(instance, formsRepository, instancesRepository, generalSettings, externalDeleteAfterUpload)
+            } catch (_: FormUploadInterruptedException) {
+                break
             } catch (e: FormUploadException) {
                 Timber.d(e)
                 uploadResults.add(InstanceUploadResult.Error(instance, e))
