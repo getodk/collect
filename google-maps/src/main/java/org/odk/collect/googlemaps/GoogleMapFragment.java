@@ -80,6 +80,7 @@ import java.util.stream.StreamSupport;
 
 import javax.inject.Inject;
 
+import kotlin.Pair;
 import timber.log.Timber;
 
 public class GoogleMapFragment extends MapViewModelMapFragment implements
@@ -396,25 +397,32 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        if (featureClickListener != null) { // FormMapActivity
-            featureClickListener.onFeature(findFeature(marker));
-        } else { // GeoWidget
+        Pair<Integer, MarkerFeature> markerFeature = getFeature(marker);
+
+        if (markerFeature != null) {
+            if (featureClickListener != null && markerFeature.getSecond().isClickable()) {
+                featureClickListener.onFeature(markerFeature.getFirst());
+            } else {
+                onMapClick(marker.getPosition());
+            }
+        } else {
             onMapClick(marker.getPosition());
         }
+
         return true;  // consume the event (no default zoom and popup behaviour)
     }
 
     @Override
     public void onPolylineClick(Polyline polyline) {
         if (featureClickListener != null) {
-            featureClickListener.onFeature(findFeature(polyline));
+            featureClickListener.onFeature(getFeatureId(polyline));
         }
     }
 
     @Override
     public void onPolygonClick(@NonNull Polygon polygon) {
         if (featureClickListener != null) {
-            featureClickListener.onFeature(findFeature(polygon));
+            featureClickListener.onFeature(getFeatureId(polygon));
         }
     }
 
@@ -423,7 +431,7 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
         // When dragging starts, GoogleMap makes the marker jump up to move it
         // out from under the user's finger; whenever a marker moves, we have
         // to update its corresponding feature.
-        updateFeature(findFeature(marker));
+        updateFeature(getFeatureId(marker));
     }
 
     @Override
@@ -432,12 +440,12 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
         // obtained from a GPS reading, so the altitude and standard deviation
         // fields are no longer meaningful; reset them to zero.
         marker.setSnippet("0;0");
-        updateFeature(findFeature(marker));
+        updateFeature(getFeatureId(marker));
     }
 
     @Override
     public void onMarkerDragEnd(Marker marker) {
-        int featureId = findFeature(marker);
+        int featureId = getFeatureId(marker);
         updateFeature(featureId);
         if (dragEndListener != null && featureId != -1) {
             dragEndListener.onFeature(featureId);
@@ -528,22 +536,35 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
         }
     }
 
+    @Nullable
+    private Pair<Integer, MarkerFeature> getFeature(Marker marker) {
+        for (int featureId : features.keySet()) {
+            MapFeature mapFeature = features.get(featureId);
+            if (mapFeature instanceof MarkerFeature && mapFeature.ownsMarker(marker)) {
+                return new Pair<>(featureId, (MarkerFeature) mapFeature);
+            }
+        }
+
+        return null;
+    }
+
     /**
-     * Finds the feature to which the given marker belongs.
+     * Finds the feature ID to which the given marker belongs.
      */
-    private int findFeature(Marker marker) {
+    private int getFeatureId(Marker marker) {
         for (int featureId : features.keySet()) {
             if (features.get(featureId).ownsMarker(marker)) {
                 return featureId;
             }
         }
-        return -1;  // not found
+
+        return -1;
     }
 
     /**
      * Finds the feature to which the given polyline belongs.
      */
-    private int findFeature(Polyline polyline) {
+    private int getFeatureId(Polyline polyline) {
         for (int featureId : features.keySet()) {
             if (features.get(featureId).ownsPolyline(polyline)) {
                 return featureId;
@@ -552,7 +573,7 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
         return -1;  // not found
     }
 
-    private int findFeature(Polygon polygon) {
+    private int getFeatureId(Polygon polygon) {
         for (int featureId : features.keySet()) {
             if (features.get(featureId).ownsPolygon(polygon)) {
                 return featureId;
@@ -682,16 +703,27 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
     }
 
     private static class MarkerFeature implements MapFeature {
+        private final MarkerDescription markerDescription;
         private Marker marker;
         private final Context context;
 
         MarkerFeature(Context context, MarkerDescription markerDescription, GoogleMap map) {
             this.context = context;
-            marker = createMarker(context, markerDescription, map);
+            this.markerDescription = markerDescription;
+            marker = createMarker(context, this.markerDescription, map);
         }
 
         public void setIcon(MarkerIconDescription markerIconDescription) {
             marker.setIcon(getBitmapDescriptor(context, markerIconDescription));
+        }
+
+        public boolean isClickable() {
+            MarkerIconDescription iconDescription = markerDescription.getIconDescription();
+            if (iconDescription instanceof MarkerIconDescription.DrawableResource) {
+                return ((MarkerIconDescription.DrawableResource) iconDescription).getClickable();
+            } else {
+                return false;
+            }
         }
 
         public MapPoint getPoint() {
