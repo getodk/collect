@@ -21,9 +21,9 @@ import org.odk.collect.entities.storage.Entity
 import org.odk.collect.entities.storage.EntityList
 import org.odk.collect.entities.storage.InMemEntitiesRepository
 import org.odk.collect.formstest.FormFixtures
-import org.odk.collect.shared.debug.DebugLogger
 import org.odk.collect.shared.Query
 import org.odk.collect.shared.TempFiles
+import org.odk.collect.shared.debug.DebugLogger
 import java.io.File
 import java.util.UUID
 

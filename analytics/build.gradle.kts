@@ -29,7 +29,6 @@ android {
 }
 
 dependencies {
-    implementation(libs.kotlinStdlib)
     implementation(libs.androidxCoreKtx)
     implementation(libs.firebaseCrashlytics)
     implementation(libs.firebaseAnalytics)

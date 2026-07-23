@@ -31,7 +31,6 @@ android {
 dependencies {
     coreLibraryDesugaring(libs.desugar)
 
-    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation(project(":async"))
     implementation(project(":audio-clips"))
     implementation(project(":shared"))
@@ -41,7 +40,6 @@ dependencies {
     implementation(project(":qr-code"))
     implementation(project(":web-page"))
     implementation(libs.androidxRecyclerview)
-    implementation(libs.kotlinStdlib)
     implementation(libs.androidxCoreKtx)
     implementation(libs.androidxWorkRuntime)
     implementation(libs.androidxAppcompat)

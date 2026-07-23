@@ -49,8 +49,11 @@ fun RangeSliderTrack(
 ) {
     val layoutDirection = LocalLayoutDirection.current
     val sliderContentDescription = stringResource(
-        if (orientation == Orientation.Horizontal) org.odk.collect.strings.R.string.horizontal_slider
-        else org.odk.collect.strings.R.string.vertical_slider
+        if (orientation == Orientation.Horizontal) {
+            org.odk.collect.strings.R.string.horizontal_slider
+        } else {
+            org.odk.collect.strings.R.string.vertical_slider
+        }
     )
 
     BoxWithConstraints(
@@ -126,8 +129,11 @@ fun RangeSliderTrack(
                         )
                         .background(MaterialTheme.colorScheme.primary)
                         .then(
-                            if (orientation == Orientation.Vertical) Modifier.align(Alignment.BottomCenter)
-                            else Modifier
+                            if (orientation == Orientation.Vertical) {
+                                Modifier.align(Alignment.BottomCenter)
+                            } else {
+                                Modifier
+                            }
                         )
                 )
             }

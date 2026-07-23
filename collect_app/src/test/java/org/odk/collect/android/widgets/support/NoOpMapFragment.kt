@@ -1,13 +1,13 @@
 package org.odk.collect.android.widgets.support
 
 import androidx.fragment.app.Fragment
-import org.odk.collect.maps.traces.LineDescription
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.circles.CircleDescription
-import org.odk.collect.maps.traces.PolygonDescription
 import org.odk.collect.maps.markers.MarkerDescription
 import org.odk.collect.maps.markers.MarkerIconDescription
+import org.odk.collect.maps.traces.LineDescription
+import org.odk.collect.maps.traces.PolygonDescription
 
 class NoOpMapFragment : Fragment(), MapFragment {
 

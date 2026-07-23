@@ -48,7 +48,6 @@ dependencies {
     implementation(libs.androidxAppcompat)
     api(libs.androidMaterial)
     implementation(libs.androidxFragmentKtx)
-    implementation(libs.kotlinStdlib)
     implementation(libs.androidxCoreKtx)
 
     val composeBom = platform(libs.androidxComposeBom)

@@ -42,7 +42,6 @@ dependencies {
     coreLibraryDesugaring(libs.desugar)
 
     implementation(project(":androidshared"))
-    implementation(project(":icons"))
     implementation(project(":strings"))
     implementation(libs.androidMaterial)
     implementation(libs.androidxBrowser)

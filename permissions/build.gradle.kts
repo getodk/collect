@@ -49,7 +49,6 @@ dependencies {
 
     testImplementation(project(":androidtest"))
     testImplementation(project(":test-shared"))
-    testImplementation(project(":strings"))
     testImplementation(libs.androidxTestExtJunit)
     testImplementation(libs.androidxTestEspressoCore)
     testImplementation(libs.androidxTestEspressoIntents)

@@ -35,8 +35,8 @@ import org.odk.collect.android.formentry.FormOpeningMode
 import org.odk.collect.android.formlists.blankformlist.BlankFormListActivity
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.instancemanagement.InstancesDataService
-import org.odk.collect.android.instancemanagement.send.autosend.AutoSendSettingsProvider
 import org.odk.collect.android.instancemanagement.send.InstanceUploaderListActivity
+import org.odk.collect.android.instancemanagement.send.autosend.AutoSendSettingsProvider
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.FormsRepositoryProvider

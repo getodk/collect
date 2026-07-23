@@ -51,7 +51,6 @@ dependencies {
     implementation(libs.androidxLifecycleRuntimeKtx)
     implementation(libs.androidMaterial)
     implementation(libs.cameraxView)
-    implementation(libs.mlkit.barcodescanning)
     implementation(libs.camera.mlkit.vision)
 
     val composeBom = platform(libs.androidxComposeBom)

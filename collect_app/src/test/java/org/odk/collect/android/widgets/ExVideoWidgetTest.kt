@@ -29,12 +29,11 @@ import org.odk.collect.android.widgets.utilities.FileRequester
 import org.odk.collect.android.widgets.video.ExVideoWidget
 import org.odk.collect.androidshared.system.IntentLauncher
 import org.odk.collect.androidtest.onNodeWithClickLabel
+import org.odk.collect.shared.TempFiles
 import org.odk.collect.strings.R.string
 import org.robolectric.shadows.ShadowToast
-import org.odk.collect.shared.TempFiles
 import java.io.File
 import java.io.IOException
-
 class ExVideoWidgetTest : FileWidgetTest<ExVideoWidget>() {
     @get:Rule
     val composeRule = createAndroidComposeRule<WidgetTestActivity>()

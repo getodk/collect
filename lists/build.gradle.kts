@@ -45,7 +45,6 @@ dependencies {
     implementation(project(":material"))
     implementation(project(":strings"))
     implementation(project(":icons"))
-    implementation(libs.kotlinStdlib)
     implementation(libs.androidxLifecycleLivedataKtx)
     implementation(libs.androidxLifecycleViewmodelKtx)
     implementation(libs.androidxRecyclerview)

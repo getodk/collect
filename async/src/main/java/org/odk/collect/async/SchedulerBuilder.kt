@@ -92,7 +92,6 @@ object SchedulerBuilder {
             override fun <T> flowOnBackground(flow: Flow<T>): Flow<T> {
                 return taskRunner.flowOnBackground(flow)
             }
-
         }
     }
 }

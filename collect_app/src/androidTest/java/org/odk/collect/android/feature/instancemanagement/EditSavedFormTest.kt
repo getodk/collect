@@ -15,7 +15,6 @@ import org.odk.collect.android.support.pages.FormHierarchyPage
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.SendFinalizedFormPage
 import org.odk.collect.android.support.rules.CollectTestRule
-import org.odk.collect.android.support.rules.PageComposeRule
 import org.odk.collect.android.support.rules.RecentAppsRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
 import java.io.File

@@ -44,7 +44,13 @@ Once the majority of high risk or visible work is done for a release, a new beta
 
 Fixes to a previous release should be merged to a "release" branch (`v2023.2.x` for example) so as to leave `master` available for the current release's work. If hotfix changes are needed in the current release as well then these can be merged in as a PR after hotfix releases (generally easiest as a single PR for the whole hotfix release). This approach can also be used if work for the next release starts before the current one is out - the next release continues on `master` while the release is on a release branch.
 
-At the beginning of each release cycle, [@grzesiek2010](https://github.com/grzesiek2010) updates all dependencies that have compatible upgrades available and ensures that the build targets the latest SDK.
+At the beginning of each release cycle, [@grzesiek2010](https://github.com/grzesiek2010) updates all dependencies that have compatible upgrades available and ensures that the build targets the latest SDK. To see which dependencies have updates available, run:
+
+```
+./gradlew dependencyUpdates --no-parallel
+```
+
+This reports available updates but only suggests stable versions that are at least 14 days old. It never applies updates or blocks builds. The main threat this guards against is supply-chain attacks: a compromised maintainer account or poisoned artifact published as a fresh release, which are typically spotted and yanked within days, so a short quarantine keeps them out of the report before anyone adopts them (requiring stable releases avoids the same risk from pre-release channels). The cost is that a genuine bugfix is also held back for 14 days, but that only delays its appearance in the report - an urgent fix can still be bumped by hand at any time. `--no-parallel` is required because the task does not support parallel project execution.
 
 ## Downloading builds
 Per-commit debug builds can be found on [CircleCI](https://circleci.com/gh/getodk/collect). Login with your GitHub account, click the build you'd like, then find the APK in the Artifacts tab.

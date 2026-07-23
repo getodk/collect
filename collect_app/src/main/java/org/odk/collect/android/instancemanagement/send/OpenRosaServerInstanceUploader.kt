@@ -136,8 +136,8 @@ class OpenRosaServerInstanceUploader(
                     if (headResult.statusCode in HttpsURLConnection.HTTP_OK until HttpsURLConnection.HTTP_MULT_CHOICE) {
                         throw FormUploadException(
                             "Failed to send to $uri. Is this an OpenRosa submission endpoint? " +
-                                    "If you have a web proxy you may need to log in to your network.\n\n" +
-                                    "HEAD request result status code: ${headResult.statusCode}"
+                                "If you have a web proxy you may need to log in to your network.\n\n" +
+                                "HEAD request result status code: ${headResult.statusCode}"
                         )
                     }
                 }
@@ -170,12 +170,12 @@ class OpenRosaServerInstanceUploader(
         try {
             val uri = URI.create(submissionUri.toString())
             val postResult = httpInterface.uploadSubmissionAndFiles(
-                    submissionFile,
-                    files,
-                    uri,
-                    webCredentialsUtils.getCredentials(uri),
-                    contentLength
-                )
+                submissionFile,
+                files,
+                uri,
+                webCredentialsUtils.getCredentials(uri),
+                contentLength
+            )
 
             val responseCode = postResult.responseCode
             messageParser.setMessageResponse(postResult.httpResponse)
@@ -198,7 +198,6 @@ class OpenRosaServerInstanceUploader(
 
                 throw exception
             }
-
         } catch (e: Exception) {
             throw FormUploadException(e.message ?: e.toString())
         }

@@ -41,7 +41,7 @@ class InstanceSubmitter(
         val sortedInstances = toUpload.sortedBy { it.finalizationDate }
         for ((index, instance) in sortedInstances.withIndex()) {
             ensureActive()
-            onProgress( index + 1, sortedInstances.size)
+            onProgress(index + 1, sortedInstances.size)
 
             try {
                 val resultMessage = instanceUploader.uploadOneSubmission(projectId, instance, deviceId, overrideURL, referrer)

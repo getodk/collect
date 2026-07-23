@@ -16,7 +16,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.annotation.Config
 import org.odk.collect.androidshared.bitmap.ImageFileUtils
 import org.odk.collect.androidtest.ActivityScenarioExtensions.isFinishing
 import org.odk.collect.androidtest.ActivityScenarioLauncherRule
@@ -25,8 +24,9 @@ import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.shared.TempFiles
 import org.odk.collect.strings.R
-import org.odk.collect.testshared.FakeScheduler
 import org.odk.collect.testshared.EspressoInteractions
+import org.odk.collect.testshared.FakeScheduler
+import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
 internal class DrawActivityTest {

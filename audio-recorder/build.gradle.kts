@@ -35,12 +35,10 @@ android {
 dependencies {
     coreLibraryDesugaring(libs.desugar)
 
-    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation(project(":icons"))
     implementation(project(":strings"))
     implementation(project(":async"))
     implementation(project(":androidshared"))
-    implementation(libs.kotlinStdlib)
     implementation(libs.androidxCoreKtx)
     implementation(libs.androidxAppcompat)
     implementation(libs.androidxLifecycleLivedataKtx)

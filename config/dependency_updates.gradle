@@ -1,0 +1,46 @@
+// Configures `./gradlew dependencyUpdates` to only suggest stable versions that are at least
+// 14 days old. See the "Release cycle" section of the README for the policy and its rationale.
+
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.TimeUnit
+
+apply plugin: "com.github.ben-manes.versions"
+
+def REPOS = [
+    "https://dl.google.com/android/maven2",
+    "https://repo1.maven.org/maven2",
+    "https://plugins.gradle.org/m2",
+    "https://jitpack.io"
+]
+
+def isStable = { String version ->
+    def stableKeyword = ["RELEASE", "FINAL", "GA"].any { version.toUpperCase().contains(it) }
+    return stableKeyword || version ==~ /^[0-9.v-]+(-r)?$/
+}
+
+def ageCache = new ConcurrentHashMap()
+def isOldEnough = { candidate ->
+    ageCache.computeIfAbsent("$candidate.group:$candidate.module:$candidate.version") {
+        def path = "${candidate.group.replace('.', '/')}/$candidate.module/$candidate.version/$candidate.module-${candidate.version}.pom"
+        for (repo in REPOS) {
+            HttpURLConnection connection = null
+            try {
+                connection = (HttpURLConnection) new URL("$repo/$path").openConnection()
+                connection.requestMethod = "HEAD"
+                connection.connectTimeout = 5000
+                connection.readTimeout = 5000
+                if (connection.responseCode == 200 && connection.lastModified > 0) {
+                    return connection.lastModified <= System.currentTimeMillis() - TimeUnit.DAYS.toMillis(14)
+                }
+            } catch (IOException ignored) {
+            } finally {
+                connection?.disconnect()
+            }
+        }
+        return false
+    }
+}
+
+tasks.named("dependencyUpdates").configure {
+    rejectVersionIf { !isStable(it.candidate.version) || !isOldEnough(it.candidate) }
+}

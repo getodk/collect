@@ -20,9 +20,9 @@ class GeoPointMapDialogFragment(
     private val dispatcherProvider: DispatcherProvider
 ) :
     WidgetAnswerDialogFragment<GeoPointMapFragment>(
-        GeoPointMapFragment::class,
-        viewModelFactory
-    ) {
+            GeoPointMapFragment::class,
+            viewModelFactory
+        ) {
 
     override fun onCreateFragment(
         prompt: FormEntryPrompt,

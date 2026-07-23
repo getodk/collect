@@ -40,7 +40,6 @@ class CrashHandler {
                 } else {
                     Crash.Normal(serializedCrash.message)
                 }
-
             }
         }
     }

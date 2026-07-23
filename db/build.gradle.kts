@@ -38,7 +38,6 @@ dependencies {
     coreLibraryDesugaring(libs.desugar)
 
     implementation(project(":shared"))
-    implementation(libs.kotlinStdlib)
     implementation(libs.androidxCoreKtx)
     implementation(libs.timber)
 

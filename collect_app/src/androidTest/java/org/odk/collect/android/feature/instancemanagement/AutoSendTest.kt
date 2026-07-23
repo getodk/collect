@@ -213,7 +213,7 @@ class AutoSendTest {
 
     @Test
     fun whenFormHasAutoSend_formsAreSentInOldestFirstOrderBasedOnFinalizationTime() {
-        /**
+        /*
          * Historically, the only timestamp we tracked for instances was the "last status changed" date.
          * However, this timestamp is updated any time the instance status changes—not only when a form
          * is finalized, but also, for example, when a submission attempt fails.
