@@ -164,6 +164,13 @@
   <string name="rank_items">Uszereguj pozycje</string>
   <string name="number_picker_title">Wybór Wartości</string>
   <string name="invalid_range_widget">Ten widget ma nieprawidłowe parametry!</string>
+  <!--Content description for a horizontal slider used in range widgets-->
+  <!--Content description for a vertical slider used in range widgets-->
+  <!--Content description for the label showing the current value of the slider-->
+  <!--Content description for each tick mark on the slider indicating discrete steps-->
+  <!--Content description for the draggable thumb handle of the slider-->
+  <!--Content description for the label at the start (minimum) of the slider-->
+  <!--Content description for the label at the end (maximum) of the slider-->
   <string name="svg_file_does_not_exist">Plik SVG nie istnieje!</string>
   <string name="capture_image">Zrób Zdjęcie</string>
   <string name="choose_image">Wybierz Obraz</string>
@@ -330,10 +337,7 @@
   <!--##############################################
     # GEO
     ##############################################-->
-  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
-   These strings are only being used to preserve compatibility with pre-existing
-    tile caches, and are not shown in the UI.-->
-    <string name="basemap">Mapa bazowa</string>
+  <string name="basemap">Mapa bazowa</string>
   <string name="basemap_source">Źródło</string>
   <string name="map_style_label">%s styl mapy</string>
   <string name="streets">Ulice</string>
@@ -343,10 +347,10 @@
   <string name="light" tools:ignore="UnusedResources">Jasny</string>
   <string name="dark" tools:ignore="UnusedResources">Ciemny</string>
   <string name="outdoors" tools:ignore="UnusedResources">Na zewnątrz</string>
-  <string name="topographic">Topograficzny</string>
+  <string name="topographic" tools:ignore="UnusedResources">Topograficzny</string>
   <string name="google_play_services_error_occured">Nie można uzyskać dostępu do Google Maps. Czy Google Play Services są zainstalowane?</string>
-  <string name="carto_map_style_positron">Pozyton</string>
-  <string name="carto_map_style_dark_matter">Ciemna Materia</string>
+  <string name="carto_map_style_positron" tools:ignore="UnusedResources">Pozyton</string>
+  <string name="carto_map_style_dark_matter" tools:ignore="UnusedResources">Ciemna Materia</string>
   <!--Title for the offline layer section of settings-->
   <!--Label for the offline layer setting-->
   <!--Title for the screen that allows the user to select a offline layer for maps-->
@@ -362,7 +366,6 @@
   <!--Text for option where layer should be available to all projects-->
   <!--Text for option where layer should be available to the current project only-->
   <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
-  <string name="record_geopoint">Zapisz punkt</string>
   <string name="provider_disabled_error">Przykro mi, dostawcy usługi Lokalizacji są niedostępni.</string>
   <string name="google_play_services_not_available">Ten formularz chce śledzić twoją lokalizację, ale usługi Google Play nie są dostępne.</string>
   <string name="location_providers_disabled_dialog_message">Ten formularz chce śledzić twoją lokalizację, ale usługi dostawców systemu lokalizacji są wyłączone. Włącz je w ustawieniach Androida.</string>
@@ -541,7 +544,7 @@
   <string name="change_password">Hasło ODK</string>
   <string name="password_error_whitespace">Spacje na początku lub na końcu hasła są niedozwolone</string>
   <string name="username_error_whitespace">Spacje na początku lub na końcu nazwy użytkownika są niedozwolone</string>
-    <string name="language">Język</string>
+  <string name="language">Język</string>
   <string name="use_device_language">Użyj języka urządzenia</string>
   <string name="font_size">Wielkość czcionki</string>
   <string name="change_font_size">Wielkość czcionki</string>
@@ -770,16 +773,10 @@
   <!--##############################################
     # Crash handling
     ##############################################-->
+  <!--Message shown when the app crashed due to running out of memory last time it was run.-->
   <!--##############################################
     # Google Drive deprecation
     ##############################################-->
-  <!--##############################################
-    # Min SDK deprecation banner
-    ##############################################-->
-  <!--First part of the message shown in the banner, informing the user that their device will soon be unsupported-->
-  <!--Second part of the message shown in the banner, informing the user that their device will soon be unsupported-->
-  <!--Button text that opens a forum post with more information about upcoming device support changes-->
-  <!--Button text to dismiss the banner-->
   <!--##############################################
     # Developer tools
     ##############################################-->

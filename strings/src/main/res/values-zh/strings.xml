@@ -121,13 +121,9 @@
   <!--Title of the end of form screen-->
   <string name="save_enter_data_description">您已到达 %s 的末尾.</string>
   <!--Text shown in an information box on the end of form screen when auto-send is off or the device is offline-->
-  <string name="form_editing_disabled_after_finalizing">无法对最终版本进行编辑。</string>
   <!--Text shown in an information box on the end of form screen when auto-send is on and the device is online-->
-  <string name="form_editing_disabled_after_sending">提交后将无法编辑。</string>
   <!--Text shown in an information box on the end of form screen when auto-send is off and the form allows edits after finalize/send-->
-  <string name="form_editing_enabled_after_finalizing">仍可以对最终版本进行编辑</string>
   <!--Text shown in an information box on the end of form screen when auto-send is on and the form allows edits after finalize/send-->
-  <string name="form_editing_enabled_after_sending">提交后仍可以编辑</string>
   <!--Details shown in an information box on the end of form screen when the form does not allow edits after finalize/send-->
   <string name="form_editing_disabled_hint">如果您需要对表格进行编辑，在准备提交前，请选择“另存为草稿”。</string>
   <!--Details shown in an information box on the end of form screen when the form allows edits after finalization-->
@@ -207,6 +203,13 @@
   <string name="rank_items">排序元素</string>
   <string name="number_picker_title">数字选择器</string>
   <string name="invalid_range_widget">此部件的参数无效！</string>
+  <!--Content description for a horizontal slider used in range widgets-->
+  <!--Content description for a vertical slider used in range widgets-->
+  <!--Content description for the label showing the current value of the slider-->
+  <!--Content description for each tick mark on the slider indicating discrete steps-->
+  <!--Content description for the draggable thumb handle of the slider-->
+  <!--Content description for the label at the start (minimum) of the slider-->
+  <!--Content description for the label at the end (maximum) of the slider-->
   <string name="svg_file_does_not_exist">SVG文件不存在！</string>
   <string name="capture_image">照相</string>
   <string name="choose_image">选择图片</string>
@@ -410,10 +413,7 @@
   <!--##############################################
     # GEO
     ##############################################-->
-  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
-   These strings are only being used to preserve compatibility with pre-existing
-    tile caches, and are not shown in the UI.-->
-    <string name="basemap">底图</string>
+  <string name="basemap">底图</string>
   <string name="basemap_source">源</string>
   <string name="basemap_source_unavailable">抱歉, %s 此设备上没有底图。请在“设置”中选择另一个底图 &gt;  地图.</string>
   <string name="map_style_label">%s 地图样式</string>
@@ -424,10 +424,10 @@
   <string name="light" tools:ignore="UnusedResources">浅色</string>
   <string name="dark" tools:ignore="UnusedResources">深色</string>
   <string name="outdoors" tools:ignore="UnusedResources">户外</string>
-  <string name="topographic">地形图</string>
+  <string name="topographic" tools:ignore="UnusedResources">地形图</string>
   <string name="google_play_services_error_occured">无法访问谷歌地图。是否安装了Google Play服务？</string>
-  <string name="carto_map_style_positron">Positron</string>
-  <string name="carto_map_style_dark_matter">Dark Matter</string>
+  <string name="carto_map_style_positron" tools:ignore="UnusedResources">Positron</string>
+  <string name="carto_map_style_dark_matter" tools:ignore="UnusedResources">Dark Matter</string>
   <!--Title for the offline layer section of settings-->
   <string name="offline_layer">离线图层</string>
   <!--Label for the offline layer setting-->
@@ -461,7 +461,6 @@
   <string name="current_project_option">目前项目</string>
   <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
   <string name="delete_layer_confirmation_message">您确定要删除 %1$s 离线图层吗？</string>
-  <string name="record_geopoint">记录点</string>
   <string name="location_accuracy">准确率：%1$s</string>
   <string name="location_accuracy_unacceptable">准确率：%1$s（不合格）</string>
   <string name="provider_disabled_error">位置服务被关闭!</string>
@@ -702,7 +701,7 @@
   <string name="change_password">密码</string>
   <string name="password_error_whitespace">密码中不允许有前导或尾随空格</string>
   <string name="username_error_whitespace">用户名中不允许有前导或尾随空格</string>
-    <string name="language">语言</string>
+  <string name="language">语言</string>
   <string name="use_device_language">使用设备语言</string>
   <string name="font_size">字体大小</string>
   <string name="change_font_size">字体大小</string>
@@ -1023,6 +1022,7 @@
     ##############################################-->
   <string name="crash_last_run">应用程序上次运行时发生了崩溃！</string>
   <string name="cant_start_app">无法启动应用程序！</string>
+  <!--Message shown when the app crashed due to running out of memory last time it was run.-->
   <!--##############################################
     # Google Drive deprecation
     ##############################################-->

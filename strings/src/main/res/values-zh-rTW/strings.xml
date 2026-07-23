@@ -197,6 +197,13 @@
   <string name="rank_items">排序項目</string>
   <string name="number_picker_title">數字選擇器</string>
   <string name="invalid_range_widget">此部件的參數無效！</string>
+  <!--Content description for a horizontal slider used in range widgets-->
+  <!--Content description for a vertical slider used in range widgets-->
+  <!--Content description for the label showing the current value of the slider-->
+  <!--Content description for each tick mark on the slider indicating discrete steps-->
+  <!--Content description for the draggable thumb handle of the slider-->
+  <!--Content description for the label at the start (minimum) of the slider-->
+  <!--Content description for the label at the end (maximum) of the slider-->
   <string name="svg_file_does_not_exist">SVG文件不存在！</string>
   <string name="capture_image">拍照</string>
   <string name="choose_image">選擇圖片</string>
@@ -398,10 +405,7 @@
   <!--##############################################
     # GEO
     ##############################################-->
-  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
-   These strings are only being used to preserve compatibility with pre-existing
-    tile caches, and are not shown in the UI.-->
-    <string name="basemap">底圖</string>
+  <string name="basemap">底圖</string>
   <string name="basemap_source">來源</string>
   <string name="basemap_source_unavailable">抱歉, %s 此設備上沒有底圖。請在「設置」中選擇另一個底圖 &gt;  地圖.</string>
   <string name="map_style_label">%s 地圖樣式</string>
@@ -412,10 +416,10 @@
   <string name="light" tools:ignore="UnusedResources">淺色</string>
   <string name="dark" tools:ignore="UnusedResources">深色</string>
   <string name="outdoors" tools:ignore="UnusedResources">戶外</string>
-  <string name="topographic">地形圖</string>
+  <string name="topographic" tools:ignore="UnusedResources">地形圖</string>
   <string name="google_play_services_error_occured">無法存取谷歌地圖。是否安裝了Google Play服務？</string>
-  <string name="carto_map_style_positron">Positron</string>
-  <string name="carto_map_style_dark_matter">Dark Matter</string>
+  <string name="carto_map_style_positron" tools:ignore="UnusedResources">Positron</string>
+  <string name="carto_map_style_dark_matter" tools:ignore="UnusedResources">Dark Matter</string>
   <!--Title for the offline layer section of settings-->
   <string name="offline_layer">離線圖層</string>
   <!--Label for the offline layer setting-->
@@ -449,7 +453,6 @@
   <string name="current_project_option">目前項目</string>
   <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
   <string name="delete_layer_confirmation_message">您確定要刪除 %1$s 離線圖層嗎？</string>
-  <string name="record_geopoint">記錄點</string>
   <string name="provider_disabled_error">位置服務被關閉！</string>
   <string name="google_play_services_not_available">此表單希望跟蹤您的位置，但Google Play服務不可用。</string>
   <string name="location_providers_disabled_dialog_message">此表單希望跟蹤您的位置，但位置提供程式被禁用，請在Android設置中啟用。</string>
@@ -677,7 +680,7 @@
   <string name="change_password">密碼</string>
   <string name="password_error_whitespace">密碼字串前後不能有空格</string>
   <string name="username_error_whitespace">使用者名稱字串前後不能有空格</string>
-    <string name="language">語言</string>
+  <string name="language">語言</string>
   <string name="use_device_language">使用設備語言</string>
   <string name="font_size">字體大小</string>
   <string name="change_font_size">字體大小</string>
@@ -977,6 +980,7 @@
     ##############################################-->
   <string name="crash_last_run">應用程式上次運行時發生了崩潰！</string>
   <string name="cant_start_app">無法啟動應用程式！</string>
+  <!--Message shown when the app crashed due to running out of memory last time it was run.-->
   <!--##############################################
     # Google Drive deprecation
     ##############################################-->
@@ -984,7 +988,6 @@
 
 </string>
   <string name="learn_more_button_text">瞭解更多</string>
-  <!--Button text to dismiss the banner-->
   <!--##############################################
     # Developer tools
     ##############################################-->

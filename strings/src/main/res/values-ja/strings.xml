@@ -168,6 +168,13 @@
   <string name="rank_items">ランキングアイテム</string>
   <string name="number_picker_title">数値選択</string>
   <string name="invalid_range_widget">このウィジェットに無効なパラメータがあります!</string>
+  <!--Content description for a horizontal slider used in range widgets-->
+  <!--Content description for a vertical slider used in range widgets-->
+  <!--Content description for the label showing the current value of the slider-->
+  <!--Content description for each tick mark on the slider indicating discrete steps-->
+  <!--Content description for the draggable thumb handle of the slider-->
+  <!--Content description for the label at the start (minimum) of the slider-->
+  <!--Content description for the label at the end (maximum) of the slider-->
   <string name="svg_file_does_not_exist">SVG ファイルが存在しません!</string>
   <string name="capture_image">写真を撮影</string>
   <string name="choose_image">画像を選択</string>
@@ -350,10 +357,7 @@
   <!--##############################################
     # GEO
     ##############################################-->
-  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
-   These strings are only being used to preserve compatibility with pre-existing
-    tile caches, and are not shown in the UI.-->
-    <string name="basemap">基本地図</string>
+  <string name="basemap">基本地図</string>
   <string name="basemap_source">ソース</string>
   <string name="map_style_label">%s 地図スタイル</string>
   <string name="streets">道路</string>
@@ -363,10 +367,10 @@
   <string name="light" tools:ignore="UnusedResources">ライト</string>
   <string name="dark" tools:ignore="UnusedResources">ダーク</string>
   <string name="outdoors" tools:ignore="UnusedResources">アウトドア</string>
-  <string name="topographic">地形</string>
+  <string name="topographic" tools:ignore="UnusedResources">地形</string>
   <string name="google_play_services_error_occured">Google マップにアクセスできません。 Google Play サービスはインストールされていますか?</string>
-  <string name="carto_map_style_positron">位置</string>
-  <string name="carto_map_style_dark_matter">ダークマター</string>
+  <string name="carto_map_style_positron" tools:ignore="UnusedResources">位置</string>
+  <string name="carto_map_style_dark_matter" tools:ignore="UnusedResources">ダークマター</string>
   <!--Title for the offline layer section of settings-->
   <!--Label for the offline layer setting-->
   <!--Title for the screen that allows the user to select a offline layer for maps-->
@@ -382,7 +386,6 @@
   <!--Text for option where layer should be available to all projects-->
   <!--Text for option where layer should be available to the current project only-->
   <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
-  <string name="record_geopoint">位置を記録</string>
   <string name="provider_disabled_error">申し訳ありません、ロケーション プロバイダーが無効です!</string>
   <string name="google_play_services_not_available">このフォームは位置を追跡しようとしますが、Google Play サービスが利用できません。</string>
   <string name="location_providers_disabled_dialog_message">このフォームは場所を追跡しようとしますが、位置情報プロバイダーが無効になっています。 Android の設定で有効にしてください。</string>
@@ -562,7 +565,7 @@
   <string name="change_password">ODK パスワード</string>
   <string name="password_error_whitespace">パスワードの先頭または末尾に空白は使用できません</string>
   <string name="username_error_whitespace">ユーザー名の先頭または末尾に空白は使用できません</string>
-    <string name="language">言語</string>
+  <string name="language">言語</string>
   <string name="use_device_language">デバイスの言語を使用する</string>
   <string name="font_size">文字フォントサイズ</string>
   <string name="change_font_size">文字フォントサイズ</string>
@@ -807,6 +810,7 @@
   <!--##############################################
     # Crash handling
     ##############################################-->
+  <!--Message shown when the app crashed due to running out of memory last time it was run.-->
   <!--##############################################
     # Google Drive deprecation
     ##############################################-->

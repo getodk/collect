@@ -121,13 +121,13 @@
   <!--Title of the end of form screen-->
   <string name="save_enter_data_description">Sie sind am Ende von \"%s\" angelangt.</string>
   <!--Text shown in an information box on the end of form screen when auto-send is off or the device is offline-->
-  <string name="form_editing_disabled_after_finalizing">Änderungen sind nach dem Abschließen nicht möglich.</string>
+  <string name="form_editing_disabled_after_finalizing">Ändern nach dem Abschließen nicht möglich</string>
   <!--Text shown in an information box on the end of form screen when auto-send is on and the device is online-->
-  <string name="form_editing_disabled_after_sending">Änderungen sind nach dem Senden nicht möglich.</string>
+  <string name="form_editing_disabled_after_sending">Ändern nach dem Senden nicht möglich</string>
   <!--Text shown in an information box on the end of form screen when auto-send is off and the form allows edits after finalize/send-->
-  <string name="form_editing_enabled_after_finalizing">Änderungen sind nach dem Abschließen möglich.</string>
+  <string name="form_editing_enabled_after_finalizing">Ändern nach dem Abschließen möglich</string>
   <!--Text shown in an information box on the end of form screen when auto-send is on and the form allows edits after finalize/send-->
-  <string name="form_editing_enabled_after_sending">Änderungen sind nach dem Senden möglich.</string>
+  <string name="form_editing_enabled_after_sending">Ändern nach dem Senden möglich</string>
   <!--Details shown in an information box on the end of form screen when the form does not allow edits after finalize/send-->
   <string name="form_editing_disabled_hint">Wenn Sie Änderungen an Ihrem Formular vornehmen müssen, \"Als Entwurf speichern\", bis Sie bereit sind, es zu senden.</string>
   <!--Details shown in an information box on the end of form screen when the form allows edits after finalization-->
@@ -207,6 +207,13 @@
   <string name="rank_items">Rangfolge festlegen</string>
   <string name="number_picker_title">Zahlenwähler</string>
   <string name="invalid_range_widget">Dieses Widget hat ungültige Parameter!</string>
+  <!--Content description for a horizontal slider used in range widgets-->
+  <!--Content description for a vertical slider used in range widgets-->
+  <!--Content description for the label showing the current value of the slider-->
+  <!--Content description for each tick mark on the slider indicating discrete steps-->
+  <!--Content description for the draggable thumb handle of the slider-->
+  <!--Content description for the label at the start (minimum) of the slider-->
+  <!--Content description for the label at the end (maximum) of the slider-->
   <string name="svg_file_does_not_exist">SVG-Datei existiert nicht!</string>
   <string name="capture_image">Foto machen</string>
   <string name="choose_image">Bild auswählen</string>
@@ -410,10 +417,7 @@
   <!--##############################################
     # GEO
     ##############################################-->
-  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
-   These strings are only being used to preserve compatibility with pre-existing
-    tile caches, and are not shown in the UI.-->
-    <string name="basemap">Basiskarte</string>
+  <string name="basemap">Basiskarte</string>
   <string name="basemap_source">Quelle</string>
   <string name="basemap_source_unavailable">%s Basiskarten sind leider nicht auf diesem Gerät verfügbar. Bitte eine andere Basiskarte unter Einstellungen &gt; Karten wählen.</string>
   <string name="map_style_label">%s Kartentyp</string>
@@ -424,10 +428,10 @@
   <string name="light" tools:ignore="UnusedResources">Hell</string>
   <string name="dark" tools:ignore="UnusedResources">Dunkel</string>
   <string name="outdoors" tools:ignore="UnusedResources">Draußen</string>
-  <string name="topographic">Topographisch</string>
+  <string name="topographic" tools:ignore="UnusedResources">Topographisch</string>
   <string name="google_play_services_error_occured">Zugriff auf Google Maps nicht möglich. Sind die Google Play Services installiert?</string>
-  <string name="carto_map_style_positron">Positron</string>
-  <string name="carto_map_style_dark_matter">Dunkle Materie</string>
+  <string name="carto_map_style_positron" tools:ignore="UnusedResources">Positron</string>
+  <string name="carto_map_style_dark_matter" tools:ignore="UnusedResources">Dunkle Materie</string>
   <!--Title for the offline layer section of settings-->
   <string name="offline_layer">Offline-Ebenen</string>
   <!--Label for the offline layer setting-->
@@ -462,7 +466,6 @@
   <string name="current_project_option">Nur aktuelles Projekt</string>
   <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
   <string name="delete_layer_confirmation_message">Möchten sie wirklich die %1$s Offline-Ebene löschen?</string>
-  <string name="record_geopoint">Punkt erfassen</string>
   <string name="location_accuracy">Genauigkeit: %1$s</string>
   <string name="location_accuracy_unacceptable">⚠️ Genauigkeit: %1$s (inakzeptabel)</string>
   <string name="provider_disabled_error">Standortdienste sind nicht aktiviert!</string>
@@ -712,7 +715,7 @@
   <string name="change_password">ODK Passwort</string>
   <string name="password_error_whitespace">Leerzeichen am Anfang und Ende von Passwörtern nicht erlaubt</string>
   <string name="username_error_whitespace">Leerzeichen am Anfang und Ende von Benutzernamen nicht erlaubt</string>
-    <string name="language">Sprache</string>
+  <string name="language">Sprache</string>
   <string name="use_device_language">Gerätesprache benutzen</string>
   <string name="font_size">Schriftgröße</string>
   <string name="change_font_size">Schriftgröße</string>
@@ -1024,6 +1027,7 @@
     ##############################################-->
   <string name="crash_last_run">Es gab einen Absturz beim letzten Lauf der App!</string>
   <string name="cant_start_app">Kann die App nicht starten!</string>
+  <!--Message shown when the app crashed due to running out of memory last time it was run.-->
   <!--##############################################
     # Google Drive deprecation
     ##############################################-->

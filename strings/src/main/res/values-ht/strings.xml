@@ -146,6 +146,13 @@
   <!--Prompt under view finder to describe where to place the camera to scan a barcode-->
   <!--Label for button that rotates camera orientation when scanning barcodes-->
   <string name="open_file">Ouvri fichye</string>
+  <!--Content description for a horizontal slider used in range widgets-->
+  <!--Content description for a vertical slider used in range widgets-->
+  <!--Content description for the label showing the current value of the slider-->
+  <!--Content description for each tick mark on the slider indicating discrete steps-->
+  <!--Content description for the draggable thumb handle of the slider-->
+  <!--Content description for the label at the start (minimum) of the slider-->
+  <!--Content description for the label at the end (maximum) of the slider-->
   <string name="svg_file_does_not_exist">Fichye SVG a pa ekziste!</string>
   <string name="capture_image">Pran foto</string>
   <string name="choose_image">Chwazi imaj</string>
@@ -227,9 +234,6 @@
   <!--##############################################
     # GEO
     ##############################################-->
-  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
-   These strings are only being used to preserve compatibility with pre-existing
-    tile caches, and are not shown in the UI.-->
   <!--Title for the offline layer section of settings-->
   <!--Label for the offline layer setting-->
   <!--Title for the screen that allows the user to select a offline layer for maps-->
@@ -427,16 +431,10 @@
   <!--##############################################
     # Crash handling
     ##############################################-->
+  <!--Message shown when the app crashed due to running out of memory last time it was run.-->
   <!--##############################################
     # Google Drive deprecation
     ##############################################-->
-  <!--##############################################
-    # Min SDK deprecation banner
-    ##############################################-->
-  <!--First part of the message shown in the banner, informing the user that their device will soon be unsupported-->
-  <!--Second part of the message shown in the banner, informing the user that their device will soon be unsupported-->
-  <!--Button text that opens a forum post with more information about upcoming device support changes-->
-  <!--Button text to dismiss the banner-->
   <!--##############################################
     # Developer tools
     ##############################################-->
