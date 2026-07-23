@@ -30,6 +30,17 @@ buildscript {
 }
 
 allprojects {
+    dependencyLocking {
+        lockAllConfigurations()
+        ignoredDependencies.add("com.mapbox*:*")
+        ignoredDependencies.add("org.jetbrains.kotlin:kotlin-stdlib-common")
+    }
+
+    // Regenerate every module's gradle.lockfile: ./gradlew resolveAndLockAll --write-locks
+    tasks.register("resolveAndLockAll") {
+        dependsOn(tasks.named("dependencies"))
+    }
+
     repositories {
         maven {
             url = uri("$rootDir/.local-m2/")

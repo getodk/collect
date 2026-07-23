@@ -12,11 +12,6 @@ import com.android.ddmlib.DdmPreferences
 
 DdmPreferences.setTimeOut(60000)
 
-dependencyLocking {
-    lockAllConfigurations()
-    ignoredDependencies.add("com.mapbox*:*")
-}
-
 ant.condition(property: 'os', value: 'windows') {
     os(family: 'windows')
 }

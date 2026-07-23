@@ -1,6 +1,6 @@
-# After changing any version here, regenerate the dependency lockfile
-# (collect_app/gradle.lockfile) so debug and release stay pinned:
-#./gradlew :collect_app:dependencies --write-locks
+# After changing any version here, regenerate the dependency lockfiles so every
+# module stays pinned for debug and release:
+#./gradlew resolveAndLockAll --write-locks
 
 [versions]
 compileSdk = "37"
