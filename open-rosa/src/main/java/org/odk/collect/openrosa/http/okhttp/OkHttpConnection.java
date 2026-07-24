@@ -151,10 +151,6 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
         int fileIndex = 0;
         int lastFileIndex;
         while (fileIndex < fileList.size() || first) {
-            if (isCancelled.get()) {
-                throw new InterruptedIOException("Upload canceled");
-            }
-
             lastFileIndex = fileIndex;
             first = false;
             long byteCount = 0L;

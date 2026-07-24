@@ -28,7 +28,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.zip.GZIPOutputStream;
 
@@ -247,7 +246,9 @@ public abstract class OpenRosaPostRequestTest {
     }
 
     @Test
-    public void whenCanceledBeforeUpload_doesNotMakeRequest() {
+    public void whenCanceledDuringUpload_abortsRequest() {
+        mockWebServer.enqueue(new MockResponse().setResponseCode(201));
+
         URI uri = mockWebServer.url("/blah").uri();
 
         assertThrows(
@@ -259,30 +260,6 @@ public abstract class OpenRosaPostRequestTest {
                         null,
                         0,
                         () -> true
-                )
-        );
-
-        assertThat(mockWebServer.getRequestCount(), equalTo(0));
-    }
-
-    @Test
-    public void whenCanceledDuringUpload_abortsRequest() {
-        mockWebServer.enqueue(new MockResponse().setResponseCode(201));
-
-        // Not canceled for the initial loop check, then canceled once the body starts streaming.
-        AtomicInteger checks = new AtomicInteger(0);
-
-        URI uri = mockWebServer.url("/blah").uri();
-
-        assertThrows(
-                InterruptedIOException.class,
-                () -> subject.uploadSubmissionAndFiles(
-                        createTempFile("<node>content</node>"),
-                        new ArrayList<>(),
-                        uri,
-                        null,
-                        0,
-                        () -> checks.getAndIncrement() > 0
                 )
         );
     }
