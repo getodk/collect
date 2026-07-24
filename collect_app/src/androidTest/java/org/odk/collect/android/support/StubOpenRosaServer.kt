@@ -18,6 +18,7 @@ import java.io.IOException
 import java.io.InputStream
 import java.net.URI
 import java.util.UUID
+import java.util.function.Supplier
 import java.util.stream.Collectors
 
 class StubOpenRosaServer : OpenRosaHttpInterface {
@@ -125,7 +126,8 @@ class StubOpenRosaServer : OpenRosaHttpInterface {
         fileList: List<File>,
         uri: URI,
         credentials: HttpCredentialsInterface,
-        contentLength: Long
+        contentLength: Long,
+        isCancelled: Supplier<Boolean>?
     ): HttpPostResult {
         accesses += 1
 

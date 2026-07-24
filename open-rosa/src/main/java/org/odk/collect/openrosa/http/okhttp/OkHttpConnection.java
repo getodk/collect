@@ -142,13 +142,9 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
 
     @NonNull
     @Override
-    public HttpPostResult uploadSubmissionAndFiles(@NonNull File submissionFile, @NonNull List<File> fileList, @NonNull URI uri, @Nullable HttpCredentialsInterface credentials, @NonNull long contentLength) throws Exception {
-        return uploadSubmissionAndFiles(submissionFile, fileList, uri, credentials, contentLength, () -> false);
-    }
+    public HttpPostResult uploadSubmissionAndFiles(@NonNull File submissionFile, @NonNull List<File> fileList, @NonNull URI uri, @Nullable HttpCredentialsInterface credentials, @NonNull long contentLength, @Nullable Supplier<Boolean> isCancelledOrNull) throws Exception {
+        Supplier<Boolean> isCancelled = isCancelledOrNull != null ? isCancelledOrNull : () -> false;
 
-    @NonNull
-    @Override
-    public HttpPostResult uploadSubmissionAndFiles(@NonNull File submissionFile, @NonNull List<File> fileList, @NonNull URI uri, @Nullable HttpCredentialsInterface credentials, @NonNull long contentLength, @NonNull Supplier<Boolean> isCancelled) throws Exception {
         HttpPostResult postResult = null;
 
         boolean first = true;
