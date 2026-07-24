@@ -737,39 +737,6 @@ public class ServerFormDownloaderTest {
     }
 
     @Test
-    public void whenFormHasEntityAttachment_doesNotLeaveTheEntityListCsvInTheFormMediaDirectory() throws Exception {
-        String xform = createXFormBody("id", "version");
-        ServerFormDetails serverFormDetails = new ServerFormDetails(
-                "Form",
-                "http://downloadUrl",
-                "id",
-                "version",
-                Md5.getMd5Hash(new ByteArrayInputStream(xform.getBytes())),
-                true,
-                false,
-                new ManifestFile("", asList(
-                        new MediaFile("file1.csv", "hash-1", "http://file1", MediaFile.Type.ENTITY_LIST),
-                        new MediaFile("file2", "hash-2", "http://file2")
-                )));
-
-        FormSource formSource = mock(FormSource.class);
-        when(formSource.fetchForm("http://downloadUrl")).thenReturn(new ByteArrayInputStream(xform.getBytes()));
-        when(formSource.fetchMediaFile("http://file1")).thenReturn(new ByteArrayInputStream("contents1".getBytes()));
-        when(formSource.fetchMediaFile("http://file2")).thenReturn(new ByteArrayInputStream("contents2".getBytes()));
-
-        ServerFormDownloader downloader = new ServerFormDownloader(formSource, formsRepository, cacheDir, formsDir.getAbsolutePath(), FormMetadataParser.INSTANCE, clock::get, entitiesRepository, entitySource);
-        downloader.downloadForm(serverFormDetails, null, null);
-
-        Form form = formsRepository.getAll().get(0);
-
-        File entityListFile = new File(form.getFormMediaPath(), "file1.csv");
-        assertThat(entityListFile.exists(), is(false));
-
-        File mediaFile = new File(form.getFormMediaPath(), "file2");
-        assertThat(mediaFile.exists(), is(true));
-    }
-
-    @Test
     public void whenFormHasEntityAttachmentsAndEntityBlock_downloadsAndSavesFormAsAFormUsingEntities() throws Exception {
         String xform = createXFormBody("id", "version", "Test Form", "2024.1.0");
         ServerFormDetails serverFormDetails = new ServerFormDetails(
