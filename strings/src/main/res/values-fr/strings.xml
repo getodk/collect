@@ -121,13 +121,13 @@
   <!--Title of the end of form screen-->
   <string name="save_enter_data_description">Vous êtes à la fin de \"%s\".</string>
   <!--Text shown in an information box on the end of form screen when auto-send is off or the device is offline-->
-  <string name="form_editing_disabled_after_finalizing">Vous ne pourrez pas éditer ce formulaire après sa finalisation.</string>
+  <string name="form_editing_disabled_after_finalizing">Ne peut éditer après finalisation</string>
   <!--Text shown in an information box on the end of form screen when auto-send is on and the device is online-->
-  <string name="form_editing_disabled_after_sending">Vous ne pourrez pas éditer ce formulaire après envoi.</string>
+  <string name="form_editing_disabled_after_sending">Ne peut éditer après envoi</string>
   <!--Text shown in an information box on the end of form screen when auto-send is off and the form allows edits after finalize/send-->
-  <string name="form_editing_enabled_after_finalizing">Vous pourrez éditer ce formulaire après qu\'il soit finalisé.</string>
+  <string name="form_editing_enabled_after_finalizing">Peut éditer après finalisation</string>
   <!--Text shown in an information box on the end of form screen when auto-send is on and the form allows edits after finalize/send-->
-  <string name="form_editing_enabled_after_sending">Vous pourrez éditer ce formulaire après envoi.</string>
+  <string name="form_editing_enabled_after_sending">Peut éditer après envoi</string>
   <!--Details shown in an information box on the end of form screen when the form does not allow edits after finalize/send-->
   <string name="form_editing_disabled_hint">Si vous devrez modifier ce formulaire prochainement, choisissez \"Enregistrer comme brouillon\" jusqu\'à ce que vous soyez prêt à l\'envoyer.</string>
   <!--Details shown in an information box on the end of form screen when the form allows edits after finalization-->
@@ -207,6 +207,20 @@
   <string name="rank_items">Choisir l\'ordre des éléments</string>
   <string name="number_picker_title">Sélecteur de numéro</string>
   <string name="invalid_range_widget">Les paramètres de ce widget sont invalides!</string>
+  <!--Content description for a horizontal slider used in range widgets-->
+  <string name="horizontal_slider">Curseur horizontal</string>
+  <!--Content description for a vertical slider used in range widgets-->
+  <string name="vertical_slider">Curseur vertical</string>
+  <!--Content description for the label showing the current value of the slider-->
+  <string name="current_slider_value">Valeur courante du curseur</string>
+  <!--Content description for each tick mark on the slider indicating discrete steps-->
+  <string name="slider_tick">Repère du curseur</string>
+  <!--Content description for the draggable thumb handle of the slider-->
+  <string name="slider_thumb">Bouton du curseur</string>
+  <!--Content description for the label at the start (minimum) of the slider-->
+  <string name="slider_start_label">Étiquette de debut de curseur</string>
+  <!--Content description for the label at the end (maximum) of the slider-->
+  <string name="slider_end_label">Étiquette de fin de curseur</string>
   <string name="svg_file_does_not_exist">Le fichier SVG n\'existe pas !</string>
   <string name="capture_image">Prendre une photo</string>
   <string name="choose_image">Choisir une Image</string>
@@ -410,10 +424,7 @@
   <!--##############################################
     # GEO
     ##############################################-->
-  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
-   These strings are only being used to preserve compatibility with pre-existing
-    tile caches, and are not shown in the UI.-->
-    <string name="basemap">Fonds de carte</string>
+  <string name="basemap">Fonds de carte</string>
   <string name="basemap_source">Source</string>
   <string name="basemap_source_unavailable">Désolé, %s carte de base ne sont pas disponibles sur ce terminal. Merci d\'en choisir une autre dans Paramètres &gt; Cartes.</string>
   <string name="map_style_label">Style de carte %s</string>
@@ -424,10 +435,10 @@
   <string name="light" tools:ignore="UnusedResources">Clair</string>
   <string name="dark" tools:ignore="UnusedResources">Foncé</string>
   <string name="outdoors" tools:ignore="UnusedResources">En exterieur</string>
-  <string name="topographic">Topographique</string>
+  <string name="topographic" tools:ignore="UnusedResources">Topographique</string>
   <string name="google_play_services_error_occured">Impossible d’accéder à Google Maps. Google Play Services est-il installé ?</string>
-  <string name="carto_map_style_positron">Positron</string>
-  <string name="carto_map_style_dark_matter">Matière Sombre</string>
+  <string name="carto_map_style_positron" tools:ignore="UnusedResources">Positron</string>
+  <string name="carto_map_style_dark_matter" tools:ignore="UnusedResources">Matière Sombre</string>
   <!--Title for the offline layer section of settings-->
   <string name="offline_layer">Couches hors ligne</string>
   <!--Label for the offline layer setting-->
@@ -463,7 +474,7 @@
   <string name="current_project_option">Projet courant seulement</string>
   <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
   <string name="delete_layer_confirmation_message">Voulez-vous vraiment supprimer la couche hors ligne %1$s?</string>
-  <string name="record_geopoint">Enregistrer un point</string>
+  <string name="record_geopoint">Ajouter un marqueur</string>
   <string name="location_accuracy">Précision : %1$s</string>
   <string name="location_accuracy_unacceptable">⚠️ Précision : %1$s (insuffisante)</string>
   <string name="provider_disabled_error">Désolé, le fournisseur de localisation est désactivé.</string>
@@ -716,7 +727,7 @@
   <string name="change_password">Mot de passe ODK</string>
   <string name="password_error_whitespace">Les espaces ne sont pas permis au début ou à la fin du mot de passe</string>
   <string name="username_error_whitespace">Les espaces ne sont pas permis au début ou à la fin du nom d\'utilisateur</string>
-    <string name="language">Langue</string>
+  <string name="language">Langue</string>
   <string name="use_device_language">Utiliser la langue de l\'appareil</string>
   <string name="font_size">Taille de la Police</string>
   <string name="change_font_size">Taille de la Police</string>
@@ -784,9 +795,9 @@
   <!--Name of setting for enabling guidance hints while filling forms. Guidance hints are meant for training or other specialized contexts.-->
   <string name="guidance_hint_title">Afficher les instructions supplémentaires (guidance hints)</string>
   <string name="guidance_no">Non</string>
-  <string name="guidance_yes">Oui - toujours visible</string>
+  <string name="guidance_yes">Oui - toujours visibles</string>
   <!--Guidance hints can be displayed behind an icon that must be tapped to reveal the hint.-->
-  <string name="guidance_yes_collapsed">Oui - replié par défaut</string>
+  <string name="guidance_yes_collapsed">Oui - repliées par défaut</string>
   <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
   <string name="external_app_recording">Enregistrer l\'audio avec une appli externe</string>
   <string name="form_import_category">Import de formulaire</string>
@@ -1029,6 +1040,8 @@
     ##############################################-->
   <string name="crash_last_run">L\'application a rencontré un problème durant l\'usage précédent!</string>
   <string name="cant_start_app">Impossible de démarrer l\'application!</string>
+  <!--Message shown when the app crashed due to running out of memory last time it was run.-->
+  <string name="crash_oom_description">Votre appareil manque de mémoire. Veuillez fermer les autres applications et rouvrir le formulaire. Si le problème persiste, le formulaire ou ses données sont peut-être trop volumineux ou complexes pour cet appareil. Veuillez contacter la personne qui vous a demandé d\'utiliser ce formulaire.</string>
   <!--##############################################
     # Google Drive deprecation
     ##############################################-->

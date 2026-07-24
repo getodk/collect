@@ -170,6 +170,13 @@ N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</strin
   <string name="rank_items">Shyira ku murongo/Tondeka</string>
   <string name="number_picker_title">Agafata mibare</string>
   <string name="invalid_range_widget">Ibyo wagaragaje muri ubu buryo ntagaciro byahawe! </string>
+  <!--Content description for a horizontal slider used in range widgets-->
+  <!--Content description for a vertical slider used in range widgets-->
+  <!--Content description for the label showing the current value of the slider-->
+  <!--Content description for each tick mark on the slider indicating discrete steps-->
+  <!--Content description for the draggable thumb handle of the slider-->
+  <!--Content description for the label at the start (minimum) of the slider-->
+  <!--Content description for the label at the end (maximum) of the slider-->
   <string name="svg_file_does_not_exist">Ububiko bwa SVG ntabwo buboneka! </string>
   <string name="capture_image">Fata ifoto </string>
   <string name="choose_image">Hitamo Ishusho</string>
@@ -352,10 +359,7 @@ N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</strin
   <!--##############################################
     # GEO
     ##############################################-->
-  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
-   These strings are only being used to preserve compatibility with pre-existing
-    tile caches, and are not shown in the UI.-->
-    <string name="basemap">Indangamimerere igaragaza amakuru.</string>
+  <string name="basemap">Indangamimerere igaragaza amakuru.</string>
   <string name="basemap_source">Aho byatangiriye</string>
   <string name="map_style_label">1%s imiterere ya ikarita</string>
   <string name="streets">Imihanda</string>
@@ -365,10 +369,10 @@ N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</strin
   <string name="light" tools:ignore="UnusedResources">Itara</string>
   <string name="dark" tools:ignore="UnusedResources">Ubwijima</string>
   <string name="outdoors" tools:ignore="UnusedResources">ikirere</string>
-  <string name="topographic">Amakuru y\'aho uhagaze</string>
+  <string name="topographic" tools:ignore="UnusedResources">Amakuru y\'aho uhagaze</string>
   <string name="google_play_services_error_occured">Ntibishoka ko ukoresha ikarita iranga ahantu.Reba ko waba ufite google play muri telefone yawe</string>
-  <string name="carto_map_style_positron">Utunyangingo.</string>
-  <string name="carto_map_style_dark_matter">Ibibazo bidasobanutse cg byijimye.</string>
+  <string name="carto_map_style_positron" tools:ignore="UnusedResources">Utunyangingo.</string>
+  <string name="carto_map_style_dark_matter" tools:ignore="UnusedResources">Ibibazo bidasobanutse cg byijimye.</string>
   <!--Title for the offline layer section of settings-->
   <!--Label for the offline layer setting-->
   <!--Title for the screen that allows the user to select a offline layer for maps-->
@@ -384,7 +388,6 @@ N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</strin
   <!--Text for option where layer should be available to all projects-->
   <!--Text for option where layer should be available to the current project only-->
   <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
-  <string name="record_geopoint">Irabika amakuru</string>
   <string name="provider_disabled_error">Ihangane, ibituma amakuru y\'ahantu afatwa birafunze</string>
   <string name="google_play_services_not_available">Iyi form irashaka kugenzura aho uherereye, ariko Google Play Services ntabwo iboneka</string>
   <string name="location_providers_disabled_dialog_message">Iyi nyandiko shingiro irashaka kugenzura aho uherereye, ariko banyirigikorwa baho ntabwo bemejwe. Usabwa kwemeza igenamiterere ya Android.</string>
@@ -571,7 +574,7 @@ N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</strin
   <string name="change_password">Ijambo banga rya ODK</string>
   <string name="password_error_whitespace">Mu ijambobanga ahantu hariho ubusa ntibyemewe </string>
   <string name="username_error_whitespace">Kuzuza ahantu hariho ubusa ntabwo byemewe mu izina ugomba gukoresha </string>
-    <string name="language">Ururimi</string>
+  <string name="language">Ururimi</string>
   <string name="use_device_language">Kurikiza imikorere y\'igikoresho</string>
   <string name="font_size">Ingano y\'amagambo</string>
   <string name="change_font_size">Ingano y\'amagambo</string>
@@ -839,16 +842,10 @@ Birashoboka ko ari zimwe zashyizwemo mubihe bitandukanye cgw ziturutse ahatanduk
   <!--##############################################
     # Crash handling
     ##############################################-->
+  <!--Message shown when the app crashed due to running out of memory last time it was run.-->
   <!--##############################################
     # Google Drive deprecation
     ##############################################-->
-  <!--##############################################
-    # Min SDK deprecation banner
-    ##############################################-->
-  <!--First part of the message shown in the banner, informing the user that their device will soon be unsupported-->
-  <!--Second part of the message shown in the banner, informing the user that their device will soon be unsupported-->
-  <!--Button text that opens a forum post with more information about upcoming device support changes-->
-  <!--Button text to dismiss the banner-->
   <!--##############################################
     # Developer tools
     ##############################################-->

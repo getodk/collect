@@ -184,6 +184,13 @@
   <string name="rank_items">Pangilia vitu</string>
   <string name="number_picker_title">Kichaguzi cha nambari</string>
   <string name="invalid_range_widget">Widget hii  ina vigezo batili!</string>
+  <!--Content description for a horizontal slider used in range widgets-->
+  <!--Content description for a vertical slider used in range widgets-->
+  <!--Content description for the label showing the current value of the slider-->
+  <!--Content description for each tick mark on the slider indicating discrete steps-->
+  <!--Content description for the draggable thumb handle of the slider-->
+  <!--Content description for the label at the start (minimum) of the slider-->
+  <!--Content description for the label at the end (maximum) of the slider-->
   <string name="svg_file_does_not_exist">Kabrasha la SVG halipo</string>
   <string name="capture_image">Chukua picha</string>
   <string name="choose_image">Chagua picha</string>
@@ -342,10 +349,7 @@
   <!--##############################################
     # GEO
     ##############################################-->
-  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
-   These strings are only being used to preserve compatibility with pre-existing
-    tile caches, and are not shown in the UI.-->
-    <string name="basemap">Ramani msingi</string>
+  <string name="basemap">Ramani msingi</string>
   <string name="basemap_source">Chanzo</string>
   <string name="map_style_label">%s aina ya ramani</string>
   <string name="streets">Mitaa</string>
@@ -355,10 +359,10 @@
   <string name="light" tools:ignore="UnusedResources">Mwanga</string>
   <string name="dark" tools:ignore="UnusedResources">Giza</string>
   <string name="outdoors" tools:ignore="UnusedResources">Nje</string>
-  <string name="topographic">Picha mpya</string>
+  <string name="topographic" tools:ignore="UnusedResources">Picha mpya</string>
   <string name="google_play_services_error_occured">Upatikanaji wa ramani za google umeshindikana. Je, huduma ya Google Play imesakinishwa kwenye simu?</string>
-  <string name="carto_map_style_positron">Positron</string>
-  <string name="carto_map_style_dark_matter">Jambo la Giza</string>
+  <string name="carto_map_style_positron" tools:ignore="UnusedResources">Positron</string>
+  <string name="carto_map_style_dark_matter" tools:ignore="UnusedResources">Jambo la Giza</string>
   <!--Title for the offline layer section of settings-->
   <!--Label for the offline layer setting-->
   <!--Title for the screen that allows the user to select a offline layer for maps-->
@@ -374,7 +378,6 @@
   <!--Text for option where layer should be available to all projects-->
   <!--Text for option where layer should be available to the current project only-->
   <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
-  <string name="record_geopoint">Rekodi pointi</string>
   <string name="provider_disabled_error">Samahani, kionesha mahali hakijawezeshwa!</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Displayed in the form filling menu when a form has background location enabled-->
@@ -526,7 +529,7 @@
   <string name="change_password">Nenosiri la ODK</string>
   <string name="password_error_whitespace">Nafasi za wazi kabla au baada ya nywila \"neno la siri\" hairuhusiwi</string>
   <string name="username_error_whitespace">Nafasi za wazi kabla au baada ya jina la mtumiaji haziruhusiwi</string>
-    <string name="language">Lugha</string>
+  <string name="language">Lugha</string>
   <string name="use_device_language">Tumia lugha ya kifaa</string>
   <string name="font_size">Ukubwa wa maandishi</string>
   <string name="change_font_size">Ukubwa wa maandishi</string>
@@ -760,16 +763,10 @@
   <!--##############################################
     # Crash handling
     ##############################################-->
+  <!--Message shown when the app crashed due to running out of memory last time it was run.-->
   <!--##############################################
     # Google Drive deprecation
     ##############################################-->
-  <!--##############################################
-    # Min SDK deprecation banner
-    ##############################################-->
-  <!--First part of the message shown in the banner, informing the user that their device will soon be unsupported-->
-  <!--Second part of the message shown in the banner, informing the user that their device will soon be unsupported-->
-  <!--Button text that opens a forum post with more information about upcoming device support changes-->
-  <!--Button text to dismiss the banner-->
   <!--##############################################
     # Developer tools
     ##############################################-->

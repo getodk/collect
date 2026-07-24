@@ -131,6 +131,13 @@
   <!--Prompt under view finder to describe where to place the camera to scan a barcode-->
   <!--Label for button that rotates camera orientation when scanning barcodes-->
   <string name="open_file">Åben fil</string>
+  <!--Content description for a horizontal slider used in range widgets-->
+  <!--Content description for a vertical slider used in range widgets-->
+  <!--Content description for the label showing the current value of the slider-->
+  <!--Content description for each tick mark on the slider indicating discrete steps-->
+  <!--Content description for the draggable thumb handle of the slider-->
+  <!--Content description for the label at the start (minimum) of the slider-->
+  <!--Content description for the label at the end (maximum) of the slider-->
   <string name="capture_image">Tag billede</string>
   <string name="choose_image">Vælg billede</string>
   <string name="error_front_camera_unavailable">Frontkamera er ikke tilgængeligt på dette device</string>
@@ -231,10 +238,7 @@
   <!--##############################################
     # GEO
     ##############################################-->
-  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
-   These strings are only being used to preserve compatibility with pre-existing
-    tile caches, and are not shown in the UI.-->
-    <string name="basemap">Basemap</string>
+  <string name="basemap">Basemap</string>
   <string name="basemap_source">Kilde</string>
   <string name="streets">Gader</string>
   <string name="terrain">Terræn</string>
@@ -243,8 +247,8 @@
   <string name="light" tools:ignore="UnusedResources">Lys</string>
   <string name="dark" tools:ignore="UnusedResources">Mørk</string>
   <string name="outdoors" tools:ignore="UnusedResources">Udendørs</string>
-  <string name="topographic">Topografisk</string>
-  <string name="carto_map_style_positron">Positron</string>
+  <string name="topographic" tools:ignore="UnusedResources">Topografisk</string>
+  <string name="carto_map_style_positron" tools:ignore="UnusedResources">Positron</string>
   <!--Title for the offline layer section of settings-->
   <!--Label for the offline layer setting-->
   <!--Title for the screen that allows the user to select a offline layer for maps-->
@@ -416,7 +420,7 @@
   <string name="change_username">ODK brugernavn</string>
   <string name="password">Adgangskode</string>
   <string name="change_password">ODK kodeord</string>
-    <string name="language">Sprog</string>
+  <string name="language">Sprog</string>
   <string name="font_size">Skriftstørrelse</string>
   <string name="change_font_size">Skriftstørrelse</string>
   <string name="font_size_extra_large">Ekstra stor</string>
@@ -578,16 +582,10 @@
   <!--##############################################
     # Crash handling
     ##############################################-->
+  <!--Message shown when the app crashed due to running out of memory last time it was run.-->
   <!--##############################################
     # Google Drive deprecation
     ##############################################-->
-  <!--##############################################
-    # Min SDK deprecation banner
-    ##############################################-->
-  <!--First part of the message shown in the banner, informing the user that their device will soon be unsupported-->
-  <!--Second part of the message shown in the banner, informing the user that their device will soon be unsupported-->
-  <!--Button text that opens a forum post with more information about upcoming device support changes-->
-  <!--Button text to dismiss the banner-->
   <!--##############################################
     # Developer tools
     ##############################################-->
