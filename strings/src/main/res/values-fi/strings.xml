@@ -121,13 +121,13 @@
   <!--Title of the end of form screen-->
   <string name="save_enter_data_description">Olet lomakkeen %s lopussa.</string>
   <!--Text shown in an information box on the end of form screen when auto-send is off or the device is offline-->
-  <string name="form_editing_disabled_after_finalizing">Muokkauksia ei voi tehdä viimeistelyn jälkeen.</string>
+  <string name="form_editing_disabled_after_finalizing">Ei voi muokata viimeistelyn jälkeen</string>
   <!--Text shown in an information box on the end of form screen when auto-send is on and the device is online-->
-  <string name="form_editing_disabled_after_sending">Muokkauksia ei voi tehdä lähettämisen jälkeen.</string>
+  <string name="form_editing_disabled_after_sending">Ei voi muokata lähettämisen jälkeen</string>
   <!--Text shown in an information box on the end of form screen when auto-send is off and the form allows edits after finalize/send-->
-  <string name="form_editing_enabled_after_finalizing">Muokkauksia voi tehdä viimeistelyn jälkeen.</string>
+  <string name="form_editing_enabled_after_finalizing">Voi muokata viimeistelyn jälkeen</string>
   <!--Text shown in an information box on the end of form screen when auto-send is on and the form allows edits after finalize/send-->
-  <string name="form_editing_enabled_after_sending">Muokkauksia voi tehdä lähettämisen jälkeen.</string>
+  <string name="form_editing_enabled_after_sending">Voi muokata lähettämisen jälkeen</string>
   <!--Details shown in an information box on the end of form screen when the form does not allow edits after finalize/send-->
   <string name="form_editing_disabled_hint">Jos sinun tarvitsee tehdä muutoksia lomakkeeseesi, \"Tallenna luonnoksena\" kunnes olet valmis lähettämään.</string>
   <!--Details shown in an information box on the end of form screen when the form allows edits after finalization-->
@@ -207,6 +207,20 @@
   <string name="rank_items">Järjestä</string>
   <string name="number_picker_title">Numerovalitsin</string>
   <string name="invalid_range_widget">Tällä widgetillä on väärät asetukset!</string>
+  <!--Content description for a horizontal slider used in range widgets-->
+  <string name="horizontal_slider">Vaakasäädin</string>
+  <!--Content description for a vertical slider used in range widgets-->
+  <string name="vertical_slider">Pystysäädin</string>
+  <!--Content description for the label showing the current value of the slider-->
+  <string name="current_slider_value">Tämänhetkinen säätimen arvo</string>
+  <!--Content description for each tick mark on the slider indicating discrete steps-->
+  <string name="slider_tick">Säätimen merkki</string>
+  <!--Content description for the draggable thumb handle of the slider-->
+  <string name="slider_thumb">Säätimen kahva</string>
+  <!--Content description for the label at the start (minimum) of the slider-->
+  <string name="slider_start_label">Säätimen alun nimiö</string>
+  <!--Content description for the label at the end (maximum) of the slider-->
+  <string name="slider_end_label">Säätimen lopun nimiö</string>
   <string name="svg_file_does_not_exist">SVG-tiedosto puuttuu!</string>
   <string name="capture_image">Ota kuva</string>
   <string name="choose_image">Valitse kuva</string>
@@ -410,10 +424,7 @@
   <!--##############################################
     # GEO
     ##############################################-->
-  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
-   These strings are only being used to preserve compatibility with pre-existing
-    tile caches, and are not shown in the UI.-->
-    <string name="basemap">Peruskartta</string>
+  <string name="basemap">Peruskartta</string>
   <string name="basemap_source">Lähde</string>
   <string name="basemap_source_unavailable">Pahoittelut, %s pohjakartat eivät ole käytettävissä tällä laitteella. Ole hyvä ja valitse toinen pohjakartta kohdassa Asetukset &gt; Kartat.</string>
   <string name="map_style_label">%s kartan tyyli</string>
@@ -424,10 +435,10 @@
   <string name="light" tools:ignore="UnusedResources">Vaalea</string>
   <string name="dark" tools:ignore="UnusedResources">Tumma</string>
   <string name="outdoors" tools:ignore="UnusedResources">Ulkoilma</string>
-  <string name="topographic">Topografinen</string>
+  <string name="topographic" tools:ignore="UnusedResources">Topografinen</string>
   <string name="google_play_services_error_occured">Google Maps -palveluun ei saada yhteyttä. Onko Google Play Services asennettu?</string>
-  <string name="carto_map_style_positron">Positroni</string>
-  <string name="carto_map_style_dark_matter">Pimeä aine</string>
+  <string name="carto_map_style_positron" tools:ignore="UnusedResources">Positroni</string>
+  <string name="carto_map_style_dark_matter" tools:ignore="UnusedResources">Pimeä aine</string>
   <!--Title for the offline layer section of settings-->
   <string name="offline_layer">Offlinetasot</string>
   <!--Label for the offline layer setting-->
@@ -462,7 +473,7 @@
   <string name="current_project_option">Vain tässä projektissa</string>
   <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
   <string name="delete_layer_confirmation_message">Haluatko varmasti poistaa offline-tason %1$s?</string>
-  <string name="record_geopoint">Tallenna piste</string>
+  <string name="record_geopoint">Lisää merkki</string>
   <string name="location_accuracy">Tarkkuus: %1$s</string>
   <string name="location_accuracy_unacceptable">⚠️ Tarkkuus: %1$s (ei hyväksyttävä)</string>
   <string name="provider_disabled_error">Pahoittelut, sijaintitiedot eivät ole käytössä!</string>
@@ -712,7 +723,7 @@
   <string name="change_password">ODK salasana</string>
   <string name="password_error_whitespace">Salasanan alussa tai lopussa ei saa olla välilyöntimerkkejä</string>
   <string name="username_error_whitespace">Käyttäjänimen alussa tai lopussa ei saa olla välilyöntimerkkejä</string>
-    <string name="language">Kieli</string>
+  <string name="language">Kieli</string>
   <string name="use_device_language">Käytä laitteen oletuskieltä</string>
   <string name="font_size">Tekstin koko</string>
   <string name="change_font_size">Tekstin koko</string>
@@ -1024,6 +1035,8 @@
     ##############################################-->
   <string name="crash_last_run">Sovellus kaatui viime käyttökerralla!</string>
   <string name="cant_start_app">Sovelluksen käynnistys ei onnistu!</string>
+  <!--Message shown when the app crashed due to running out of memory last time it was run.-->
+  <string name="crash_oom_description">Laitteessasi ei ole tarpeeksi muistia. Yritä sulkea muita sovelluksia ja avata lomake uudelleen. Jos ongelma jatkuu, lomake tai sen tiedot saattavat olla liian suuria tai monimutkaisia tälle laitteelle. Ota yhteyttä henkilöön, joka pyysi sinua käyttämään lomaketta.</string>
   <!--##############################################
     # Google Drive deprecation
     ##############################################-->

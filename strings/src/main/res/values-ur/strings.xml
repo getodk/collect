@@ -196,6 +196,13 @@
   <string name="rank_items"> رینک آئٹمز</string>
   <string name="number_picker_title">نمبر منتخب کرنے کی جگہ</string>
   <string name="invalid_range_widget">اس ویجیٹ میں غلط پیرامیٹرز ہیں!</string>
+  <!--Content description for a horizontal slider used in range widgets-->
+  <!--Content description for a vertical slider used in range widgets-->
+  <!--Content description for the label showing the current value of the slider-->
+  <!--Content description for each tick mark on the slider indicating discrete steps-->
+  <!--Content description for the draggable thumb handle of the slider-->
+  <!--Content description for the label at the start (minimum) of the slider-->
+  <!--Content description for the label at the end (maximum) of the slider-->
   <string name="svg_file_does_not_exist">SVG فائل موجود نہیں ہے </string>
   <string name="capture_image">تصویر لیں</string>
   <string name="choose_image">تصویر کا انتخاب کریں</string>
@@ -383,10 +390,7 @@
   <!--##############################################
     # GEO
     ##############################################-->
-  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
-   These strings are only being used to preserve compatibility with pre-existing
-    tile caches, and are not shown in the UI.-->
-    <string name="basemap">بیس میپ</string>
+  <string name="basemap">بیس میپ</string>
   <string name="basemap_source">ذریعہ</string>
   <string name="basemap_source_unavailable">ہم معذرت خواہ ہیں کہ اس فون پہ basemaps %s موجود نہیں ہیں۔ براہ مہربانی سیٹنگز &gt; Maps میں سے کوئی اور basemap منتخب کریں۔</string>
   <string name="map_style_label">%s میپ کا سٹائل</string>
@@ -397,10 +401,10 @@
   <string name="light" tools:ignore="UnusedResources">لائٹ/ہلکا رنگ</string>
   <string name="dark" tools:ignore="UnusedResources">ڈارک/گہرا رنگ</string>
   <string name="outdoors" tools:ignore="UnusedResources">باہر</string>
-  <string name="topographic">جغرافیائی</string>
+  <string name="topographic" tools:ignore="UnusedResources">جغرافیائی</string>
   <string name="google_play_services_error_occured">گوگل میپس تک رسائی حاصل کرنے میں ناکام۔ کیا گوگل پلے سروسز  انسٹالڈہے؟</string>
-  <string name="carto_map_style_positron">Positron</string>
-  <string name="carto_map_style_dark_matter">Dark Matter</string>
+  <string name="carto_map_style_positron" tools:ignore="UnusedResources">Positron</string>
+  <string name="carto_map_style_dark_matter" tools:ignore="UnusedResources">Dark Matter</string>
   <!--Title for the offline layer section of settings-->
   <!--Label for the offline layer setting-->
   <!--Title for the screen that allows the user to select a offline layer for maps-->
@@ -416,7 +420,6 @@
   <!--Text for option where layer should be available to all projects-->
   <!--Text for option where layer should be available to the current project only-->
   <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
-  <string name="record_geopoint">پوائنٹ کو ریکارڈ کریں</string>
   <string name="provider_disabled_error">معذرت، لوکیشن فراہم کرنے والے نااہل کئے گئے ہیں</string>
   <string name="google_play_services_not_available">یہ فارم آپ کی لوکیشن کو ریکارڈ کرنا چاہتا ہے، مگر Google Play Services دستیاب نہیں ہیں۔</string>
   <string name="location_providers_disabled_dialog_message">یہ فارم آپ کی لوکیشن حاصل کرنا چاہتا ہے، لیکن لوکیشن سیٹنگ بند ہے۔ براہ مہربانی اس کو اینڈرائڈ سیٹنگز سے کھولیں۔</string>
@@ -645,7 +648,7 @@
   <string name="change_password">  ODK  کا پاس ورڈ</string>
   <string name="password_error_whitespace">پاس ورڈز میں شروع اور بعد میں سپیسس کی اجازت نہیں ہے</string>
   <string name="username_error_whitespace">صارف کےناموں میں شروع اور بعد میں سپیسس کی اجازت نہیں ہے</string>
-    <string name="language">زبان </string>
+  <string name="language">زبان </string>
   <string name="use_device_language">ڈیوائس کی زبان استعمال کریں</string>
   <string name="font_size">ٹیکسٹ فونٹ سائز</string>
   <string name="change_font_size">ٹیکسٹ فونٹ سائز</string>
@@ -958,6 +961,7 @@ Constraint processing</string>
     ##############################################-->
   <string name="crash_last_run">پچھلی دفعہ یہ ایپ کریش ہو گئی تھی</string>
   <string name="cant_start_app">ایپ سٹارٹ نہیں ہو سکتی!</string>
+  <!--Message shown when the app crashed due to running out of memory last time it was run.-->
   <!--##############################################
     # Google Drive deprecation
     ##############################################-->

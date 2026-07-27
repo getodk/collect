@@ -164,6 +164,13 @@
   <string name="rank_items">ర్యాంక్ అంశాలు</string>
   <string name="number_picker_title">నెంబర్ ను ఎంచుకునేది </string>
   <string name="invalid_range_widget">ఈ విడ్జెట్ లో చెల్లని ప్రాతిపదికలు కలిగి ఉంది!</string>
+  <!--Content description for a horizontal slider used in range widgets-->
+  <!--Content description for a vertical slider used in range widgets-->
+  <!--Content description for the label showing the current value of the slider-->
+  <!--Content description for each tick mark on the slider indicating discrete steps-->
+  <!--Content description for the draggable thumb handle of the slider-->
+  <!--Content description for the label at the start (minimum) of the slider-->
+  <!--Content description for the label at the end (maximum) of the slider-->
   <string name="svg_file_does_not_exist">SVG ఫైల్ ఉనికిలో లేదు!</string>
   <string name="capture_image">ఫోటో తియ్యి</string>
   <string name="choose_image">ఫోటో ని ఎంచుకోండి</string>
@@ -330,10 +337,7 @@
   <!--##############################################
     # GEO
     ##############################################-->
-  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
-   These strings are only being used to preserve compatibility with pre-existing
-    tile caches, and are not shown in the UI.-->
-    <string name="basemap">బేస్ మ్యాప్</string>
+  <string name="basemap">బేస్ మ్యాప్</string>
   <string name="basemap_source">ఆధారం</string>
   <string name="map_style_label">%s మ్యాప్ శైలి</string>
   <string name="streets">స్ట్రీట్స్</string>
@@ -343,10 +347,10 @@
   <string name="light" tools:ignore="UnusedResources">Light</string>
   <string name="dark" tools:ignore="UnusedResources">Dark</string>
   <string name="outdoors" tools:ignore="UnusedResources">బయటి ప్రదేశాలు</string>
-  <string name="topographic">Topographic</string>
+  <string name="topographic" tools:ignore="UnusedResources">Topographic</string>
   <string name="google_play_services_error_occured">Google మ్యాప్స్‌ను యాక్సెస్ చేయడం సాధ్యం కాట్లేదు. Google Play సేవలు ఇన్‌స్టాల్ చేయబడిందా?</string>
-  <string name="carto_map_style_positron">Positron</string>
-  <string name="carto_map_style_dark_matter">Dark Matter</string>
+  <string name="carto_map_style_positron" tools:ignore="UnusedResources">Positron</string>
+  <string name="carto_map_style_dark_matter" tools:ignore="UnusedResources">Dark Matter</string>
   <!--Title for the offline layer section of settings-->
   <!--Label for the offline layer setting-->
   <!--Title for the screen that allows the user to select a offline layer for maps-->
@@ -362,7 +366,6 @@
   <!--Text for option where layer should be available to all projects-->
   <!--Text for option where layer should be available to the current project only-->
   <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
-  <string name="record_geopoint">ఒక పాయింట్ రికార్డ్ చేయండి</string>
   <string name="provider_disabled_error">క్షమించండి, లొకేషన్ ప్రొవైడర్లు డిసేబుల్ చెయ్యబడ్డాయి!</string>
   <string name="google_play_services_not_available">ఈ ఫారం మీ స్థానాన్ని ట్రాక్ చేయాలనుకుంటుంది, కానీ గూగుల్ ప్లే సేవలు అందుబాటులో లేవు.</string>
   <string name="location_providers_disabled_dialog_message">ఈ ఫారం మీ స్థానాన్ని ట్రాక్ చేయాలనుకుంటుంది కాని స్థాన ప్రొవైడర్లు నిలిపివేయబడ్డారు. దయచేసి Android సెట్టింగ్‌లలో ప్రారంభించండి.</string>
@@ -539,7 +542,7 @@
   <string name="change_password">ODK పాస్ వర్డ్ </string>
   <string name="password_error_whitespace">పాస్ వర్డ్ ముందు లేదా తరువాత స్పేస్ ఉండకూడదు </string>
   <string name="username_error_whitespace">యూసర్ నేమ్ లో ముందు లేదా తరువాత స్పేస్ ఉండకూడదు </string>
-    <string name="language">భాష</string>
+  <string name="language">భాష</string>
   <string name="use_device_language">పరికర భాషను ఉపయోగించండి</string>
   <string name="font_size">అక్షరాల సైజు </string>
   <string name="change_font_size">అక్షరాల సైజు  </string>
@@ -775,6 +778,7 @@
   <!--##############################################
     # Crash handling
     ##############################################-->
+  <!--Message shown when the app crashed due to running out of memory last time it was run.-->
   <!--##############################################
     # Google Drive deprecation
     ##############################################-->

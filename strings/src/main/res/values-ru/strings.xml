@@ -85,6 +85,7 @@
   <!--Text of button from the form's table of contents to navigate out of a group or a repeat-->
   <string name="jump_to_previous">Назад</string>
   <!--Text of button from the form's table of contents to edit a finalized form-->
+  <string name="edit_finalized_form">Редактировать финальные формы</string>
   <!--Displayed below group names in a form's table of contents-->
   <string name="group_label">Группа</string>
   <!--Displayed below repeat names in a form's table of contents-->
@@ -95,6 +96,7 @@
   <!--Text of button from the 'Add new repeat' dialog to confirm adding a repeat-->
   <string name="add_repeat">Добавить</string>
   <!--Text of button from the 'Add new repeat' dialog to cancel adding a repeat-->
+  <string name="do_not_add_repeat">Не добавлять</string>
   <string name="add_another_menu">Добавить другое</string>
   <!--Title of overlay menu displayed when long pressing on a question in a form-->
   <string name="edit_prompt">Изменить вопрос</string>
@@ -197,6 +199,13 @@
   <string name="rank_items">Сортировать</string>
   <string name="number_picker_title">Выбор номера</string>
   <string name="invalid_range_widget">У этого виджета неправильные параметры!</string>
+  <!--Content description for a horizontal slider used in range widgets-->
+  <!--Content description for a vertical slider used in range widgets-->
+  <!--Content description for the label showing the current value of the slider-->
+  <!--Content description for each tick mark on the slider indicating discrete steps-->
+  <!--Content description for the draggable thumb handle of the slider-->
+  <!--Content description for the label at the start (minimum) of the slider-->
+  <!--Content description for the label at the end (maximum) of the slider-->
   <string name="svg_file_does_not_exist">SVG файл не найден!</string>
   <string name="capture_image">Сделать снимок</string>
   <string name="choose_image">Выберите изображение</string>
@@ -375,10 +384,7 @@
   <!--##############################################
     # GEO
     ##############################################-->
-  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
-   These strings are only being used to preserve compatibility with pre-existing
-    tile caches, and are not shown in the UI.-->
-    <string name="basemap">Подложка</string>
+  <string name="basemap">Подложка</string>
   <string name="basemap_source">Источник</string>
   <string name="basemap_source_unavailable">К сожалению, базовые карты %s недоступны на этом устройстве. Выберите другую базовую карту в разделе Настройки &gt; Карты.</string>
   <string name="map_style_label">%s стиль карты</string>
@@ -389,7 +395,7 @@
   <string name="light" tools:ignore="UnusedResources">Светлая</string>
   <string name="dark" tools:ignore="UnusedResources">Тёмная</string>
   <string name="outdoors" tools:ignore="UnusedResources">Снаружи</string>
-  <string name="topographic">Топографический</string>
+  <string name="topographic" tools:ignore="UnusedResources">Топографический</string>
   <string name="google_play_services_error_occured">Не удалось получить доступ к Google картам. Установлен ли Google Play Services?</string>
   <!--Title for the offline layer section of settings-->
   <string name="offline_layer">Оффлайн слои</string>
@@ -421,7 +427,6 @@
   <string name="current_project_option">Только текущий проект</string>
   <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
   <string name="delete_layer_confirmation_message">Вы уверены, что хотите удалить оффлайн слой %1$s?</string>
-  <string name="record_geopoint">Зафиксировать точку</string>
   <string name="provider_disabled_error">Включите функцию определения местоположения на вашем устройстве!</string>
   <string name="google_play_services_not_available">Эта форма хочет отслеживать ваше местоположение, но сервисы Google Play недоступны.</string>
   <string name="location_providers_disabled_dialog_message">Эта форма хочет отслеживать ваше местоположение, но определение местоположения отключено. Включите в настройках Android.</string>
@@ -640,7 +645,7 @@
   <string name="change_password">Пароль ODK</string>
   <string name="password_error_whitespace">Не допускается использовать пробелы в начале и конце пароля</string>
   <string name="username_error_whitespace">Не допускается использовать пробелы в начале и конце имени пользователя</string>
-    <string name="language">Язык</string>
+  <string name="language">Язык</string>
   <string name="use_device_language">Использовать язык устройства</string>
   <string name="font_size">Размер шрифта</string>
   <string name="change_font_size">Размер шрифта</string>
@@ -935,11 +940,11 @@
     ##############################################-->
   <string name="crash_last_run">При последнем запуске приложения произошел сбой!</string>
   <string name="cant_start_app">Не удается запустить приложение!</string>
+  <!--Message shown when the app crashed due to running out of memory last time it was run.-->
   <!--##############################################
     # Google Drive deprecation
     ##############################################-->
   <string name="learn_more_button_text">Узнать больше</string>
-  <!--Button text to dismiss the banner-->
   <!--##############################################
     # Developer tools
     ##############################################-->

@@ -121,13 +121,9 @@
   <!--Title of the end of form screen-->
   <string name="save_enter_data_description">Jste na konci %s.</string>
   <!--Text shown in an information box on the end of form screen when auto-send is off or the device is offline-->
-  <string name="form_editing_disabled_after_finalizing">Po dokončení nelze provádět žádné úpravy.</string>
   <!--Text shown in an information box on the end of form screen when auto-send is on and the device is online-->
-  <string name="form_editing_disabled_after_sending">Po odeslání nelze provádět žádné úpravy.</string>
   <!--Text shown in an information box on the end of form screen when auto-send is off and the form allows edits after finalize/send-->
-  <string name="form_editing_enabled_after_finalizing">Úpravy lze provádět i po dokončení.</string>
   <!--Text shown in an information box on the end of form screen when auto-send is on and the form allows edits after finalize/send-->
-  <string name="form_editing_enabled_after_sending">Úpravy lze provádět i po odeslání.</string>
   <!--Details shown in an information box on the end of form screen when the form does not allow edits after finalize/send-->
   <string name="form_editing_disabled_hint">Pokud potřebujete formulář upravit, uložte jej jako návrh, dokud nebudete připraveni k odeslání.</string>
   <!--Details shown in an information box on the end of form screen when the form allows edits after finalization-->
@@ -206,6 +202,13 @@
   <string name="rank_items">Pořadí položek</string>
   <string name="number_picker_title">Výběr čísla</string>
   <string name="invalid_range_widget">Tento widget obsahuje neplatné parametry!</string>
+  <!--Content description for a horizontal slider used in range widgets-->
+  <!--Content description for a vertical slider used in range widgets-->
+  <!--Content description for the label showing the current value of the slider-->
+  <!--Content description for each tick mark on the slider indicating discrete steps-->
+  <!--Content description for the draggable thumb handle of the slider-->
+  <!--Content description for the label at the start (minimum) of the slider-->
+  <!--Content description for the label at the end (maximum) of the slider-->
   <string name="svg_file_does_not_exist">Soubor SVG neexistuje!</string>
   <string name="capture_image">Udělat fotku</string>
   <string name="choose_image">Vyberte obrázek</string>
@@ -408,10 +411,7 @@
   <!--##############################################
     # GEO
     ##############################################-->
-  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
-   These strings are only being used to preserve compatibility with pre-existing
-    tile caches, and are not shown in the UI.-->
-    <string name="basemap">Základní mapa</string>
+  <string name="basemap">Základní mapa</string>
   <string name="basemap_source">Zdroj</string>
   <string name="basemap_source_unavailable">Je nám líto, ale v tomto zařízení nejsou k dispozici základní mapy %s. Vyberte prosím jinou podkladovou mapu v Nastavení &gt; Mapy.</string>
   <string name="map_style_label">%s styl mapy</string>
@@ -422,10 +422,10 @@
   <string name="light" tools:ignore="UnusedResources">Světlý</string>
   <string name="dark" tools:ignore="UnusedResources">Tmavý</string>
   <string name="outdoors" tools:ignore="UnusedResources">Přírodní</string>
-  <string name="topographic">Topografický</string>
+  <string name="topographic" tools:ignore="UnusedResources">Topografický</string>
   <string name="google_play_services_error_occured">Nelze přistupovat k Mapám Google. Je služba Google Play nainstalována?</string>
-  <string name="carto_map_style_positron">Positron</string>
-  <string name="carto_map_style_dark_matter">Temná hmota</string>
+  <string name="carto_map_style_positron" tools:ignore="UnusedResources">Positron</string>
+  <string name="carto_map_style_dark_matter" tools:ignore="UnusedResources">Temná hmota</string>
   <!--Title for the offline layer section of settings-->
   <string name="offline_layer">Offline vrstvy</string>
   <!--Label for the offline layer setting-->
@@ -462,7 +462,6 @@
   <string name="current_project_option">Pouze aktuální projekt</string>
   <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
   <string name="delete_layer_confirmation_message">Opravdu chcete odstranit %1$s vrstvu offline?</string>
-  <string name="record_geopoint">Zaznamenat bod</string>
   <string name="provider_disabled_error">Nástroje pro získání polohy jsou zakázané!</string>
   <string name="google_play_services_not_available">Tento formulář chce sledovat vaši polohu, ale služby Google Play nejsou k dispozici.</string>
   <string name="location_providers_disabled_dialog_message">Tento formulář chce sledovat vaši polohu, ale poskytovatelé polohy jsou zakázáni. Zvolte prosím nastavení v systému Android.</string>
@@ -705,7 +704,7 @@
   <string name="change_password">Heslo do ODK</string>
   <string name="password_error_whitespace">Počáteční nebo koncové mezery v heslech nejsou povoleny </string>
   <string name="username_error_whitespace">Počáteční nebo koncové mezery v uživatelských jménech nejsou povoleny</string>
-    <string name="language">Jazyk</string>
+  <string name="language">Jazyk</string>
   <string name="use_device_language">Použít jazyk zařízení</string>
   <string name="font_size">Velikost písma</string>
   <string name="change_font_size">Velikost písma</string>
@@ -1012,6 +1011,7 @@
     ##############################################-->
   <string name="crash_last_run">Při posledním spuštění aplikace došlo k pádu!</string>
   <string name="cant_start_app">Nelze spustit aplikaci!</string>
+  <!--Message shown when the app crashed due to running out of memory last time it was run.-->
   <!--##############################################
     # Google Drive deprecation
     ##############################################-->
