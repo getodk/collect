@@ -183,12 +183,20 @@ class DrawView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
 
     private fun resetImage(width: Int, height: Int) {
         val backgroundBitmapFile = File(imagePath)
-        if (backgroundBitmapFile.exists()) {
+        val loadedBitmap = if (backgroundBitmapFile.exists()) {
             val options = BitmapFactory.Options()
             options.inSampleSize = backgroundBitmapFile.calculateSampleSize(4096)
+            ImageFileUtils.getBitmap(backgroundBitmapFile.absolutePath, options)
+                ?.copy(Bitmap.Config.ARGB_8888, true)
+        } else {
+            null
+        }
 
-            bitmap = ImageFileUtils.getBitmap(backgroundBitmapFile.absolutePath, options)!!
-                .copy(Bitmap.Config.ARGB_8888, true)
+        // Treat a missing or undecodable background the same: blank canvas.
+        // Some camera/device images (or corrupt files) fail BitmapFactory.decodeFile
+        // and previously crashed via !! on a null decode result.
+        if (loadedBitmap != null) {
+            bitmap = loadedBitmap
             canvas = Canvas(bitmap)
         } else {
             bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)

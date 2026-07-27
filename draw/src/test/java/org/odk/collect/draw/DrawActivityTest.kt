@@ -12,6 +12,7 @@ import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.CoreMatchers.notNullValue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -140,5 +141,30 @@ internal class DrawActivityTest {
         val savedImage = BitmapFactory.decodeFile(imagePath)
         assertThat(savedImage.width, equalTo(50))
         assertThat(savedImage.height, equalTo(3000))
+    }
+
+    @Test
+    @Config(qualifiers = "w400dp-h700dp-mdpi")
+    fun `does not crash when annotating an image that cannot be decoded`() {
+        val invalidImageFile = TempFiles.createTempFile(".jpg")
+        invalidImageFile.writeText("not an image")
+
+        val intent = Intent(getApplicationContext(), DrawActivity::class.java).apply {
+            putExtra(DrawActivity.SCREEN_ORIENTATION, 1)
+            putExtra(DrawActivity.OPTION, DrawActivity.OPTION_ANNOTATE)
+            putExtra(DrawActivity.REF_IMAGE, Uri.fromFile(invalidImageFile))
+        }
+        val scenario = launcherRule.launchForResult<DrawActivity>(intent)
+
+        assertThat(scenario.isFinishing, equalTo(false))
+
+        Espresso.pressBack()
+        EspressoInteractions.clickOn(withText(R.string.keep_changes), isDialog())
+        scheduler.flush()
+
+        assertThat(scenario.isFinishing, equalTo(true))
+        assertThat(scenario.result.resultCode, equalTo(Activity.RESULT_OK))
+        val savedImage = BitmapFactory.decodeFile(imagePath)
+        assertThat(savedImage, notNullValue())
     }
 }
