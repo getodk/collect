@@ -14,6 +14,7 @@ import org.odk.collect.android.activities.CrashHandlerActivity
 import org.odk.collect.android.activities.FirstLaunchActivity
 import org.odk.collect.android.application.CollectComposeThemeProvider
 import org.odk.collect.android.application.MapboxClassInstanceCreator
+import org.odk.collect.android.application.initialization.MapsInitializer
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.ProjectSettingsDialog
 import org.odk.collect.android.utilities.ThemeUtils
@@ -44,6 +45,9 @@ class MainMenuActivity : LocalizedActivity(), CollectComposeThemeProvider {
 
     @Inject
     lateinit var webPageService: WebPageService
+
+    @Inject
+    lateinit var mapsInitializer: MapsInitializer
 
     private lateinit var currentProjectViewModel: CurrentProjectViewModel
 
@@ -99,7 +103,7 @@ class MainMenuActivity : LocalizedActivity(), CollectComposeThemeProvider {
             setView(R.layout.main_menu_activity, false)
             lifecycle.addObserver(mdmConfigObserver)
 
-            initMapFrameworks()
+            mapsInitializer.initializeUIComponents(this, R.id.map_box_initialization_fragment)
         }
     }
 
@@ -114,19 +118,5 @@ class MainMenuActivity : LocalizedActivity(), CollectComposeThemeProvider {
         } else {
             setTheme(R.style.Theme_Collect)
         }
-    }
-
-    private fun initMapFrameworks() {
-        if (MapboxClassInstanceCreator.isMapboxAvailable()) {
-            supportFragmentManager
-                .beginTransaction()
-                .add(
-                    R.id.map_box_initialization_fragment,
-                    MapboxClassInstanceCreator.createMapBoxInitializationFragment()
-                )
-                .commit()
-        }
-
-        MapView(this).onCreate(null)
     }
 }

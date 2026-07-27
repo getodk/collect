@@ -1,8 +1,9 @@
 package org.odk.collect.android.application.initialization
 
 import android.content.Context
-import android.os.Handler
+import androidx.fragment.app.FragmentActivity
 import com.google.android.gms.maps.MapView
+import org.odk.collect.android.application.MapboxClassInstanceCreator
 import org.odk.collect.android.geo.MapConfiguratorProvider
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
@@ -16,9 +17,24 @@ class MapsInitializer @Inject constructor(
 
     fun initialize() {
         resetToAvailableFramework()
+        initializeFrameworks()
+    }
 
-        if (!FRAMEWORKS_INITIALIZED) {
-            initializeFrameworks()
+    fun initializeUIComponents(activity: FragmentActivity, fragmentContainer: Int) {
+        if (!UI_COMPONENTS_INITIALIZED) {
+            MapView(activity).onCreate(null)
+
+            if (MapboxClassInstanceCreator.isMapboxAvailable()) {
+                activity.supportFragmentManager
+                    .beginTransaction()
+                    .add(
+                        fragmentContainer,
+                        MapboxClassInstanceCreator.createMapBoxInitializationFragment()
+                    )
+                    .commit()
+            }
+
+            UI_COMPONENTS_INITIALIZED = true
         }
     }
 
@@ -54,6 +70,6 @@ class MapsInitializer @Inject constructor(
     }
 
     companion object {
-        private var FRAMEWORKS_INITIALIZED = false
+        private var UI_COMPONENTS_INITIALIZED = false
     }
 }
