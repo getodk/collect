@@ -14,10 +14,6 @@
 
 package org.odk.collect.android.widgets;
 
-import static org.odk.collect.android.utilities.Appearances.MAPS;
-import static org.odk.collect.android.utilities.Appearances.PLACEMENT_MAP;
-import static org.odk.collect.android.utilities.Appearances.hasAppearance;
-
 import android.content.Context;
 import android.hardware.SensorManager;
 
@@ -172,13 +168,8 @@ public class WidgetFactory {
                         }
                         break;
                     case Constants.DATATYPE_GEOPOINT:
-                        if (hasAppearance(questionDetails.getPrompt(), PLACEMENT_MAP) || hasAppearance(questionDetails.getPrompt(), MAPS)) {
-                            questionWidget = new GeoPointMapWidget(activity, questionDetails, waitingForDataRegistry,
-                                    new ActivityGeoDataRequester(permissionsProvider, activity), dependencies);
-                        } else {
-                            questionWidget = new GeoPointWidget(activity, questionDetails, waitingForDataRegistry,
-                                    new ActivityGeoDataRequester(permissionsProvider, activity), dependencies);
-                        }
+                        questionWidget = new GeoPointWidget(activity, questionDetails, waitingForDataRegistry,
+                                new ActivityGeoDataRequester(permissionsProvider, activity), dependencies);
                         break;
                     case Constants.DATATYPE_GEOSHAPE:
                         questionWidget = new GeoShapeWidget(activity, questionDetails,
