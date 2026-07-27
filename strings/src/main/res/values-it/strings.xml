@@ -121,13 +121,9 @@
   <!--Title of the end of form screen-->
   <string name="save_enter_data_description">Ti trovi alla fine di \"%s\".</string>
   <!--Text shown in an information box on the end of form screen when auto-send is off or the device is offline-->
-  <string name="form_editing_disabled_after_finalizing">Non è possibile apportare modifiche dopo la finalizzazione.</string>
   <!--Text shown in an information box on the end of form screen when auto-send is on and the device is online-->
-  <string name="form_editing_disabled_after_sending">Non è possibile apportare modifiche dopo l\'invio.</string>
   <!--Text shown in an information box on the end of form screen when auto-send is off and the form allows edits after finalize/send-->
-  <string name="form_editing_enabled_after_finalizing">È possibile apportare modifiche dopo la finalizzazione.</string>
   <!--Text shown in an information box on the end of form screen when auto-send is on and the form allows edits after finalize/send-->
-  <string name="form_editing_enabled_after_sending">È possibile apportare modifiche dopo l\'invio.</string>
   <!--Details shown in an information box on the end of form screen when the form does not allow edits after finalize/send-->
   <string name="form_editing_disabled_hint">Se devi apportare modifiche al modulo, \"Salva come bozza\" finché non sei pronto per l\'invio.</string>
   <!--Details shown in an information box on the end of form screen when the form allows edits after finalization-->
@@ -207,6 +203,13 @@
   <string name="rank_items">Ordina gli elementi</string>
   <string name="number_picker_title">Selezionatore numerico</string>
   <string name="invalid_range_widget">Questo widget ha parametri invalidi!</string>
+  <!--Content description for a horizontal slider used in range widgets-->
+  <!--Content description for a vertical slider used in range widgets-->
+  <!--Content description for the label showing the current value of the slider-->
+  <!--Content description for each tick mark on the slider indicating discrete steps-->
+  <!--Content description for the draggable thumb handle of the slider-->
+  <!--Content description for the label at the start (minimum) of the slider-->
+  <!--Content description for the label at the end (maximum) of the slider-->
   <string name="svg_file_does_not_exist">Il file SVG non esiste!</string>
   <string name="capture_image">Scatta Foto</string>
   <string name="choose_image">Seleziona Foto</string>
@@ -410,10 +413,7 @@
   <!--##############################################
     # GEO
     ##############################################-->
-  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
-   These strings are only being used to preserve compatibility with pre-existing
-    tile caches, and are not shown in the UI.-->
-    <string name="basemap">Mappa Base</string>
+  <string name="basemap">Mappa Base</string>
   <string name="basemap_source">Origine</string>
   <string name="basemap_source_unavailable">Spiacente, %s le mappe di base non sono disponibili su questo dispositivo. Scegli un\'altra mappa di base in Impostazioni &gt; Mappe.</string>
   <string name="map_style_label">%sstile mappa</string>
@@ -424,10 +424,10 @@
   <string name="light" tools:ignore="UnusedResources">Chiaro</string>
   <string name="dark" tools:ignore="UnusedResources">Scuro</string>
   <string name="outdoors" tools:ignore="UnusedResources">All\'aperto</string>
-  <string name="topographic">Topografico</string>
+  <string name="topographic" tools:ignore="UnusedResources">Topografico</string>
   <string name="google_play_services_error_occured">Impossibile accedere a Google Maps. Il Servizio di Google Play è installato?</string>
-  <string name="carto_map_style_positron">Posizione</string>
-  <string name="carto_map_style_dark_matter">Scuro è importante</string>
+  <string name="carto_map_style_positron" tools:ignore="UnusedResources">Posizione</string>
+  <string name="carto_map_style_dark_matter" tools:ignore="UnusedResources">Scuro è importante</string>
   <!--Title for the offline layer section of settings-->
   <string name="offline_layer">Livelli non in linea</string>
   <!--Label for the offline layer setting-->
@@ -463,7 +463,6 @@
   <string name="current_project_option">Solo il progetto attuale</string>
   <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
   <string name="delete_layer_confirmation_message">Sei sicuro di voler eliminare il %1$s livello non in linea?</string>
-  <string name="record_geopoint">Memorizza un punto</string>
   <string name="location_accuracy">Precisione: %1$s </string>
   <string name="location_accuracy_unacceptable">⚠️ Precisione: %1$s (inaccettabile)</string>
   <string name="provider_disabled_error">Attenzione, i Sistemi di Posizionamento sono disabilitati!</string>
@@ -716,7 +715,7 @@
   <string name="change_password">Password ODK</string>
   <string name="password_error_whitespace">Spazi vuoti all\'inizio e alla fine delle password non sono ammessi</string>
   <string name="username_error_whitespace">Spazi vuoti all\'inizio e alla fine delle username non sono ammessi</string>
-    <string name="language">Lingua</string>
+  <string name="language">Lingua</string>
   <string name="use_device_language">Utilizza lingua del dispositivo</string>
   <string name="font_size">Dimensione dei caratteri del testo</string>
   <string name="change_font_size">Dimensione dei caratteri del testo</string>
@@ -1028,6 +1027,7 @@
     ##############################################-->
   <string name="crash_last_run">Si è verificato un arresto anomalo l\'ultima volta che l\'app era in esecuzione!</string>
   <string name="cant_start_app">Impossibile avviare l\'app!</string>
+  <!--Message shown when the app crashed due to running out of memory last time it was run.-->
   <!--##############################################
     # Google Drive deprecation
     ##############################################-->

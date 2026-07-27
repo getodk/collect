@@ -190,6 +190,13 @@
   <string name="rank_items">رتب العناصر</string>
   <string name="number_picker_title">منتقي الأرقام</string>
   <string name="invalid_range_widget">هذة الميزة غير موجودة</string>
+  <!--Content description for a horizontal slider used in range widgets-->
+  <!--Content description for a vertical slider used in range widgets-->
+  <!--Content description for the label showing the current value of the slider-->
+  <!--Content description for each tick mark on the slider indicating discrete steps-->
+  <!--Content description for the draggable thumb handle of the slider-->
+  <!--Content description for the label at the start (minimum) of the slider-->
+  <!--Content description for the label at the end (maximum) of the slider-->
   <string name="svg_file_does_not_exist">ملف SVG غير موجود!</string>
   <string name="capture_image">التقط صورة</string>
   <string name="choose_image">إختر صورة</string>
@@ -379,10 +386,7 @@
   <!--##############################################
     # GEO
     ##############################################-->
-  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
-   These strings are only being used to preserve compatibility with pre-existing
-    tile caches, and are not shown in the UI.-->
-    <string name="basemap">الخريطة الأساسية</string>
+  <string name="basemap">الخريطة الأساسية</string>
   <string name="basemap_source">المصدر</string>
   <string name="map_style_label">%s نمط الخريطة</string>
   <string name="streets">الطرق</string>
@@ -392,10 +396,10 @@
   <string name="light" tools:ignore="UnusedResources">ضوء</string>
   <string name="dark" tools:ignore="UnusedResources">داكن</string>
   <string name="outdoors" tools:ignore="UnusedResources">في الخارج</string>
-  <string name="topographic">طبوغرافي</string>
+  <string name="topographic" tools:ignore="UnusedResources">طبوغرافي</string>
   <string name="google_play_services_error_occured">غير قادر على الوصول إلى خرائط الجوجل. هل خدمات Google Play مثبتة؟</string>
-  <string name="carto_map_style_positron">بوزيترون</string>
-  <string name="carto_map_style_dark_matter">المادة المظلمة</string>
+  <string name="carto_map_style_positron" tools:ignore="UnusedResources">بوزيترون</string>
+  <string name="carto_map_style_dark_matter" tools:ignore="UnusedResources">المادة المظلمة</string>
   <!--Title for the offline layer section of settings-->
   <!--Label for the offline layer setting-->
   <!--Title for the screen that allows the user to select a offline layer for maps-->
@@ -409,9 +413,9 @@
   <!--Text for title above list of layers-->
   <!--Text for title and subtitle above options for how the layer can be access-->
   <!--Text for option where layer should be available to all projects-->
+  <string name="all_projects_option">كل المشاريع</string>
   <!--Text for option where layer should be available to the current project only-->
   <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
-  <string name="record_geopoint">سجل نقطة</string>
   <string name="provider_disabled_error">عذراً، مزود خدمة الموقع معطّل.</string>
   <string name="google_play_services_not_available">تريد هذه الاستمارة تتبع موقعك ولكن خدمات Google Play غير متوفرة.</string>
   <string name="location_providers_disabled_dialog_message">تريد هذه الاستمارة تتبع موقعك ولكن موفري الموقع معطلين. يرجى التمكين في إعدادات أندرويد.</string>
@@ -612,7 +616,7 @@
   <string name="change_password">ODK كلمة المرور</string>
   <string name="password_error_whitespace">الفراغات في البداية أو النهاية غير مسموح بها في كلمات المرور</string>
   <string name="username_error_whitespace">الفراغات في البداية أو النهاية غير مسموح بها في اسم المستخدم</string>
-    <string name="language">اللغة</string>
+  <string name="language">اللغة</string>
   <string name="use_device_language">استخدم لغة الجهاز</string>
   <string name="font_size">حجم الخط</string>
   <string name="change_font_size">حجم الخط</string>
@@ -804,6 +808,8 @@
   <!--##############################################
      # Projects
      ##############################################-->
+  <string name="projects">المشاريع</string>
+  <string name="add_project">إضافة مشروع</string>
   <string name="add">أضف</string>
   <!--Title of the dialog shown when attempting to create a project with connection settings that match an existing project-->
   <!--Detail text of the dialog shown when attempting to create a project with connection settings that match an existing project-->
@@ -859,6 +865,7 @@
   <!--##############################################
     # Crash handling
     ##############################################-->
+  <!--Message shown when the app crashed due to running out of memory last time it was run.-->
   <!--##############################################
     # Google Drive deprecation
     ##############################################-->
@@ -890,6 +897,7 @@
   <!--Message displayed when the list of questions is empty-->
   <!--Message displayed when the list of blank forms is empty-->
   <!--Subtext displayed when the list of blank forms is empty-->
+  <string name="empty_list_of_blank_forms_subtitle">حمّل استمارة للبدء بالعمل</string>
   <!--Message displayed when the list of drafts is empty-->
   <!--Subtext displayed when the list of drafts is empty-->
   <!--Message displayed when the list of ready to send forms is empty-->
@@ -897,6 +905,8 @@
   <!--Message displayed when the list of sent forms is empty-->
   <!--Subtext of message displayed when the list of sent forms is empty-->
   <!--Message displayed when the list of forms to download is empty-->
+  <string name="empty_list_of_forms_to_download_title">ليس هناك استمارات للتحميل</string>
+  <string name="empty_list_of_forms_to_download_subtitle">حمّل استمارة للبدء بالعمل</string>
   <!--Message displayed when the list of forms to delete is empty-->
   <!--Subtext displayed when the list of blank forms to delete is empty-->
   <!--Subtext displayed when the list of filled forms to delete is empty-->

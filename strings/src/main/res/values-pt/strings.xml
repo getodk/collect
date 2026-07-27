@@ -121,14 +121,9 @@
   <!--Title of the end of form screen-->
   <string name="save_enter_data_description">Você está no fim de \"%s\".</string>
   <!--Text shown in an information box on the end of form screen when auto-send is off or the device is offline-->
-  <string name="form_editing_disabled_after_finalizing">Não é possível editar após finalizar.</string>
   <!--Text shown in an information box on the end of form screen when auto-send is on and the device is online-->
-  <string name="form_editing_disabled_after_sending">Não é possível editar após o envio.</string>
   <!--Text shown in an information box on the end of form screen when auto-send is off and the form allows edits after finalize/send-->
-  <string name="form_editing_enabled_after_finalizing">É possível editar após finalizar.</string>
   <!--Text shown in an information box on the end of form screen when auto-send is on and the form allows edits after finalize/send-->
-  <string name="form_editing_enabled_after_sending">É possível editar após o envio.
-</string>
   <!--Details shown in an information box on the end of form screen when the form does not allow edits after finalize/send-->
   <string name="form_editing_disabled_hint">Se você precisa fazer alterações em seu formulário, utilize \"Salvar como rascunho\" até que você esteja pronto para enviar.</string>
   <!--Details shown in an information box on the end of form screen when the form allows edits after finalization-->
@@ -208,6 +203,13 @@
   <string name="rank_items">Ordenar itens</string>
   <string name="number_picker_title">Teclado para escolher números</string>
   <string name="invalid_range_widget">Esta ferramenta possui parâmetros inválidos!</string>
+  <!--Content description for a horizontal slider used in range widgets-->
+  <!--Content description for a vertical slider used in range widgets-->
+  <!--Content description for the label showing the current value of the slider-->
+  <!--Content description for each tick mark on the slider indicating discrete steps-->
+  <!--Content description for the draggable thumb handle of the slider-->
+  <!--Content description for the label at the start (minimum) of the slider-->
+  <!--Content description for the label at the end (maximum) of the slider-->
   <string name="svg_file_does_not_exist">O arquivo SVG não existe!</string>
   <string name="capture_image">Tirar Foto</string>
   <string name="choose_image">Escolher Imagem</string>
@@ -411,10 +413,7 @@
   <!--##############################################
     # GEO
     ##############################################-->
-  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
-   These strings are only being used to preserve compatibility with pre-existing
-    tile caches, and are not shown in the UI.-->
-    <string name="basemap">Mapa base</string>
+  <string name="basemap">Mapa base</string>
   <string name="basemap_source">Fonte</string>
   <string name="basemap_source_unavailable">Desculpe, %s mapas base não estão disponíveis nesse dispositivo. Por favor, escolha outro mapa base em Configurações &gt; Mapas.</string>
   <string name="map_style_label">estilo do mapa %s</string>
@@ -425,10 +424,10 @@
   <string name="light" tools:ignore="UnusedResources">Claro</string>
   <string name="dark" tools:ignore="UnusedResources">Escuro</string>
   <string name="outdoors" tools:ignore="UnusedResources">Ambiente externo</string>
-  <string name="topographic">Topográfico</string>
+  <string name="topographic" tools:ignore="UnusedResources">Topográfico</string>
   <string name="google_play_services_error_occured">Não foi capaz de acessar o Google Maps. O serviço do Google Play está instalado?</string>
-  <string name="carto_map_style_positron">Positron</string>
-  <string name="carto_map_style_dark_matter">Matéria escura</string>
+  <string name="carto_map_style_positron" tools:ignore="UnusedResources">Positron</string>
+  <string name="carto_map_style_dark_matter" tools:ignore="UnusedResources">Matéria escura</string>
   <!--Title for the offline layer section of settings-->
   <string name="offline_layer">Camadas offline</string>
   <!--Label for the offline layer setting-->
@@ -464,7 +463,6 @@
   <string name="current_project_option">Apenas o projeto atual</string>
   <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
   <string name="delete_layer_confirmation_message">Você tem certeza que deseja excluir a camada offline %1$s?</string>
-  <string name="record_geopoint">Registre um ponto</string>
   <string name="location_accuracy">Precisão: %1$s</string>
   <string name="location_accuracy_unacceptable">⚠️ Precisão: %1$s (inaceitável)</string>
   <string name="provider_disabled_error">Desculpe, provedor de localização desabilitado!</string>
@@ -717,7 +715,7 @@
   <string name="change_password">Senha</string>
   <string name="password_error_whitespace">Espaços em branco antes e depois de senhas não são permitidos</string>
   <string name="username_error_whitespace">Espaços em branco antes e depois de nomes de usuários não são permitidos</string>
-    <string name="language">Idioma</string>
+  <string name="language">Idioma</string>
   <string name="use_device_language">Utilizar idioma do dispositivo</string>
   <string name="font_size">Tamanho da Fonte do Texto</string>
   <string name="change_font_size">Tamanho da Fonte do Texto</string>
@@ -1029,6 +1027,7 @@
     ##############################################-->
   <string name="crash_last_run">Houve um \"crash\" na última vez que o app foi executado!</string>
   <string name="cant_start_app">Não foi possível executar o app!</string>
+  <!--Message shown when the app crashed due to running out of memory last time it was run.-->
   <!--##############################################
     # Google Drive deprecation
     ##############################################-->

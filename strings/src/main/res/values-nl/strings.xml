@@ -168,6 +168,13 @@
   <string name="barcode_scanner_prompt">Positioneer de barcode binnen het rechthoek</string>
   <!--Label for button that rotates camera orientation when scanning barcodes-->
   <string name="open_file">Open bestand</string>
+  <!--Content description for a horizontal slider used in range widgets-->
+  <!--Content description for a vertical slider used in range widgets-->
+  <!--Content description for the label showing the current value of the slider-->
+  <!--Content description for each tick mark on the slider indicating discrete steps-->
+  <!--Content description for the draggable thumb handle of the slider-->
+  <!--Content description for the label at the start (minimum) of the slider-->
+  <!--Content description for the label at the end (maximum) of the slider-->
   <string name="svg_file_does_not_exist">SVG bestand bestaat niet!</string>
   <string name="capture_image">Foto nemen</string>
   <string name="choose_image">Selecteer afbeelding</string>
@@ -285,9 +292,6 @@
   <!--##############################################
     # GEO
     ##############################################-->
-  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
-   These strings are only being used to preserve compatibility with pre-existing
-    tile caches, and are not shown in the UI.-->
   <string name="basemap_source">Bron</string>
   <string name="map_style_label">%s kaartstijl</string>
   <string name="streets">Straten</string>
@@ -297,7 +301,7 @@
   <string name="light" tools:ignore="UnusedResources">Licht</string>
   <string name="dark" tools:ignore="UnusedResources">Donker</string>
   <string name="outdoors" tools:ignore="UnusedResources">Buiten</string>
-  <string name="topographic">Topografisch</string>
+  <string name="topographic" tools:ignore="UnusedResources">Topografisch</string>
   <!--Title for the offline layer section of settings-->
   <!--Label for the offline layer setting-->
   <!--Title for the screen that allows the user to select a offline layer for maps-->
@@ -447,7 +451,7 @@
   <string name="change_username">ODK Username</string>
   <string name="password">Wachtwoord</string>
   <string name="change_password">Wachtwoord</string>
-    <string name="language">Taal</string>
+  <string name="language">Taal</string>
   <string name="font_size">Tekstgrootte</string>
   <string name="change_font_size">Tekstgrootte</string>
   <string name="font_size_extra_large">Extra groot</string>
@@ -625,16 +629,10 @@
   <!--##############################################
     # Crash handling
     ##############################################-->
+  <!--Message shown when the app crashed due to running out of memory last time it was run.-->
   <!--##############################################
     # Google Drive deprecation
     ##############################################-->
-  <!--##############################################
-    # Min SDK deprecation banner
-    ##############################################-->
-  <!--First part of the message shown in the banner, informing the user that their device will soon be unsupported-->
-  <!--Second part of the message shown in the banner, informing the user that their device will soon be unsupported-->
-  <!--Button text that opens a forum post with more information about upcoming device support changes-->
-  <!--Button text to dismiss the banner-->
   <!--##############################################
     # Developer tools
     ##############################################-->
