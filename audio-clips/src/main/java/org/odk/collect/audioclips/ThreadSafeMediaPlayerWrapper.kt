@@ -68,7 +68,9 @@ internal class ThreadSafeMediaPlayerWrapper(
     }
 
     fun getPosition(): Int? {
-        return mediaPlayer?.currentPosition
+        synchronized(this) {
+            return mediaPlayer?.currentPosition
+        }
     }
 
     fun release() {
