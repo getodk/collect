@@ -15,11 +15,9 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.gms.maps.MapView
 import org.odk.collect.android.activities.DeleteFormsActivity
 import org.odk.collect.android.activities.FormDownloadListActivity
 import org.odk.collect.android.activities.InstanceChooserList
-import org.odk.collect.android.application.MapboxClassInstanceCreator
 import org.odk.collect.android.databinding.MainMenuBinding
 import org.odk.collect.android.formentry.FormOpeningMode
 import org.odk.collect.android.formlists.blankformlist.BlankFormListActivity
@@ -120,8 +118,6 @@ class MainMenuFragment(
                 binding.googleDriveDeprecationBanner.root.visibility = View.GONE
             }
         }
-
-        initMapFrameworks()
     }
 
     override fun onResume() {
@@ -163,20 +159,6 @@ class MainMenuFragment(
     private fun initToolbar(binding: MainMenuBinding) {
         val toolbar = binding.root.findViewById<Toolbar>(org.odk.collect.androidshared.R.id.toolbar)
         (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
-    }
-
-    private fun initMapFrameworks() {
-        if (MapboxClassInstanceCreator.isMapboxAvailable()) {
-            childFragmentManager
-                .beginTransaction()
-                .add(
-                    org.odk.collect.android.R.id.map_box_initialization_fragment,
-                    MapboxClassInstanceCreator.createMapBoxInitializationFragment()!!
-                )
-                .commit()
-        }
-
-        MapView(requireContext()).onCreate(null)
     }
 
     private fun initButtons(binding: MainMenuBinding) {

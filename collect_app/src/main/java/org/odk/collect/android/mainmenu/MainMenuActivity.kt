@@ -7,11 +7,13 @@ import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
 import androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.gms.maps.MapView
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.activities.CrashHandlerActivity
 import org.odk.collect.android.activities.FirstLaunchActivity
 import org.odk.collect.android.application.CollectComposeThemeProvider
+import org.odk.collect.android.application.MapboxClassInstanceCreator
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.ProjectSettingsDialog
 import org.odk.collect.android.utilities.ThemeUtils
@@ -96,6 +98,8 @@ class MainMenuActivity : LocalizedActivity(), CollectComposeThemeProvider {
             super.onCreate(savedInstanceState)
             setView(R.layout.main_menu_activity, false)
             lifecycle.addObserver(mdmConfigObserver)
+
+            initMapFrameworks()
         }
     }
 
@@ -110,5 +114,19 @@ class MainMenuActivity : LocalizedActivity(), CollectComposeThemeProvider {
         } else {
             setTheme(R.style.Theme_Collect)
         }
+    }
+
+    private fun initMapFrameworks() {
+        if (MapboxClassInstanceCreator.isMapboxAvailable()) {
+            supportFragmentManager
+                .beginTransaction()
+                .add(
+                    R.id.map_box_initialization_fragment,
+                    MapboxClassInstanceCreator.createMapBoxInitializationFragment()
+                )
+                .commit()
+        }
+
+        MapView(this).onCreate(null)
     }
 }
