@@ -15,6 +15,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.gms.maps.MapView
 import org.odk.collect.android.activities.DeleteFormsActivity
 import org.odk.collect.android.activities.FormDownloadListActivity
 import org.odk.collect.android.activities.InstanceChooserList
@@ -77,7 +78,6 @@ class MainMenuFragment(
 
         val binding = MainMenuBinding.bind(view)
         initToolbar(binding)
-        initMapbox()
         initButtons(binding)
         initAppName(binding)
 
@@ -120,6 +120,8 @@ class MainMenuFragment(
                 binding.googleDriveDeprecationBanner.root.visibility = View.GONE
             }
         }
+
+        initMapFrameworks()
     }
 
     override fun onResume() {
@@ -163,7 +165,7 @@ class MainMenuFragment(
         (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
     }
 
-    private fun initMapbox() {
+    private fun initMapFrameworks() {
         if (MapboxClassInstanceCreator.isMapboxAvailable()) {
             childFragmentManager
                 .beginTransaction()
@@ -173,6 +175,8 @@ class MainMenuFragment(
                 )
                 .commit()
         }
+
+        MapView(requireContext()).onCreate(null)
     }
 
     private fun initButtons(binding: MainMenuBinding) {
