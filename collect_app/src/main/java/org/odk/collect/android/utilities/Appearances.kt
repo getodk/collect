@@ -227,7 +227,6 @@ object Appearances {
         }
     }
 
-    @JvmStatic
     fun isGeoPointMapAppearance(prompt: FormEntryPrompt): Boolean {
         return hasAppearance(prompt, MAPS) || hasAppearance(prompt, PLACEMENT_MAP)
     }
