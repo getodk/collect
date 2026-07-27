@@ -12,6 +12,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
+import org.odk.collect.android.support.MockFormEntryPromptBuilder;
+import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
@@ -23,7 +25,9 @@ import static org.mockito.Mockito.verify;
 import static org.odk.collect.android.widgets.support.GeoWidgetHelpers.getRandomDoubleArray;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAppearance;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnly;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndAnswer;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetDependencies;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
 
@@ -41,9 +45,45 @@ public class GeoPointWidgetTest {
     }
 
     @Test
-    public void usingReadOnlyOption_doesNotShowTheGeoButton() {
+    public void whenPromptIsReadOnlyAndHasNoAnswer_geoPointButtonIsHidden() {
         GeoPointWidget widget = createWidget(promptWithReadOnly());
         assertEquals(widget.binding.simpleButton.getVisibility(), View.GONE);
+    }
+
+    @Test
+    public void whenPromptIsNotReadOnlyAndHasNoAnswer_geoPointButtonIsShown() {
+        GeoPointWidget widget = createWidget(promptWithAnswer(null));
+        assertEquals(widget.binding.simpleButton.getVisibility(), View.VISIBLE);
+    }
+
+    @Test
+    public void whenPromptIsReadOnlyAndHasAnswer_geoPointButtonIsShown() {
+        GeoPointWidget widget = createWidget(promptWithReadOnlyAndAnswer(answer));
+        assertEquals(widget.binding.simpleButton.getVisibility(), View.VISIBLE);
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.view_point));
+    }
+
+    @Test
+    public void withMapsAppearance_whenPromptIsReadOnlyAndHasNoAnswer_geoButtonIsNotDisplayed() {
+        FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
+                .withAppearance(Appearances.MAPS)
+                .withReadOnly(true)
+                .withAnswer(null)
+                .build();
+        GeoPointWidget widget = createWidget(prompt);
+        assertEquals(widget.binding.simpleButton.getVisibility(), View.GONE);
+    }
+
+    @Test
+    public void withMapsAppearance_whenPromptIsReadOnlyAndHasAnswer_viewGeoPointButtonIsShown() {
+        FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
+                .withAppearance(Appearances.MAPS)
+                .withReadOnly(true)
+                .withAnswer(answer)
+                .build();
+        GeoPointWidget widget = createWidget(prompt);
+        assertEquals(widget.binding.simpleButton.getVisibility(), View.VISIBLE);
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.view_point));
     }
 
     @Test
@@ -68,6 +108,7 @@ public class GeoPointWidgetTest {
     public void creatingWidgetWithInvalidValue_doesNotUpdateWidgetDisplayedAnswer() {
         GeoPointWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
         assertEquals(widget.binding.geoAnswerText.getText(), "");
+        assertEquals(widget.binding.geoAnswerText.getVisibility(), View.GONE);
         assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_point));
     }
 
@@ -75,10 +116,11 @@ public class GeoPointWidgetTest {
     public void answerTextViewShouldShowCorrectAnswer() {
         GeoPointWidget widget = createWidget(promptWithAnswer(answer));
         assertEquals(widget.binding.geoAnswerText.getText(), GeoWidgetUtils.getGeoPointAnswerToDisplay(widget.getContext(), answer.getDisplayText()));
+        assertEquals(widget.binding.geoAnswerText.getVisibility(), View.VISIBLE);
     }
 
     @Test
-    public void whenPromptDoesNotHaveHasAnswer_buttonShowsCorrectText() {
+    public void whenPromptDoesNotHaveAnswer_buttonShowsCorrectText() {
         GeoPointWidget widget = createWidget(promptWithAnswer(null));
         assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_point));
     }
@@ -90,11 +132,38 @@ public class GeoPointWidgetTest {
     }
 
     @Test
+    public void withMapsAppearance_whenPromptDoesNotHaveAnswer_buttonShowsCorrectText() {
+        GeoPointWidget widget = createWidget(promptWithAppearance(Appearances.MAPS));
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_point));
+    }
+
+    @Test
+    public void withMapsAppearance_whenPromptHasAnswer_buttonShowsCorrectText() {
+        FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
+                .withAppearance(Appearances.MAPS)
+                .withAnswer(answer)
+                .build();
+        GeoPointWidget widget = createWidget(prompt);
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.view_or_change_point));
+    }
+
+    @Test
+    public void withPlacementMapAppearance_whenPromptHasAnswer_buttonShowsCorrectText() {
+        FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
+                .withAppearance(Appearances.PLACEMENT_MAP)
+                .withAnswer(answer)
+                .build();
+        GeoPointWidget widget = createWidget(prompt);
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.view_or_change_point));
+    }
+
+    @Test
     public void clearAnswer_clearsWidgetAnswer() {
         GeoPointWidget widget = createWidget(promptWithAnswer(answer));
         widget.clearAnswer();
 
         assertEquals(widget.binding.geoAnswerText.getText(), "");
+        assertEquals(widget.binding.geoAnswerText.getVisibility(), View.GONE);
         assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_point));
     }
 
@@ -139,6 +208,7 @@ public class GeoPointWidgetTest {
         GeoPointWidget widget = createWidget(promptWithAnswer(null));
         widget.setData(answer.getDisplayText());
         assertEquals(widget.binding.geoAnswerText.getText(), GeoWidgetUtils.getGeoPointAnswerToDisplay(widget.getContext(), answer.getDisplayText()));
+        assertEquals(widget.binding.geoAnswerText.getVisibility(), View.VISIBLE);
     }
 
     @Test
@@ -146,6 +216,7 @@ public class GeoPointWidgetTest {
         GeoPointWidget widget = createWidget(promptWithAnswer(null));
         widget.setData("blah");
         assertEquals(widget.binding.geoAnswerText.getText(), "");
+        assertEquals(widget.binding.geoAnswerText.getVisibility(), View.GONE);
         assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_point));
     }
 
@@ -164,6 +235,24 @@ public class GeoPointWidgetTest {
     }
 
     @Test
+    public void withMapsAppearance_setData_whenDataIsNull_updatesButtonLabel() {
+        FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
+                .withAppearance(Appearances.MAPS)
+                .withAnswer(answer)
+                .build();
+        GeoPointWidget widget = createWidget(prompt);
+        widget.setData("");
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_point));
+    }
+
+    @Test
+    public void withMapsAppearance_setData_whenDataIsNotNull_updatesButtonLabel() {
+        GeoPointWidget widget = createWidget(promptWithAppearance(Appearances.MAPS));
+        widget.setData(answer.getDisplayText());
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.view_or_change_point));
+    }
+
+    @Test
     public void setData_callsValueChangeListener() {
         GeoPointWidget widget = createWidget(promptWithAnswer(null));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
@@ -176,6 +265,16 @@ public class GeoPointWidgetTest {
         FormEntryPrompt prompt = promptWithAnswer(answer);
         GeoPointWidget widget = createWidget(prompt);
         widget.binding.simpleButton.performClick();
+
+        verify(geoDataRequester).requestGeoPoint(prompt, waitingForDataRegistry);
+    }
+
+    @Test
+    public void whenPromptIsReadOnlyAndHasAnswer_buttonClick_requestsGeoPoint() {
+        FormEntryPrompt prompt = promptWithReadOnlyAndAnswer(answer);
+        GeoPointWidget widget = createWidget(prompt);
+        widget.binding.simpleButton.performClick();
+
         verify(geoDataRequester).requestGeoPoint(prompt, waitingForDataRegistry);
     }
 

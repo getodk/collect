@@ -35,7 +35,7 @@ class ActivityGeoDataRequester(
                 override fun granted() {
                     waitingForDataRegistry.waitForData(prompt.index)
 
-                    if (isMapsAppearance(prompt)) {
+                    if (Appearances.isGeoPointMapAppearance(prompt) || prompt.isReadOnly) {
                         DialogFragmentUtils.showIfNotShowing(
                             GeoPointMapDialogFragment::class.java,
                             bundleOf(WidgetAnswerDialogFragment.ARG_FORM_INDEX to prompt.index),
@@ -105,18 +105,6 @@ class ActivityGeoDataRequester(
                 ALLOW_MOCK_ACCURACY
             )
         )
-    }
-
-    private fun isMapsAppearance(prompt: FormEntryPrompt): Boolean {
-        return hasMapsAppearance(prompt) || hasPlacementMapAppearance(prompt)
-    }
-
-    private fun hasMapsAppearance(prompt: FormEntryPrompt): Boolean {
-        return Appearances.hasAppearance(prompt, Appearances.MAPS)
-    }
-
-    private fun hasPlacementMapAppearance(prompt: FormEntryPrompt): Boolean {
-        return Appearances.hasAppearance(prompt, Appearances.PLACEMENT_MAP)
     }
 
     companion object {
