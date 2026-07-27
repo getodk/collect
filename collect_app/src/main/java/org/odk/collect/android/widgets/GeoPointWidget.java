@@ -27,6 +27,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.databinding.GeopointQuestionBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
@@ -55,21 +56,17 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
         binding = GeopointQuestionBinding.inflate(((Activity) context).getLayoutInflater());
 
         binding.geoAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-        if (prompt.isReadOnly()) {
-            binding.simpleButton.setVisibility(GONE);
-        } else {
-            binding.simpleButton.setOnClickListener(v -> geoDataRequester.requestGeoPoint(prompt, waitingForDataRegistry));
-        }
+        binding.simpleButton.setOnClickListener(v -> geoDataRequester.requestGeoPoint(prompt, waitingForDataRegistry));
 
         answerText = prompt.getAnswerText();
 
         String answerToDisplay = GeoWidgetUtils.getGeoPointAnswerToDisplay(getContext(), answerText);
+        binding.simpleButton.setText(getButtonText(prompt, answerToDisplay));
         if (answerToDisplay.isEmpty()) {
-            binding.simpleButton.setText(org.odk.collect.strings.R.string.get_point);
+            binding.simpleButton.setVisibility(prompt.isReadOnly() ? GONE : VISIBLE);
             answerText = null;
         } else {
             binding.geoAnswerText.setText(answerToDisplay);
-            binding.simpleButton.setText(org.odk.collect.strings.R.string.change_point);
         }
         binding.geoAnswerText.setVisibility(binding.geoAnswerText.getText().toString().isBlank() ? GONE : VISIBLE);
 
@@ -89,7 +86,7 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
         answerText = null;
         binding.geoAnswerText.setText(null);
         binding.geoAnswerText.setVisibility(GONE);
-        binding.simpleButton.setText(org.odk.collect.strings.R.string.get_point);
+        binding.simpleButton.setText(getButtonText(getFormEntryPrompt(), ""));
         widgetValueChanged();
     }
 
@@ -109,17 +106,28 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
     @Override
     public void setData(Object answer) {
         String answerToDisplay = GeoWidgetUtils.getGeoPointAnswerToDisplay(getContext(), answer.toString());
+        binding.simpleButton.setText(getButtonText(getFormEntryPrompt(), answerToDisplay));
         if (answerToDisplay.isEmpty()) {
             answerText = null;
             binding.geoAnswerText.setText("");
             binding.geoAnswerText.setVisibility(GONE);
-            binding.simpleButton.setText(org.odk.collect.strings.R.string.get_point);
         } else {
             answerText = answer.toString();
             binding.geoAnswerText.setText(answerToDisplay);
             binding.geoAnswerText.setVisibility(VISIBLE);
-            binding.simpleButton.setText(org.odk.collect.strings.R.string.change_point);
         }
         widgetValueChanged();
+    }
+
+    private int getButtonText(FormEntryPrompt prompt, String answerToDisplay) {
+        if (answerToDisplay.isEmpty()) {
+            return org.odk.collect.strings.R.string.get_point;
+        }
+        if (prompt.isReadOnly()) {
+            return org.odk.collect.strings.R.string.view_point;
+        }
+        return Appearances.isGeoPointMapAppearance(prompt)
+                ? org.odk.collect.strings.R.string.view_or_change_point
+                : org.odk.collect.strings.R.string.change_point;
     }
 }
