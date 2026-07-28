@@ -32,7 +32,11 @@ internal class ThreadSafeMediaPlayerWrapper(
                 mediaPlayer.setDataSource(uri)
                 mediaPlayer.prepare()
                 true
-            } catch (e: IOException) {
+            } catch (_: IOException) {
+                releaseMediaPlayerInstance()
+                false
+            } catch (_: IllegalStateException) {
+                releaseMediaPlayerInstance()
                 false
             }
         }
@@ -64,14 +68,20 @@ internal class ThreadSafeMediaPlayerWrapper(
     }
 
     fun getPosition(): Int? {
-        return mediaPlayer?.currentPosition
+        synchronized(this) {
+            return mediaPlayer?.currentPosition
+        }
     }
 
     fun release() {
         synchronized(this) {
-            mediaPlayer?.release()
-            mediaPlayer = null
+            releaseMediaPlayerInstance()
         }
+    }
+
+    private fun releaseMediaPlayerInstance() {
+        mediaPlayer?.release()
+        mediaPlayer = null
     }
 
     private fun setupNewMediaPlayer(): MediaPlayer {
