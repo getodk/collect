@@ -1,18 +1,24 @@
 package org.odk.collect.android.widgets
 
-import android.view.View
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.junit4.createEmptyComposeRule
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.javarosa.core.model.data.GeoPointData
 import org.javarosa.core.model.data.StringData
 import org.javarosa.form.api.FormEntryPrompt
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.verify
 import org.mockito.kotlin.mock
 import org.odk.collect.android.formentry.questions.QuestionDetails
+import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
+import org.odk.collect.android.support.WidgetTestActivity
 import org.odk.collect.android.utilities.Appearances
 import org.odk.collect.android.widgets.interfaces.GeoDataRequester
 import org.odk.collect.android.widgets.support.GeoWidgetHelpers.getRandomDoubleArray
@@ -22,12 +28,18 @@ import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithA
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnly
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndAnswer
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetDependencies
-import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry
+import org.odk.collect.androidtest.onNodeWithClickLabel
+import org.odk.collect.strings.R.string
 
 @RunWith(AndroidJUnit4::class)
 class GeoPointWidgetTest {
+    @get:Rule
+    val composeRule = createEmptyComposeRule()
+
+    private val activity = CollectHelpers.buildThemedActivity(WidgetTestActivity::class.java).setup().get()
+
     private val answer = GeoPointData(getRandomDoubleArray())
 
     private val geoDataRequester = mock<GeoDataRequester>()
@@ -35,24 +47,20 @@ class GeoPointWidgetTest {
 
     @Test
     fun whenPromptIsReadOnlyAndHasNoAnswer_geoPointButtonIsHidden() {
-        val widget = createWidget(promptWithReadOnly())
-        assertThat(widget.binding.simpleButton.visibility, equalTo(View.GONE))
+        createWidget(promptWithReadOnly())
+        composeRule.onNodeWithClickLabel(string.get_point).assertDoesNotExist()
     }
 
     @Test
     fun whenPromptIsNotReadOnlyAndHasNoAnswer_geoPointButtonIsShown() {
-        val widget = createWidget(promptWithAnswer(null))
-        assertThat(widget.binding.simpleButton.visibility, equalTo(View.VISIBLE))
+        createWidget(promptWithAnswer(null))
+        composeRule.onNodeWithClickLabel(string.get_point).assertIsDisplayed()
     }
 
     @Test
     fun whenPromptIsReadOnlyAndHasAnswer_geoPointButtonIsShown() {
-        val widget = createWidget(promptWithReadOnlyAndAnswer(answer))
-        assertThat(widget.binding.simpleButton.visibility, equalTo(View.VISIBLE))
-        assertThat(
-            widget.binding.simpleButton.text.toString(),
-            equalTo(widget.context.getString(org.odk.collect.strings.R.string.view_point))
-        )
+        createWidget(promptWithReadOnlyAndAnswer(answer))
+        composeRule.onNodeWithClickLabel(string.view_point).assertIsDisplayed()
     }
 
     @Test
@@ -62,8 +70,8 @@ class GeoPointWidgetTest {
             .withReadOnly(true)
             .withAnswer(null)
             .build()
-        val widget = createWidget(prompt)
-        assertThat(widget.binding.simpleButton.visibility, equalTo(View.GONE))
+        createWidget(prompt)
+        composeRule.onNodeWithClickLabel(string.get_point).assertDoesNotExist()
     }
 
     @Test
@@ -73,12 +81,8 @@ class GeoPointWidgetTest {
             .withReadOnly(true)
             .withAnswer(answer)
             .build()
-        val widget = createWidget(prompt)
-        assertThat(widget.binding.simpleButton.visibility, equalTo(View.VISIBLE))
-        assertThat(
-            widget.binding.simpleButton.text.toString(),
-            equalTo(widget.context.getString(org.odk.collect.strings.R.string.view_point))
-        )
+        createWidget(prompt)
+        composeRule.onNodeWithClickLabel(string.view_point).assertIsDisplayed()
     }
 
     @Test
@@ -101,50 +105,33 @@ class GeoPointWidgetTest {
 
     @Test
     fun creatingWidgetWithInvalidValue_doesNotUpdateWidgetDisplayedAnswer() {
-        val widget = createWidget(promptWithAnswer(StringData("blah")))
-        assertThat(widget.binding.geoAnswerText.text.toString(), equalTo(""))
-        assertThat(widget.binding.geoAnswerText.visibility, equalTo(View.GONE))
-        assertThat(
-            widget.binding.simpleButton.text.toString(),
-            equalTo(widget.context.getString(org.odk.collect.strings.R.string.get_point))
-        )
+        createWidget(promptWithAnswer(StringData("blah")))
+        composeRule.onNodeWithText("blah").assertDoesNotExist()
+        composeRule.onNodeWithClickLabel(string.get_point).assertIsDisplayed()
     }
 
     @Test
     fun answerTextViewShouldShowCorrectAnswer() {
-        val widget = createWidget(promptWithAnswer(answer))
-        assertThat(
-            widget.binding.geoAnswerText.text.toString(),
-            equalTo(GeoWidgetUtils.getGeoPointAnswerToDisplay(widget.context, answer.displayText))
-        )
-        assertThat(widget.binding.geoAnswerText.visibility, equalTo(View.VISIBLE))
+        createWidget(promptWithAnswer(answer))
+        composeRule.onNodeWithText(answerToDisplay(answer)).assertIsDisplayed()
     }
 
     @Test
     fun whenPromptDoesNotHaveAnswer_buttonShowsCorrectText() {
-        val widget = createWidget(promptWithAnswer(null))
-        assertThat(
-            widget.binding.simpleButton.text.toString(),
-            equalTo(widget.context.getString(org.odk.collect.strings.R.string.get_point))
-        )
+        createWidget(promptWithAnswer(null))
+        composeRule.onNodeWithClickLabel(string.get_point).assertIsDisplayed()
     }
 
     @Test
     fun whenPromptHasAnswer_buttonShowsCorrectText() {
-        val widget = createWidget(promptWithAnswer(answer))
-        assertThat(
-            widget.binding.simpleButton.text.toString(),
-            equalTo(widget.context.getString(org.odk.collect.strings.R.string.change_point))
-        )
+        createWidget(promptWithAnswer(answer))
+        composeRule.onNodeWithClickLabel(string.change_point).assertIsDisplayed()
     }
 
     @Test
     fun withMapsAppearance_whenPromptDoesNotHaveAnswer_buttonShowsCorrectText() {
-        val widget = createWidget(promptWithAppearance(Appearances.MAPS))
-        assertThat(
-            widget.binding.simpleButton.text.toString(),
-            equalTo(widget.context.getString(org.odk.collect.strings.R.string.get_point))
-        )
+        createWidget(promptWithAppearance(Appearances.MAPS))
+        composeRule.onNodeWithClickLabel(string.get_point).assertIsDisplayed()
     }
 
     @Test
@@ -153,11 +140,8 @@ class GeoPointWidgetTest {
             .withAppearance(Appearances.MAPS)
             .withAnswer(answer)
             .build()
-        val widget = createWidget(prompt)
-        assertThat(
-            widget.binding.simpleButton.text.toString(),
-            equalTo(widget.context.getString(org.odk.collect.strings.R.string.view_or_change_point))
-        )
+        createWidget(prompt)
+        composeRule.onNodeWithClickLabel(string.view_or_change_point).assertIsDisplayed()
     }
 
     @Test
@@ -166,11 +150,8 @@ class GeoPointWidgetTest {
             .withAppearance(Appearances.PLACEMENT_MAP)
             .withAnswer(answer)
             .build()
-        val widget = createWidget(prompt)
-        assertThat(
-            widget.binding.simpleButton.text.toString(),
-            equalTo(widget.context.getString(org.odk.collect.strings.R.string.view_or_change_point))
-        )
+        createWidget(prompt)
+        composeRule.onNodeWithClickLabel(string.view_or_change_point).assertIsDisplayed()
     }
 
     @Test
@@ -178,12 +159,9 @@ class GeoPointWidgetTest {
         val widget = createWidget(promptWithAnswer(answer))
         widget.clearAnswer()
 
-        assertThat(widget.binding.geoAnswerText.text.toString(), equalTo(""))
-        assertThat(widget.binding.geoAnswerText.visibility, equalTo(View.GONE))
-        assertThat(
-            widget.binding.simpleButton.text.toString(),
-            equalTo(widget.context.getString(org.odk.collect.strings.R.string.get_point))
-        )
+        assertThat(widget.answer, equalTo(null))
+        composeRule.onNodeWithText(answerToDisplay(answer)).assertDoesNotExist()
+        composeRule.onNodeWithClickLabel(string.get_point).assertIsDisplayed()
     }
 
     @Test
@@ -193,19 +171,6 @@ class GeoPointWidgetTest {
         widget.clearAnswer()
 
         verify(valueChangedListener).widgetValueChanged(widget)
-    }
-
-    @Test
-    fun clickingButtonAndAnswerTextViewForLong_callsLongClickListeners() {
-        val listener = mock<View.OnLongClickListener>()
-        val widget = createWidget(promptWithAnswer(null))
-
-        widget.setOnLongClickListener(listener)
-        widget.binding.simpleButton.performLongClick()
-        widget.binding.geoAnswerText.performLongClick()
-
-        verify(listener).onLongClick(widget.binding.simpleButton)
-        verify(listener).onLongClick(widget.binding.geoAnswerText)
     }
 
     @Test
@@ -226,43 +191,29 @@ class GeoPointWidgetTest {
     fun setData_updatesWidgetDisplayedAnswer() {
         val widget = createWidget(promptWithAnswer(null))
         widget.setData(answer.displayText)
-        assertThat(
-            widget.binding.geoAnswerText.text.toString(),
-            equalTo(GeoWidgetUtils.getGeoPointAnswerToDisplay(widget.context, answer.displayText))
-        )
-        assertThat(widget.binding.geoAnswerText.visibility, equalTo(View.VISIBLE))
+        composeRule.onNodeWithText(answerToDisplay(answer)).assertIsDisplayed()
     }
 
     @Test
     fun setDataWithInvalidValue_doesNotUpdateWidgetDisplayedAnswer() {
         val widget = createWidget(promptWithAnswer(null))
         widget.setData("blah")
-        assertThat(widget.binding.geoAnswerText.text.toString(), equalTo(""))
-        assertThat(widget.binding.geoAnswerText.visibility, equalTo(View.GONE))
-        assertThat(
-            widget.binding.simpleButton.text.toString(),
-            equalTo(widget.context.getString(org.odk.collect.strings.R.string.get_point))
-        )
+        composeRule.onNodeWithText("blah").assertDoesNotExist()
+        composeRule.onNodeWithClickLabel(string.get_point).assertIsDisplayed()
     }
 
     @Test
     fun setData_whenDataIsNull_updatesButtonLabel() {
         val widget = createWidget(promptWithAnswer(answer))
         widget.setData("")
-        assertThat(
-            widget.binding.simpleButton.text.toString(),
-            equalTo(widget.context.getString(org.odk.collect.strings.R.string.get_point))
-        )
+        composeRule.onNodeWithClickLabel(string.get_point).assertIsDisplayed()
     }
 
     @Test
     fun setData_whenDataIsNotNull_updatesButtonLabel() {
         val widget = createWidget(promptWithAnswer(null))
         widget.setData(answer.displayText)
-        assertThat(
-            widget.binding.simpleButton.text.toString(),
-            equalTo(widget.context.getString(org.odk.collect.strings.R.string.change_point))
-        )
+        composeRule.onNodeWithClickLabel(string.change_point).assertIsDisplayed()
     }
 
     @Test
@@ -273,20 +224,14 @@ class GeoPointWidgetTest {
             .build()
         val widget = createWidget(prompt)
         widget.setData("")
-        assertThat(
-            widget.binding.simpleButton.text.toString(),
-            equalTo(widget.context.getString(org.odk.collect.strings.R.string.get_point))
-        )
+        composeRule.onNodeWithClickLabel(string.get_point).assertIsDisplayed()
     }
 
     @Test
     fun withMapsAppearance_setData_whenDataIsNotNull_updatesButtonLabel() {
         val widget = createWidget(promptWithAppearance(Appearances.MAPS))
         widget.setData(answer.displayText)
-        assertThat(
-            widget.binding.simpleButton.text.toString(),
-            equalTo(widget.context.getString(org.odk.collect.strings.R.string.view_or_change_point))
-        )
+        composeRule.onNodeWithClickLabel(string.view_or_change_point).assertIsDisplayed()
     }
 
     @Test
@@ -300,8 +245,8 @@ class GeoPointWidgetTest {
     @Test
     fun buttonClick_requestsGeoPoint() {
         val prompt = promptWithAnswer(answer)
-        val widget = createWidget(prompt)
-        widget.binding.simpleButton.performClick()
+        createWidget(prompt)
+        composeRule.onNodeWithClickLabel(string.change_point).performClick()
 
         verify(geoDataRequester).requestGeoPoint(prompt, waitingForDataRegistry)
     }
@@ -309,8 +254,8 @@ class GeoPointWidgetTest {
     @Test
     fun whenPromptIsReadOnlyAndHasAnswer_buttonClick_requestsGeoPoint() {
         val prompt = promptWithReadOnlyAndAnswer(answer)
-        val widget = createWidget(prompt)
-        widget.binding.simpleButton.performClick()
+        createWidget(prompt)
+        composeRule.onNodeWithClickLabel(string.view_point).performClick()
 
         verify(geoDataRequester).requestGeoPoint(prompt, waitingForDataRegistry)
     }
@@ -320,7 +265,7 @@ class GeoPointWidgetTest {
         val prompt = promptWithAnswer(answer)
         val widget = createWidget(prompt)
         widget.clearAnswer()
-        widget.binding.simpleButton.performClick()
+        composeRule.onNodeWithClickLabel(string.get_point).performClick()
 
         verify(geoDataRequester).requestGeoPoint(prompt, waitingForDataRegistry)
     }
@@ -330,18 +275,23 @@ class GeoPointWidgetTest {
         val prompt = promptWithAnswer(null)
         val widget = createWidget(prompt)
         widget.setData(answer)
-        widget.binding.simpleButton.performClick()
+        composeRule.onNodeWithClickLabel(string.change_point).performClick()
 
         verify(geoDataRequester).requestGeoPoint(prompt, waitingForDataRegistry)
     }
 
+    private fun answerToDisplay(answer: GeoPointData) =
+        GeoWidgetUtils.getGeoPointAnswerToDisplay(activity, answer.displayText)
+
     private fun createWidget(prompt: FormEntryPrompt): GeoPointWidget {
         return GeoPointWidget(
-            widgetTestActivity(),
+            activity,
             QuestionDetails(prompt),
             waitingForDataRegistry,
             geoDataRequester,
             widgetDependencies()
-        )
+        ).also {
+            activity.setContentView(it)
+        }
     }
 }
