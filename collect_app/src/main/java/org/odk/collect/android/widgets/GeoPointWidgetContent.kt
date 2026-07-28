@@ -5,13 +5,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MyLocation
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.utilities.Appearances
-import org.odk.collect.android.widgets.utilities.GeoWidgetUtils
 import org.odk.collect.androidshared.ui.compose.marginStandard
+import org.odk.collect.geo.GeoUtils
 import org.odk.collect.strings.R.string
 
 @Composable
@@ -25,12 +25,12 @@ fun GeoPointWidgetContent(
     onGetPointClick: () -> Unit,
     onLongClick: () -> Unit
 ) {
-    val answerToDisplay = GeoWidgetUtils.getGeoPointAnswerToDisplay(LocalContext.current, answer)
+    val hasAnswer = remember(answer) { GeoUtils.parseGeometryPoint(answer) != null }
 
     Column {
-        if (!readOnly || answerToDisplay.isNotEmpty()) {
+        if (!readOnly || hasAnswer) {
             val buttonText = when {
-                answerToDisplay.isEmpty() -> string.get_point
+                !hasAnswer -> string.get_point
                 readOnly -> string.view_point
                 Appearances.isGeoPointMapAppearance(formEntryPrompt) -> string.view_or_change_point
                 else -> string.change_point
@@ -48,7 +48,7 @@ fun GeoPointWidgetContent(
         WidgetAnswer(
             Modifier.padding(top = marginStandard()),
             formEntryPrompt,
-            answerToDisplay,
+            answer,
             answerFontSize,
             mediaWidgetAnswerViewModel = mediaWidgetAnswerViewModel,
             onLongClick = onLongClick
