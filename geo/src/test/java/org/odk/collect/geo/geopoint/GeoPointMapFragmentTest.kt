@@ -221,6 +221,23 @@ class GeoPointMapFragmentTest {
     }
 
     @Test
+    fun `clicking clear when input provided clears marker after recreation`() {
+        val scenario = launcherRule.launchInContainer {
+            GeoPointMapFragment(MapPoint(0.0, 0.0), false, false, false)
+        }
+
+        val location = Location(2.0, 2.0, accuracy = 5.2f)
+        locationTracker.currentLocation = location
+
+        EspressoInteractions.clickOn(withContentDescription(string.clear))
+        assertThat(map.getMarkers().size, equalTo(1))
+        assertThat(map, showsCurrentLocation(location.toMapPoint()))
+
+        scenario.recreate()
+        assertThat(map.getMarkers().size, equalTo(1))
+    }
+
+    @Test
     fun `enables place marker button when existing location cleared`() {
         val inputPoint = MapPoint(1.0, 2.0)
         launcherRule.launchInContainer {
