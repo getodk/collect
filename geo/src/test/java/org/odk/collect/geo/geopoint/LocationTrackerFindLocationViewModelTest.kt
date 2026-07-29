@@ -17,7 +17,7 @@ import org.odk.collect.location.satellites.SatelliteInfoClient
 import org.odk.collect.location.tracker.LocationTracker
 import org.odk.collect.testshared.FakeScheduler
 
-class LocationTrackerGeoPointViewModelTest {
+class LocationTrackerFindLocationViewModelTest {
 
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -302,5 +302,5 @@ class LocationTrackerGeoPointViewModelTest {
     }
 
     private fun createViewModel(clock: () -> Long = { 0 }) =
-        LocationTrackerGeoPointViewModel(locationTracker, satelliteInfoClient, clock, scheduler)
+        LocationTrackerFindLocationViewModel(locationTracker, satelliteInfoClient, clock, scheduler)
 }

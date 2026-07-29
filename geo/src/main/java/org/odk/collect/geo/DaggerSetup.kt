@@ -11,8 +11,8 @@ import org.odk.collect.async.Scheduler
 import org.odk.collect.geo.geopoint.GeoPointActivity
 import org.odk.collect.geo.geopoint.GeoPointDialogFragment
 import org.odk.collect.geo.geopoint.GeoPointMapFragment
-import org.odk.collect.geo.geopoint.GeoPointViewModelFactory
-import org.odk.collect.geo.geopoint.LocationTrackerGeoPointViewModel
+import org.odk.collect.geo.geopoint.FindLocationViewModelFactory
+import org.odk.collect.geo.geopoint.LocationTrackerFindLocationViewModel
 import org.odk.collect.geo.geopoly.GeoPolyFragment
 import org.odk.collect.geo.selection.SelectionMapFragment
 import org.odk.collect.location.LocationClient
@@ -94,13 +94,13 @@ open class GeoDependencyModule {
     }
 
     @Provides
-    internal open fun providesGeoPointViewModelFactory(application: Application): GeoPointViewModelFactory {
-        return object : GeoPointViewModelFactory {
+    internal open fun providesGeoPointViewModelFactory(application: Application): FindLocationViewModelFactory {
+        return object : FindLocationViewModelFactory {
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 val componentProvider = application as GeoDependencyComponentProvider
                 val component = componentProvider.geoDependencyComponent
-                return LocationTrackerGeoPointViewModel(
+                return LocationTrackerFindLocationViewModel(
                     component.locationTracker,
                     component.satelliteInfoClient,
                     System::currentTimeMillis,
