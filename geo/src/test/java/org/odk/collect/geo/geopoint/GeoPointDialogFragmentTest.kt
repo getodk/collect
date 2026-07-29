@@ -41,7 +41,7 @@ class GeoPointDialogFragmentTest {
     private val currentAccuracyLiveData: MutableLiveData<LocationAccuracy?> = MutableLiveData(null)
     private val timeElapsedLiveData: MutableNonNullLiveData<Long> = MutableNonNullLiveData(0)
     private val satellitesLiveData = MutableNonNullLiveData(0)
-    private val viewModel = mock<GeoPointViewModel> {
+    private val viewModel = mock<FindLocationViewModel> {
         on { currentAccuracy } doReturn currentAccuracyLiveData
         on { timeElapsed } doReturn timeElapsedLiveData
         on { satellites } doReturn satellitesLiveData
@@ -56,7 +56,7 @@ class GeoPointDialogFragmentTest {
             .application(application)
             .geoDependencyModule(object : GeoDependencyModule() {
                 override fun providesGeoPointViewModelFactory(application: Application) =
-                    object : GeoPointViewModelFactory {
+                    object : FindLocationViewModelFactory {
                         @Suppress("UNCHECKED_CAST")
                         override fun <T : ViewModel> create(modelClass: Class<T>): T {
                             return viewModel as T

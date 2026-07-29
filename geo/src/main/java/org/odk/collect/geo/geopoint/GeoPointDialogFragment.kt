@@ -19,12 +19,12 @@ import javax.inject.Inject
 class GeoPointDialogFragment : DialogFragment() {
 
     @Inject
-    internal lateinit var geoPointViewModelFactory: GeoPointViewModelFactory
+    internal lateinit var findLocationViewModelFactory: FindLocationViewModelFactory
 
     var listener: Listener? = null
 
     lateinit var binding: GeopointDialogBinding
-    private lateinit var viewModel: GeoPointViewModel
+    private lateinit var viewModel: FindLocationViewModel
 
     private val onBackPressedCallback: OnBackPressedCallback =
         object : OnBackPressedCallback(true) {
@@ -44,8 +44,8 @@ class GeoPointDialogFragment : DialogFragment() {
         viewModel =
             ViewModelProvider(
                 requireActivity(),
-                geoPointViewModelFactory
-            ).get(GeoPointViewModel::class.java)
+                findLocationViewModelFactory
+            ).get(FindLocationViewModel::class.java)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

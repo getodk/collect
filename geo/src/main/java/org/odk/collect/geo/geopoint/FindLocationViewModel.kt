@@ -13,7 +13,7 @@ import org.odk.collect.location.satellites.SatelliteInfoClient
 import org.odk.collect.location.tracker.LocationTracker
 import org.odk.collect.location.tracker.getCurrentLocation
 
-internal abstract class GeoPointViewModel : ViewModel() {
+internal abstract class FindLocationViewModel : ViewModel() {
 
     abstract val accuracyThreshold: Float
 
@@ -31,12 +31,12 @@ internal abstract class GeoPointViewModel : ViewModel() {
     abstract fun forceLocation()
 }
 
-internal class LocationTrackerGeoPointViewModel(
+internal class LocationTrackerFindLocationViewModel(
     private val locationTracker: LocationTracker,
     private val satelliteInfoClient: SatelliteInfoClient,
     private val clock: () -> Long,
     scheduler: Scheduler
-) : GeoPointViewModel() {
+) : FindLocationViewModel() {
 
     private val startTime = clock()
     private val repeat = scheduler.repeat(
@@ -112,4 +112,4 @@ internal class LocationTrackerGeoPointViewModel(
     }
 }
 
-internal interface GeoPointViewModelFactory : ViewModelProvider.Factory
+internal interface FindLocationViewModelFactory : ViewModelProvider.Factory

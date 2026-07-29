@@ -13,7 +13,7 @@ import javax.inject.Inject
 class GeoPointActivity : LocalizedActivity(), GeoPointDialogFragment.Listener {
 
     @Inject
-    internal lateinit var geoPointViewModelFactory: GeoPointViewModelFactory
+    internal lateinit var findLocationViewModelFactory: FindLocationViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,7 +21,7 @@ class GeoPointActivity : LocalizedActivity(), GeoPointDialogFragment.Listener {
         (application as GeoDependencyComponentProvider).geoDependencyComponent.inject(this)
 
         val viewModel =
-            ViewModelProvider(this, geoPointViewModelFactory).get(GeoPointViewModel::class.java)
+            ViewModelProvider(this, findLocationViewModelFactory).get(FindLocationViewModel::class.java)
 
         viewModel.acceptedLocation.observe(this) {
             if (it != null) {
