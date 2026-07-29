@@ -1,7 +1,6 @@
 package org.odk.collect.geo.geopoint
 
 import android.app.Application
-import androidx.activity.OnBackPressedDispatcher
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -26,7 +25,6 @@ import org.odk.collect.geo.DaggerGeoDependencyComponent
 import org.odk.collect.geo.GeoDependencyModule
 import org.odk.collect.geo.GeoUtils.toMapPoint
 import org.odk.collect.geo.R
-import org.odk.collect.geo.geopoly.GeoPolyFragment
 import org.odk.collect.geo.support.FakeLocationTracker
 import org.odk.collect.geo.support.FakeMapFragment
 import org.odk.collect.geo.support.FakeMappableData
@@ -51,7 +49,6 @@ import org.odk.collect.testshared.EspressoInteractions
 import org.odk.collect.testshared.FragmentResultRecorder
 import org.odk.collect.testshared.RobolectricHelpers.getFragmentByClass
 import org.odk.collect.webpage.WebPageService
-import org.robolectric.Shadows
 
 @RunWith(AndroidJUnit4::class)
 class GeoPointMapFragmentTest {
@@ -62,14 +59,8 @@ class GeoPointMapFragmentTest {
     @get:Rule
     val launcherRule = FragmentScenarioLauncherRule()
 
-    private val application = ApplicationProvider.getApplicationContext<Application>()
-
     @Before
     fun setUp() {
-        val shadowApplication =
-            Shadows.shadowOf(application)
-        shadowApplication.grantPermissions("android.permission.ACCESS_FINE_LOCATION")
-        shadowApplication.grantPermissions("android.permission.ACCESS_COARSE_LOCATION")
         overrideDependencies(map)
     }
 
