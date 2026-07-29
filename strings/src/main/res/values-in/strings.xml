@@ -121,13 +121,9 @@
   <!--Title of the end of form screen-->
   <string name="save_enter_data_description">Anda berada di akhir formulir\n\"%s\".</string>
   <!--Text shown in an information box on the end of form screen when auto-send is off or the device is offline-->
-  <string name="form_editing_disabled_after_finalizing">Perubahan tidak dapat dilakukan setelah finalisasi.</string>
   <!--Text shown in an information box on the end of form screen when auto-send is on and the device is online-->
-  <string name="form_editing_disabled_after_sending">Perubahan tidak dapat dilakukan setelah dikirim.</string>
   <!--Text shown in an information box on the end of form screen when auto-send is off and the form allows edits after finalize/send-->
-  <string name="form_editing_enabled_after_finalizing">Perubahan dapat dilakukan setelah finalisasi.</string>
   <!--Text shown in an information box on the end of form screen when auto-send is on and the form allows edits after finalize/send-->
-  <string name="form_editing_enabled_after_sending">Perubahan dapat dilakukan setelah pengiriman.</string>
   <!--Details shown in an information box on the end of form screen when the form does not allow edits after finalize/send-->
   <string name="form_editing_disabled_hint">Jika Anda perlu mengedit formulir, simpan sebagai draf.</string>
   <!--Details shown in an information box on the end of form screen when the form allows edits after finalization-->
@@ -207,6 +203,13 @@
   <string name="rank_items">Peringkat isian</string>
   <string name="number_picker_title">Pemilihan nomor</string>
   <string name="invalid_range_widget">Widget ini memiliki parameter yang tidak valid.</string>
+  <!--Content description for a horizontal slider used in range widgets-->
+  <!--Content description for a vertical slider used in range widgets-->
+  <!--Content description for the label showing the current value of the slider-->
+  <!--Content description for each tick mark on the slider indicating discrete steps-->
+  <!--Content description for the draggable thumb handle of the slider-->
+  <!--Content description for the label at the start (minimum) of the slider-->
+  <!--Content description for the label at the end (maximum) of the slider-->
   <string name="svg_file_does_not_exist">Berkas SVG tidak ada.</string>
   <string name="capture_image">Ambil Foto</string>
   <string name="choose_image">Pilih Gambar</string>
@@ -410,10 +413,7 @@
   <!--##############################################
     # GEO
     ##############################################-->
-  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
-   These strings are only being used to preserve compatibility with pre-existing
-    tile caches, and are not shown in the UI.-->
-    <string name="basemap">Peta dasar</string>
+  <string name="basemap">Peta dasar</string>
   <string name="basemap_source">Sumber</string>
   <string name="basemap_source_unavailable">Maaf, peta dasar %s tidak tersedia pada perangkat ini. Silakan pilih peta dasar lainnya di Pengaturan &gt; Peta.</string>
   <string name="map_style_label">Gaya peta %s</string>
@@ -424,10 +424,10 @@
   <string name="light" tools:ignore="UnusedResources">Terang</string>
   <string name="dark" tools:ignore="UnusedResources">Gelap</string>
   <string name="outdoors" tools:ignore="UnusedResources">Tempat terbuka</string>
-  <string name="topographic">Topografi</string>
+  <string name="topographic" tools:ignore="UnusedResources">Topografi</string>
   <string name="google_play_services_error_occured">Tidak dapat mengakses Google Maps. Apakah Google Play Services telah terinstal?</string>
-  <string name="carto_map_style_positron">Positron</string>
-  <string name="carto_map_style_dark_matter">Dark Matter</string>
+  <string name="carto_map_style_positron" tools:ignore="UnusedResources">Positron</string>
+  <string name="carto_map_style_dark_matter" tools:ignore="UnusedResources">Dark Matter</string>
   <!--Title for the offline layer section of settings-->
   <string name="offline_layer">Lapisan luring</string>
   <!--Label for the offline layer setting-->
@@ -461,7 +461,6 @@
   <string name="current_project_option">Hanya proyek ini</string>
   <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
   <string name="delete_layer_confirmation_message">Anda yakin ingin menghapus %1$s lapisan luring?</string>
-  <string name="record_geopoint">Rekam titik</string>
   <string name="location_accuracy">Akurasi: %1$s</string>
   <string name="location_accuracy_unacceptable">⚠️ Akurasi: %1$s (belum sesuai)</string>
   <string name="provider_disabled_error">Maaf, penyedia lokasi belum diaktifkan</string>
@@ -698,7 +697,7 @@
   <string name="change_password">Kata Sandi ODK</string>
   <string name="password_error_whitespace">Tidak diperkenankan menggunakan spasi pada kata sandi</string>
   <string name="username_error_whitespace">Tidak diperkenankan menggunakan spasi pada nama pengguna</string>
-    <string name="language">Bahasa</string>
+  <string name="language">Bahasa</string>
   <string name="use_device_language">Gunakan bahasa perangkat</string>
   <string name="font_size">Ukuran teks font</string>
   <string name="change_font_size">Ukuran teks font</string>
@@ -1010,6 +1009,7 @@
     ##############################################-->
   <string name="crash_last_run">Terjadi kegagalan sistem saat aplikasi berjalan terakhir kali!</string>
   <string name="cant_start_app">Tidak dapat memulai aplikasi!</string>
+  <!--Message shown when the app crashed due to running out of memory last time it was run.-->
   <!--##############################################
     # Google Drive deprecation
     ##############################################-->

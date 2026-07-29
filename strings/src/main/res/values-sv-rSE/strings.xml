@@ -158,6 +158,13 @@
   <!--Label for button that rotates camera orientation when scanning barcodes-->
   <string name="open_file">Öppna fil</string>
   <string name="invalid_range_widget">Ogiltiga parametrar för widget!</string>
+  <!--Content description for a horizontal slider used in range widgets-->
+  <!--Content description for a vertical slider used in range widgets-->
+  <!--Content description for the label showing the current value of the slider-->
+  <!--Content description for each tick mark on the slider indicating discrete steps-->
+  <!--Content description for the draggable thumb handle of the slider-->
+  <!--Content description for the label at the start (minimum) of the slider-->
+  <!--Content description for the label at the end (maximum) of the slider-->
   <string name="svg_file_does_not_exist">SVG-fil finns inte!</string>
   <string name="capture_image">Ta bild</string>
   <string name="choose_image">Välj bild</string>
@@ -309,10 +316,7 @@
   <!--##############################################
     # GEO
     ##############################################-->
-  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
-   These strings are only being used to preserve compatibility with pre-existing
-    tile caches, and are not shown in the UI.-->
-    <string name="basemap">Grundkarta</string>
+  <string name="basemap">Grundkarta</string>
   <string name="basemap_source">Källa</string>
   <string name="map_style_label">%s kartstil</string>
   <string name="streets">Streets</string>
@@ -322,10 +326,10 @@
   <string name="light" tools:ignore="UnusedResources">Ljus</string>
   <string name="dark" tools:ignore="UnusedResources">Mörk</string>
   <string name="outdoors" tools:ignore="UnusedResources">Utomhus</string>
-  <string name="topographic">Topografisk</string>
+  <string name="topographic" tools:ignore="UnusedResources">Topografisk</string>
   <string name="google_play_services_error_occured">Åtkomst till Google Maps ej möjlig. Är Google Play Services installerad?</string>
-  <string name="carto_map_style_positron">Positron</string>
-  <string name="carto_map_style_dark_matter">Mörk materia</string>
+  <string name="carto_map_style_positron" tools:ignore="UnusedResources">Positron</string>
+  <string name="carto_map_style_dark_matter" tools:ignore="UnusedResources">Mörk materia</string>
   <!--Title for the offline layer section of settings-->
   <!--Label for the offline layer setting-->
   <!--Title for the screen that allows the user to select a offline layer for maps-->
@@ -485,7 +489,7 @@
   <string name="change_password">ODK lösenord</string>
   <string name="password_error_whitespace">Inledande eller avslutande blanksteg är inte tillåtet i lösenord</string>
   <string name="username_error_whitespace">Inledande eller avslutande blanksteg är inte tillåtet i användarnamn</string>
-    <string name="language">Språk</string>
+  <string name="language">Språk</string>
   <string name="use_device_language">Använd enhetens språk</string>
   <string name="font_size">Textstorlek</string>
   <string name="change_font_size">Textstorlek</string>
@@ -714,16 +718,10 @@ Dela ODK Collect med dem.</string>
   <!--##############################################
     # Crash handling
     ##############################################-->
+  <!--Message shown when the app crashed due to running out of memory last time it was run.-->
   <!--##############################################
     # Google Drive deprecation
     ##############################################-->
-  <!--##############################################
-    # Min SDK deprecation banner
-    ##############################################-->
-  <!--First part of the message shown in the banner, informing the user that their device will soon be unsupported-->
-  <!--Second part of the message shown in the banner, informing the user that their device will soon be unsupported-->
-  <!--Button text that opens a forum post with more information about upcoming device support changes-->
-  <!--Button text to dismiss the banner-->
   <!--##############################################
     # Developer tools
     ##############################################-->

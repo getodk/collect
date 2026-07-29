@@ -193,6 +193,13 @@
   <string name="rank_items">رده بندی اقلام</string>
   <string name="number_picker_title">شماره جمع کننده</string>
   <string name="invalid_range_widget">این ویجت دارای پارامترهای نامعتبر است!</string>
+  <!--Content description for a horizontal slider used in range widgets-->
+  <!--Content description for a vertical slider used in range widgets-->
+  <!--Content description for the label showing the current value of the slider-->
+  <!--Content description for each tick mark on the slider indicating discrete steps-->
+  <!--Content description for the draggable thumb handle of the slider-->
+  <!--Content description for the label at the start (minimum) of the slider-->
+  <!--Content description for the label at the end (maximum) of the slider-->
   <string name="svg_file_does_not_exist">فایل SVG موجود نیست!</string>
   <string name="capture_image">گرفتن عکس</string>
   <string name="choose_image">انتخاب تصویر</string>
@@ -357,10 +364,7 @@
   <!--##############################################
     # GEO
     ##############################################-->
-  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
-   These strings are only being used to preserve compatibility with pre-existing
-    tile caches, and are not shown in the UI.-->
-    <string name="basemap">نقشه اصلی</string>
+  <string name="basemap">نقشه اصلی</string>
   <string name="basemap_source">منبع</string>
   <string name="basemap_source_unavailable">متأسفیم، %s نقشه پایه در این دستگاه موجود نیست. لطفاً نقشه پایه دیگری را در تنظیمات &gt; نقشه ها.</string>
   <string name="map_style_label">%s سبک نقشه</string>
@@ -371,10 +375,10 @@
   <string name="light" tools:ignore="UnusedResources">روشن</string>
   <string name="dark" tools:ignore="UnusedResources">تاریک</string>
   <string name="outdoors" tools:ignore="UnusedResources">در فضای بیرونی </string>
-  <string name="topographic">توپوگرافی</string>
+  <string name="topographic" tools:ignore="UnusedResources">توپوگرافی</string>
   <string name="google_play_services_error_occured">دسترسی به نقشه های گوگل امکان پذیر نیست. آیا خدمات Google Play نصب شده است؟</string>
-  <string name="carto_map_style_positron">پوزیترون</string>
-  <string name="carto_map_style_dark_matter">ماده تاریک</string>
+  <string name="carto_map_style_positron" tools:ignore="UnusedResources">پوزیترون</string>
+  <string name="carto_map_style_dark_matter" tools:ignore="UnusedResources">ماده تاریک</string>
   <!--Title for the offline layer section of settings-->
   <!--Label for the offline layer setting-->
   <!--Title for the screen that allows the user to select a offline layer for maps-->
@@ -390,7 +394,6 @@
   <!--Text for option where layer should be available to all projects-->
   <!--Text for option where layer should be available to the current project only-->
   <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
-  <string name="record_geopoint">یک نقطه را ثبت کنید</string>
   <string name="provider_disabled_error">با معذرت، نشان دهنده های مکان غیرفعال هستند!</string>
   <string name="google_play_services_not_available">این فورم می خواهد موقعیت مکانی شما را ردیابی کند اما خدمات Google Play در دسترس نیست.</string>
   <string name="location_providers_disabled_dialog_message">این فورم می خواهد موقعیت مکانی شما را ردیابی کند اما ارائه دهندگان موقعیت مکانی غیرفعال هستند. لطفا در تنظیمات اندروید فعال کنید.</string>
@@ -615,7 +618,7 @@
   <string name="change_password">پسورد ODK</string>
   <string name="password_error_whitespace">فضای خالی پیشرو یا انتهایی در پسورد مجاز نیست</string>
   <string name="username_error_whitespace">فضای خالی پیشرو یا انتهایی در نام کاربری مجاز نیست</string>
-    <string name="language">زبان</string>
+  <string name="language">زبان</string>
   <string name="use_device_language">از زبان دستگاه استفاده کنید</string>
   <string name="font_size">اندازه فونت متن</string>
   <string name="change_font_size">اندازه فونت متن</string>
@@ -909,11 +912,11 @@
     ##############################################-->
   <string name="crash_last_run">آخرین باری که برنامه در حال اجرا بود یک خرابی وجود داشت!</string>
   <string name="cant_start_app">نمی توان app را راه اندازی کرد!</string>
+  <!--Message shown when the app crashed due to running out of memory last time it was run.-->
   <!--##############################################
     # Google Drive deprecation
     ##############################################-->
   <string name="learn_more_button_text">بیشتر بدانید</string>
-  <!--Button text to dismiss the banner-->
   <!--##############################################
     # Developer tools
     ##############################################-->
