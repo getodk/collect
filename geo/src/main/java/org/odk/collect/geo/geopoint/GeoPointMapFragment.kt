@@ -271,7 +271,11 @@ class GeoPointMapFragment(
             clearButton!!.isEnabled = false
         }
 
-        if (inputPoint != null) {
+        if (previousState != null) {
+            restoreFromInstanceState(previousState!!)
+        }
+
+        if (inputPoint != null && !setClear) {
             // If the point is initially set, the "place marker"
             // button, dragging, and long-pressing are all initially disabled.
             // To enable them, the user must clear the marker and add a new one.
@@ -284,10 +288,6 @@ class GeoPointMapFragment(
             locationStatus!!.visibility = View.GONE
             zoomButton!!.isEnabled = true
             zoomToMarker(false)
-        }
-
-        if (previousState != null) {
-            restoreFromInstanceState(previousState!!)
         }
 
         map!!.showCurrentLocation(
