@@ -357,7 +357,10 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
     @Override
     public void clearFeatures(@NotNull List<@NotNull Integer> ids) {
         for (Integer id : ids) {
-            features.remove(id).dispose();
+            MapFeature removedFeature = features.remove(id);
+            if (removedFeature != null) {
+                removedFeature.dispose();
+            }
         }
     }
 

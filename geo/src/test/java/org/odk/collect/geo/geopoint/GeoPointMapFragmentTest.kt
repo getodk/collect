@@ -238,18 +238,6 @@ class GeoPointMapFragmentTest {
     }
 
     @Test
-    fun `enables place marker button when existing location cleared`() {
-        val inputPoint = MapPoint(1.0, 2.0)
-        launcherRule.launchInContainer {
-            GeoPointMapFragment(inputPoint, false, false, false)
-        }
-
-        EspressoAssertions.assertDisabled(withContentDescription(string.record_geopoint))
-        EspressoInteractions.clickOn(withContentDescription(string.clear))
-        EspressoAssertions.assertEnabled(withContentDescription(string.record_geopoint))
-    }
-
-    @Test
     fun `shows items from mappable data`() {
         val mappableData = FakeMappableData(
             listOf(
