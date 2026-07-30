@@ -13,6 +13,6 @@ class AMRAppender : AudioFileAppender {
     }
 
     companion object {
-        const val AMR_HEADER_BYTES: Int = 6
+        private const val AMR_HEADER_BYTES: Int = 6
     }
 }
