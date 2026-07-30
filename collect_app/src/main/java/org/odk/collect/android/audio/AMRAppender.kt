@@ -7,7 +7,7 @@ class AMRAppender : AudioFileAppender {
     @Throws(IOException::class)
     override fun append(one: File, two: File) {
         val twoContents = two.readBytes()
-        if (twoContents.size - AMR_HEADER_BYTES >= 0) {
+        if (twoContents.size > AMR_HEADER_BYTES) {
             one.appendBytes(twoContents.copyOfRange(AMR_HEADER_BYTES, twoContents.size))
         }
     }
