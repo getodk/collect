@@ -24,7 +24,6 @@ import org.odk.collect.qrcode.BarcodeFilter
 import org.odk.collect.qrcode.BarcodeFormat
 import org.odk.collect.qrcode.BarcodeScannerView
 import org.odk.collect.qrcode.BarcodeScannerViewContainer
-import org.odk.collect.qrcode.DetectedBarcode
 import org.odk.collect.qrcode.DetectedState
 import org.odk.collect.qrcode.ScannerOverlay
 import org.odk.collect.qrcode.calculateViewFinder
@@ -139,8 +138,8 @@ private class MlKitBarcodeScannerView(
                     detectedState.value = it
 
                     if (it is DetectedState.Full) {
-                        val contents = processBarcode(it.barcode)
-                        if (!contents.isNullOrEmpty()) {
+                        val contents = it.barcode.contents
+                        if (contents.isNotEmpty()) {
                             cameraController.unbind()
                             callback(contents)
                         }
@@ -186,26 +185,6 @@ private class MlKitBarcodeScannerView(
             (viewFinderOffset.x + viewFinderSize.width).toInt(),
             (viewFinderOffset.y + viewFinderSize.height).toInt()
         )
-    }
-
-    private fun processBarcode(barcode: DetectedBarcode): String? {
-        return when (barcode) {
-            is DetectedBarcode.Utf8 -> {
-                barcode.contents
-            }
-
-            is DetectedBarcode.Bytes -> {
-                if (barcode.format == BarcodeFormat.PDF417) {
-                    /**
-                     * Allow falling back to Latin encoding for PDF417 barcodes. This provides parity
-                     * with the Zxing implementation.
-                     */
-                    String(barcode.bytes, Charsets.ISO_8859_1)
-                } else {
-                    null
-                }
-            }
-        }
     }
 
     companion object {

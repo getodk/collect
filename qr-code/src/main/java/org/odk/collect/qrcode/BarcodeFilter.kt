@@ -52,9 +52,10 @@ sealed class DetectedBarcode {
 
     abstract val bytes: ByteArray
     abstract val format: BarcodeFormat
+    abstract val contents: String
 
     data class Utf8(
-        val contents: String,
+        override val contents: String,
         override val format: BarcodeFormat,
         override val bytes: ByteArray
     ) : DetectedBarcode() {
@@ -86,6 +87,15 @@ sealed class DetectedBarcode {
         override val format: BarcodeFormat,
         override val bytes: ByteArray
     ) : DetectedBarcode() {
+
+        /**
+         * Contents that aren't valid UTF-8 are decoded as Latin, which is the default encoding
+         * for barcodes that don't declare one. This provides parity with the Zxing
+         * implementation.
+         */
+        override val contents: String
+            get() = String(bytes, Charsets.ISO_8859_1)
+
         /**
          * Requires custom [equals] due to [ByteArray] field
          */
