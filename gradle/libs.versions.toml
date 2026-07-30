@@ -1,7 +1,3 @@
-# After changing any version here, regenerate the dependency lockfiles so every
-# module stays pinned for debug and release:
-#./gradlew resolveAndLockAll --write-locks
-
 [versions]
 compileSdk = "37"
 minSdk = "26"
