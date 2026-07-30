@@ -38,5 +38,4 @@ object MapboxClassInstanceCreator {
             .getConstructor(String::class.java)
             .newInstance(configuration) as MapConfigurator
     }
-
 }

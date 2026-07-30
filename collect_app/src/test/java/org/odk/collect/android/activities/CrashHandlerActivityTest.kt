@@ -18,6 +18,7 @@ class CrashHandlerActivityTest {
 
     private val context = ApplicationProvider.getApplicationContext<Context>()
     private val crashHandler = CrashHandler.getInstance(context)!!
+
     @get:Rule
     val launcherRule = ActivityScenarioLauncherRule()
 

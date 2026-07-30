@@ -196,7 +196,7 @@ private class MlKitBarcodeScannerView(
 
             is DetectedBarcode.Bytes -> {
                 if (barcode.format == BarcodeFormat.PDF417) {
-                    /**
+                    /*
                      * Allow falling back to Latin encoding for PDF417 barcodes. This provides parity
                      * with the Zxing implementation.
                      */

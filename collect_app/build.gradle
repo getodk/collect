@@ -221,11 +221,8 @@ configurations.all {
         cacheDynamicVersionsFor(0, 'seconds')
         cacheChangingModulesFor(0, 'seconds')
 
-        force 'org.objenesis:objenesis:2.6'
         force 'org.hamcrest:hamcrest:3.0'
     }
-    
-    transitive = true
 }
 
 dependencies {
@@ -295,7 +292,7 @@ dependencies {
         exclude group: "com.android.support"
     }
     implementation libs.myanmarCalendar
-    implementation files('libs/bikram-sambat-1.8.0.jar')
+    implementation files('libs/bikram-sambat-1.8.1.jar')
     implementation libs.commonsIo
     implementation (libs.opencsv) {
         exclude group: 'commons-logging'
@@ -347,7 +344,7 @@ dependencies {
     implementation(composeBom)
     implementation(libs.androidXComposeMaterial)
     implementation(libs.androidXConstraintLayoutCompose)
-    implementation(libs.androidXComposeMaterialIcons)
+    implementation(libs.androidXComposeMaterialIconsExtended)
     implementation(libs.androidXComposePreview)
     implementation(libs.coil)
     implementation(libs.coil.gif)
@@ -398,7 +395,7 @@ dependencies {
     androidTestImplementation libs.hamcrest
 
     debugImplementation project(':fragments-test')
-    debugImplementation(project(':test-shared',)) {
+    debugImplementation(project(':test-shared')) {
         exclude group: 'org.robolectric' // Some tests in `collect_app` don't work with newer Robolectric
     }
 

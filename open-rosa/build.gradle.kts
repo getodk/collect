@@ -47,7 +47,6 @@ dependencies {
     implementation(project(":shared"))
     implementation(project(":forms"))
 
-    implementation(libs.kotlinStdlib)
     implementation(libs.timber)
     implementation(libs.okHttp)
     implementation(libs.okHttpDigest)

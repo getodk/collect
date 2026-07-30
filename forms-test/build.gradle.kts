@@ -13,7 +13,6 @@ java {
 dependencies {
     implementation(project(":forms"))
     implementation(project(":shared"))
-    implementation(libs.kotlinStdlib)
     implementation(libs.commonsIo)
     implementation(libs.junit)
     implementation(libs.mockitoKotlin)

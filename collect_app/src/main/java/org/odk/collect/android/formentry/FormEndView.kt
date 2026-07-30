@@ -18,7 +18,7 @@ class FormEndView(
     private val binding = FormEntryEndBinding.inflate(LayoutInflater.from(context), this, true)
 
     init {
-        binding.composeView.setContextThemedContent { 
+        binding.composeView.setContextThemedContent {
             FormEnd(
                 formTitle = formTitle,
                 isEditableAfterFinalization = isFormEditableAfterFinalization,

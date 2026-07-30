@@ -85,7 +85,6 @@ class InstanceUploadViewModel(
         this.uploadingStatus = uploadingStatus
     }
 
-
     private fun setTemporaryCredentials() {
         if (externalUrl != null && externalUsername != null && externalPassword != null) {
             webCredentialsUtils.saveCredentials(

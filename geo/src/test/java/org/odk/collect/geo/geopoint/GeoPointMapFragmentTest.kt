@@ -1,7 +1,6 @@
 package org.odk.collect.geo.geopoint
 
 import android.app.Application
-import androidx.activity.OnBackPressedDispatcher
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -26,7 +25,6 @@ import org.odk.collect.geo.DaggerGeoDependencyComponent
 import org.odk.collect.geo.GeoDependencyModule
 import org.odk.collect.geo.GeoUtils.toMapPoint
 import org.odk.collect.geo.R
-import org.odk.collect.geo.geopoly.GeoPolyFragment
 import org.odk.collect.geo.support.FakeLocationTracker
 import org.odk.collect.geo.support.FakeMapFragment
 import org.odk.collect.geo.support.FakeMappableData

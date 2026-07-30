@@ -47,7 +47,6 @@ import org.odk.collect.geo.geopoly.GeoPolyFragment
 import org.odk.collect.geo.geopoly.GeoPolyFragment.OutputMode
 import org.odk.collect.geo.items.MappableItem
 import org.odk.collect.maps.MapPoint
-import org.odk.collect.testshared.FakeScheduler
 import org.odk.collect.testshared.getOrAwaitValue
 
 @RunWith(AndroidJUnit4::class)

@@ -35,7 +35,6 @@ class CurrentLocationDelegate {
             }
         }
 
-
         val circleDescription = CircleDescription(location, location.accuracy.toFloat())
         accuracyHaloId.let {
             if (it == null) {

@@ -25,11 +25,11 @@ import android.graphics.Path
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import androidx.core.graphics.withTranslation
 import org.odk.collect.androidshared.bitmap.ImageFileUtils
 import org.odk.collect.androidshared.utils.calculateSampleSize
 import java.io.File
 import javax.inject.Inject
-import androidx.core.graphics.withTranslation
 
 class DrawView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
 

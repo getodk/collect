@@ -5,9 +5,9 @@ import com.mapbox.maps.plugin.annotation.generated.OnPolylineAnnotationClickList
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationOptions
-import org.odk.collect.maps.traces.LineDescription
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapPoint
+import org.odk.collect.maps.traces.LineDescription
 
 /** A polyline that can not be manipulated by dragging Symbols at its vertices. */
 internal class StaticPolyLineFeature(

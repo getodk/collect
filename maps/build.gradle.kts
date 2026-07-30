@@ -53,7 +53,6 @@ dependencies {
     implementation(project(":analytics"))
     implementation(project(":lists"))
     implementation(libs.androidMaterial)
-    implementation(libs.kotlinStdlib)
     implementation(libs.androidxFragmentKtx)
     implementation(libs.androidxPreferenceKtx)
     implementation(libs.timber)

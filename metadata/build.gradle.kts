@@ -39,7 +39,6 @@ dependencies {
         exclude(group = "joda-time")
         exclude(group = "org.hamcrest", module = "hamcrest-all")
     }
-    implementation(libs.timber)
 
     testImplementation(libs.hamcrest)
     testImplementation(libs.junit)

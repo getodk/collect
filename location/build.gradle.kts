@@ -41,7 +41,6 @@ dependencies {
     implementation(project(":icons"))
     implementation(project(":strings"))
     implementation(project(":analytics"))
-    implementation(libs.kotlinStdlib)
     implementation(libs.androidxCoreKtx)
     implementation(libs.playServicesLocation)
     implementation(libs.timber)

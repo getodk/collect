@@ -350,7 +350,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String, private val c
                         ${EntitiesTable.COLUMN_BRANCH_ID} text,
                         ${EntitiesTable.COLUMN_STATE} integer NOT NULL
                     );
-                    """.trimIndent()
+            """.trimIndent()
         )
     }
 
@@ -358,7 +358,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String, private val c
         db.execSQL(
             """
                 CREATE UNIQUE INDEX "${list}_unique_id_index" ON "$list" (${EntitiesTable.COLUMN_ID});
-                """.trimIndent()
+            """.trimIndent()
         )
     }
 

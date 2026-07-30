@@ -14,7 +14,7 @@ abstract class ZoomObserver : Observer<Zoom?> {
             return
         }
 
-        /**
+        /*
          * Ignore zooms from the user unless it's the first change that this observer is dealing
          * with. In that case, we always want to use the value as we're rendering a fresh map.
          */

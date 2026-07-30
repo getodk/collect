@@ -45,7 +45,7 @@ open class DatabaseConnection @JvmOverloads constructor(
         get() {
             return synchronized(openHelpers) {
                 if (openHelpers.containsKey(databasePath) && !File(databasePath).exists()) {
-                    /**
+                    /*
                      * Ideally we should close the database here as well but it was causing crashes in
                      * our tests as DB connections seem to be getting used after being closed. These
                      * "removed" helpers will be closed in [closeAll] rather than when they are

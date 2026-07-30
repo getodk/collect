@@ -34,7 +34,7 @@ fun Instance.isEdit(): Boolean {
 }
 
 fun Instance.isDeletable(): Boolean {
-    return canDeleteBeforeSend() || status != Instance.STATUS_COMPLETE && status != Instance.STATUS_SUBMISSION_FAILED
+    return canDeleteBeforeSend() || (status != Instance.STATUS_COMPLETE && status != Instance.STATUS_SUBMISSION_FAILED)
 }
 
 fun Instance.showAsEditable(settingsProvider: SettingsProvider): Boolean {

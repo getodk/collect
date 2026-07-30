@@ -25,7 +25,7 @@ class AutoSendSettingsProvider(
             sendnetwork = true
         }
 
-        return currentNetworkType == Scheduler.NetworkType.WIFI &&
-            sendwifi || currentNetworkType == Scheduler.NetworkType.CELLULAR && sendnetwork
+        return (currentNetworkType == Scheduler.NetworkType.WIFI && sendwifi) ||
+            (currentNetworkType == Scheduler.NetworkType.CELLULAR && sendnetwork)
     }
 }

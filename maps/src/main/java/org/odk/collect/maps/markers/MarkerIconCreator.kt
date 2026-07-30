@@ -94,7 +94,7 @@ object MarkerIconCreator {
             drawable.mutate()
 
             val isBackgroundDark = color?.let {
-                /**
+                /*
                  * Tint icon for normal Drawables, but only change solid color for
                  * GradientDrawables (shapes).
                  */

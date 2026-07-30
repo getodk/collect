@@ -2,7 +2,6 @@ package org.odk.collect.geo.geopoly
 
 import android.app.Application
 import androidx.activity.OnBackPressedDispatcher
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
@@ -26,8 +25,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
-import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
-import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.androidshared.ui.DisplayString
 import org.odk.collect.androidshared.ui.SnackbarUtils
 import org.odk.collect.androidshared.utils.opaque
@@ -42,8 +39,6 @@ import org.odk.collect.geo.geopoint.AccuracyStatusView
 import org.odk.collect.geo.geopoint.LocationAccuracy
 import org.odk.collect.geo.geopoly.GeoPolyFragment.Companion.INTERVAL_OPTIONS
 import org.odk.collect.geo.geopoly.GeoPolyFragment.OutputMode
-import org.odk.collect.geo.items.MappableData
-import org.odk.collect.geo.items.MappableItem
 import org.odk.collect.geo.support.AccuracyStatusViewMatcher.Companion.hasAccuracy
 import org.odk.collect.geo.support.FakeLocationTracker
 import org.odk.collect.geo.support.FakeMapFragment

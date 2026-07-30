@@ -28,7 +28,6 @@ android {
 }
 
 dependencies {
-    implementation(libs.kotlinStdlib)
     implementation(libs.androidxTestEspressoCore)
     implementation(libs.androidMaterial)
 

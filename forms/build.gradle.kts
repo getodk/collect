@@ -11,7 +11,6 @@ java {
 }
 
 dependencies {
-    implementation(libs.kotlinStdlib)
     testImplementation(libs.junit)
     testImplementation(libs.hamcrest)
 }

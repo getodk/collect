@@ -36,7 +36,6 @@ import org.odk.collect.geo.GeoUtils.toMapPoint
 import org.odk.collect.geo.R
 import org.odk.collect.geo.geopoint.LocationAccuracy.Improving
 import org.odk.collect.geo.items.MappableData
-import org.odk.collect.geo.items.MappableItem
 import org.odk.collect.geo.items.MappableItemsDelegate
 import org.odk.collect.location.tracker.LocationTracker
 import org.odk.collect.location.tracker.getCurrentLocation

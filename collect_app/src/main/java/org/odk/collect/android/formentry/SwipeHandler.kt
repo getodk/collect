@@ -88,7 +88,7 @@ class SwipeHandler(context: Context, generalSettings: Settings) {
                     return false
                 }
 
-                if (diffX > xpixellimit && diffY < ypixellimit || diffX > xpixellimit * 2) {
+                if ((diffX > xpixellimit && diffY < ypixellimit) || diffX > xpixellimit * 2) {
                     beenSwiped = true
                     if (e1.x > e2.x) {
                         if (view!!.context.isLTR()) {

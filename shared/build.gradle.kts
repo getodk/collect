@@ -11,7 +11,6 @@ java {
 }
 
 dependencies {
-    implementation(libs.kotlinStdlib)
     compileOnly(libs.json)
 
     testImplementation(libs.junit)

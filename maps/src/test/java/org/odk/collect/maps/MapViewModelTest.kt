@@ -2,8 +2,8 @@ package org.odk.collect.maps
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.contains
+import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.androidtest.getOrAwaitValue

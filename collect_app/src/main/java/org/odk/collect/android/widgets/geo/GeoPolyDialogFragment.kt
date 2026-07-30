@@ -26,9 +26,9 @@ class GeoPolyDialogFragment(
     private val dispatcherProvider: DispatcherProvider
 ) :
     WidgetAnswerDialogFragment<GeoPolyFragment>(
-        GeoPolyFragment::class,
-        viewModelFactory
-    ) {
+            GeoPolyFragment::class,
+            viewModelFactory
+        ) {
 
     override fun onCreateFragment(
         prompt: FormEntryPrompt,

@@ -24,8 +24,8 @@ import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry
 import org.odk.collect.androidshared.system.CameraUtils
 import org.odk.collect.androidshared.ui.ComposeThemeProvider.Companion.setContextThemedContent
-import org.odk.collect.selfiecamera.CaptureSelfieActivity
 import org.odk.collect.permissions.PermissionListener
+import org.odk.collect.selfiecamera.CaptureSelfieActivity
 import org.odk.collect.strings.R.string
 import java.util.Locale
 

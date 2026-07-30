@@ -2,7 +2,6 @@ package org.odk.collect.android.mainmenu
 
 import android.os.Build
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
 import androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -14,7 +13,6 @@ import org.odk.collect.android.activities.FirstLaunchActivity
 import org.odk.collect.android.application.CollectComposeThemeProvider
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.ProjectSettingsDialog
-import org.odk.collect.android.utilities.ThemeUtils
 import org.odk.collect.androidshared.ui.EdgeToEdge.setView
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.crashhandler.CrashHandler

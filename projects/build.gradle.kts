@@ -45,7 +45,6 @@ dependencies {
     implementation(project(":shared"))
     implementation(project(":androidshared"))
     implementation(project(":material"))
-    implementation(libs.kotlinStdlib)
     implementation(libs.androidxAppcompat)
     implementation(libs.androidxCoreKtx)
     implementation(libs.androidxFragmentKtx)

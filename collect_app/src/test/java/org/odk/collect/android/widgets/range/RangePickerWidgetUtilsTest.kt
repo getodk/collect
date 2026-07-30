@@ -3,7 +3,6 @@ package org.odk.collect.android.widgets.range
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.javarosa.core.model.Constants
-import org.javarosa.core.model.DataType
 import org.javarosa.core.model.RangeQuestion
 import org.javarosa.core.model.data.IntegerData
 import org.javarosa.form.api.FormEntryPrompt

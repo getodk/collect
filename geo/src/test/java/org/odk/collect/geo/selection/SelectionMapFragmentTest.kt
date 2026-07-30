@@ -48,10 +48,10 @@ import org.odk.collect.geo.items.IconifiedText
 import org.odk.collect.geo.items.MappableItem
 import org.odk.collect.geo.support.FakeLocationTracker
 import org.odk.collect.geo.support.FakeMapFragment
-import org.odk.collect.geo.support.MappableItemsFixtures
 import org.odk.collect.geo.support.MapFragmentAssertions.hasZoomedToCurrentLocation
 import org.odk.collect.geo.support.MapFragmentAssertions.showsCurrentLocation
 import org.odk.collect.geo.support.MapFragmentAssertions.showsMappableData
+import org.odk.collect.geo.support.MappableItemsFixtures
 import org.odk.collect.geo.support.RobolectricApplication
 import org.odk.collect.location.Location
 import org.odk.collect.location.tracker.LocationTracker
