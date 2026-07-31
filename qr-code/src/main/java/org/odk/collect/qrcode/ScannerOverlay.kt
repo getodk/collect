@@ -228,11 +228,7 @@ private fun PreviewFull() {
     MaterialTheme {
         ScannerOverlay(
             detectedState = DetectedState.Full(
-                DetectedBarcode.Utf8(
-                    "",
-                    BarcodeFormat.OTHER,
-                    byteArrayOf()
-                )
+                DetectedBarcode.Utf8("", byteArrayOf())
             )
         )
     }

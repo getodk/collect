@@ -21,7 +21,6 @@ import com.google.mlkit.vision.barcode.common.Barcode
 import org.odk.collect.androidshared.ui.ComposeThemeProvider.Companion.setContextThemedContent
 import org.odk.collect.qrcode.BarcodeCandidate
 import org.odk.collect.qrcode.BarcodeFilter
-import org.odk.collect.qrcode.BarcodeFormat
 import org.odk.collect.qrcode.BarcodeScannerView
 import org.odk.collect.qrcode.BarcodeScannerViewContainer
 import org.odk.collect.qrcode.DetectedState
@@ -190,12 +189,7 @@ private class MlKitBarcodeScannerView(
     companion object {
 
         private fun Barcode.toCandidate(): BarcodeCandidate {
-            val format = when (this.format) {
-                Barcode.FORMAT_PDF417 -> BarcodeFormat.PDF417
-                else -> BarcodeFormat.OTHER
-            }
-
-            return BarcodeCandidate(this.rawBytes, this.rawValue, this.boundingBox, format)
+            return BarcodeCandidate(this.rawBytes, this.rawValue, this.boundingBox)
         }
     }
 }
