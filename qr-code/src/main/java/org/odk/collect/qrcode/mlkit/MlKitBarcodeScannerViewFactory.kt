@@ -137,11 +137,8 @@ private class MlKitBarcodeScannerView(
                     detectedState.value = it
 
                     if (it is DetectedState.Full) {
-                        val contents = it.barcode.contents
-                        if (contents.isNotEmpty()) {
-                            cameraController.unbind()
-                            callback(contents)
-                        }
+                        cameraController.unbind()
+                        callback(it.contents)
                     }
                 }
             }
