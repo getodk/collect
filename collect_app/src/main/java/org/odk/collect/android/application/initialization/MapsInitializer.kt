@@ -22,7 +22,7 @@ class MapsInitializer @Inject constructor(
 
     fun initializeUIComponents(activity: FragmentActivity, fragmentContainer: Int) {
         if (!UI_COMPONENTS_INITIALIZED) {
-            MapView(activity).onCreate(null)
+            MapView(activity.application).onCreate(null)
 
             if (MapboxClassInstanceCreator.isMapboxAvailable()) {
                 activity.supportFragmentManager
