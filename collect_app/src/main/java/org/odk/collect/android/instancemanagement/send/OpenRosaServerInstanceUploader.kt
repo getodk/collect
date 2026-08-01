@@ -1,6 +1,7 @@
 package org.odk.collect.android.instancemanagement.send
 
 import android.net.Uri
+import androidx.annotation.VisibleForTesting
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.application.Collect
@@ -161,9 +162,19 @@ class OpenRosaServerInstanceUploader(
             throw FormUploadException("${FAIL}instance XML file does not exist!")
         }
 
+        val instanceDir = instanceFile.parentFile
+            ?: throw FormUploadException("Error reading files to upload")
+
         val files = getFilesInParentDirectory(instanceFile, submissionFile)
             // TODO: when can this happen? It used to cause the whole submission attempt to fail. Should it?
             ?: throw FormUploadException("Error reading files to upload")
+
+        // Resume an interrupted chunked upload from the last chunk the server accepted, as long as the
+        // upload's content is unchanged since the previous attempt (see InstanceUploadProgressTracker).
+        val progressTracker = InstanceUploadProgressTracker(instanceDir)
+        progressTracker.start(
+            InstanceUploadProgressTracker.computeUploadFingerprint(submissionFile, files)
+        )
 
         val messageParser = ResponseMessageParser()
 
@@ -174,7 +185,8 @@ class OpenRosaServerInstanceUploader(
                 files,
                 uri,
                 webCredentialsUtils.getCredentials(uri),
-                contentLength
+                contentLength,
+                progressTracker
             )
 
             val responseCode = postResult.responseCode
@@ -203,6 +215,7 @@ class OpenRosaServerInstanceUploader(
         }
 
         markSubmissionComplete(instance, instancesRepository)
+        progressTracker.clear()
         logOverrideURL(referrer, overrideURL)
 
         return if (messageParser.isValid) {
@@ -212,7 +225,8 @@ class OpenRosaServerInstanceUploader(
         }
     }
 
-    private fun getFilesInParentDirectory(instanceFile: File, submissionFile: File): List<File>? {
+    @VisibleForTesting
+    internal fun getFilesInParentDirectory(instanceFile: File, submissionFile: File): List<File>? {
         val files = mutableListOf<File>()
 
         // find all files in parent directory
@@ -230,7 +244,10 @@ class OpenRosaServerInstanceUploader(
             files.add(file)
         }
 
-        return files
+        // Sort by name so the upload order — and therefore the chunk boundaries — is deterministic and
+        // reproducible across retries (a prerequisite for resuming a chunked upload). File.listFiles()
+        // itself returns files in no guaranteed order.
+        return files.sortedBy { it.name }
     }
 
     /**

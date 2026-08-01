@@ -11,6 +11,8 @@ import org.odk.collect.openrosa.http.HttpGetResult;
 import org.odk.collect.openrosa.http.HttpHeadResult;
 import org.odk.collect.openrosa.http.HttpPostResult;
 import org.odk.collect.openrosa.http.OpenRosaHttpInterface;
+import org.odk.collect.openrosa.http.SubmissionChunker;
+import org.odk.collect.openrosa.http.SubmissionUploadProgressTracker;
 import org.odk.collect.shared.strings.Md5;
 
 import java.io.ByteArrayInputStream;
@@ -138,15 +140,28 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     @NonNull
     @Override
     public HttpPostResult uploadSubmissionAndFiles(@NonNull File submissionFile, @NonNull List<File> fileList, @NonNull URI uri, @Nullable HttpCredentialsInterface credentials, @NonNull long contentLength) throws Exception {
-        HttpPostResult postResult = null;
+        return uploadSubmissionAndFiles(submissionFile, fileList, uri, credentials, contentLength, null);
+    }
 
-        boolean first = true;
-        int fileIndex = 0;
-        int lastFileIndex;
-        while (fileIndex < fileList.size() || first) {
-            lastFileIndex = fileIndex;
-            first = false;
-            long byteCount = 0L;
+    @NonNull
+    @Override
+    public HttpPostResult uploadSubmissionAndFiles(@NonNull File submissionFile, @NonNull List<File> fileList, @NonNull URI uri, @Nullable HttpCredentialsInterface credentials, @NonNull long contentLength, @Nullable SubmissionUploadProgressTracker progressTracker) throws Exception {
+        List<SubmissionChunker.Chunk> chunks = new SubmissionChunker(submissionFile.length(), fileList, contentLength).chunk();
+
+        // Resume from the last chunk the server accepted (if the tracker says so). A resume index
+        // beyond the last chunk is clamped so we always re-send the final, submission-finalizing
+        // chunk. A null tracker always starts from the first chunk.
+        int startChunk = 0;
+        if (progressTracker != null) {
+            startChunk = Math.max(0, Math.min(progressTracker.getResumeFromChunkIndex(), chunks.size() - 1));
+        }
+        if (startChunk > 0) {
+            Timber.i("Resuming submission upload from chunk %d of %d", startChunk, chunks.size());
+        }
+
+        HttpPostResult postResult = null;
+        for (int chunkIndex = startChunk; chunkIndex < chunks.size(); chunkIndex++) {
+            SubmissionChunker.Chunk chunk = chunks.get(chunkIndex);
 
             RequestBody requestBody = RequestBody.create(MediaType.parse(HTTP_CONTENT_TYPE_TEXT_XML), submissionFile);
 
@@ -155,9 +170,8 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
                     .addPart(MultipartBody.Part.createFormData("xml_submission_file", submissionFile.getName(), requestBody));
 
             Timber.i("added xml_submission_file: %s", submissionFile.getName());
-            byteCount += submissionFile.length();
 
-            for (; fileIndex < fileList.size(); fileIndex++) {
+            for (int fileIndex = chunk.getStartIndex(); fileIndex < chunk.getEndIndex(); fileIndex++) {
                 File file = fileList.get(fileIndex);
 
                 String contentType = fileToContentTypeMapper.map(file.getName());
@@ -165,20 +179,13 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
                 RequestBody fileRequestBody = RequestBody.create(MediaType.parse(contentType), file);
                 multipartBuilder.addPart(MultipartBody.Part.createFormData(file.getName(), file.getName(), fileRequestBody));
 
-                byteCount += file.length();
                 Timber.i("added file of type '%s' %s", contentType, file.getName());
+            }
 
-                // we've added at least one attachment to the request...
-                if (fileIndex + 1 < fileList.size()) {
-                    if ((fileIndex - lastFileIndex + 1 > 100) || (byteCount + fileList.get(fileIndex + 1).length()
-                            > contentLength)) {
-                        // the next file would exceed the 10MB threshold...
-                        Timber.i("Extremely long post is being split into multiple posts");
-                        multipartBuilder.addPart(MultipartBody.Part.createFormData("*isIncomplete*", "yes"));
-                        ++fileIndex; // advance over the last attachment added...
-                        break;
-                    }
-                }
+            if (chunk.isIncomplete()) {
+                // more chunks follow this one, so the server must keep the submission open...
+                Timber.i("Extremely long post is being split into multiple posts");
+                multipartBuilder.addPart(MultipartBody.Part.createFormData("*isIncomplete*", "yes"));
             }
 
             MultipartBody multipartBody = multipartBuilder.build();
@@ -186,9 +193,14 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
 
             if (postResult.getResponseCode() != HttpURLConnection.HTTP_CREATED &&
                     postResult.getResponseCode() != HttpURLConnection.HTTP_ACCEPTED) {
+                // this chunk was not accepted: stop and do not record it as uploaded so the next
+                // retry re-attempts from here...
                 return postResult;
             }
 
+            if (progressTracker != null) {
+                progressTracker.onChunkUploaded(chunkIndex);
+            }
         }
 
         return postResult;

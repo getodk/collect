@@ -66,6 +66,28 @@ public interface OpenRosaHttpInterface {
                                             @NonNull HttpCredentialsInterface credentials,
                                             @NonNull long contentLength) throws Exception;
 
+    /**
+     * Uploads a submission that may be split into several chunks, resuming from the chunk indicated
+     * by {@code progressTracker} and reporting each accepted chunk back to it so that a later retry
+     * can continue where this attempt stopped.
+     *
+     * <p>Implementations that do not support resumable uploads may ignore the tracker; the default
+     * simply delegates to the non-resumable overload (upload the whole submission from the start).
+     *
+     * @param progressTracker tracks and resumes chunk progress, or {@code null} to always upload
+     *                        from the first chunk
+     * @throws IOException can be thrown if files do not exist
+     */
+    @NonNull
+    default HttpPostResult uploadSubmissionAndFiles(@NonNull File submissionFile,
+                                                    @NonNull List<File> fileList,
+                                                    @NonNull URI uri,
+                                                    @NonNull HttpCredentialsInterface credentials,
+                                                    @NonNull long contentLength,
+                                                    @Nullable SubmissionUploadProgressTracker progressTracker) throws Exception {
+        return uploadSubmissionAndFiles(submissionFile, fileList, uri, credentials, contentLength);
+    }
+
     interface FileToContentTypeMapper {
 
         @NonNull
