@@ -29,9 +29,7 @@ class AMRAppenderTest {
             it.writeBytes(AMR_HEADER + byteArrayOf(1, 2))
         }
 
-        val file2 = File.createTempFile("file2", ".amr").also {
-            it.writeBytes(byteArrayOf(3, 4))
-        }
+        val file2 = File.createTempFile("file2", ".amr")
 
         appender.append(file1, file2)
         assertThat(file1.readBytes(), equalTo(AMR_HEADER + byteArrayOf(1, 2)))
@@ -43,7 +41,9 @@ class AMRAppenderTest {
             it.writeBytes(AMR_HEADER + byteArrayOf(1, 2))
         }
 
-        val file2 = File.createTempFile("file2", ".amr")
+        val file2 = File.createTempFile("file2", ".amr").also {
+            it.writeBytes(byteArrayOf(3, 4))
+        }
 
         appender.append(file1, file2)
         assertThat(file1.readBytes(), equalTo(AMR_HEADER + byteArrayOf(1, 2)))
