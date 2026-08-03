@@ -20,7 +20,7 @@ class AMRAppenderTest {
         }
 
         appender.append(file1, file2)
-        assertThat(file1.readBytes(), equalTo(AMR_HEADER + byteArrayOf(1, 2, 3 , 4)))
+        assertThat(file1.readBytes(), equalTo(AMR_HEADER + byteArrayOf(1, 2, 3, 4)))
     }
 
     @Test
