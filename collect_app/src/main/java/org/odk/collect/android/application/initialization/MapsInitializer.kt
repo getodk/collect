@@ -2,6 +2,8 @@ package org.odk.collect.android.application.initialization
 
 import android.content.Context
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import com.google.android.gms.maps.MapView
 import org.odk.collect.android.application.MapboxClassInstanceCreator
 import org.odk.collect.android.geo.MapConfiguratorProvider
@@ -24,7 +26,11 @@ class MapsInitializer @Inject constructor(
         if (!UI_COMPONENTS_INITIALIZED) {
             val mapView = MapView(activity.application)
             mapView.onCreate(null)
-            mapView.onDestroy()
+            activity.lifecycle.addObserver(object : DefaultLifecycleObserver {
+                override fun onDestroy(owner: LifecycleOwner) {
+                    mapView.onDestroy()
+                }
+            })
 
             if (MapboxClassInstanceCreator.isMapboxAvailable()) {
                 activity.supportFragmentManager
