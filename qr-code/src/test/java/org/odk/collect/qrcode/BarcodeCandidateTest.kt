@@ -7,15 +7,15 @@ import org.junit.Test
 class BarcodeCandidateTest {
 
     @Test
-    fun `contents are the UTF8 contents when MLKit decoded them`() {
-        val candidate = BarcodeCandidate("Sección".toByteArray(), "Sección", null)
+    fun `contents are the UTF8 contents when they are not empty`() {
+        val candidate = BarcodeCandidate("not the contents".toByteArray(), "Sección", null)
 
         assertThat(candidate.contents, equalTo("Sección"))
     }
 
     @Test
     fun `contents are decoded as Latin when there are no UTF8 contents`() {
-        val bytes = byteArrayOf(0x53, 0x65, 0x63, 0x63, 0x69, 0xF3.toByte(), 0x6E)
+        val bytes = "Sección".toByteArray(Charsets.ISO_8859_1)
         val candidate = BarcodeCandidate(bytes, null, null)
 
         assertThat(candidate.contents, equalTo("Sección"))
@@ -23,10 +23,18 @@ class BarcodeCandidateTest {
 
     @Test
     fun `contents are decoded as Latin when UTF8 contents are empty`() {
-        val bytes = byteArrayOf(0x53, 0x65, 0x63, 0x63, 0x69, 0xF3.toByte(), 0x6E)
+        val bytes = "Sección".toByteArray(Charsets.ISO_8859_1)
         val candidate = BarcodeCandidate(bytes, "", null)
 
         assertThat(candidate.contents, equalTo("Sección"))
+    }
+
+    @Test
+    fun `contents are decoded as Latin even when the bytes are in another encoding`() {
+        val bytes = "Sección".toByteArray(Charsets.UTF_8)
+        val candidate = BarcodeCandidate(bytes, null, null)
+
+        assertThat(candidate.contents, equalTo("SecciÃ³n"))
     }
 
     @Test
@@ -37,9 +45,17 @@ class BarcodeCandidateTest {
     }
 
     @Test
-    fun `contents are empty when there are no bytes or UTF8 contents`() {
-        val candidate = BarcodeCandidate(null, null, null)
+    fun `contents are empty when both UTF8 contents and bytes are null or empty`() {
+        var candidate = BarcodeCandidate(byteArrayOf(), "", null)
+        assertThat(candidate.contents, equalTo(""))
 
+        candidate = BarcodeCandidate(byteArrayOf(), null, null)
+        assertThat(candidate.contents, equalTo(""))
+
+        candidate = BarcodeCandidate(null, "", null)
+        assertThat(candidate.contents, equalTo(""))
+
+        candidate = BarcodeCandidate(null, null, null)
         assertThat(candidate.contents, equalTo(""))
     }
 }
