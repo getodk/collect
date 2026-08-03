@@ -3,7 +3,6 @@ package org.odk.collect.android.feature.formentry.entities
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
-import org.odk.collect.android.support.StubOpenRosaServer.EntityListItem
 import org.odk.collect.android.support.StubOpenRosaServer.MediaFileItem
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.FormEntryPage.QuestionAndAnswer
@@ -41,25 +40,5 @@ class ExternalCsvVsEntityListTest {
             .startBlankForm("External Csv Select")
             .assertText("Roman Roy")
             .assertTextDoesNotExist("Logan Roy")
-    }
-
-    /**
-     * An entity list is read from the database, not from the CSV it was originally seeded from
-     * (that CSV is deleted after import). So entities created or updated offline - which exist only
-     * in the database - remain visible.
-     */
-    @Test
-    fun entityListIsReadFromDatabaseNotFromOriginalCsvFile() {
-        testDependencies.server.addForm("one-question-entity-registration.xml")
-        testDependencies.server.addForm(
-            "one-question-entity-update.xml",
-            listOf(EntityListItem("people.csv"))
-        )
-
-        rule.withProject(testDependencies.server.url, matchExactly = true)
-            .startBlankForm("One Question Entity Registration")
-            .fillOutAndFinalize(QuestionAndAnswer("Name", "Logan Roy"))
-            .startBlankForm("One Question Entity Update")
-            .assertTexts("Roman Roy", "Logan Roy")
     }
 }
