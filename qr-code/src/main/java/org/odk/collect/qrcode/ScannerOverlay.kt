@@ -227,13 +227,7 @@ private fun PreviewPotential() {
 private fun PreviewFull() {
     MaterialTheme {
         ScannerOverlay(
-            detectedState = DetectedState.Full(
-                DetectedBarcode.Utf8(
-                    "",
-                    BarcodeFormat.OTHER,
-                    byteArrayOf()
-                )
-            )
+            detectedState = DetectedState.Full("blah")
         )
     }
 }

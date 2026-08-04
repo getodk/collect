@@ -21,10 +21,8 @@ import com.google.mlkit.vision.barcode.common.Barcode
 import org.odk.collect.androidshared.ui.ComposeThemeProvider.Companion.setContextThemedContent
 import org.odk.collect.qrcode.BarcodeCandidate
 import org.odk.collect.qrcode.BarcodeFilter
-import org.odk.collect.qrcode.BarcodeFormat
 import org.odk.collect.qrcode.BarcodeScannerView
 import org.odk.collect.qrcode.BarcodeScannerViewContainer
-import org.odk.collect.qrcode.DetectedBarcode
 import org.odk.collect.qrcode.DetectedState
 import org.odk.collect.qrcode.ScannerOverlay
 import org.odk.collect.qrcode.calculateViewFinder
@@ -139,11 +137,8 @@ private class MlKitBarcodeScannerView(
                     detectedState.value = it
 
                     if (it is DetectedState.Full) {
-                        val contents = processBarcode(it.barcode)
-                        if (!contents.isNullOrEmpty()) {
-                            cameraController.unbind()
-                            callback(contents)
-                        }
+                        cameraController.unbind()
+                        callback(it.contents)
                     }
                 }
             }
@@ -188,35 +183,10 @@ private class MlKitBarcodeScannerView(
         )
     }
 
-    private fun processBarcode(barcode: DetectedBarcode): String? {
-        return when (barcode) {
-            is DetectedBarcode.Utf8 -> {
-                barcode.contents
-            }
-
-            is DetectedBarcode.Bytes -> {
-                if (barcode.format == BarcodeFormat.PDF417) {
-                    /**
-                     * Allow falling back to Latin encoding for PDF417 barcodes. This provides parity
-                     * with the Zxing implementation.
-                     */
-                    String(barcode.bytes, Charsets.ISO_8859_1)
-                } else {
-                    null
-                }
-            }
-        }
-    }
-
     companion object {
 
         private fun Barcode.toCandidate(): BarcodeCandidate {
-            val format = when (this.format) {
-                Barcode.FORMAT_PDF417 -> BarcodeFormat.PDF417
-                else -> BarcodeFormat.OTHER
-            }
-
-            return BarcodeCandidate(this.rawBytes, this.rawValue, this.boundingBox, format)
+            return BarcodeCandidate(this.rawBytes, this.rawValue, this.boundingBox)
         }
     }
 }
