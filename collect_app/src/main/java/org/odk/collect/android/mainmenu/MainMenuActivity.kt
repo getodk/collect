@@ -6,13 +6,11 @@ import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
 import androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.gms.maps.MapView
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.activities.CrashHandlerActivity
 import org.odk.collect.android.activities.FirstLaunchActivity
 import org.odk.collect.android.application.CollectComposeThemeProvider
-import org.odk.collect.android.application.MapboxClassInstanceCreator
 import org.odk.collect.android.application.initialization.MapsInitializer
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.ProjectSettingsDialog
