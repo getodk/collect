@@ -19,14 +19,6 @@
             android:paddingBottom="@dimen/margin_standard"
             app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/map_box_initialization_fragment"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
             <include
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -36,7 +28,7 @@
                 android:layout_marginHorizontal="@dimen/margin_standard"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/map_box_initialization_fragment" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <org.odk.collect.android.mainmenu.StartNewFormButton
                 android:id="@+id/enter_data"

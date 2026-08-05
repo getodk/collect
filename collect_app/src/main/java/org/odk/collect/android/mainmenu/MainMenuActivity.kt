@@ -11,6 +11,7 @@ import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.activities.CrashHandlerActivity
 import org.odk.collect.android.activities.FirstLaunchActivity
 import org.odk.collect.android.application.CollectComposeThemeProvider
+import org.odk.collect.android.application.initialization.MapsInitializer
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.ProjectSettingsDialog
 import org.odk.collect.androidshared.ui.EdgeToEdge.setView
@@ -40,6 +41,9 @@ class MainMenuActivity : LocalizedActivity(), CollectComposeThemeProvider {
 
     @Inject
     lateinit var webPageService: WebPageService
+
+    @Inject
+    lateinit var mapsInitializer: MapsInitializer
 
     private lateinit var currentProjectViewModel: CurrentProjectViewModel
 
@@ -94,6 +98,8 @@ class MainMenuActivity : LocalizedActivity(), CollectComposeThemeProvider {
             super.onCreate(savedInstanceState)
             setView(R.layout.main_menu_activity, false)
             lifecycle.addObserver(mdmConfigObserver)
+
+            mapsInitializer.initializeUIComponents(this, R.id.map_box_initialization_fragment)
         }
     }
 
