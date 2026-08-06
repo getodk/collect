@@ -11,7 +11,6 @@ import org.junit.runner.RunWith
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils.getGeoPointAnswerToDisplay
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils.getGeoPolyAnswerToDisplay
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils.isWithinMapBounds
-import org.odk.collect.android.widgets.utilities.GeoWidgetUtils.truncateDouble
 import org.odk.collect.maps.MapPoint
 
 @RunWith(AndroidJUnit4::class)
@@ -58,16 +57,17 @@ class GeoWidgetUtilsTest {
     }
 
     @Test
-    fun truncateDoubleTest() {
-        assertEquals("5", truncateDouble("5"))
-        assertEquals("-5", truncateDouble("-5"))
-        assertEquals("5.12", truncateDouble("5.12"))
-        assertEquals("-5.12", truncateDouble("-5.12"))
-        assertEquals("5.12", truncateDouble("5.1234"))
-        assertEquals("-5.12", truncateDouble("-5.1234"))
-        assertEquals("", truncateDouble(""))
-        assertEquals("", truncateDouble(null))
-        assertEquals("", truncateDouble("qwerty"))
+    fun getAnswerToDisplay_roundsAltitudeAndAccuracyToTwoDecimalPlaces() {
+        assertEquals(
+            getGeoPointAnswerToDisplay(context, "1.0 2.0 5.126 8.4321"),
+            context.getString(
+                org.odk.collect.strings.R.string.gps_result,
+                "1.000000°",
+                "2.000000°",
+                "5.13",
+                "8.43"
+            )
+        )
     }
 
     @Test
