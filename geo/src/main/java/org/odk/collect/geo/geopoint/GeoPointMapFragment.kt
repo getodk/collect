@@ -55,10 +55,10 @@ import org.odk.collect.webpage.WebPageService
 import javax.inject.Inject
 
 class GeoPointMapFragment(
-    val inputPoint: MapPoint?,
-    val draggable: Boolean,
-    val readOnly: Boolean,
-    val retainMockAccuracy: Boolean,
+    val inputPoint: MapPoint? = null,
+    val draggable: Boolean = true,
+    val readOnly: Boolean = false,
+    val retainMockAccuracy: Boolean = false,
     val mappableData: MappableData? = null
 ) : Fragment() {
 
@@ -110,7 +110,7 @@ class GeoPointMapFragment(
     /**
      * While true, the point cannot be moved by dragging or long-pressing.
      */
-    private var isPointLocked = false
+    private var isPointLocked = inputPoint != null
 
     private val currentLocationDelegate = CurrentLocationDelegate()
     private val mappableItemsDelegate = MappableItemsDelegate(background = true, clickable = false)
