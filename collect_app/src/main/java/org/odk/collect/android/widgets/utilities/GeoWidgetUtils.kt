@@ -1,13 +1,10 @@
 package org.odk.collect.android.widgets.utilities
 
 import android.content.Context
-import android.location.Location
-import org.odk.collect.android.R
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.shared.strings.StringUtils.removeEnd
 import timber.log.Timber
 import java.text.DecimalFormat
-import kotlin.math.abs
 import kotlin.math.absoluteValue
 
 object GeoWidgetUtils {
@@ -19,8 +16,8 @@ object GeoWidgetUtils {
                 val parts = answer.split(" ").toTypedArray()
                 return context.getString(
                     org.odk.collect.strings.R.string.gps_result,
-                    convertCoordinatesIntoDegreeFormat(context, parts[0].toDouble(), "lat"),
-                    convertCoordinatesIntoDegreeFormat(context, parts[1].toDouble(), "lon"),
+                    formatCoordinate(parts[0].toDouble()),
+                    formatCoordinate(parts[1].toDouble()),
                     truncateDouble(parts[2]),
                     truncateDouble(parts[3])
                 )
@@ -46,28 +43,6 @@ object GeoWidgetUtils {
     }
 
     @JvmStatic
-    fun convertCoordinatesIntoDegreeFormat(
-        context: Context,
-        coordinate: Double,
-        type: String
-    ): String {
-        val coordinateDegrees = Location.convert(abs(coordinate), Location.FORMAT_SECONDS)
-        val coordinateSplit = coordinateDegrees.split(":").toTypedArray()
-        val degrees = floor(coordinateSplit[0]) + "°"
-        val mins = floor(coordinateSplit[1]) + "'"
-        val secs = floor(coordinateSplit[2]) + '"'
-        return String.format(getCardinalDirection(context, coordinate, type), degrees, mins, secs)
-    }
-
-    @JvmStatic
-    fun floor(value: String?): String {
-        if (value == null || value.isEmpty()) {
-            return ""
-        }
-        return if (value.contains(".")) value.substring(0, value.indexOf('.')) else value
-    }
-
-    @JvmStatic
     fun truncateDouble(string: String?): String {
         val df = DecimalFormat("#.##")
         try {
@@ -78,17 +53,7 @@ object GeoWidgetUtils {
         return ""
     }
 
-    private fun getCardinalDirection(context: Context, coordinate: Double, type: String): String {
-        return if (type.equals("lon", ignoreCase = true)) {
-            if (coordinate < 0) {
-                context.getString(org.odk.collect.strings.R.string.west)
-            } else {
-                context.getString(org.odk.collect.strings.R.string.east)
-            }
-        } else if (coordinate < 0) {
-            context.getString(org.odk.collect.strings.R.string.south)
-        } else {
-            context.getString(org.odk.collect.strings.R.string.north)
-        }
+    private fun formatCoordinate(coordinate: Double): String {
+        return DecimalFormat("0.000000").format(coordinate) + "°"
     }
 }
