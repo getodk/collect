@@ -1,4 +1,4 @@
-package org.odk.collect.android.widgets.utilities
+package org.odk.collect.android.widgets.geo
 
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
@@ -22,8 +22,6 @@ import org.odk.collect.android.formentry.FormEntryViewModel
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.utilities.Appearances
-import org.odk.collect.android.widgets.geo.GeoPointMapDialogFragment
-import org.odk.collect.android.widgets.geo.ReferenceGeometryMappableData
 import org.odk.collect.android.widgets.items.GeoSelectChoiceElements
 import org.odk.collect.android.widgets.support.FormElementFixtures.selectChoice
 import org.odk.collect.android.widgets.support.FormElementFixtures.treeElement
