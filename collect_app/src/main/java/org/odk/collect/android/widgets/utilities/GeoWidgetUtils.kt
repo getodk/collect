@@ -1,40 +1,36 @@
 package org.odk.collect.android.widgets.utilities
 
 import android.content.Context
-import android.location.Location
-import org.odk.collect.android.R
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.shared.strings.StringUtils.removeEnd
-import timber.log.Timber
 import java.text.DecimalFormat
-import kotlin.math.abs
 import kotlin.math.absoluteValue
 
 object GeoWidgetUtils {
 
     @JvmStatic
     fun getGeoPointAnswerToDisplay(context: Context, answer: String?): String {
-        try {
-            if (answer != null && answer.isNotEmpty()) {
-                val parts = answer.split(" ").toTypedArray()
-                return context.getString(
-                    org.odk.collect.strings.R.string.gps_result,
-                    convertCoordinatesIntoDegreeFormat(context, parts[0].toDouble(), "lat"),
-                    convertCoordinatesIntoDegreeFormat(context, parts[1].toDouble(), "lon"),
-                    truncateDouble(parts[2]),
-                    truncateDouble(parts[3])
-                )
-            }
-        } catch (e: NumberFormatException) {
+        if (answer.isNullOrEmpty()) {
             return ""
         }
 
-        return ""
+        return try {
+            val parts = answer.split(" ")
+            context.getString(
+                org.odk.collect.strings.R.string.gps_result,
+                formatCoordinate(parts[0].toDouble()),
+                formatCoordinate(parts[1].toDouble()),
+                formatMeters(parts[2].toDouble()),
+                formatMeters(parts[3].toDouble())
+            )
+        } catch (_: Exception) {
+            ""
+        }
     }
 
     @JvmStatic
     fun getGeoPolyAnswerToDisplay(answer: String?): String? {
-        return if (answer != null && answer.isNotEmpty()) {
+        return if (!answer.isNullOrEmpty()) {
             removeEnd(answer.trim(), ";")
         } else {
             answer
@@ -45,50 +41,11 @@ object GeoWidgetUtils {
         return point.latitude.absoluteValue <= 90 && point.longitude.absoluteValue <= 180
     }
 
-    @JvmStatic
-    fun convertCoordinatesIntoDegreeFormat(
-        context: Context,
-        coordinate: Double,
-        type: String
-    ): String {
-        val coordinateDegrees = Location.convert(abs(coordinate), Location.FORMAT_SECONDS)
-        val coordinateSplit = coordinateDegrees.split(":").toTypedArray()
-        val degrees = floor(coordinateSplit[0]) + "°"
-        val mins = floor(coordinateSplit[1]) + "'"
-        val secs = floor(coordinateSplit[2]) + '"'
-        return String.format(getCardinalDirection(context, coordinate, type), degrees, mins, secs)
+    private fun formatCoordinate(coordinate: Double): String {
+        return DecimalFormat("0.000000").format(coordinate) + "°"
     }
 
-    @JvmStatic
-    fun floor(value: String?): String {
-        if (value == null || value.isEmpty()) {
-            return ""
-        }
-        return if (value.contains(".")) value.substring(0, value.indexOf('.')) else value
-    }
-
-    @JvmStatic
-    fun truncateDouble(string: String?): String {
-        val df = DecimalFormat("#.##")
-        try {
-            return df.format(string?.toDouble())
-        } catch (e: Throwable) {
-            Timber.w(e)
-        }
-        return ""
-    }
-
-    private fun getCardinalDirection(context: Context, coordinate: Double, type: String): String {
-        return if (type.equals("lon", ignoreCase = true)) {
-            if (coordinate < 0) {
-                context.getString(org.odk.collect.strings.R.string.west)
-            } else {
-                context.getString(org.odk.collect.strings.R.string.east)
-            }
-        } else if (coordinate < 0) {
-            context.getString(org.odk.collect.strings.R.string.south)
-        } else {
-            context.getString(org.odk.collect.strings.R.string.north)
-        }
+    private fun formatMeters(value: Double): String {
+        return DecimalFormat("#.##").format(value)
     }
 }
