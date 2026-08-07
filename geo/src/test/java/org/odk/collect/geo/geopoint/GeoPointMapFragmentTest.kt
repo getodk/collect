@@ -132,6 +132,20 @@ class GeoPointMapFragmentTest {
     }
 
     @Test
+    fun `can drag marker after adding one`() {
+        launcherRule.launchInContainer { GeoPointMapFragment() }
+
+        val location = Location(1.0, 2.0, 3.0, 4.0f)
+        locationTracker.currentLocation = location
+        EspressoInteractions.clickOn(withContentDescription(string.record_geopoint))
+        assertThat(map.getMarkers().size, equalTo(2))
+
+        val destination = MapPoint(2.0, 3.0)
+        map.dragMarker(1, destination)
+        assertThat(map.getMarkers()[1].point, equalTo(destination))
+    }
+
+    @Test
     fun `shows marker when input point provided`() {
         val inputPoint = MapPoint(1.0, 2.0)
         launcherRule.launchInContainer { GeoPointMapFragment(inputPoint) }
