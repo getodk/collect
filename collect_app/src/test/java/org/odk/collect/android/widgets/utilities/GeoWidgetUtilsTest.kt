@@ -29,6 +29,11 @@ class GeoWidgetUtilsTest {
     }
 
     @Test
+    fun getAnswerToDisplay_whenAnswerHasMissingParts_returnsEmptyString() {
+        assertEquals(getGeoPointAnswerToDisplay(context, "12.3 4.5"), "")
+    }
+
+    @Test
     fun getAnswerToDisplay_whenAnswerIsNotNullAndConvertible_returnsCoordinatesInDecimalDegrees() {
         assertEquals(
             getGeoPointAnswerToDisplay(context, "37.451533 -122.155392 100.0 5.5"),
