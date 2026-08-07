@@ -359,6 +359,7 @@ class GeoPointMapFragment(
             captureLocation = true
             setClear = false
             map!!.setCenter(map!!.getMarkerPoint(featureId), true)
+            geoPointViewModel.place(map!!.getMarkerPoint(featureId)!!)
         }
     }
 

@@ -278,4 +278,10 @@ class FakeMapFragment(private val ready: Boolean = false) : Fragment(), MapFragm
         polyLines[featureId] = polyLines[featureId]!!.copy(points = new)
         dragListener?.onFeature(featureId)
     }
+
+    fun dragMarker(index: Int, destination: MapPoint) {
+        val featureId = featureIds[index]
+        markers[featureId] = markers[featureId]!!.copy(point = destination)
+        dragListener?.onFeature(featureId)
+    }
 }
