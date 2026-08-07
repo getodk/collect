@@ -97,6 +97,7 @@ class GeoPointWidgetTest {
     fun creatingWidgetWithInvalidValue_doesNotUpdateWidgetDisplayedAnswer() {
         createWidget(geoPointPrompt(answer = StringData("blah")))
         composeRule.onNodeWithText("blah").assertDoesNotExist()
+        composeRule.onNodeWithText("").assertDoesNotExist()
         composeRule.onNodeWithClickLabel(string.get_point).assertIsDisplayed()
     }
 
