@@ -3,7 +3,6 @@ package org.odk.collect.android.widgets.utilities
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import junit.framework.TestCase.assertEquals
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
@@ -20,57 +19,63 @@ class GeoWidgetUtilsTest {
 
     @Test
     fun getAnswerToDisplay_whenAnswerIsNull_returnsEmptyString() {
-        assertEquals(getGeoPointAnswerToDisplay(context, null), "")
+        assertThat(getGeoPointAnswerToDisplay(context, null), equalTo(""))
     }
 
     @Test
     fun getAnswerToDisplay_whenAnswerIsNotConvertible_returnsEmptyString() {
-        assertEquals(getGeoPointAnswerToDisplay(context, "blah"), "")
+        assertThat(getGeoPointAnswerToDisplay(context, "blah"), equalTo(""))
     }
 
     @Test
     fun getAnswerToDisplay_whenAnswerHasMissingParts_returnsEmptyString() {
-        assertEquals(getGeoPointAnswerToDisplay(context, "12.3 4.5"), "")
+        assertThat(getGeoPointAnswerToDisplay(context, "12.3 4.5"), equalTo(""))
     }
 
     @Test
     fun getAnswerToDisplay_whenAnswerIsNotNullAndConvertible_returnsCoordinatesInDecimalDegrees() {
-        assertEquals(
+        assertThat(
             getGeoPointAnswerToDisplay(context, "37.451533 -122.155392 100.0 5.5"),
-            context.getString(
-                org.odk.collect.strings.R.string.gps_result,
-                "37.451533°",
-                "-122.155392°",
-                "100",
-                "5.5"
+            equalTo(
+                context.getString(
+                    org.odk.collect.strings.R.string.gps_result,
+                    "37.451533°",
+                    "-122.155392°",
+                    "100",
+                    "5.5"
+                )
             )
         )
     }
 
     @Test
     fun getAnswerToDisplay_padsCoordinatesToSixDecimalPlaces() {
-        assertEquals(
+        assertThat(
             getGeoPointAnswerToDisplay(context, "1.5 -2 0.0 0.0"),
-            context.getString(
-                org.odk.collect.strings.R.string.gps_result,
-                "1.500000°",
-                "-2.000000°",
-                "0",
-                "0"
+            equalTo(
+                context.getString(
+                    org.odk.collect.strings.R.string.gps_result,
+                    "1.500000°",
+                    "-2.000000°",
+                    "0",
+                    "0"
+                )
             )
         )
     }
 
     @Test
     fun getAnswerToDisplay_roundsAltitudeAndAccuracyToTwoDecimalPlaces() {
-        assertEquals(
+        assertThat(
             getGeoPointAnswerToDisplay(context, "1.0 2.0 5.126 8.4321"),
-            context.getString(
-                org.odk.collect.strings.R.string.gps_result,
-                "1.000000°",
-                "2.000000°",
-                "5.13",
-                "8.43"
+            equalTo(
+                context.getString(
+                    org.odk.collect.strings.R.string.gps_result,
+                    "1.000000°",
+                    "2.000000°",
+                    "5.13",
+                    "8.43"
+                )
             )
         )
     }
