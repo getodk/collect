@@ -7,6 +7,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.isA;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.fail;
 import static java.util.Arrays.asList;
 
@@ -22,6 +23,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InterruptedIOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,7 +57,7 @@ public abstract class OpenRosaPostRequestTest {
         mockWebServer.enqueue(new MockResponse().setResponseCode(201));
 
         URI uri = mockWebServer.url("/blah").uri();
-        subject.uploadSubmissionAndFiles(File.createTempFile("blah", "blah"), new ArrayList<>(), uri, null, 0);
+        subject.uploadSubmissionAndFiles(File.createTempFile("blah", "blah"), new ArrayList<>(), uri, null, 0, null);
 
         assertThat(mockWebServer.getRequestCount(), equalTo(1));
 
@@ -71,7 +73,7 @@ public abstract class OpenRosaPostRequestTest {
                 .setBody("I AM BODY"));
 
         URI uri = mockWebServer.url("/blah").uri();
-        HttpPostResult response = subject.uploadSubmissionAndFiles(File.createTempFile("blah", "blah"), new ArrayList<>(), uri, null, 0);
+        HttpPostResult response = subject.uploadSubmissionAndFiles(File.createTempFile("blah", "blah"), new ArrayList<>(), uri, null, 0, null);
 
         assertThat(response.getResponseCode(), equalTo(200));
         assertThat(response.getHttpResponse(), equalTo("I AM BODY"));
@@ -85,7 +87,7 @@ public abstract class OpenRosaPostRequestTest {
                 .setBody(new Buffer().write(gzip("I AM BODY"))));
 
         URI uri = mockWebServer.url("/blah").uri();
-        HttpPostResult response = subject.uploadSubmissionAndFiles(File.createTempFile("blah", "blah"), new ArrayList<>(), uri, null, 0);
+        HttpPostResult response = subject.uploadSubmissionAndFiles(File.createTempFile("blah", "blah"), new ArrayList<>(), uri, null, 0, null);
 
         assertThat(response.getHttpResponse(), equalTo("I AM BODY"));
     }
@@ -96,7 +98,7 @@ public abstract class OpenRosaPostRequestTest {
                 .setResponseCode(204));
 
         URI uri = mockWebServer.url("/blah").uri();
-        subject.uploadSubmissionAndFiles(File.createTempFile("blah", "blah"), new ArrayList<>(), uri, null, 0);
+        subject.uploadSubmissionAndFiles(File.createTempFile("blah", "blah"), new ArrayList<>(), uri, null, 0, null);
     }
 
     @Test
@@ -106,7 +108,7 @@ public abstract class OpenRosaPostRequestTest {
                 .setBody("blah"));
 
         URI uri = mockWebServer.url("/blah").uri();
-        HttpPostResult response = subject.uploadSubmissionAndFiles(File.createTempFile("blah", "blah"), new ArrayList<>(), uri, null, 0);
+        HttpPostResult response = subject.uploadSubmissionAndFiles(File.createTempFile("blah", "blah"), new ArrayList<>(), uri, null, 0, null);
 
         assertThat(response, notNullValue());
         assertThat(response.getResponseCode(), equalTo(500));
@@ -116,7 +118,7 @@ public abstract class OpenRosaPostRequestTest {
     public void whenRequestFails_throwsExceptionWithMessage() {
         try {
             URI uri = new URI("http://localhost:8443");
-            subject.uploadSubmissionAndFiles(File.createTempFile("blah", "blah"), new ArrayList<>(), uri, null, 0);
+            subject.uploadSubmissionAndFiles(File.createTempFile("blah", "blah"), new ArrayList<>(), uri, null, 0, null);
             fail();
         } catch (Exception e) {
             assertThat(e, isA(Exception.class));
@@ -131,7 +133,7 @@ public abstract class OpenRosaPostRequestTest {
         URI uri = mockWebServer.url("/blah").uri();
         String submissionContent = "<node>content</node>";
         File tempFile = createTempFile(submissionContent);
-        subject.uploadSubmissionAndFiles(tempFile, new ArrayList<>(), uri, null, 0);
+        subject.uploadSubmissionAndFiles(tempFile, new ArrayList<>(), uri, null, 0, null);
 
         RecordedRequest request = mockWebServer.takeRequest();
         String[] firstPartLines = splitMultiPart(request).get(0);
@@ -148,7 +150,7 @@ public abstract class OpenRosaPostRequestTest {
         URI uri = mockWebServer.url("/blah").uri();
         File attachment1 = createTempFile("blah blah blah");
         File attachment2 = createTempFile("blah2 blah2 blah2");
-        subject.uploadSubmissionAndFiles(createTempFile("<node>content</node>"), asList(attachment1, attachment2), uri, null, 1024);
+        subject.uploadSubmissionAndFiles(createTempFile("<node>content</node>"), asList(attachment1, attachment2), uri, null, 1024, null);
 
         RecordedRequest request = mockWebServer.takeRequest();
         List<String[]> parts = splitMultiPart(request);
@@ -172,7 +174,7 @@ public abstract class OpenRosaPostRequestTest {
         File xmlAttachment = createTempFile("<node>blah blah blah</node>", ".xml");
         File plainAttachment = createTempFile("blah", ".blah");
 
-        subject.uploadSubmissionAndFiles(createTempFile("<node>content</node>"), asList(xmlAttachment, plainAttachment), uri, null, 1024);
+        subject.uploadSubmissionAndFiles(createTempFile("<node>content</node>"), asList(xmlAttachment, plainAttachment), uri, null, 1024, null);
 
         RecordedRequest request = mockWebServer.takeRequest();
         List<String[]> parts = splitMultiPart(request);
@@ -188,7 +190,7 @@ public abstract class OpenRosaPostRequestTest {
         URI uri = mockWebServer.url("/blah").uri();
         File attachment1 = createTempFile("blah blah blah");
         File attachment2 = createTempFile("blah2 blah2 blah2");
-        subject.uploadSubmissionAndFiles(createTempFile("<node>content</node>"), asList(attachment1, attachment2), uri, null, 0);
+        subject.uploadSubmissionAndFiles(createTempFile("<node>content</node>"), asList(attachment1, attachment2), uri, null, 0, null);
 
         RecordedRequest request = mockWebServer.takeRequest();
         List<String[]> parts = splitMultiPart(request);
@@ -221,7 +223,7 @@ public abstract class OpenRosaPostRequestTest {
         URI uri = mockWebServer.url("/blah").uri();
         File attachment1 = createTempFile("blah blah blah");
         File attachment2 = createTempFile("blah2 blah2 blah2");
-        HttpPostResult response = subject.uploadSubmissionAndFiles(createTempFile("<node>content</node>"), asList(attachment1, attachment2), uri, null, 0);
+        HttpPostResult response = subject.uploadSubmissionAndFiles(createTempFile("<node>content</node>"), asList(attachment1, attachment2), uri, null, 0, null);
 
         assertThat(mockWebServer.getRequestCount(), equalTo(1));
         assertThat(response, notNullValue());
@@ -236,11 +238,30 @@ public abstract class OpenRosaPostRequestTest {
         URI uri = mockWebServer.url("/blah").uri();
         File attachment1 = createTempFile("blah blah blah");
         File attachment2 = createTempFile("blah2 blah2 blah2");
-        HttpPostResult response = subject.uploadSubmissionAndFiles(createTempFile("<node>content</node>"), asList(attachment1, attachment2), uri, null, 0);
+        HttpPostResult response = subject.uploadSubmissionAndFiles(createTempFile("<node>content</node>"), asList(attachment1, attachment2), uri, null, 0, null);
 
         assertThat(mockWebServer.getRequestCount(), equalTo(2));
         assertThat(response, notNullValue());
         assertThat(response.getResponseCode(), equalTo(500));
+    }
+
+    @Test
+    public void whenCanceledDuringUpload_abortsRequest() {
+        mockWebServer.enqueue(new MockResponse().setResponseCode(201));
+
+        URI uri = mockWebServer.url("/blah").uri();
+
+        assertThrows(
+                InterruptedIOException.class,
+                () -> subject.uploadSubmissionAndFiles(
+                        createTempFile("<node>content</node>"),
+                        new ArrayList<>(),
+                        uri,
+                        null,
+                        0,
+                        () -> true
+                )
+        );
     }
 
     private File createTempFile(String content) throws Exception {
