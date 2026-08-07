@@ -10,22 +10,22 @@ object GeoWidgetUtils {
 
     @JvmStatic
     fun getGeoPointAnswerToDisplay(context: Context, answer: String?): String {
-        try {
-            if (!answer.isNullOrEmpty()) {
-                val parts = answer.split(" ").toTypedArray()
-                return context.getString(
-                    org.odk.collect.strings.R.string.gps_result,
-                    formatCoordinate(parts[0].toDouble()),
-                    formatCoordinate(parts[1].toDouble()),
-                    formatMeters(parts[2].toDouble()),
-                    formatMeters(parts[3].toDouble())
-                )
-            }
-        } catch (_: NumberFormatException) {
+        if (answer.isNullOrEmpty()) {
             return ""
         }
 
-        return ""
+        return try {
+            val parts = answer.split(" ")
+            context.getString(
+                org.odk.collect.strings.R.string.gps_result,
+                formatCoordinate(parts[0].toDouble()),
+                formatCoordinate(parts[1].toDouble()),
+                formatMeters(parts[2].toDouble()),
+                formatMeters(parts[3].toDouble())
+            )
+        } catch (_: Exception) {
+            ""
+        }
     }
 
     @JvmStatic
