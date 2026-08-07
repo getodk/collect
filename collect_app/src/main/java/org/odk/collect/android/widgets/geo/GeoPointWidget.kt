@@ -1,4 +1,4 @@
-package org.odk.collect.android.widgets
+package org.odk.collect.android.widgets.geo
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -12,6 +12,7 @@ import org.javarosa.core.model.data.GeoPointData
 import org.javarosa.core.model.data.IAnswerData
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.formentry.questions.QuestionDetails
+import org.odk.collect.android.widgets.QuestionWidget
 import org.odk.collect.android.widgets.interfaces.GeoDataRequester
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver
 import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils
