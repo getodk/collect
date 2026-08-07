@@ -43,7 +43,7 @@ class LocalEntitiesFilterStrategyTest {
     private val entitiesRepository = InMemEntitiesRepository()
     private val fallthroughFilterStrategy = FallthroughFilterStrategy()
     private val instanceProvider =
-        SpyInstanceProvider(LocalEntitiesInstanceProvider(::entitiesRepository))
+        SpyInstanceProvider(LocalEntitiesInstanceProvider(::entitiesRepository) { null })
 
     private val controllerSupplier: (FormDef) -> FormEntryController = { formDef ->
         FormEntryController(FormEntryModel(formDef)).also {
