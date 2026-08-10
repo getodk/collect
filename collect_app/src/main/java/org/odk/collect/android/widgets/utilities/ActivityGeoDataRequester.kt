@@ -13,7 +13,6 @@ import org.odk.collect.android.widgets.geo.GeoPolyDialogFragment
 import org.odk.collect.android.widgets.interfaces.GeoDataRequester
 import org.odk.collect.android.widgets.utilities.BindAttributes.ALLOW_MOCK_ACCURACY
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
-import org.odk.collect.geo.Constants.EXTRA_READ_ONLY
 import org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY
 import org.odk.collect.geo.geopoint.GeoPointActivity
 import org.odk.collect.permissions.PermissionListener
@@ -66,7 +65,6 @@ class ActivityGeoDataRequester(
                             )
 
                             it.putBoolean(EXTRA_RETAIN_MOCK_ACCURACY, getAllowMockAccuracy(prompt))
-                            it.putBoolean(EXTRA_READ_ONLY, prompt.isReadOnly)
                         }
 
                         val intent = Intent(activity, GeoPointActivity::class.java).also {
