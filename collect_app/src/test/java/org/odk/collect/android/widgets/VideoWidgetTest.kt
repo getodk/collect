@@ -2,8 +2,11 @@ package org.odk.collect.android.widgets
 
 import android.content.Intent
 import android.provider.MediaStore
+import android.view.View
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTouchInput
 import net.bytebuddy.utility.RandomString
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
@@ -86,6 +89,17 @@ class VideoWidgetTest : FileWidgetTest<VideoWidget>() {
 
         composeRule.onNodeWithClickLabel(activity.getString(string.play_video)).performClick()
         verify(mediaUtils).openFile(any(), any(), any<String>())
+    }
+
+    @Test
+    fun longPressingButtonAndAnswerShouldShowContextMenu() {
+        whenever(formEntryPrompt.getAnswerText()).thenReturn(initialAnswer.displayText)
+        val widget = createWidget()
+
+        composeRule.onNodeWithClickLabel(activity.getString(string.capture_video)).performTouchInput { longClick() }
+        composeRule.onNodeWithClickLabel(activity.getString(string.play_video)).performTouchInput { longClick() }
+
+        assertThat(viewsWithShownContextMenu, equalTo(listOf<View>(widget, widget)))
     }
 
     @Test

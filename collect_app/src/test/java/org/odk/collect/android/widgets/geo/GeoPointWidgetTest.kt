@@ -1,9 +1,12 @@
 package org.odk.collect.android.widgets.geo
 
+import android.view.View
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createEmptyComposeRule
+import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTouchInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -240,6 +243,16 @@ class GeoPointWidgetTest {
         composeRule.onNodeWithClickLabel(string.view_point).performClick()
 
         verify(geoDataRequester).requestGeoPoint(prompt, waitingForDataRegistry)
+    }
+
+    @Test
+    fun longPressingButtonAndAnswer_showsContextMenu() {
+        val widget = createWidget(geoPointPrompt(answer = answer))
+
+        composeRule.onNodeWithClickLabel(string.change_point).performTouchInput { longClick() }
+        composeRule.onNodeWithText(answerToDisplay(answer)).performTouchInput { longClick() }
+
+        assertThat(activity.viewsWithShownContextMenu, equalTo(listOf<View>(widget, widget)))
     }
 
     @Test
