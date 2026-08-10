@@ -1,6 +1,8 @@
 package org.odk.collect.mapbox
 
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListener
 import com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationDragListener
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotation
@@ -65,7 +67,9 @@ class MarkerFeature(
         override fun onAnnotationDragFinished(annotation: com.mapbox.maps.plugin.annotation.Annotation<*>) {
             onAnnotationDrag(annotation)
             if (annotation.id == pointAnnotation.id && featureDragEndListener != null) {
-                featureDragEndListener.onFeature(featureId)
+                Handler(Looper.getMainLooper()).post {
+                    featureDragEndListener.onFeature(featureId)
+                }
             }
         }
     }
