@@ -42,7 +42,7 @@ object GeoWidgetUtils {
     }
 
     private fun formatCoordinate(coordinate: Double): String {
-        return DecimalFormat("0.000000").format(coordinate) + "°"
+        return DecimalFormat("0.000000").format(coordinate)
     }
 
     private fun formatMeters(value: Double): String {

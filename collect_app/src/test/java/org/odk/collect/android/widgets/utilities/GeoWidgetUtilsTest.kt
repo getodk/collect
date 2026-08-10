@@ -39,8 +39,8 @@ class GeoWidgetUtilsTest {
             equalTo(
                 context.getString(
                     org.odk.collect.strings.R.string.gps_result,
-                    "37.451533°",
-                    "-122.155392°",
+                    "37.451533",
+                    "-122.155392",
                     "100",
                     "5.5"
                 )
@@ -55,8 +55,8 @@ class GeoWidgetUtilsTest {
             equalTo(
                 context.getString(
                     org.odk.collect.strings.R.string.gps_result,
-                    "1.500000°",
-                    "-2.000000°",
+                    "1.500000",
+                    "-2.000000",
                     "0",
                     "0"
                 )
@@ -71,8 +71,8 @@ class GeoWidgetUtilsTest {
             equalTo(
                 context.getString(
                     org.odk.collect.strings.R.string.gps_result,
-                    "1.000000°",
-                    "2.000000°",
+                    "1.000000",
+                    "2.000000",
                     "5.13",
                     "8.43"
                 )
