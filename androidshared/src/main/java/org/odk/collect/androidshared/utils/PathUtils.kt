@@ -27,14 +27,14 @@ object PathUtils {
                         "canonicalDirPath: $canonicalDirPath\n"
                 )
             }
-        } catch (e: IOException) {
-            Timber.e(
-                "Failed attempt to access canonicalPath:\n" +
-                    "dirPath: $dirPath\n" +
-                    "filePath: $filePath\n" +
-                    "absoluteFilePath: $absoluteFilePath\n" +
-                    "absoluteFilePath exists: ${absoluteFile.exists()}\n"
-            )
+        } catch (_: IOException) {
+            val message = "Failed attempt to access canonicalPath:\n" +
+                "dirPath: $dirPath\n" +
+                "filePath: $filePath\n" +
+                "absoluteFilePath: $absoluteFilePath\n" +
+                "absoluteFilePath exists: ${absoluteFile.exists()}\n"
+
+            Timber.e(Error(message))
             absoluteFilePath
         }
     }
