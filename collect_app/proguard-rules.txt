@@ -37,3 +37,6 @@
 
 # Keep line numbers for Crashlytics https://stackoverflow.com/questions/38529304/android-crashlytics-sending-incorrect-line-number
 -keepattributes SourceFile,LineNumberTable
+
+# Prevent optimizations and the obscure NullPointerException crashes
+-optimizations !convertchecknotnull
