@@ -16,8 +16,8 @@ fun Uri.copyToFile(context: Context, dest: File) {
                 inputStream.copyTo(outputStream)
             }
         }
-    } catch (e: Exception) {
-        // ignore
+    } catch (_: Exception) {
+        dest.delete()
     }
 }
 
