@@ -79,7 +79,7 @@ class FormMapTest {
                     1
                 )
             )
-            .selectForm(mapFragment, 0)
+            .selectForm(mapFragment, LATITUDE, LONGITUDE)
             .clickEditSavedForm("Single geopoint")
             .clickOnQuestion("Name")
             .assertText("Foo")
@@ -87,8 +87,8 @@ class FormMapTest {
 
     private fun stubGeopointIntent() {
         val location = Location("gps")
-        location.latitude = 125.1
-        location.longitude = 10.1
+        location.latitude = LATITUDE
+        location.longitude = LONGITUDE
         location.altitude = 5.0
 
         val intent = getReturnIntent(GeoUtils.formatLocationResultString(location))
@@ -101,5 +101,7 @@ class FormMapTest {
     companion object {
         private const val SINGLE_GEOPOINT_FORM = "single-geopoint.xml"
         private const val NO_GEOPOINT_FORM = "basic.xml"
+        private const val LATITUDE = 125.1
+        private const val LONGITUDE = 10.1
     }
 }

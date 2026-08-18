@@ -25,8 +25,8 @@ public class FormMapPage extends Page<FormMapPage> {
         return new FormEntryPage(formName).assertOnPage();
     }
 
-    public FormMapPage selectForm(FakeClickableMapFragment mapFragment, int index) {
-        mapFragment.clickOnFeature(index);
+    public FormMapPage selectForm(FakeClickableMapFragment mapFragment, double latitude, double longitude) {
+        mapFragment.clickOnFeatureAt(latitude, longitude);
         WaitFor.waitFor((Callable<Object>) () -> {
             return assertText(org.odk.collect.strings.R.string.edit_data);
         });
