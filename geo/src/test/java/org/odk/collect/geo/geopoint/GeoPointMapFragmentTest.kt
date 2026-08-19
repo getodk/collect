@@ -222,6 +222,7 @@ class GeoPointMapFragmentTest {
 
         val location = Location(2.0, 2.0, accuracy = 5.2f)
         locationTracker.currentLocation = location
+        assertThat(map.getMarkers().size, equalTo(2))
 
         EspressoInteractions.clickOn(withContentDescription(string.clear))
         assertThat(map.getMarkers().size, equalTo(1))
