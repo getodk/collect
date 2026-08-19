@@ -229,7 +229,7 @@ class GeoPointMapFragmentTest {
     }
 
     @Test
-    fun `clicking clear when input provided clears marker after recreation`() {
+    fun `clicking clear when input point provided keeps marker cleared after recreation`() {
         val scenario = launcherRule.launchInContainer { GeoPointMapFragment(MapPoint(0.0, 0.0)) }
 
         val location = Location(2.0, 2.0, accuracy = 5.2f)
