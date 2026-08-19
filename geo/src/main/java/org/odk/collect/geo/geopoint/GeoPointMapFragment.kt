@@ -299,12 +299,6 @@ class GeoPointMapFragment(
         setClear = state.getBoolean(SET_CLEAR_KEY, false)
         isPointLocked = state.getBoolean(IS_POINT_LOCKED_KEY, false)
 
-        // Restore the flags again, because placeMarker() and clear() modify some of them.
-        isDragged = state.getBoolean(IS_DRAGGED_KEY, false)
-        captureLocation = state.getBoolean(CAPTURE_LOCATION_KEY, false)
-        setClear = state.getBoolean(SET_CLEAR_KEY, false)
-        isPointLocked = state.getBoolean(IS_POINT_LOCKED_KEY, false)
-
         placeMarkerButton!!.isEnabled = state.getBoolean(PLACE_MARKER_BUTTON_ENABLED_KEY, false)
         zoomButton!!.isEnabled = state.getBoolean(ZOOM_BUTTON_ENABLED_KEY, false)
         clearButton!!.isEnabled = state.getBoolean(CLEAR_BUTTON_ENABLED_KEY, false)
