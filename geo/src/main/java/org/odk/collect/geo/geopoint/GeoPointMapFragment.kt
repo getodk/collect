@@ -101,12 +101,6 @@ class GeoPointMapFragment(
      * no new marker has been placed.
      */
     private var setClear = false
-
-    /**
-     * True if the current point was not via interacting with the UI
-     */
-    private var hasInputPoint = false
-
     /**
      * While true, the point cannot be moved by dragging or long-pressing.
      */
@@ -191,7 +185,6 @@ class GeoPointMapFragment(
         state.putBoolean(IS_DRAGGED_KEY, isDragged)
         state.putBoolean(CAPTURE_LOCATION_KEY, captureLocation)
         state.putBoolean(SET_CLEAR_KEY, setClear)
-        state.putBoolean(HAS_INPUT_POINT_KEY, hasInputPoint)
         state.putBoolean(IS_POINT_LOCKED_KEY, isPointLocked)
 
         // UI state
@@ -206,7 +199,7 @@ class GeoPointMapFragment(
 
         if (setClear || (readOnly && featureId == -1)) {
             result = ""
-        } else if (isDragged || readOnly || hasInputPoint) {
+        } else if (isDragged || readOnly) {
             result = formatResult(map!!.getMarkerPoint(featureId)!!)
         } else {
             val geoPoint = geoPointViewModel.geoPoint.value
@@ -266,7 +259,6 @@ class GeoPointMapFragment(
         clearButton!!.setOnClickListener {
             clear()
             locationStatus!!.visibility = View.VISIBLE
-            hasInputPoint = false
         }
 
         if (!draggable) {
@@ -305,14 +297,12 @@ class GeoPointMapFragment(
         isDragged = state.getBoolean(IS_DRAGGED_KEY, false)
         captureLocation = state.getBoolean(CAPTURE_LOCATION_KEY, false)
         setClear = state.getBoolean(SET_CLEAR_KEY, false)
-        hasInputPoint = state.getBoolean(HAS_INPUT_POINT_KEY, false)
         isPointLocked = state.getBoolean(IS_POINT_LOCKED_KEY, false)
 
         // Restore the flags again, because placeMarker() and clear() modify some of them.
         isDragged = state.getBoolean(IS_DRAGGED_KEY, false)
         captureLocation = state.getBoolean(CAPTURE_LOCATION_KEY, false)
         setClear = state.getBoolean(SET_CLEAR_KEY, false)
-        hasInputPoint = state.getBoolean(HAS_INPUT_POINT_KEY, false)
         isPointLocked = state.getBoolean(IS_POINT_LOCKED_KEY, false)
 
         placeMarkerButton!!.isEnabled = state.getBoolean(PLACE_MARKER_BUTTON_ENABLED_KEY, false)
@@ -429,7 +419,6 @@ class GeoPointMapFragment(
         const val IS_DRAGGED_KEY: String = "is_dragged"
         const val CAPTURE_LOCATION_KEY: String = "capture_location"
         const val SET_CLEAR_KEY: String = "set_clear"
-        const val HAS_INPUT_POINT_KEY: String = "has_input_point"
         const val IS_POINT_LOCKED_KEY: String = "is_point_locked"
 
         const val PLACE_MARKER_BUTTON_ENABLED_KEY: String = "place_marker_button_enabled"
