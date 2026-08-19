@@ -7,14 +7,14 @@ import org.odk.collect.maps.MapPoint
 
 class GeoPointViewModel(inputPoint: MapPoint?) : ViewModel() {
 
-    private val _geopoint = MutableStateFlow(inputPoint)
-    val geoPoint: StateFlow<MapPoint?> = _geopoint
+    private val _geoPoint = MutableStateFlow(inputPoint)
+    val geoPoint: StateFlow<MapPoint?> = _geoPoint
 
     fun place(point: MapPoint) {
-        _geopoint.value = point
+        _geoPoint.value = point
     }
 
     fun clear() {
-        _geopoint.value = null
+        _geoPoint.value = null
     }
 }
