@@ -199,8 +199,6 @@ class GeoPointMapFragment(
 
         if (setClear || (readOnly && featureId == -1)) {
             result = ""
-        } else if (isDragged || readOnly) {
-            result = formatResult(map!!.getMarkerPoint(featureId)!!)
         } else {
             val geoPoint = geoPointViewModel.geoPoint.value
             if (geoPoint != null) {
@@ -342,7 +340,6 @@ class GeoPointMapFragment(
             isDragged = true
             captureLocation = true
             setClear = false
-            map!!.setCenter(map!!.getMarkerPoint(featureId), true)
             geoPointViewModel.place(map!!.getMarkerPoint(featureId)!!)
         }
     }
