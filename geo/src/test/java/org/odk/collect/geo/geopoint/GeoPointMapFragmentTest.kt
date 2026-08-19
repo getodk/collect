@@ -146,7 +146,7 @@ class GeoPointMapFragmentTest {
     }
 
     @Test
-    fun `shows marker when input point provided`() {
+    fun `shows marker and centers on it when input point provided`() {
         val inputPoint = MapPoint(1.0, 2.0)
         launcherRule.launchInContainer { GeoPointMapFragment(inputPoint) }
 
@@ -154,6 +154,17 @@ class GeoPointMapFragmentTest {
         assertThat(markers.size, equalTo(1))
         assertThat(markers[0].point.latitude, equalTo(1.0))
         assertThat(markers[0].point.longitude, equalTo(2.0))
+
+        assertThat(map.getCenter(), equalTo(inputPoint))
+    }
+
+    @Test
+    fun `does not allow editing input point`() {
+        val inputPoint = MapPoint(1.0, 2.0)
+        launcherRule.launchInContainer { GeoPointMapFragment(inputPoint) }
+
+        val markers = map.getMarkers()
+        assertThat(markers.size, equalTo(1))
         assertThat(markers[0].isDraggable, equalTo(false))
     }
 

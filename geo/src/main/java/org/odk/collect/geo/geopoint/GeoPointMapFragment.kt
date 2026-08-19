@@ -421,6 +421,8 @@ class GeoPointMapFragment(
 
         captureLocation = true
         setClear = false
+
+        map?.setCenter(point, animate = true)
     }
 
     companion object {
