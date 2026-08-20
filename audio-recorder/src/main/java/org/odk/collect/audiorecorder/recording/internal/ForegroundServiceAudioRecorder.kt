@@ -33,7 +33,7 @@ internal class ForegroundServiceAudioRecorder internal constructor(private val a
     }
 
     override fun start(sessionId: Serializable, output: Output) {
-        application.startService(
+        application.startForegroundService(
             Intent(application, AudioRecorderService::class.java).apply {
                 action = ACTION_START
                 putExtra(EXTRA_SESSION_ID, sessionId)

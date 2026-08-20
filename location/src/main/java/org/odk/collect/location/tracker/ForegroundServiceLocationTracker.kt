@@ -36,7 +36,7 @@ class ForegroundServiceLocationTracker(private val application: Application) : L
             }
         }
 
-        application.startService(intent)
+        application.startForegroundService(intent)
     }
 
     override fun stop() {

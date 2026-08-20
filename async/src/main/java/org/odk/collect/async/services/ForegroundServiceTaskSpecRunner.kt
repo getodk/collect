@@ -40,7 +40,7 @@ class ForegroundServiceTaskSpecRunner(private val application: Application) : Ta
             it.putExtra(EXTRA_INPUT_DATA, HashMap(inputData))
         }
 
-        application.startService(intent)
+        application.startForegroundService(intent)
     }
 }
 
