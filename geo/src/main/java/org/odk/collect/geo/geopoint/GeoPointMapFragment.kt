@@ -89,8 +89,6 @@ class GeoPointMapFragment(
 
     private var placeMarkerButton: ImageButton? = null
 
-    private var isDragged = false
-
     private var zoomButton: ImageButton? = null
     private var clearButton: ImageButton? = null
 
@@ -182,7 +180,6 @@ class GeoPointMapFragment(
         }
 
         // Flags
-        state.putBoolean(IS_DRAGGED_KEY, isDragged)
         state.putBoolean(CAPTURE_LOCATION_KEY, captureLocation)
         state.putBoolean(SET_CLEAR_KEY, setClear)
         state.putBoolean(IS_POINT_LOCKED_KEY, isPointLocked)
@@ -292,7 +289,6 @@ class GeoPointMapFragment(
     }
 
     private fun restoreFromInstanceState(state: Bundle) {
-        isDragged = state.getBoolean(IS_DRAGGED_KEY, false)
         captureLocation = state.getBoolean(CAPTURE_LOCATION_KEY, false)
         setClear = state.getBoolean(SET_CLEAR_KEY, false)
         isPointLocked = state.getBoolean(IS_POINT_LOCKED_KEY, false)
@@ -337,7 +333,6 @@ class GeoPointMapFragment(
 
     private fun onDragEnd(draggedFeatureId: Int) {
         if (draggedFeatureId == featureId) {
-            isDragged = true
             captureLocation = true
             setClear = false
             geoPointViewModel.place(map!!.getMarkerPoint(featureId)!!)
@@ -348,7 +343,6 @@ class GeoPointMapFragment(
         if (draggable && !readOnly && !isPointLocked) {
             geoPointViewModel.place(point)
             enableZoomButton()
-            isDragged = true
         }
     }
 
@@ -368,7 +362,6 @@ class GeoPointMapFragment(
         placeMarkerButton!!.isEnabled = true
 
         isPointLocked = false
-        isDragged = false
         captureLocation = false
         setClear = true
     }
@@ -407,7 +400,6 @@ class GeoPointMapFragment(
     }
 
     companion object {
-        const val IS_DRAGGED_KEY: String = "is_dragged"
         const val CAPTURE_LOCATION_KEY: String = "capture_location"
         const val SET_CLEAR_KEY: String = "set_clear"
         const val IS_POINT_LOCKED_KEY: String = "is_point_locked"
