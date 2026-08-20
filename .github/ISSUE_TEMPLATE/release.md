@@ -43,4 +43,5 @@ Maintainers keep a folder with a clean checkout of the code and use [jenv.be](ht
 - [ ] add a release to GitHub [here](https://github.com/getodk/collect/releases), generate release notes and attach the APK
 - [ ] upload APK(s) to Play Store
 - [ ] backup dependencies for the release by downloading the `vX.X.X.tar` artifact from the `create_dependency_backup` job on Circle CI (for the release commit) and then uploading it to [this folder](https://drive.google.com/drive/folders/1_tMKBFLdhzFZF9GKNeob4FbARjdfbtJu?usp=share_link)
+- [ ] delete dependency backups for other major versions older than 2 years (i.e. if this version is v3003.1 then backups for v3001.x and older should be deleted)
 - [ ] backup a self-signed release APK by downloading the `selfSignedRelease.apk` from the `build_release` job on Circle CI (for the release commit) and then upload to [this folder](https://drive.google.com/drive/folders/1pbbeNaMTziFhtZmedOs0If3BeYu3Ex5x?usp=share_link)
