@@ -83,6 +83,7 @@ import org.odk.collect.android.widgets.utilities.RecordingRequesterProvider;
 import org.odk.collect.android.widgets.utilities.StringRequesterImpl;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.androidshared.system.IntentLauncher;
+import org.odk.collect.androidshared.system.UriExtKt;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton;
 import org.odk.collect.audioclips.PlaybackFailedException;
@@ -643,7 +644,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
                                         public void granted() {
                                             File destFile = FileUtils.createDestinationMediaFile(formController.getInstanceFile().getParent(), ContentUriHelper.getFileExtensionFromUri(uri));
                                             //TODO might be better to use QuestionMediaManager in the future
-                                            FileUtils.saveAnswerFileFromUri(uri, destFile, getContext());
+                                            UriExtKt.copyToFile(uri, getContext(), destFile);
                                             ((WidgetDataReceiver) questionWidget).setData(destFile);
 
                                             questionWidget.showAnswerContainer();

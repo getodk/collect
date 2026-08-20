@@ -65,15 +65,6 @@ public final class FileUtils {
     private FileUtils() {
     }
 
-    public static void saveAnswerFileFromUri(Uri uri, File destFile, Context context) {
-        try (InputStream fileInputStream = context.getContentResolver().openInputStream(uri);
-             OutputStream fileOutputStream = new FileOutputStream(destFile)) {
-            IOUtils.copy(fileInputStream, fileOutputStream);
-        } catch (IOException e) {
-            Timber.e(e);
-        }
-    }
-
     public static File createDestinationMediaFile(String fileLocation, String fileExtension) {
         return new File(fileLocation
                 + File.separator

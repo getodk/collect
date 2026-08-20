@@ -14,6 +14,7 @@ import org.odk.collect.android.utilities.ContentUriHelper;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ImageCompressionController;
 import org.odk.collect.android.widgets.QuestionWidget;
+import org.odk.collect.androidshared.system.UriExtKt;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.settings.SettingsProvider;
 
@@ -63,7 +64,7 @@ public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
             String extension = ContentUriHelper.getFileExtensionFromUri(uris[0]);
 
             File newFile = FileUtils.createDestinationMediaFile(instanceFile.getParent(), extension);
-            FileUtils.saveAnswerFileFromUri(uris[0], newFile, Collect.getInstance());
+            UriExtKt.copyToFile(uris[0], Collect.getInstance(), newFile);
 
             // apply image conversion if the question is an image question
             if (questionWidget.getFormEntryPrompt().getControlType() == Constants.CONTROL_IMAGE_CHOOSE) {
