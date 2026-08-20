@@ -13,19 +13,28 @@ object PathUtils {
 
         val absoluteFile = File(absoluteFilePath)
         return try {
-            if (absoluteFile.sanitizedCanonicalPath().startsWith(File(dirPath).sanitizedCanonicalPath())) {
+            val canonicalFilePath = absoluteFile.sanitizedCanonicalPath()
+            val canonicalDirPath = File(dirPath).sanitizedCanonicalPath()
+
+            if (canonicalFilePath.startsWith(canonicalDirPath)) {
                 absoluteFilePath
             } else {
-                throw SecurityException("Contact support@getodk.org. Attempt to access file outside of Collect directory: $absoluteFilePath")
+                throw SecurityException(
+                    "Contact support@getodk.org. Attempt to access file outside of Collect directory: $absoluteFilePath\n" +
+                        "dirPath: $dirPath\n" +
+                        "filePath: $filePath\n" +
+                        "canonicalFilePath: $canonicalFilePath\n" +
+                        "canonicalDirPath: $canonicalDirPath\n"
+                )
             }
-        } catch (e: IOException) {
-            Timber.e(
-                "Failed attempt to access canonicalPath:\n" +
-                    "dirPath: $dirPath\n" +
-                    "filePath: $filePath\n" +
-                    "absoluteFilePath: $absoluteFilePath\n" +
-                    "absoluteFilePath exists: ${absoluteFile.exists()}\n"
-            )
+        } catch (_: IOException) {
+            val message = "Failed attempt to access canonicalPath:\n" +
+                "dirPath: $dirPath\n" +
+                "filePath: $filePath\n" +
+                "absoluteFilePath: $absoluteFilePath\n" +
+                "absoluteFilePath exists: ${absoluteFile.exists()}\n"
+
+            Timber.e(Error(message))
             absoluteFilePath
         }
     }
