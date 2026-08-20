@@ -182,6 +182,17 @@ class GeoPointMapFragmentTest {
     }
 
     @Test
+    fun `does not show accuracy status when there is an input point`() {
+        launcherRule.launchInContainer { GeoPointMapFragment(MapPoint(0.0, 0.0)) }
+
+        locationTracker.currentLocation = Location(1.0, 2.0, 3.0, 4.0f)
+        EspressoAssertions.assertNotVisible(withText("Accuracy: 4 m"))
+
+        EspressoInteractions.clickOn(withContentDescription(string.clear))
+        EspressoAssertions.assertVisible(withText("Accuracy: 4 m"))
+    }
+
+    @Test
     fun `passing retain mock accuracy extra updates location tracker`() {
         launcherRule.launchInContainer { GeoPointMapFragment(retainMockAccuracy = true) }
 

@@ -22,6 +22,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.core.graphics.toColorInt
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.viewModels
@@ -91,8 +92,6 @@ class GeoPointMapFragment(
 
     private var zoomButton: ImageButton? = null
     private var clearButton: ImageButton? = null
-
-    private var captureLocation = false
 
     /**
      * True if a tap on the clear button removed an existing marker and
@@ -165,6 +164,10 @@ class GeoPointMapFragment(
         if (mappableData != null) {
             showItemLoading(mappableData)
         }
+
+        geoPointViewModel.isInputPoint.asLiveData().observe(viewLifecycleOwner) {
+            locationStatus!!.isVisible = !it
+        }
     }
 
     override fun onSaveInstanceState(state: Bundle) {
@@ -180,7 +183,6 @@ class GeoPointMapFragment(
         }
 
         // Flags
-        state.putBoolean(CAPTURE_LOCATION_KEY, captureLocation)
         state.putBoolean(SET_CLEAR_KEY, setClear)
         state.putBoolean(IS_POINT_LOCKED_KEY, isPointLocked)
 
@@ -188,7 +190,6 @@ class GeoPointMapFragment(
         state.putBoolean(PLACE_MARKER_BUTTON_ENABLED_KEY, placeMarkerButton!!.isEnabled)
         state.putBoolean(ZOOM_BUTTON_ENABLED_KEY, zoomButton!!.isEnabled)
         state.putBoolean(CLEAR_BUTTON_ENABLED_KEY, clearButton!!.isEnabled)
-        state.putInt(LOCATION_STATUS_VISIBILITY_KEY, locationStatus!!.visibility)
     }
 
     private fun returnLocation() {
@@ -253,7 +254,6 @@ class GeoPointMapFragment(
         clearButton!!.isEnabled = false
         clearButton!!.setOnClickListener {
             clear()
-            locationStatus!!.visibility = View.VISIBLE
         }
 
         if (!draggable) {
@@ -263,7 +263,6 @@ class GeoPointMapFragment(
         }
 
         if (readOnly) {
-            captureLocation = true
             clearButton!!.isEnabled = false
         }
 
@@ -293,15 +292,12 @@ class GeoPointMapFragment(
     }
 
     private fun restoreFromInstanceState(state: Bundle) {
-        captureLocation = state.getBoolean(CAPTURE_LOCATION_KEY, false)
         setClear = state.getBoolean(SET_CLEAR_KEY, false)
         isPointLocked = state.getBoolean(IS_POINT_LOCKED_KEY, false)
 
         placeMarkerButton!!.isEnabled = state.getBoolean(PLACE_MARKER_BUTTON_ENABLED_KEY, false)
         zoomButton!!.isEnabled = state.getBoolean(ZOOM_BUTTON_ENABLED_KEY, false)
         clearButton!!.isEnabled = state.getBoolean(CLEAR_BUTTON_ENABLED_KEY, false)
-
-        locationStatus!!.visibility = state.getInt(LOCATION_STATUS_VISIBILITY_KEY, View.GONE)
     }
 
     private fun onLocationChanged(point: MapPoint?) {
@@ -312,7 +308,7 @@ class GeoPointMapFragment(
         if (point != null) {
             enableZoomButton()
 
-            if (!captureLocation && !setClear) {
+            if (!geoPointViewModel.hasGeoPoint() && !setClear) {
                 geoPointViewModel.place(point)
                 placeMarkerButton!!.isEnabled = true
             }
@@ -337,7 +333,6 @@ class GeoPointMapFragment(
 
     private fun onDragEnd(draggedFeatureId: Int) {
         if (draggedFeatureId == featureId) {
-            captureLocation = true
             setClear = false
             geoPointViewModel.place(map!!.getMarkerPoint(featureId)!!)
         }
@@ -362,7 +357,6 @@ class GeoPointMapFragment(
         placeMarkerButton!!.isEnabled = true
 
         isPointLocked = false
-        captureLocation = false
         setClear = true
     }
 
@@ -393,19 +387,16 @@ class GeoPointMapFragment(
             clearButton!!.isEnabled = true
         }
 
-        captureLocation = true
         setClear = false
     }
 
     companion object {
-        const val CAPTURE_LOCATION_KEY: String = "capture_location"
         const val SET_CLEAR_KEY: String = "set_clear"
         const val IS_POINT_LOCKED_KEY: String = "is_point_locked"
 
         const val PLACE_MARKER_BUTTON_ENABLED_KEY: String = "place_marker_button_enabled"
         const val ZOOM_BUTTON_ENABLED_KEY: String = "zoom_button_enabled"
         const val CLEAR_BUTTON_ENABLED_KEY: String = "clear_button_enabled"
-        const val LOCATION_STATUS_VISIBILITY_KEY: String = "location_status_visibility"
 
         const val MARKER_COLOR: String = "#52C268"
         const val REQUEST_GEOPOINT: String = "geopoint"
