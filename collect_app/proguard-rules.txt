@@ -39,4 +39,4 @@
 -keepattributes SourceFile,LineNumberTable
 
 # Prevent optimizations and the obscure NullPointerException crashes
--optimizations !convertchecknotnull
+-processkotlinnullchecks keep
