@@ -116,7 +116,7 @@ class GeoPointMapFragmentTest {
     }
 
     @Test
-    fun `clicking add marker moves marker to the current location`() {
+    fun `clicking add marker moves marker to the current location and centers on it`() {
         launcherRule.launchInContainer { GeoPointMapFragment() }
 
         locationTracker.currentLocation = Location(1.0, 2.0, 3.0, 4.0f)
@@ -129,6 +129,8 @@ class GeoPointMapFragmentTest {
             .filter { it.iconDescription != CurrentLocationDelegate.ICON_DESCRIPTION }
         assertThat(markers.size, equalTo(1))
         assertThat(markers[0].point, equalTo(secondLocation.toMapPoint()))
+
+        assertThat(map.getCenter(), equalTo(secondLocation.toMapPoint()))
     }
 
     @Test

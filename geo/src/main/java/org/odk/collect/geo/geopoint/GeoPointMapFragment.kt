@@ -230,7 +230,7 @@ class GeoPointMapFragment(
             if (currentLocation != null) {
                 val mapPoint = currentLocation.toMapPoint()
                 geoPointViewModel.place(mapPoint)
-                zoomToMarker(true)
+                map!!.zoomToPoint(map!!.getMarkerPoint(featureId), true)
             }
         }
 
@@ -354,10 +354,6 @@ class GeoPointMapFragment(
         if (zoomButton != null) {
             zoomButton!!.isEnabled = true
         }
-    }
-
-    private fun zoomToMarker(animate: Boolean) {
-        map!!.zoomToPoint(map!!.getMarkerPoint(featureId), animate)
     }
 
     private fun clear() {
