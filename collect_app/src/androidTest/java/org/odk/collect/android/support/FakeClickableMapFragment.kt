@@ -14,7 +14,7 @@ import org.odk.collect.maps.traces.PolygonDescription
 class FakeClickableMapFragment : Fragment(), MapFragment {
 
     private var idCounter = 1
-    private val featureIds = mutableListOf<Int>()
+    private val markers = mutableMapOf<Int, MarkerDescription>()
     private var featureClickListener: MapFragment.FeatureListener? = null
 
     override fun init(
@@ -52,8 +52,8 @@ class FakeClickableMapFragment : Fragment(), MapFragment {
     }
 
     override fun addMarkers(markers: List<MarkerDescription>): List<Int> {
-        return markers.map {
-            idCounter++.also { id -> featureIds.add(id) }
+        return markers.map { marker ->
+            idCounter++.also { id -> this.markers[id] = marker }
         }
     }
 
@@ -89,11 +89,11 @@ class FakeClickableMapFragment : Fragment(), MapFragment {
     }
 
     override fun clearFeatures() {
-        featureIds.clear()
+        markers.clear()
     }
 
     override fun clearFeatures(ids: List<Int>) {
-        featureIds.removeAll(ids)
+        markers.keys.removeAll(ids.toSet())
     }
 
     override fun setClickListener(listener: MapFragment.PointListener?) {}
@@ -110,11 +110,15 @@ class FakeClickableMapFragment : Fragment(), MapFragment {
         return false
     }
 
-    fun clickOnFeature(index: Int) {
+    fun clickOnFeatureAt(latitude: Double, longitude: Double) {
+        val featureId = markers.entries.single {
+            it.value.point.latitude == latitude && it.value.point.longitude == longitude
+        }.key
+
         var done = false
 
         Handler(Looper.getMainLooper()).post {
-            featureClickListener!!.onFeature(featureIds[index])
+            featureClickListener!!.onFeature(featureId)
             done = true
         }
 

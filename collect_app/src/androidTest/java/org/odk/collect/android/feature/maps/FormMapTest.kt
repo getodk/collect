@@ -56,7 +56,9 @@ class FormMapTest {
 
     @Test
     fun fillingBlankForm_addsInstanceToMap() {
-        stubGeopointIntent()
+        val latitude = 125.1
+        val longitude = 10.1
+        stubGeopointIntent(latitude, longitude)
 
         rule.startAtMainMenu()
             .copyForm(SINGLE_GEOPOINT_FORM)
@@ -79,16 +81,16 @@ class FormMapTest {
                     1
                 )
             )
-            .selectForm(mapFragment, 0)
+            .selectForm(mapFragment, latitude, longitude)
             .clickEditSavedForm("Single geopoint")
             .clickOnQuestion("Name")
             .assertText("Foo")
     }
 
-    private fun stubGeopointIntent() {
+    private fun stubGeopointIntent(latitude: Double, longitude: Double) {
         val location = Location("gps")
-        location.latitude = 125.1
-        location.longitude = 10.1
+        location.latitude = latitude
+        location.longitude = longitude
         location.altitude = 5.0
 
         val intent = getReturnIntent(GeoUtils.formatLocationResultString(location))
