@@ -33,6 +33,10 @@ fun TextWidgetAnswer(
     onLongClick: () -> Unit,
     onClickLabel: String? = null
 ) {
+    if (answer.isEmpty()) {
+        return
+    }
+
     val annotatedAnswer = remember(answer) {
         AnnotatedString.fromHtml(HtmlUtils.markdownToHtml(answer))
     }

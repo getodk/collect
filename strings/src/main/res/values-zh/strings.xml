@@ -493,14 +493,6 @@
   <string name="accuracy_status_title">正在获取位置</string>
   <!--The accuracy of a location fix in meters-->
   <string name="accuracy_m">%1$s米</string>
-  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
-  <string name="west">W %1$s%2$s%3$s</string>
-  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
-  <string name="east">E %1$s%2$s%3$s</string>
-  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
-  <string name="south">S %1$s%2$s%3$s</string>
-  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
-  <string name="north">N %1$s%2$s%3$s</string>
   <string name="input_method">输入方法</string>
   <string name="start">开始</string>
   <string name="enable_gps">启用GPS</string>

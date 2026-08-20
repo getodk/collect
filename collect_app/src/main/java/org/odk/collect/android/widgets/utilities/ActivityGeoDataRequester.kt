@@ -13,7 +13,6 @@ import org.odk.collect.android.widgets.geo.GeoPolyDialogFragment
 import org.odk.collect.android.widgets.interfaces.GeoDataRequester
 import org.odk.collect.android.widgets.utilities.BindAttributes.ALLOW_MOCK_ACCURACY
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
-import org.odk.collect.geo.Constants.EXTRA_READ_ONLY
 import org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY
 import org.odk.collect.geo.geopoint.GeoPointActivity
 import org.odk.collect.permissions.PermissionListener
@@ -35,7 +34,7 @@ class ActivityGeoDataRequester(
                 override fun granted() {
                     waitingForDataRegistry.waitForData(prompt.index)
 
-                    if (isMapsAppearance(prompt)) {
+                    if (Appearances.isGeoPointMapAppearance(prompt) || prompt.isReadOnly) {
                         DialogFragmentUtils.showIfNotShowing(
                             GeoPointMapDialogFragment::class.java,
                             bundleOf(WidgetAnswerDialogFragment.ARG_FORM_INDEX to prompt.index),
@@ -66,7 +65,6 @@ class ActivityGeoDataRequester(
                             )
 
                             it.putBoolean(EXTRA_RETAIN_MOCK_ACCURACY, getAllowMockAccuracy(prompt))
-                            it.putBoolean(EXTRA_READ_ONLY, prompt.isReadOnly)
                         }
 
                         val intent = Intent(activity, GeoPointActivity::class.java).also {
@@ -105,18 +103,6 @@ class ActivityGeoDataRequester(
                 ALLOW_MOCK_ACCURACY
             )
         )
-    }
-
-    private fun isMapsAppearance(prompt: FormEntryPrompt): Boolean {
-        return hasMapsAppearance(prompt) || hasPlacementMapAppearance(prompt)
-    }
-
-    private fun hasMapsAppearance(prompt: FormEntryPrompt): Boolean {
-        return Appearances.hasAppearance(prompt, Appearances.MAPS)
-    }
-
-    private fun hasPlacementMapAppearance(prompt: FormEntryPrompt): Boolean {
-        return Appearances.hasAppearance(prompt, Appearances.PLACEMENT_MAP)
     }
 
     companion object {

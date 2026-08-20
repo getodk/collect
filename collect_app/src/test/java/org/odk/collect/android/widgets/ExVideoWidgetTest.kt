@@ -1,9 +1,12 @@
 package org.odk.collect.android.widgets
 
+import android.view.View
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTouchInput
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.javarosa.core.model.Constants
@@ -115,6 +118,17 @@ class ExVideoWidgetTest : FileWidgetTest<ExVideoWidget>() {
         widget.clearAnswer()
         composeRule.onNodeWithClickLabel(activity.getString(string.launch_app)).assertIsDisplayed()
         composeRule.onNodeWithClickLabel(activity.getString(string.play_video)).assertDoesNotExist()
+    }
+
+    @Test
+    fun whenLongPressingButtonAndAnswer_shouldContextMenuBeShown() {
+        whenever(formEntryPrompt.getAnswerText()).thenReturn(initialAnswer.displayText)
+        val widget = createWidget()
+
+        composeRule.onNodeWithClickLabel(activity.getString(string.launch_app)).performTouchInput { longClick() }
+        composeRule.onNodeWithClickLabel(activity.getString(string.play_video)).performTouchInput { longClick() }
+
+        assertThat(viewsWithShownContextMenu, equalTo(listOf<View>(widget, widget)))
     }
 
     @Test
