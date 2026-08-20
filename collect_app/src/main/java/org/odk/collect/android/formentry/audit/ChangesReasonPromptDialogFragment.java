@@ -20,7 +20,18 @@ import org.odk.collect.material.MaterialFullScreenDialogFragment;
 
 public class ChangesReasonPromptDialogFragment extends MaterialFullScreenDialogFragment {
 
+    private final ViewModelProvider.Factory viewModelFactory;
     private FormSaveViewModel viewModel;
+
+    public ChangesReasonPromptDialogFragment(ViewModelProvider.Factory viewModelFactory) {
+        this.viewModelFactory = viewModelFactory;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        viewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(FormSaveViewModel.class);
+    }
 
     @Nullable
     @Override
@@ -63,12 +74,6 @@ public class ChangesReasonPromptDialogFragment extends MaterialFullScreenDialogF
         });
 
         reasonField.requestFocus();
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        viewModel = new ViewModelProvider(requireActivity()).get(FormSaveViewModel.class);
     }
 
     @Override
