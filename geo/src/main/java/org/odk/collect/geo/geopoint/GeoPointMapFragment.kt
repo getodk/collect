@@ -271,6 +271,10 @@ class GeoPointMapFragment(
             restoreFromInstanceState(previousState!!)
         }
 
+        if (inputPoint != null && !map!!.hasCenter()) {
+            map!!.setCenter(inputPoint, animate = true)
+        }
+
         map!!.showCurrentLocation(
             locationTracker,
             currentLocationDelegate,
@@ -395,8 +399,6 @@ class GeoPointMapFragment(
 
         captureLocation = true
         setClear = false
-
-        map?.setCenter(point, animate = true)
     }
 
     companion object {

@@ -305,6 +305,17 @@ class GeoPointMapFragmentTest {
             }
     }
 
+    @Test
+    fun `recreating retains center when there is a point`() {
+        val inputPoint = MapPoint(-1.0, -1.0)
+        val scenario = launcherRule.launchInContainer { GeoPointMapFragment(inputPoint) }
+
+        val center = MapPoint(5.0, 5.0)
+        map.setCenter(center)
+        scenario.recreate()
+        assertThat(map.getCenter(), equalTo(center))
+    }
+
     private fun overrideDependencies(mapFragment: MapFragment) {
         val application = ApplicationProvider.getApplicationContext<RobolectricApplication>()
         application.geoDependencyComponent = DaggerGeoDependencyComponent.builder()
