@@ -32,7 +32,7 @@ import org.odk.collect.testshared.FakeScheduler
 class GeoPointActivityTest {
 
     private val locationLiveData: MutableLiveData<Location?> = MutableLiveData(null)
-    private val viewModel = mock<GeoPointViewModel> {
+    private val viewModel = mock<FindLocationViewModel> {
         on { acceptedLocation } doReturn locationLiveData
         on { currentAccuracy } doReturn MutableLiveData(null)
         on { timeElapsed } doReturn MutableNonNullLiveData(0)
@@ -53,7 +53,7 @@ class GeoPointActivityTest {
                 override fun providesScheduler() = scheduler
 
                 override fun providesGeoPointViewModelFactory(application: Application) =
-                    object : GeoPointViewModelFactory {
+                    object : FindLocationViewModelFactory {
                         @Suppress("UNCHECKED_CAST")
                         override fun <T : ViewModel> create(modelClass: Class<T>): T {
                             return viewModel as T

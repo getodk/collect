@@ -1,7 +1,6 @@
 package org.odk.collect.geo.geopoint
 
 import android.app.Application
-import androidx.activity.OnBackPressedDispatcher
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -26,7 +25,6 @@ import org.odk.collect.geo.DaggerGeoDependencyComponent
 import org.odk.collect.geo.GeoDependencyModule
 import org.odk.collect.geo.GeoUtils.toMapPoint
 import org.odk.collect.geo.R
-import org.odk.collect.geo.geopoly.GeoPolyFragment
 import org.odk.collect.geo.support.FakeLocationTracker
 import org.odk.collect.geo.support.FakeMapFragment
 import org.odk.collect.geo.support.FakeMappableData
@@ -51,7 +49,6 @@ import org.odk.collect.testshared.EspressoInteractions
 import org.odk.collect.testshared.FragmentResultRecorder
 import org.odk.collect.testshared.RobolectricHelpers.getFragmentByClass
 import org.odk.collect.webpage.WebPageService
-import org.robolectric.Shadows
 
 @RunWith(AndroidJUnit4::class)
 class GeoPointMapFragmentTest {
@@ -62,31 +59,21 @@ class GeoPointMapFragmentTest {
     @get:Rule
     val launcherRule = FragmentScenarioLauncherRule()
 
-    private val application = ApplicationProvider.getApplicationContext<Application>()
-
     @Before
     fun setUp() {
-        val shadowApplication =
-            Shadows.shadowOf(application)
-        shadowApplication.grantPermissions("android.permission.ACCESS_FINE_LOCATION")
-        shadowApplication.grantPermissions("android.permission.ACCESS_COARSE_LOCATION")
         overrideDependencies(map)
     }
 
     @Test
     fun `displays please wait message when location not set`() {
-        launcherRule.launchInContainer {
-            GeoPointMapFragment(null, false, false, false)
-        }
+        launcherRule.launchInContainer { GeoPointMapFragment() }
 
         EspressoAssertions.assertVisible(withText(string.please_wait_long))
     }
 
     @Test
     fun `displays status message when location set`() {
-        launcherRule.launchInContainer {
-            GeoPointMapFragment(null, false, false, false)
-        }
+        launcherRule.launchInContainer { GeoPointMapFragment() }
 
         locationTracker.currentLocation = Location(1.0, 2.0, 3.0, 4.0f)
         EspressoAssertions.assertVisible(withText("Accuracy: 4 m"))
@@ -94,9 +81,7 @@ class GeoPointMapFragmentTest {
 
     @Test
     fun `returns point from first location fix`() {
-        val scenario = launcherRule.launchInContainer {
-            GeoPointMapFragment(null, false, false, false)
-        }
+        val scenario = launcherRule.launchInContainer { GeoPointMapFragment() }
 
         val resultListener = FragmentResultRecorder()
         scenario.setFragmentResultListener(GeoPointMapFragment.REQUEST_GEOPOINT, resultListener)
@@ -131,10 +116,8 @@ class GeoPointMapFragmentTest {
     }
 
     @Test
-    fun `clicking add marker moves marker to the current location`() {
-        launcherRule.launchInContainer {
-            GeoPointMapFragment(null, false, false, false)
-        }
+    fun `clicking add marker moves marker to the current location and centers on it`() {
+        launcherRule.launchInContainer { GeoPointMapFragment() }
 
         locationTracker.currentLocation = Location(1.0, 2.0, 3.0, 4.0f)
         val secondLocation = Location(5.0, 6.0, 7.0, 8.0f)
@@ -146,26 +129,72 @@ class GeoPointMapFragmentTest {
             .filter { it.iconDescription != CurrentLocationDelegate.ICON_DESCRIPTION }
         assertThat(markers.size, equalTo(1))
         assertThat(markers[0].point, equalTo(secondLocation.toMapPoint()))
+
+        assertThat(map.getCenter(), equalTo(secondLocation.toMapPoint()))
     }
 
     @Test
-    fun `shows marker when input point provided`() {
+    fun `can drag marker after adding one`() {
+        val scenario = launcherRule.launchInContainer { GeoPointMapFragment() }
+
+        val resultListener = FragmentResultRecorder()
+        scenario.setFragmentResultListener(GeoPointMapFragment.REQUEST_GEOPOINT, resultListener)
+
+        val location = Location(1.0, 2.0, 3.0, 4.0f)
+        locationTracker.currentLocation = location
+        EspressoInteractions.clickOn(withContentDescription(string.record_geopoint))
+        assertThat(map.getMarkers().size, equalTo(2))
+
+        val destination = MapPoint(2.0, 3.0)
+        map.dragMarker(1, destination)
+        assertThat(map.getMarkers()[1].point, equalTo(destination))
+
+        EspressoInteractions.clickOn(withContentDescription(string.save))
+        val result = resultListener.getAll().last()
+        assertThat(result.first, equalTo(GeoPointMapFragment.REQUEST_GEOPOINT))
+        assertThat(
+            result.second.getString(GeoPointMapFragment.RESULT_GEOPOINT),
+            equalTo("2.0 3.0 0.0 0.0")
+        )
+    }
+
+    @Test
+    fun `shows marker and centers on it when input point provided`() {
         val inputPoint = MapPoint(1.0, 2.0)
-        launcherRule.launchInContainer {
-            GeoPointMapFragment(inputPoint, false, false, false)
-        }
+        launcherRule.launchInContainer { GeoPointMapFragment(inputPoint) }
 
         val markers = map.getMarkers()
         assertThat(markers.size, equalTo(1))
         assertThat(markers[0].point.latitude, equalTo(1.0))
         assertThat(markers[0].point.longitude, equalTo(2.0))
+
+        assertThat(map.getCenter(), equalTo(inputPoint))
+    }
+
+    @Test
+    fun `does not allow editing input point`() {
+        val inputPoint = MapPoint(1.0, 2.0)
+        launcherRule.launchInContainer { GeoPointMapFragment(inputPoint) }
+
+        val markers = map.getMarkers()
+        assertThat(markers.size, equalTo(1))
+        assertThat(markers[0].isDraggable, equalTo(false))
+    }
+
+    @Test
+    fun `does not show accuracy status when there is an input point`() {
+        launcherRule.launchInContainer { GeoPointMapFragment(MapPoint(0.0, 0.0)) }
+
+        locationTracker.currentLocation = Location(1.0, 2.0, 3.0, 4.0f)
+        EspressoAssertions.assertNotVisible(withText("Accuracy: 4 m"))
+
+        EspressoInteractions.clickOn(withContentDescription(string.clear))
+        EspressoAssertions.assertVisible(withText("Accuracy: 4 m"))
     }
 
     @Test
     fun `passing retain mock accuracy extra updates location tracker`() {
-        launcherRule.launchInContainer {
-            GeoPointMapFragment(null, false, false, true)
-        }
+        launcherRule.launchInContainer { GeoPointMapFragment(retainMockAccuracy = true) }
 
         assertThat(locationTracker.retainMockAccuracy, equalTo(true))
 
@@ -179,7 +208,7 @@ class GeoPointMapFragmentTest {
     @Test
     fun `recreating the fragment with the layers dialog displayed does not crash the app`() {
         val scenario =
-            launcherRule.launchInContainer { GeoPointMapFragment(null, false, false, false) }
+            launcherRule.launchInContainer { GeoPointMapFragment() }
 
         onView(withId(R.id.layer_menu)).perform(click())
 
@@ -188,9 +217,7 @@ class GeoPointMapFragmentTest {
 
     @Test
     fun `clicking zoom zooms to the current location`() {
-        launcherRule.launchInContainer {
-            GeoPointMapFragment(null, false, false, false)
-        }
+        launcherRule.launchInContainer { GeoPointMapFragment() }
 
         locationTracker.currentLocation = Location(5.0, 5.0)
         locationTracker.currentLocation = Location(6.0, 6.0)
@@ -201,9 +228,7 @@ class GeoPointMapFragmentTest {
 
     @Test
     fun `shows current location`() {
-        launcherRule.launchInContainer {
-            GeoPointMapFragment(null, false, false, false)
-        }
+        launcherRule.launchInContainer { GeoPointMapFragment() }
 
         val firstLocation = Location(2.0, 2.0, accuracy = 5.2f)
         locationTracker.currentLocation = firstLocation
@@ -217,12 +242,11 @@ class GeoPointMapFragmentTest {
 
     @Test
     fun `clicking clear clears marker`() {
-        launcherRule.launchInContainer {
-            GeoPointMapFragment(null, false, false, false)
-        }
+        launcherRule.launchInContainer { GeoPointMapFragment() }
 
         val location = Location(2.0, 2.0, accuracy = 5.2f)
         locationTracker.currentLocation = location
+        assertThat(map.getMarkers().size, equalTo(2))
 
         EspressoInteractions.clickOn(withContentDescription(string.clear))
         assertThat(map.getMarkers().size, equalTo(1))
@@ -230,11 +254,23 @@ class GeoPointMapFragmentTest {
     }
 
     @Test
-    fun `enables place marker button when existing location cleared`() {
-        val inputPoint = MapPoint(1.0, 2.0)
-        launcherRule.launchInContainer {
-            GeoPointMapFragment(inputPoint, false, false, false)
-        }
+    fun `clicking clear when input point provided keeps marker cleared after recreation`() {
+        val scenario = launcherRule.launchInContainer { GeoPointMapFragment(MapPoint(0.0, 0.0)) }
+
+        val location = Location(2.0, 2.0, accuracy = 5.2f)
+        locationTracker.currentLocation = location
+
+        EspressoInteractions.clickOn(withContentDescription(string.clear))
+        assertThat(map.getMarkers().size, equalTo(1))
+        assertThat(map, showsCurrentLocation(location.toMapPoint()))
+
+        scenario.recreate()
+        assertThat(map.getMarkers().size, equalTo(1))
+    }
+
+    @Test
+    fun `enables place marker button when input point marker cleared`() {
+        launcherRule.launchInContainer { GeoPointMapFragment(MapPoint(1.0, 2.0)) }
 
         EspressoAssertions.assertDisabled(withContentDescription(string.record_geopoint))
         EspressoInteractions.clickOn(withContentDescription(string.clear))
@@ -251,10 +287,7 @@ class GeoPointMapFragmentTest {
             )
         )
 
-        launcherRule.launchInContainer {
-            GeoPointMapFragment(null, false, false, false, mappableData)
-        }
-
+        launcherRule.launchInContainer { GeoPointMapFragment(mappableData = mappableData) }
         assertThat(map, showsMappableData(mappableData, background = true, clickable = false))
     }
 
@@ -263,27 +296,37 @@ class GeoPointMapFragmentTest {
         val mappableData = FakeMappableData(emptyList())
         mappableData.isLoading = false
 
-        launcherRule.launchInContainer {
-            GeoPointMapFragment(null, false, false, false, mappableData)
-        }.onFragment {
-            val dialogClass = MaterialProgressDialogFragment::class.java
-            assertThat(
-                getFragmentByClass(it.childFragmentManager, dialogClass),
-                nullValue()
-            )
+        launcherRule.launchInContainer { GeoPointMapFragment(mappableData = mappableData) }
+            .onFragment {
+                val dialogClass = MaterialProgressDialogFragment::class.java
+                assertThat(
+                    getFragmentByClass(it.childFragmentManager, dialogClass),
+                    nullValue()
+                )
 
-            mappableData.isLoading = true
-            assertThat(
-                getFragmentByClass(it.childFragmentManager, dialogClass),
-                notNullValue()
-            )
+                mappableData.isLoading = true
+                assertThat(
+                    getFragmentByClass(it.childFragmentManager, dialogClass),
+                    notNullValue()
+                )
 
-            mappableData.isLoading = false
-            assertThat(
-                getFragmentByClass(it.childFragmentManager, dialogClass),
-                nullValue()
-            )
-        }
+                mappableData.isLoading = false
+                assertThat(
+                    getFragmentByClass(it.childFragmentManager, dialogClass),
+                    nullValue()
+                )
+            }
+    }
+
+    @Test
+    fun `recreating retains center when there is a point`() {
+        val inputPoint = MapPoint(-1.0, -1.0)
+        val scenario = launcherRule.launchInContainer { GeoPointMapFragment(inputPoint) }
+
+        val center = MapPoint(5.0, 5.0)
+        map.setCenter(center)
+        scenario.recreate()
+        assertThat(map.getCenter(), equalTo(center))
     }
 
     private fun overrideDependencies(mapFragment: MapFragment) {

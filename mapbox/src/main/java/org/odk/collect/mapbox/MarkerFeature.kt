@@ -1,6 +1,8 @@
 package org.odk.collect.mapbox
 
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListener
 import com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationDragListener
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotation
@@ -65,7 +67,13 @@ class MarkerFeature(
         override fun onAnnotationDragFinished(annotation: com.mapbox.maps.plugin.annotation.Annotation<*>) {
             onAnnotationDrag(annotation)
             if (annotation.id == pointAnnotation.id && featureDragEndListener != null) {
-                featureDragEndListener.onFeature(featureId)
+                /**
+                 * Prevents listener from accidentally interfering with features while Mapbox
+                 * performs updates which can cause a `ConcurrentModificationException`
+                 */
+                Handler(Looper.getMainLooper()).post {
+                    featureDragEndListener.onFeature(featureId)
+                }
             }
         }
     }

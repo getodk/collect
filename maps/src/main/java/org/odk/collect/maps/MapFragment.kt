@@ -43,7 +43,7 @@ interface MapFragment {
      * Centers the map view on the given point, leaving zoom level unchanged,
      * possibly with animation.
      */
-    fun setCenter(center: MapPoint?, animate: Boolean)
+    fun setCenter(center: MapPoint?, animate: Boolean = false)
 
     /**
      * Centers the map view on the current location, zooming in to the last zoom level set by the
