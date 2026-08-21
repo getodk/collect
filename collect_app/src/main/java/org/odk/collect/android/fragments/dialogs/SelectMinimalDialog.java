@@ -1,6 +1,7 @@
 package org.odk.collect.android.fragments.dialogs;
 
 import static org.odk.collect.android.injection.DaggerUtils.getComponent;
+import static org.odk.collect.androidshared.ui.EdgeToEdge.applyBottomInsets;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -90,6 +91,7 @@ public abstract class SelectMinimalDialog extends MaterialFullScreenDialogFragme
 
         initRecyclerView();
         initToolbar();
+        applyBottomInsets(view);
     }
 
     @Override
