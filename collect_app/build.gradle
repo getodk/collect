@@ -265,6 +265,7 @@ dependencies {
     implementation project(':open-rosa')
     implementation project(':mobile-device-management')
     implementation project(':timedgrid')
+    implementation project(':maplibre')
 
     if (getSecrets().getProperty('MAPBOX_DOWNLOADS_TOKEN', '') != '') {
         implementation project(':mapbox')
