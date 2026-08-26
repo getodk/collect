@@ -1,13 +1,15 @@
 package org.odk.collect.android.formmanagement.download;
 
 import static org.odk.collect.android.utilities.FileUtils.interuptablyWriteFile;
+import static java.util.Collections.emptyList;
 
 import org.jetbrains.annotations.NotNull;
+import org.odk.collect.android.formmanagement.EntityListUpdate;
 import org.odk.collect.android.formmanagement.MediaFilesDownloadResult;
-import org.odk.collect.android.formmanagement.metadata.FormMetadata;
-import org.odk.collect.android.formmanagement.metadata.FormMetadataParser;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormUseCases;
+import org.odk.collect.android.formmanagement.metadata.FormMetadata;
+import org.odk.collect.android.formmanagement.metadata.FormMetadataParser;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormNameUtils;
 import org.odk.collect.androidshared.utils.Validator;
@@ -104,7 +106,7 @@ public class ServerFormDownloader implements FormDownloader {
             if (fd.getManifest() != null && !fd.getManifest().getMediaFiles().isEmpty()) {
                 mediaFilesDownloadResult = ServerFormUseCases.downloadMediaFiles(fd, formSource, formsRepository, tempMediaPath, tempDir, entitiesRepository, entitySource, stateListener);
             } else {
-                mediaFilesDownloadResult = new MediaFilesDownloadResult(false, false);
+                mediaFilesDownloadResult = new MediaFilesDownloadResult(false, emptyList());
             }
 
             ServerFormUseCases.copySavedFileFromPreviousFormVersionIfExists(formsRepository, fd.getFormId(), tempMediaPath);
@@ -191,6 +193,10 @@ public class ServerFormDownloader implements FormDownloader {
 
         // Save form in database
         formResult = findOrCreateForm(formFile, formMetadata, mediaFilesDownloadResult);
+
+        for (EntityListUpdate entityListUpdate : mediaFilesDownloadResult.getUpdatedEntityLists()) {
+            ServerFormUseCases.ingestEntityListUpdate(entityListUpdate, entitiesRepository);
+        }
 
         // move the media files in the media folder
         if (tempMediaPath != null) {
