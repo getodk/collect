@@ -6,7 +6,7 @@ import org.junit.Test
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.times
+import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.entities.storage.InMemEntitiesRepository
@@ -116,11 +116,14 @@ class DownloadMediaFilesServerFormUseCasesTest {
         val formsRepository = InMemFormsRepository()
         val entitiesRepository = InMemEntitiesRepository()
 
-        val mediaFile = MediaFile("file", "hash", "downloadUrl", type = MediaFile.Type.ENTITY_LIST)
+        val listName = "list"
+        val listHash = "hash"
+        entitiesRepository.addList(listName)
+        entitiesRepository.updateList(listName, hash = listHash, needsApproval = false)
+
+        val mediaFile = MediaFile("$listName.csv", listHash, "downloadUrl", type = MediaFile.Type.ENTITY_LIST)
         val manifestFile = ManifestFile(null, listOf(mediaFile))
-        val form1 =
-            ServerFormDetails(null, null, "1", "1", null, true, false, manifestFile)
-        val form2 =
+        val form =
             ServerFormDetails(null, null, "2", "1", null, true, false, manifestFile)
         val formSource = mock<FormSource> {
             on { fetchMediaFile(mediaFile.downloadUrl) } doAnswer {
@@ -129,7 +132,7 @@ class DownloadMediaFilesServerFormUseCasesTest {
         }
 
         ServerFormUseCases.downloadMediaFiles(
-            form1,
+            form,
             formSource,
             formsRepository,
             File(TempFiles.createTempDir(), "temp").absolutePath,
@@ -139,20 +142,7 @@ class DownloadMediaFilesServerFormUseCasesTest {
             mock()
         )
 
-        verify(formSource, times(1)).fetchMediaFile(mediaFile.downloadUrl)
-
-        ServerFormUseCases.downloadMediaFiles(
-            form2,
-            formSource,
-            formsRepository,
-            File(TempFiles.createTempDir(), "temp").absolutePath,
-            TempFiles.createTempDir(),
-            entitiesRepository,
-            mock(),
-            mock()
-        )
-
-        verify(formSource, times(1)).fetchMediaFile(mediaFile.downloadUrl)
+        verify(formSource, never()).fetchMediaFile(mediaFile.downloadUrl)
     }
 
     @Test
