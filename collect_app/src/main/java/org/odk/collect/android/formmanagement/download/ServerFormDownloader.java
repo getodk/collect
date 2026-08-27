@@ -4,7 +4,7 @@ import static org.odk.collect.android.utilities.FileUtils.interuptablyWriteFile;
 import static java.util.Collections.emptyList;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.android.formmanagement.EntityListUpdate;
+import org.odk.collect.android.formmanagement.EntityListDownload;
 import org.odk.collect.android.formmanagement.MediaFilesDownloadResult;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormUseCases;
@@ -194,8 +194,8 @@ public class ServerFormDownloader implements FormDownloader {
         // Save form in database
         formResult = findOrCreateForm(formFile, formMetadata, mediaFilesDownloadResult);
 
-        for (EntityListUpdate entityListUpdate : mediaFilesDownloadResult.getUpdatedEntityLists()) {
-            ServerFormUseCases.ingestEntityListUpdate(entityListUpdate, entitiesRepository);
+        for (EntityListDownload entityListDownload : mediaFilesDownloadResult.getUpdatedEntityLists()) {
+            ServerFormUseCases.ingestEntityList(entityListDownload, entitiesRepository);
         }
 
         // move the media files in the media folder
