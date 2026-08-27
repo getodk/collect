@@ -110,6 +110,9 @@ class EntityListSyncTest {
         rule.withProject(testDependencies.server.url, matchExactly = true)
             .startBlankForm("One Question Entity Registration")
             .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
+            .startBlankForm("One Question Entity Update")
+            .assertText("Logan Roy")
+            .pressBackAndDiscardForm()
 
             .also {
                 testDependencies.server.deleteEntity("Logan Roy")
