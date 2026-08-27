@@ -14,6 +14,7 @@ import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain
+import java.util.UUID
 
 @RunWith(AndroidJUnit4::class)
 class EntityListSyncTest {
@@ -107,15 +108,19 @@ class EntityListSyncTest {
             listOf(EntityListItem("people.csv"))
         )
 
+        val entityId = UUID.randomUUID().toString()
         rule.withProject(testDependencies.server.url, matchExactly = true)
             .startBlankForm("One Question Entity Registration")
-            .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
+            .fillOutAndFinalize(
+                FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"),
+                FormEntryPage.QuestionAndAnswer("ID", entityId)
+            )
             .startBlankForm("One Question Entity Update")
             .assertText("Logan Roy")
             .pressBackAndDiscardForm()
 
             .also {
-                testDependencies.server.deleteEntity("Logan Roy")
+                testDependencies.server.deleteEntity(entityId)
             }
 
             .clickFillBlankForm()

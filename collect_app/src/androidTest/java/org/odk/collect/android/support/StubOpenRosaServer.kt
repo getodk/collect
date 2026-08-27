@@ -12,6 +12,7 @@ import org.odk.collect.openrosa.http.OpenRosaConstants
 import org.odk.collect.openrosa.http.OpenRosaHttpInterface
 import org.odk.collect.shared.strings.Md5.getMd5Hash
 import org.odk.collect.shared.strings.RandomString
+import org.odk.collect.shared.strings.getQueryParameter
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.IOException
@@ -342,8 +343,7 @@ class StubOpenRosaServer : OpenRosaHttpInterface {
     }
 
     private fun getIntegrityResponse(uri: URI): InputStream {
-        val ids = uri.query.split("=".toRegex()).dropLastWhile { it.isEmpty() }
-            .toTypedArray()[1].split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        val ids = uri.getQueryParameter("id")!!.split(",")
 
         val stringBuilder = StringBuilder()
         stringBuilder

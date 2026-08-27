@@ -10,6 +10,7 @@ it can be used in tests (as opposed to having the standard UUID generated ID).
 			<instance>
 				<data id="one_question_entity" version="1">
 					<name/>
+                    <id/>
 					<meta>
 						<instanceID/>
 						<instanceName/>
@@ -23,7 +24,7 @@ it can be used in tests (as opposed to having the standard UUID generated ID).
 
 			<bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
 
-			<bind nodeset="/data/meta/entity/@id" type="string" calculate="/data/name"/>
+			<bind nodeset="/data/meta/entity/@id" type="string" calculate="/data/id"/>
 			<bind calculate="/data/name" nodeset="/data/meta/entity/label" type="string"/>
 		</model>
 	</h:head>
@@ -31,5 +32,8 @@ it can be used in tests (as opposed to having the standard UUID generated ID).
 		<input ref="/data/name">
 			<label>Name</label>
 		</input>
+        <input ref="/data/id">
+            <label>ID</label>
+        </input>
 	</h:body>
 </h:html>
