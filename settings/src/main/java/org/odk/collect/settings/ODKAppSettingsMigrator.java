@@ -1,6 +1,8 @@
 package org.odk.collect.settings;
 
 import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_CARTO;
+import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_MAPBOX;
+import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_MAPLIBRE;
 import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_OSM;
 import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_USGS;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_BASEMAP_SOURCE;
@@ -130,7 +132,9 @@ public class ODKAppSettingsMigrator implements SettingsMigrator {
 
                 moveKey("default_completed").toPreferences(protectedSettings),
 
-                translateValue("stamen").toValue(BASEMAP_SOURCE_OSM).forKey(KEY_BASEMAP_SOURCE)
+                translateValue("stamen").toValue(BASEMAP_SOURCE_OSM).forKey(KEY_BASEMAP_SOURCE),
+
+                translateValue(BASEMAP_SOURCE_MAPBOX).toValue(BASEMAP_SOURCE_MAPLIBRE).forKey(KEY_BASEMAP_SOURCE)
         );
     }
 
