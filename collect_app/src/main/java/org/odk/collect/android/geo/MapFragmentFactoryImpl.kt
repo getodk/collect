@@ -1,6 +1,5 @@
 package org.odk.collect.android.geo
 
-import org.odk.collect.android.application.MapboxClassInstanceCreator
 import org.odk.collect.googlemaps.GoogleMapFragment
 import org.odk.collect.maplibre.MapLibreMapFragment
 import org.odk.collect.maps.MapFragment
@@ -18,7 +17,6 @@ class MapFragmentFactoryImpl(private val settingsProvider: SettingsProvider) : M
             ProjectKeys.BASEMAP_SOURCE_OSM,
             ProjectKeys.BASEMAP_SOURCE_USGS,
             ProjectKeys.BASEMAP_SOURCE_CARTO -> MapLibreMapFragment(basemapSource)
-            ProjectKeys.BASEMAP_SOURCE_MAPBOX -> MapboxClassInstanceCreator.createMapboxMapFragment(basemapSource)
             else -> GoogleMapFragment()
         }
     }

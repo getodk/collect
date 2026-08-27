@@ -4,7 +4,6 @@ import static androidx.core.content.FileProvider.getUriForFile;
 import static org.odk.collect.androidshared.data.AppStateKt.getState;
 import static org.odk.collect.settings.keys.MetaKeys.KEY_INSTALL_ID;
 import static java.util.Arrays.asList;
-import static java.util.Collections.singletonList;
 
 import android.app.Application;
 import android.content.Context;
@@ -16,7 +15,6 @@ import androidx.work.WorkManager;
 import com.google.gson.Gson;
 
 import org.javarosa.core.reference.ReferenceManager;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.analytics.BlockableFirebaseAnalytics;
@@ -24,7 +22,6 @@ import org.odk.collect.analytics.NoopAnalytics;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.CollectSettingsChangeHandler;
-import org.odk.collect.android.application.MapboxClassInstanceCreator;
 import org.odk.collect.android.application.initialization.AnalyticsInitializer;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.application.initialization.CachedFormsCleaner;
@@ -143,7 +140,6 @@ import org.odk.collect.settings.ODKAppSettingsMigrator;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.importing.ProjectDetailsCreatorImpl;
 import org.odk.collect.settings.importing.SettingsChangeHandler;
-import org.odk.collect.settings.keys.AppConfigurationKeys;
 import org.odk.collect.settings.keys.MetaKeys;
 import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.shared.strings.UUIDGenerator;
@@ -312,18 +308,6 @@ public class AppDependencyModule {
 
     @Provides
     public ODKAppSettingsImporter providesODKAppSettingsImporter(Context context, ProjectsRepository projectsRepository, SettingsProvider settingsProvider, SettingsChangeHandler settingsChangeHandler) {
-        JSONObject deviceUnsupportedSettings = new JSONObject();
-        if (!MapboxClassInstanceCreator.isMapboxAvailable()) {
-            try {
-                deviceUnsupportedSettings.put(
-                        AppConfigurationKeys.GENERAL,
-                        new JSONObject().put(ProjectKeys.KEY_BASEMAP_SOURCE, new JSONArray(singletonList(ProjectKeys.BASEMAP_SOURCE_MAPBOX)))
-                );
-            } catch (Throwable ignored) {
-                // ignore
-            }
-        }
-
         return new ODKAppSettingsImporter(
                 projectsRepository,
                 settingsProvider,
@@ -331,7 +315,7 @@ public class AppDependencyModule {
                 Defaults.getProtected(),
                 asList(context.getResources().getStringArray(R.array.project_colors)),
                 settingsChangeHandler,
-                deviceUnsupportedSettings
+                new JSONObject()
         );
     }
 

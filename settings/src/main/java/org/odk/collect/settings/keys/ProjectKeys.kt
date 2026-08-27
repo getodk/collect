@@ -67,7 +67,6 @@ object ProjectKeys {
 
     // basemap source values
     const val BASEMAP_SOURCE_GOOGLE = "google"
-    const val BASEMAP_SOURCE_MAPBOX = "mapbox"
     const val BASEMAP_SOURCE_MAPLIBRE = "maplibre"
     const val BASEMAP_SOURCE_OSM = "osm"
     const val BASEMAP_SOURCE_USGS = "usgs"

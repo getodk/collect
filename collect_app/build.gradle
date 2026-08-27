@@ -267,10 +267,6 @@ dependencies {
     implementation project(':timedgrid')
     implementation project(':maplibre')
 
-    if (getSecrets().getProperty('MAPBOX_DOWNLOADS_TOKEN', '') != '') {
-        implementation project(':mapbox')
-    }
-
     implementation libs.androidxStartup
     implementation libs.androidxCoreKtx
     implementation libs.androidxBrowser

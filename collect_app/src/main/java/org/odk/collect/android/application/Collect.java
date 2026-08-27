@@ -182,7 +182,7 @@ public class Collect extends Application implements
                 .drawDependencyModule(new CollectDrawDependencyModule(applicationComponent))
                 .build();
 
-        // Mapbox dependencies
+        // MapLibre module dependencies
         objectProvider.addSupplier(SettingsProvider.class, applicationComponent::settingsProvider);
         objectProvider.addSupplier(NetworkStateProvider.class, applicationComponent::networkStateProvider);
         objectProvider.addSupplier(ReferenceLayerRepository.class, applicationComponent::referenceLayerRepository);

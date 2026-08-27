@@ -135,9 +135,17 @@ public class ODKAppSettingsMigratorTest {
 
         assertSettingsEmpty(unprotectedSettings);
         assertSettings(metaSettings,
-                "scoped_storage_used", true,
-                "mapbox_initialized", true
+                "scoped_storage_used", true
         );
+    }
+
+    @Test
+    public void removesMapboxInitialized() {
+        initSettings(metaSettings, "mapbox_initialized", true);
+
+        runMigrations();
+
+        assertSettingsEmpty(metaSettings);
     }
 
     @Test
@@ -392,7 +400,7 @@ public class ODKAppSettingsMigratorTest {
 
     @Test
     public void migratesMapboxToMapLibre() {
-        initSettings(unprotectedSettings, "basemap_source", ProjectKeys.BASEMAP_SOURCE_MAPBOX);
+        initSettings(unprotectedSettings, "basemap_source", "mapbox");
         runMigrations();
         assertSettings(unprotectedSettings, "basemap_source", ProjectKeys.BASEMAP_SOURCE_MAPLIBRE);
     }

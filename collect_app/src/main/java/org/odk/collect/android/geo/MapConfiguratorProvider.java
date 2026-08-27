@@ -2,7 +2,6 @@ package org.odk.collect.android.geo;
 
 import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_CARTO;
 import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_GOOGLE;
-import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_MAPBOX;
 import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_MAPLIBRE;
 import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_OSM;
 import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_USGS;
@@ -13,7 +12,6 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.application.MapboxClassInstanceCreator;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.googlemaps.GoogleMapConfigurator;
 import org.odk.collect.maps.MapConfigurator;
@@ -46,12 +44,6 @@ public class MapConfiguratorProvider {
         if (googleMapsConfigurator.isAvailable(context)) {
             sourceOptions.add(new SourceOption(BASEMAP_SOURCE_GOOGLE, org.odk.collect.strings.R.string.basemap_source_google,
                     googleMapsConfigurator
-            ));
-        }
-
-        if (isMapboxSupported()) {
-            sourceOptions.add(new SourceOption(BASEMAP_SOURCE_MAPBOX, org.odk.collect.strings.R.string.basemap_source_mapbox,
-                    MapboxClassInstanceCreator.createMapboxMapConfigurator(BASEMAP_SOURCE_MAPBOX)
             ));
         }
 
@@ -106,10 +98,6 @@ public class MapConfiguratorProvider {
             labelIds[i] = sourceOptions[i].labelId;
         }
         return labelIds;
-    }
-
-    private static boolean isMapboxSupported() {
-        return MapboxClassInstanceCreator.isMapboxAvailable();
     }
 
     /**
