@@ -104,7 +104,7 @@ public class ServerFormDownloader implements FormDownloader {
 
             // download media files if there are any
             if (fd.getManifest() != null && !fd.getManifest().getMediaFiles().isEmpty()) {
-                mediaFilesDownloadResult = ServerFormUseCases.downloadMediaFiles(fd, formSource, formsRepository, tempMediaPath, tempDir, entitiesRepository, entitySource, stateListener);
+                mediaFilesDownloadResult = ServerFormUseCases.downloadMediaFiles(fd, formSource, formsRepository, tempMediaPath, tempDir, entitiesRepository, stateListener);
             } else {
                 mediaFilesDownloadResult = new MediaFilesDownloadResult(false, emptyList());
             }
@@ -195,7 +195,7 @@ public class ServerFormDownloader implements FormDownloader {
         formResult = findOrCreateForm(formFile, formMetadata, mediaFilesDownloadResult);
 
         for (EntityListDownload entityListDownload : mediaFilesDownloadResult.getUpdatedEntityLists()) {
-            ServerFormUseCases.ingestEntityList(entityListDownload, entitiesRepository);
+            ServerFormUseCases.ingestEntityList(entityListDownload, entitiesRepository, entitySource);
         }
 
         // move the media files in the media folder

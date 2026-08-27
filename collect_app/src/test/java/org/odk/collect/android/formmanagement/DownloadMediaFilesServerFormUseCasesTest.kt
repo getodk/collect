@@ -60,7 +60,6 @@ class DownloadMediaFilesServerFormUseCasesTest {
             File(TempFiles.createTempDir(), "temp").absolutePath,
             TempFiles.createTempDir(),
             InMemEntitiesRepository(),
-            mock(),
             mock()
         )
 
@@ -104,7 +103,6 @@ class DownloadMediaFilesServerFormUseCasesTest {
             File(TempFiles.createTempDir(), "temp").absolutePath,
             TempFiles.createTempDir(),
             InMemEntitiesRepository(),
-            mock(),
             mock()
         )
 
@@ -138,7 +136,6 @@ class DownloadMediaFilesServerFormUseCasesTest {
             File(TempFiles.createTempDir(), "temp").absolutePath,
             TempFiles.createTempDir(),
             entitiesRepository,
-            mock(),
             mock()
         )
 

@@ -144,7 +144,6 @@ object ServerFormUseCases {
         tempMediaPath: String,
         tempDir: File,
         entitiesRepository: EntitiesRepository,
-        entitySource: EntitySource,
         stateListener: OngoingWorkListener
     ): MediaFilesDownloadResult {
         var newAttachmentsDownloaded = false
@@ -185,13 +184,6 @@ object ServerFormUseCases {
 
                     entityLists += EntityListDownload(tempMediaFile, mediaFile, isUpdated = false)
                 }
-
-                LocalEntityUseCases.cleanUpDeletedOfflineEntities(
-                    entityListName,
-                    entitiesRepository,
-                    entitySource,
-                    mediaFile
-                )
             } else {
                 val existingFile = searchForExistingMediaFile(currentOrLastFormVersion, mediaFile)
                 if (existingFile != null) {
@@ -236,10 +228,12 @@ object ServerFormUseCases {
     fun ingestEntityList(
         entityListDownload: EntityListDownload,
         entitiesRepository: EntitiesRepository,
+        entitySource: EntitySource
     ) {
+        val listName = getEntityListFromFileName(entityListDownload.medaFile)
         if (entityListDownload.isUpdated) {
             LocalEntityUseCases.updateLocalEntitiesFromServer(
-                getEntityListFromFileName(entityListDownload.medaFile),
+                listName,
                 entityListDownload.file,
                 entitiesRepository,
                 entityListDownload.medaFile
@@ -247,6 +241,13 @@ object ServerFormUseCases {
 
             entityListDownload.file.delete()
         }
+
+        LocalEntityUseCases.cleanUpDeletedOfflineEntities(
+            listName,
+            entitiesRepository,
+            entitySource,
+            entityListDownload.medaFile
+        )
     }
 
     private fun downloadMediaFile(
