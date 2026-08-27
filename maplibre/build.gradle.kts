@@ -22,8 +22,19 @@ android {
 }
 
 dependencies {
+    implementation(project(":androidshared"))
+    implementation(project(":maps"))
+    implementation(project(":settings"))
+    implementation(project(":shared"))
+    implementation(project(":strings"))
+    implementation(libs.androidxFragmentKtx)
+    implementation(libs.androidxPreferenceKtx)
+    implementation(libs.timber)
     implementation(libs.maplibreAndroidSdk)
     implementation(libs.maplibreAnnotationPlugin) {
+        exclude(group = "org.maplibre.gl", module = "android-sdk")
+    }
+    implementation(libs.maplibreScalebarPlugin) {
         exclude(group = "org.maplibre.gl", module = "android-sdk")
     }
 }

@@ -3,6 +3,7 @@ package org.odk.collect.android.geo;
 import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_CARTO;
 import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_GOOGLE;
 import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_MAPBOX;
+import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_MAPLIBRE;
 import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_OSM;
 import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_USGS;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_BASEMAP_SOURCE;
@@ -16,6 +17,7 @@ import org.odk.collect.android.application.MapboxClassInstanceCreator;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.googlemaps.GoogleMapConfigurator;
 import org.odk.collect.maps.MapConfigurator;
+import org.odk.collect.maplibre.MapLibreMapConfigurator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,17 +53,21 @@ public class MapConfiguratorProvider {
             sourceOptions.add(new SourceOption(BASEMAP_SOURCE_MAPBOX, org.odk.collect.strings.R.string.basemap_source_mapbox,
                     MapboxClassInstanceCreator.createMapboxMapConfigurator(BASEMAP_SOURCE_MAPBOX)
             ));
-
-            sourceOptions.add(new SourceOption(BASEMAP_SOURCE_OSM, org.odk.collect.strings.R.string.basemap_source_osm,
-                    MapboxClassInstanceCreator.createMapboxMapConfigurator(BASEMAP_SOURCE_OSM)
-            ));
-            sourceOptions.add(new SourceOption(BASEMAP_SOURCE_USGS, org.odk.collect.strings.R.string.basemap_source_usgs,
-                    MapboxClassInstanceCreator.createMapboxMapConfigurator(BASEMAP_SOURCE_USGS)
-            ));
-            sourceOptions.add(new SourceOption(BASEMAP_SOURCE_CARTO, org.odk.collect.strings.R.string.basemap_source_carto,
-                    MapboxClassInstanceCreator.createMapboxMapConfigurator(BASEMAP_SOURCE_CARTO)
-            ));
         }
+
+        sourceOptions.add(new SourceOption(BASEMAP_SOURCE_MAPLIBRE, org.odk.collect.strings.R.string.basemap_source_maplibre,
+                new MapLibreMapConfigurator(BASEMAP_SOURCE_MAPLIBRE)
+        ));
+
+        sourceOptions.add(new SourceOption(BASEMAP_SOURCE_OSM, org.odk.collect.strings.R.string.basemap_source_osm,
+                new MapLibreMapConfigurator(BASEMAP_SOURCE_OSM)
+        ));
+        sourceOptions.add(new SourceOption(BASEMAP_SOURCE_USGS, org.odk.collect.strings.R.string.basemap_source_usgs,
+                new MapLibreMapConfigurator(BASEMAP_SOURCE_USGS)
+        ));
+        sourceOptions.add(new SourceOption(BASEMAP_SOURCE_CARTO, org.odk.collect.strings.R.string.basemap_source_carto,
+                new MapLibreMapConfigurator(BASEMAP_SOURCE_CARTO)
+        ));
 
         initOptions(sourceOptions);
     }

@@ -58,6 +58,7 @@ playServicesOssLicenses = { group = "com.google.android.gms", name = "play-servi
 mapboxAndroidSdk = { group = "com.mapbox.maps", name = "android-ndk27", version = "10.19.1" } # Check if https://github.com/mapbox/mapbox-maps-android/issues/2389#issuecomment-2432018812 no longer takes place before upgrading
 maplibreAndroidSdk = { group = "org.maplibre.gl", name = "android-sdk-opengl", version = "13.5.0" } # The default "android-sdk" artifact declares a required Vulkan uses-feature, which would stop Play serving the app to devices without Vulkan
 maplibreAnnotationPlugin = { group = "org.maplibre.gl", name = "android-plugin-annotation-v9", version = "3.0.2" }
+maplibreScalebarPlugin = { group = "org.maplibre.gl", name = "android-plugin-scalebar-v9", version = "3.0.2" }
 okHttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp3" }
 okHttpTls = { group = "com.squareup.okhttp3", name = "okhttp-tls", version.ref = "okhttp3" }
 okHttpDigest = { group = "io.github.rburgst", name = "okhttp-digest", version = "3.1.1" }
