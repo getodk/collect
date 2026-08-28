@@ -250,7 +250,6 @@ object ServerFormUseCases {
                 entityListDownload.medaFile
             )
         }
-
     }
 
     private fun downloadMediaFile(
