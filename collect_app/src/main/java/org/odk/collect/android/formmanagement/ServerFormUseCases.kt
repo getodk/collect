@@ -145,7 +145,7 @@ object ServerFormUseCases {
         tempDir: File,
         entitiesRepository: EntitiesRepository,
         stateListener: OngoingWorkListener
-    ): MediaFilesDownloadResult {
+    ): MediaFilesDownload {
         var newAttachmentsDownloaded = false
         val tempMediaDir = File(tempMediaPath).also { it.mkdir() }
 
@@ -221,33 +221,36 @@ object ServerFormUseCases {
             }
         }
 
-        return MediaFilesDownloadResult(newAttachmentsDownloaded, entityLists)
+        return MediaFilesDownload(newAttachmentsDownloaded, entityLists)
     }
 
     @JvmStatic
-    fun ingestEntityList(
-        entityListDownload: EntityListDownload,
+    fun ingestEntityListsFromDownload(
+        mediaFilesDownload: MediaFilesDownload,
         entitiesRepository: EntitiesRepository,
         entitySource: EntitySource
     ) {
-        val listName = getEntityListFromFileName(entityListDownload.medaFile)
-        if (entityListDownload.isUpdated) {
-            LocalEntityUseCases.updateLocalEntitiesFromServer(
+        mediaFilesDownload.entityLists.forEach { entityListDownload ->
+            val listName = getEntityListFromFileName(entityListDownload.medaFile)
+            if (entityListDownload.isUpdated) {
+                LocalEntityUseCases.updateLocalEntitiesFromServer(
+                    listName,
+                    entityListDownload.file,
+                    entitiesRepository,
+                    entityListDownload.medaFile
+                )
+
+                entityListDownload.file.delete()
+            }
+
+            LocalEntityUseCases.cleanUpDeletedOfflineEntities(
                 listName,
-                entityListDownload.file,
                 entitiesRepository,
+                entitySource,
                 entityListDownload.medaFile
             )
-
-            entityListDownload.file.delete()
         }
 
-        LocalEntityUseCases.cleanUpDeletedOfflineEntities(
-            listName,
-            entitiesRepository,
-            entitySource,
-            entityListDownload.medaFile
-        )
     }
 
     private fun downloadMediaFile(
@@ -323,14 +326,12 @@ object ServerFormUseCases {
     }
 }
 
-class EntityListUpdateException(cause: Throwable) : Exception(cause)
-
-data class MediaFilesDownloadResult(
+data class MediaFilesDownload(
     val newAttachmentsDownloaded: Boolean,
-    val updatedEntityLists: List<EntityListDownload>
+    val entityLists: List<EntityListDownload>
 ) {
     val entitiesDownloaded: Boolean
-        get() = updatedEntityLists.any { it.isUpdated }
+        get() = entityLists.any { it.isUpdated }
 }
 
 data class EntityListDownload(

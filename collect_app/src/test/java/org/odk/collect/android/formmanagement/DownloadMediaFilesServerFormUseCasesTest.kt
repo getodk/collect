@@ -63,7 +63,7 @@ class DownloadMediaFilesServerFormUseCasesTest {
             mock()
         )
 
-        assertThat(result, equalTo(MediaFilesDownloadResult(false, emptyList())))
+        assertThat(result, equalTo(MediaFilesDownload(false, emptyList())))
     }
 
     @Test
@@ -106,7 +106,7 @@ class DownloadMediaFilesServerFormUseCasesTest {
             mock()
         )
 
-        assertThat(result, equalTo(MediaFilesDownloadResult(false, emptyList())))
+        assertThat(result, equalTo(MediaFilesDownload(false, emptyList())))
     }
 
     @Test
