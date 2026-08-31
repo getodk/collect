@@ -153,10 +153,9 @@ android {
 
     packaging {
         jniLibs {
-            // Without useLegacyPackaging, Mapbox native libraries (.so)
-            // can grow by several MB after upgrading to AGP 9, even if the Mapbox
-            // version itself hasn’t changed. Legacy packaging keeps them as built,
-            // avoiding extra padding, alignment, and ELF headers, which keeps the APK smaller.
+            // Without useLegacyPackaging, native libraries (.so) can grow by several MB
+            // after upgrading to AGP 9. Legacy packaging keeps them as built, avoiding
+            // extra padding and alignment, which keeps the APK smaller.
             useLegacyPackaging = true
         }
         resources {
@@ -169,15 +168,11 @@ android {
 
         // To ensure that ODK Collect is installable on all devices, we don't use
         // abiFilters to exclude any ABIs; but to keep the APK slim, we include
-        // the Mapbox native library only for 32-bit and 64-bit ARM devices and
+        // the MapLibre native library only for 32-bit and 64-bit ARM devices and
         // omit it for all X86 devices.
         if (!project.hasProperty("x86Libs")) {
-            exclude 'lib/x86/libmapbox-maps.so'
-            exclude 'lib/x86/libmapbox-common.so'
-            exclude 'lib/x86/libc++_shared.so'
-            exclude 'lib/x86_64/libmapbox-maps.so'
-            exclude 'lib/x86_64/libmapbox-common.so'
-            exclude 'lib/x86_64/libc++_shared.so'
+            exclude 'lib/x86/libmaplibre.so'
+            exclude 'lib/x86_64/libmaplibre.so'
         }
 
         /* Exclude large properties files used by BouncyCastle's Picnic implementation (which
