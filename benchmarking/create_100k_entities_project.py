@@ -12,23 +12,6 @@ from pathlib import Path
 
 from pyodk.client import Client
 
-# Names expected by the benchmark, as described in the issue.
-FORM_NAME = "100k Entities Filter"
-ENTITY_LIST_CSV_NAME = "entities_100k.csv"
-ENTITY_LIST_NAME = "entities_100k"
-
-# Fixed name for the project created on ODK Central.
-PROJECT_NAME = "Collect benchmarking"
-
-# The CSV column used as the entity label.
-LABEL_COLUMN = "label"
-
-# Number of entities to send each call
-ENTITY_BATCH_SIZE = 1000
-
-# Fixed display name for the app user created on ODK Central.
-APP_USER_NAME = "100k Entities Filter"
-
 # The pyODK config TOML is expected to live in the same directory as the forms.
 CONFIG_FILE_NAME = ".pyodk_config.toml"
 
@@ -52,14 +35,14 @@ def find_entity_csv(directory: Path, entity_list_csv_name: str) -> Path:
     return candidate
 
 
-def read_entities(csv_path: Path, label_column: str) -> list[dict]:
+def read_entities(csv_path: Path) -> list[dict]:
     with csv_path.open(newline="", encoding="utf-8-sig") as csv_file:
         reader = csv.DictReader(csv_file)
         if reader.fieldnames is None:
             raise ValueError(f"The CSV {csv_path} appears to be empty")
-        if label_column not in reader.fieldnames:
+        if "label" not in reader.fieldnames:
             raise ValueError(
-                f"The CSV {csv_path} does not contain the {label_column!r} column "
+                f"The CSV {csv_path} does not contain the \"label\" column "
                 f"Available columns: {reader.fieldnames}"
             )
 
@@ -88,11 +71,10 @@ def populate_entity_list(
     client: Client,
     entities: list[dict],
     entity_list_name: str,
-    label_column: str,
     entity_batch_size: int,
 ) -> None:
     # Property columns are every CSV column except the label column.
-    property_names = [key for key in entities[0] if key != label_column]
+    property_names = [key for key in entities[0] if key != "label"]
     for name in property_names:
         client.entity_lists.add_property(
             name=name,
@@ -165,27 +147,28 @@ def main(argv: list[str] | None = None) -> int:
             f"Could not find the pyODK config {CONFIG_FILE_NAME!r} in {directory}"
         )
 
-    form_definition = find_form_definition(directory, FORM_NAME)
-    entity_csv = find_entity_csv(directory, ENTITY_LIST_CSV_NAME)
-    entities = read_entities(entity_csv, LABEL_COLUMN)
+    form_definition = find_form_definition(directory, "100k Entities Filter")
+    entity_csv = find_entity_csv(directory, "entities_100k.csv")
+    entities = read_entities(entity_csv)
     print(f"Read {len(entities)} entities from {entity_csv}")
 
     with Client(config_path=str(config_path)) as client:
         base_url = client.config.central.base_url.rstrip("/")
-        project_id = create_project(client, PROJECT_NAME)
-        print(f"Created project {PROJECT_NAME!r} (id={project_id})")
+
+        project_name = "Collect benchmarking"
+        project_id = create_project(client, project_name)
+        print(f"Created project {project_name!r} (id={project_id})")
 
     with Client(config_path=str(config_path), project_id=project_id) as client:
-        create_entity_list(client, ENTITY_LIST_NAME)
+        create_entity_list(client, "entities_100k")
         populate_entity_list(
             client,
             entities,
-            ENTITY_LIST_NAME,
-            LABEL_COLUMN,
-            ENTITY_BATCH_SIZE,
+            "entities_100k",
+            1000,
         )
         form = publish_form(client, form_definition)
-        app_users = create_app_user(client, form.xmlFormId, APP_USER_NAME)
+        app_users = create_app_user(client, form.xmlFormId, "100k Entities Filter")
 
         print_access_urls(base_url, project_id, app_users, form.xmlFormId)
 
