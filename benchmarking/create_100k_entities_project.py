@@ -112,17 +112,16 @@ def create_app_user(client: Client, form_id: str, app_user_name: str):
         raise RuntimeError(
             f"ODK Central did not create the app user {app_user_name!r}"
         )
-    return app_users
+    return app_users[0]
 
 
-def print_access_urls(base_url: str, project_id: int, app_users, form_id: str) -> None:
+def print_access_urls(base_url: str, project_id: int, app_user, form_id: str) -> None:
     project_url = f"{base_url}/#/projects/{project_id}"
 
     print()
     print(f"Central project URL: {project_url}")
-    for app_user in app_users:
-        app_user_url = f"{base_url}/v1/key/{app_user.token}/projects/{project_id}"
-        print(f"App user URL: {app_user_url}")
+    app_user_url = f"{base_url}/v1/key/{app_user.token}/projects/{project_id}"
+    print(f"App user URL: {app_user_url}")
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -168,9 +167,9 @@ def main(argv: list[str] | None = None) -> int:
             1000,
         )
         form = publish_form(client, form_definition)
-        app_users = create_app_user(client, form.xmlFormId, "100k Entities Filter")
+        app_user = create_app_user(client, form.xmlFormId, "100k Entities Filter")
 
-        print_access_urls(base_url, project_id, app_users, form.xmlFormId)
+        print_access_urls(base_url, project_id, app_user, form.xmlFormId)
 
     print("Done.")
     return 0
