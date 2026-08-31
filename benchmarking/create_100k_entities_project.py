@@ -95,9 +95,10 @@ def populate_entity_list(
         )
 
 
-def publish_form(client: Client, form_definition: Path):
+def publish_form(client: Client, form_definition: Path, attachments=None):
     form = client.forms.create(
         definition=str(form_definition),
+        attachments=attachments,
     )
     print(f"Published form {form.xmlFormId!r} (version {form.version!r})")
     return form
@@ -115,7 +116,7 @@ def create_app_user(client: Client, form_id: str, app_user_name: str):
     return app_users[0]
 
 
-def print_access_urls(project_id: int, app_user) -> None:
+def print_access_urls(base_url: str, project_id: int, app_user) -> None:
     app_user_url = f"{base_url}/v1/key/{app_user.token}/projects/{project_id}"
     print(f"App user URL ({app_user.displayName}): {app_user_url}")
 
@@ -167,13 +168,16 @@ def main(argv: list[str] | None = None) -> int:
         entities_app_user = create_app_user(client, entities_form.xmlFormId, "100k Entities Filter")
 
         media_form_definition = find_form_definition(directory, "1000-media-files-entity-list")
-        media_form = publish_form(client, media_form_definition)
+        media_dir = directory / "1000-media-files"
+        media_files = list(media_dir.iterdir()) if media_dir.is_dir() else []
+        media_form = publish_form(client, media_form_definition, media_files)
         create_entity_list(client, "empty_entity_list")
+
         media_app_user = create_app_user(client, media_form.xmlFormId, "1000-media-files-entity-list")
 
         print(f"Central project URL: {project_url}")
-        print_access_urls(project_id, media_app_user)
-        print_access_urls(project_id, entities_app_user)
+        print_access_urls(base_url, project_id, media_app_user)
+        print_access_urls(base_url, project_id, entities_app_user)
 
     print("Done.")
     return 0
