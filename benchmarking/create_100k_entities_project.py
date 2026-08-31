@@ -115,13 +115,9 @@ def create_app_user(client: Client, form_id: str, app_user_name: str):
     return app_users[0]
 
 
-def print_access_urls(base_url: str, project_id: int, app_user, form_id: str) -> None:
-    project_url = f"{base_url}/#/projects/{project_id}"
-
-    print()
-    print(f"Central project URL: {project_url}")
+def print_access_urls(project_id: int, app_user) -> None:
     app_user_url = f"{base_url}/v1/key/{app_user.token}/projects/{project_id}"
-    print(f"App user URL: {app_user_url}")
+    print(f"App user URL ({app_user.displayName}): {app_user_url}")
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -156,6 +152,7 @@ def main(argv: list[str] | None = None) -> int:
 
         project_name = "Collect benchmarking"
         project_id = create_project(client, project_name)
+        project_url = f"{base_url}/#/projects/{project_id}"
         print(f"Created project {project_name!r} (id={project_id})")
 
     with Client(config_path=str(config_path), project_id=project_id) as client:
@@ -166,10 +163,17 @@ def main(argv: list[str] | None = None) -> int:
             "entities_100k",
             1000,
         )
-        form = publish_form(client, form_definition)
-        app_user = create_app_user(client, form.xmlFormId, "100k Entities Filter")
+        entities_form = publish_form(client, form_definition)
+        entities_app_user = create_app_user(client, entities_form.xmlFormId, "100k Entities Filter")
 
-        print_access_urls(base_url, project_id, app_user, form.xmlFormId)
+        media_form_definition = find_form_definition(directory, "1000-media-files-entity-list")
+        media_form = publish_form(client, media_form_definition)
+        create_entity_list(client, "empty_entity_list")
+        media_app_user = create_app_user(client, media_form.xmlFormId, "1000-media-files-entity-list")
+
+        print(f"Central project URL: {project_url}")
+        print_access_urls(project_id, media_app_user)
+        print_access_urls(project_id, entities_app_user)
 
     print("Done.")
     return 0
