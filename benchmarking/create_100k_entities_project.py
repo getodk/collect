@@ -100,7 +100,7 @@ def publish_form(client: Client, form_definition: Path, attachments=None):
         definition=str(form_definition),
         attachments=attachments,
     )
-    print(f"Published form {form.xmlFormId!r} (version {form.version!r})")
+    print(f"Published form {form.xmlFormId!r}")
     return form
 
 
@@ -114,11 +114,6 @@ def create_app_user(client: Client, form_id: str, app_user_name: str):
             f"ODK Central did not create the app user {app_user_name!r}"
         )
     return app_users[0]
-
-
-def print_access_urls(base_url: str, project_id: int, app_user) -> None:
-    app_user_url = f"{base_url}/v1/key/{app_user.token}/projects/{project_id}"
-    print(f"App user URL ({app_user.displayName}): {app_user_url}")
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -143,11 +138,6 @@ def main(argv: list[str] | None = None) -> int:
             f"Could not find the pyODK config {CONFIG_FILE_NAME!r} in {directory}"
         )
 
-    form_definition = find_form_definition(directory, "100k Entities Filter")
-    entity_csv = find_entity_csv(directory, "entities_100k.csv")
-    entities = read_entities(entity_csv)
-    print(f"Read {len(entities)} entities from {entity_csv}")
-
     with Client(config_path=str(config_path)) as client:
         base_url = client.config.central.base_url.rstrip("/")
 
@@ -158,28 +148,37 @@ def main(argv: list[str] | None = None) -> int:
 
     with Client(config_path=str(config_path), project_id=project_id) as client:
         create_entity_list(client, "entities_100k")
+        entity_csv = find_entity_csv(directory, "entities_100k.csv")
+        entities = read_entities(entity_csv)
         populate_entity_list(
             client,
             entities,
             "entities_100k",
             1000,
         )
-        entities_form = publish_form(client, form_definition)
+        entity_form_definition = find_form_definition(directory, "100k Entities Filter")
+        entities_form = publish_form(client, entity_form_definition)
         entities_app_user = create_app_user(client, entities_form.xmlFormId, "100k Entities Filter")
 
+        create_entity_list(client, "empty_entity_list")
         media_form_definition = find_form_definition(directory, "1000-media-files-entity-list")
-        media_dir = directory / "1000-media-files"
+        media_dir = directory / "1000-media-files-media"
         media_files = list(media_dir.iterdir()) if media_dir.is_dir() else []
         media_form = publish_form(client, media_form_definition, media_files)
-        create_entity_list(client, "empty_entity_list")
-
         media_app_user = create_app_user(client, media_form.xmlFormId, "1000-media-files-entity-list")
 
-        print(f"Central project URL: {project_url}")
-        print_access_urls(base_url, project_id, media_app_user)
-        print_access_urls(base_url, project_id, entities_app_user)
+        print()
+        print("#####################################")
+        print()
 
-    print("Done.")
+        print(f"Central project URL: {project_url}")
+        print()
+        print("secrets.properties:")
+        entities_app_user_url = f"{base_url}/v1/key/{entities_app_user.token}/projects/{project_id}"
+        print(f"ENTITIES_FILTER_PROJECT_URL={entities_app_user_url}")
+        media_app_user_url = f"{base_url}/v1/key/{media_app_user.token}/projects/{project_id}"
+        print(f"THOUSAND_MEDIA_FILE_ENTITY_LIST_PROJECT_URL={media_app_user_url}")
+
     return 0
 
 
