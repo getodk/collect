@@ -1,5 +1,6 @@
 package org.odk.collect.maplibre
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.view.Gravity
@@ -55,11 +56,11 @@ import org.odk.collect.maps.traces.LineDescription
 import org.odk.collect.maps.traces.PolygonDescription
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys.KEY_MAPBOX_MAP_STYLE
-import org.odk.collect.shared.injection.ObjectProviderHost
 import org.odk.collect.shared.settings.Settings
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
+import javax.inject.Inject
 
 class MapLibreMapFragment(private val configuration: Configuration) :
     MapViewModelMapFragment(),
@@ -105,14 +106,17 @@ class MapLibreMapFragment(private val configuration: Configuration) :
         }
     }
 
-    private val settingsProvider: SettingsProvider by lazy {
-        (requireActivity().applicationContext as ObjectProviderHost).getObjectProvider()
-            .provide(SettingsProvider::class.java)
-    }
+    @Inject
+    lateinit var settingsProvider: SettingsProvider
 
-    private val referenceLayerRepository: ReferenceLayerRepository by lazy {
-        (requireActivity().applicationContext as ObjectProviderHost).getObjectProvider()
-            .provide(ReferenceLayerRepository::class.java)
+    @Inject
+    lateinit var referenceLayerRepository: ReferenceLayerRepository
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        (context.applicationContext as MapLibreDependencyComponentProvider)
+            .mapLibreDependencyComponent
+            .inject(this)
     }
 
     override fun init(readyListener: ReadyListener?, errorListener: ErrorListener?) {

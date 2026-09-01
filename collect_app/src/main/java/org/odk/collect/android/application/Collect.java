@@ -31,6 +31,7 @@ import org.odk.collect.android.injection.config.CollectDrawDependencyModule;
 import org.odk.collect.android.injection.config.CollectEntitiesDependencyModule;
 import org.odk.collect.android.injection.config.CollectGeoDependencyModule;
 import org.odk.collect.android.injection.config.CollectGoogleMapsDependencyModule;
+import org.odk.collect.android.injection.config.CollectMapLibreDependencyModule;
 import org.odk.collect.android.injection.config.CollectProjectsDependencyModule;
 import org.odk.collect.android.injection.config.CollectSelfieCameraDependencyModule;
 import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
@@ -41,7 +42,6 @@ import org.odk.collect.androidshared.data.StateStore;
 import org.odk.collect.androidshared.system.ExternalFilesUtils;
 import org.odk.collect.androidshared.utils.UniqueIdGenerator;
 import org.odk.collect.async.Scheduler;
-import org.odk.collect.async.network.NetworkStateProvider;
 import org.odk.collect.audiorecorder.AudioRecorderDependencyComponent;
 import org.odk.collect.audiorecorder.AudioRecorderDependencyComponentProvider;
 import org.odk.collect.audiorecorder.AudioRecorderDependencyModule;
@@ -60,11 +60,12 @@ import org.odk.collect.googlemaps.DaggerGoogleMapsDependencyComponent;
 import org.odk.collect.googlemaps.GoogleMapsDependencyComponent;
 import org.odk.collect.googlemaps.GoogleMapsDependencyComponentProvider;
 import org.odk.collect.location.DaggerLocationDependencyComponent;
-import org.odk.collect.location.LocationClient;
 import org.odk.collect.location.LocationDependencyComponent;
 import org.odk.collect.location.LocationDependencyComponentProvider;
 import org.odk.collect.location.LocationDependencyModule;
-import org.odk.collect.maps.layers.ReferenceLayerRepository;
+import org.odk.collect.maplibre.DaggerMapLibreDependencyComponent;
+import org.odk.collect.maplibre.MapLibreDependencyComponent;
+import org.odk.collect.maplibre.MapLibreDependencyComponentProvider;
 import org.odk.collect.projects.DaggerProjectsDependencyComponent;
 import org.odk.collect.projects.ProjectsDependencyComponent;
 import org.odk.collect.projects.ProjectsDependencyComponentProvider;
@@ -72,11 +73,7 @@ import org.odk.collect.qrcode.mlkit.MlKitBarcodeScannerViewFactory;
 import org.odk.collect.selfiecamera.DaggerSelfieCameraDependencyComponent;
 import org.odk.collect.selfiecamera.SelfieCameraDependencyComponent;
 import org.odk.collect.selfiecamera.SelfieCameraDependencyComponentProvider;
-import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.ProjectKeys;
-import org.odk.collect.shared.injection.ObjectProvider;
-import org.odk.collect.shared.injection.ObjectProviderHost;
-import org.odk.collect.shared.injection.SupplierObjectProvider;
 import org.odk.collect.shared.settings.Settings;
 import org.odk.collect.strings.localization.LocalizedApplication;
 
@@ -89,7 +86,7 @@ public class Collect extends Application implements
         ProjectsDependencyComponentProvider,
         GeoDependencyComponentProvider,
         StateStore,
-        ObjectProviderHost,
+        MapLibreDependencyComponentProvider,
         EntitiesDependencyComponentProvider,
         SelfieCameraDependencyComponentProvider,
         GoogleMapsDependencyComponentProvider,
@@ -100,7 +97,6 @@ public class Collect extends Application implements
     private static Collect singleton;
 
     private final AppState appState = new AppState();
-    private final SupplierObjectProvider objectProvider = new SupplierObjectProvider();
 
     private ExternalDataManager externalDataManager;
     private AppDependencyComponent applicationComponent;
@@ -111,6 +107,7 @@ public class Collect extends Application implements
     private EntitiesDependencyComponent entitiesDependencyComponent;
     private SelfieCameraDependencyComponent selfieCameraDependencyComponent;
     private GoogleMapsDependencyComponent googleMapsDependencyComponent;
+    private MapLibreDependencyComponent mapLibreDependencyComponent;
     private DrawDependencyComponent drawDependencyComponent;
 
     /**
@@ -181,12 +178,6 @@ public class Collect extends Application implements
         drawDependencyComponent = DaggerDrawDependencyComponent.builder()
                 .drawDependencyModule(new CollectDrawDependencyModule(applicationComponent))
                 .build();
-
-        // MapLibre module dependencies
-        objectProvider.addSupplier(SettingsProvider.class, applicationComponent::settingsProvider);
-        objectProvider.addSupplier(NetworkStateProvider.class, applicationComponent::networkStateProvider);
-        objectProvider.addSupplier(ReferenceLayerRepository.class, applicationComponent::referenceLayerRepository);
-        objectProvider.addSupplier(LocationClient.class, applicationComponent::locationClient);
     }
 
     @NotNull
@@ -268,12 +259,6 @@ public class Collect extends Application implements
 
     @NonNull
     @Override
-    public ObjectProvider getObjectProvider() {
-        return objectProvider;
-    }
-
-    @NonNull
-    @Override
     public EntitiesDependencyComponent getEntitiesDependencyComponent() {
         if (entitiesDependencyComponent == null) {
             entitiesDependencyComponent = DaggerEntitiesDependencyComponent.builder()
@@ -300,6 +285,18 @@ public class Collect extends Application implements
         }
 
         return googleMapsDependencyComponent;
+    }
+
+    @NonNull
+    @Override
+    public MapLibreDependencyComponent getMapLibreDependencyComponent() {
+        if (mapLibreDependencyComponent == null) {
+            mapLibreDependencyComponent = DaggerMapLibreDependencyComponent.builder()
+                    .mapLibreDependencyModule(new CollectMapLibreDependencyModule(applicationComponent))
+                    .build();
+        }
+
+        return mapLibreDependencyComponent;
     }
 
     @NonNull

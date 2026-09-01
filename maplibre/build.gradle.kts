@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlinKsp)
 }
 
 apply(from = "../config/quality.gradle")
@@ -30,6 +31,8 @@ dependencies {
     implementation(libs.androidxFragmentKtx)
     implementation(libs.androidxPreferenceKtx)
     implementation(libs.timber)
+    implementation(libs.dagger)
+    ksp(libs.daggerCompiler)
     implementation(libs.maplibreAndroidSdk)
     implementation(libs.maplibreAnnotationPlugin) {
         exclude(group = "org.maplibre.gl", module = "android-sdk")
