@@ -16,6 +16,7 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.googlemaps.GoogleMapConfigurator;
 import org.odk.collect.maps.MapConfigurator;
 import org.odk.collect.maplibre.MapLibreMapConfigurator;
+import org.odk.collect.maplibre.MapLibreSupport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,19 +48,21 @@ public class MapConfiguratorProvider {
             ));
         }
 
-        sourceOptions.add(new SourceOption(BASEMAP_SOURCE_MAPLIBRE, org.odk.collect.strings.R.string.basemap_source_maplibre,
-                new MapLibreMapConfigurator(BASEMAP_SOURCE_MAPLIBRE)
-        ));
+        if (MapLibreSupport.isAvailable()) {
+            sourceOptions.add(new SourceOption(BASEMAP_SOURCE_MAPLIBRE, org.odk.collect.strings.R.string.basemap_source_maplibre,
+                    new MapLibreMapConfigurator(BASEMAP_SOURCE_MAPLIBRE)
+            ));
 
-        sourceOptions.add(new SourceOption(BASEMAP_SOURCE_OSM, org.odk.collect.strings.R.string.basemap_source_osm,
-                new MapLibreMapConfigurator(BASEMAP_SOURCE_OSM)
-        ));
-        sourceOptions.add(new SourceOption(BASEMAP_SOURCE_USGS, org.odk.collect.strings.R.string.basemap_source_usgs,
-                new MapLibreMapConfigurator(BASEMAP_SOURCE_USGS)
-        ));
-        sourceOptions.add(new SourceOption(BASEMAP_SOURCE_CARTO, org.odk.collect.strings.R.string.basemap_source_carto,
-                new MapLibreMapConfigurator(BASEMAP_SOURCE_CARTO)
-        ));
+            sourceOptions.add(new SourceOption(BASEMAP_SOURCE_OSM, org.odk.collect.strings.R.string.basemap_source_osm,
+                    new MapLibreMapConfigurator(BASEMAP_SOURCE_OSM)
+            ));
+            sourceOptions.add(new SourceOption(BASEMAP_SOURCE_USGS, org.odk.collect.strings.R.string.basemap_source_usgs,
+                    new MapLibreMapConfigurator(BASEMAP_SOURCE_USGS)
+            ));
+            sourceOptions.add(new SourceOption(BASEMAP_SOURCE_CARTO, org.odk.collect.strings.R.string.basemap_source_carto,
+                    new MapLibreMapConfigurator(BASEMAP_SOURCE_CARTO)
+            ));
+        }
 
         initOptions(sourceOptions);
     }

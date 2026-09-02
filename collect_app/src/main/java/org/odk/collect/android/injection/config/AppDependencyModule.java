@@ -15,6 +15,7 @@ import androidx.work.WorkManager;
 import com.google.gson.Gson;
 
 import org.javarosa.core.reference.ReferenceManager;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.analytics.BlockableFirebaseAnalytics;
@@ -115,6 +116,8 @@ import org.odk.collect.location.LocationClientProvider;
 import org.odk.collect.maps.MapFragmentFactory;
 import org.odk.collect.maps.layers.DirectoryReferenceLayerRepository;
 import org.odk.collect.maps.layers.ReferenceLayerRepository;
+import org.odk.collect.maplibre.Configurations;
+import org.odk.collect.maplibre.MapLibreSupport;
 import org.odk.collect.metadata.InstallIDProvider;
 import org.odk.collect.metadata.PropertyManager;
 import org.odk.collect.metadata.SettingsInstallIDProvider;
@@ -140,6 +143,7 @@ import org.odk.collect.settings.ODKAppSettingsMigrator;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.importing.ProjectDetailsCreatorImpl;
 import org.odk.collect.settings.importing.SettingsChangeHandler;
+import org.odk.collect.settings.keys.AppConfigurationKeys;
 import org.odk.collect.settings.keys.MetaKeys;
 import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.shared.strings.UUIDGenerator;
@@ -148,6 +152,8 @@ import org.odk.collect.webpage.CustomTabsWebPageService;
 import org.odk.collect.webpage.WebPageService;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -308,6 +314,21 @@ public class AppDependencyModule {
 
     @Provides
     public ODKAppSettingsImporter providesODKAppSettingsImporter(Context context, ProjectsRepository projectsRepository, SettingsProvider settingsProvider, SettingsChangeHandler settingsChangeHandler) {
+        JSONObject deviceUnsupportedSettings = new JSONObject();
+        if (!MapLibreSupport.isAvailable()) {
+            try {
+                List<String> unsupportedBasemaps = new ArrayList<>(Configurations.INSTANCE.getAll().keySet());
+                unsupportedBasemaps.add("mapbox");
+
+                deviceUnsupportedSettings.put(
+                        AppConfigurationKeys.GENERAL,
+                        new JSONObject().put(ProjectKeys.KEY_BASEMAP_SOURCE, new JSONArray(unsupportedBasemaps))
+                );
+            } catch (Throwable ignored) {
+                // ignore
+            }
+        }
+
         return new ODKAppSettingsImporter(
                 projectsRepository,
                 settingsProvider,
@@ -315,7 +336,7 @@ public class AppDependencyModule {
                 Defaults.getProtected(),
                 asList(context.getResources().getStringArray(R.array.project_colors)),
                 settingsChangeHandler,
-                new JSONObject()
+                deviceUnsupportedSettings
         );
     }
 
