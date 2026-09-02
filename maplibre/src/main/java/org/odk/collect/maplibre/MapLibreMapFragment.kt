@@ -93,6 +93,7 @@ class MapLibreMapFragment(private val configuration: Configuration) :
     private var tileServer: TileHttpServer? = null
     private var referenceLayerFile: File? = null
     private var basemapTopLayer: String? = null
+    private var awaitingRemoteStyle = false
 
     private val _mapViewModel by viewModels<MapViewModel> {
         viewModelFactory {
@@ -138,16 +139,24 @@ class MapLibreMapFragment(private val configuration: Configuration) :
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        initializeMapLibre()
+
+        mapView = MapView(requireContext())
+        mapView.getMapAsync { map -> onMapReady(map) }
+
+        return mapView
+    }
+
+    private fun initializeMapLibre() {
         MapLibre.getInstance(
             requireContext(),
             getMapboxAccessToken(),
             WellKnownTileServer.Mapbox
         )
 
-        mapView = MapView(requireContext())
-        mapView.getMapAsync { map -> onMapReady(map) }
-
-        return mapView
+        // MapLibre makes no HTTP requests while the device is offline, and TileHttpServer serves
+        // reference layers over HTTP, so they would never load offline without this.
+        MapLibre.setConnected(true)
     }
 
     private fun getMapboxAccessToken(): String? {
@@ -186,6 +195,12 @@ class MapLibreMapFragment(private val configuration: Configuration) :
                 getMapViewModel().onUserMove(getCenter(), getZoom())
             }
         })
+
+        mapView.addOnDidFailLoadingMapListener {
+            if (awaitingRemoteStyle) {
+                loadEmptyStyle()
+            }
+        }
 
         moveOrAnimateCamera(MapFragment.INITIAL_CENTER, false, MapFragment.INITIAL_ZOOM.toDouble())
 
@@ -242,6 +257,8 @@ class MapLibreMapFragment(private val configuration: Configuration) :
     }
 
     private fun loadStyle(settings: Settings) {
+        awaitingRemoteStyle = false
+
         val uri = if (configuration.uri != null) {
             configuration.uri
         } else if (configuration.styleSetting != null) {
@@ -268,11 +285,27 @@ class MapLibreMapFragment(private val configuration: Configuration) :
             }
 
             is BasemapUri.Mapbox -> {
-                map?.setStyle(uri.value) {
-                    basemapTopLayer = it.layers.lastOrNull()?.id
-                    onStyleLoaded(it)
-                }
+                loadRemoteStyle(uri.value)
             }
+        }
+    }
+
+    private fun loadRemoteStyle(styleUri: String) {
+        awaitingRemoteStyle = true
+
+        map?.setStyle(styleUri) {
+            awaitingRemoteStyle = false
+            basemapTopLayer = it.layers.lastOrNull()?.id
+            onStyleLoaded(it)
+        }
+    }
+
+    private fun loadEmptyStyle() {
+        awaitingRemoteStyle = false
+
+        map?.setStyle(Style.Builder()) {
+            basemapTopLayer = null
+            onStyleLoaded(it)
         }
     }
 
@@ -702,7 +735,7 @@ class MapLibreMapFragment(private val configuration: Configuration) :
 
     private fun addOverlayLayer(layer: Layer) {
         val style = map?.style ?: return
-        basemapTopLayer?.let { style.addLayerAbove(layer, it) }
+        basemapTopLayer?.let { style.addLayerAbove(layer, it) } ?: style.addLayerAt(layer, 0)
     }
 
     private fun addOverlaySource(source: Source) {
