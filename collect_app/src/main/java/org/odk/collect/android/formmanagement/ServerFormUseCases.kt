@@ -149,8 +149,12 @@ object ServerFormUseCases {
         var newAttachmentsDownloaded = false
         val tempMediaDir = File(tempMediaPath).also { it.mkdir() }
 
-        val existingForm = formsRepository.getAllByFormIdAndVersion(formToDownload.formId, formToDownload.formVersion).firstOrNull()
-        val allFormVersionsSorted = formsRepository.getAllByFormId(formToDownload.formId).sortedByDescending { it.date }
+        val existingForm = formsRepository.getAllByFormIdAndVersion(
+            formToDownload.formId,
+            formToDownload.formVersion
+        ).firstOrNull()
+        val allFormVersionsSorted =
+            formsRepository.getAllByFormId(formToDownload.formId).sortedByDescending { it.date }
         val currentOrLastFormVersion = existingForm ?: allFormVersionsSorted.firstOrNull()
 
         val entityLists = mutableListOf<EntityListDownload>()
@@ -241,14 +245,25 @@ object ServerFormUseCases {
                 )
 
                 entityListDownload.file.delete()
+            } else {
+                /*
+                 * There is a case where the hash stays the same, but we still might need to clean up deleted offline entities:
+                 *  - a sync happens and the current hash is stored,
+                 *  - an Entity is created locally and a form is uploaded, creating the Entity on the server,
+                 *  - the Entity is then deleted on the server,
+                 *  - another sync occurs, but the hash is the same as the stored one because the list
+                 *    contents are identical to before the local Entity was added.
+                 *
+                 * In this case, Collect must use the integrityUrl to check for missing Entities
+                 * and remove them locally.
+                 */
+                LocalEntityUseCases.cleanUpDeletedOfflineEntities(
+                    listName,
+                    entitiesRepository,
+                    entitySource,
+                    entityListDownload.mediaFile
+                )
             }
-
-            LocalEntityUseCases.cleanUpDeletedOfflineEntities(
-                listName,
-                entitiesRepository,
-                entitySource,
-                entityListDownload.mediaFile
-            )
         }
     }
 
