@@ -172,7 +172,7 @@ object ServerFormUseCases {
                     newAttachmentsDownloaded = true
                     downloadMediaFile(formSource, mediaFile, tempMediaFile, tempDir, stateListener)
 
-                    entityLists += EntityListDownload(tempMediaFile, mediaFile, isUpdated = true)
+                    entityLists += EntityListDownload.Update(mediaFile, tempMediaFile)
                 } else {
                     val existingForm = formsRepository.getAllByFormIdAndVersion(
                         formToDownload.formId,
@@ -186,7 +186,7 @@ object ServerFormUseCases {
                         }
                     }
 
-                    entityLists += EntityListDownload(tempMediaFile, mediaFile, isUpdated = false)
+                    entityLists += EntityListDownload.Skipped(mediaFile)
                 }
             } else {
                 val existingFile = searchForExistingMediaFile(currentOrLastFormVersion, mediaFile)
@@ -236,33 +236,37 @@ object ServerFormUseCases {
     ) {
         mediaFilesDownload.entityLists.forEach { entityListDownload ->
             val listName = getEntityListFromFileName(entityListDownload.mediaFile)
-            if (entityListDownload.isUpdated) {
-                LocalEntityUseCases.updateLocalEntitiesFromServer(
-                    listName,
-                    entityListDownload.file,
-                    entitiesRepository,
-                    entityListDownload.mediaFile
-                )
+            when (entityListDownload) {
+                is EntityListDownload.Update -> {
+                    LocalEntityUseCases.updateLocalEntitiesFromServer(
+                        listName,
+                        entityListDownload.file,
+                        entitiesRepository,
+                        entityListDownload.mediaFile
+                    )
 
-                entityListDownload.file.delete()
-            } else {
-                /*
-                 * There is a case where the hash stays the same, but we still might need to clean up deleted offline entities:
-                 *  - a sync happens and the current hash is stored,
-                 *  - an Entity is created locally and a form is uploaded, creating the Entity on the server,
-                 *  - the Entity is then deleted on the server,
-                 *  - another sync occurs, but the hash is the same as the stored one because the list
-                 *    contents are identical to before the local Entity was added.
-                 *
-                 * In this case, Collect must use the integrityUrl to check for missing Entities
-                 * and remove them locally.
-                 */
-                LocalEntityUseCases.cleanUpDeletedOfflineEntities(
-                    listName,
-                    entitiesRepository,
-                    entitySource,
-                    entityListDownload.mediaFile
-                )
+                    entityListDownload.file.delete()
+                }
+
+                is EntityListDownload.Skipped -> {
+                    /*
+                     * There is a case where the hash stays the same, but we still might need to clean up deleted offline entities:
+                     *  - a sync happens and the current hash is stored,
+                     *  - an Entity is created locally and a form is uploaded, creating the Entity on the server,
+                     *  - the Entity is then deleted on the server,
+                     *  - another sync occurs, but the hash is the same as the stored one because the list
+                     *    contents are identical to before the local Entity was added.
+                     *
+                     * In this case, Collect must use the integrityUrl to check for missing Entities
+                     * and remove them locally.
+                     */
+                    LocalEntityUseCases.cleanUpDeletedOfflineEntities(
+                        listName,
+                        entitiesRepository,
+                        entitySource,
+                        entityListDownload.mediaFile
+                    )
+                }
             }
         }
     }
@@ -345,11 +349,12 @@ data class MediaFilesDownload(
     val entityLists: List<EntityListDownload>
 ) {
     val entitiesDownloaded: Boolean
-        get() = entityLists.any { it.isUpdated }
+        get() = entityLists.any { it is EntityListDownload.Update }
 }
 
-data class EntityListDownload(
-    val file: File,
-    val mediaFile: MediaFile,
-    val isUpdated: Boolean
-)
+sealed interface EntityListDownload {
+    val mediaFile: MediaFile
+
+    data class Update(override val mediaFile: MediaFile, val file: File) : EntityListDownload
+    data class Skipped(override val mediaFile: MediaFile) : EntityListDownload
+}
