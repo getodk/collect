@@ -1,7 +1,7 @@
 ---
 name: Beta release
 about: Checklist for publishing a new beta release
-title: '🚢 vXXXX.X.0-beta.X'
+title: '🚢 `vXXXX.X.0-beta.X`'
 labels: ''
 assignees: ''
 ---
