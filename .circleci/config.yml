@@ -265,12 +265,7 @@ jobs:
 
       - run:
           name: Check APK size hasn't increased
-          command: |
-            if [[ -n "$GOOGLE_MAPS_API_KEY" ]]; then \
-              ./check-size.sh 20447232
-            else
-              ./check-size.sh 11010048
-            fi
+          command: ./check-size.sh 18350080
 
       - run:
           name: Copy APK to predictable path for artifact storage
