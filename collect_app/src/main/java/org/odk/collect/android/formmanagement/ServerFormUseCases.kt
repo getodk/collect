@@ -231,13 +231,13 @@ object ServerFormUseCases {
         entitySource: EntitySource
     ) {
         mediaFilesDownload.entityLists.forEach { entityListDownload ->
-            val listName = getEntityListFromFileName(entityListDownload.medaFile)
+            val listName = getEntityListFromFileName(entityListDownload.mediaFile)
             if (entityListDownload.isUpdated) {
                 LocalEntityUseCases.updateLocalEntitiesFromServer(
                     listName,
                     entityListDownload.file,
                     entitiesRepository,
-                    entityListDownload.medaFile
+                    entityListDownload.mediaFile
                 )
 
                 entityListDownload.file.delete()
@@ -247,7 +247,7 @@ object ServerFormUseCases {
                 listName,
                 entitiesRepository,
                 entitySource,
-                entityListDownload.medaFile
+                entityListDownload.mediaFile
             )
         }
     }
@@ -335,6 +335,6 @@ data class MediaFilesDownload(
 
 data class EntityListDownload(
     val file: File,
-    val medaFile: MediaFile,
+    val mediaFile: MediaFile,
     val isUpdated: Boolean
 )
