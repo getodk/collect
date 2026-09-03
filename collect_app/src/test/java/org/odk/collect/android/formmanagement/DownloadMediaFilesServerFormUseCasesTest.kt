@@ -110,7 +110,7 @@ class DownloadMediaFilesServerFormUseCasesTest {
     }
 
     @Test
-    fun `#downloadMediaFiles does not download an entity list when it has already been downloaded for a different form`() {
+    fun `#downloadMediaFiles does not download an entity list when the local list hash matches`() {
         val formsRepository = InMemFormsRepository()
         val entitiesRepository = InMemEntitiesRepository()
 
