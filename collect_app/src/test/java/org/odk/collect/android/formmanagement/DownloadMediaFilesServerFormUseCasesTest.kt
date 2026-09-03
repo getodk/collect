@@ -129,7 +129,7 @@ class DownloadMediaFilesServerFormUseCasesTest {
             }
         }
 
-        ServerFormUseCases.downloadMediaFiles(
+        val mediaFilesDownload = ServerFormUseCases.downloadMediaFiles(
             form,
             formSource,
             formsRepository,
@@ -139,6 +139,7 @@ class DownloadMediaFilesServerFormUseCasesTest {
             mock()
         )
 
+        assertThat(mediaFilesDownload.entitiesDownloaded, equalTo(true))
         verify(formSource, never()).fetchMediaFile(mediaFile.downloadUrl)
     }
 

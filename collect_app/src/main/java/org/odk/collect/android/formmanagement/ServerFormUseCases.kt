@@ -349,7 +349,7 @@ data class MediaFilesDownload(
     val entityLists: List<EntityListDownload>
 ) {
     val entitiesDownloaded: Boolean
-        get() = entityLists.any { it is EntityListDownload.Update }
+        get() = entityLists.isNotEmpty()
 }
 
 sealed interface EntityListDownload {
