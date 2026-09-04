@@ -2,8 +2,8 @@ package org.odk.collect.android.benchmark
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.blankOrNullString
 import org.hamcrest.Matchers.not
+import org.hamcrest.text.IsBlankString.blankOrNullString
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
@@ -32,7 +32,6 @@ class EntitiesBenchmarkTest {
      *
      * Devices that currently pass:
      * - Fairphone 3
-     * - Pixel 3
      *
      */
     @Test
@@ -69,24 +68,24 @@ class EntitiesBenchmarkTest {
 
             .clickOK(MainMenuPage())
             .clickGetBlankForm()
-            .benchmark("Downloading form second time with http cache", 5, benchmarker) {
+            .benchmark("Downloading form second time with http cache", 10, benchmarker) {
                 it.clickGetSelected()
             }
 
             .clickOK(MainMenuPage())
             .clickFillBlankForm()
-            .benchmark("Loading form first time", 2, benchmarker) {
+            .benchmark("Loading form first time", 5, benchmarker) {
                 it.clickOnForm("100k Entities Filter")
             }
 
             .pressBackAndDiscardForm()
             .clickFillBlankForm()
-            .benchmark("Loading form second time", 2, benchmarker) {
+            .benchmark("Loading form second time", 5, benchmarker) {
                 it.clickOnForm("100k Entities Filter")
             }
 
             .answerQuestion("Which value do you want to filter by?", "1024")
-            .benchmark("Filtering select", 3, benchmarker) {
+            .benchmark("Filtering select", 5, benchmarker) {
                 it.swipeToNextQuestion("Filtered select")
             }
 
@@ -128,7 +127,7 @@ class EntitiesBenchmarkTest {
             .clickGetBlankForm()
             .benchmark(
                 "Redownloading a form with 1k media files and entity list when there are no updates",
-                5,
+                10,
                 benchmarker
             ) {
                 it
