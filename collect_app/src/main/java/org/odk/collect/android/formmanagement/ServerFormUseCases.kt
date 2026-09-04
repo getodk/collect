@@ -226,38 +226,36 @@ object ServerFormUseCases {
     ) {
         mediaFilesDownload.entityLists.forEach { entityListDownload ->
             val listName = getEntityListFromFileName(entityListDownload.mediaFile)
-            when (entityListDownload) {
-                is EntityListDownload.Update -> {
-                    LocalEntityUseCases.updateLocalEntitiesFromServer(
-                        listName,
-                        entityListDownload.file,
-                        entitiesRepository,
-                        entityListDownload.mediaFile
-                    )
+            if (entityListDownload is EntityListDownload.Update) {
+                LocalEntityUseCases.updateLocalEntitiesFromServer(
+                    listName,
+                    entityListDownload.file,
+                    entitiesRepository,
+                    entityListDownload.mediaFile
+                )
 
-                    entityListDownload.file.delete()
-                }
-
-                is EntityListDownload.Skipped -> {
-                    /*
-                     * There is a case where the hash stays the same, but we still might need to clean up deleted offline entities:
-                     *  - a sync happens and the current hash is stored,
-                     *  - an Entity is created locally and a form is uploaded, creating the Entity on the server,
-                     *  - the Entity is then deleted on the server,
-                     *  - another sync occurs, but the hash is the same as the stored one because the list
-                     *    contents are identical to before the local Entity was added.
-                     *
-                     * In this case, Collect must use the integrityUrl to check for missing Entities
-                     * and remove them locally.
-                     */
-                    LocalEntityUseCases.cleanUpDeletedOfflineEntities(
-                        listName,
-                        entitiesRepository,
-                        entitySource,
-                        entityListDownload.mediaFile
-                    )
-                }
+                entityListDownload.file.delete()
             }
+
+            /*
+             * We automatically delete online entities that no longer appear in the list in
+             * updateLocalEntitiesFromServer above, but entities can end up being deleted between
+             * syncs:
+             *  1. a sync happens
+             *  2. an Entity is created locally and a form is uploaded, creating the Entity on the server
+             *  3. the Entity is then deleted on the server
+             *  4. another sync occurs
+             *
+             * In this case, Collect must use the integrityUrl to check for missing Entities
+             * and remove them locally as the offline entity will never be marked as online and
+             * so will never get deleted.
+             */
+            LocalEntityUseCases.cleanUpDeletedOfflineEntities(
+                listName,
+                entitiesRepository,
+                entitySource,
+                entityListDownload.mediaFile
+            )
 
             val entityListLastUpdated = entitiesRepository.getList(listName)?.lastUpdated
             if (!formResult.isNew && entityListLastUpdated != null && entityListLastUpdated > formResult.form.getLastUpdated()) {
