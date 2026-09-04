@@ -100,7 +100,7 @@ class EntityListSyncTest {
     }
 
     @Test
-    fun aLocallyCreatedEntity_thatIsDeletedOnTheServer_isNotAvailableToFollowUpForms() {
+    fun aLocallyCreatedEntity_thatIsDeletedOnTheServer_isNotAvailableToFollowUpForms_whenTheListDoesNotUpdate() {
         testDependencies.server.includeIntegrityUrl()
         testDependencies.server.addForm("one-question-entity-registration-id.xml")
         testDependencies.server.addForm(
@@ -129,6 +129,53 @@ class EntityListSyncTest {
             .clickOnForm("One Question Entity Update")
             .assertQuestion("Select person")
             .assertText("Roman Roy")
+            .assertTextDoesNotExist("Logan Roy")
+    }
+
+    @Test
+    fun aLocallyCreatedEntity_thatIsDeletedOnTheServer_isNotAvailableToFollowUpForms_whenTheListUpdates() {
+        testDependencies.server.includeIntegrityUrl()
+        testDependencies.server.addForm("one-question-entity-registration-id.xml")
+        testDependencies.server.addForm(
+            "one-question-entity-update.xml",
+            listOf(EntityListItem("people.csv", version = 1))
+        )
+
+        val entityId = UUID.randomUUID().toString()
+        rule.withProject(testDependencies.server.url, matchExactly = true)
+            .startBlankForm("One Question Entity Registration")
+            .fillOutAndFinalize(
+                FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"),
+                FormEntryPage.QuestionAndAnswer("ID", entityId)
+            )
+            .startBlankForm("One Question Entity Update")
+            .assertText("Logan Roy")
+            .pressBackAndDiscardForm()
+
+            .also {
+                testDependencies.server.apply {
+                    removeForm("One Question Entity Update")
+                    addForm(
+                        "one-question-entity-update.xml",
+                        listOf(
+                            EntityListItem(
+                                name = "people.csv",
+                                file = "updated-people.csv",
+                                version = 2
+                            )
+                        )
+                    )
+
+                    deleteEntity(entityId)
+                }
+            }
+
+            .clickFillBlankForm()
+            .clickRefresh()
+
+            .clickOnForm("One Question Entity Update")
+            .assertQuestion("Select person")
+            .assertText("Ro-Ro Roy")
             .assertTextDoesNotExist("Logan Roy")
     }
 

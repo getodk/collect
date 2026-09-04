@@ -432,20 +432,12 @@ class StubOpenRosaServer : OpenRosaHttpInterface {
 
         constructor(
             name: String,
-            file: String,
-            version: Int,
+            file: String = name,
+            version: Int = 0,
             approvalList: Boolean = false
         ) : super(name, file) {
             this.version = version
             this.isApprovalList = approvalList
-        }
-
-        constructor(name: String) : super(name, name, name)
-
-        constructor(name: String, approvalList: Boolean) : this(name, name, 0, approvalList)
-
-        fun incrementVersion() {
-            version++
         }
     }
 
