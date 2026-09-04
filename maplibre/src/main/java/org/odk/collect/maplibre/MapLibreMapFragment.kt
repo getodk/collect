@@ -319,7 +319,10 @@ class MapLibreMapFragment(private val configuration: Configuration) :
             lineManager = LineManager(mapView, map, style)
             fillManager = FillManager(mapView, map, style)
             circleManager = CircleManager(mapView, map, style)
-            symbolManager = SymbolManager(mapView, map, style)
+            symbolManager = SymbolManager(mapView, map, style).apply {
+                iconAllowOverlap = true
+                iconIgnorePlacement = true
+            }
             annotationManagersCreated = true
 
             // The map becomes usable only once the annotation managers exist. The style loads
