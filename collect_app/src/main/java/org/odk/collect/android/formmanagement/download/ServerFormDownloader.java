@@ -4,6 +4,7 @@ import static org.odk.collect.android.utilities.FileUtils.interuptablyWriteFile;
 import static java.util.Collections.emptyList;
 
 import org.jetbrains.annotations.NotNull;
+import org.odk.collect.android.formmanagement.FormResult;
 import org.odk.collect.android.formmanagement.MediaFilesDownload;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormUseCases;
@@ -193,11 +194,17 @@ public class ServerFormDownloader implements FormDownloader {
         // Save form in database
         formResult = findOrCreateForm(formFile, formMetadata, mediaFilesDownload);
 
-        ServerFormUseCases.ingestEntityListsFromDownload(mediaFilesDownload, entitiesRepository, entitySource);
+        ServerFormUseCases.ingestEntityListsFromDownload(
+                formResult,
+                mediaFilesDownload,
+                entitiesRepository,
+                entitySource,
+                formsRepository
+        );
 
         // move the media files in the media folder
         if (tempMediaPath != null) {
-            File formMediaDir = new File(formResult.form.getFormMediaPath());
+            File formMediaDir = new File(formResult.getForm().getFormMediaPath());
 
             try {
                 moveMediaFiles(tempMediaPath, formMediaDir);
@@ -206,7 +213,7 @@ public class ServerFormDownloader implements FormDownloader {
 
                 if (formResult.isNew() && fileResult.isNew()) {
                     // this means we should delete the entire form together with the metadata
-                    formsRepository.delete(formResult.form.getDbId());
+                    formsRepository.delete(formResult.getForm().getDbId());
                 }
 
                 throw new FormDownloadException.DiskError();
@@ -317,25 +324,6 @@ public class ServerFormDownloader implements FormDownloader {
                 }
 
             }
-        }
-    }
-
-    private static class FormResult {
-
-        private final Form form;
-        private final boolean isNew;
-
-        private FormResult(Form form, boolean isNew) {
-            this.form = form;
-            this.isNew = isNew;
-        }
-
-        private boolean isNew() {
-            return isNew;
-        }
-
-        public Form getForm() {
-            return form;
         }
     }
 

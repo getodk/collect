@@ -174,18 +174,6 @@ object ServerFormUseCases {
 
                     entityLists += EntityListDownload.Update(mediaFile, tempMediaFile)
                 } else {
-                    val existingForm = formsRepository.getAllByFormIdAndVersion(
-                        formToDownload.formId,
-                        formToDownload.formVersion
-                    ).getOrNull(0)
-
-                    if (existingForm != null) {
-                        val entityListLastUpdated = localEntityList.lastUpdated
-                        if (entityListLastUpdated != null && entityListLastUpdated > existingForm.getLastUpdated()) {
-                            newAttachmentsDownloaded = true
-                        }
-                    }
-
                     entityLists += EntityListDownload.Skipped(mediaFile)
                 }
             } else {
@@ -230,9 +218,11 @@ object ServerFormUseCases {
 
     @JvmStatic
     fun ingestEntityListsFromDownload(
+        formResult: FormResult,
         mediaFilesDownload: MediaFilesDownload,
         entitiesRepository: EntitiesRepository,
-        entitySource: EntitySource
+        entitySource: EntitySource,
+        formsRepository: FormsRepository
     ) {
         mediaFilesDownload.entityLists.forEach { entityListDownload ->
             val listName = getEntityListFromFileName(entityListDownload.mediaFile)
@@ -267,6 +257,15 @@ object ServerFormUseCases {
                         entityListDownload.mediaFile
                     )
                 }
+            }
+
+            val entityListLastUpdated = entitiesRepository.getList(listName)?.lastUpdated
+            if (!formResult.isNew && entityListLastUpdated != null && entityListLastUpdated > formResult.form.getLastUpdated()) {
+                formsRepository.save(
+                    Form.Builder(formResult.form)
+                        .lastDetectedAttachmentsUpdateDate(entityListLastUpdated)
+                        .build()
+                )
             }
         }
     }
@@ -358,3 +357,5 @@ sealed interface EntityListDownload {
     data class Update(override val mediaFile: MediaFile, val file: File) : EntityListDownload
     data class Skipped(override val mediaFile: MediaFile) : EntityListDownload
 }
+
+data class FormResult(val form: Form, val isNew: Boolean)
