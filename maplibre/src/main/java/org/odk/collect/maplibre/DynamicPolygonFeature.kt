@@ -93,10 +93,8 @@ internal class DynamicPolygonFeature(
     }
 
     private fun updateLine() {
-        val points = points
-            .map {
-                LatLng(it.latitude, it.longitude, it.altitude)
-            }
+        val points = points.map { LatLng(it.latitude, it.longitude, it.altitude) }
+            .let { if (it.size > 1 && it.first() != it.last()) it + it.first() else it }
 
         fill?.let {
             fillManager.delete(it)
@@ -122,7 +120,7 @@ internal class DynamicPolygonFeature(
         if (points.size > 1) {
             line = lineManager.create(
                 LineOptions()
-                    .withLatLngs(points + points.first())
+                    .withLatLngs(points)
                     .withLineColor(
                         ColorUtils.colorToRgbaString(polygonDescription.getStrokeColor())
                     )

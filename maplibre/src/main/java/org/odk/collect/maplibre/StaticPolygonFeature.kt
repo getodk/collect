@@ -24,11 +24,7 @@ class StaticPolygonFeature(
     override val points: List<MapPoint> = polygonDescription.points
 
     private val latLngs = points.map { LatLng(it.latitude, it.longitude) }
-    private val outlineLatLngs = if (latLngs.size > 1 && latLngs.first() != latLngs.last()) {
-        latLngs + latLngs.first()
-    } else {
-        latLngs
-    }
+        .let { if (it.size > 1 && it.first() != it.last()) it + it.first() else it }
 
     private val fill = fillManager.create(
         FillOptions()
@@ -39,7 +35,7 @@ class StaticPolygonFeature(
 
     private val line = lineManager.create(
         LineOptions()
-            .withLatLngs(outlineLatLngs)
+            .withLatLngs(latLngs)
             .withLineColor(ColorUtils.colorToRgbaString(polygonDescription.getStrokeColor()))
             .withLineWidth(MapUtils.convertStrokeWidth(polygonDescription))
             .withLineJoin(Property.LINE_JOIN_ROUND)
