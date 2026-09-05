@@ -7,6 +7,7 @@ import org.maplibre.android.geometry.LatLng
 import org.maplibre.android.plugins.annotation.Line
 import org.maplibre.android.plugins.annotation.LineManager
 import org.maplibre.android.plugins.annotation.LineOptions
+import org.maplibre.android.plugins.annotation.OnLineClickListener
 import org.maplibre.android.plugins.annotation.OnSymbolClickListener
 import org.maplibre.android.plugins.annotation.OnSymbolDragListener
 import org.maplibre.android.plugins.annotation.Symbol
@@ -38,6 +39,17 @@ internal class DynamicPolyLineFeature(
     private val symbolDragListener = DragListener()
     private var line: Line? = null
 
+    private val lineClickListener = OnLineClickListener { annotation ->
+        line?.let {
+            if (annotation.id == it.id && featureClickListener != null) {
+                featureClickListener.onFeature(featureId)
+                true
+            } else {
+                false
+            }
+        } ?: false
+    }
+
     init {
         val markerDescriptions = lineDescription.getMarkersForPoints()
         markerDescriptions.forEach {
@@ -51,16 +63,7 @@ internal class DynamicPolyLineFeature(
 
         symbolManager.addClickListener(symbolClickListener)
         symbolManager.addDragListener(symbolDragListener)
-        lineManager.addClickListener { annotation ->
-            line?.let {
-                if (annotation.id == it.id && featureClickListener != null) {
-                    featureClickListener.onFeature(featureId)
-                    true
-                } else {
-                    false
-                }
-            } ?: false
-        }
+        lineManager.addClickListener(lineClickListener)
     }
 
     override fun dispose() {
@@ -70,6 +73,7 @@ internal class DynamicPolyLineFeature(
             delete(symbols)
         }
 
+        lineManager.removeClickListener(lineClickListener)
         line?.let {
             lineManager.delete(it)
         }

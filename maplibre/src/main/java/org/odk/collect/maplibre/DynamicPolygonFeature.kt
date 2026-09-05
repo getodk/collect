@@ -10,6 +10,7 @@ import org.maplibre.android.plugins.annotation.FillOptions
 import org.maplibre.android.plugins.annotation.Line
 import org.maplibre.android.plugins.annotation.LineManager
 import org.maplibre.android.plugins.annotation.LineOptions
+import org.maplibre.android.plugins.annotation.OnFillClickListener
 import org.maplibre.android.plugins.annotation.OnSymbolClickListener
 import org.maplibre.android.plugins.annotation.OnSymbolDragListener
 import org.maplibre.android.plugins.annotation.Symbol
@@ -43,6 +44,17 @@ internal class DynamicPolygonFeature(
     private var fill: Fill? = null
     private var line: Line? = null
 
+    private val fillClickListener = OnFillClickListener { annotation ->
+        fill?.let {
+            if (annotation.id == it.id && featureClickListener != null) {
+                featureClickListener.onFeature(featureId)
+                true
+            } else {
+                false
+            }
+        } ?: false
+    }
+
     init {
         val markerDescriptions = polygonDescription.getMarkersForPoints()
         markerDescriptions.forEach {
@@ -56,16 +68,7 @@ internal class DynamicPolygonFeature(
 
         symbolManager.addClickListener(symbolClickListener)
         symbolManager.addDragListener(symbolDragListener)
-        fillManager.addClickListener { annotation ->
-            fill?.let {
-                if (annotation.id == it.id && featureClickListener != null) {
-                    featureClickListener.onFeature(featureId)
-                    true
-                } else {
-                    false
-                }
-            } ?: false
-        }
+        fillManager.addClickListener(fillClickListener)
     }
 
     override fun dispose() {
@@ -75,6 +78,7 @@ internal class DynamicPolygonFeature(
             delete(symbols)
         }
 
+        fillManager.removeClickListener(fillClickListener)
         fill?.let {
             fillManager.delete(it)
         }
