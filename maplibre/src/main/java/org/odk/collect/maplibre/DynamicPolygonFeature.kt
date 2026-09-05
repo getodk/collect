@@ -15,6 +15,7 @@ import org.maplibre.android.plugins.annotation.OnSymbolClickListener
 import org.maplibre.android.plugins.annotation.OnSymbolDragListener
 import org.maplibre.android.plugins.annotation.Symbol
 import org.maplibre.android.plugins.annotation.SymbolManager
+import org.maplibre.android.style.layers.Property
 import org.maplibre.android.utils.ColorUtils
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapPoint
@@ -126,6 +127,7 @@ internal class DynamicPolygonFeature(
                         ColorUtils.colorToRgbaString(polygonDescription.getStrokeColor())
                     )
                     .withLineWidth(MapUtils.convertStrokeWidth(polygonDescription))
+                    .withLineJoin(Property.LINE_JOIN_ROUND)
             ).also {
                 lineManager.update(it)
             }

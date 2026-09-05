@@ -7,6 +7,7 @@ import org.maplibre.android.plugins.annotation.LineManager
 import org.maplibre.android.plugins.annotation.LineOptions
 import org.maplibre.android.plugins.annotation.OnFillClickListener
 import org.maplibre.android.plugins.annotation.OnLineClickListener
+import org.maplibre.android.style.layers.Property
 import org.maplibre.android.utils.ColorUtils
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapPoint
@@ -41,6 +42,7 @@ class StaticPolygonFeature(
             .withLatLngs(outlineLatLngs)
             .withLineColor(ColorUtils.colorToRgbaString(polygonDescription.getStrokeColor()))
             .withLineWidth(MapUtils.convertStrokeWidth(polygonDescription))
+            .withLineJoin(Property.LINE_JOIN_ROUND)
     )
 
     private var fillClickListener: OnFillClickListener? = null

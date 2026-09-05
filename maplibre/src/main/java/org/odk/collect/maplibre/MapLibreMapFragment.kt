@@ -30,6 +30,7 @@ import org.maplibre.android.plugins.scalebar.ScaleBarOptions
 import org.maplibre.android.plugins.scalebar.ScaleBarPlugin
 import org.maplibre.android.style.layers.Layer
 import org.maplibre.android.style.layers.LineLayer
+import org.maplibre.android.style.layers.Property
 import org.maplibre.android.style.layers.PropertyFactory
 import org.maplibre.android.style.layers.RasterLayer
 import org.maplibre.android.style.sources.RasterSource
@@ -324,9 +325,13 @@ class MapLibreMapFragment(private val configuration: Configuration) :
 
         if (!annotationManagersCreated) {
             val map = this.map ?: return
-            backgroundLineManager = LineManager(mapView, map, style)
+            backgroundLineManager = LineManager(mapView, map, style).apply {
+                setLineCap(Property.LINE_CAP_ROUND)
+            }
             backgroundFillManager = FillManager(mapView, map, style)
-            lineManager = LineManager(mapView, map, style)
+            lineManager = LineManager(mapView, map, style).apply {
+                setLineCap(Property.LINE_CAP_ROUND)
+            }
             fillManager = FillManager(mapView, map, style)
             circleManager = CircleManager(mapView, map, style)
             symbolManager = SymbolManager(mapView, map, style).apply {
