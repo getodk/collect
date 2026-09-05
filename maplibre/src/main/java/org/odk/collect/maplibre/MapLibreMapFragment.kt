@@ -95,6 +95,24 @@ class MapLibreMapFragment(private val configuration: Configuration) :
     private var basemapTopLayer: String? = null
     private var awaitingRemoteStyle = false
 
+    private val scaleListener = object : MapLibreMap.OnScaleListener {
+        override fun onScaleBegin(detector: StandardScaleGestureDetector) = Unit
+        override fun onScale(detector: StandardScaleGestureDetector) = Unit
+
+        override fun onScaleEnd(detector: StandardScaleGestureDetector) {
+            getMapViewModel().onUserZoom(getCenter(), getZoom())
+        }
+    }
+
+    private val moveListener = object : MapLibreMap.OnMoveListener {
+        override fun onMoveBegin(detector: MoveGestureDetector) = Unit
+        override fun onMove(detector: MoveGestureDetector) = Unit
+
+        override fun onMoveEnd(detector: MoveGestureDetector) {
+            getMapViewModel().onUserMove(getCenter(), getZoom())
+        }
+    }
+
     private val _mapViewModel by viewModels<MapViewModel> {
         viewModelFactory {
             addInitializer(MapViewModel::class) {
@@ -178,23 +196,8 @@ class MapLibreMapFragment(private val configuration: Configuration) :
         map.addOnMapClickListener(this)
         map.addOnMapLongClickListener(this)
 
-        map.addOnScaleListener(object : MapLibreMap.OnScaleListener {
-            override fun onScaleBegin(detector: StandardScaleGestureDetector) = Unit
-            override fun onScale(detector: StandardScaleGestureDetector) = Unit
-
-            override fun onScaleEnd(detector: StandardScaleGestureDetector) {
-                getMapViewModel().onUserZoom(getCenter(), getZoom())
-            }
-        })
-
-        map.addOnMoveListener(object : MapLibreMap.OnMoveListener {
-            override fun onMoveBegin(detector: MoveGestureDetector) = Unit
-            override fun onMove(detector: MoveGestureDetector) = Unit
-
-            override fun onMoveEnd(detector: MoveGestureDetector) {
-                getMapViewModel().onUserMove(getCenter(), getZoom())
-            }
-        })
+        map.addOnScaleListener(scaleListener)
+        map.addOnMoveListener(moveListener)
 
         mapView.addOnDidFailLoadingMapListener {
             if (awaitingRemoteStyle) {
@@ -235,6 +238,13 @@ class MapLibreMapFragment(private val configuration: Configuration) :
         fillManager?.onDestroy()
         circleManager?.onDestroy()
         symbolManager?.onDestroy()
+
+        map?.apply {
+            removeOnMapClickListener(this@MapLibreMapFragment)
+            removeOnMapLongClickListener(this@MapLibreMapFragment)
+            removeOnScaleListener(scaleListener)
+            removeOnMoveListener(moveListener)
+        }
 
         mapView.onDestroy()
         map = null
