@@ -325,19 +325,31 @@ class MapLibreMapFragment(private val configuration: Configuration) :
 
         if (!annotationManagersCreated) {
             val map = this.map ?: return
-            backgroundLineManager = LineManager(mapView, map, style).apply {
-                setLineCap(Property.LINE_CAP_ROUND)
-            }
-            backgroundFillManager = FillManager(mapView, map, style)
-            lineManager = LineManager(mapView, map, style).apply {
-                setLineCap(Property.LINE_CAP_ROUND)
-            }
-            fillManager = FillManager(mapView, map, style)
-            circleManager = CircleManager(mapView, map, style)
-            symbolManager = SymbolManager(mapView, map, style).apply {
+
+            val symbolManager = SymbolManager(mapView, map, style).apply {
                 iconAllowOverlap = true
                 iconIgnorePlacement = true
             }
+            val lineManager = LineManager(mapView, map, style, symbolManager.layerId, null).apply {
+                setLineCap(Property.LINE_CAP_ROUND)
+            }
+            val fillManager = FillManager(mapView, map, style, lineManager.layerId, null)
+            val backgroundLineManager =
+                LineManager(mapView, map, style, fillManager.layerId, null).apply {
+                    setLineCap(Property.LINE_CAP_ROUND)
+                }
+            val backgroundFillManager =
+                FillManager(mapView, map, style, backgroundLineManager.layerId, null)
+
+            val circleManager = CircleManager(mapView, map, style, symbolManager.layerId, null)
+
+            this.symbolManager = symbolManager
+            this.circleManager = circleManager
+            this.fillManager = fillManager
+            this.lineManager = lineManager
+            this.backgroundFillManager = backgroundFillManager
+            this.backgroundLineManager = backgroundLineManager
+
             annotationManagersCreated = true
 
             // The map becomes usable only once the annotation managers exist. The style loads
