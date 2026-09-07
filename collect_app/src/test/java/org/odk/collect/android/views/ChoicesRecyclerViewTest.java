@@ -505,6 +505,27 @@ public class ChoicesRecyclerViewTest {
         assertThat(view.getImageView().getVisibility(), is(View.GONE));
     }
 
+    @Test
+    public void whenAChoiceWithoutAnImageReusesAView_shouldTheMissingImageMessageOfThePreviousChoiceBeHidden() throws InvalidReferenceException {
+        String missingImageURI = "jr://images/missing.jpg";
+        List<SelectChoice> items = getTestChoices();
+        formEntryPrompt = new MockFormEntryPromptBuilder()
+                .withSelectChoices(items)
+                .withSpecialFormSelectChoiceText(asList(
+                        Pair.create(FormEntryCaption.TEXT_FORM_IMAGE, missingImageURI),
+                        Pair.create(FormEntryCaption.TEXT_FORM_IMAGE, null)
+                ))
+                .build();
+
+        Reference reference = mock(Reference.class);
+        when(reference.getLocalURI()).thenReturn(new File(TempFiles.createTempDir(), "missing.jpg").getAbsolutePath());
+        when(referenceManager.deriveReference(missingImageURI)).thenReturn(reference);
+
+        AudioVideoImageTextLabel view = bindThenRebind(items);
+
+        assertThat(view.getMissingImage().getVisibility(), is(View.GONE));
+    }
+
     /**
      * Binds a view holder to one choice and then rebinds the same view to another, which is what the
      * list does to a view that gets recycled while scrolling.
