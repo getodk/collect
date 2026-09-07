@@ -152,8 +152,13 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
         this.bigImageFile = bigImageFile;
     }
 
-    public void setVideo(@NonNull File videoFile) {
+    public void setVideo(@Nullable File videoFile) {
         this.videoFile = videoFile;
+
+        if (videoFile == null) {
+            binding.videoButton.setVisibility(GONE);
+            return;
+        }
 
         binding.videoButton.setVisibility(VISIBLE);
         binding.mediaButtons.setVisibility(VISIBLE);
