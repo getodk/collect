@@ -236,9 +236,9 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
             String bigImageURI = prompt.getSpecialFormSelectChoiceText(item, "big-image");
             String audioURI = getPlayableAudioURI(prompt, item, referenceManager);
             try {
-                if (imageURI != null) {
-                    audioVideoImageTextLabel.setImage(new File(referenceManager.deriveReference(imageURI).getLocalURI()), new GlideImageLoader());
-                }
+                audioVideoImageTextLabel.setImage(imageURI == null
+                        ? null
+                        : new File(referenceManager.deriveReference(imageURI).getLocalURI()), new GlideImageLoader());
                 if (bigImageURI != null) {
                     audioVideoImageTextLabel.setBigImage(new File(referenceManager.deriveReference(bigImageURI).getLocalURI()));
                 }

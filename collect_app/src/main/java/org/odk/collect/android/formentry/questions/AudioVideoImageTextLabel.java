@@ -29,6 +29,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioButton;
@@ -126,8 +127,10 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
         binding.mediaButtons.setVisibility(VISIBLE);
     }
 
-    public void setImage(@NonNull File imageFile, ImageLoader imageLoader) {
-        if (imageFile.exists()) {
+    public void setImage(@Nullable File imageFile, ImageLoader imageLoader) {
+        if (imageFile == null) {
+            binding.imageView.setVisibility(GONE);
+        } else if (imageFile.exists()) {
             ImageViewUtils.resetSizeForNewImage(binding.imageView);
 
             imageLoader.loadImage(binding.imageView, imageFile, ImageView.ScaleType.CENTER_INSIDE, null);
