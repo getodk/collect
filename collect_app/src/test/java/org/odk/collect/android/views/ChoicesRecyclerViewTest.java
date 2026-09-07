@@ -52,6 +52,7 @@ import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.imageloader.ImageLoader;
 import org.odk.collect.shared.TempFiles;
+import org.odk.collect.testshared.FakeAudioPlayer;
 import org.odk.collect.testshared.RobolectricHelpers;
 import org.robolectric.android.controller.ActivityController;
 
@@ -526,13 +527,34 @@ public class ChoicesRecyclerViewTest {
         assertThat(view.getMissingImage().getVisibility(), is(View.GONE));
     }
 
+    @Test
+    public void whenAChoiceWithoutAudioReusesAView_shouldTheAudioButtonOfThePreviousChoiceBeHidden() throws InvalidReferenceException {
+        String audioURI = "jr://audio/audio.mp3";
+        List<SelectChoice> items = getTestChoices();
+        formEntryPrompt = new MockFormEntryPromptBuilder()
+                .withSelectChoices(items)
+                .withSpecialFormSelectChoiceText(asList(
+                        Pair.create(FormEntryCaption.TEXT_FORM_AUDIO, audioURI),
+                        Pair.create(FormEntryCaption.TEXT_FORM_AUDIO, null)
+                ))
+                .build();
+
+        Reference reference = mock(Reference.class);
+        when(reference.getLocalURI()).thenReturn(TempFiles.createTempFile(".mp3").getAbsolutePath());
+        when(referenceManager.deriveReference(audioURI)).thenReturn(reference);
+
+        AudioVideoImageTextLabel view = bindThenRebind(items);
+
+        assertThat(view.getAudioButton().getVisibility(), is(View.GONE));
+    }
+
     /**
      * Binds a view holder to one choice and then rebinds the same view to another, which is what the
      * list does to a view that gets recycled while scrolling.
      */
     private AudioVideoImageTextLabel bindThenRebind(List<SelectChoice> items) {
         SelectOneListAdapter adapter = new SelectOneListAdapter(null, null, activityController.get(),
-                items, formEntryPrompt, referenceManager, null, 0, 1, false, mock(MediaUtils.class));
+                items, formEntryPrompt, referenceManager, new FakeAudioPlayer(), 0, 1, false, mock(MediaUtils.class));
         initRecyclerView(adapter, false);
 
         RecyclerView.Adapter recyclerViewAdapter = adapter;
