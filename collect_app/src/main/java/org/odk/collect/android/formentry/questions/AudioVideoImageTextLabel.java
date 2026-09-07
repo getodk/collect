@@ -130,6 +130,7 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
     public void setImage(@Nullable File imageFile, ImageLoader imageLoader) {
         if (imageFile == null) {
             binding.imageView.setVisibility(GONE);
+            binding.missingImage.setVisibility(GONE);
         } else if (imageFile.exists()) {
             ImageViewUtils.resetSizeForNewImage(binding.imageView);
 
