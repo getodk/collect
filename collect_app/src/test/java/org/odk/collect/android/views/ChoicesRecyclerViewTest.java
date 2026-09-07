@@ -548,6 +548,27 @@ public class ChoicesRecyclerViewTest {
         assertThat(view.getAudioButton().getVisibility(), is(View.GONE));
     }
 
+    @Test
+    public void whenAChoiceWithoutAVideoReusesAView_shouldTheVideoButtonOfThePreviousChoiceBeHidden() throws InvalidReferenceException {
+        String videoURI = "jr://video/video.mp4";
+        List<SelectChoice> items = getTestChoices();
+        formEntryPrompt = new MockFormEntryPromptBuilder()
+                .withSelectChoices(items)
+                .withSpecialFormSelectChoiceText(asList(
+                        Pair.create("video", videoURI),
+                        Pair.create("video", null)
+                ))
+                .build();
+
+        Reference reference = mock(Reference.class);
+        when(reference.getLocalURI()).thenReturn(TempFiles.createTempFile(".mp4").getAbsolutePath());
+        when(referenceManager.deriveReference(videoURI)).thenReturn(reference);
+
+        AudioVideoImageTextLabel view = bindThenRebind(items);
+
+        assertThat(view.getVideoButton().getVisibility(), is(View.GONE));
+    }
+
     /**
      * Binds a view holder to one choice and then rebinds the same view to another, which is what the
      * list does to a view that gets recycled while scrolling.
