@@ -97,7 +97,12 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
         }
     }
 
-    public void setAudio(String audioURI, AudioPlayer audioPlayer) {
+    public void setAudio(@Nullable String audioURI, AudioPlayer audioPlayer) {
+        if (audioURI == null) {
+            binding.audioButton.setVisibility(GONE);
+            return;
+        }
+
         String clipID = getTag() != null ? getTag().toString() : "";
 
         originalTextColor = textLabel.getTextColors().getDefaultColor();

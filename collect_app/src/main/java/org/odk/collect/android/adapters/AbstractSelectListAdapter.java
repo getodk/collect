@@ -245,9 +245,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
                 if (videoURI != null) {
                     audioVideoImageTextLabel.setVideo(new File(referenceManager.deriveReference(videoURI).getLocalURI()));
                 }
-                if (audioURI != null) {
-                    audioVideoImageTextLabel.setAudio(audioURI, audioPlayer);
-                }
+                audioVideoImageTextLabel.setAudio(audioURI, audioPlayer);
             } catch (InvalidReferenceException e) {
                 Timber.d(e, "Invalid media reference due to %s ", e.getMessage());
             }
