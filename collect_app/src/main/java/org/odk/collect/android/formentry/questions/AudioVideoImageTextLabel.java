@@ -129,7 +129,6 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
         });
 
         binding.audioButton.setVisibility(VISIBLE);
-        binding.mediaButtons.setVisibility(VISIBLE);
     }
 
     public void setImage(@Nullable File imageFile, ImageLoader imageLoader) {
@@ -163,7 +162,6 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
         }
 
         binding.videoButton.setVisibility(VISIBLE);
-        binding.mediaButtons.setVisibility(VISIBLE);
         binding.videoButton.setOnClickListener(this);
     }
 
