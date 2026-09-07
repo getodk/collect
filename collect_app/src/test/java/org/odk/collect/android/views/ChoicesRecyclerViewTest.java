@@ -21,8 +21,10 @@ import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import androidx.core.util.Pair;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.google.android.flexbox.FlexboxLayoutManager;
@@ -32,6 +34,7 @@ import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.Reference;
 import org.javarosa.core.reference.ReferenceManager;
+import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
 import org.junit.Test;
@@ -48,6 +51,7 @@ import org.odk.collect.android.support.WidgetTestActivity;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.imageloader.ImageLoader;
+import org.odk.collect.shared.TempFiles;
 import org.odk.collect.testshared.RobolectricHelpers;
 import org.robolectric.android.controller.ActivityController;
 
@@ -478,6 +482,44 @@ public class ChoicesRecyclerViewTest {
         assertThat(getAudioVideoImageTextLabelView(0).getImageView().getVisibility(), is(View.GONE));
         assertThat(getAudioVideoImageTextLabelView(0).getVideoButton().getVisibility(), is(View.GONE));
         assertThat(getAudioVideoImageTextLabelView(0).getAudioButton().getVisibility(), is(View.GONE));
+    }
+
+    @Test
+    public void whenAChoiceWithoutAnImageReusesAView_shouldTheImageOfThePreviousChoiceBeHidden() throws InvalidReferenceException {
+        String imageURI = "jr://images/present.jpg";
+        List<SelectChoice> items = getTestChoices();
+        formEntryPrompt = new MockFormEntryPromptBuilder()
+                .withSelectChoices(items)
+                .withSpecialFormSelectChoiceText(asList(
+                        Pair.create(FormEntryCaption.TEXT_FORM_IMAGE, imageURI),
+                        Pair.create(FormEntryCaption.TEXT_FORM_IMAGE, null)
+                ))
+                .build();
+
+        Reference reference = mock(Reference.class);
+        when(reference.getLocalURI()).thenReturn(TempFiles.createTempFile(".jpg").getAbsolutePath());
+        when(referenceManager.deriveReference(imageURI)).thenReturn(reference);
+
+        AudioVideoImageTextLabel view = bindThenRebind(items);
+
+        assertThat(view.getImageView().getVisibility(), is(View.GONE));
+    }
+
+    /**
+     * Binds a view holder to one choice and then rebinds the same view to another, which is what the
+     * list does to a view that gets recycled while scrolling.
+     */
+    private AudioVideoImageTextLabel bindThenRebind(List<SelectChoice> items) {
+        SelectOneListAdapter adapter = new SelectOneListAdapter(null, null, activityController.get(),
+                items, formEntryPrompt, referenceManager, null, 0, 1, false, mock(MediaUtils.class));
+        initRecyclerView(adapter, false);
+
+        RecyclerView.Adapter recyclerViewAdapter = adapter;
+        RecyclerView.ViewHolder holder = recyclerViewAdapter.createViewHolder(recyclerView, recyclerViewAdapter.getItemViewType(0));
+        recyclerViewAdapter.bindViewHolder(holder, 0);
+        recyclerViewAdapter.bindViewHolder(holder, 1);
+
+        return (AudioVideoImageTextLabel) holder.itemView;
     }
 
     private void setUpReferenceManager() throws InvalidReferenceException {
