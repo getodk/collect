@@ -555,6 +555,33 @@ public class ChoicesRecyclerViewTest {
     }
 
     @Test
+    public void whenAChoiceWithAnImageReusesAView_shouldTheMissingImageMessageOfThePreviousChoiceBeHidden() throws InvalidReferenceException {
+        String missingImageURI = "jr://images/missing.jpg";
+        String imageURI = "jr://images/present.jpg";
+        List<SelectChoice> items = getTestChoices();
+        formEntryPrompt = new MockFormEntryPromptBuilder()
+                .withSelectChoices(items)
+                .withSpecialFormSelectChoiceText(asList(
+                        Pair.create(FormEntryCaption.TEXT_FORM_IMAGE, missingImageURI),
+                        Pair.create(FormEntryCaption.TEXT_FORM_IMAGE, imageURI)
+                ))
+                .build();
+
+        Reference missingReference = mock(Reference.class);
+        when(missingReference.getLocalURI()).thenReturn(new File(TempFiles.createTempDir(), "missing.jpg").getAbsolutePath());
+        when(referenceManager.deriveReference(missingImageURI)).thenReturn(missingReference);
+
+        Reference reference = mock(Reference.class);
+        when(reference.getLocalURI()).thenReturn(TempFiles.createTempFile(".jpg").getAbsolutePath());
+        when(referenceManager.deriveReference(imageURI)).thenReturn(reference);
+
+        AudioVideoImageTextLabel view = bindThenRebind(items);
+
+        assertThat(view.getMissingImage().getVisibility(), is(View.GONE));
+        assertThat(view.getImageView().getVisibility(), is(View.VISIBLE));
+    }
+
+    @Test
     public void whenAChoiceWithoutAudioReusesAView_shouldTheAudioButtonOfThePreviousChoiceBeHidden() throws InvalidReferenceException {
         String audioURI = "jr://audio/audio.mp3";
         List<SelectChoice> items = getTestChoices();
