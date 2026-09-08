@@ -15,6 +15,7 @@
 package org.odk.collect.android.widgets;
 
 import static org.odk.collect.android.formentry.media.FormMediaUtils.getClipID;
+import static org.odk.collect.android.formentry.media.FormMediaUtils.getMediaFile;
 import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayColor;
 import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayableAudioURI;
 import static org.odk.collect.android.injection.DaggerUtils.getComponent;
@@ -34,7 +35,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
-import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
@@ -59,12 +59,9 @@ import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.enums.GuidanceHintMode;
 import org.odk.collect.shared.settings.Settings;
 
-import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.inject.Inject;
-
-import timber.log.Timber;
 
 public abstract class QuestionWidget extends FrameLayout implements Widget {
 
@@ -192,22 +189,10 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
         String videoURI = formEntryPrompt.getSpecialFormQuestionText("video");
         String bigImageURI = formEntryPrompt.getSpecialFormQuestionText("big-image");
         String playableAudioURI = getPlayableAudioURI(formEntryPrompt, referenceManager);
-        try {
-            if (imageURI != null) {
-                audioVideoImageTextLabel.setImage(new File(referenceManager.deriveReference(imageURI).getLocalURI()), imageLoader);
-            }
-            if (bigImageURI != null) {
-                audioVideoImageTextLabel.setBigImage(new File(referenceManager.deriveReference(bigImageURI).getLocalURI()));
-            }
-            if (videoURI != null) {
-                audioVideoImageTextLabel.setVideo(new File(referenceManager.deriveReference(videoURI).getLocalURI()));
-            }
-            if (playableAudioURI != null) {
-                audioVideoImageTextLabel.setAudio(playableAudioURI, audioPlayer);
-            }
-        } catch (InvalidReferenceException e) {
-            Timber.d(e, "Invalid media reference due to %s ", e.getMessage());
-        }
+        audioVideoImageTextLabel.setImage(getMediaFile(imageURI, referenceManager), imageLoader);
+        audioVideoImageTextLabel.setBigImage(getMediaFile(bigImageURI, referenceManager));
+        audioVideoImageTextLabel.setVideo(getMediaFile(videoURI, referenceManager));
+        audioVideoImageTextLabel.setAudio(playableAudioURI, audioPlayer);
 
         audioVideoImageTextLabel.setPlayTextColor(getPlayColor(formEntryPrompt, themeUtils));
     }
