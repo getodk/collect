@@ -68,6 +68,7 @@ public class ChoicesRecyclerViewTest {
 
     private FormEntryPrompt formEntryPrompt;
     private ReferenceManager referenceManager;
+    private final MediaUtils mediaUtils = mock(MediaUtils.class);
 
     @Before
     public void setUp() throws InvalidReferenceException {
@@ -623,13 +624,44 @@ public class ChoicesRecyclerViewTest {
         assertThat(view.getVideoButton().getVisibility(), is(View.GONE));
     }
 
+    @Test
+    public void whenAChoiceWithoutABigImageReusesAView_shouldClickingItsImageNotOpenTheBigImageOfThePreviousChoice() throws InvalidReferenceException {
+        String imageURI = "jr://images/image.jpg";
+        String bigImageURI = "jr://images/big-image.jpg";
+        List<SelectChoice> items = getTestChoices();
+        formEntryPrompt = new MockFormEntryPromptBuilder()
+                .withSelectChoices(items)
+                .withSpecialFormSelectChoiceText(asList(
+                        Pair.create(FormEntryCaption.TEXT_FORM_IMAGE, imageURI),
+                        Pair.create(FormEntryCaption.TEXT_FORM_IMAGE, imageURI)
+                ))
+                .withSpecialFormSelectChoiceText(asList(
+                        Pair.create("big-image", bigImageURI),
+                        Pair.create("big-image", null)
+                ))
+                .build();
+
+        Reference reference = mock(Reference.class);
+        when(reference.getLocalURI()).thenReturn(TempFiles.createTempFile(".jpg").getAbsolutePath());
+        when(referenceManager.deriveReference(imageURI)).thenReturn(reference);
+
+        Reference bigImageReference = mock(Reference.class);
+        when(bigImageReference.getLocalURI()).thenReturn(TempFiles.createTempFile(".jpg").getAbsolutePath());
+        when(referenceManager.deriveReference(bigImageURI)).thenReturn(bigImageReference);
+
+        AudioVideoImageTextLabel view = bindThenRebind(items);
+        view.getImageView().performClick();
+
+        verify(mediaUtils, never()).openFile(any(), any(), any());
+    }
+
     /**
      * Binds a view holder to one choice and then rebinds the same view to another, which is what the
      * list does to a view that gets recycled while scrolling.
      */
     private AudioVideoImageTextLabel bindThenRebind(List<SelectChoice> items) {
         SelectOneListAdapter adapter = new SelectOneListAdapter(null, null, activityController.get(),
-                items, formEntryPrompt, referenceManager, new FakeAudioPlayer(), 0, 1, false, mock(MediaUtils.class));
+                items, formEntryPrompt, referenceManager, new FakeAudioPlayer(), 0, 1, false, mediaUtils);
         initRecyclerView(adapter, false);
 
         RecyclerView.Adapter recyclerViewAdapter = adapter;
