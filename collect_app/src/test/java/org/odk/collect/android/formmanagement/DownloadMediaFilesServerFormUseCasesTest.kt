@@ -53,17 +53,18 @@ class DownloadMediaFilesServerFormUseCasesTest {
                 .inputStream()
         }
 
+        val tempMediaPath = File(TempFiles.createTempDir(), "temp").absolutePath
         val result = ServerFormUseCases.downloadMediaFiles(
             serverFormDetails,
             formSource,
             formsRepository,
-            File(TempFiles.createTempDir(), "temp").absolutePath,
+            tempMediaPath,
             TempFiles.createTempDir(),
             InMemEntitiesRepository(),
             mock()
         )
 
-        assertThat(result, equalTo(MediaFilesDownload(false, emptyList())))
+        assertThat(result, equalTo(MediaFilesDownload(tempMediaPath, false, emptyList())))
     }
 
     @Test
@@ -96,17 +97,18 @@ class DownloadMediaFilesServerFormUseCasesTest {
                 .inputStream()
         }
 
+        val tempMediaPath = File(TempFiles.createTempDir(), "temp").absolutePath
         val result = ServerFormUseCases.downloadMediaFiles(
             serverFormDetails,
             formSource,
             formsRepository,
-            File(TempFiles.createTempDir(), "temp").absolutePath,
+            tempMediaPath,
             TempFiles.createTempDir(),
             InMemEntitiesRepository(),
             mock()
         )
 
-        assertThat(result, equalTo(MediaFilesDownload(false, emptyList())))
+        assertThat(result, equalTo(MediaFilesDownload(tempMediaPath, false, emptyList())))
     }
 
     @Test
