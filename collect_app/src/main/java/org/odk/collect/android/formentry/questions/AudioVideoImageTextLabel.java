@@ -38,6 +38,7 @@ import org.odk.collect.android.listeners.SelectItemClickListener;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.androidshared.system.ContextExt;
+import org.odk.collect.async.Cancellable;
 import org.odk.collect.audioclips.AudioPlayer;
 import org.odk.collect.audioclips.Clip;
 import org.odk.collect.imageloader.ImageLoader;
@@ -58,6 +59,7 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
     private File videoFile;
     private File bigImageFile;
     private MediaUtils mediaUtils;
+    private Cancellable playingChangedObserver;
 
     public AudioVideoImageTextLabel(Context context) {
         super(context);
@@ -98,6 +100,11 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
     }
 
     public void setAudio(@Nullable String audioURI, AudioPlayer audioPlayer) {
+        if (playingChangedObserver != null) {
+            playingChangedObserver.cancel();
+            playingChangedObserver = null;
+        }
+
         if (audioURI == null) {
             binding.audioButton.setVisibility(GONE);
             return;
@@ -106,7 +113,7 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
         String clipID = getTag() != null ? getTag().toString() : "";
 
         originalTextColor = textLabel.getTextColors().getDefaultColor();
-        audioPlayer.onPlayingChanged(clipID, isPlaying -> {
+        playingChangedObserver = audioPlayer.onPlayingChanged(clipID, isPlaying -> {
             binding.audioButton.setPlaying(isPlaying);
 
             if (isPlaying) {

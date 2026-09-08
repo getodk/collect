@@ -4,8 +4,10 @@ import android.media.MediaPlayer
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.androidshared.data.consume
+import org.odk.collect.async.Cancellable
 import org.odk.collect.async.Scheduler
 import org.odk.collect.audioclips.AudioClipViewModel
 import org.odk.collect.audioclips.AudioPlayer
@@ -33,9 +35,16 @@ class ViewModelAudioPlayer(
         viewModel.setPosition(clipId, position)
     }
 
-    override fun onPlayingChanged(clipID: String, playingConsumer: Consumer<Boolean>) {
-        viewModel.isPlaying(clipID).observe(lifecycleOwner) {
-            playingConsumer.accept(it)
+    override fun onPlayingChanged(clipID: String, playingConsumer: Consumer<Boolean>): Cancellable {
+        val isPlaying = viewModel.isPlaying(clipID)
+        val observer = Observer<Boolean> { playingConsumer.accept(it) }
+        isPlaying.observe(lifecycleOwner, observer)
+
+        return object : Cancellable {
+            override fun cancel(): Boolean {
+                isPlaying.removeObserver(observer)
+                return true
+            }
         }
     }
 

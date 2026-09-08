@@ -1,6 +1,7 @@
 package org.odk.collect.audioclips
 
 import androidx.lifecycle.LiveData
+import org.odk.collect.async.Cancellable
 import java.util.function.Consumer
 
 interface AudioPlayer {
@@ -12,7 +13,7 @@ interface AudioPlayer {
 
     fun setPosition(clipId: String, position: Int)
 
-    fun onPlayingChanged(clipID: String, playingConsumer: Consumer<Boolean>)
+    fun onPlayingChanged(clipID: String, playingConsumer: Consumer<Boolean>): Cancellable
 
     fun onPositionChanged(clipID: String, positionConsumer: Consumer<Int>)
 
