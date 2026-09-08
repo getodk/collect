@@ -27,7 +27,7 @@ class URIExtTest {
     }
 
     @Test
-    fun `#getQueryParameter returns the query is malformed with extra =`() {
+    fun `#getQueryParameter returns null when the query is malformed with extra =`() {
         val uri = URI("https://example.com/blah?id=123=123")
         assertThat(uri.getQueryParameter("id"), equalTo(null))
     }
