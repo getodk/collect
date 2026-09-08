@@ -229,7 +229,10 @@ public class ServerFormDownloader implements FormDownloader {
         } else {
             String md5Hash = Md5.getMd5Hash(formFileDownload.file);
             if (md5Hash != null) {
-                formsRepository.deleteByMd5Hash(md5Hash);
+                Form form = formsRepository.getOneByMd5Hash(md5Hash);
+                if (form != null) {
+                    formsRepository.delete(form.getDbId());
+                }
             }
             FileUtils.deleteAndReport(formFileDownload.getFile());
         }

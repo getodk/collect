@@ -360,36 +360,6 @@ public abstract class FormsRepositoryTest {
         assertThat(savepointsRepository.getAll().isEmpty(), equalTo(true));
     }
 
-    @Test
-    public void deleteByMd5Hash_deletesFormsWithMatchingHash() {
-        FormsRepository formsRepository = buildSubject();
-        formsRepository.save(FormUtils.buildForm("id1", "version", getFormFilesPath(), createXFormBody("id1", "version", "Form1")).build());
-        formsRepository.save(FormUtils.buildForm("id2", "version", getFormFilesPath(), createXFormBody("id2", "version", "Form2")).build());
-
-        List<Form> id1Forms = formsRepository.getAllByFormIdAndVersion("id1", "version");
-        formsRepository.deleteByMd5Hash(id1Forms.get(0).getMD5Hash());
-
-        assertThat(formsRepository.getAll().size(), is(1));
-        assertThat(formsRepository.getAll().get(0).getFormId(), is("id2"));
-    }
-
-    @Test
-    public void deleteByMd5Hash_deletesTheSavepointThatBelongsToTheFormThatShouldBeDeleted() {
-        FormsRepository formsRepository = buildSubject();
-        Form form1 = formsRepository.save(FormUtils.buildForm("id1", "version", getFormFilesPath(), createXFormBody("id1", "version", "Form1")).build());
-        Form form2 = formsRepository.save(FormUtils.buildForm("id2", "version", getFormFilesPath(), createXFormBody("id2", "version", "Form2")).build());
-
-        Savepoint savepoint1 = new Savepoint(form1.getDbId(), null, "", "");
-        Savepoint savepoint2 = new Savepoint(form2.getDbId(), null, "", "");
-        savepointsRepository.save(savepoint1);
-        savepointsRepository.save(savepoint2);
-
-        List<Form> id1Forms = formsRepository.getAllByFormIdAndVersion("id1", "version");
-        formsRepository.deleteByMd5Hash(id1Forms.get(0).getMD5Hash());
-
-        assertThat(savepointsRepository.getAll(), contains(savepoint2));
-    }
-
     @Test(expected = Exception.class)
     public void getOneByMd5Hash_whenHashIsNull_explodes() {
         buildSubject().getOneByMd5Hash(null);

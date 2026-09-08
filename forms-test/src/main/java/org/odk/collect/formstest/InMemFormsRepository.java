@@ -178,15 +178,6 @@ public class InMemFormsRepository implements FormsRepository {
     }
 
     @Override
-    public void deleteByMd5Hash(@NotNull String md5Hash) {
-        Form form = forms.stream().filter(f -> f.getMD5Hash().equals(md5Hash)).findFirst().orElse(null);
-        if (form != null) {
-            forms.remove(form);
-            savepointsRepository.delete(form.getDbId(), null);
-        }
-    }
-
-    @Override
     public void deleteAll() {
         for (Form form : forms) {
             deleteFilesForForm(form);
