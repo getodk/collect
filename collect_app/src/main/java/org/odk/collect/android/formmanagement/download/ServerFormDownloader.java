@@ -33,6 +33,7 @@ import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
+import kotlin.Pair;
 import timber.log.Timber;
 
 public class ServerFormDownloader implements FormDownloader {
@@ -80,7 +81,16 @@ public class ServerFormDownloader implements FormDownloader {
 
         try {
             OngoingWorkListener stateListener = new ProgressReporterAndSupplierStateListener(progressReporter, isCancelled);
-            processOneForm(form, stateListener, tempDir, formsDirPath, formMetadataParser);
+            Pair<FormFileDownload, MediaFilesDownload> result = processOneForm(form, stateListener, tempDir, formsDirPath);
+            FormFileDownload formFileDownload = result.getFirst();
+            MediaFilesDownload mediaFilesDownload = result.getSecond();
+
+            try {
+                installEverything(formFileDownload, mediaFilesDownload, formsDirPath);
+            } catch (FormDownloadException.DiskError e) {
+                cleanUp(formFileDownload, mediaFilesDownload.getTempDirPath());
+                throw e;
+            }
         } catch (FormSourceException e) {
             throw new FormDownloadException.FormSourceError(e);
         } finally {
@@ -91,66 +101,39 @@ public class ServerFormDownloader implements FormDownloader {
         }
     }
 
-    private void processOneForm(ServerFormDetails fd, OngoingWorkListener stateListener, File tempDir, String formsDirPath, FormMetadataParser formMetadataParser) throws FormDownloadException, FormSourceException {
+    private Pair<FormFileDownload, MediaFilesDownload> processOneForm(ServerFormDetails fd, OngoingWorkListener stateListener, File tempDir, String formsDirPath) throws FormDownloadException, FormSourceException {
         // use a temporary media path until everything is ok.
         String tempMediaPath = new File(tempDir, "media").getAbsolutePath();
-        FileResult fileResult = null;
+        FormFileDownload formFileDownload = null;
         MediaFilesDownload mediaFilesDownload;
 
         try {
             // get the xml file
             // if we've downloaded a duplicate, this gives us the file
-            fileResult = downloadXform(fd.getFormName(), fd.getDownloadUrl(), stateListener, tempDir, formsDirPath);
+            formFileDownload = downloadXform(fd.getFormName(), fd.getDownloadUrl(), stateListener, tempDir, formsDirPath);
 
             // download media files if there are any
             if (fd.getManifest() != null && !fd.getManifest().getMediaFiles().isEmpty()) {
                 mediaFilesDownload = ServerFormUseCases.downloadMediaFiles(fd, formSource, formsRepository, tempMediaPath, tempDir, entitiesRepository, stateListener);
             } else {
-                mediaFilesDownload = new MediaFilesDownload(false, emptyList());
+                mediaFilesDownload = new MediaFilesDownload(tempMediaPath, false, emptyList());
             }
 
             ServerFormUseCases.copySavedFileFromPreviousFormVersionIfExists(formsRepository, fd.getFormId(), tempMediaPath);
         } catch (FormDownloadException.DownloadingInterrupted | InterruptedException e) {
             Timber.i(e);
-            cleanUp(fileResult, tempMediaPath);
+            cleanUp(formFileDownload, tempMediaPath);
             throw new FormDownloadException.DownloadingInterrupted();
         } catch (IOException e) {
             throw new FormDownloadException.DiskError();
         }
 
         if (stateListener != null && stateListener.isCancelled()) {
-            cleanUp(fileResult, tempMediaPath);
+            cleanUp(formFileDownload, tempMediaPath);
             throw new FormDownloadException.DownloadingInterrupted();
         }
 
-        FormMetadata formMetadata = null;
-        if (fileResult.isNew) {
-            try {
-                final long start = System.currentTimeMillis();
-                Timber.i("Parsing document %s", fileResult.file.getAbsolutePath());
-
-                formMetadata = formMetadataParser.readMetadata(fileResult.file);
-
-                Timber.i("Parse finished in %.3f seconds.", (System.currentTimeMillis() - start) / 1000F);
-            } catch (RuntimeException e) {
-                throw new FormDownloadException.FormParsingError(e);
-            }
-        }
-
-        if (stateListener != null && stateListener.isCancelled()) {
-            throw new FormDownloadException.DownloadingInterrupted();
-        }
-
-        if (fileResult.isNew && !isSubmissionOk(formMetadata)) {
-            throw new FormDownloadException.InvalidSubmission();
-        }
-
-        try {
-            installEverything(tempMediaPath, fileResult, formMetadata, formsDirPath, mediaFilesDownload);
-        } catch (FormDownloadException.DiskError e) {
-            cleanUp(fileResult, tempMediaPath);
-            throw e;
-        }
+        return new Pair<>(formFileDownload, mediaFilesDownload);
     }
 
     private boolean isSubmissionOk(FormMetadata formMetadata) {
@@ -158,17 +141,35 @@ public class ServerFormDownloader implements FormDownloader {
         return submission == null || Validator.isUrlValid(submission);
     }
 
-    private void installEverything(String tempMediaPath, FileResult fileResult, FormMetadata formMetadata, String formsDirPath, MediaFilesDownload mediaFilesDownload) throws FormDownloadException.DiskError {
+    private void installEverything(FormFileDownload formFileDownload, MediaFilesDownload mediaFilesDownload, String formsDirPath) throws FormDownloadException.DiskError, FormDownloadException.FormParsingError, FormDownloadException.DownloadingInterrupted, FormDownloadException.InvalidSubmission {
+        FormMetadata formMetadata = null;
+        if (formFileDownload.isNew) {
+            try {
+                final long start = System.currentTimeMillis();
+                Timber.i("Parsing document %s", formFileDownload.file.getAbsolutePath());
+
+                formMetadata = formMetadataParser.readMetadata(formFileDownload.file);
+
+                Timber.i("Parse finished in %.3f seconds.", (System.currentTimeMillis() - start) / 1000F);
+            } catch (RuntimeException e) {
+                throw new FormDownloadException.FormParsingError(e);
+            }
+        }
+
+        if (formFileDownload.isNew && !isSubmissionOk(formMetadata)) {
+            throw new FormDownloadException.InvalidSubmission();
+        }
+
         FormResult formResult;
 
         File formFile;
 
-        if (fileResult.isNew()) {
+        if (formFileDownload.isNew()) {
             // Copy form to forms dir
-            formFile = new File(formsDirPath, fileResult.file.getName());
-            FileUtils.copyFile(fileResult.file, formFile);
+            formFile = new File(formsDirPath, formFileDownload.file.getName());
+            FileUtils.copyFile(formFileDownload.file, formFile);
         } else {
-            formFile = fileResult.file;
+            formFile = formFileDownload.file;
 
             if (mediaFilesDownload.getNewAttachmentsDownloaded()) {
                 Form existingForm = formsRepository.getOneByPath(formFile.getAbsolutePath());
@@ -203,6 +204,7 @@ public class ServerFormDownloader implements FormDownloader {
         );
 
         // move the media files in the media folder
+        String tempMediaPath = mediaFilesDownload.getTempDirPath();
         if (tempMediaPath != null) {
             File formMediaDir = new File(formResult.getForm().getFormMediaPath());
 
@@ -211,7 +213,7 @@ public class ServerFormDownloader implements FormDownloader {
             } catch (IOException e) {
                 Timber.e(e);
 
-                if (formResult.isNew() && fileResult.isNew()) {
+                if (formResult.isNew() && formFileDownload.isNew()) {
                     // this means we should delete the entire form together with the metadata
                     formsRepository.delete(formResult.getForm().getDbId());
                 }
@@ -221,15 +223,15 @@ public class ServerFormDownloader implements FormDownloader {
         }
     }
 
-    private void cleanUp(FileResult fileResult, String tempMediaPath) {
-        if (fileResult == null) {
+    private void cleanUp(FormFileDownload formFileDownload, String tempMediaPath) {
+        if (formFileDownload == null) {
             Timber.d("The user cancelled (or an exception happened) the download of a form at the very beginning.");
         } else {
-            String md5Hash = Md5.getMd5Hash(fileResult.file);
+            String md5Hash = Md5.getMd5Hash(formFileDownload.file);
             if (md5Hash != null) {
                 formsRepository.deleteByMd5Hash(md5Hash);
             }
-            FileUtils.deleteAndReport(fileResult.getFile());
+            FileUtils.deleteAndReport(formFileDownload.getFile());
         }
 
         if (tempMediaPath != null) {
@@ -273,7 +275,7 @@ public class ServerFormDownloader implements FormDownloader {
      * Takes the formName and the URL and attempts to download the specified file. Returns a file
      * object representing the downloaded file.
      */
-    private FileResult downloadXform(String formName, String url, OngoingWorkListener stateListener, File tempDir, String formsDirPath) throws FormSourceException, IOException, FormDownloadException.DownloadingInterrupted, InterruptedException {
+    private FormFileDownload downloadXform(String formName, String url, OngoingWorkListener stateListener, File tempDir, String formsDirPath) throws FormSourceException, IOException, FormDownloadException.DownloadingInterrupted, InterruptedException {
         InputStream xform = formSource.fetchForm(url);
 
         String fileName = getFormFileName(formName, formsDirPath);
@@ -288,9 +290,9 @@ public class ServerFormDownloader implements FormDownloader {
             FileUtils.deleteAndReport(tempFormFile);
 
             // set the file returned to the file we already had
-            return new FileResult(new File(form.getFormFilePath()), false);
+            return new FormFileDownload(new File(form.getFormFilePath()), false);
         } else {
-            return new FileResult(tempFormFile, true);
+            return new FormFileDownload(tempFormFile, true);
         }
     }
 
@@ -327,12 +329,12 @@ public class ServerFormDownloader implements FormDownloader {
         }
     }
 
-    private static class FileResult {
+    private static class FormFileDownload {
 
         private final File file;
         private final boolean isNew;
 
-        FileResult(File file, boolean isNew) {
+        FormFileDownload(File file, boolean isNew) {
             this.file = file;
             this.isNew = isNew;
         }

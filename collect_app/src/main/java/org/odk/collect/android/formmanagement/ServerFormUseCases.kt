@@ -213,7 +213,7 @@ object ServerFormUseCases {
             }
         }
 
-        return MediaFilesDownload(newAttachmentsDownloaded, entityLists)
+        return MediaFilesDownload(tempMediaPath, newAttachmentsDownloaded, entityLists)
     }
 
     @JvmStatic
@@ -342,6 +342,7 @@ object ServerFormUseCases {
 }
 
 data class MediaFilesDownload(
+    val tempDirPath: String,
     val newAttachmentsDownloaded: Boolean,
     val entityLists: List<EntityListDownload>
 ) {
