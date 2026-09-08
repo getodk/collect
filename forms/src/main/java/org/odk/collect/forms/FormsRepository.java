@@ -35,8 +35,6 @@ public interface FormsRepository {
 
     void softDelete(Long id);
 
-    void deleteByMd5Hash(@NotNull String md5Hash);
-
     void deleteAll();
 
     void restore(Long id);
