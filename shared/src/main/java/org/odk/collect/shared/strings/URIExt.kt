@@ -9,11 +9,15 @@ fun URI.getQueryParameter(param: String): String? {
         query
             .split("&")
             .mapNotNull {
-                val split = it.split("=")
-                if (split.size == 2) {
-                    split[0] to split[1]
+                val matchResult = "([^=]+)=(.*)$".toRegex().find(it)
+                if (matchResult != null) {
+                    val groups = matchResult.groupValues.drop(1)
+                    when (groups.size) {
+                        2 -> groups[0] to groups[1]
+                        else -> null
+                    }
                 } else {
-                    null
+                    it to ""
                 }
             }
             .toMap()[param]

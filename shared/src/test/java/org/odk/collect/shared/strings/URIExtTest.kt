@@ -28,7 +28,19 @@ class URIExtTest {
 
     @Test
     fun `#getQueryParameter returns null when the query is malformed with extra =`() {
-        val uri = URI("https://example.com/blah?id=123=123")
-        assertThat(uri.getQueryParameter("id"), equalTo(null))
+        val uri = URI("https://example.com?id=a=b")
+        assertThat(uri.getQueryParameter("id"), equalTo("a=b"))
+    }
+
+    @Test
+    fun `#getQueryParameter returns first value when the parameter is used more than once`() {
+        val uri = URI("https://example.com?id=1&id=2")
+        assertThat(uri.getQueryParameter("id"), equalTo("2"))
+    }
+
+    @Test
+    fun `#getQueryParameter returns empty string when there is no value`() {
+        val uri = URI("https://example.com?id")
+        assertThat(uri.getQueryParameter("id"), equalTo(""))
     }
 }
