@@ -28,7 +28,6 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.odk.collect.android.R;
@@ -156,7 +155,7 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
         }
     }
 
-    public void setBigImage(@NonNull File bigImageFile) {
+    public void setBigImage(@Nullable File bigImageFile) {
         this.bigImageFile = bigImageFile;
     }
 

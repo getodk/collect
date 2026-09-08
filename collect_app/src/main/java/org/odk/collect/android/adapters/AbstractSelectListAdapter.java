@@ -239,9 +239,9 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
                 audioVideoImageTextLabel.setImage(imageURI == null
                         ? null
                         : new File(referenceManager.deriveReference(imageURI).getLocalURI()), new GlideImageLoader());
-                if (bigImageURI != null) {
-                    audioVideoImageTextLabel.setBigImage(new File(referenceManager.deriveReference(bigImageURI).getLocalURI()));
-                }
+                audioVideoImageTextLabel.setBigImage(bigImageURI == null
+                        ? null
+                        : new File(referenceManager.deriveReference(bigImageURI).getLocalURI()));
                 audioVideoImageTextLabel.setVideo(videoURI == null
                         ? null
                         : new File(referenceManager.deriveReference(videoURI).getLocalURI()));
