@@ -30,12 +30,14 @@ public class NoButtonsItem extends FrameLayout {
         if (imageFile != null && imageFile.exists()) {
             ImageViewUtils.resetSizeForNewImage(binding.imageView);
             binding.imageView.setVisibility(View.VISIBLE);
+            binding.label.setVisibility(View.GONE);
             if (isInGridView) {
                 imageLoader.loadImage(binding.imageView, imageFile, ImageView.ScaleType.FIT_CENTER, null);
             } else {
                 imageLoader.loadImage(binding.imageView, imageFile, ImageView.ScaleType.CENTER_INSIDE, null);
             }
         } else {
+            binding.imageView.setVisibility(View.GONE);
             binding.label.setVisibility(View.VISIBLE);
             binding.label.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionFontSizeUtils.getQuestionFontSize());
             binding.label.setText(choiceText == null || choiceText.isEmpty() ? errorMsg : choiceText);
