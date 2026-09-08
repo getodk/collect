@@ -80,19 +80,24 @@ public class ServerFormDownloader implements FormDownloader {
         tempDir.mkdirs();
 
         try {
-            OngoingWorkListener stateListener = new ProgressReporterAndSupplierStateListener(progressReporter, isCancelled);
-            Pair<FormFileDownload, MediaFilesDownload> result = processOneForm(form, stateListener, tempDir, formsDirPath);
-            FormFileDownload formFileDownload = result.getFirst();
-            MediaFilesDownload mediaFilesDownload = result.getSecond();
+            FormFileDownload formFileDownload;
+            MediaFilesDownload mediaFilesDownload;
+
+            try {
+                OngoingWorkListener stateListener = new ProgressReporterAndSupplierStateListener(progressReporter, isCancelled);
+                Pair<FormFileDownload, MediaFilesDownload> result = processOneForm(form, stateListener, tempDir, formsDirPath);
+                formFileDownload = result.getFirst();
+                mediaFilesDownload = result.getSecond();
+            } catch (FormSourceException e) {
+                throw new FormDownloadException.FormSourceError(e);
+            }
 
             try {
                 installEverything(formFileDownload, mediaFilesDownload, formsDirPath);
-            } catch (FormDownloadException.DiskError e) {
+            } catch (Exception e) {
                 cleanUp(formFileDownload, mediaFilesDownload.getTempDirPath());
                 throw e;
             }
-        } catch (FormSourceException e) {
-            throw new FormDownloadException.FormSourceError(e);
         } finally {
             FileExt.deleteDirectory(tempDir);
             for (Form formToDelete : preExistingFormsWithSameIdAndVersion) {
@@ -141,7 +146,7 @@ public class ServerFormDownloader implements FormDownloader {
         return submission == null || Validator.isUrlValid(submission);
     }
 
-    private void installEverything(FormFileDownload formFileDownload, MediaFilesDownload mediaFilesDownload, String formsDirPath) throws FormDownloadException.DiskError, FormDownloadException.FormParsingError, FormDownloadException.DownloadingInterrupted, FormDownloadException.InvalidSubmission {
+    private void installEverything(FormFileDownload formFileDownload, MediaFilesDownload mediaFilesDownload, String formsDirPath) throws FormDownloadException.DiskError, FormDownloadException.FormParsingError, FormDownloadException.InvalidSubmission {
         FormMetadata formMetadata = null;
         if (formFileDownload.isNew) {
             try {
