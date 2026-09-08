@@ -205,21 +205,12 @@ public class ServerFormDownloader implements FormDownloader {
 
         // move the media files in the media folder
         String tempMediaPath = mediaFilesDownload.getTempDirPath();
-        if (tempMediaPath != null) {
-            File formMediaDir = new File(formResult.getForm().getFormMediaPath());
-
-            try {
-                moveMediaFiles(tempMediaPath, formMediaDir);
-            } catch (IOException e) {
-                Timber.e(e);
-
-                if (formResult.isNew() && formFileDownload.isNew()) {
-                    // this means we should delete the entire form together with the metadata
-                    formsRepository.delete(formResult.getForm().getDbId());
-                }
-
-                throw new FormDownloadException.DiskError();
-            }
+        File formMediaDir = new File(formResult.getForm().getFormMediaPath());
+        try {
+            moveMediaFiles(tempMediaPath, formMediaDir);
+        } catch (IOException e) {
+            Timber.e(e);
+            throw new FormDownloadException.DiskError();
         }
     }
 
