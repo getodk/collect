@@ -489,9 +489,10 @@ public class ChoicesRecyclerViewTest {
     @Test
     public void whenAChoiceWithoutAnImageReusesAView_shouldTheImageOfThePreviousChoiceBeHidden() throws InvalidReferenceException {
         String imageURI = "jr://images/present.jpg";
-        List<SelectChoice> items = getTestChoices();
+        SelectChoice firstChoice = new SelectChoice("AAA", "AAA");
+        SelectChoice secondChoice = new SelectChoice("BBB", "BBB");
         formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withSelectChoices(items)
+                .withSelectChoices(asList(firstChoice, secondChoice))
                 .withSpecialFormSelectChoiceText(asList(
                         Pair.create(FormEntryCaption.TEXT_FORM_IMAGE, imageURI),
                         Pair.create(FormEntryCaption.TEXT_FORM_IMAGE, null)
@@ -500,7 +501,7 @@ public class ChoicesRecyclerViewTest {
 
         CollectHelpers.createFakeReference(referenceManager, imageURI, TempFiles.createTempFile(".jpg").getAbsolutePath());
 
-        AudioVideoImageTextLabel view = bindThenRebind(items);
+        AudioVideoImageTextLabel view = bindThenRebind(firstChoice, secondChoice);
 
         assertThat(view.getImageView().getVisibility(), is(View.GONE));
     }
@@ -508,9 +509,10 @@ public class ChoicesRecyclerViewTest {
     @Test
     public void whenAChoiceWithoutAnImageReusesAView_shouldTheMissingImageMessageOfThePreviousChoiceBeHidden() throws InvalidReferenceException {
         String missingImageURI = "jr://images/missing.jpg";
-        List<SelectChoice> items = getTestChoices();
+        SelectChoice firstChoice = new SelectChoice("AAA", "AAA");
+        SelectChoice secondChoice = new SelectChoice("BBB", "BBB");
         formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withSelectChoices(items)
+                .withSelectChoices(asList(firstChoice, secondChoice))
                 .withSpecialFormSelectChoiceText(asList(
                         Pair.create(FormEntryCaption.TEXT_FORM_IMAGE, missingImageURI),
                         Pair.create(FormEntryCaption.TEXT_FORM_IMAGE, null)
@@ -519,7 +521,7 @@ public class ChoicesRecyclerViewTest {
 
         CollectHelpers.createFakeReference(referenceManager, missingImageURI, new File(TempFiles.createTempDir(), "missing.jpg").getAbsolutePath());
 
-        AudioVideoImageTextLabel view = bindThenRebind(items);
+        AudioVideoImageTextLabel view = bindThenRebind(firstChoice, secondChoice);
 
         assertThat(view.getMissingImage().getVisibility(), is(View.GONE));
     }
@@ -528,9 +530,10 @@ public class ChoicesRecyclerViewTest {
     public void whenAChoiceWithAMissingImageReusesAView_shouldTheImageOfThePreviousChoiceBeHidden() throws InvalidReferenceException {
         String imageURI = "jr://images/present.jpg";
         String missingImageURI = "jr://images/missing.jpg";
-        List<SelectChoice> items = getTestChoices();
+        SelectChoice firstChoice = new SelectChoice("AAA", "AAA");
+        SelectChoice secondChoice = new SelectChoice("BBB", "BBB");
         formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withSelectChoices(items)
+                .withSelectChoices(asList(firstChoice, secondChoice))
                 .withSpecialFormSelectChoiceText(asList(
                         Pair.create(FormEntryCaption.TEXT_FORM_IMAGE, imageURI),
                         Pair.create(FormEntryCaption.TEXT_FORM_IMAGE, missingImageURI)
@@ -540,7 +543,7 @@ public class ChoicesRecyclerViewTest {
         CollectHelpers.createFakeReference(referenceManager, imageURI, TempFiles.createTempFile(".jpg").getAbsolutePath());
         CollectHelpers.createFakeReference(referenceManager, missingImageURI, new File(TempFiles.createTempDir(), "missing.jpg").getAbsolutePath());
 
-        AudioVideoImageTextLabel view = bindThenRebind(items);
+        AudioVideoImageTextLabel view = bindThenRebind(firstChoice, secondChoice);
 
         assertThat(view.getImageView().getVisibility(), is(View.GONE));
         assertThat(view.getMissingImage().getVisibility(), is(View.VISIBLE));
@@ -550,9 +553,10 @@ public class ChoicesRecyclerViewTest {
     public void whenAChoiceWithAnImageReusesAView_shouldTheMissingImageMessageOfThePreviousChoiceBeHidden() throws InvalidReferenceException {
         String missingImageURI = "jr://images/missing.jpg";
         String imageURI = "jr://images/present.jpg";
-        List<SelectChoice> items = getTestChoices();
+        SelectChoice firstChoice = new SelectChoice("AAA", "AAA");
+        SelectChoice secondChoice = new SelectChoice("BBB", "BBB");
         formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withSelectChoices(items)
+                .withSelectChoices(asList(firstChoice, secondChoice))
                 .withSpecialFormSelectChoiceText(asList(
                         Pair.create(FormEntryCaption.TEXT_FORM_IMAGE, missingImageURI),
                         Pair.create(FormEntryCaption.TEXT_FORM_IMAGE, imageURI)
@@ -562,7 +566,7 @@ public class ChoicesRecyclerViewTest {
         CollectHelpers.createFakeReference(referenceManager, missingImageURI, new File(TempFiles.createTempDir(), "missing.jpg").getAbsolutePath());
         CollectHelpers.createFakeReference(referenceManager, imageURI, TempFiles.createTempFile(".jpg").getAbsolutePath());
 
-        AudioVideoImageTextLabel view = bindThenRebind(items);
+        AudioVideoImageTextLabel view = bindThenRebind(firstChoice, secondChoice);
 
         assertThat(view.getMissingImage().getVisibility(), is(View.GONE));
         assertThat(view.getImageView().getVisibility(), is(View.VISIBLE));
@@ -571,9 +575,10 @@ public class ChoicesRecyclerViewTest {
     @Test
     public void whenAChoiceWithoutAudioReusesAView_shouldTheAudioButtonOfThePreviousChoiceBeHidden() throws InvalidReferenceException {
         String audioURI = "jr://audio/audio.mp3";
-        List<SelectChoice> items = getTestChoices();
+        SelectChoice firstChoice = new SelectChoice("AAA", "AAA");
+        SelectChoice secondChoice = new SelectChoice("BBB", "BBB");
         formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withSelectChoices(items)
+                .withSelectChoices(asList(firstChoice, secondChoice))
                 .withSpecialFormSelectChoiceText(asList(
                         Pair.create(FormEntryCaption.TEXT_FORM_AUDIO, audioURI),
                         Pair.create(FormEntryCaption.TEXT_FORM_AUDIO, null)
@@ -582,7 +587,7 @@ public class ChoicesRecyclerViewTest {
 
         CollectHelpers.createFakeReference(referenceManager, audioURI, TempFiles.createTempFile(".mp3").getAbsolutePath());
 
-        AudioVideoImageTextLabel view = bindThenRebind(items);
+        AudioVideoImageTextLabel view = bindThenRebind(firstChoice, secondChoice);
 
         assertThat(view.getAudioButton().getVisibility(), is(View.GONE));
     }
@@ -590,9 +595,10 @@ public class ChoicesRecyclerViewTest {
     @Test
     public void whenAChoiceWithoutAVideoReusesAView_shouldTheVideoButtonOfThePreviousChoiceBeHidden() throws InvalidReferenceException {
         String videoURI = "jr://video/video.mp4";
-        List<SelectChoice> items = getTestChoices();
+        SelectChoice firstChoice = new SelectChoice("AAA", "AAA");
+        SelectChoice secondChoice = new SelectChoice("BBB", "BBB");
         formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withSelectChoices(items)
+                .withSelectChoices(asList(firstChoice, secondChoice))
                 .withSpecialFormSelectChoiceText(asList(
                         Pair.create("video", videoURI),
                         Pair.create("video", null)
@@ -601,7 +607,7 @@ public class ChoicesRecyclerViewTest {
 
         CollectHelpers.createFakeReference(referenceManager, videoURI, TempFiles.createTempFile(".mp4").getAbsolutePath());
 
-        AudioVideoImageTextLabel view = bindThenRebind(items);
+        AudioVideoImageTextLabel view = bindThenRebind(firstChoice, secondChoice);
 
         assertThat(view.getVideoButton().getVisibility(), is(View.GONE));
     }
@@ -610,9 +616,10 @@ public class ChoicesRecyclerViewTest {
     public void whenAChoiceWithoutABigImageReusesAView_shouldClickingItsImageNotOpenTheBigImageOfThePreviousChoice() throws InvalidReferenceException {
         String imageURI = "jr://images/image.jpg";
         String bigImageURI = "jr://images/big-image.jpg";
-        List<SelectChoice> items = getTestChoices();
+        SelectChoice firstChoice = new SelectChoice("AAA", "AAA");
+        SelectChoice secondChoice = new SelectChoice("BBB", "BBB");
         formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withSelectChoices(items)
+                .withSelectChoices(asList(firstChoice, secondChoice))
                 .withSpecialFormSelectChoiceText(asList(
                         Pair.create(FormEntryCaption.TEXT_FORM_IMAGE, imageURI),
                         Pair.create(FormEntryCaption.TEXT_FORM_IMAGE, imageURI)
@@ -626,7 +633,7 @@ public class ChoicesRecyclerViewTest {
         CollectHelpers.createFakeReference(referenceManager, imageURI, TempFiles.createTempFile(".jpg").getAbsolutePath());
         CollectHelpers.createFakeReference(referenceManager, bigImageURI, TempFiles.createTempFile(".jpg").getAbsolutePath());
 
-        AudioVideoImageTextLabel view = bindThenRebind(items);
+        AudioVideoImageTextLabel view = bindThenRebind(firstChoice, secondChoice);
         view.getImageView().performClick();
 
         verify(mediaUtils, never()).openFile(any(), any(), any());
@@ -636,9 +643,9 @@ public class ChoicesRecyclerViewTest {
      * Binds a view holder to one choice and then rebinds the same view to another, which is what the
      * list does to a view that gets recycled while scrolling.
      */
-    private AudioVideoImageTextLabel bindThenRebind(List<SelectChoice> items) {
+    private AudioVideoImageTextLabel bindThenRebind(SelectChoice firstChoice, SelectChoice secondChoice) {
         SelectOneListAdapter adapter = new SelectOneListAdapter(null, null, activityController.get(),
-                items, formEntryPrompt, referenceManager, new FakeAudioPlayer(), 0, 1, false, mediaUtils);
+                asList(firstChoice, secondChoice), formEntryPrompt, referenceManager, new FakeAudioPlayer(), 0, 1, false, mediaUtils);
         initRecyclerView(adapter, false);
 
         RecyclerView.Adapter recyclerViewAdapter = adapter;
