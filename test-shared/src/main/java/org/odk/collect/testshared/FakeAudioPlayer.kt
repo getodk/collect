@@ -53,7 +53,7 @@ class FakeAudioPlayer : AudioPlayer {
         }
     }
 
-    fun isListeningTo(clipID: String): Boolean {
+    fun isBeingObserved(clipID: String): Boolean {
         return playingChangedListeners.containsKey(clipID)
     }
 
