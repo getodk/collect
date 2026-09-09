@@ -32,12 +32,12 @@ Maintainers keep a folder with a clean checkout of the code and use [jenv.be](ht
 
 - [ ] update translations
 - [ ] make sure CI is green for the chosen commit
-- [ ] run `./gradlew releaseCheck`
-- [ ] verify a basic "happy path": scan a QR code to configure a new project, get a blank form, fill it, open the form map (confirms that the Google Maps key is correct), send form
-- [ ] verify new APK can be installed as update to previous version and that above "happy path" works in that case also
 - [ ] run `./benchmark.sh` with a real device connected to verify performance
-    - To run benchmarks a project will need to be set up in Central with the benchmark forms and app users. The forms and entities needed for that are available [here](https://drive.google.com/drive/folders/1dPLvDY0LhVX-5qTUEs6EDoraDnLpUS0g?usp=drive_link).
-- [ ] create and publish scheduled forum post with release description
+  - To run benchmarks a project will need to be set up in Central with the benchmark forms and app users. The forms and entities needed for that are available [here](https://drive.google.com/drive/folders/1dPLvDY0LhVX-5qTUEs6EDoraDnLpUS0g?usp=drive_link).
+- [ ] run `./gradlew testLab` (CI doesn't run these tests)
+- [ ] run `./gradlew assembleOdkCollectRelease`
+- [ ] verify a basic "happy path": scan a QR code to configure a new project, get a blank form, fill it, open the form map (confirms that the Google Maps key is correct), send form
+- [ ] verify new APK can be installed as update to previous version and that above "happy path" works in that case also- [ ] create and publish scheduled forum post with release description
 - [ ] write Play Store release notes, include link to forum post
 - [ ] Tag the commit for the release (`vX.X.0`)
 - [ ] Run `./create-release.sh <last release version code> <release tag>`
