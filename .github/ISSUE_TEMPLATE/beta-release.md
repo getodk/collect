@@ -1,7 +1,7 @@
 ---
 name: Beta release
 about: Checklist for publishing a new beta release
-title: '🚢 vXXXX.X.0-beta.X'
+title: '🚢 `vXXXX.X.0-beta.X`'
 labels: ''
 assignees: ''
 ---
@@ -31,7 +31,8 @@ Maintainers keep a folder with a clean checkout of the code and use [jenv.be](ht
 ## Checklist
 
 - [ ] make sure CI is green for the chosen commit
-- [ ] run `./gradlew releaseCheck`
+- [ ] run `./gradlew testLab` (CI doesn't run these tests)
+- [ ] run `./gradlew assembleOdkCollectRelease`
 - [ ] verify a basic "happy path": scan a QR code to configure a new project, get a blank form, fill it, open the form map (confirms that the Google Maps key is correct), send form
 - [ ] verify new APK can be installed as update to previous version and that above "happy path" works in that case also
 - [ ] create and publish scheduled forum post with release description

@@ -126,7 +126,3 @@ tasks.register<Exec>("testLab") {
         "--test-targets", "notPackage org.odk.collect.android.benchmark"
     )
 }
-
-tasks.register("releaseCheck") {
-    dependsOn("testLab", "collect_app:assembleOdkCollectRelease")
-}
