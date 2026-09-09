@@ -190,6 +190,7 @@ class MapLibreMapFragment(private val configuration: Configuration) :
         map.uiSettings.apply {
             compassGravity = Gravity.TOP or Gravity.START
             setCompassMargins(36, 36, 36, 36)
+            isTiltGesturesEnabled = false
         }
 
         ScaleBarPlugin(mapView, map).create(ScaleBarOptions(requireContext()))
