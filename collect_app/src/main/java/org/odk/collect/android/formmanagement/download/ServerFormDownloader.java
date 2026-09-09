@@ -223,14 +223,15 @@ public class ServerFormDownloader implements FormDownloader {
         if (formFileDownload == null) {
             Timber.d("The user cancelled (or an exception happened) the download of a form at the very beginning.");
         } else {
-            String md5Hash = Md5.getMd5Hash(formFileDownload.file);
-            if (md5Hash != null) {
-                Form form = formsRepository.getOneByMd5Hash(md5Hash);
-                if (form != null) {
-                    formsRepository.delete(form.getDbId());
+            if (formFileDownload.isNew) {
+                String md5Hash = Md5.getMd5Hash(formFileDownload.file);
+                if (md5Hash != null) {
+                    Form form = formsRepository.getOneByMd5Hash(md5Hash);
+                    if (form != null) {
+                        formsRepository.delete(form.getDbId());
+                    }
                 }
             }
-            FileUtils.deleteAndReport(formFileDownload.getFile());
         }
 
         if (tempMediaPath != null) {
