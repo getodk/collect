@@ -50,7 +50,7 @@ public final class CollectHelpers {
         return referenceManager;
     }
 
-    private static String createFakeReference(ReferenceManager referenceManager, String referenceURI, String localURI) throws InvalidReferenceException {
+    public static String createFakeReference(ReferenceManager referenceManager, String referenceURI, String localURI) throws InvalidReferenceException {
         Reference reference = mock(Reference.class);
         when(reference.getLocalURI()).thenReturn(localURI);
         when(referenceManager.deriveReference(referenceURI)).thenReturn(reference);

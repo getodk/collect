@@ -498,9 +498,7 @@ public class ChoicesRecyclerViewTest {
                 ))
                 .build();
 
-        Reference reference = mock(Reference.class);
-        when(reference.getLocalURI()).thenReturn(TempFiles.createTempFile(".jpg").getAbsolutePath());
-        when(referenceManager.deriveReference(imageURI)).thenReturn(reference);
+        CollectHelpers.createFakeReference(referenceManager, imageURI, TempFiles.createTempFile(".jpg").getAbsolutePath());
 
         AudioVideoImageTextLabel view = bindThenRebind(items);
 
@@ -519,9 +517,7 @@ public class ChoicesRecyclerViewTest {
                 ))
                 .build();
 
-        Reference reference = mock(Reference.class);
-        when(reference.getLocalURI()).thenReturn(new File(TempFiles.createTempDir(), "missing.jpg").getAbsolutePath());
-        when(referenceManager.deriveReference(missingImageURI)).thenReturn(reference);
+        CollectHelpers.createFakeReference(referenceManager, missingImageURI, new File(TempFiles.createTempDir(), "missing.jpg").getAbsolutePath());
 
         AudioVideoImageTextLabel view = bindThenRebind(items);
 
@@ -541,13 +537,8 @@ public class ChoicesRecyclerViewTest {
                 ))
                 .build();
 
-        Reference reference = mock(Reference.class);
-        when(reference.getLocalURI()).thenReturn(TempFiles.createTempFile(".jpg").getAbsolutePath());
-        when(referenceManager.deriveReference(imageURI)).thenReturn(reference);
-
-        Reference missingReference = mock(Reference.class);
-        when(missingReference.getLocalURI()).thenReturn(new File(TempFiles.createTempDir(), "missing.jpg").getAbsolutePath());
-        when(referenceManager.deriveReference(missingImageURI)).thenReturn(missingReference);
+        CollectHelpers.createFakeReference(referenceManager, imageURI, TempFiles.createTempFile(".jpg").getAbsolutePath());
+        CollectHelpers.createFakeReference(referenceManager, missingImageURI, new File(TempFiles.createTempDir(), "missing.jpg").getAbsolutePath());
 
         AudioVideoImageTextLabel view = bindThenRebind(items);
 
@@ -568,13 +559,8 @@ public class ChoicesRecyclerViewTest {
                 ))
                 .build();
 
-        Reference missingReference = mock(Reference.class);
-        when(missingReference.getLocalURI()).thenReturn(new File(TempFiles.createTempDir(), "missing.jpg").getAbsolutePath());
-        when(referenceManager.deriveReference(missingImageURI)).thenReturn(missingReference);
-
-        Reference reference = mock(Reference.class);
-        when(reference.getLocalURI()).thenReturn(TempFiles.createTempFile(".jpg").getAbsolutePath());
-        when(referenceManager.deriveReference(imageURI)).thenReturn(reference);
+        CollectHelpers.createFakeReference(referenceManager, missingImageURI, new File(TempFiles.createTempDir(), "missing.jpg").getAbsolutePath());
+        CollectHelpers.createFakeReference(referenceManager, imageURI, TempFiles.createTempFile(".jpg").getAbsolutePath());
 
         AudioVideoImageTextLabel view = bindThenRebind(items);
 
@@ -594,9 +580,7 @@ public class ChoicesRecyclerViewTest {
                 ))
                 .build();
 
-        Reference reference = mock(Reference.class);
-        when(reference.getLocalURI()).thenReturn(TempFiles.createTempFile(".mp3").getAbsolutePath());
-        when(referenceManager.deriveReference(audioURI)).thenReturn(reference);
+        CollectHelpers.createFakeReference(referenceManager, audioURI, TempFiles.createTempFile(".mp3").getAbsolutePath());
 
         AudioVideoImageTextLabel view = bindThenRebind(items);
 
@@ -615,9 +599,7 @@ public class ChoicesRecyclerViewTest {
                 ))
                 .build();
 
-        Reference reference = mock(Reference.class);
-        when(reference.getLocalURI()).thenReturn(TempFiles.createTempFile(".mp4").getAbsolutePath());
-        when(referenceManager.deriveReference(videoURI)).thenReturn(reference);
+        CollectHelpers.createFakeReference(referenceManager, videoURI, TempFiles.createTempFile(".mp4").getAbsolutePath());
 
         AudioVideoImageTextLabel view = bindThenRebind(items);
 
@@ -641,13 +623,8 @@ public class ChoicesRecyclerViewTest {
                 ))
                 .build();
 
-        Reference reference = mock(Reference.class);
-        when(reference.getLocalURI()).thenReturn(TempFiles.createTempFile(".jpg").getAbsolutePath());
-        when(referenceManager.deriveReference(imageURI)).thenReturn(reference);
-
-        Reference bigImageReference = mock(Reference.class);
-        when(bigImageReference.getLocalURI()).thenReturn(TempFiles.createTempFile(".jpg").getAbsolutePath());
-        when(referenceManager.deriveReference(bigImageURI)).thenReturn(bigImageReference);
+        CollectHelpers.createFakeReference(referenceManager, imageURI, TempFiles.createTempFile(".jpg").getAbsolutePath());
+        CollectHelpers.createFakeReference(referenceManager, bigImageURI, TempFiles.createTempFile(".jpg").getAbsolutePath());
 
         AudioVideoImageTextLabel view = bindThenRebind(items);
         view.getImageView().performClick();
