@@ -20,7 +20,7 @@ fun URI.getQueryParameter(param: String): String? {
                     it to ""
                 }
             }
-            .toMap()[param]
+            .firstOrNull { it.first == param }?.second
     } else {
         null
     }
