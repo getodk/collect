@@ -343,7 +343,7 @@ object ServerFormUseCases {
 }
 
 data class MediaFilesDownload(
-    val tempDirPath: String,
+    val tempMediaPath: String,
     val newAttachmentsDownloaded: Boolean,
     val entityLists: List<EntityListDownload>
 ) {

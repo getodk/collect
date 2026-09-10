@@ -95,10 +95,10 @@ public class ServerFormDownloader implements FormDownloader {
             try {
                 installEverything(formFileDownload, mediaFilesDownload, formsDirPath);
             } catch (FormSourceException e) {
-                cleanUp(formFileDownload, mediaFilesDownload.getTempDirPath());
+                cleanUp(formFileDownload, mediaFilesDownload.getTempMediaPath());
                 throw new FormDownloadException.FormSourceError(e);
             } catch (FormDownloadException e) {
-                cleanUp(formFileDownload, mediaFilesDownload.getTempDirPath());
+                cleanUp(formFileDownload, mediaFilesDownload.getTempMediaPath());
                 throw e;
             }
         } finally {
@@ -212,7 +212,7 @@ public class ServerFormDownloader implements FormDownloader {
         );
 
         // move the media files in the media folder
-        String tempMediaPath = mediaFilesDownload.getTempDirPath();
+        String tempMediaPath = mediaFilesDownload.getTempMediaPath();
         File formMediaDir = new File(formResult.getForm().getFormMediaPath());
         try {
             moveMediaFiles(tempMediaPath, formMediaDir);
