@@ -460,6 +460,7 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
                 .forClass(GeoPolyDialogFragment.class, () -> new GeoPolyDialogFragment(viewModelFactory, dispatcherProvider))
                 .forClass(GeoPointMapDialogFragment.class, () -> new GeoPointMapDialogFragment(viewModelFactory, dispatcherProvider))
                 .forClass(RangePickerDialogFragment.class, () -> new RangePickerDialogFragment(viewModelFactory))
+                .forClass(ChangesReasonPromptDialogFragment.class, () -> new ChangesReasonPromptDialogFragment(viewModelFactory))
                 .build());
 
         getSupportFragmentManager().setFragmentResultListener(REQUEST_DELETE_REPEAT, this, (requestKey, result) -> deleteGroup());
