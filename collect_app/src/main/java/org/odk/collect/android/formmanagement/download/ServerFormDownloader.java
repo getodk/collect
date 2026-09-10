@@ -94,7 +94,10 @@ public class ServerFormDownloader implements FormDownloader {
 
             try {
                 installEverything(formFileDownload, mediaFilesDownload, formsDirPath);
-            } catch (Exception e) {
+            } catch (FormSourceException e) {
+                cleanUp(formFileDownload, mediaFilesDownload.getTempDirPath());
+                throw new FormDownloadException.FormSourceError(e);
+            } catch (FormDownloadException e) {
                 cleanUp(formFileDownload, mediaFilesDownload.getTempDirPath());
                 throw e;
             }
@@ -146,7 +149,7 @@ public class ServerFormDownloader implements FormDownloader {
         return submission == null || Validator.isUrlValid(submission);
     }
 
-    private void installEverything(FormFileDownload formFileDownload, MediaFilesDownload mediaFilesDownload, String formsDirPath) throws FormDownloadException.DiskError, FormDownloadException.FormParsingError, FormDownloadException.InvalidSubmission {
+    private void installEverything(FormFileDownload formFileDownload, MediaFilesDownload mediaFilesDownload, String formsDirPath) throws FormDownloadException.DiskError, FormDownloadException.FormParsingError, FormDownloadException.InvalidSubmission, FormSourceException.ParseError {
         FormMetadata formMetadata = null;
         if (formFileDownload.isNew) {
             try {
