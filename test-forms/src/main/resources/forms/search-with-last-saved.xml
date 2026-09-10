@@ -14,6 +14,7 @@
                 <data id="search-with-last-saved">
                     <group>
                         <fruit/>
+                        <number/>
                     </group>
                     <meta>
                         <instanceID/>
@@ -23,6 +24,8 @@
             <instance id="__last-saved" src="jr://instance/last-saved"/>
             <bind nodeset="/data/group/fruit" type="string"/>
             <setvalue ref="/data/group/fruit" value=" instance('__last-saved')/data/group/fruit " event="odk-instance-first-load"/>
+            <bind nodeset="/data/group/number" type="string"/>
+            <setvalue ref="/data/group/number" value=" instance('__last-saved')/data/group/number " event="odk-instance-first-load"/>
             <bind nodeset="/data/meta/instanceID" type="string" readonly="true()" jr:preload="uid"/>
         </model>
     </h:head>
@@ -35,6 +38,13 @@
                     <value>name_key</value>
                 </item>
             </select1>
+            <select ref="/data/group/number" appearance="search('external_data')">
+                <label>Select numbers</label>
+                <item>
+                    <label>label</label>
+                    <value>name</value>
+                </item>
+            </select>
         </group>
     </h:body>
 </h:html>
