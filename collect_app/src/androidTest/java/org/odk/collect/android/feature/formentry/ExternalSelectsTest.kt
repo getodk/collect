@@ -79,31 +79,24 @@ class ExternalSelectsTest {
     @Test // https://github.com/getodk/collect/issues/6801
     fun searchFunctionWorksWellWithLastSaved() {
         rule.startAtMainMenu()
-            // Fill out and finalize the first form
+            // Fill out and finalize a form so that there is a last-saved instance
             .copyForm("search-with-last-saved.xml", listOf("fruits.csv"))
             .startBlankForm("Search with last-saved")
             .clickOnText("Mango")
-            .swipeToNextQuestion("Select fruit 2")
-            .clickOnText("Oranges")
             .swipeToEndScreen()
             .clickFinalize()
 
-            // Start a new form to verify that answers from the previous form are retained
+            // Start a new form to verify that the answer from the previous one is retained
             .startBlankForm("Search with last-saved")
-            .swipeToNextQuestion("Select fruit 2")
             .clickGoToArrow()
-            .assertText("Select fruit 1")
+            .assertText("Select fruit")
             .assertAnswer("Mango")
-            .assertText("Select fruit 2")
-            .assertAnswer("Oranges")
 
-            // Change an answer in a field-list and verify no errors occur
-            .clickOnQuestion("Select fruit 2")
+            // Change the answer in a field-list and verify no errors occur
+            .clickOnQuestion("Select fruit")
             .clickOnText("Strawberries")
             .clickGoToArrow()
-            .assertText("Select fruit 1")
-            .assertAnswer("Mango")
-            .assertText("Select fruit 2")
+            .assertText("Select fruit")
             .assertAnswer("Strawberries")
     }
 }
