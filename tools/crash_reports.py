@@ -4,6 +4,17 @@
 # dependencies = ["google-cloud-bigquery"]
 # ///
 
+"""
+Queries Firebase Crashlytics via BigQuery to find the top 10 crashes by users affected
+for a specific version of the ODK Collect Android app.
+
+Usage:
+    crash_reports.py <version>
+
+Example:
+    crash_reports.py v2026.3
+"""
+
 import sys
 from google.cloud import bigquery
 from google.auth.exceptions import DefaultCredentialsError
