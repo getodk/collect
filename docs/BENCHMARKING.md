@@ -24,7 +24,7 @@ password = "your-password"
 To run the setup do:
 
 ```bash
-uv run benchmarking/setup.py /path/to/benchmark-forms
+benchmarking/setup.py /path/to/benchmark-forms
 ```
 
 ## Running benchmarks
