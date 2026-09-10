@@ -8,7 +8,7 @@ import sys
 from google.cloud import bigquery
 from google.auth.exceptions import DefaultCredentialsError
 
-QUERY = """
+QUERY_TEMPLATE = """
     SELECT t.issue_id,
            COUNT(DISTINCT t.installation_uuid) as users
     FROM `api-project-322300403941.firebase_crashlytics.org_odk_collect_android_ANDROID` as t,
@@ -22,21 +22,28 @@ QUERY = """
       AND t.issue_subtitle != "android.os.ThreadLocalWorkSource.setUid"
       AND t.issue_subtitle != "java.lang.Object.wait"
       AND e.type != "java.lang.OutOfMemoryError"
-      AND STARTS_WITH(t.application.display_version, "v2026.3.")
+      AND STARTS_WITH(t.application.display_version, "{version}.")
     GROUP BY t.issue_id
     ORDER BY users DESC
         LIMIT 10
 """
 
-def main() -> int:
+def main(args) -> int:
+    if len(args) < 2:
+        print("Usage: crash_reports.py <version>")
+        print("Example: crash_reports.py v2026.3")
+        return 1
+
     try:
         client = bigquery.Client()
     except DefaultCredentialsError:
         print("Not authenticated with Google Cloud! Run the follow and then try again:\n")
         print("    gcloud auth application-default login\n")
-        return 0
+        return 1
 
-    query_job = client.query(QUERY)
+    version = args[1]
+    query = QUERY_TEMPLATE.format(version=version)
+    query_job = client.query(query)
     results = query_job.result()
 
     print("\nTop 10 crashes by users affected:\n\n")
@@ -46,4 +53,4 @@ def main() -> int:
     return 0
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(main(sys.argv))
