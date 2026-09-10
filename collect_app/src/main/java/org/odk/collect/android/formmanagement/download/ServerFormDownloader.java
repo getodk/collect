@@ -342,10 +342,6 @@ public class ServerFormDownloader implements FormDownloader {
             this.isNew = isNew;
         }
 
-        private File getFile() {
-            return file;
-        }
-
         private boolean isNew() {
             return isNew;
         }
