@@ -4,17 +4,7 @@
 # dependencies = ["google-cloud-bigquery"]
 # ///
 
-"""
-Queries Firebase Crashlytics via BigQuery to find the top 10 crashes by users affected
-for a specific version of the ODK Collect Android app.
-
-Usage:
-    crash_reports.py <version>
-
-Example:
-    crash_reports.py v2026.3
-"""
-
+import argparse
 import sys
 from google.cloud import bigquery
 from google.auth.exceptions import DefaultCredentialsError
@@ -39,29 +29,33 @@ QUERY_TEMPLATE = """
         LIMIT 10
 """
 
-def main(args) -> int:
-    if len(args) < 2:
-        print("Usage: crash_reports.py <version>")
-        print("Example: crash_reports.py v2026.3")
-        return 1
+def main() -> int:
+    parser = argparse.ArgumentParser(
+        description="Query Firebase Crashlytics via BigQuery for top crashes by users affected"
+    )
+    parser.add_argument(
+        "version",
+        help="App version to query (e.g., v2026.3)"
+    )
+    args = parser.parse_args()
 
     try:
         client = bigquery.Client()
     except DefaultCredentialsError:
-        print("Not authenticated with Google Cloud! Run the follow and then try again:\n")
-        print("    gcloud auth application-default login\n")
-        return 1
+        parser.error(
+            "Not authenticated with Google Cloud! Run: gcloud auth application-default login"
+        )
 
-    version = args[1]
+    version = args.version
     query = QUERY_TEMPLATE.format(version=version)
     query_job = client.query(query)
     results = query_job.result()
 
-    print("\nTop 10 crashes by users affected:\n\n")
+    print("Top 10 crashes by users affected:\n")
     for row in results:
         print(f"https://console.firebase.google.com/project/api-project-322300403941/crashlytics/app/android:org.odk.collect.android/issues/{row.issue_id}\n")
 
     return 0
 
 if __name__ == "__main__":
-    sys.exit(main(sys.argv))
+    sys.exit(main())
