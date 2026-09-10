@@ -487,7 +487,7 @@ public class ChoicesRecyclerViewTest {
     }
 
     @Test
-    public void whenAChoiceWithoutAnImageReusesAView_shouldTheImageOfThePreviousChoiceBeHidden() throws InvalidReferenceException {
+    public void whenAChoiceWithoutAnImageReusesAView_theImageOfThePreviousChoiceIsHidden() throws InvalidReferenceException {
         String imageURI = "jr://images/present.jpg";
         SelectChoice firstChoice = new SelectChoice("AAA", "AAA");
         SelectChoice secondChoice = new SelectChoice("BBB", "BBB");
@@ -507,7 +507,7 @@ public class ChoicesRecyclerViewTest {
     }
 
     @Test
-    public void whenAChoiceWithoutAnImageReusesAView_shouldTheMissingImageMessageOfThePreviousChoiceBeHidden() throws InvalidReferenceException {
+    public void whenAChoiceWithoutAnImageReusesAView_theMissingImageMessageOfThePreviousChoiceIsHidden() throws InvalidReferenceException {
         String missingImageURI = "jr://images/missing.jpg";
         SelectChoice firstChoice = new SelectChoice("AAA", "AAA");
         SelectChoice secondChoice = new SelectChoice("BBB", "BBB");
@@ -527,7 +527,7 @@ public class ChoicesRecyclerViewTest {
     }
 
     @Test
-    public void whenAChoiceWithAMissingImageReusesAView_shouldTheImageOfThePreviousChoiceBeHidden() throws InvalidReferenceException {
+    public void whenAChoiceWithAMissingImageReusesAView_theImageOfThePreviousChoiceIsHidden() throws InvalidReferenceException {
         String imageURI = "jr://images/present.jpg";
         String missingImageURI = "jr://images/missing.jpg";
         SelectChoice firstChoice = new SelectChoice("AAA", "AAA");
@@ -550,7 +550,7 @@ public class ChoicesRecyclerViewTest {
     }
 
     @Test
-    public void whenAChoiceWithAnImageReusesAView_shouldTheMissingImageMessageOfThePreviousChoiceBeHidden() throws InvalidReferenceException {
+    public void whenAChoiceWithAnImageReusesAView_theMissingImageMessageOfThePreviousChoiceIsHidden() throws InvalidReferenceException {
         String missingImageURI = "jr://images/missing.jpg";
         String imageURI = "jr://images/present.jpg";
         SelectChoice firstChoice = new SelectChoice("AAA", "AAA");
@@ -573,7 +573,7 @@ public class ChoicesRecyclerViewTest {
     }
 
     @Test
-    public void whenAChoiceWithoutAudioReusesAView_shouldTheAudioButtonOfThePreviousChoiceBeHidden() throws InvalidReferenceException {
+    public void whenAChoiceWithoutAudioReusesAView_theAudioButtonOfThePreviousChoiceIsHidden() throws InvalidReferenceException {
         String audioURI = "jr://audio/audio.mp3";
         SelectChoice firstChoice = new SelectChoice("AAA", "AAA");
         SelectChoice secondChoice = new SelectChoice("BBB", "BBB");
@@ -593,7 +593,7 @@ public class ChoicesRecyclerViewTest {
     }
 
     @Test
-    public void whenAChoiceWithoutAVideoReusesAView_shouldTheVideoButtonOfThePreviousChoiceBeHidden() throws InvalidReferenceException {
+    public void whenAChoiceWithoutAVideoReusesAView_theVideoButtonOfThePreviousChoiceIsHidden() throws InvalidReferenceException {
         String videoURI = "jr://video/video.mp4";
         SelectChoice firstChoice = new SelectChoice("AAA", "AAA");
         SelectChoice secondChoice = new SelectChoice("BBB", "BBB");
@@ -613,7 +613,7 @@ public class ChoicesRecyclerViewTest {
     }
 
     @Test
-    public void whenAChoiceWithoutABigImageReusesAView_shouldClickingItsImageNotOpenTheBigImageOfThePreviousChoice() throws InvalidReferenceException {
+    public void whenAChoiceWithoutABigImageReusesAView_clickingItsImageDoesNotOpenTheBigImageOfThePreviousChoice() throws InvalidReferenceException {
         String imageURI = "jr://images/image.jpg";
         String bigImageURI = "jr://images/big-image.jpg";
         SelectChoice firstChoice = new SelectChoice("AAA", "AAA");
