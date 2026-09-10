@@ -28,7 +28,7 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioButton;
@@ -37,6 +37,7 @@ import org.odk.collect.android.listeners.SelectItemClickListener;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.androidshared.system.ContextExt;
+import org.odk.collect.async.Cancellable;
 import org.odk.collect.audioclips.AudioPlayer;
 import org.odk.collect.audioclips.Clip;
 import org.odk.collect.imageloader.ImageLoader;
@@ -57,6 +58,7 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
     private File videoFile;
     private File bigImageFile;
     private MediaUtils mediaUtils;
+    private Cancellable playingChangedObserver;
 
     public AudioVideoImageTextLabel(Context context) {
         super(context);
@@ -96,11 +98,21 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
         }
     }
 
-    public void setAudio(String audioURI, AudioPlayer audioPlayer) {
+    public void setAudio(@Nullable String audioURI, AudioPlayer audioPlayer) {
+        if (playingChangedObserver != null) {
+            playingChangedObserver.cancel();
+            playingChangedObserver = null;
+        }
+
+        if (audioURI == null) {
+            binding.audioButton.setVisibility(GONE);
+            return;
+        }
+
         String clipID = getTag() != null ? getTag().toString() : "";
 
         originalTextColor = textLabel.getTextColors().getDefaultColor();
-        audioPlayer.onPlayingChanged(clipID, isPlaying -> {
+        playingChangedObserver = audioPlayer.onPlayingChanged(clipID, isPlaying -> {
             binding.audioButton.setPlaying(isPlaying);
 
             if (isPlaying) {
@@ -123,31 +135,39 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
         });
 
         binding.audioButton.setVisibility(VISIBLE);
-        binding.mediaButtons.setVisibility(VISIBLE);
     }
 
-    public void setImage(@NonNull File imageFile, ImageLoader imageLoader) {
-        if (imageFile.exists()) {
+    public void setImage(@Nullable File imageFile, ImageLoader imageLoader) {
+        if (imageFile == null) {
+            binding.imageView.setVisibility(GONE);
+            binding.missingImage.setVisibility(GONE);
+        } else if (imageFile.exists()) {
             ImageViewUtils.resetSizeForNewImage(binding.imageView);
 
             imageLoader.loadImage(binding.imageView, imageFile, ImageView.ScaleType.CENTER_INSIDE, null);
             binding.imageView.setVisibility(VISIBLE);
             binding.imageView.setOnClickListener(this);
+            binding.missingImage.setVisibility(GONE);
         } else {
+            binding.imageView.setVisibility(GONE);
             binding.missingImage.setVisibility(VISIBLE);
             binding.missingImage.setText(getContext().getString(org.odk.collect.strings.R.string.file_missing, imageFile));
         }
     }
 
-    public void setBigImage(@NonNull File bigImageFile) {
+    public void setBigImage(@Nullable File bigImageFile) {
         this.bigImageFile = bigImageFile;
     }
 
-    public void setVideo(@NonNull File videoFile) {
+    public void setVideo(@Nullable File videoFile) {
         this.videoFile = videoFile;
 
+        if (videoFile == null) {
+            binding.videoButton.setVisibility(GONE);
+            return;
+        }
+
         binding.videoButton.setVisibility(VISIBLE);
-        binding.mediaButtons.setVisibility(VISIBLE);
         binding.videoButton.setOnClickListener(this);
     }
 

@@ -50,12 +50,10 @@ public final class CollectHelpers {
         return referenceManager;
     }
 
-    private static String createFakeReference(ReferenceManager referenceManager, String referenceURI, String localURI) throws InvalidReferenceException {
+    public static void createFakeReference(ReferenceManager referenceManager, String referenceURI, String localURI) throws InvalidReferenceException {
         Reference reference = mock(Reference.class);
         when(reference.getLocalURI()).thenReturn(localURI);
         when(referenceManager.deriveReference(referenceURI)).thenReturn(reference);
-
-        return localURI;
     }
 
     public static AppDependencyComponent overrideAppDependencyModule(AppDependencyModule appDependencyModule) {
