@@ -44,27 +44,27 @@ public class ODKAppSettingsMigratorTest {
     public void shouldMigrateMapboxMapSettings() {
         initSettings(unprotectedSettings, "map_sdk_behavior", "mapbox_maps", "map_basemap_behavior", "mapbox_streets");
         runMigrations();
-        assertSettings(unprotectedSettings, "basemap_source", "mapbox", "mapbox_map_style", "mapbox://styles/mapbox/streets-v11");
+        assertSettings(unprotectedSettings, "basemap_source", "maplibre", "mapbox_map_style", "mapbox://styles/mapbox/streets-v11");
 
         initSettings(unprotectedSettings, "map_sdk_behavior", "mapbox_maps", "map_basemap_behavior", "mapbox_light");
         runMigrations();
-        assertSettings(unprotectedSettings, "basemap_source", "mapbox", "mapbox_map_style", "mapbox://styles/mapbox/light-v10");
+        assertSettings(unprotectedSettings, "basemap_source", "maplibre", "mapbox_map_style", "mapbox://styles/mapbox/light-v10");
 
         initSettings(unprotectedSettings, "map_sdk_behavior", "mapbox_maps", "map_basemap_behavior", "mapbox_dark");
         runMigrations();
-        assertSettings(unprotectedSettings, "basemap_source", "mapbox", "mapbox_map_style", "mapbox://styles/mapbox/dark-v10");
+        assertSettings(unprotectedSettings, "basemap_source", "maplibre", "mapbox_map_style", "mapbox://styles/mapbox/dark-v10");
 
         initSettings(unprotectedSettings, "map_sdk_behavior", "mapbox_maps", "map_basemap_behavior", "mapbox_satellite");
         runMigrations();
-        assertSettings(unprotectedSettings, "basemap_source", "mapbox", "mapbox_map_style", "mapbox://styles/mapbox/satellite-v9");
+        assertSettings(unprotectedSettings, "basemap_source", "maplibre", "mapbox_map_style", "mapbox://styles/mapbox/satellite-v9");
 
         initSettings(unprotectedSettings, "map_sdk_behavior", "mapbox_maps", "map_basemap_behavior", "mapbox_satellite_streets");
         runMigrations();
-        assertSettings(unprotectedSettings, "basemap_source", "mapbox", "mapbox_map_style", "mapbox://styles/mapbox/satellite-streets-v11");
+        assertSettings(unprotectedSettings, "basemap_source", "maplibre", "mapbox_map_style", "mapbox://styles/mapbox/satellite-streets-v11");
 
         initSettings(unprotectedSettings, "map_sdk_behavior", "mapbox_maps", "map_basemap_behavior", "mapbox_outdoors");
         runMigrations();
-        assertSettings(unprotectedSettings, "basemap_source", "mapbox", "mapbox_map_style", "mapbox://styles/mapbox/outdoors-v11");
+        assertSettings(unprotectedSettings, "basemap_source", "maplibre", "mapbox_map_style", "mapbox://styles/mapbox/outdoors-v11");
     }
 
     @Test
@@ -135,9 +135,17 @@ public class ODKAppSettingsMigratorTest {
 
         assertSettingsEmpty(unprotectedSettings);
         assertSettings(metaSettings,
-                "scoped_storage_used", true,
-                "mapbox_initialized", true
+                "scoped_storage_used", true
         );
+    }
+
+    @Test
+    public void removesMapboxInitialized() {
+        initSettings(metaSettings, "mapbox_initialized", true);
+
+        runMigrations();
+
+        assertSettingsEmpty(metaSettings);
     }
 
     @Test
@@ -388,6 +396,13 @@ public class ODKAppSettingsMigratorTest {
         initSettings(unprotectedSettings, "basemap_source", "stamen");
         runMigrations();
         assertSettings(unprotectedSettings, "basemap_source", ProjectKeys.BASEMAP_SOURCE_OSM);
+    }
+
+    @Test
+    public void migratesMapboxToMapLibre() {
+        initSettings(unprotectedSettings, "basemap_source", "mapbox");
+        runMigrations();
+        assertSettings(unprotectedSettings, "basemap_source", ProjectKeys.BASEMAP_SOURCE_MAPLIBRE);
     }
 
     private void runMigrations() {

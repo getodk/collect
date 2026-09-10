@@ -1,4 +1,4 @@
-package org.odk.collect.mapbox
+package org.odk.collect.maplibre
 
 import android.content.Context
 import androidx.preference.Preference
@@ -11,14 +11,14 @@ import org.odk.collect.shared.settings.Settings
 import org.odk.collect.strings.R
 import java.io.File
 
-class MapboxMapConfigurator(private val configuration: Configuration) : MapConfigurator {
+class MapLibreMapConfigurator(private val configuration: Configuration) : MapConfigurator {
 
     constructor(configuration: String) : this(Configurations.all.getValue(configuration))
 
     override fun isAvailable(context: Context): Boolean {
         /*
-         * The Mapbox SDK for Android requires OpenGL ES version 3.
-         * See: https://github.com/mapbox/mapbox-maps-android/blob/main/CHANGELOG.md#1100-november-29-2023
+         * MapLibre requires OpenGL ES version 3 since 11.0.0.
+         * See: https://github.com/maplibre/maplibre-native/blob/main/platform/android/CHANGELOG.md#1100
          */
         return isOpenGLv3Supported(context)
     }
@@ -53,7 +53,7 @@ class MapboxMapConfigurator(private val configuration: Configuration) : MapConfi
     }
 
     override fun supportsLayer(file: File): Boolean {
-        // MapboxMapFragment supports any file that MbtilesFile can read.
+        // MapLibreMapFragment supports any file that MbtilesFile can read.
         return MbtilesFile.readLayerType(file) != null
     }
 

@@ -1,6 +1,7 @@
 package org.odk.collect.settings;
 
 import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_CARTO;
+import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_MAPLIBRE;
 import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_OSM;
 import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_USGS;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_BASEMAP_SOURCE;
@@ -106,7 +107,7 @@ public class ODKAppSettingsMigrator implements SettingsMigrator {
                 removeKey("lastVersion"),
                 moveKey("scoped_storage_used").toPreferences(metaSettings),
                 removeKey("metadata_migrated"),
-                moveKey("mapbox_initialized").toPreferences(metaSettings),
+                removeKey("mapbox_initialized"),
 
                 combineKeys("autosend_wifi", "autosend_network")
                         .withValues(false, false).toPairs("autosend", "off")
@@ -130,7 +131,9 @@ public class ODKAppSettingsMigrator implements SettingsMigrator {
 
                 moveKey("default_completed").toPreferences(protectedSettings),
 
-                translateValue("stamen").toValue(BASEMAP_SOURCE_OSM).forKey(KEY_BASEMAP_SOURCE)
+                translateValue("stamen").toValue(BASEMAP_SOURCE_OSM).forKey(KEY_BASEMAP_SOURCE),
+
+                translateValue("mapbox").toValue(BASEMAP_SOURCE_MAPLIBRE).forKey(KEY_BASEMAP_SOURCE)
         );
     }
 
@@ -139,7 +142,9 @@ public class ODKAppSettingsMigrator implements SettingsMigrator {
                 renameKey("firstRun").toKey("first_run"),
                 renameKey("lastVersion").toKey("last_version"),
 
-                renameKey("knownUrlList").toKey("server_list")
+                renameKey("knownUrlList").toKey("server_list"),
+
+                removeKey("mapbox_initialized")
         );
     }
 

@@ -11,6 +11,7 @@ import org.odk.collect.projects.InMemProjectsRepository
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectConfigurationResult
 import org.odk.collect.settings.importing.SettingsChangeHandler
+import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.settings.support.SettingsUtils.assertSettingsEmpty
 import java.lang.RuntimeException
 
@@ -107,5 +108,27 @@ class ODKAppSettingsImporterTest {
         assertThat(result, equalTo(ProjectConfigurationResult.GD_PROJECT))
         assertSettingsEmpty(settingsProvider.getUnprotectedSettings())
         assertSettingsEmpty(settingsProvider.getProtectedSettings())
+    }
+
+    @Test
+    fun `imports 'mapbox' basemap source as 'maplibre'`() {
+        val project = projectsRepository.save(Project.New("Flat", "AS", "#ff0000"))
+
+        val result = settingsImporter.fromJSON(
+            "{\n" +
+                "  \"general\": {\n" +
+                "       \"basemap_source\" : \"mapbox\"" +
+                "  },\n" +
+                "  \"admin\": {\n" +
+                "  }\n" +
+                "}",
+            project
+        )
+
+        assertThat(result, equalTo(ProjectConfigurationResult.SUCCESS))
+        assertThat(
+            settingsProvider.getUnprotectedSettings(project.uuid).getString(ProjectKeys.KEY_BASEMAP_SOURCE),
+            equalTo(ProjectKeys.BASEMAP_SOURCE_MAPLIBRE)
+        )
     }
 }

@@ -497,7 +497,7 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
         }
         if (referenceLayerFile != null) {
             referenceOverlay = this.map.addTileOverlay(new TileOverlayOptions().tileProvider(
-                    new GoogleMapsMapBoxOfflineTileProvider(referenceLayerFile)
+                    new GoogleMapsOfflineTileProvider(referenceLayerFile)
             ));
             setLabelsVisibility("off");
         } else {

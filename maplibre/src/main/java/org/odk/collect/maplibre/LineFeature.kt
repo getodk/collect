@@ -1,4 +1,4 @@
-package org.odk.collect.mapbox
+package org.odk.collect.maplibre
 
 import org.odk.collect.maps.MapPoint
 

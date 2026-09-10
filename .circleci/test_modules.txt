@@ -26,3 +26,4 @@ web-page
 open-rosa
 mobile-device-management
 material
+maplibre

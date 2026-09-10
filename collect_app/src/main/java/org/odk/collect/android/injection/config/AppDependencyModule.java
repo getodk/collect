@@ -4,7 +4,6 @@ import static androidx.core.content.FileProvider.getUriForFile;
 import static org.odk.collect.androidshared.data.AppStateKt.getState;
 import static org.odk.collect.settings.keys.MetaKeys.KEY_INSTALL_ID;
 import static java.util.Arrays.asList;
-import static java.util.Collections.singletonList;
 
 import android.app.Application;
 import android.content.Context;
@@ -24,7 +23,6 @@ import org.odk.collect.analytics.NoopAnalytics;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.CollectSettingsChangeHandler;
-import org.odk.collect.android.application.MapboxClassInstanceCreator;
 import org.odk.collect.android.application.initialization.AnalyticsInitializer;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.application.initialization.CachedFormsCleaner;
@@ -118,6 +116,8 @@ import org.odk.collect.location.LocationClientProvider;
 import org.odk.collect.maps.MapFragmentFactory;
 import org.odk.collect.maps.layers.DirectoryReferenceLayerRepository;
 import org.odk.collect.maps.layers.ReferenceLayerRepository;
+import org.odk.collect.maplibre.Configurations;
+import org.odk.collect.maplibre.MapLibreSupport;
 import org.odk.collect.metadata.InstallIDProvider;
 import org.odk.collect.metadata.PropertyManager;
 import org.odk.collect.metadata.SettingsInstallIDProvider;
@@ -152,6 +152,8 @@ import org.odk.collect.webpage.CustomTabsWebPageService;
 import org.odk.collect.webpage.WebPageService;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -313,11 +315,14 @@ public class AppDependencyModule {
     @Provides
     public ODKAppSettingsImporter providesODKAppSettingsImporter(Context context, ProjectsRepository projectsRepository, SettingsProvider settingsProvider, SettingsChangeHandler settingsChangeHandler) {
         JSONObject deviceUnsupportedSettings = new JSONObject();
-        if (!MapboxClassInstanceCreator.isMapboxAvailable()) {
+        if (!MapLibreSupport.isAvailable()) {
             try {
+                List<String> unsupportedBasemaps = new ArrayList<>(Configurations.INSTANCE.getAll().keySet());
+                unsupportedBasemaps.add("mapbox");
+
                 deviceUnsupportedSettings.put(
                         AppConfigurationKeys.GENERAL,
-                        new JSONObject().put(ProjectKeys.KEY_BASEMAP_SOURCE, new JSONArray(singletonList(ProjectKeys.BASEMAP_SOURCE_MAPBOX)))
+                        new JSONObject().put(ProjectKeys.KEY_BASEMAP_SOURCE, new JSONArray(unsupportedBasemaps))
                 );
             } catch (Throwable ignored) {
                 // ignore
