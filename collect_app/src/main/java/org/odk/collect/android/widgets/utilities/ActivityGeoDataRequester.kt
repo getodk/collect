@@ -32,8 +32,6 @@ class ActivityGeoDataRequester(
             activity,
             object : PermissionListener {
                 override fun granted() {
-                    waitingForDataRegistry.waitForData(prompt.index)
-
                     if (Appearances.isGeoPointMapAppearance(prompt) || prompt.isReadOnly) {
                         DialogFragmentUtils.showIfNotShowing(
                             GeoPointMapDialogFragment::class.java,
@@ -41,6 +39,8 @@ class ActivityGeoDataRequester(
                             activity.supportFragmentManager
                         )
                     } else {
+                        waitingForDataRegistry.waitForData(prompt.index)
+
                         val bundle = Bundle().also {
                             val accuracyThreshold =
                                 FormEntryPromptUtils.getAdditionalAttribute(
