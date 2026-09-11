@@ -4,7 +4,7 @@ import java.net.URI
 import java.net.URLDecoder
 
 fun URI.getQueryParameter(param: String): String? {
-    val query = this.query
+    val query = this.rawQuery
 
     return if (query != null) {
         query

@@ -43,4 +43,10 @@ class URIExtTest {
         val uri = URI("https://example.com?id")
         assertThat(uri.getQueryParameter("id"), equalTo(""))
     }
+
+    @Test
+    fun `#getQueryParameter returns the decoded value when it contains an encoded separator`() {
+        val uri = URI("https://example.com?id=a%26b&x=1")
+        assertThat(uri.getQueryParameter("id"), equalTo("a&b"))
+    }
 }
