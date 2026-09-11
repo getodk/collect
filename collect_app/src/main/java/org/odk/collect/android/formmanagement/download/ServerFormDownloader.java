@@ -149,7 +149,7 @@ public class ServerFormDownloader implements FormDownloader {
         return submission == null || Validator.isUrlValid(submission);
     }
 
-    private void installEverything(FormFileDownload formFileDownload, MediaFilesDownload mediaFilesDownload, String formsDirPath) throws FormDownloadException.DiskError, FormDownloadException.FormParsingError, FormDownloadException.InvalidSubmission, FormSourceException.ParseError {
+    private void installEverything(FormFileDownload formFileDownload, MediaFilesDownload mediaFilesDownload, String formsDirPath) throws FormDownloadException.DiskError, FormDownloadException.FormParsingError, FormDownloadException.InvalidSubmission, FormSourceException {
         FormMetadata formMetadata = null;
         if (formFileDownload.isNew) {
             try {

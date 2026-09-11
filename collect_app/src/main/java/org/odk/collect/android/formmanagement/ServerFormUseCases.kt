@@ -217,7 +217,7 @@ object ServerFormUseCases {
     }
 
     @JvmStatic
-    @Throws(FormSourceException.ParseError::class)
+    @Throws(FormSourceException::class)
     fun ingestEntityListsFromDownload(
         formResult: FormResult,
         mediaFilesDownload: MediaFilesDownload,
