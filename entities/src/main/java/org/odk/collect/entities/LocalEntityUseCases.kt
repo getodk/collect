@@ -169,7 +169,7 @@ object LocalEntityUseCases {
         )
     }
 
-    @Throws(FormSourceException.ParseError::class)
+    @Throws(FormSourceException::class)
     fun cleanUpDeletedOfflineEntities(
         list: String,
         entitiesRepository: EntitiesRepository,
