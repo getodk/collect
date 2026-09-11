@@ -29,7 +29,7 @@ class GeoPointWidget(
     private val dependencies: Dependencies
 ) : QuestionWidget(context, dependencies, questionDetails), WidgetDataReceiver {
 
-    private var answer by mutableStateOf<String?>(questionDetails.prompt.answerText)
+    private var answer by mutableStateOf(questionDetails.prompt.answerValue as? GeoPointData)
 
     init {
         render()
@@ -44,7 +44,7 @@ class GeoPointWidget(
                 GeoPointWidgetContent(
                     dependencies.mediaWidgetAnswerViewModel,
                     prompt,
-                    answer,
+                    answer?.displayText,
                     readOnly,
                     buttonFontSize,
                     answerFontSize,
@@ -55,14 +55,7 @@ class GeoPointWidget(
         }
     }
 
-    override fun getAnswer(): IAnswerData? {
-        val parsedGeometryPoint = GeoUtils.parseGeometryPoint(answer)
-        return if (parsedGeometryPoint == null) {
-            null
-        } else {
-            GeoPointData(parsedGeometryPoint)
-        }
-    }
+    override fun getAnswer(): IAnswerData? = answer
 
     override fun clearAnswer() {
         answer = null
@@ -70,7 +63,7 @@ class GeoPointWidget(
     }
 
     override fun setData(answer: Any) {
-        this.answer = answer.toString()
+        this.answer = GeoUtils.parseGeometryPoint(answer.toString())?.let { GeoPointData(it) }
         widgetValueChanged()
     }
 
