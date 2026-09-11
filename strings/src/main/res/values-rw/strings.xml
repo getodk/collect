@@ -402,14 +402,6 @@ N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</strin
   <!--%1$s is the accuracy required for a point to be automatically saved-->
   <!--%1$s is the number of satellites being used to get location-->
   <!--The accuracy of a location fix in meters-->
-  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
-  <string name="west">W %1$s%2$s%3$s</string>
-  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
-  <string name="east">E %1$s%2$s%3$s</string>
-  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
-  <string name="south">S %1$s%2$s%3$s</string>
-  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
-  <string name="north">N %1$s%2$s%3$s</string>
   <string name="input_method">Uburyo bwo kwinjiza amakuru</string>
   <string name="start">Tangira</string>
   <string name="enable_gps">Emeza GPS</string>

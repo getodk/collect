@@ -447,14 +447,6 @@
   <string name="improving_accuracy">Izboljšujem natančnost. Počakajte, prosim.</string>
   <string name="accuracy_status_title">Pridobivam lokacijo</string>
   <!--The accuracy of a location fix in meters-->
-  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
-  <string name="west">Z %1$s%2$s%3$s</string>
-  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
-  <string name="east">V %1$s%2$s%3$s</string>
-  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
-  <string name="south">J %1$s%2$s%3$s</string>
-  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
-  <string name="north">S %1$s%2$s%3$s</string>
   <string name="input_method">Vhodna metoda</string>
   <string name="start">Začni</string>
   <string name="enable_gps">Omogoči GPS</string>

@@ -1,5 +1,6 @@
 package org.odk.collect.android.widgets
 
+import android.util.TypedValue
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -14,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.fromHtml
 import androidx.compose.ui.unit.sp
@@ -33,10 +35,15 @@ fun TextWidgetAnswer(
     onLongClick: () -> Unit,
     onClickLabel: String? = null
 ) {
+    if (answer.isEmpty()) {
+        return
+    }
+
     val annotatedAnswer = remember(answer) {
         AnnotatedString.fromHtml(HtmlUtils.markdownToHtml(answer))
     }
     val hasFormatting = annotatedAnswer.spanStyles.isNotEmpty()
+    val highEmphasis = TypedValue().also { LocalResources.current.getValue(dimen.high_emphasis, it, true) }.float
 
     Row(
         modifier = modifier
@@ -52,7 +59,7 @@ fun TextWidgetAnswer(
                 onLongClick = onLongClick,
                 onClickLabel = onClickLabel
             ),
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = Alignment.Top,
         horizontalArrangement = horizontalArrangement
     ) {
         if (icon != null) {
@@ -60,9 +67,7 @@ fun TextWidgetAnswer(
                 modifier = Modifier.padding(end = marginSmall()),
                 imageVector = icon,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurface.copy(
-                    alpha = dimen.high_emphasis.toFloat()
-                )
+                tint = MaterialTheme.colorScheme.onSurface.copy(alpha = highEmphasis)
             )
         }
         Text(
@@ -70,7 +75,7 @@ fun TextWidgetAnswer(
             style = MaterialTheme.typography.bodyLarge.copy(
                 fontSize = fontSize?.sp ?: MaterialTheme.typography.bodyLarge.fontSize,
                 color = MaterialTheme.colorScheme.onSurface.copy(
-                    alpha = if (!hasFormatting) dimen.high_emphasis.toFloat() else 1f
+                    alpha = if (!hasFormatting) highEmphasis else 1f
                 )
             )
         )
