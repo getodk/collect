@@ -56,7 +56,7 @@ fun TextWidgetAnswer(
                 onLongClick = onLongClick,
                 onClickLabel = onClickLabel
             ),
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = Alignment.Top,
         horizontalArrangement = horizontalArrangement
     ) {
         if (icon != null) {
