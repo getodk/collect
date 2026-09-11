@@ -153,10 +153,11 @@ class OpenRosaClient(
         return downloadListUrl
     }
 
+    @Throws(FormSourceException::class)
     override fun fetchDeletedStates(integrityUrl: String, ids: List<String>): List<Pair<String, Boolean>> {
         val uri = integrityUrl.toUri("id" to ids.joinToString(","))
 
-        val result = openRosaXMLFetcher.getXML(uri.toString())
+        val result = mapException { openRosaXMLFetcher.getXML(uri.toString()) }
         if (!result.isOpenRosaResponse) {
             throw FormSourceException.ParseError(serverUrl)
         }

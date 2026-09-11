@@ -206,14 +206,6 @@ public class DatabaseFormsRepository implements FormsRepository {
     }
 
     @Override
-    public void deleteByMd5Hash(@NotNull String md5Hash) {
-        String selection = DatabaseFormColumns.MD5_HASH + "=?";
-        String[] selectionArgs = {md5Hash};
-
-        deleteForms(selection, selectionArgs);
-    }
-
-    @Override
     public void deleteAll() {
         deleteForms(null, null);
     }

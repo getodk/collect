@@ -12,6 +12,7 @@ import org.odk.collect.entities.server.EntitySource
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
 import org.odk.collect.entities.storage.findEntityById
+import org.odk.collect.forms.FormSourceException
 import org.odk.collect.forms.MediaFile
 import org.odk.collect.shared.debug.DebugLogger
 import java.io.File
@@ -168,6 +169,7 @@ object LocalEntityUseCases {
         )
     }
 
+    @Throws(FormSourceException::class)
     fun cleanUpDeletedOfflineEntities(
         list: String,
         entitiesRepository: EntitiesRepository,

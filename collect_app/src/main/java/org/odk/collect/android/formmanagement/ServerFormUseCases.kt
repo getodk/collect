@@ -144,18 +144,20 @@ object ServerFormUseCases {
         tempMediaPath: String,
         tempDir: File,
         entitiesRepository: EntitiesRepository,
-        entitySource: EntitySource,
         stateListener: OngoingWorkListener
-    ): MediaFilesDownloadResult {
+    ): MediaFilesDownload {
         var newAttachmentsDownloaded = false
-        var entitiesDownloaded = false
-
         val tempMediaDir = File(tempMediaPath).also { it.mkdir() }
 
-        val existingForm = formsRepository.getAllByFormIdAndVersion(formToDownload.formId, formToDownload.formVersion).firstOrNull()
-        val allFormVersionsSorted = formsRepository.getAllByFormId(formToDownload.formId).sortedByDescending { it.date }
+        val existingForm = formsRepository.getAllByFormIdAndVersion(
+            formToDownload.formId,
+            formToDownload.formVersion
+        ).firstOrNull()
+        val allFormVersionsSorted =
+            formsRepository.getAllByFormId(formToDownload.formId).sortedByDescending { it.date }
         val currentOrLastFormVersion = existingForm ?: allFormVersionsSorted.firstOrNull()
 
+        val entityLists = mutableListOf<EntityListDownload>()
         formToDownload.manifest!!.mediaFiles.forEachIndexed { i, mediaFile ->
             stateListener.progressUpdate(i + 1)
 
@@ -166,55 +168,14 @@ object ServerFormUseCases {
                 val entityListName = getEntityListFromFileName(mediaFile)
                 val localEntityList = entitiesRepository.getList(entityListName)
 
-                entitiesDownloaded = true
-
                 if (localEntityList == null || mediaFile.hash != localEntityList.hash) {
                     newAttachmentsDownloaded = true
                     downloadMediaFile(formSource, mediaFile, tempMediaFile, tempDir, stateListener)
 
-                    LocalEntityUseCases.updateLocalEntitiesFromServer(
-                        entityListName,
-                        tempMediaFile,
-                        entitiesRepository,
-                        mediaFile
-                    )
-
-                    tempMediaFile.delete()
+                    entityLists += EntityListDownload.Update(mediaFile, tempMediaFile)
                 } else {
-                    val existingForm = formsRepository.getAllByFormIdAndVersion(
-                        formToDownload.formId,
-                        formToDownload.formVersion
-                    ).getOrNull(0)
-
-                    if (existingForm != null) {
-                        val entityListLastUpdated = localEntityList.lastUpdated
-                        if (entityListLastUpdated != null && entityListLastUpdated > existingForm.getLastUpdated()) {
-                            newAttachmentsDownloaded = true
-                        }
-                    }
+                    entityLists += EntityListDownload.Skipped(mediaFile)
                 }
-
-                /*
-                 * Ensures local offline Entities are cleaned up when they have been deleted on the server.
-                 *
-                 * Normally this cleanup is triggered during sync as part of a full update with the server
-                 * whenever the Entity list hash from Central changes.
-                 * However, there is a case where the hash stays the same:
-                 *  - a sync happens and the current hash is stored,
-                 *  - an Entity is created locally and a form is uploaded, creating the Entity on the server,
-                 *  - the Entity is then deleted on the server,
-                 *  - another sync occurs, but the hash is the same as the stored one because the list
-                 *    contents are identical to before the local Entity was added.
-                 *
-                 * In this case, the usual hash-based update will not detect the deletion. Collect must
-                 * use the integrityUrl to check for missing Entities and remove them locally.
-                 */
-                LocalEntityUseCases.cleanUpDeletedOfflineEntities(
-                    entityListName,
-                    entitiesRepository,
-                    entitySource,
-                    mediaFile
-                )
             } else {
                 val existingFile = searchForExistingMediaFile(currentOrLastFormVersion, mediaFile)
                 if (existingFile != null) {
@@ -252,7 +213,60 @@ object ServerFormUseCases {
             }
         }
 
-        return MediaFilesDownloadResult(newAttachmentsDownloaded, entitiesDownloaded)
+        return MediaFilesDownload(tempMediaPath, newAttachmentsDownloaded, entityLists)
+    }
+
+    @JvmStatic
+    @Throws(FormSourceException::class)
+    fun ingestEntityListsFromDownload(
+        formResult: FormResult,
+        mediaFilesDownload: MediaFilesDownload,
+        entitiesRepository: EntitiesRepository,
+        entitySource: EntitySource,
+        formsRepository: FormsRepository
+    ) {
+        mediaFilesDownload.entityLists.forEach { entityListDownload ->
+            val listName = getEntityListFromFileName(entityListDownload.mediaFile)
+            if (entityListDownload is EntityListDownload.Update) {
+                LocalEntityUseCases.updateLocalEntitiesFromServer(
+                    listName,
+                    entityListDownload.file,
+                    entitiesRepository,
+                    entityListDownload.mediaFile
+                )
+
+                entityListDownload.file.delete()
+            }
+
+            /*
+             * We automatically delete online entities that no longer appear in the list in
+             * updateLocalEntitiesFromServer above, but entities can end up being deleted between
+             * syncs:
+             *  1. a sync happens
+             *  2. an Entity is created locally and a form is uploaded, creating the Entity on the server
+             *  3. the Entity is then deleted on the server
+             *  4. another sync occurs
+             *
+             * In this case, Collect must use the integrityUrl to check for missing Entities
+             * and remove them locally as the offline entity will never be marked as online and
+             * so will never get deleted.
+             */
+            LocalEntityUseCases.cleanUpDeletedOfflineEntities(
+                listName,
+                entitiesRepository,
+                entitySource,
+                entityListDownload.mediaFile
+            )
+
+            val entityListLastUpdated = entitiesRepository.getList(listName)?.lastUpdated
+            if (!formResult.isNew && entityListLastUpdated != null && entityListLastUpdated > formResult.form.getLastUpdated()) {
+                formsRepository.save(
+                    Form.Builder(formResult.form)
+                        .lastDetectedAttachmentsUpdateDate(entityListLastUpdated)
+                        .build()
+                )
+            }
+        }
     }
 
     private fun downloadMediaFile(
@@ -328,9 +342,20 @@ object ServerFormUseCases {
     }
 }
 
-class EntityListUpdateException(cause: Throwable) : Exception(cause)
-
-data class MediaFilesDownloadResult(
+data class MediaFilesDownload(
+    val tempMediaPath: String,
     val newAttachmentsDownloaded: Boolean,
+    val entityLists: List<EntityListDownload>
+) {
     val entitiesDownloaded: Boolean
-)
+        get() = entityLists.isNotEmpty()
+}
+
+sealed interface EntityListDownload {
+    val mediaFile: MediaFile
+
+    data class Update(override val mediaFile: MediaFile, val file: File) : EntityListDownload
+    data class Skipped(override val mediaFile: MediaFile) : EntityListDownload
+}
+
+data class FormResult(val form: Form, val isNew: Boolean)

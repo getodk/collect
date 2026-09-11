@@ -25,7 +25,7 @@ class EntityFormApprovalTest {
         testDependencies.server.addForm("one-question-entity-registration.xml")
         testDependencies.server.addForm(
             "one-question-entity-update.xml",
-            listOf(EntityListItem("people.csv", true))
+            listOf(EntityListItem("people.csv", approvalList = true))
         )
 
         rule.withProject(testDependencies.server.url, matchExactly = true)
@@ -42,7 +42,7 @@ class EntityFormApprovalTest {
         testDependencies.server.addForm("one-question-entity-registration.xml")
         testDependencies.server.addForm(
             "one-question-entity-update.xml",
-            listOf(EntityListItem("people.csv", true))
+            listOf(EntityListItem("people.csv", approvalList = true))
         )
 
         rule.withProject(testDependencies.server.url, matchExactly = true)
