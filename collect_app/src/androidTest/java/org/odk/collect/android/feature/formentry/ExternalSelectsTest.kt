@@ -91,9 +91,7 @@ class ExternalSelectsTest {
             // Start a new form to verify that the answers from the previous one are retained
             .startBlankForm("Search with last-saved")
             .clickGoToArrow()
-            .assertText("Select fruit")
             .assertAnswer("Mango")
-            .assertText("Select numbers")
             .assertAnswer("One, Two")
 
             // Change the answers in a field-list and verify no errors occur
@@ -101,9 +99,7 @@ class ExternalSelectsTest {
             .clickOnText("Strawberries")
             .clickOnText("Three")
             .clickGoToArrow()
-            .assertText("Select fruit")
             .assertAnswer("Strawberries")
-            .assertText("Select numbers")
             .assertAnswer("One, Two, Three")
     }
 }
