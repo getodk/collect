@@ -76,34 +76,30 @@ class ExternalSelectsTest {
             .assertText("File: $formsDirPath/dynamic_and_static_choices-media/numbers.csv is missing.")
     }
 
-    @Test // https://github.com/getodk/collect/issues/6801
+    @Test // https://github.com/getodk/collect/issues/6801 and https://github.com/getodk/collect/issues/7387
     fun searchFunctionWorksWellWithLastSaved() {
         rule.startAtMainMenu()
-            // Fill out and finalize the first form
-            .copyForm("search-with-last-saved.xml", listOf("fruits.csv"))
+            // Fill out and finalize a form so that there is a last-saved instance
+            .copyForm("search-with-last-saved.xml", listOf("fruits.csv", "external_data.csv"))
             .startBlankForm("Search with last-saved")
             .clickOnText("Mango")
-            .swipeToNextQuestion("Select fruit 2")
-            .clickOnText("Oranges")
+            .clickOnText("One")
+            .clickOnText("Two")
             .swipeToEndScreen()
             .clickFinalize()
 
-            // Start a new form to verify that answers from the previous form are retained
+            // Start a new form to verify that the answers from the previous one are retained
             .startBlankForm("Search with last-saved")
-            .swipeToNextQuestion("Select fruit 2")
             .clickGoToArrow()
-            .assertText("Select fruit 1")
             .assertAnswer("Mango")
-            .assertText("Select fruit 2")
-            .assertAnswer("Oranges")
+            .assertAnswer("One, Two")
 
-            // Change an answer in a field-list and verify no errors occur
-            .clickOnQuestion("Select fruit 2")
+            // Change the answers in a field-list and verify no errors occur
+            .clickOnQuestion("Select fruit")
             .clickOnText("Strawberries")
+            .clickOnText("Three")
             .clickGoToArrow()
-            .assertText("Select fruit 1")
-            .assertAnswer("Mango")
-            .assertText("Select fruit 2")
             .assertAnswer("Strawberries")
+            .assertAnswer("One, Two, Three")
     }
 }
