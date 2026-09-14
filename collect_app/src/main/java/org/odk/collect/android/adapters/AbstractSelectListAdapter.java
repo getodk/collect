@@ -18,6 +18,7 @@ package org.odk.collect.android.adapters;
 
 import static org.odk.collect.android.formentry.media.FormMediaUtils.getClip;
 import static org.odk.collect.android.formentry.media.FormMediaUtils.getClipID;
+import static org.odk.collect.android.formentry.media.FormMediaUtils.getMediaFile;
 import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayableAudioURI;
 
 import android.content.Context;
@@ -235,22 +236,10 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
             String videoURI = prompt.getSpecialFormSelectChoiceText(item, "video");
             String bigImageURI = prompt.getSpecialFormSelectChoiceText(item, "big-image");
             String audioURI = getPlayableAudioURI(prompt, item, referenceManager);
-            try {
-                if (imageURI != null) {
-                    audioVideoImageTextLabel.setImage(new File(referenceManager.deriveReference(imageURI).getLocalURI()), new GlideImageLoader());
-                }
-                if (bigImageURI != null) {
-                    audioVideoImageTextLabel.setBigImage(new File(referenceManager.deriveReference(bigImageURI).getLocalURI()));
-                }
-                if (videoURI != null) {
-                    audioVideoImageTextLabel.setVideo(new File(referenceManager.deriveReference(videoURI).getLocalURI()));
-                }
-                if (audioURI != null) {
-                    audioVideoImageTextLabel.setAudio(audioURI, audioPlayer);
-                }
-            } catch (InvalidReferenceException e) {
-                Timber.d(e, "Invalid media reference due to %s ", e.getMessage());
-            }
+            audioVideoImageTextLabel.setImage(getMediaFile(imageURI, referenceManager), new GlideImageLoader());
+            audioVideoImageTextLabel.setBigImage(getMediaFile(bigImageURI, referenceManager));
+            audioVideoImageTextLabel.setVideo(getMediaFile(videoURI, referenceManager));
+            audioVideoImageTextLabel.setAudio(audioURI, audioPlayer);
 
             textView.setGravity(Gravity.CENTER_VERTICAL);
         }

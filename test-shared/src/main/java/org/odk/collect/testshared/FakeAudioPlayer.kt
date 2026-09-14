@@ -4,6 +4,7 @@ import androidx.activity.ComponentActivity
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import org.odk.collect.async.Cancellable
 import org.odk.collect.audioclips.AudioPlayer
 import org.odk.collect.audioclips.AudioPlayerFactory
 import org.odk.collect.audioclips.Clip
@@ -42,8 +43,18 @@ class FakeAudioPlayer : AudioPlayer {
         positionChangedListeners[clipId]!!.accept(position)
     }
 
-    override fun onPlayingChanged(clipID: String, playingConsumer: Consumer<Boolean>) {
+    override fun onPlayingChanged(clipID: String, playingConsumer: Consumer<Boolean>): Cancellable {
         playingChangedListeners[clipID] = playingConsumer
+
+        return object : Cancellable {
+            override fun cancel(): Boolean {
+                return playingChangedListeners.remove(clipID) != null
+            }
+        }
+    }
+
+    fun isBeingObserved(clipID: String): Boolean {
+        return playingChangedListeners.containsKey(clipID)
     }
 
     override fun onPositionChanged(clipID: String, positionConsumer: Consumer<Int>) {

@@ -75,6 +75,19 @@ public class AudioVideoImageTextLabelTest {
     }
 
     @Test
+    public void settingAudioAgain_stopsObservingThePreviousClip() {
+        AudioVideoImageTextLabel label = new AudioVideoImageTextLabel(activity);
+        label.setTag("clip1");
+        label.setAudio("file://audio1.mp3", audioPlayer);
+
+        label.setTag("clip2");
+        label.setAudio("file://audio2.mp3", audioPlayer);
+
+        assertThat(audioPlayer.isBeingObserved("clip1"), is(false));
+        assertThat(audioPlayer.isBeingObserved("clip2"), is(true));
+    }
+
+    @Test
     public void withText_andAudio_playingAudio_highlightsText() {
         AudioVideoImageTextLabel audioVideoImageTextLabel = new AudioVideoImageTextLabel(activity);
         audioVideoImageTextLabel.setTag("blah");
