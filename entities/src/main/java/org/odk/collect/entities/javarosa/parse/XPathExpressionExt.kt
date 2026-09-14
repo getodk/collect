@@ -64,7 +64,7 @@ object XPathExpressionExt {
         return if (candidate != null) {
             val steps = candidate.nodeSide.steps
             val child = if (steps.size == 1) {
-                steps[0].name.name
+                steps[0].name?.name ?: return null
             } else if (isNodeRelativeExpression(steps)) {
                 steps[1].name.name
             } else {
