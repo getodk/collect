@@ -97,7 +97,7 @@ public class ServerFormDownloader implements FormDownloader {
             } catch (FormSourceException e) {
                 cleanUp(formFileDownload, mediaFilesDownload.getTempMediaPath());
                 throw new FormDownloadException.FormSourceError(e);
-            } catch (FormDownloadException e) {
+            } catch (Exception e) {
                 cleanUp(formFileDownload, mediaFilesDownload.getTempMediaPath());
                 throw e;
             }
