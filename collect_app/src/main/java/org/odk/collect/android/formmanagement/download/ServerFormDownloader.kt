@@ -72,15 +72,10 @@ class ServerFormDownloader(
         tempDir.mkdirs()
 
         try {
-            val formFileDownload: FormFileDownload
-            val mediaFilesDownload: MediaFilesDownload
-
-            try {
+            val (formFileDownload, mediaFilesDownload) = try {
                 val stateListener: OngoingWorkListener =
                     ProgressReporterAndSupplierStateListener(progressReporter, isCancelled)
-                val result = processOneForm(form, stateListener, tempDir, formsDirPath)
-                formFileDownload = result.first
-                mediaFilesDownload = result.second
+                processOneForm(form, stateListener, tempDir, formsDirPath)
             } catch (e: FormSourceException) {
                 throw FormSourceError(e)
             }
@@ -109,20 +104,21 @@ class ServerFormDownloader(
         tempDir: File,
         formsDirPath: String
     ): Pair<FormFileDownload, MediaFilesDownload> {
-        // use a temporary media path until everything is ok.
         val tempMediaPath = File(tempDir, "media").absolutePath
-        var formFileDownload: FormFileDownload? = null
-        val mediaFilesDownload: MediaFilesDownload?
 
-        try {
-            // get the xml file
-            // if we've downloaded a duplicate, this gives us the file
-            formFileDownload =
-                downloadXform(fd.formName, fd.downloadUrl, stateListener, tempDir, formsDirPath)
+        // get the xml file
+        // if we've downloaded a duplicate, this gives us the original file
+        val formFileDownload = try {
+            downloadXform(fd.formName, fd.downloadUrl, stateListener, tempDir, formsDirPath)
+        } catch (_: InterruptedException) {
+            cleanUp(null, tempMediaPath)
+            throw DownloadingInterrupted()
+        }
 
+        return try {
             // download media files if there are any
-            if (fd.manifest != null && !fd.manifest.mediaFiles.isEmpty()) {
-                mediaFilesDownload = ServerFormUseCases.downloadMediaFiles(
+            val mediaFilesDownload = if (fd.manifest != null && !fd.manifest.mediaFiles.isEmpty()) {
+                ServerFormUseCases.downloadMediaFiles(
                     fd,
                     formSource,
                     formsRepository,
@@ -132,8 +128,7 @@ class ServerFormDownloader(
                     stateListener!!
                 )
             } else {
-                mediaFilesDownload =
-                    MediaFilesDownload(tempMediaPath, false, mutableListOf())
+                MediaFilesDownload(tempMediaPath, false, mutableListOf())
             }
 
             ServerFormUseCases.copySavedFileFromPreviousFormVersionIfExists(
@@ -141,6 +136,13 @@ class ServerFormDownloader(
                 fd.formId!!,
                 tempMediaPath
             )
+
+            if (stateListener != null && stateListener.isCancelled) {
+                cleanUp(formFileDownload, tempMediaPath)
+                throw DownloadingInterrupted()
+            }
+
+            Pair(formFileDownload, mediaFilesDownload)
         } catch (e: DownloadingInterrupted) {
             i(e)
             cleanUp(formFileDownload, tempMediaPath)
@@ -152,18 +154,6 @@ class ServerFormDownloader(
         } catch (_: IOException) {
             throw DiskError()
         }
-
-        if (stateListener != null && stateListener.isCancelled) {
-            cleanUp(formFileDownload, tempMediaPath)
-            throw DownloadingInterrupted()
-        }
-
-        return Pair(formFileDownload, mediaFilesDownload)
-    }
-
-    private fun isSubmissionOk(formMetadata: FormMetadata): Boolean {
-        val submission = formMetadata.submissionUri
-        return submission == null || isUrlValid(submission)
     }
 
     @Throws(
@@ -192,17 +182,15 @@ class ServerFormDownloader(
             throw InvalidSubmission()
         }
 
-        val formResult: FormResult?
-
-        val formFile: File
-
-        if (formFileDownload.isNew) {
-            // Copy form to forms dir
-            formFile = File(formsDirPath, formFileDownload.file.name)
-            FileUtils.copyFile(formFileDownload.file, formFile)
+        val formFile = if (formFileDownload.isNew) {
+            File(formsDirPath, formFileDownload.file.name).also {
+                FileUtils.copyFile(formFileDownload.file, it)
+            }
         } else {
-            formFile = formFileDownload.file
+            formFileDownload.file
+        }
 
+        if (!formFileDownload.isNew) {
             if (mediaFilesDownload.newAttachmentsDownloaded) {
                 val existingForm = formsRepository.getOneByPath(formFile.absolutePath)
                 if (existingForm != null) {
@@ -227,7 +215,7 @@ class ServerFormDownloader(
         }
 
         // Save form in database
-        formResult = findOrCreateForm(formFile, formMetadata, mediaFilesDownload)
+        val formResult = findOrCreateForm(formFile, formMetadata, mediaFilesDownload)
 
         ingestEntityListsFromDownload(
             formResult,
@@ -248,7 +236,12 @@ class ServerFormDownloader(
         }
     }
 
-    private fun cleanUp(formFileDownload: FormFileDownload?, tempMediaPath: String?) {
+    private fun isSubmissionOk(formMetadata: FormMetadata): Boolean {
+        val submission = formMetadata.submissionUri
+        return submission == null || isUrlValid(submission)
+    }
+
+    private fun cleanUp(formFileDownload: FormFileDownload?, tempMediaPath: String) {
         if (formFileDownload == null) {
             d("The user cancelled (or an exception happened) the download of a form at the very beginning.")
         } else {
@@ -263,9 +256,7 @@ class ServerFormDownloader(
             }
         }
 
-        if (tempMediaPath != null) {
-            FileUtils.purgeMediaPath(tempMediaPath)
-        }
+        FileUtils.purgeMediaPath(tempMediaPath)
     }
 
     private fun findOrCreateForm(
