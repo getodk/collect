@@ -10,14 +10,11 @@ fun URI.getQueryParameter(param: String): String? {
         val paramRegex = "([^=]+)=(.*)$".toRegex()
         query
             .split("&")
-            .mapNotNull {
+            .map {
                 val matchResult = paramRegex.find(it)
                 if (matchResult != null) {
                     val groups = matchResult.groupValues.drop(1)
-                    when (groups.size) {
-                        2 -> groups[0] to URLDecoder.decode(groups[1], "UTF-8")
-                        else -> null
-                    }
+                    groups[0] to URLDecoder.decode(groups[1], "UTF-8")
                 } else {
                     it to ""
                 }
