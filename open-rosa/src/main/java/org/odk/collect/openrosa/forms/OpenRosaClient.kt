@@ -66,11 +66,7 @@ class OpenRosaClient(
     }
 
     @Throws(FormSourceException::class)
-    override fun fetchManifest(manifestURL: String?): ManifestFile? {
-        if (manifestURL == null) {
-            return null
-        }
-
+    override fun fetchManifest(manifestURL: String): ManifestFile {
         val result = mapException { openRosaXMLFetcher.getXML(manifestURL) }
 
         if (result.errorMessage != null) {

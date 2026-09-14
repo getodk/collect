@@ -47,7 +47,7 @@ class DownloadMediaFilesServerFormUseCasesTest {
         val mediaFile = MediaFile("file", existingMediaFileHash, "downloadUrl")
         val manifestFile = ManifestFile(null, listOf(mediaFile))
         val serverFormDetails =
-            ServerFormDetails(null, null, "formId", "3", null, false, true, manifestFile)
+            ServerFormDetails("blah", "http://example.com", "formId", "3", null, false, true, manifestFile)
         val formSource = mock<FormSource> {
             on { fetchMediaFile(mediaFile.downloadUrl) } doReturn "existing".toByteArray()
                 .inputStream()
@@ -91,7 +91,7 @@ class DownloadMediaFilesServerFormUseCasesTest {
         val mediaFile = MediaFile("file", "somethingElse", "downloadUrl")
         val manifestFile = ManifestFile(null, listOf(mediaFile))
         val serverFormDetails =
-            ServerFormDetails(null, null, "formId", "3", null, false, true, manifestFile)
+            ServerFormDetails("blah", "http://example.com", "formId", "3", null, false, true, manifestFile)
         val formSource = mock<FormSource> {
             on { fetchMediaFile(mediaFile.downloadUrl) } doReturn "existing".toByteArray()
                 .inputStream()
@@ -124,7 +124,7 @@ class DownloadMediaFilesServerFormUseCasesTest {
         val mediaFile = MediaFile("$listName.csv", listHash, "downloadUrl", type = MediaFile.Type.ENTITY_LIST)
         val manifestFile = ManifestFile(null, listOf(mediaFile))
         val form =
-            ServerFormDetails(null, null, "2", "1", null, true, false, manifestFile)
+            ServerFormDetails("blah", "http://example.com", "2", "1", null, true, false, manifestFile)
         val formSource = mock<FormSource> {
             on { fetchMediaFile(mediaFile.downloadUrl) } doAnswer {
                 "name,label,__version".toByteArray().inputStream()

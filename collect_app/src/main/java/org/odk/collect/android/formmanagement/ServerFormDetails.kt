@@ -17,8 +17,8 @@ import org.odk.collect.forms.ManifestFile
 import java.io.Serializable
 
 data class ServerFormDetails @JvmOverloads constructor(
-    val formName: String?,
-    val downloadUrl: String?,
+    val formName: String,
+    val downloadUrl: String,
     val formId: String?,
     val formVersion: String?,
     val hash: String?,
@@ -28,8 +28,8 @@ data class ServerFormDetails @JvmOverloads constructor(
 
     @Deprecated(message = "Use primary constructor instead")
     constructor(
-        formName: String?,
-        downloadUrl: String?,
+        formName: String,
+        downloadUrl: String,
         formId: String?,
         formVersion: String?,
         hash: String?,

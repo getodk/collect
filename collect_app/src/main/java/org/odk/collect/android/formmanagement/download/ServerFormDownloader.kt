@@ -100,7 +100,7 @@ class ServerFormDownloader(
     @Throws(FormDownloadException::class, FormSourceException::class)
     private fun processOneForm(
         fd: ServerFormDetails,
-        stateListener: OngoingWorkListener?,
+        stateListener: OngoingWorkListener,
         tempDir: File,
         formsDirPath: String
     ): Pair<FormFileDownload, MediaFilesDownload> {
@@ -125,7 +125,7 @@ class ServerFormDownloader(
                     tempMediaPath,
                     tempDir,
                     entitiesRepository,
-                    stateListener!!
+                    stateListener
                 )
             } else {
                 MediaFilesDownload(tempMediaPath, false, mutableListOf())
@@ -137,7 +137,7 @@ class ServerFormDownloader(
                 tempMediaPath
             )
 
-            if (stateListener != null && stateListener.isCancelled) {
+            if (stateListener.isCancelled) {
                 cleanUp(formFileDownload, tempMediaPath)
                 throw DownloadingInterrupted()
             }
@@ -316,11 +316,11 @@ class ServerFormDownloader(
         InterruptedException::class
     )
     private fun downloadXform(
-        formName: String?,
-        url: String?,
-        stateListener: OngoingWorkListener?,
-        tempDir: File?,
-        formsDirPath: String?
+        formName: String,
+        url: String,
+        stateListener: OngoingWorkListener,
+        tempDir: File,
+        formsDirPath: String
     ): FormFileDownload {
         val xform = formSource.fetchForm(url)
 
