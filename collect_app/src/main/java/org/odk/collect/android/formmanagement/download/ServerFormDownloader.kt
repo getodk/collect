@@ -37,8 +37,8 @@ import java.util.function.Supplier
 class ServerFormDownloader(
     private val formSource: FormSource,
     private val formsRepository: FormsRepository,
-    private val cacheDir: File?,
-    private val formsDirPath: String?,
+    private val cacheDir: File,
+    private val formsDirPath: String,
     private val formMetadataParser: FormMetadataParser,
     private val clock: Supplier<Long>,
     private val entitiesRepository: EntitiesRepository,
@@ -107,7 +107,7 @@ class ServerFormDownloader(
         fd: ServerFormDetails,
         stateListener: OngoingWorkListener?,
         tempDir: File,
-        formsDirPath: String?
+        formsDirPath: String
     ): Pair<FormFileDownload, MediaFilesDownload> {
         // use a temporary media path until everything is ok.
         val tempMediaPath = File(tempDir, "media").absolutePath
@@ -175,7 +175,7 @@ class ServerFormDownloader(
     private fun installEverything(
         formFileDownload: FormFileDownload,
         mediaFilesDownload: MediaFilesDownload,
-        formsDirPath: String?
+        formsDirPath: String
     ) {
         val formMetadata = try {
             val start = System.currentTimeMillis()
