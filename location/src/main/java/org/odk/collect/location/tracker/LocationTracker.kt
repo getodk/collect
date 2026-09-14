@@ -4,6 +4,7 @@ import android.app.ActivityManager
 import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -42,62 +43,14 @@ interface LocationTracker {
      * Stops tracking location. Does not reset the value returned by [LocationTracker.getCurrentLocation].
      */
     fun stop()
+
+    fun bindToLifecycle(
+        context: Context,
+        lifecycle: LifecycleOwner,
+        retainMockAccuracy: Boolean = false
+    )
 }
 
 fun LocationTracker.getCurrentLocation(): Location? {
     return this.getLocation().value
-}
-
-fun LocationTracker.bindToLifecycle(
-    fragment: Fragment,
-    retainMockAccuracy: Boolean = false
-) {
-    fragment.bindToForeground(
-        onForeground = {
-            start(
-                retainMockAccuracy = retainMockAccuracy,
-                updateInterval = null,
-                notification = false
-            )
-        },
-        onBackground = {
-            stop()
-        }
-    )
-}
-
-fun Fragment.bindToForeground(onForeground: () -> Unit, onBackground: () -> Unit) {
-    val delayedCheckScope = CoroutineScope(Dispatchers.Main)
-
-    lifecycle.addObserver(object : DefaultLifecycleObserver {
-        override fun onResume(owner: LifecycleOwner) {
-            delayedCheckScope.launch {
-                while (!isAppInForeground(requireContext())) {
-                    delay(100.milliseconds)
-                }
-
-                onForeground()
-            }
-        }
-
-        override fun onPause(owner: LifecycleOwner) {
-            delayedCheckScope.cancel()
-            onBackground()
-        }
-    })
-}
-
-private fun isAppInForeground(context: Context): Boolean {
-    val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-    val appProcesses = activityManager.runningAppProcesses ?: return false
-
-    val packageName = context.packageName
-    for (appProcess in appProcesses) {
-        if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND &&
-            appProcess.processName == packageName) {
-            return true
-        }
-    }
-
-    return false
 }
