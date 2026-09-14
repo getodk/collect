@@ -1,6 +1,5 @@
 package org.odk.collect.android.formmanagement.download
 
-import org.odk.collect.android.formmanagement.EntityListDownload
 import org.odk.collect.android.formmanagement.FormResult
 import org.odk.collect.android.formmanagement.MediaFilesDownload
 import org.odk.collect.android.formmanagement.ServerFormDetails
@@ -98,7 +97,7 @@ class ServerFormDownloader(
         } finally {
             tempDir.deleteDirectory()
             for (formToDelete in preExistingFormsWithSameIdAndVersion) {
-                formsRepository.delete(formToDelete.getDbId())
+                formsRepository.delete(formToDelete.dbId)
             }
         }
     }
@@ -111,7 +110,7 @@ class ServerFormDownloader(
         formsDirPath: String?
     ): Pair<FormFileDownload, MediaFilesDownload> {
         // use a temporary media path until everything is ok.
-        val tempMediaPath = File(tempDir, "media").getAbsolutePath()
+        val tempMediaPath = File(tempDir, "media").absolutePath
         var formFileDownload: FormFileDownload? = null
         val mediaFilesDownload: MediaFilesDownload?
 
@@ -134,7 +133,7 @@ class ServerFormDownloader(
                 )
             } else {
                 mediaFilesDownload =
-                    MediaFilesDownload(tempMediaPath, false, mutableListOf<EntityListDownload>())
+                    MediaFilesDownload(tempMediaPath, false, mutableListOf())
             }
 
             ServerFormUseCases.copySavedFileFromPreviousFormVersionIfExists(
@@ -150,7 +149,7 @@ class ServerFormDownloader(
             i(e)
             cleanUp(formFileDownload, tempMediaPath)
             throw DownloadingInterrupted()
-        } catch (e: IOException) {
+        } catch (_: IOException) {
             throw DiskError()
         }
 
@@ -159,7 +158,7 @@ class ServerFormDownloader(
             throw DownloadingInterrupted()
         }
 
-        return Pair<FormFileDownload, MediaFilesDownload>(formFileDownload, mediaFilesDownload)
+        return Pair(formFileDownload, mediaFilesDownload)
     }
 
     private fun isSubmissionOk(formMetadata: FormMetadata): Boolean {
@@ -180,7 +179,7 @@ class ServerFormDownloader(
     ) {
         val formMetadata = try {
             val start = System.currentTimeMillis()
-            i("Parsing document %s", formFileDownload.file.getAbsolutePath())
+            i("Parsing document %s", formFileDownload.file.absolutePath)
 
             formMetadataParser.readMetadata(formFileDownload.file).also {
                 i("Parse finished in %.3f seconds.", (System.currentTimeMillis() - start) / 1000f)
@@ -199,13 +198,13 @@ class ServerFormDownloader(
 
         if (formFileDownload.isNew) {
             // Copy form to forms dir
-            formFile = File(formsDirPath, formFileDownload.file.getName())
+            formFile = File(formsDirPath, formFileDownload.file.name)
             FileUtils.copyFile(formFileDownload.file, formFile)
         } else {
             formFile = formFileDownload.file
 
             if (mediaFilesDownload.newAttachmentsDownloaded) {
-                val existingForm = formsRepository.getOneByPath(formFile.getAbsolutePath())
+                val existingForm = formsRepository.getOneByPath(formFile.absolutePath)
                 if (existingForm != null) {
                     formsRepository.save(
                         Form.Builder(existingForm)
@@ -216,7 +215,7 @@ class ServerFormDownloader(
             }
 
             if (mediaFilesDownload.entitiesDownloaded) {
-                val existingForm = formsRepository.getOneByPath(formFile.getAbsolutePath())
+                val existingForm = formsRepository.getOneByPath(formFile.absolutePath)
                 if (existingForm != null) {
                     formsRepository.save(
                         Form.Builder(existingForm)
@@ -258,7 +257,7 @@ class ServerFormDownloader(
                 if (md5Hash != null) {
                     val form = formsRepository.getOneByMd5Hash(md5Hash)
                     if (form != null) {
-                        formsRepository.delete(form.getDbId())
+                        formsRepository.delete(form.dbId)
                     }
                 }
             }
@@ -274,10 +273,10 @@ class ServerFormDownloader(
         formMetadata: FormMetadata,
         mediaFilesDownload: MediaFilesDownload
     ): FormResult {
-        val formFilePath = formFile.getAbsolutePath()
+        val formFilePath = formFile.absolutePath
         val mediaPath = FileUtils.constructMediaPath(formFilePath)
 
-        val existingForm = formsRepository.getOneByPath(formFile.getAbsolutePath())
+        val existingForm = formsRepository.getOneByPath(formFile.absolutePath)
 
         if (existingForm == null) {
             val newForm = saveNewForm(
@@ -299,7 +298,7 @@ class ServerFormDownloader(
         entityAttachmentsDetected: Boolean
     ): Form {
         val form = Form.Builder()
-            .formFilePath(formFile.getAbsolutePath())
+            .formFilePath(formFile.absolutePath)
             .formMediaPath(mediaPath)
             .displayName(formMetadata.title)
             .version(formMetadata.version)
@@ -346,7 +345,7 @@ class ServerFormDownloader(
             FileUtils.deleteAndReport(tempFormFile)
 
             // set the file returned to the file we already had
-            return FormFileDownload(File(form.getFormFilePath()), false)
+            return FormFileDownload(File(form.formFilePath), false)
         } else {
             return FormFileDownload(tempFormFile, true)
         }
@@ -369,7 +368,7 @@ class ServerFormDownloader(
     companion object {
         private fun getFormFileName(formName: String?, formsDirPath: String?): String {
             val formattedFormName = FormNameUtils.formatFilenameFromFormName(formName)
-            var fileName = formattedFormName + ".xml"
+            var fileName = "$formattedFormName.xml"
             var i = 2
             while (File(formsDirPath + File.separator + fileName).exists()) {
                 fileName = formattedFormName + "_" + i + ".xml"
