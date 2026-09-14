@@ -59,9 +59,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:gravity="end"
-        android:orientation="vertical"
-        android:visibility="gone"
-        tools:visibility="visible">
+        android:orientation="vertical">
 
         <org.odk.collect.android.audio.AudioButton
             android:id="@+id/audioButton"
