@@ -240,7 +240,7 @@ class ServerFormDownloader(
 
         // move the media files in the media folder
         val tempMediaPath = mediaFilesDownload.tempMediaPath
-        val formMediaDir = File(formResult.form.getFormMediaPath())
+        val formMediaDir = File(formResult.form.formMediaPath)
         try {
             moveMediaFiles(tempMediaPath, formMediaDir)
         } catch (e: IOException) {
