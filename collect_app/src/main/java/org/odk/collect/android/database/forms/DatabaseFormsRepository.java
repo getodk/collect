@@ -106,10 +106,6 @@ public class DatabaseFormsRepository implements FormsRepository {
     @Nullable
     @Override
     public Form getOneByMd5Hash(@NotNull String hash) {
-        if (hash == null) {
-            throw new IllegalArgumentException("Missing form hash. ODK-compatible servers must include form hashes in their form lists. Please talk to the person who asked you to collect data.");
-        }
-
         String selection = DatabaseFormColumns.MD5_HASH + "=?";
         String[] selectionArgs = {hash};
         return queryForForm(selection, selectionArgs);

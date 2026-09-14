@@ -360,11 +360,6 @@ public abstract class FormsRepositoryTest {
         assertThat(savepointsRepository.getAll().isEmpty(), equalTo(true));
     }
 
-    @Test(expected = Exception.class)
-    public void getOneByMd5Hash_whenHashIsNull_explodes() {
-        buildSubject().getOneByMd5Hash(null);
-    }
-
     @Test
     public void getOneByMd5Hash_returnsMatchingForm() {
         FormsRepository formsRepository = buildSubject();
