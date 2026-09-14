@@ -93,7 +93,7 @@ object XPathExpressionExt {
 
     private fun isNodeRelativeExpression(steps: Array<XPathStep>): Boolean {
         return if (steps.size == 2 && steps[0].test == TEST_TYPE_NODE) {
-            return steps[0].axis == AXIS_SELF || steps[0].axis == AXIS_CHILD
+            steps[0].axis == AXIS_SELF || steps[0].axis == AXIS_CHILD
         } else {
             false
         }
