@@ -371,19 +371,11 @@ class ServerFormDownloader(
         @Throws(IOException::class)
         private fun moveMediaFiles(tempMediaPath: String, formMediaPath: File) {
             val tempMediaFolder = File(tempMediaPath)
-            val mediaFiles = tempMediaFolder.listFiles()
-
-            if (mediaFiles != null && mediaFiles.size != 0) {
-                for (mediaFile in mediaFiles) {
-                    try {
-                        org.apache.commons.io.FileUtils.copyFileToDirectory(
-                            mediaFile,
-                            formMediaPath
-                        )
-                    } catch (e: IllegalArgumentException) {
-                        // This can happen if copyFileToDirectory is pointed at a file instead of a dir
-                        throw IOException(e)
-                    }
+            tempMediaFolder.listFiles()?.takeIf { it.isNotEmpty() }?.forEach { mediaFile ->
+                try {
+                    org.apache.commons.io.FileUtils.copyFileToDirectory(mediaFile, formMediaPath)
+                } catch (e: IllegalArgumentException) {
+                    throw IOException(e)
                 }
             }
         }
