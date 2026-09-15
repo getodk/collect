@@ -51,21 +51,21 @@ class ServerFormDownloader(
         progressReporter: ProgressReporter?,
         isCancelled: Supplier<Boolean>?
     ) {
-        var preExistingFormsWithSameIdAndVersion: MutableList<Form> = ArrayList()
-
         val formOnDevice = if (!form.hash.isNullOrEmpty()) {
             formsRepository.getOneByMd5Hash(form.hash)
         } else {
             throw FormWithNoHash()
         }
 
+        val preExistingFormsWithSameIdAndVersion = mutableListOf<Form>()
         if (formOnDevice != null) {
             if (formOnDevice.isDeleted) {
                 formsRepository.restore(formOnDevice.dbId)
             }
         } else {
-            preExistingFormsWithSameIdAndVersion =
+            preExistingFormsWithSameIdAndVersion.addAll(
                 formsRepository.getAllByFormIdAndVersion(form.formId, form.formVersion)
+            )
         }
 
         val tempDir = File(cacheDir, "download-" + UUID.randomUUID().toString())
