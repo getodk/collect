@@ -227,8 +227,8 @@ class ServerFormDownloader(
 
         ServerFormUseCases.copySavedFileFromPreviousFormVersionIfExists(
             formsRepository,
-            formResult.form.formId,
-            tempMediaPath
+            formResult.form,
+            formMediaDir.absolutePath
         )
     }
 

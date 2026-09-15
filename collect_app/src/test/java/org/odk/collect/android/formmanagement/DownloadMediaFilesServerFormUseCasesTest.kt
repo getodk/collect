@@ -148,9 +148,12 @@ class DownloadMediaFilesServerFormUseCasesTest {
     @Test
     fun `#copySavedFileFromPreviousFormVersionIfExists does not copy any file if there is no matching last-saved file`() {
         val destinationMediaDirPath = TempFiles.createTempDir().absolutePath
+        val formsRepository = InMemFormsRepository()
+        val form = formsRepository.save(FormFixtures.form())
+
         ServerFormUseCases.copySavedFileFromPreviousFormVersionIfExists(
-            InMemFormsRepository(),
-            "1",
+            formsRepository,
+            form,
             destinationMediaDirPath
         )
 
@@ -159,7 +162,7 @@ class DownloadMediaFilesServerFormUseCasesTest {
     }
 
     @Test
-    fun `#copySavedFileFromPreviousFormVersionIfExists copies the newest matching last-saved file for given formId`() {
+    fun `#copySavedFileFromPreviousFormVersionIfExists copies the newest matching last-saved file for given form`() {
         val tempDir1 = TempFiles.createTempDir()
         val file1 = TempFiles.createTempFile(tempDir1, "last-saved", ".xml")
         org.apache.commons.io.FileUtils.writeByteArrayToFile(file1, "file1".toByteArray())
@@ -179,7 +182,6 @@ class DownloadMediaFilesServerFormUseCasesTest {
         val formsRepository = InMemFormsRepository().also {
             it.save(
                 Form.Builder()
-                    .dbId(1)
                     .formId("1")
                     .version("1")
                     .date(0)
@@ -190,7 +192,6 @@ class DownloadMediaFilesServerFormUseCasesTest {
 
             it.save(
                 Form.Builder()
-                    .dbId(2)
                     .formId("1")
                     .version("2")
                     .date(2)
@@ -201,7 +202,6 @@ class DownloadMediaFilesServerFormUseCasesTest {
 
             it.save(
                 Form.Builder()
-                    .dbId(3)
                     .formId("1")
                     .version("3")
                     .date(1)
@@ -212,7 +212,6 @@ class DownloadMediaFilesServerFormUseCasesTest {
 
             it.save(
                 Form.Builder()
-                    .dbId(4)
                     .formId("2")
                     .version("1")
                     .date(3)
@@ -222,10 +221,12 @@ class DownloadMediaFilesServerFormUseCasesTest {
             )
         }
 
+        val form = formsRepository.save(FormFixtures.form(formId = "1", version = "4"))
+
         val destinationMediaDirPath = TempFiles.createTempDir().absolutePath
         ServerFormUseCases.copySavedFileFromPreviousFormVersionIfExists(
             formsRepository,
-            "1",
+            form,
             destinationMediaDirPath
         )
 
