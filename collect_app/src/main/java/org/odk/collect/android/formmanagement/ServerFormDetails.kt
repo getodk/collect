@@ -16,10 +16,10 @@ package org.odk.collect.android.formmanagement
 import org.odk.collect.forms.ManifestFile
 import java.io.Serializable
 
-data class ServerFormDetails @JvmOverloads constructor(
+data class ServerFormDetails(
     val formName: String,
     val downloadUrl: String,
-    val formId: String?,
+    val formId: String,
     val formVersion: String?,
     val hash: String?,
     val manifest: ManifestFile?,
@@ -30,7 +30,7 @@ data class ServerFormDetails @JvmOverloads constructor(
     constructor(
         formName: String,
         downloadUrl: String,
-        formId: String?,
+        formId: String,
         formVersion: String?,
         hash: String?,
         isNotOnDevice: Boolean,

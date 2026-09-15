@@ -140,7 +140,7 @@ class ServerFormDownloader(
 
             ServerFormUseCases.copySavedFileFromPreviousFormVersionIfExists(
                 formsRepository,
-                fd.formId!!,
+                fd.formId,
                 tempMediaPath
             )
 
