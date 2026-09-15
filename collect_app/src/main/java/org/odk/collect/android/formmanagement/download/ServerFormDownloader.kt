@@ -73,8 +73,15 @@ class ServerFormDownloader(
 
         try {
             val (formFileDownload, mediaFilesDownload) = try {
-                val stateListener: OngoingWorkListener =
-                    ProgressReporterAndSupplierStateListener(progressReporter, isCancelled)
+                val stateListener = object : OngoingWorkListener {
+                    override fun progressUpdate(progress: Int) {
+                        progressReporter?.onDownloadingMediaFile(progress)
+                    }
+
+                    override val isCancelled: Boolean
+                        get() = isCancelled?.get() ?: false
+                }
+
                 processOneForm(form, stateListener, tempDir, formsDirPath)
             } catch (e: FormSourceException) {
                 throw FormSourceError(e)
@@ -236,11 +243,6 @@ class ServerFormDownloader(
         }
     }
 
-    private fun isSubmissionOk(formMetadata: FormMetadata): Boolean {
-        val submission = formMetadata.submissionUri
-        return submission == null || isUrlValid(submission)
-    }
-
     private fun cleanUp(formFileDownload: FormFileDownload?, tempMediaPath: String) {
         if (formFileDownload == null) {
             d("The user cancelled (or an exception happened) the download of a form at the very beginning.")
@@ -341,43 +343,34 @@ class ServerFormDownloader(
             return FormFileDownload(tempFormFile, true)
         }
     }
+}
 
-    private class FormFileDownload(val file: File, val isNew: Boolean)
+private data class FormFileDownload(val file: File, val isNew: Boolean)
 
-    private class ProgressReporterAndSupplierStateListener(
-        private val progressReporter: ProgressReporter?,
-        private val isCancelledProvider: Supplier<Boolean>?
-    ) : OngoingWorkListener {
-        override fun progressUpdate(progress: Int) {
-            progressReporter?.onDownloadingMediaFile(progress)
-        }
-
-        override val isCancelled: Boolean
-            get() = isCancelledProvider?.get() ?: false
+private fun getFormFileName(formName: String?, formsDirPath: String?): String {
+    val formattedFormName = FormNameUtils.formatFilenameFromFormName(formName)
+    var fileName = "$formattedFormName.xml"
+    var i = 2
+    while (File(formsDirPath + File.separator + fileName).exists()) {
+        fileName = formattedFormName + "_" + i + ".xml"
+        i++
     }
+    return fileName
+}
 
-    companion object {
-        private fun getFormFileName(formName: String?, formsDirPath: String?): String {
-            val formattedFormName = FormNameUtils.formatFilenameFromFormName(formName)
-            var fileName = "$formattedFormName.xml"
-            var i = 2
-            while (File(formsDirPath + File.separator + fileName).exists()) {
-                fileName = formattedFormName + "_" + i + ".xml"
-                i++
-            }
-            return fileName
-        }
-
-        @Throws(IOException::class)
-        private fun moveMediaFiles(tempMediaPath: String, formMediaPath: File) {
-            val tempMediaFolder = File(tempMediaPath)
-            tempMediaFolder.listFiles()?.takeIf { it.isNotEmpty() }?.forEach { mediaFile ->
-                try {
-                    org.apache.commons.io.FileUtils.copyFileToDirectory(mediaFile, formMediaPath)
-                } catch (e: IllegalArgumentException) {
-                    throw IOException(e)
-                }
-            }
+@Throws(IOException::class)
+private fun moveMediaFiles(tempMediaPath: String, formMediaPath: File) {
+    val tempMediaFolder = File(tempMediaPath)
+    tempMediaFolder.listFiles()?.takeIf { it.isNotEmpty() }?.forEach { mediaFile ->
+        try {
+            org.apache.commons.io.FileUtils.copyFileToDirectory(mediaFile, formMediaPath)
+        } catch (e: IllegalArgumentException) {
+            throw IOException(e)
         }
     }
+}
+
+private fun isSubmissionOk(formMetadata: FormMetadata): Boolean {
+    val submission = formMetadata.submissionUri
+    return submission == null || isUrlValid(submission)
 }
