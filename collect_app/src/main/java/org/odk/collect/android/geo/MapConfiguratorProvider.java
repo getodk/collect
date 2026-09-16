@@ -49,9 +49,12 @@ public class MapConfiguratorProvider {
         }
 
         if (MapLibreSupport.isAvailable()) {
-            sourceOptions.add(new SourceOption(BASEMAP_SOURCE_MAPBOX, org.odk.collect.strings.R.string.basemap_source_mapbox,
-                    new MapLibreMapConfigurator(BASEMAP_SOURCE_MAPBOX)
-            ));
+            MapLibreMapConfigurator mapboxConfigurator = new MapLibreMapConfigurator(BASEMAP_SOURCE_MAPBOX);
+            if (mapboxConfigurator.isAvailable(context)) {
+                sourceOptions.add(new SourceOption(BASEMAP_SOURCE_MAPBOX, org.odk.collect.strings.R.string.basemap_source_mapbox,
+                        mapboxConfigurator
+                ));
+            }
 
             sourceOptions.add(new SourceOption(BASEMAP_SOURCE_OSM, org.odk.collect.strings.R.string.basemap_source_osm,
                     new MapLibreMapConfigurator(BASEMAP_SOURCE_OSM)

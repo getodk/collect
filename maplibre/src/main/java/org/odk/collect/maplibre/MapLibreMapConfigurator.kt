@@ -7,6 +7,7 @@ import org.odk.collect.androidshared.ui.PrefUtils
 import org.odk.collect.androidshared.ui.ToastUtils.showLongToast
 import org.odk.collect.maps.MapConfigurator
 import org.odk.collect.maps.layers.MbtilesFile
+import org.odk.collect.settings.keys.ProjectKeys.KEY_MAPBOX_MAP_STYLE
 import org.odk.collect.shared.settings.Settings
 import org.odk.collect.strings.R
 import java.io.File
@@ -20,7 +21,11 @@ class MapLibreMapConfigurator(private val configuration: Configuration) : MapCon
          * MapLibre requires OpenGL ES version 3 since 11.0.0.
          * See: https://github.com/maplibre/maplibre-native/blob/main/platform/android/CHANGELOG.md#1100
          */
-        return isOpenGLv3Supported(context)
+        return isOpenGLv3Supported(context) && hasRequiredAccessToken(context)
+    }
+
+    private fun hasRequiredAccessToken(context: Context): Boolean {
+        return configuration.styleSetting != KEY_MAPBOX_MAP_STYLE || MapboxAccessToken.get(context) != null
     }
 
     override fun showUnavailableMessage(context: Context) {

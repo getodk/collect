@@ -169,19 +169,13 @@ class MapLibreMapFragment(private val configuration: Configuration) :
     private fun initializeMapLibre() {
         MapLibre.getInstance(
             requireContext(),
-            getMapboxAccessToken(),
+            MapboxAccessToken.get(requireContext()),
             WellKnownTileServer.Mapbox
         )
 
         // MapLibre makes no HTTP requests while the device is offline, and TileHttpServer serves
         // reference layers over HTTP, so they would never load offline without this.
         MapLibre.setConnected(true)
-    }
-
-    private fun getMapboxAccessToken(): String? {
-        val context = requireContext()
-        val id = context.resources.getIdentifier("mapbox_access_token", "string", context.packageName)
-        return if (id != 0) context.getString(id) else null
     }
 
     private fun onMapReady(map: MapLibreMap) {
