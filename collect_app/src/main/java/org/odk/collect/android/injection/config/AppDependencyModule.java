@@ -318,7 +318,6 @@ public class AppDependencyModule {
         if (!MapLibreSupport.isAvailable()) {
             try {
                 List<String> unsupportedBasemaps = new ArrayList<>(Configurations.INSTANCE.getAll().keySet());
-                unsupportedBasemaps.add("mapbox");
 
                 deviceUnsupportedSettings.put(
                         AppConfigurationKeys.GENERAL,

@@ -41,7 +41,7 @@ class MapFragmentFactoryImplTest {
     fun `MapLibreMapFragment should be returned if MapLibre selected in settings`() {
         settingsProvider
             .getUnprotectedSettings()
-            .save(ProjectKeys.KEY_BASEMAP_SOURCE, ProjectKeys.BASEMAP_SOURCE_MAPLIBRE)
+            .save(ProjectKeys.KEY_BASEMAP_SOURCE, ProjectKeys.BASEMAP_SOURCE_MAPBOX)
 
         assertThat(
             mapFragmentFactoryImpl.createMapFragment(),

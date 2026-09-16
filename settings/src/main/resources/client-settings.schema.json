@@ -77,7 +77,6 @@
           "enum": [
             "google",
             "mapbox",
-            "maplibre",
             "osm",
             "usgs",
             "stamen",

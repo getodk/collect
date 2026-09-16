@@ -13,7 +13,7 @@ class MapFragmentFactoryImpl(private val settingsProvider: SettingsProvider) : M
     override fun createMapFragment(): MapFragment {
         val settings = settingsProvider.getUnprotectedSettings()
         return when (val basemapSource = settings.getString(KEY_BASEMAP_SOURCE)) {
-            ProjectKeys.BASEMAP_SOURCE_MAPLIBRE,
+            ProjectKeys.BASEMAP_SOURCE_MAPBOX,
             ProjectKeys.BASEMAP_SOURCE_OSM,
             ProjectKeys.BASEMAP_SOURCE_USGS,
             ProjectKeys.BASEMAP_SOURCE_CARTO -> MapLibreMapFragment(basemapSource)

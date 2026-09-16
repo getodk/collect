@@ -6,8 +6,8 @@ import org.odk.collect.strings.R
 
 object Configurations {
     val all = mapOf(
-        ProjectKeys.BASEMAP_SOURCE_MAPLIBRE to Configuration(
-            name = R.string.basemap_source_maplibre,
+        ProjectKeys.BASEMAP_SOURCE_MAPBOX to Configuration(
+            name = R.string.basemap_source_mapbox,
             styleSetting = KEY_MAPBOX_MAP_STYLE,
             styleOptions = mapOf(
                 "mapbox://styles/mapbox/streets-v11" to StyleOption(
