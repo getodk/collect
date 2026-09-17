@@ -64,27 +64,31 @@ object XPathExpressionExt {
         return if (candidate != null) {
             val steps = candidate.nodeSide.steps
             val child = if (steps.size == 1) {
-                steps[0].name?.name ?: return null
+                steps[0].name?.name
             } else if (isNodeRelativeExpression(steps)) {
-                steps[1].name?.name ?: return null
+                steps[1].name?.name
             } else {
-                return null
+                null
             }
 
-            val value = candidate.evalContextSide(sourceInstance, evaluationContext)
+            if (child != null) {
+                val value = candidate.evalContextSide(sourceInstance, evaluationContext)
 
-            if (predicate.isEqual) {
-                if (value is Double) {
-                    Query.NumericEq(child, value)
+                if (predicate.isEqual) {
+                    if (value is Double) {
+                        Query.NumericEq(child, value)
+                    } else {
+                        Query.StringEq(child, value.toString())
+                    }
                 } else {
-                    Query.StringEq(child, value.toString())
+                    if (value is Double) {
+                        Query.NumericNotEq(child, value)
+                    } else {
+                        Query.StringNotEq(child, value.toString())
+                    }
                 }
             } else {
-                if (value is Double) {
-                    Query.NumericNotEq(child, value)
-                } else {
-                    Query.StringNotEq(child, value.toString())
-                }
+                null
             }
         } else {
             null
