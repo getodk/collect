@@ -54,4 +54,16 @@ public class ServerSettingsTest {
                 .assertMessage("All downloads succeeded!")
                 .clickOKOnDialog(new MainMenuPage());
     }
+
+    @Test
+    public void whenChangingServerUrl_typingImmediatelyReplacesExistingUrl() {
+        new MainMenuPage().assertOnPage()
+                .openProjectSettingsDialog()
+                .clickSettings()
+                .clickServerSettings()
+                .clickOnURL()
+                .addText("https://demo.getodk.org", "https://example.com")
+                .clickOKOnDialog()
+                .assertText("https://example.com");
+    }
 }

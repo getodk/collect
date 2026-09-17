@@ -64,6 +64,7 @@ public class ServerPreferencesFragment extends BaseProjectPreferencesFragment {
 
         serverUrlPreference.setOnPreferenceChangeListener(createChangeListener());
         serverUrlPreference.setSummary(serverUrlPreference.getText());
+        serverUrlPreference.setOnBindEditTextListener(editText -> editText.selectAll());
 
         usernamePreference.setOnPreferenceChangeListener(createChangeListener());
         usernamePreference.setSummary(usernamePreference.getText());
