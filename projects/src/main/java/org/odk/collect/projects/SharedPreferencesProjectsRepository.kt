@@ -50,7 +50,7 @@ class SharedPreferencesProjectsRepository @JvmOverloads constructor(
     }
 
     override fun delete(uuid: String) {
-        val projects = getAll().toMutableList().minus(get(uuid))
+        val projects = getJsonProjects().filterNot { it.uuid == uuid }
         settings.save(key, gson.toJson(projects))
     }
 
