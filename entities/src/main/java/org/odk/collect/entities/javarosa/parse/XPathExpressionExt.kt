@@ -64,27 +64,31 @@ object XPathExpressionExt {
         return if (candidate != null) {
             val steps = candidate.nodeSide.steps
             val child = if (steps.size == 1) {
-                steps[0].name.name
+                steps[0].name?.name
             } else if (isNodeRelativeExpression(steps)) {
-                steps[1].name.name
+                steps[1].name?.name
             } else {
-                return null
+                null
             }
 
-            val value = candidate.evalContextSide(sourceInstance, evaluationContext)
+            if (child != null) {
+                val value = candidate.evalContextSide(sourceInstance, evaluationContext)
 
-            if (predicate.isEqual) {
-                if (value is Double) {
-                    Query.NumericEq(child, value)
+                if (predicate.isEqual) {
+                    if (value is Double) {
+                        Query.NumericEq(child, value)
+                    } else {
+                        Query.StringEq(child, value.toString())
+                    }
                 } else {
-                    Query.StringEq(child, value.toString())
+                    if (value is Double) {
+                        Query.NumericNotEq(child, value)
+                    } else {
+                        Query.StringNotEq(child, value.toString())
+                    }
                 }
             } else {
-                if (value is Double) {
-                    Query.NumericNotEq(child, value)
-                } else {
-                    Query.StringNotEq(child, value.toString())
-                }
+                null
             }
         } else {
             null
@@ -93,7 +97,7 @@ object XPathExpressionExt {
 
     private fun isNodeRelativeExpression(steps: Array<XPathStep>): Boolean {
         return if (steps.size == 2 && steps[0].test == TEST_TYPE_NODE) {
-            return steps[0].axis == AXIS_SELF || steps[0].axis == AXIS_CHILD
+            steps[0].axis == AXIS_SELF || steps[0].axis == AXIS_CHILD
         } else {
             false
         }

@@ -58,4 +58,28 @@ class XPathExpressionExtTest {
             equalTo(null)
         )
     }
+
+    @Test
+    fun `#toQuery returns null when node side is self expression`() {
+        val sourceInstance = ExternalDataInstance()
+        val evaluationContext = EvaluationContext(sourceInstance)
+
+        val expression = XPathParseTool.parseXPath(". = 'blah'")
+        assertThat(
+            expression.toQuery(sourceInstance, evaluationContext),
+            equalTo(null)
+        )
+    }
+
+    @Test
+    fun `#toQuery returns null when node side is relative self expression`() {
+        val sourceInstance = ExternalDataInstance()
+        val evaluationContext = EvaluationContext(sourceInstance)
+
+        val expression = XPathParseTool.parseXPath("./. = 'blah'")
+        assertThat(
+            expression.toQuery(sourceInstance, evaluationContext),
+            equalTo(null)
+        )
+    }
 }
