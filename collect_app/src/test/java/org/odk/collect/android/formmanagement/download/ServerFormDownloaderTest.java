@@ -20,8 +20,8 @@ import static java.util.Arrays.asList;
 import com.google.common.io.Files;
 
 import org.junit.Test;
-import org.odk.collect.android.formmanagement.metadata.FormMetadataParser;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
+import org.odk.collect.android.formmanagement.metadata.FormMetadataParser;
 import org.odk.collect.entities.server.EntitySource;
 import org.odk.collect.entities.storage.EntitiesRepository;
 import org.odk.collect.entities.storage.InMemEntitiesRepository;
@@ -402,6 +402,52 @@ public class ServerFormDownloaderTest {
             assertThat(formsRepository.getAll(), is(empty()));
             assertThat(asList(new File(getCacheFilesPath()).listFiles()), is(empty()));
             assertThat(asList(new File(getFormFilesPath()).listFiles()), is(empty()));
+        }
+    }
+
+    @Test
+    public void whenFormHasNewMediaFiles_andFileExistsInMediaDirPath_throwsDiskExceptionAndDoesNotSaveAnythingNew() throws Exception {
+        String xform = createXFormBody("id", "version");
+        ServerFormDetails serverFormDetails = new ServerFormDetails(
+                "Form",
+                "http://downloadUrl",
+                "id",
+                "version",
+                Md5.getMd5Hash(new ByteArrayInputStream(xform.getBytes())),
+                null,
+                ServerFormDetails.Type.New
+        );
+
+        FormSource formSource = mock(FormSource.class);
+        when(formSource.fetchForm("http://downloadUrl")).thenReturn(new ByteArrayInputStream(xform.getBytes()));
+        ServerFormDownloader downloader = new ServerFormDownloader(formSource, formsRepository, cacheDir, formsDir.getAbsolutePath(), FormMetadataParser.INSTANCE, clock::get, entitiesRepository, entitySource);
+        downloader.downloadForm(serverFormDetails, null, null);
+
+        // Create file where media dir would go
+        assertThat(new File(formsDir, "Form-media").createNewFile(), is(true));
+
+        ServerFormDetails serverFormDetailsWithMedia = new ServerFormDetails(
+                "Form",
+                "http://downloadUrl",
+                "id",
+                "version",
+                Md5.getMd5Hash(new ByteArrayInputStream(xform.getBytes())),
+                new ManifestFile("", List.of(
+                        new MediaFile("file1", "hash-1", "http://file1")
+                )),
+                ServerFormDetails.Type.UpdatedMedia
+        );
+
+        when(formSource.fetchForm("http://downloadUrl")).thenReturn(new ByteArrayInputStream(xform.getBytes()));
+        when(formSource.fetchMediaFile("http://file1")).thenReturn(new ByteArrayInputStream("contents1".getBytes()));
+
+        try {
+            downloader.downloadForm(serverFormDetailsWithMedia, null, null);
+            fail("Expected exception");
+        } catch (FormDownloadException.DiskError e) {
+            assertThat(formsRepository.getAll().size(), equalTo(1));
+            assertThat(asList(new File(getCacheFilesPath()).listFiles()), is(empty()));
+            assertThat(asList(new File(getFormFilesPath()).listFiles()).size(), equalTo(2)); // Check the form and the bad file still exist
         }
     }
 

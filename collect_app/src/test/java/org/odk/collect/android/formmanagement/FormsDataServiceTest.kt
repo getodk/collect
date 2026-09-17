@@ -71,14 +71,14 @@ class FormsDataServiceTest {
             project.uuid,
             { settingsProvider.getUnprotectedSettings(project.uuid) },
             formsRepositoryProvider,
-            mock(),
+            { mock() },
             storagePathProvider,
             changeLockProvider,
             { formSource },
-            mock(),
-            mock(),
-            mock(),
-            mock()
+            { mock() },
+            { mock() },
+            { mock() },
+            { mock() }
         )
 
         val projectDependencyModuleFactory = mock<ProjectDependencyModuleFactory>()

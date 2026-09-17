@@ -390,6 +390,63 @@ class OpenRosaClientTest {
         }
     }
 
+    @Test
+    fun fetchDeletedStates_whenThereIsAnUnknownHostException_throwsUnreachableException() {
+        val client =
+            OpenRosaClient("http://blah.com", httpInterface, webCredentialsProvider, responseParser, "myDeviceId")
+
+        try {
+            whenever(
+                httpInterface.executeGetRequest(any(), any(), any())
+            ).thenThrow(
+                UnknownHostException::class.java
+            )
+
+            client.fetchDeletedStates("http://blah.com/integrity", listOf("1", "2", "3"))
+            fail("No exception thrown!")
+        } catch (e: FormSourceException.Unreachable) {
+            assertThat(e.serverUrl, equalTo("http://blah.com"))
+        }
+    }
+
+    @Test
+    fun fetchDeletedStates_whenThereIsATimeout_throwsFetchError() {
+        val client =
+            OpenRosaClient("http://blah.com", httpInterface, webCredentialsProvider, responseParser, "myDeviceId")
+
+        try {
+            whenever(
+                httpInterface.executeGetRequest(any(), any(), any())
+            ).thenThrow(
+                SocketTimeoutException::class.java
+            )
+
+            client.fetchDeletedStates("http://blah.com/integrity", listOf("1", "2", "3"))
+            fail("No exception thrown!")
+        } catch (_: FetchError) {
+            // Pass
+        }
+    }
+
+    @Test
+    fun fetchDeletedStates_whenThereIsAnSSLException_throwsSecurityError() {
+        val client =
+            OpenRosaClient("http://blah.com", httpInterface, webCredentialsProvider, responseParser, "myDeviceId")
+
+        try {
+            whenever(
+                httpInterface.executeGetRequest(any(), any(), any())
+            ).thenThrow(
+                SSLException::class.java
+            )
+
+            client.fetchDeletedStates("http://blah.com/integrity", listOf("1", "2", "3"))
+            fail("No exception thrown!")
+        } catch (e: SecurityError) {
+            assertThat(e.serverUrl, equalTo("http://blah.com"))
+        }
+    }
+
     companion object {
         private fun join(vararg strings: String): String {
             val bob = StringBuilder()

@@ -12,6 +12,7 @@ import org.odk.collect.openrosa.http.OpenRosaConstants
 import org.odk.collect.openrosa.http.OpenRosaHttpInterface
 import org.odk.collect.shared.strings.Md5.getMd5Hash
 import org.odk.collect.shared.strings.RandomString
+import org.odk.collect.shared.strings.getQueryParameter
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.IOException
@@ -277,13 +278,12 @@ class StubOpenRosaServer : OpenRosaHttpInterface {
         }
 
     private fun getFormResponse(uri: URI): InputStream {
-        val formID = getFormId(uri)
+        val formID = uri.getQueryParameter("formId")!!
         return getFormXML(formID)
     }
 
     private fun getManifestResponse(uri: URI): InputStream? {
-        val formID = getFormId(uri)
-
+        val formID = uri.getQueryParameter("formId")!!
         val xformItem = forms[formID.toInt()]
 
         if (xformItem.mediaFiles.isEmpty()) {
@@ -342,8 +342,7 @@ class StubOpenRosaServer : OpenRosaHttpInterface {
     }
 
     private fun getIntegrityResponse(uri: URI): InputStream {
-        val ids = uri.query.split("=".toRegex()).dropLastWhile { it.isEmpty() }
-            .toTypedArray()[1].split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        val ids = uri.getQueryParameter("id")!!.split(",")
 
         val stringBuilder = StringBuilder()
         stringBuilder
@@ -399,11 +398,6 @@ class StubOpenRosaServer : OpenRosaHttpInterface {
         )
     }
 
-    private fun getFormId(uri: URI) =
-        uri.query.split("&")
-            .first { it.startsWith("formId=") }
-            .substringAfter("=")
-
     fun deleteEntity(id: String) {
         deletedEntities.add(id)
     }
@@ -432,20 +426,12 @@ class StubOpenRosaServer : OpenRosaHttpInterface {
 
         constructor(
             name: String,
-            file: String,
-            version: Int,
+            file: String = name,
+            version: Int = 0,
             approvalList: Boolean = false
         ) : super(name, file) {
             this.version = version
             this.isApprovalList = approvalList
-        }
-
-        constructor(name: String) : super(name, name, name)
-
-        constructor(name: String, approvalList: Boolean) : this(name, name, 0, approvalList)
-
-        fun incrementVersion() {
-            version++
         }
     }
 
