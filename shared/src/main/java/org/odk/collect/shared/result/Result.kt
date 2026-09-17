@@ -28,6 +28,7 @@ fun <S, E : Throwable> Result<S, E>.getOrThrow(): S {
 fun <S, E> S.toSuccess(): Success<S, E> {
     return Success(this)
 }
+
 fun <S, E> E.toError(): Error<S, E> {
     return Error(this)
 }
@@ -54,7 +55,7 @@ fun <S, E : Any, C : E> Result<S, E>.requireError(clazz: KClass<C>): C {
     }
 }
 
-fun <S, E> Result<S, E>.onSuccess(block: (S) -> Unit): Result<S, E> {
+inline fun <S, E> Result<S, E>.onSuccess(block: (S) -> Unit): Result<S, E> {
     when (this) {
         is Success -> block(value)
         is Error -> {}
@@ -63,7 +64,7 @@ fun <S, E> Result<S, E>.onSuccess(block: (S) -> Unit): Result<S, E> {
     return this
 }
 
-fun <S, E> Result<S, E>.onError(block: (E) -> Unit): Result<S, E> {
+inline fun <S, E> Result<S, E>.onError(block: (E) -> Unit): Result<S, E> {
     when (this) {
         is Success -> {}
         is Error -> block(value)

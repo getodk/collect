@@ -25,9 +25,14 @@ import org.odk.collect.forms.FormSource
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.forms.FormsRepository
 import org.odk.collect.shared.files.FileExt.deleteDirectory
+import org.odk.collect.shared.result.Result
+import org.odk.collect.shared.result.onError
+import org.odk.collect.shared.result.runAndCatch
+import org.odk.collect.shared.result.toError
+import org.odk.collect.shared.result.toSuccess
 import org.odk.collect.shared.strings.Md5.getMd5Hash
+import timber.log.Timber
 import timber.log.Timber.Forest.d
-import timber.log.Timber.Forest.e
 import timber.log.Timber.Forest.i
 import java.io.File
 import java.io.IOException
@@ -87,11 +92,9 @@ class ServerFormDownloader(
                 throw FormSourceError(e)
             }
 
-            try {
-                installEverything(formFileDownload, mediaFilesDownload, formsDirPath)
-            } catch (e: Exception) {
+            installEverything(formFileDownload, mediaFilesDownload, formsDirPath).onError {
                 cleanUp(formFileDownload, mediaFilesDownload.tempMediaPath)
-                throw e
+                throw it
             }
         } finally {
             tempDir.deleteDirectory()
@@ -154,16 +157,11 @@ class ServerFormDownloader(
         }
     }
 
-    @Throws(
-        DiskError::class,
-        FormParsingError::class,
-        InvalidSubmission::class,
-    )
     private fun installEverything(
         formFileDownload: FormFileDownload,
         mediaFilesDownload: MediaFilesDownload,
         formsDirPath: String
-    ) {
+    ): Result<Unit, FormDownloadException> {
         val formResult = when (formFileDownload) {
             is FormFileDownload.Existing -> {
                 val formBuilder = Form.Builder(formFileDownload.form)
@@ -183,11 +181,11 @@ class ServerFormDownloader(
                 val formMetadata = try {
                     formMetadataParser.readMetadata(formFileDownload.file)
                 } catch (e: RuntimeException) {
-                    throw FormParsingError(e)
+                    return FormParsingError(e).toError()
                 }
 
                 if (!isSubmissionOk(formMetadata)) {
-                    throw InvalidSubmission()
+                    return InvalidSubmission().toError()
                 }
 
                 val formFile = File(formsDirPath, formFileDownload.file.name)
@@ -214,11 +212,12 @@ class ServerFormDownloader(
         // move the media files in the media folder
         val tempMediaPath = mediaFilesDownload.tempMediaPath
         val formMediaDir = File(formResult.form.formMediaPath)
-        try {
+
+        runAndCatch {
             moveMediaFiles(tempMediaPath, formMediaDir)
-        } catch (e: IOException) {
-            e(e)
-            throw DiskError()
+        }.onError {
+            Timber.e(it)
+            return DiskError().toError()
         }
 
         ServerFormUseCases.copySavedFileFromPreviousFormVersionIfExists(
@@ -226,6 +225,8 @@ class ServerFormDownloader(
             formResult.form,
             formMediaDir.absolutePath
         )
+
+        return Unit.toSuccess()
     }
 
     private fun cleanUp(formFileDownload: FormFileDownload?, tempMediaPath: String) {
