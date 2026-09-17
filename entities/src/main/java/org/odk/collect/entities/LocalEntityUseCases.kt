@@ -15,6 +15,7 @@ import org.odk.collect.entities.storage.findEntityById
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.forms.MediaFile
 import org.odk.collect.shared.debug.DebugLogger
+import org.odk.collect.shared.result.getOrThrow
 import java.io.File
 import java.util.UUID
 
@@ -29,10 +30,15 @@ object LocalEntityUseCases {
         formEntities?.entities?.forEach { formEntity ->
             if (formEntity.id.isV4UUID()) {
                 when (formEntity.action) {
-                    EntityAction.CREATE -> saveNewEntity(formEntity, entitiesRepository, debugLogger)
+                    EntityAction.CREATE -> saveNewEntity(
+                        formEntity,
+                        entitiesRepository,
+                        debugLogger
+                    )
 
                     EntityAction.UPDATE -> {
-                        val existing = entitiesRepository.findEntityById(formEntity.dataset, formEntity.id)
+                        val existing =
+                            entitiesRepository.findEntityById(formEntity.dataset, formEntity.id)
                         if (existing != null) {
                             saveUpdatedEntity(formEntity, existing, entitiesRepository)
                         } else {
@@ -41,7 +47,8 @@ object LocalEntityUseCases {
                     }
 
                     EntityAction.UPSERT -> {
-                        val existing = entitiesRepository.findEntityById(formEntity.dataset, formEntity.id)
+                        val existing =
+                            entitiesRepository.findEntityById(formEntity.dataset, formEntity.id)
                         if (existing == null) {
                             saveNewEntity(formEntity, entitiesRepository, debugLogger)
                         } else {
@@ -182,12 +189,15 @@ object LocalEntityUseCases {
 
         val integrityUrl = mediaFile.integrityUrl
         if (integrityUrl != null && offlineLocalEntities.isNotEmpty()) {
-            entitySource.fetchDeletedStates(integrityUrl, offlineLocalEntities.map { it.id })
-                .forEach {
-                    if (it.second) {
-                        entitiesRepository.delete(list, it.first)
-                    }
+            val deletedIds = entitySource
+                .fetchDeletedStates(integrityUrl, offlineLocalEntities.map { it.id })
+                .getOrThrow()
+
+            deletedIds.forEach {
+                if (it.second) {
+                    entitiesRepository.delete(list, it.first)
                 }
+            }
         }
     }
 

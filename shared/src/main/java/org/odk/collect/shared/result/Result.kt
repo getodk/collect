@@ -1,16 +1,55 @@
 package org.odk.collect.shared.result
 
+import org.odk.collect.shared.result.Result.Error
+import org.odk.collect.shared.result.Result.Success
+import kotlin.reflect.KClass
+
 sealed class Result<S, E> {
     data class Success<S, E>(val value: S) : Result<S, E>()
     data class Error<S, E>(val value: E) : Result<S, E>()
+}
 
-    companion object {
-        fun <S, E> S.toSuccess(): Success<S, E> {
-            return Success(this)
-        }
+@Throws(Exception::class)
+fun <S, E> Result<S, E>.getOrThrow(block: (E) -> Throwable): S {
+    return when (this) {
+        is Success -> value
+        is Error -> throw block(value)
+    }
+}
 
-        fun <S, E> E.toError(): Error<S, E> {
-            return Error(this)
-        }
+@Throws(Exception::class)
+fun <S, E : Throwable> Result<S, E>.getOrThrow(): S {
+    return when (this) {
+        is Success -> value
+        is Error -> throw value
+    }
+}
+
+fun <S, E> S.toSuccess(): Success<S, E> {
+    return Success(this)
+}
+fun <S, E> E.toError(): Error<S, E> {
+    return Error(this)
+}
+
+fun <T> runAndCatch(block: () -> T): Result<T, Exception> {
+    return try {
+        block().toSuccess()
+    } catch (e: Exception) {
+        e.toError()
+    }
+}
+
+@Throws(AssertionError::class)
+fun <S, E : Any, C : E> Result<S, E>.requireError(clazz: KClass<C>): C {
+    val error = when (this) {
+        is Success -> throw AssertionError()
+        is Error -> value
+    }
+
+    return if (clazz.isInstance(error)) {
+        error as C
+    } else {
+        throw AssertionError()
     }
 }
