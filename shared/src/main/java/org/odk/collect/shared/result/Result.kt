@@ -54,9 +54,20 @@ fun <S, E : Any, C : E> Result<S, E>.requireError(clazz: KClass<C>): C {
     }
 }
 
-fun <S, E> Result<S, E>.onSuccess(block: (S) -> Unit) {
+fun <S, E> Result<S, E>.onSuccess(block: (S) -> Unit): Result<S, E> {
     when (this) {
         is Success -> block(value)
         is Error -> {}
     }
+
+    return this
+}
+
+fun <S, E> Result<S, E>.onError(block: (E) -> Unit): Result<S, E> {
+    when (this) {
+        is Success -> {}
+        is Error -> block(value)
+    }
+
+    return this
 }

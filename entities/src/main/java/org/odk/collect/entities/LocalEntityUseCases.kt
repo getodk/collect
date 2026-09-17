@@ -14,7 +14,9 @@ import org.odk.collect.entities.storage.Entity
 import org.odk.collect.entities.storage.findEntityById
 import org.odk.collect.forms.MediaFile
 import org.odk.collect.shared.debug.DebugLogger
+import org.odk.collect.shared.result.onError
 import org.odk.collect.shared.result.onSuccess
+import timber.log.Timber
 import java.io.File
 import java.util.UUID
 
@@ -195,6 +197,8 @@ object LocalEntityUseCases {
                             entitiesRepository.delete(list, it.first)
                         }
                     }
+                }.onError {
+                    Timber.e(it)
                 }
         }
     }
