@@ -53,3 +53,10 @@ fun <S, E : Any, C : E> Result<S, E>.requireError(clazz: KClass<C>): C {
         throw AssertionError()
     }
 }
+
+fun <S, E> Result<S, E>.onSuccess(block: (S) -> Unit) {
+    when (this) {
+        is Success -> block(value)
+        is Error -> {}
+    }
+}

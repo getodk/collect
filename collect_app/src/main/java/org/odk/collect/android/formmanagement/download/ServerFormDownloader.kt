@@ -89,9 +89,6 @@ class ServerFormDownloader(
 
             try {
                 installEverything(formFileDownload, mediaFilesDownload, formsDirPath)
-            } catch (e: FormSourceException) {
-                cleanUp(formFileDownload, mediaFilesDownload.tempMediaPath)
-                throw FormSourceError(e)
             } catch (e: Exception) {
                 cleanUp(formFileDownload, mediaFilesDownload.tempMediaPath)
                 throw e
@@ -161,7 +158,6 @@ class ServerFormDownloader(
         DiskError::class,
         FormParsingError::class,
         InvalidSubmission::class,
-        FormSourceException::class
     )
     private fun installEverything(
         formFileDownload: FormFileDownload,

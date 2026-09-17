@@ -12,10 +12,9 @@ import org.odk.collect.entities.server.EntitySource
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
 import org.odk.collect.entities.storage.findEntityById
-import org.odk.collect.forms.FormSourceException
 import org.odk.collect.forms.MediaFile
 import org.odk.collect.shared.debug.DebugLogger
-import org.odk.collect.shared.result.getOrThrow
+import org.odk.collect.shared.result.onSuccess
 import java.io.File
 import java.util.UUID
 
@@ -176,7 +175,6 @@ object LocalEntityUseCases {
         )
     }
 
-    @Throws(FormSourceException::class)
     fun cleanUpDeletedOfflineEntities(
         list: String,
         entitiesRepository: EntitiesRepository,
@@ -189,15 +187,15 @@ object LocalEntityUseCases {
 
         val integrityUrl = mediaFile.integrityUrl
         if (integrityUrl != null && offlineLocalEntities.isNotEmpty()) {
-            val deletedIds = entitySource
+            entitySource
                 .fetchDeletedStates(integrityUrl, offlineLocalEntities.map { it.id })
-                .getOrThrow()
-
-            deletedIds.forEach {
-                if (it.second) {
-                    entitiesRepository.delete(list, it.first)
+                .onSuccess { deletedIds ->
+                    deletedIds.forEach {
+                        if (it.second) {
+                            entitiesRepository.delete(list, it.first)
+                        }
+                    }
                 }
-            }
         }
     }
 
