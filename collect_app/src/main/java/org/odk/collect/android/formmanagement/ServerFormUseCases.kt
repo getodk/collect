@@ -4,7 +4,6 @@ import org.apache.commons.io.FileUtils.copyFileToDirectory
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.formmanagement.download.FormDownloadException
 import org.odk.collect.android.formmanagement.download.FormDownloader
-import org.odk.collect.android.instancemanagement.send.autosend.getLastUpdated
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.android.utilities.FormUtils
 import org.odk.collect.async.OngoingWorkListener
@@ -219,12 +218,11 @@ object ServerFormUseCases {
 
     @JvmStatic
     fun ingestEntityListsFromDownload(
-        formResult: FormResult,
         mediaFilesDownload: MediaFilesDownload,
         entitiesRepository: EntitiesRepository,
         entitySource: EntitySource,
-        formsRepository: FormsRepository
-    ) {
+    ): Long? {
+        var entityListUpdate: Long? = null
         mediaFilesDownload.entityLists.forEach { entityListDownload ->
             val listName = getEntityListFromFileName(entityListDownload.mediaFile)
             if (entityListDownload is EntityListDownload.Update) {
@@ -258,15 +256,12 @@ object ServerFormUseCases {
                 entityListDownload.mediaFile
             )
 
-            val entityListLastUpdated = entitiesRepository.getList(listName)?.lastUpdated
-            if (!formResult.isNew && entityListLastUpdated != null && entityListLastUpdated > formResult.form.getLastUpdated()) {
-                formsRepository.save(
-                    Form.Builder(formResult.form)
-                        .lastDetectedAttachmentsUpdateDate(entityListLastUpdated)
-                        .build()
-                )
+            if (entityListUpdate == null) {
+                entityListUpdate = entitiesRepository.getList(listName)?.lastUpdated
             }
         }
+
+        return entityListUpdate
     }
 
     private fun downloadMediaFile(
@@ -346,10 +341,7 @@ data class MediaFilesDownload(
     val tempMediaPath: String,
     val newAttachmentsDownloaded: Boolean,
     val entityLists: List<EntityListDownload>
-) {
-    val entitiesDownloaded: Boolean
-        get() = entityLists.isNotEmpty()
-}
+)
 
 sealed interface EntityListDownload {
     val mediaFile: MediaFile

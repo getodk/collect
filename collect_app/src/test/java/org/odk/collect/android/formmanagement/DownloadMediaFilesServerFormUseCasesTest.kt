@@ -141,7 +141,7 @@ class DownloadMediaFilesServerFormUseCasesTest {
             mock()
         )
 
-        assertThat(mediaFilesDownload.entitiesDownloaded, equalTo(true))
+        assertThat(mediaFilesDownload.entityLists.isNotEmpty(), equalTo(true))
         verify(formSource, never()).fetchMediaFile(mediaFile.downloadUrl)
     }
 

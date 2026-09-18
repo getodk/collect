@@ -14,6 +14,7 @@ import org.odk.collect.android.formmanagement.download.FormDownloadException.Inv
 import org.odk.collect.android.formmanagement.download.FormDownloader.ProgressReporter
 import org.odk.collect.android.formmanagement.metadata.FormMetadata
 import org.odk.collect.android.formmanagement.metadata.FormMetadataParser
+import org.odk.collect.android.instancemanagement.send.autosend.getLastUpdated
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.android.utilities.FormNameUtils
 import org.odk.collect.androidshared.utils.Validator.isUrlValid
@@ -162,16 +163,27 @@ class ServerFormDownloader(
         mediaFilesDownload: MediaFilesDownload,
         formsDirPath: String
     ): Result<Unit, FormDownloadException> {
+        val entityListUpdate = ingestEntityListsFromDownload(
+            mediaFilesDownload,
+            entitiesRepository,
+            entitySource,
+        )
+
         val formResult = when (formFileDownload) {
             is FormFileDownload.Existing -> {
-                val formBuilder = Form.Builder(formFileDownload.form)
+                val existingForm = formFileDownload.form
+                val formBuilder = Form.Builder(existingForm)
 
                 if (mediaFilesDownload.newAttachmentsDownloaded) {
                     formBuilder.lastDetectedAttachmentsUpdateDate(clock.get())
                 }
 
-                if (mediaFilesDownload.entitiesDownloaded) {
+                if (mediaFilesDownload.entityLists.isNotEmpty()) {
                     formBuilder.usesEntities(true)
+                }
+
+                if (entityListUpdate != null && entityListUpdate > existingForm.getLastUpdated()) {
+                    formBuilder.lastDetectedAttachmentsUpdateDate(entityListUpdate)
                 }
 
                 FormResult(formsRepository.save(formBuilder.build()), false)
@@ -194,27 +206,17 @@ class ServerFormDownloader(
                 val newForm = saveNewForm(
                     formMetadata,
                     formFile,
-                    mediaFilesDownload.entitiesDownloaded
+                    mediaFilesDownload.entityLists.isNotEmpty()
                 )
 
                 FormResult(newForm, true)
             }
         }
 
-        ingestEntityListsFromDownload(
-            formResult,
-            mediaFilesDownload,
-            entitiesRepository,
-            entitySource,
-            formsRepository
-        )
-
         // move the media files in the media folder
-        val tempMediaPath = mediaFilesDownload.tempMediaPath
         val formMediaDir = File(formResult.form.formMediaPath)
-
         runAndCatch {
-            moveMediaFiles(tempMediaPath, formMediaDir)
+            moveMediaFiles(mediaFilesDownload.tempMediaPath, formMediaDir)
         }.onError {
             Timber.e(it)
             return DiskError().toError()
