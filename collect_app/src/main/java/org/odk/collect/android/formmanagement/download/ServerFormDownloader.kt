@@ -27,6 +27,7 @@ import org.odk.collect.forms.FormsRepository
 import org.odk.collect.shared.files.FileExt.deleteDirectory
 import org.odk.collect.shared.result.Result
 import org.odk.collect.shared.result.chain
+import org.odk.collect.shared.result.map
 import org.odk.collect.shared.result.mapError
 import org.odk.collect.shared.result.onError
 import org.odk.collect.shared.result.result
@@ -163,7 +164,7 @@ class ServerFormDownloader(
         formFileDownload: FormFileDownload,
         mediaFilesDownload: MediaFilesDownload,
         formsDirPath: String
-    ): Result<Any, FormDownloadException> {
+    ): Result<Unit, FormDownloadException> {
         return result<Long?, FormDownloadException> {
             ingestEntityListsFromDownload(
                 mediaFilesDownload,
@@ -173,14 +174,9 @@ class ServerFormDownloader(
         }.chain { entityListUpdate ->
             createOrUpdateForm(formFileDownload, mediaFilesDownload, entityListUpdate, formsDirPath)
         }.chain { form ->
-            val formMediaDir = File(form.formMediaPath)
-            runAndCatch {
-                moveMediaFiles(mediaFilesDownload.tempMediaPath, formMediaDir)
-            }.mapError {
-                DiskError()
-            }
-
-            Pair(form, formMediaDir).toSuccess()
+            moveMediaFiles(mediaFilesDownload.tempMediaPath, form)
+                .map { Pair(form, it) }
+                .mapError { DiskError() }
         }.chain { (form, formMediaDir) ->
             ServerFormUseCases.copySavedFileFromPreviousFormVersionIfExists(
                 formsRepository,
@@ -188,7 +184,7 @@ class ServerFormDownloader(
                 formMediaDir.absolutePath
             )
 
-            form.toSuccess()
+            Unit.toSuccess()
         }
     }
 
@@ -339,16 +335,21 @@ private fun getFormFileName(formName: String?, formsDirPath: String?): String {
     return fileName
 }
 
-@Throws(IOException::class)
-private fun moveMediaFiles(tempMediaPath: String, formMediaPath: File) {
+private fun moveMediaFiles(tempMediaPath: String, form: Form): Result<File, IOException> {
     val tempMediaFolder = File(tempMediaPath)
+    val formMediaDir = File(form.formMediaPath)
     tempMediaFolder.listFiles()?.takeIf { it.isNotEmpty() }?.forEach { mediaFile ->
-        try {
-            org.apache.commons.io.FileUtils.copyFileToDirectory(mediaFile, formMediaPath)
-        } catch (e: IllegalArgumentException) {
-            throw IOException(e)
+        runAndCatch {
+            org.apache.commons.io.FileUtils.copyFileToDirectory(mediaFile, formMediaDir)
+        }.onError {
+            return when (it) {
+                is IOException -> it.toError()
+                else -> IOException(it).toError()
+            }
         }
     }
+
+    return formMediaDir.toSuccess()
 }
 
 private fun isSubmissionOk(formMetadata: FormMetadata): Boolean {

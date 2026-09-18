@@ -63,6 +63,13 @@ inline fun <S, E> Result<S, E>.onError(block: (E) -> Unit): Result<S, E> {
     return this
 }
 
+fun <S, E, T> Result<S, E>.map(map: (S) -> T): Result<T, E> {
+    return when (this) {
+        is Success -> map(value).toSuccess()
+        is Error -> value.toError()
+    }
+}
+
 fun <S, E, T> Result<S, E>.mapError(map: (E) -> T): Result<S, T> {
     return when (this) {
         is Success -> value.toSuccess()
