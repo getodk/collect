@@ -2,27 +2,17 @@ package org.odk.collect.shared.result
 
 import org.odk.collect.shared.result.Result.Error
 import org.odk.collect.shared.result.Result.Success
+import org.odk.collect.shared.result.asInstanceOf
 import kotlin.reflect.KClass
 
+/**
+ * Alternative to Kotlin's [kotlin.Result] that provides a typed error/failure value. This is
+ * essentially an implementation of an Either monad that uses "result" language.
+ *
+ */
 sealed class Result<out S, out E> {
     data class Success<S, E>(val value: S) : Result<S, E>()
     data class Error<S, E>(val value: E) : Result<S, E>()
-}
-
-@Throws(Exception::class)
-fun <S, E> Result<S, E>.getOrThrow(block: (E) -> Throwable): S {
-    return when (this) {
-        is Success -> value
-        is Error -> throw block(value)
-    }
-}
-
-@Throws(Exception::class)
-fun <S, E : Throwable> Result<S, E>.getOrThrow(): S {
-    return when (this) {
-        is Success -> value
-        is Error -> throw value
-    }
 }
 
 fun <S, E> S.toSuccess(): Success<S, E> {
@@ -75,11 +65,22 @@ inline fun <S, E> Result<S, E>.onError(block: (E) -> Unit): Result<S, E> {
 
 fun <S, E, T> Result<S, E>.mapError(map: (E) -> T): Result<S, T> {
     return when (this) {
-        is Success -> this.value.toSuccess()
-        is Error -> map(this.value).toError()
+        is Success -> value.toSuccess()
+        is Error -> map(value).toError()
     }
 }
 
-fun <S, E> Result.Error<*, E>.raise(): Result<S, E> {
+fun <S, E> Error<*, E>.asInstanceOf(): Result<S, E> {
     return this.value.toError()
+}
+
+fun <S1, E, S2> Result<S1, E>.chain(block: (S1) -> Result<S2, E>): Result<S2, E> {
+    return when (this) {
+        is Success -> block(value)
+        is Error -> this.asInstanceOf()
+    }
+}
+
+fun <S, E> result(block: () -> S): Result<S, E> {
+    return block().toSuccess()
 }
