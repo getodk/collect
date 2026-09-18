@@ -189,6 +189,8 @@ class MapLibreMapFragment(private val configuration: Configuration) :
 
         ScaleBarPlugin(mapView, map).create(ScaleBarOptions(requireContext()))
 
+        map.setMaxZoomPreference(22.0)
+
         map.addOnMapClickListener(this)
         map.addOnMapLongClickListener(this)
 
