@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.fromHtml
+import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import org.odk.collect.android.utilities.HtmlUtils
 import org.odk.collect.androidshared.R.dimen
@@ -74,6 +75,7 @@ fun TextWidgetAnswer(
             text = annotatedAnswer,
             style = MaterialTheme.typography.bodyLarge.copy(
                 fontSize = fontSize?.sp ?: MaterialTheme.typography.bodyLarge.fontSize,
+                lineHeight = 1.5.em,
                 color = MaterialTheme.colorScheme.onSurface.copy(
                     alpha = if (!hasFormatting) highEmphasis else 1f
                 )
