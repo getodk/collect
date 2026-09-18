@@ -4,7 +4,7 @@ import org.odk.collect.shared.result.Result.Error
 import org.odk.collect.shared.result.Result.Success
 import kotlin.reflect.KClass
 
-sealed class Result<S, E> {
+sealed class Result<out S, out E> {
     data class Success<S, E>(val value: S) : Result<S, E>()
     data class Error<S, E>(val value: E) : Result<S, E>()
 }
@@ -71,4 +71,11 @@ inline fun <S, E> Result<S, E>.onError(block: (E) -> Unit): Result<S, E> {
     }
 
     return this
+}
+
+fun <S, E, T> Result<S, E>.mapError(map: (E) -> T): Result<S, T> {
+    return when (this) {
+        is Success -> this.value.toSuccess()
+        is Error -> map(this.value).toError()
+    }
 }

@@ -27,6 +27,7 @@ import org.odk.collect.forms.FormSourceException
 import org.odk.collect.forms.FormsRepository
 import org.odk.collect.shared.files.FileExt.deleteDirectory
 import org.odk.collect.shared.result.Result
+import org.odk.collect.shared.result.mapError
 import org.odk.collect.shared.result.onError
 import org.odk.collect.shared.result.runAndCatch
 import org.odk.collect.shared.result.toError
@@ -162,7 +163,7 @@ class ServerFormDownloader(
         formFileDownload: FormFileDownload,
         mediaFilesDownload: MediaFilesDownload,
         formsDirPath: String
-    ): Result<Unit, FormDownloadException> {
+    ): Result<Any, FormDownloadException> {
         val entityListUpdate = ingestEntityListsFromDownload(
             mediaFilesDownload,
             entitiesRepository,
@@ -190,30 +191,31 @@ class ServerFormDownloader(
             }
 
             is FormFileDownload.New -> {
-                val formMetadata = try {
-                    formMetadataParser.readMetadata(formFileDownload.file)
-                } catch (e: RuntimeException) {
-                    return FormParsingError(e).toError()
+                when (val formMetadataResult = parseFormMetadata(formFileDownload)) {
+                    is Result.Success -> {
+                        if (!isSubmissionOk(formMetadataResult.value)) {
+                            return InvalidSubmission().toError()
+                        }
+
+                        val formFile = File(formsDirPath, formFileDownload.file.name)
+                        FileUtils.copyFile(formFileDownload.file, formFile)
+
+                        val newForm = saveNewForm(
+                            formMetadataResult.value,
+                            formFile,
+                            mediaFilesDownload.entityLists.isNotEmpty()
+                        )
+
+                        FormResult(newForm, true)
+                    }
+
+                    is Result.Error -> {
+                        return formMetadataResult
+                    }
                 }
-
-                if (!isSubmissionOk(formMetadata)) {
-                    return InvalidSubmission().toError()
-                }
-
-                val formFile = File(formsDirPath, formFileDownload.file.name)
-                FileUtils.copyFile(formFileDownload.file, formFile)
-
-                val newForm = saveNewForm(
-                    formMetadata,
-                    formFile,
-                    mediaFilesDownload.entityLists.isNotEmpty()
-                )
-
-                FormResult(newForm, true)
             }
         }
 
-        // move the media files in the media folder
         val formMediaDir = File(formResult.form.formMediaPath)
         runAndCatch {
             moveMediaFiles(mediaFilesDownload.tempMediaPath, formMediaDir)
@@ -229,6 +231,14 @@ class ServerFormDownloader(
         )
 
         return Unit.toSuccess()
+    }
+
+    private fun parseFormMetadata(formFileDownload: FormFileDownload.New): Result<FormMetadata, FormParsingError> {
+        return runAndCatch {
+            formMetadataParser.readMetadata(formFileDownload.file)
+        }.mapError {
+            FormParsingError(it)
+        }
     }
 
     private fun cleanUp(formFileDownload: FormFileDownload?, tempMediaPath: String) {
