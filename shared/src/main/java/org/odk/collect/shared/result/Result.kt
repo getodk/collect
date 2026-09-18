@@ -2,12 +2,12 @@ package org.odk.collect.shared.result
 
 import org.odk.collect.shared.result.Result.Error
 import org.odk.collect.shared.result.Result.Success
-import org.odk.collect.shared.result.asInstanceOf
 import kotlin.reflect.KClass
 
 /**
  * Alternative to Kotlin's [kotlin.Result] that provides a typed error/failure value. This is
- * essentially an implementation of an Either monad that uses "result" language.
+ * essentially an implementation of an Either monad that uses "result" language replacing "left"
+ * "right" with "error" and "success" respectively.
  *
  */
 sealed class Result<out S, out E> {
