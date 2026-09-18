@@ -67,10 +67,8 @@ class ForegroundServiceLocationTracker(private val application: Application) : L
             var delayedCheckScope = CoroutineScope(Dispatchers.Main)
 
             override fun onResume(owner: LifecycleOwner) {
-                /**
-                 * Avoid starting service in background (even after `onResume`) due to Android
-                 * issue: https://issuetracker.google.com/u/2/issues/110237673.
-                 */
+                // Avoid starting service in background (even after `onResume`) due to Android
+                // issue: https://issuetracker.google.com/u/2/issues/110237673.
                 delayedCheckScope.launch {
                     while (!isAppInForeground(context)) {
                         delay(100.milliseconds)

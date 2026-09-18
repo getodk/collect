@@ -1,19 +1,9 @@
 package org.odk.collect.location.tracker
 
-import android.app.ActivityManager
 import android.content.Context
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 import org.odk.collect.location.Location
-import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * Provides a way to track the location of a device.
