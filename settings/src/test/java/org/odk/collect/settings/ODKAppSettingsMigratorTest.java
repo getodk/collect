@@ -135,9 +135,17 @@ public class ODKAppSettingsMigratorTest {
 
         assertSettingsEmpty(unprotectedSettings);
         assertSettings(metaSettings,
-                "scoped_storage_used", true,
-                "mapbox_initialized", true
+                "scoped_storage_used", true
         );
+    }
+
+    @Test
+    public void removesMapboxInitialized() {
+        initSettings(metaSettings, "mapbox_initialized", true);
+
+        runMigrations();
+
+        assertSettingsEmpty(metaSettings);
     }
 
     @Test

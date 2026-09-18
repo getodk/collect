@@ -3,10 +3,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 apply(from = "secrets.gradle")
 
-@Suppress("UNCHECKED_CAST")
-fun getSecrets(): java.util.Properties =
-    (extra["getSecrets"] as groovy.lang.Closure<*>).call() as java.util.Properties
-
 buildscript {
     repositories {
         google()
@@ -32,7 +28,6 @@ buildscript {
 allprojects {
     dependencyLocking {
         lockAllConfigurations()
-        ignoredDependencies.add("com.mapbox*:*")
         // Can't be locked, see https://github.com/gradle/gradle/issues/21396
         ignoredDependencies.add("org.jetbrains.kotlin:kotlin-stdlib-common")
     }
@@ -62,17 +57,6 @@ allprojects {
         maven {
             url = uri("https://staging.dev.medicmobile.org/_couch/maven-repo")
             metadataSources { artifact() }
-        }
-
-        maven {
-            url = uri("https://api.mapbox.com/downloads/v2/releases/maven")
-            authentication {
-                create<BasicAuthentication>("basic")
-            }
-            credentials {
-                username = "mapbox"
-                password = getSecrets().getProperty("MAPBOX_DOWNLOADS_TOKEN", "")
-            }
         }
     }
 

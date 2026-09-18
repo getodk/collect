@@ -1,4 +1,4 @@
-package org.odk.collect.mapbox
+package org.odk.collect.maplibre
 
 /**
  * A MapFeature is a physical feature on a map, such as a point, a road,

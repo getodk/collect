@@ -31,7 +31,7 @@ import com.google.android.gms.maps.model.TileProvider;
 import java.io.Closeable;
 import java.io.File;
 
-public class GoogleMapsMapBoxOfflineTileProvider implements TileProvider, Closeable {
+public class GoogleMapsOfflineTileProvider implements TileProvider, Closeable {
 
     // ------------------------------------------------------------------------
     // Instance Variables
@@ -49,11 +49,11 @@ public class GoogleMapsMapBoxOfflineTileProvider implements TileProvider, Closea
     // Constructors
     // ------------------------------------------------------------------------
 
-    public GoogleMapsMapBoxOfflineTileProvider(File file) {
+    public GoogleMapsOfflineTileProvider(File file) {
         this(file.getAbsolutePath());
     }
 
-    public GoogleMapsMapBoxOfflineTileProvider(String pathToFile) {
+    public GoogleMapsOfflineTileProvider(String pathToFile) {
         int flags = SQLiteDatabase.OPEN_READONLY | SQLiteDatabase.NO_LOCALIZED_COLLATORS;
         this.database = SQLiteDatabase.openDatabase(pathToFile, null, flags);
         this.calculateZoomConstraints();
