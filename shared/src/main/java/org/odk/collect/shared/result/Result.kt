@@ -79,3 +79,7 @@ fun <S, E, T> Result<S, E>.mapError(map: (E) -> T): Result<S, T> {
         is Error -> map(this.value).toError()
     }
 }
+
+fun <S, E> Result.Error<*, E>.raise(): Result<S, E> {
+    return this.value.toError()
+}

@@ -349,5 +349,3 @@ sealed interface EntityListDownload {
     data class Update(override val mediaFile: MediaFile, val file: File) : EntityListDownload
     data class Skipped(override val mediaFile: MediaFile) : EntityListDownload
 }
-
-data class FormResult(val form: Form, val isNew: Boolean)

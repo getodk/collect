@@ -1,6 +1,5 @@
 package org.odk.collect.android.formmanagement.download
 
-import org.odk.collect.android.formmanagement.FormResult
 import org.odk.collect.android.formmanagement.MediaFilesDownload
 import org.odk.collect.android.formmanagement.ServerFormDetails
 import org.odk.collect.android.formmanagement.ServerFormUseCases
@@ -29,6 +28,8 @@ import org.odk.collect.shared.files.FileExt.deleteDirectory
 import org.odk.collect.shared.result.Result
 import org.odk.collect.shared.result.mapError
 import org.odk.collect.shared.result.onError
+import org.odk.collect.shared.result.onSuccess
+import org.odk.collect.shared.result.raise
 import org.odk.collect.shared.result.runAndCatch
 import org.odk.collect.shared.result.toError
 import org.odk.collect.shared.result.toSuccess
@@ -170,7 +171,36 @@ class ServerFormDownloader(
             entitySource,
         )
 
-        val formResult = when (formFileDownload) {
+        createOrUpdateForm(formFileDownload, mediaFilesDownload, entityListUpdate, formsDirPath)
+            .onError {
+                return it.toError()
+            }
+            .onSuccess { form ->
+                val formMediaDir = File(form.formMediaPath)
+                runAndCatch {
+                    moveMediaFiles(mediaFilesDownload.tempMediaPath, formMediaDir)
+                }.onError {
+                    Timber.e(it)
+                    return DiskError().toError()
+                }
+
+                ServerFormUseCases.copySavedFileFromPreviousFormVersionIfExists(
+                    formsRepository,
+                    form,
+                    formMediaDir.absolutePath
+                )
+            }
+
+        return Unit.toSuccess()
+    }
+
+    private fun createOrUpdateForm(
+        formFileDownload: FormFileDownload,
+        mediaFilesDownload: MediaFilesDownload,
+        entityListUpdate: Long?,
+        formsDirPath: String
+    ): Result<Form, FormDownloadException> {
+        return when (formFileDownload) {
             is FormFileDownload.Existing -> {
                 val existingForm = formFileDownload.form
                 val formBuilder = Form.Builder(existingForm)
@@ -187,50 +217,34 @@ class ServerFormDownloader(
                     formBuilder.lastDetectedAttachmentsUpdateDate(entityListUpdate)
                 }
 
-                FormResult(formsRepository.save(formBuilder.build()), false)
+                formsRepository.save(formBuilder.build()).toSuccess()
             }
 
             is FormFileDownload.New -> {
                 when (val formMetadataResult = parseFormMetadata(formFileDownload)) {
                     is Result.Success -> {
                         if (!isSubmissionOk(formMetadataResult.value)) {
-                            return InvalidSubmission().toError()
+                            InvalidSubmission().toError()
+                        } else {
+                            val formFile = File(formsDirPath, formFileDownload.file.name)
+                            FileUtils.copyFile(formFileDownload.file, formFile)
+
+                            val newForm = saveNewForm(
+                                formMetadataResult.value,
+                                formFile,
+                                mediaFilesDownload.entityLists.isNotEmpty()
+                            )
+
+                            newForm.toSuccess()
                         }
-
-                        val formFile = File(formsDirPath, formFileDownload.file.name)
-                        FileUtils.copyFile(formFileDownload.file, formFile)
-
-                        val newForm = saveNewForm(
-                            formMetadataResult.value,
-                            formFile,
-                            mediaFilesDownload.entityLists.isNotEmpty()
-                        )
-
-                        FormResult(newForm, true)
                     }
 
                     is Result.Error -> {
-                        return formMetadataResult
+                        formMetadataResult.raise()
                     }
                 }
             }
         }
-
-        val formMediaDir = File(formResult.form.formMediaPath)
-        runAndCatch {
-            moveMediaFiles(mediaFilesDownload.tempMediaPath, formMediaDir)
-        }.onError {
-            Timber.e(it)
-            return DiskError().toError()
-        }
-
-        ServerFormUseCases.copySavedFileFromPreviousFormVersionIfExists(
-            formsRepository,
-            formResult.form,
-            formMediaDir.absolutePath
-        )
-
-        return Unit.toSuccess()
     }
 
     private fun parseFormMetadata(formFileDownload: FormFileDownload.New): Result<FormMetadata, FormParsingError> {
