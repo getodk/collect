@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2014 GeoODK
+ * Copyright (C) 2015 GeoODK
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -11,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.widgets;
+package org.odk.collect.android.widgets.geo;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -21,19 +22,23 @@ import android.view.View;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.databinding.GeoshapeQuestionBinding;
+import org.odk.collect.android.databinding.GeotraceQuestionBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
 
+/**
+ * GeoTraceWidget allows the user to collect a trace of GPS points as the
+ * device moves along a path.
+ */
 @SuppressLint("ViewConstructor")
-public class GeoShapeWidget extends QuestionWidget {
-    GeoshapeQuestionBinding binding;
+public class GeoTraceWidget extends QuestionWidget {
+    GeotraceQuestionBinding binding;
 
     private final GeoDataRequester geoDataRequester;
 
-    public GeoShapeWidget(Context context, QuestionDetails questionDetails,
-                          GeoDataRequester geoDataRequester, Dependencies dependencies) {
+    public GeoTraceWidget(Context context, QuestionDetails questionDetails, GeoDataRequester geoDataRequester, Dependencies dependencies) {
         super(context, dependencies, questionDetails);
         render();
 
@@ -42,11 +47,13 @@ public class GeoShapeWidget extends QuestionWidget {
 
     @Override
     protected View onCreateWidgetView(Context context, FormEntryPrompt prompt, int answerFontSize) {
-        binding = GeoshapeQuestionBinding.inflate(((Activity) context).getLayoutInflater());
+        binding = GeotraceQuestionBinding.inflate(((Activity) context).getLayoutInflater());
 
         binding.geoAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
-        binding.simpleButton.setOnClickListener(v -> geoDataRequester.requestGeoPoly(prompt));
+        binding.simpleButton.setOnClickListener(v -> {
+            geoDataRequester.requestGeoPoly(prompt);
+        });
 
         String stringAnswer = GeoWidgetUtils.getGeoPolyAnswerToDisplay(prompt.getAnswerText());
         binding.geoAnswerText.setText(stringAnswer);
@@ -56,15 +63,15 @@ public class GeoShapeWidget extends QuestionWidget {
 
         if (getFormEntryPrompt().isReadOnly()) {
             if (dataAvailable) {
-                binding.simpleButton.setText(org.odk.collect.strings.R.string.view_polygon);
+                binding.simpleButton.setText(org.odk.collect.strings.R.string.view_line);
             } else {
                 binding.simpleButton.setVisibility(View.GONE);
             }
         } else {
             if (dataAvailable) {
-                binding.simpleButton.setText(org.odk.collect.strings.R.string.view_or_change_polygon);
+                binding.simpleButton.setText(org.odk.collect.strings.R.string.view_or_change_line);
             } else {
-                binding.simpleButton.setText(org.odk.collect.strings.R.string.get_polygon);
+                binding.simpleButton.setText(org.odk.collect.strings.R.string.get_line);
             }
         }
 
@@ -77,13 +84,13 @@ public class GeoShapeWidget extends QuestionWidget {
     }
 
     @Override
-    public void clearAnswer() {}
-
-    @Override
     public void setOnLongClickListener(OnLongClickListener l) {
         binding.simpleButton.setOnLongClickListener(l);
         binding.geoAnswerText.setOnLongClickListener(l);
     }
+
+    @Override
+    public void clearAnswer() {}
 
     @Override
     public void cancelLongPress() {

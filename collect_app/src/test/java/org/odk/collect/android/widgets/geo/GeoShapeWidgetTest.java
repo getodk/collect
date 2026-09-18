@@ -1,4 +1,4 @@
-package org.odk.collect.android.widgets;
+package org.odk.collect.android.widgets.geo;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -24,7 +24,7 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
 
 @RunWith(AndroidJUnit4.class)
-public class GeoTraceWidgetTest {
+public class GeoShapeWidgetTest {
     private final String answer = stringFromDoubleList();
 
     private GeoDataRequester geoDataRequester;
@@ -36,56 +36,56 @@ public class GeoTraceWidgetTest {
 
     @Test
     public void getAnswer_whenPromptDoesNotHaveAnswer_returnsNull() {
-        GeoTraceWidget widget = createWidget(promptWithAnswer(null));
+        GeoShapeWidget widget = createWidget(promptWithAnswer(null));
         assertNull(widget.getAnswer());
     }
 
     @Test
     public void getAnswer_whenPromptHasAnswer_returnsAnswer() {
-        GeoTraceWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
+        GeoShapeWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
         assertEquals(widget.getAnswer().getDisplayText(), answer);
     }
 
     @Test
     public void whenPromptDoesNotHaveAnswer_textViewDisplaysEmptyString() {
-        GeoTraceWidget widget = createWidget(promptWithAnswer(null));
+        GeoShapeWidget widget = createWidget(promptWithAnswer(null));
         assertEquals(widget.binding.geoAnswerText.getText().toString(), "");
     }
 
     @Test
     public void whenPromptHasAnswer_textViewDisplaysAnswer() {
-        GeoTraceWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
+        GeoShapeWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
         assertEquals(widget.binding.geoAnswerText.getText().toString(), answer);
     }
 
     @Test
     public void whenPromptIsReadOnlyAndDoesNotHaveAnswer_geoButtonIsNotDisplayed() {
-        GeoTraceWidget widget = createWidget(promptWithReadOnly());
+        GeoShapeWidget widget = createWidget(promptWithReadOnly());
         assertEquals(widget.binding.simpleButton.getVisibility(), View.GONE);
     }
 
     @Test
     public void whenPromptIsReadOnlyAndHasAnswer_viewGeoShapeButtonIsShown() {
-        GeoTraceWidget widget = createWidget(promptWithReadOnlyAndAnswer(new StringData(answer)));
-        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.view_line));
+        GeoShapeWidget widget = createWidget(promptWithReadOnlyAndAnswer(new StringData(answer)));
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.view_polygon));
     }
 
     @Test
     public void whenPromptIsNotReadOnlyAndDoesNotHaveAnswer_startGeoShapeButtonIsShown() {
-        GeoTraceWidget widget = createWidget(promptWithAnswer(null));
-        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_line));
+        GeoShapeWidget widget = createWidget(promptWithAnswer(null));
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_polygon));
     }
 
     @Test
     public void whenPromptIsNotReadOnlyAndHasAnswer_viewOrChangeGeoShapeButtonIsShown() {
-        GeoTraceWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
-        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.view_or_change_line));
+        GeoShapeWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.view_or_change_polygon));
     }
 
     @Test
-    public void clickingButtonAndAnswerTextViewForLong_callsLongClickListener() {
+    public void clickingButtonAndAnswerTextViewForLong_callsLongClickListeners() {
         View.OnLongClickListener listener = mock(View.OnLongClickListener.class);
-        GeoTraceWidget widget = createWidget(promptWithAnswer(null));
+        GeoShapeWidget widget = createWidget(promptWithAnswer(null));
 
         widget.setOnLongClickListener(listener);
         widget.binding.simpleButton.performLongClick();
@@ -96,26 +96,25 @@ public class GeoTraceWidgetTest {
     }
 
     @Test
-    public void buttonClick_whenMapConfiguratorIsAvailable_requestsGeoTrace() {
-        FormEntryPrompt prompt = promptWithAnswer(null);
-        GeoTraceWidget widget = createWidget(prompt);
+    public void buttonClick_requestsGeoShape() {
+        FormEntryPrompt prompt = promptWithAnswer(new StringData(answer));
+        GeoShapeWidget widget = createWidget(prompt);
         widget.binding.simpleButton.performClick();
-
         verify(geoDataRequester).requestGeoPoly(prompt);
     }
 
     @Test
-    public void buttonClick_requestsGeoTrace_whenAnswerIsCleared() {
+    public void buttonClick_requestsGeoShape_whenAnswerIsCleared() {
         FormEntryPrompt prompt = promptWithAnswer(new StringData(answer));
-        GeoTraceWidget widget = createWidget(prompt);
+        GeoShapeWidget widget = createWidget(prompt);
         widget.clearAnswer();
         widget.binding.simpleButton.performClick();
 
         verify(geoDataRequester).requestGeoPoly(prompt);
     }
 
-    private GeoTraceWidget createWidget(FormEntryPrompt prompt) {
-        return new GeoTraceWidget(widgetTestActivity(), new QuestionDetails(prompt),
+    private GeoShapeWidget createWidget(FormEntryPrompt prompt) {
+        return new GeoShapeWidget(widgetTestActivity(), new QuestionDetails(prompt),
                 geoDataRequester, widgetDependencies());
     }
 }

@@ -1,9 +1,12 @@
 package org.odk.collect.android.widgets
 
+import android.view.View
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTouchInput
 import net.bytebuddy.utility.RandomString
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
@@ -90,6 +93,19 @@ class BarcodeWidgetTest : QuestionWidgetTest<BarcodeWidget, StringData>() {
             .build()
         createWidget()
         composeRule.onNodeWithText("blah").assertIsDisplayed()
+    }
+
+    @Test
+    fun `Long-pressing the button and the answer shows the context menu`() {
+        formEntryPrompt = MockFormEntryPromptBuilder(formEntryPrompt)
+            .withAnswer(StringData("blah"))
+            .build()
+        val widget = createWidget()
+
+        composeRule.onNodeWithClickLabel(activity.getString(string.replace_barcode)).performTouchInput { longClick() }
+        composeRule.onNodeWithText("blah").performTouchInput { longClick() }
+
+        assertThat(viewsWithShownContextMenu, equalTo(listOf<View>(widget, widget)))
     }
 
     @Test
