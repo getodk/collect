@@ -148,6 +148,25 @@ abstract class ProjectsRepositoryTest {
     }
 
     @Test
+    fun `delete() does not change created order of remaining projects`() {
+        var now = 0L
+        projectsRepository = buildSubject { now }
+
+        now = 2
+        projectsRepository.save(Project.Saved("blah1", projectX))
+
+        now = 3
+        projectsRepository.save(Project.Saved("blah2", projectY))
+        projectsRepository.delete("blah2")
+
+        now = 1
+        projectsRepository.save(Project.Saved("blah3", projectZ))
+
+        val uuids = projectsRepository.getAll().map { it.uuid }
+        assertThat(uuids, `is`(listOf("blah3", "blah1")))
+    }
+
+    @Test
     fun `deleteAll() should delete all projects from storage`() {
         projectsRepository.save(projectX)
         projectsRepository.save(projectY)
