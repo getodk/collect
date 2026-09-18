@@ -23,6 +23,8 @@ import android.widget.Toast;
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.data.MultipleItemsData;
+import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.core.model.instance.FormInstance;
 import org.javarosa.form.api.FormEntryCaption;
@@ -40,6 +42,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -168,11 +171,7 @@ public final class ExternalDataUtil {
     public static ArrayList<SelectChoice> populateExternalChoices(FormEntryPrompt formEntryPrompt,
             XPathFuncExpr xpathfuncexpr, FormController formController) throws FileNotFoundException {
         try {
-            IAnswerData selectedValue = formEntryPrompt.getAnswerValue();
-            Selection selection = null;
-            if (selectedValue != null) {
-                selection = (Selection) selectedValue.getValue();
-            }
+            List<Selection> selections = getSelections(formEntryPrompt.getAnswerValue());
             List<SelectChoice> selectChoices = formEntryPrompt.getSelectChoices();
             if (!containsConfigurationChoice(selectChoices)) {
                 String filePath = getFilePath(xpathfuncexpr, formController);
@@ -183,7 +182,7 @@ public final class ExternalDataUtil {
                 String value = selectChoice.getValue();
                 if (isAnInteger(value)) {
                     // treat this as a static choice
-                    attachChoiceToSelectionIfMatch(selection, selectChoice);
+                    attachChoiceToSelectionIfMatch(selections, selectChoice);
                     returnedChoices.add(selectChoice);
                 } else {
                     String displayColumns = formEntryPrompt.getSelectChoiceText(selectChoice);
@@ -213,7 +212,7 @@ public final class ExternalDataUtil {
                         @SuppressWarnings("unchecked")
                         List<SelectChoice> dynamicChoices = (ArrayList<SelectChoice>) eval;
                         for (SelectChoice dynamicChoice : dynamicChoices) {
-                            attachChoiceToSelectionIfMatch(selection, dynamicChoice);
+                            attachChoiceToSelectionIfMatch(selections, dynamicChoice);
                             returnedChoices.add(dynamicChoice);
                         }
                     } else {
@@ -234,13 +233,21 @@ public final class ExternalDataUtil {
         }
     }
 
-    private static void attachChoiceToSelectionIfMatch(Selection selection, SelectChoice selectChoice) {
-        if (selection == null || selection.index != -1) {
-            return;
+    private static List<Selection> getSelections(IAnswerData answer) {
+        if (answer instanceof SelectOneData) {
+            return Collections.singletonList((Selection) answer.getValue());
+        } else if (answer instanceof MultipleItemsData) {
+            return (List<Selection>) answer.getValue();
+        } else {
+            return Collections.emptyList();
         }
+    }
 
-        if (selection.getValue().equals(selectChoice.getValue())) {
-            selection.attachChoice(selectChoice);
+    private static void attachChoiceToSelectionIfMatch(List<Selection> selections, SelectChoice selectChoice) {
+        for (Selection selection : selections) {
+            if (selection.index == -1 && selection.getValue().equals(selectChoice.getValue())) {
+                selection.attachChoice(selectChoice);
+            }
         }
     }
 
