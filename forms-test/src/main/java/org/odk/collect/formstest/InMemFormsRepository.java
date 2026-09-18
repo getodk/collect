@@ -66,10 +66,6 @@ public class InMemFormsRepository implements FormsRepository {
     @Nullable
     @Override
     public Form getOneByMd5Hash(@NotNull String hash) {
-        if (hash == null) {
-            throw new IllegalArgumentException("null hash");
-        }
-
         return forms.stream().filter(f -> f.getMD5Hash().equals(hash)).findFirst().orElse(null);
     }
 
@@ -120,8 +116,10 @@ public class InMemFormsRepository implements FormsRepository {
             forms.add(builder.build());
             return form;
         } else {
-            builder.dbId(idCounter++)
-                    .date(clock.get());
+            builder.dbId(idCounter++);
+            if (form.getDate() == null) {
+                builder.date(clock.get());
+            }
 
             // Allows tests to override hash
             String hash;

@@ -920,7 +920,7 @@ public class ServerFormDownloaderTest {
     }
 
     @Test
-    public void whenAFormWithAnEntityListHasAlreadyBeenDownloading_redownloadingDoesNotUpdateLastDetectedAttachmentsUpdateDate() throws Exception {
+    public void whenAFormWithAnEntityListHasAlreadyBeenDownloaded_redownloadingDoesNotUpdateLastDetectedAttachmentsUpdateDate() throws Exception {
         String xform = createXFormBody("id", "version", "Test Form", "2024.1.0");
         ServerFormDetails serverFormDetails = new ServerFormDetails(
                 "Form",

@@ -9,13 +9,19 @@ import org.odk.collect.forms.FormSourceException.AuthRequired
 import org.odk.collect.forms.FormSourceException.FetchError
 import org.odk.collect.forms.FormSourceException.SecurityError
 import org.odk.collect.forms.FormSourceException.ServerNotOpenRosaError
+import org.odk.collect.forms.FormSourceException.Unreachable
 import org.odk.collect.forms.ManifestFile
 import org.odk.collect.openrosa.forms.OpenRosaXmlFetcher.WebCredentialsProvider
 import org.odk.collect.openrosa.http.OpenRosaConstants
 import org.odk.collect.openrosa.http.OpenRosaHttpInterface
 import org.odk.collect.openrosa.parse.OpenRosaResponseParser
+import org.odk.collect.shared.result.Result
+import org.odk.collect.shared.result.runAndCatch
+import org.odk.collect.shared.result.toError
+import org.odk.collect.shared.result.toSuccess
 import java.io.InputStream
 import java.net.HttpURLConnection
+import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import java.util.concurrent.Callable
 import javax.net.ssl.SSLException
@@ -43,7 +49,7 @@ class OpenRosaClient(
                 }
 
                 HttpURLConnection.HTTP_NOT_FOUND -> {
-                    throw FormSourceException.Unreachable(serverUrl)
+                    throw Unreachable(serverUrl)
                 }
 
                 else -> {
@@ -66,11 +72,7 @@ class OpenRosaClient(
     }
 
     @Throws(FormSourceException::class)
-    override fun fetchManifest(manifestURL: String?): ManifestFile? {
-        if (manifestURL == null) {
-            return null
-        }
-
+    override fun fetchManifest(manifestURL: String): ManifestFile {
         val result = mapException { openRosaXMLFetcher.getXML(manifestURL) }
 
         if (result.errorMessage != null) {
@@ -133,12 +135,17 @@ class OpenRosaClient(
             } else {
                 throw FetchError()
             }
-        } catch (e: UnknownHostException) {
-            throw FormSourceException.Unreachable(serverUrl)
-        } catch (e: SSLException) {
-            throw SecurityError(serverUrl)
         } catch (e: Exception) {
-            throw FetchError()
+            throw mapException(e)
+        }
+    }
+
+    private fun mapException(e: Exception): FormSourceException {
+        return when (e) {
+            is UnknownHostException -> Unreachable(serverUrl)
+            is SocketTimeoutException -> FetchError()
+            is SSLException -> SecurityError(serverUrl)
+            else -> FetchError()
         }
     }
 
@@ -153,21 +160,31 @@ class OpenRosaClient(
         return downloadListUrl
     }
 
-    @Throws(FormSourceException::class)
-    override fun fetchDeletedStates(integrityUrl: String, ids: List<String>): List<Pair<String, Boolean>> {
+    override fun fetchDeletedStates(
+        integrityUrl: String,
+        ids: List<String>
+    ): Result<List<Pair<String, Boolean>>, FormSourceException> {
         val uri = integrityUrl.toUri("id" to ids.joinToString(","))
-
-        val result = mapException { openRosaXMLFetcher.getXML(uri.toString()) }
-        if (!result.isOpenRosaResponse) {
-            throw FormSourceException.ParseError(serverUrl)
+        val documentFetchResult = runAndCatch {
+            openRosaXMLFetcher.getXML(uri.toString())
         }
 
-        val parsedResponse = openRosaResponseParser.parseIntegrityResponse(result.doc)
+        return when (documentFetchResult) {
+            is Result.Error -> mapException(documentFetchResult.value).toError()
+            is Result.Success -> {
+                if (documentFetchResult.value.isOpenRosaResponse) {
+                    val doc = documentFetchResult.value.doc
+                    val parsedResponse = openRosaResponseParser.parseIntegrityResponse(doc)
 
-        if (parsedResponse != null) {
-            return parsedResponse.map { Pair(it.id, it.deleted) }
-        } else {
-            throw FormSourceException.ParseError(serverUrl)
+                    if (parsedResponse != null) {
+                        parsedResponse.map { Pair(it.id, it.deleted) }.toSuccess()
+                    } else {
+                        FormSourceException.ParseError(serverUrl).toError()
+                    }
+                } else {
+                    FormSourceException.ParseError(serverUrl).toError()
+                }
+            }
         }
     }
 }

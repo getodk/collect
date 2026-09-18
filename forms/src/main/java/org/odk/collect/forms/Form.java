@@ -39,7 +39,6 @@ public final class Form {
     private final String md5Hash;
     private final Long date;
     private final String jrCacheFilePath;
-    private final String formMediaPath;
     private final String language;
     private final String autoSend;
     private final String autoDelete;
@@ -47,6 +46,9 @@ public final class Form {
     private final boolean deleted;
     private final Long lastDetectedAttachmentsUpdateDate;
     private final boolean usesEntities;
+
+    @NotNull
+    private final String formMediaPath;
 
     private Form(Form.Builder builder) {
         dbId = builder.dbId;
@@ -262,7 +264,7 @@ public final class Form {
         return jrCacheFilePath;
     }
 
-    @Nullable
+    @NotNull
     public String getFormMediaPath() {
         return formMediaPath;
     }
