@@ -33,6 +33,7 @@ import org.maplibre.android.style.layers.LineLayer
 import org.maplibre.android.style.layers.Property
 import org.maplibre.android.style.layers.PropertyFactory
 import org.maplibre.android.style.layers.RasterLayer
+import org.maplibre.android.style.layers.TransitionOptions
 import org.maplibre.android.style.sources.RasterSource
 import org.maplibre.android.style.sources.Source
 import org.maplibre.android.style.sources.TileSet
@@ -318,6 +319,9 @@ class MapLibreMapFragment(private val configuration: Configuration) :
     }
 
     private fun onStyleLoaded(style: Style) {
+        // Avoid markers flickering while they are added or dragged.
+        style.transition = TransitionOptions(style.transition.duration, style.transition.delay, false)
+
         styleIcons.onStyleLoaded(style)
 
         if (!annotationManagersCreated) {
