@@ -38,12 +38,12 @@ object Configurations {
         ),
         ProjectKeys.BASEMAP_SOURCE_OSM to Configuration(
             name = R.string.basemap_source_osm,
-            attribution = "© OpenStreetMap contributors",
+            attribution = "<a href=\"https://www.openstreetmap.org/copyright\">© OpenStreetMap contributors</a>",
             uri = BasemapUri.Raster("https://tile.openstreetmap.org/{z}/{x}/{y}.png")
         ),
         ProjectKeys.BASEMAP_SOURCE_USGS to Configuration(
             name = R.string.basemap_source_usgs,
-            attribution = "Map services and data available from U.S. Geological Survey, National Geospatial Program.",
+            attribution = "<a href=\"https://www.usgs.gov/programs/national-geospatial-program\">Map services and data available from U.S. Geological Survey, National Geospatial Program.</a>",
             styleSetting = ProjectKeys.KEY_USGS_MAP_STYLE,
             styleOptions = mapOf(
                 "topographic" to StyleOption(
@@ -62,7 +62,8 @@ object Configurations {
         ),
         ProjectKeys.BASEMAP_SOURCE_CARTO to Configuration(
             name = R.string.basemap_source_carto,
-            attribution = "© OpenStreetMap contributors, © CARTO",
+            attribution = "<a href=\"https://www.openstreetmap.org/copyright\">© OpenStreetMap contributors</a>, " +
+                "<a href=\"https://carto.com/attributions\">© CARTO</a>",
             styleSetting = ProjectKeys.KEY_CARTO_MAP_STYLE,
             styleOptions = mapOf(
                 "positron" to StyleOption(
