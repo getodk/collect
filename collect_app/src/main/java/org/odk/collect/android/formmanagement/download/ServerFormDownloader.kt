@@ -1,5 +1,6 @@
 package org.odk.collect.android.formmanagement.download
 
+import org.odk.collect.android.formmanagement.FormFileDownload
 import org.odk.collect.android.formmanagement.MediaFilesDownload
 import org.odk.collect.android.formmanagement.ServerFormDetails
 import org.odk.collect.android.formmanagement.ServerFormUseCases
@@ -13,14 +14,12 @@ import org.odk.collect.android.formmanagement.download.FormDownloadException.Inv
 import org.odk.collect.android.formmanagement.download.FormDownloader.ProgressReporter
 import org.odk.collect.android.formmanagement.metadata.FormMetadata
 import org.odk.collect.android.formmanagement.metadata.FormMetadataParser
-import org.odk.collect.android.instancemanagement.send.autosend.getLastUpdated
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.android.utilities.FormNameUtils
 import org.odk.collect.androidshared.utils.Validator.isUrlValid
 import org.odk.collect.async.OngoingWorkListener
 import org.odk.collect.entities.server.EntitySource
 import org.odk.collect.entities.storage.EntitiesRepository
-import org.odk.collect.entities.storage.getLastUpdateTime
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.FormSource
 import org.odk.collect.forms.FormSourceException
@@ -198,24 +197,13 @@ class ServerFormDownloader(
 
         return when (formFileDownload) {
             is FormFileDownload.Existing -> {
-                val existingForm = formFileDownload.form
-                val formBuilder = Form.Builder(existingForm)
-
-                if (mediaFilesDownload.newAttachmentsDownloaded) {
-                    formBuilder.lastDetectedAttachmentsUpdateDate(clock.get())
-                }
-
-                if (entityLists.isNotEmpty()) {
-                    formBuilder.usesEntities(true)
-
-                    val lists = mediaFilesDownload.entityLists.map { it.listName }
-                    val entityListUpdate = entitiesRepository.getLastUpdateTime(lists)
-                    if (entityListUpdate != null && entityListUpdate > existingForm.getLastUpdated()) {
-                        formBuilder.lastDetectedAttachmentsUpdateDate(entityListUpdate)
-                    }
-                }
-
-                formsRepository.save(formBuilder.build()).toSuccess()
+                ServerFormUseCases.updateForm(
+                    formFileDownload,
+                    mediaFilesDownload,
+                    entitiesRepository,
+                    formsRepository,
+                    clock.get()
+                ).toSuccess()
             }
 
             is FormFileDownload.New -> {
@@ -321,11 +309,6 @@ class ServerFormDownloader(
             return FormFileDownload.New(tempFormFile)
         }
     }
-}
-
-private sealed class FormFileDownload {
-    data class New(val file: File) : FormFileDownload()
-    data class Existing(val form: Form) : FormFileDownload()
 }
 
 private fun getFormFileName(formName: String?, formsDirPath: String?): String {

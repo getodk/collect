@@ -4,12 +4,14 @@ import org.apache.commons.io.FileUtils.copyFileToDirectory
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.formmanagement.download.FormDownloadException
 import org.odk.collect.android.formmanagement.download.FormDownloader
+import org.odk.collect.android.instancemanagement.send.autosend.getLastUpdated
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.android.utilities.FormUtils
 import org.odk.collect.async.OngoingWorkListener
 import org.odk.collect.entities.LocalEntityUseCases
 import org.odk.collect.entities.server.EntitySource
 import org.odk.collect.entities.storage.EntitiesRepository
+import org.odk.collect.entities.storage.getLastUpdateTime
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.FormSource
 import org.odk.collect.forms.FormSourceException
@@ -256,6 +258,38 @@ object ServerFormUseCases {
         }
     }
 
+    fun updateForm(
+        formFileDownload: FormFileDownload.Existing,
+        mediaFilesDownload: MediaFilesDownload,
+        entitiesRepository: EntitiesRepository,
+        formsRepository: FormsRepository,
+        time: Long
+    ): Form {
+        val existingForm = formFileDownload.form
+        val formBuilder = Form.Builder(existingForm)
+
+        val attachmentUpdateTime = if (mediaFilesDownload.newAttachmentsDownloaded) time else null
+        val entityLists = mediaFilesDownload.entityLists.map { it.listName }
+        if (entityLists.isNotEmpty()) {
+            formBuilder.usesEntities(true)
+        }
+
+        val entityListUpdate = entitiesRepository.getLastUpdateTime(entityLists)
+        val entityListUpdateTime =
+            if (entityListUpdate != null && entityListUpdate > existingForm.getLastUpdated()) {
+                entityListUpdate
+            } else {
+                null
+            }
+
+        val latestUpdateTime = listOfNotNull(attachmentUpdateTime, entityListUpdateTime).maxOrNull()
+        if (latestUpdateTime != null) {
+            formBuilder.lastDetectedAttachmentsUpdateDate(latestUpdateTime)
+        }
+
+        return formsRepository.save(formBuilder.build())
+    }
+
     private fun downloadMediaFile(
         formSource: FormSource,
         mediaFile: MediaFile,
@@ -331,6 +365,11 @@ data class MediaFilesDownload(
     val newAttachmentsDownloaded: Boolean,
     val entityLists: List<EntityListDownload>
 )
+
+sealed class FormFileDownload {
+    data class New(val file: File) : FormFileDownload()
+    data class Existing(val form: Form) : FormFileDownload()
+}
 
 sealed class EntityListDownload {
     abstract val mediaFile: MediaFile
