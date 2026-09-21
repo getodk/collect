@@ -190,6 +190,8 @@ class MapLibreMapFragment(private val configuration: Configuration) :
 
         ScaleBarPlugin(mapView, map).create(ScaleBarOptions(requireContext()))
 
+        // MapLibre allows zooming in to 25 by default, while its predecessor Mapbox allowed 22.
+        // Allowing more than 22 can cause rendering problems.
         map.setMaxZoomPreference(22.0)
 
         map.addOnMapClickListener(this)
