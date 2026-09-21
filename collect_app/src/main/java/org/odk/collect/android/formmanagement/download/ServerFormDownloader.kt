@@ -165,14 +165,14 @@ class ServerFormDownloader(
         mediaFilesDownload: MediaFilesDownload,
         formsDirPath: String
     ): Result<Unit, FormDownloadException> {
-        return result<Long?, FormDownloadException> {
+        return result<Unit, FormDownloadException> {
             ingestEntityListsFromDownload(
                 mediaFilesDownload,
                 entitiesRepository,
                 entitySource,
             )
-        }.chain { entityListUpdate ->
-            createOrUpdateForm(formFileDownload, mediaFilesDownload, entityListUpdate, formsDirPath)
+        }.chain {
+            createOrUpdateForm(formFileDownload, mediaFilesDownload, formsDirPath)
         }.chain { form ->
             moveMediaFiles(mediaFilesDownload.tempMediaPath, form)
                 .map { Pair(form, it) }
@@ -191,9 +191,10 @@ class ServerFormDownloader(
     private fun createOrUpdateForm(
         formFileDownload: FormFileDownload,
         mediaFilesDownload: MediaFilesDownload,
-        entityListUpdate: Long?,
         formsDirPath: String
     ): Result<Form, FormDownloadException> {
+        val entityLists = mediaFilesDownload.entityLists
+
         return when (formFileDownload) {
             is FormFileDownload.Existing -> {
                 val existingForm = formFileDownload.form
@@ -203,12 +204,13 @@ class ServerFormDownloader(
                     formBuilder.lastDetectedAttachmentsUpdateDate(clock.get())
                 }
 
-                if (mediaFilesDownload.entityLists.isNotEmpty()) {
+                if (entityLists.isNotEmpty()) {
                     formBuilder.usesEntities(true)
-                }
 
-                if (entityListUpdate != null && entityListUpdate > existingForm.getLastUpdated()) {
-                    formBuilder.lastDetectedAttachmentsUpdateDate(entityListUpdate)
+                    val entityListUpdate = entitiesRepository.getList(entityLists.first().listName)?.lastUpdated
+                    if (entityListUpdate != null && entityListUpdate > existingForm.getLastUpdated()) {
+                        formBuilder.lastDetectedAttachmentsUpdateDate(entityListUpdate)
+                    }
                 }
 
                 formsRepository.save(formBuilder.build()).toSuccess()
@@ -225,7 +227,7 @@ class ServerFormDownloader(
                         val newForm = saveNewForm(
                             it,
                             formFile,
-                            mediaFilesDownload.entityLists.isNotEmpty()
+                            entityLists.isNotEmpty()
                         )
 
                         newForm.toSuccess()

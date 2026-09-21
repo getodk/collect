@@ -165,7 +165,7 @@ object ServerFormUseCases {
 
             val isEntityList = mediaFile.type != null
             if (isEntityList) {
-                val entityListName = getEntityListFromFileName(mediaFile)
+                val entityListName = getListNameFromMediaFile(mediaFile)
                 val localEntityList = entitiesRepository.getList(entityListName)
 
                 if (localEntityList == null || mediaFile.hash != localEntityList.hash) {
@@ -221,13 +221,11 @@ object ServerFormUseCases {
         mediaFilesDownload: MediaFilesDownload,
         entitiesRepository: EntitiesRepository,
         entitySource: EntitySource,
-    ): Long? {
-        var entityListUpdate: Long? = null
+    ) {
         mediaFilesDownload.entityLists.forEach { entityListDownload ->
-            val listName = getEntityListFromFileName(entityListDownload.mediaFile)
             if (entityListDownload is EntityListDownload.Update) {
                 LocalEntityUseCases.updateLocalEntitiesFromServer(
-                    listName,
+                    entityListDownload.listName,
                     entityListDownload.file,
                     entitiesRepository,
                     entityListDownload.mediaFile
@@ -250,18 +248,12 @@ object ServerFormUseCases {
              * so will never get deleted.
              */
             LocalEntityUseCases.cleanUpDeletedOfflineEntities(
-                listName,
+                entityListDownload.listName,
                 entitiesRepository,
                 entitySource,
                 entityListDownload.mediaFile
             )
-
-            if (entityListUpdate == null) {
-                entityListUpdate = entitiesRepository.getList(listName)?.lastUpdated
-            }
         }
-
-        return entityListUpdate
     }
 
     private fun downloadMediaFile(
@@ -285,14 +277,11 @@ object ServerFormUseCases {
         entitiesRepository: EntitiesRepository
     ) {
         val isCsv = mediaFile.filename.endsWith(".csv")
-        val mostLikelyInstanceId = getEntityListFromFileName(mediaFile)
+        val mostLikelyInstanceId = getListNameFromMediaFile(mediaFile)
         if (isCsv && entitiesRepository.getList(mostLikelyInstanceId) != null) {
             Analytics.setUserProperty("HasEntityListCollision", "true")
         }
     }
-
-    private fun getEntityListFromFileName(mediaFile: MediaFile) =
-        mediaFile.filename.substringBefore(".csv")
 
     private fun searchForExistingMediaFile(
         currentOrLastFormVersion: Form?,
@@ -343,9 +332,14 @@ data class MediaFilesDownload(
     val entityLists: List<EntityListDownload>
 )
 
-sealed interface EntityListDownload {
-    val mediaFile: MediaFile
+sealed class EntityListDownload {
+    abstract val mediaFile: MediaFile
+    val listName: String by lazy { getListNameFromMediaFile(mediaFile) }
 
-    data class Update(override val mediaFile: MediaFile, val file: File) : EntityListDownload
-    data class Skipped(override val mediaFile: MediaFile) : EntityListDownload
+    data class Update(override val mediaFile: MediaFile, val file: File) : EntityListDownload()
+    data class Skipped(override val mediaFile: MediaFile) : EntityListDownload()
+}
+
+private fun getListNameFromMediaFile(mediaFile: MediaFile): String {
+    return mediaFile.filename.substringBefore(".csv")
 }
