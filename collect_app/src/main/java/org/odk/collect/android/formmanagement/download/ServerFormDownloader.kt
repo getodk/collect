@@ -20,6 +20,7 @@ import org.odk.collect.androidshared.utils.Validator.isUrlValid
 import org.odk.collect.async.OngoingWorkListener
 import org.odk.collect.entities.server.EntitySource
 import org.odk.collect.entities.storage.EntitiesRepository
+import org.odk.collect.entities.storage.getLastUpdateTime
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.FormSource
 import org.odk.collect.forms.FormSourceException
@@ -207,7 +208,8 @@ class ServerFormDownloader(
                 if (entityLists.isNotEmpty()) {
                     formBuilder.usesEntities(true)
 
-                    val entityListUpdate = entitiesRepository.getList(entityLists.first().listName)?.lastUpdated
+                    val lists = mediaFilesDownload.entityLists.map { it.listName }
+                    val entityListUpdate = entitiesRepository.getLastUpdateTime(lists)
                     if (entityListUpdate != null && entityListUpdate > existingForm.getLastUpdated()) {
                         formBuilder.lastDetectedAttachmentsUpdateDate(entityListUpdate)
                     }

@@ -31,3 +31,7 @@ fun EntitiesRepository.getListNames(): List<String> {
 fun EntitiesRepository.findEntityById(dataset: String, id: String): Entity.Saved? {
     return query(dataset, Query.StringEq(EntitySchema.ID, id)).firstOrNull()
 }
+
+fun EntitiesRepository.getLastUpdateTime(lists: List<String>): Long? {
+    return lists.mapNotNull { getList(it)?.lastUpdated }.maxOrNull()
+}
