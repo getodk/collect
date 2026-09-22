@@ -129,14 +129,14 @@ More information about using Android Debug Bridge with Collect can be found [her
 
 Certain functions in ODK Collect depend on cloud services that require API keys or authorization steps to work.  Here are the steps you need to take in order to use these functions in your development builds.
 
-**Google Maps API**: When the "Google Maps SDK" option is selected in the "User interface" settings, ODK Collect uses the Google Maps API for displaying maps in the geospatial question types (GeoPoint, GeoTrace, and GeoShape).  To enable this API:
+**Google Maps API**: When the "Google Maps" option is selected in "Maps" settings, ODK Collect uses the Google Maps API for displaying maps in the geospatial question types (GeoPoint, GeoTrace, and GeoShape).  To enable this API:
   1. [Get a Google Maps API key](https://developers.google.com/maps/documentation/android-api/signup).  Note that this requires a credit card number, though the card will not be charged immediately; some free API usage is permitted.  You should carefully read the terms before providing a credit card number.
   1. Edit or create `secrets.properties` and set the `GOOGLE_MAPS_API_KEY` property to your API key.  You should end up with a line that looks like this:
     ```
     GOOGLE_MAPS_API_KEY=AIbzvW8e0ub...
     ```
 
-**Mapbox Maps SDK for Android**: When the "Mapbox SDK" option is selected in the "User interface" settings, ODK Collect uses the Mapbox SDK for displaying maps in the geospatial question types (GeoPoint, GeoTrace, and GeoShape).  To enable this API:
+**Mapbox Maps SDK for Android**: When the "Mapbox" option is selected in "Maps" settings, ODK Collect uses the Mapbox SDK for displaying maps in the geospatial question types (GeoPoint, GeoTrace, and GeoShape).  To enable this API:
   1. [Create a Mapbox account](https://www.mapbox.com/signup/).  Note that signing up with the "Pay-As-You-Go" plan does not require a credit card.  Mapbox provides free API usage up to the monthly thresholds documented at [https://www.mapbox.com/pricing](https://www.mapbox.com/pricing).  If your usage exceeds these thresholds, you will receive e-mail with instructions on how to add a credit card for payment; services will remain live until the end of the 30-day billing term, after which the account will be deactivated and will require a credit card to reactivate.
   2. Find your access token on your [account page](https://account.mapbox.com/) - it should be in "Tokens" as "Default public token".
   3. Edit or create `secrets.properties` and set the `MAPBOX_ACCESS_TOKEN` property to your access token.  You should end up with a line that looks like this:
@@ -146,6 +146,13 @@ Certain functions in ODK Collect depend on cloud services that require API keys 
   4. Create a new secret token with the "DOWNLOADS:READ" secret scope and then add it to `secrets.properties` as `MAPBOX_DOWNLOADS_TOKEN`.
 
 *Note: Mapbox will not be available as an option in compiled versions of Collect unless you follow the steps above. Mapbox will also not be available on x86 devices as the native libraries are excluded to reduce the APK size. If you need to use an x86 device, you can force the build to include x86 libs by include the `x86Libs` Gradle parameter. For example, to build a debug APK with x86 libs: `./gradlew assembleDebug -Px86Libs`.*
+
+**Carto API**: When the "Carto" option is selected in "Maps" settings, ODK Collect uses the Carto API for displaying maps in the geospatial question types (GeoPoint, GeoTrace, and GeoShape).  To enable this API:
+    1. [Get a Carto API key](https://carto.com/basemaps/apikey/).
+    1. Edit or create `secrets.properties` and set the `CARTO_API_KEY` property to your API key.  You should end up with a line that looks like this:
+        ```
+        CARTO_API_KEY=AIbzvW8e0ub...
+        ```
 
 ## Debugging JavaRosa
 
