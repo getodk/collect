@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlinKsp)
 }
 
 apply(from = "../config/quality.gradle")
@@ -13,43 +14,33 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-        }
-    }
-
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    buildFeatures {
-        viewBinding = true
-    }
-
-    namespace = "org.odk.collect.mapbox"
+    namespace = "org.odk.collect.maplibre"
 }
 
 dependencies {
     coreLibraryDesugaring(libs.desugar)
 
     implementation(project(":androidshared"))
-    implementation(project(":icons"))
     implementation(project(":maps"))
     implementation(project(":settings"))
     implementation(project(":shared"))
     implementation(project(":strings"))
-    implementation(project(":async"))
-    implementation(libs.playServicesLocation)
+    implementation(libs.androidxFragmentKtx)
     implementation(libs.androidxPreferenceKtx)
-    implementation(libs.mapboxAndroidSdk)
     implementation(libs.timber)
-    implementation(libs.androidxStartup)
-
-    testImplementation(project(":test-shared"))
-    testImplementation(libs.junit)
-    testImplementation(libs.mockitoCore)
-    testImplementation(libs.hamcrest)
+    implementation(libs.dagger)
+    ksp(libs.daggerCompiler)
+    implementation(libs.maplibreAndroidSdk)
+    implementation(libs.maplibreAnnotationPlugin) {
+        exclude(group = "org.maplibre.gl", module = "android-sdk")
+    }
+    implementation(libs.maplibreScalebarPlugin) {
+        exclude(group = "org.maplibre.gl", module = "android-sdk")
+    }
 }

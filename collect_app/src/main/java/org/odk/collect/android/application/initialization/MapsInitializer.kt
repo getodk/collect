@@ -5,7 +5,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.gms.maps.MapView
-import org.odk.collect.android.application.MapboxClassInstanceCreator
 import org.odk.collect.android.geo.MapConfiguratorProvider
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
@@ -22,7 +21,7 @@ class MapsInitializer @Inject constructor(
         initializeFrameworks()
     }
 
-    fun initializeUIComponents(activity: FragmentActivity, fragmentContainer: Int) {
+    fun initializeUIComponents(activity: FragmentActivity) {
         if (!UI_COMPONENTS_INITIALIZED) {
             val mapView = MapView(activity.application)
             mapView.onCreate(null)
@@ -31,16 +30,6 @@ class MapsInitializer @Inject constructor(
                     mapView.onDestroy()
                 }
             })
-
-            if (MapboxClassInstanceCreator.isMapboxAvailable()) {
-                activity.supportFragmentManager
-                    .beginTransaction()
-                    .add(
-                        fragmentContainer,
-                        MapboxClassInstanceCreator.createMapBoxInitializationFragment()
-                    )
-                    .commit()
-            }
 
             UI_COMPONENTS_INITIALIZED = true
         }

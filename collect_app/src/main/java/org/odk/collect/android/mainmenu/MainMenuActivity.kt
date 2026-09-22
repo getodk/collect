@@ -99,7 +99,7 @@ class MainMenuActivity : LocalizedActivity(), CollectComposeThemeProvider {
             setView(R.layout.main_menu_activity, false)
             lifecycle.addObserver(mdmConfigObserver)
 
-            mapsInitializer.initializeUIComponents(this, R.id.map_box_initialization_fragment)
+            mapsInitializer.initializeUIComponents(this)
         }
     }
 

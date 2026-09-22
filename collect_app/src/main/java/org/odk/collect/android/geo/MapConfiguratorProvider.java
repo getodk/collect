@@ -12,10 +12,11 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.application.MapboxClassInstanceCreator;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.googlemaps.GoogleMapConfigurator;
 import org.odk.collect.maps.MapConfigurator;
+import org.odk.collect.maplibre.MapLibreMapConfigurator;
+import org.odk.collect.maplibre.MapLibreSupport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,19 +48,22 @@ public class MapConfiguratorProvider {
             ));
         }
 
-        if (isMapboxSupported()) {
-            sourceOptions.add(new SourceOption(BASEMAP_SOURCE_MAPBOX, org.odk.collect.strings.R.string.basemap_source_mapbox,
-                    MapboxClassInstanceCreator.createMapboxMapConfigurator(BASEMAP_SOURCE_MAPBOX)
-            ));
+        if (MapLibreSupport.isAvailable()) {
+            MapLibreMapConfigurator mapboxConfigurator = new MapLibreMapConfigurator(BASEMAP_SOURCE_MAPBOX);
+            if (mapboxConfigurator.isAvailable(context)) {
+                sourceOptions.add(new SourceOption(BASEMAP_SOURCE_MAPBOX, org.odk.collect.strings.R.string.basemap_source_mapbox,
+                        mapboxConfigurator
+                ));
+            }
 
             sourceOptions.add(new SourceOption(BASEMAP_SOURCE_OSM, org.odk.collect.strings.R.string.basemap_source_osm,
-                    MapboxClassInstanceCreator.createMapboxMapConfigurator(BASEMAP_SOURCE_OSM)
+                    new MapLibreMapConfigurator(BASEMAP_SOURCE_OSM)
             ));
             sourceOptions.add(new SourceOption(BASEMAP_SOURCE_USGS, org.odk.collect.strings.R.string.basemap_source_usgs,
-                    MapboxClassInstanceCreator.createMapboxMapConfigurator(BASEMAP_SOURCE_USGS)
+                    new MapLibreMapConfigurator(BASEMAP_SOURCE_USGS)
             ));
             sourceOptions.add(new SourceOption(BASEMAP_SOURCE_CARTO, org.odk.collect.strings.R.string.basemap_source_carto,
-                    MapboxClassInstanceCreator.createMapboxMapConfigurator(BASEMAP_SOURCE_CARTO)
+                    new MapLibreMapConfigurator(BASEMAP_SOURCE_CARTO)
             ));
         }
 
@@ -100,10 +104,6 @@ public class MapConfiguratorProvider {
             labelIds[i] = sourceOptions[i].labelId;
         }
         return labelIds;
-    }
-
-    private static boolean isMapboxSupported() {
-        return MapboxClassInstanceCreator.isMapboxAvailable();
     }
 
     /**

@@ -1,6 +1,5 @@
-package org.odk.collect.mapbox
+package org.odk.collect.maplibre
 
-import com.mapbox.maps.Style
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.settings.keys.ProjectKeys.KEY_MAPBOX_MAP_STYLE
 import org.odk.collect.strings.R
@@ -11,40 +10,40 @@ object Configurations {
             name = R.string.basemap_source_mapbox,
             styleSetting = KEY_MAPBOX_MAP_STYLE,
             styleOptions = mapOf(
-                Style.MAPBOX_STREETS to StyleOption(
+                "mapbox://styles/mapbox/streets-v11" to StyleOption(
                     name = R.string.streets,
-                    BasemapUri.Mapbox(Style.MAPBOX_STREETS)
+                    BasemapUri.Mapbox("mapbox://styles/mapbox/streets-v11")
                 ),
-                Style.LIGHT to StyleOption(
+                "mapbox://styles/mapbox/light-v10" to StyleOption(
                     name = R.string.light,
-                    BasemapUri.Mapbox(Style.LIGHT)
+                    BasemapUri.Mapbox("mapbox://styles/mapbox/light-v10")
                 ),
-                Style.DARK to StyleOption(
+                "mapbox://styles/mapbox/dark-v10" to StyleOption(
                     name = R.string.dark,
-                    BasemapUri.Mapbox(Style.DARK)
+                    BasemapUri.Mapbox("mapbox://styles/mapbox/dark-v10")
                 ),
-                Style.SATELLITE to StyleOption(
+                "mapbox://styles/mapbox/satellite-v9" to StyleOption(
                     name = R.string.satellite,
-                    BasemapUri.Mapbox(Style.SATELLITE)
+                    BasemapUri.Mapbox("mapbox://styles/mapbox/satellite-v9")
                 ),
-                Style.SATELLITE_STREETS to StyleOption(
+                "mapbox://styles/mapbox/satellite-streets-v11" to StyleOption(
                     name = R.string.hybrid,
-                    BasemapUri.Mapbox(Style.SATELLITE_STREETS)
+                    BasemapUri.Mapbox("mapbox://styles/mapbox/satellite-streets-v11")
                 ),
-                Style.OUTDOORS to StyleOption(
+                "mapbox://styles/mapbox/outdoors-v11" to StyleOption(
                     name = R.string.outdoors,
-                    BasemapUri.Mapbox(Style.OUTDOORS)
+                    BasemapUri.Mapbox("mapbox://styles/mapbox/outdoors-v11")
                 )
             )
         ),
         ProjectKeys.BASEMAP_SOURCE_OSM to Configuration(
             name = R.string.basemap_source_osm,
-            attribution = "© OpenStreetMap contributors",
+            attribution = "<a href=\"https://www.openstreetmap.org/copyright\">© OpenStreetMap contributors</a>",
             uri = BasemapUri.Raster("https://tile.openstreetmap.org/{z}/{x}/{y}.png")
         ),
         ProjectKeys.BASEMAP_SOURCE_USGS to Configuration(
             name = R.string.basemap_source_usgs,
-            attribution = "Map services and data available from U.S. Geological Survey, National Geospatial Program.",
+            attribution = "<a href=\"https://www.usgs.gov/programs/national-geospatial-program\">Map services and data available from U.S. Geological Survey, National Geospatial Program.</a>",
             styleSetting = ProjectKeys.KEY_USGS_MAP_STYLE,
             styleOptions = mapOf(
                 "topographic" to StyleOption(
@@ -63,16 +62,17 @@ object Configurations {
         ),
         ProjectKeys.BASEMAP_SOURCE_CARTO to Configuration(
             name = R.string.basemap_source_carto,
-            attribution = "© OpenStreetMap contributors, © CARTO",
+            attribution = "<a href=\"https://www.openstreetmap.org/copyright\">© OpenStreetMap contributors</a>, " +
+                "<a href=\"https://carto.com/attributions\">© CARTO</a>",
             styleSetting = ProjectKeys.KEY_CARTO_MAP_STYLE,
             styleOptions = mapOf(
                 "positron" to StyleOption(
                     name = R.string.carto_map_style_positron,
-                    BasemapUri.Raster("http://1.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png")
+                    BasemapUri.Raster("https://1.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png")
                 ),
                 "dark_matter" to StyleOption(
                     name = R.string.carto_map_style_dark_matter,
-                    BasemapUri.Raster("http://1.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png")
+                    BasemapUri.Raster("https://1.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png")
                 )
             )
         ),
