@@ -81,6 +81,7 @@ import org.odk.collect.maps.traces.PolygonDescription
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys.KEY_MAPBOX_MAP_STYLE
 import org.odk.collect.shared.injection.ObjectProviderHost
+import org.odk.collect.shared.injection.Keys
 import org.odk.collect.shared.settings.Settings
 import timber.log.Timber
 import java.io.File
@@ -134,6 +135,11 @@ class MapboxMapFragment(private val configuration: Configuration) :
     private val referenceLayerRepository: ReferenceLayerRepository by lazy {
         (requireActivity().applicationContext as ObjectProviderHost).getObjectProvider()
             .provide(ReferenceLayerRepository::class.java)
+    }
+
+    private val keys: Keys by lazy {
+        (requireActivity().applicationContext as ObjectProviderHost).getObjectProvider()
+            .provide(Keys::class.java)
     }
 
     override fun init(readyListener: ReadyListener?, errorListener: ErrorListener?) {
@@ -282,7 +288,14 @@ class MapboxMapFragment(private val configuration: Configuration) :
         when (uri) {
             is BasemapUri.Raster -> {
                 mapboxMap.loadStyleUri("") { style ->
-                    val tileSet = TileSet.Builder("2.1.0", listOf(uri.value))
+                    val tileUri =  if (uri.keyName != null) {
+                        val key = keys.get(uri.keyName)
+                        uri.value(key)
+                    } else {
+                        uri.value()
+                    }
+
+                    val tileSet = TileSet.Builder("2.1.0", listOf(tileUri))
                         .attribution(configuration.attribution ?: "")
                         .scheme(Scheme.XYZ)
                         .build()
@@ -310,7 +323,7 @@ class MapboxMapFragment(private val configuration: Configuration) :
             }
 
             is BasemapUri.Mapbox -> {
-                mapboxMap.loadStyleUri(uri.value) {
+                mapboxMap.loadStyleUri(uri.value()) {
                     basemapTopLayer = it.styleLayers.last().id
                     loadReferenceOverlay()
                 }

@@ -64,6 +64,7 @@ import org.odk.collect.location.LocationClient;
 import org.odk.collect.location.LocationDependencyComponent;
 import org.odk.collect.location.LocationDependencyComponentProvider;
 import org.odk.collect.location.LocationDependencyModule;
+import org.odk.collect.shared.injection.Keys;
 import org.odk.collect.maps.layers.ReferenceLayerRepository;
 import org.odk.collect.projects.DaggerProjectsDependencyComponent;
 import org.odk.collect.projects.ProjectsDependencyComponent;
@@ -81,6 +82,7 @@ import org.odk.collect.shared.settings.Settings;
 import org.odk.collect.strings.localization.LocalizedApplication;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Locale;
 
 public class Collect extends Application implements
@@ -187,6 +189,7 @@ public class Collect extends Application implements
         objectProvider.addSupplier(NetworkStateProvider.class, applicationComponent::networkStateProvider);
         objectProvider.addSupplier(ReferenceLayerRepository.class, applicationComponent::referenceLayerRepository);
         objectProvider.addSupplier(LocationClient.class, applicationComponent::locationClient);
+        objectProvider.addSupplier(Keys.class, () -> new Keys(new HashMap<>()));
     }
 
     @NotNull
