@@ -102,10 +102,9 @@ class GeoTraceWidgetTest {
     }
 
     @Test
-    fun `clicking the button requests a geotrace after the answer has been cleared`() {
+    fun `clicking the button requests a geotrace when there is an answer`() {
         val prompt = promptWithAnswer(StringData(answer))
-        val widget = createWidget(prompt)
-        widget.clearAnswer()
+        createWidget(prompt)
 
         composeRule.onNodeWithClickLabel(string.view_or_change_line).performClick()
 
