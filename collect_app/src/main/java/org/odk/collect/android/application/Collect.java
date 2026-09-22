@@ -24,6 +24,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.jetbrains.annotations.NotNull;
+import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.dynamicpreload.ExternalDataManager;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
@@ -189,7 +190,12 @@ public class Collect extends Application implements
         objectProvider.addSupplier(NetworkStateProvider.class, applicationComponent::networkStateProvider);
         objectProvider.addSupplier(ReferenceLayerRepository.class, applicationComponent::referenceLayerRepository);
         objectProvider.addSupplier(LocationClient.class, applicationComponent::locationClient);
-        objectProvider.addSupplier(Keys.class, () -> new Keys(new HashMap<>()));
+        objectProvider.addSupplier(Keys.class, () -> {
+            HashMap<String, String> map = new HashMap<>();
+            map.put("carto", BuildConfig.CARTO_API_KEY);
+
+            return new Keys(map);
+        });
     }
 
     @NotNull

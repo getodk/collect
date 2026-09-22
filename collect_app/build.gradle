@@ -43,7 +43,7 @@ def entitiesFilterProjectUrl = secrets.getProperty('ENTITIES_FILTER_PROJECT_URL'
 def entitiesFilterSearchProjectUrl = secrets.getProperty('ENTITIES_FILTER_SEARCH_PROJECT_URL', '')
 def thousandMediaFileProjectUrl = secrets.getProperty('THOUSAND_MEDIA_FILE_PROJECT_URL', '')
 def thousandMediaFileEntityListProjectUrl = secrets.getProperty('THOUSAND_MEDIA_FILE_ENTITY_LIST_PROJECT_URL', '')
-
+def cartoApiKey = secrets.getProperty('CARTO_API_KEY', null)
 android {
     compileSdk libs.versions.compileSdk.get().toInteger()
 
@@ -98,6 +98,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt'
             resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
             resValue("string", "mapbox_access_token", mapboxAccessToken)
+            buildConfigField("String", "CARTO_API_KEY", cartoApiKey != null ? "${cartoApiKey}" : "null")
             buildConfigField("String", "SIGNATURE", "\"\"")
         }
 
@@ -111,6 +112,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt'
             resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
             resValue("string", "mapbox_access_token", mapboxAccessToken)
+            buildConfigField("String", "CARTO_API_KEY", cartoApiKey != null ? "${cartoApiKey}" : "null")
             buildConfigField("String", "SIGNATURE", "\"DC:D4:B9:4B:1E:0C:3D:96:69:22:3D:45:CD:C0:E2:F0:CC:6D:ED:12:A7:E6:EF:AB:49:BA:36:B3:D1:D4:8D:D8\"")
 
             matchingFallbacks = ['release'] // So other modules use release build type for this
@@ -124,6 +126,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt'
             resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
             resValue("string", "mapbox_access_token", mapboxAccessToken)
+            buildConfigField("String", "CARTO_API_KEY", cartoApiKey != null ? "${cartoApiKey}" : "null")
             buildConfigField("String", "SIGNATURE", "\"\"")
 
             matchingFallbacks = ['release'] // So other modules use release build type for this
@@ -133,6 +136,7 @@ android {
             debuggable(true)
             resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
             resValue("string", "mapbox_access_token", mapboxAccessToken)
+            buildConfigField("String", "CARTO_API_KEY", cartoApiKey != null ? "${cartoApiKey}" : "null")
             buildConfigField("String", "ENTITIES_FILTER_PROJECT_URL", "\"$entitiesFilterProjectUrl\"")
             buildConfigField("String", "ENTITIES_FILTER_SEARCH_PROJECT_URL", "\"$entitiesFilterSearchProjectUrl\"")
             buildConfigField("String", "THOUSAND_MEDIA_FILE_PROJECT_URL", "\"$thousandMediaFileProjectUrl\"")
