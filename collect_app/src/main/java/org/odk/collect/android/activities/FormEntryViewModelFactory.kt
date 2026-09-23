@@ -35,6 +35,7 @@ import org.odk.collect.android.widgets.viewmodels.QuestionViewModel
 import org.odk.collect.async.Scheduler
 import org.odk.collect.audiorecorder.recording.AudioRecorder
 import org.odk.collect.location.LocationClient
+import org.odk.collect.maps.MapPreviewRenderer
 import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.printer.HtmlPrinter
@@ -63,7 +64,8 @@ class FormEntryViewModelFactory(
     private val htmlPrinter: HtmlPrinter,
     private val instancesDataService: InstancesDataService,
     private val changeLockProvider: ChangeLockProvider,
-    private val projectDependencyModuleFactory: ProjectDependencyModuleFactory
+    private val projectDependencyModuleFactory: ProjectDependencyModuleFactory,
+    private val mapPreviewRenderer: MapPreviewRenderer
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
@@ -146,7 +148,8 @@ class FormEntryViewModelFactory(
             MediaWidgetAnswerViewModel::class.java -> MediaWidgetAnswerViewModel(
                 scheduler,
                 createFormSaveViewModel(extras.createSavedStateHandle()),
-                mediaUtils
+                mediaUtils,
+                mapPreviewRenderer
             )
 
             else -> throw IllegalArgumentException()
