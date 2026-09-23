@@ -80,7 +80,7 @@ class MapLibreMapPreviewRenderer(
 
     private fun basemap(configuration: Configuration): Style.Builder {
         return when (val uri = configuration.basemapUri(settingsProvider.getUnprotectedSettings())) {
-            is BasemapUri.Raster -> configuration.rasterBasemapStyle(uri)
+            is BasemapUri.Raster -> configuration.rasterBasemapStyle(uri).fromUri("asset://maplibre_empty_style.json")
             is BasemapUri.Mapbox -> Style.Builder().fromUri(uri.value)
         }
     }
