@@ -42,7 +42,6 @@ import org.odk.collect.maps.MapViewModelMapFragment
 import org.odk.collect.maps.Zoom
 import org.odk.collect.maps.ZoomObserver
 import org.odk.collect.maps.circles.CircleDescription
-import org.odk.collect.maps.layers.MbtilesFile
 import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.maps.markers.MarkerDescription
 import org.odk.collect.maps.markers.MarkerIconCreator
@@ -52,9 +51,7 @@ import org.odk.collect.maps.traces.PolygonDescription
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys.KEY_MAPBOX_MAP_STYLE
 import org.odk.collect.shared.settings.Settings
-import timber.log.Timber
 import java.io.File
-import java.io.IOException
 import javax.inject.Inject
 
 class MapLibreMapFragment(private val configuration: Configuration) :
@@ -85,7 +82,7 @@ class MapLibreMapFragment(private val configuration: Configuration) :
 
     private var featureClickListener: FeatureListener? = null
     private var featureDragEndListener: FeatureListener? = null
-    private var tileServer: TileHttpServer? = null
+    private val referenceLayers = ReferenceLayers()
     private var referenceLayerFile: File? = null
     private var basemapTopLayer: String? = null
     private var awaitingRemoteStyle = false
@@ -135,16 +132,6 @@ class MapLibreMapFragment(private val configuration: Configuration) :
 
     override fun init(readyListener: ReadyListener?, errorListener: ErrorListener?) {
         mapReadyListener = readyListener
-
-        // MapLibre only knows how to fetch tiles via HTTP. If we want it to
-        // display tiles from a local file, we have to serve them locally over HTTP.
-        try {
-            tileServer = TileHttpServer().also {
-                it.start()
-            }
-        } catch (e: IOException) {
-            Timber.e(e, "Could not start the TileHttpServer")
-        }
     }
 
     override fun onCreateView(
@@ -255,7 +242,7 @@ class MapLibreMapFragment(private val configuration: Configuration) :
     }
 
     override fun onDestroy() {
-        tileServer?.destroy()
+        referenceLayers.destroy()
         MarkerIconCreator.clearCache()
         super.onDestroy()
     }
@@ -654,26 +641,9 @@ class MapLibreMapFragment(private val configuration: Configuration) :
 
     private fun loadReferenceOverlay() {
         referenceLayerFile?.let {
-            addMbtiles(it.name, it)
-        }
-    }
-
-    private fun addMbtiles(id: String, file: File) {
-        tileServer?.let {
-            val mbtiles: MbtilesFile = try {
-                MbtilesFile(file)
-            } catch (e: MbtilesFile.MbtilesException) {
-                Timber.w(e.message)
-                return
-            }
-
-            it.addSource(id, mbtiles)
-
-            val (source, layers) = mbtilesSourceAndLayers(id, mbtiles, it.getUrlTemplate(id))
+            val (source, layers) = referenceLayers.sourceAndLayers(it) ?: return
             addOverlaySource(source)
-            layers.forEach { layer -> addOverlayLayer(layer) }
-
-            Timber.i("Added %s as a %s layer at /%s", file, mbtiles.layerType, id)
+            layers.forEach { addOverlayLayer(it) }
         }
     }
 
