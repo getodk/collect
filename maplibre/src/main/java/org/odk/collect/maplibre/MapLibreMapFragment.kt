@@ -29,11 +29,8 @@ import org.maplibre.android.plugins.scalebar.ScaleBarOptions
 import org.maplibre.android.plugins.scalebar.ScaleBarPlugin
 import org.maplibre.android.style.layers.Layer
 import org.maplibre.android.style.layers.Property
-import org.maplibre.android.style.layers.RasterLayer
 import org.maplibre.android.style.layers.TransitionOptions
-import org.maplibre.android.style.sources.RasterSource
 import org.maplibre.android.style.sources.Source
-import org.maplibre.android.style.sources.TileSet
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragment.ErrorListener
 import org.odk.collect.maps.MapFragment.FeatureListener
@@ -268,16 +265,7 @@ class MapLibreMapFragment(private val configuration: Configuration) :
 
         when (val uri = configuration.basemapUri(settings)) {
             is BasemapUri.Raster -> {
-                val tileSet = TileSet("2.1.0", uri.value).apply {
-                    attribution = configuration.attribution ?: ""
-                    scheme = "xyz"
-                }
-
-                map?.setStyle(
-                    Style.Builder()
-                        .withSource(RasterSource("basemap_source", tileSet))
-                        .withLayer(RasterLayer("basemap_layer", "basemap_source"))
-                ) {
+                map?.setStyle(configuration.rasterBasemapStyle(uri)) {
                     basemapTopLayer = "basemap_layer"
                     onStyleLoaded(it)
                 }

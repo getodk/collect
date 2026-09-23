@@ -1,5 +1,9 @@
 package org.odk.collect.maplibre
 
+import org.maplibre.android.maps.Style
+import org.maplibre.android.style.layers.RasterLayer
+import org.maplibre.android.style.sources.RasterSource
+import org.maplibre.android.style.sources.TileSet
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.settings.keys.ProjectKeys.KEY_MAPBOX_MAP_STYLE
 import org.odk.collect.shared.settings.Settings
@@ -95,6 +99,17 @@ class Configuration(
         } else {
             throw IllegalArgumentException("Invalid Configuration!")
         }
+    }
+
+    fun rasterBasemapStyle(uri: BasemapUri.Raster): Style.Builder {
+        val tileSet = TileSet("2.1.0", uri.value).apply {
+            attribution = this@Configuration.attribution ?: ""
+            scheme = "xyz"
+        }
+
+        return Style.Builder()
+            .withSource(RasterSource("basemap_source", tileSet))
+            .withLayer(RasterLayer("basemap_layer", "basemap_source"))
     }
 }
 

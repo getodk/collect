@@ -13,10 +13,7 @@ import org.maplibre.android.snapshotter.MapSnapshotter
 import org.maplibre.android.style.layers.LineLayer
 import org.maplibre.android.style.layers.Property
 import org.maplibre.android.style.layers.PropertyFactory
-import org.maplibre.android.style.layers.RasterLayer
 import org.maplibre.android.style.sources.GeoJsonSource
-import org.maplibre.android.style.sources.RasterSource
-import org.maplibre.android.style.sources.TileSet
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.MapPreviewRenderer
 import org.odk.collect.maps.traces.TraceDescription
@@ -81,17 +78,7 @@ class MapLibreMapPreviewRenderer(
 
     private fun basemap(configuration: Configuration): Style.Builder {
         return when (val uri = configuration.basemapUri(settingsProvider.getUnprotectedSettings())) {
-            is BasemapUri.Raster -> {
-                val tileSet = TileSet("2.1.0", uri.value).apply {
-                    attribution = configuration.attribution ?: ""
-                    scheme = "xyz"
-                }
-
-                Style.Builder()
-                    .withSource(RasterSource("basemap_source", tileSet))
-                    .withLayer(RasterLayer("basemap_layer", "basemap_source"))
-            }
-
+            is BasemapUri.Raster -> configuration.rasterBasemapStyle(uri)
             is BasemapUri.Mapbox -> Style.Builder().fromUri(uri.value)
         }
     }
