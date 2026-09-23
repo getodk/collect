@@ -158,6 +158,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Named;
+import javax.inject.Provider;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -600,8 +601,9 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public MapPreviewRenderer providesMapPreviewRenderer(Context context, SettingsProvider settingsProvider) {
-        return new MapLibreMapPreviewRenderer(context, settingsProvider);
+    @Singleton
+    public MapPreviewRenderer providesMapPreviewRenderer(Context context, SettingsProvider settingsProvider, Provider<ReferenceLayerRepository> referenceLayerRepository) {
+        return new MapLibreMapPreviewRenderer(context, settingsProvider, referenceLayerRepository);
     }
 
     @Provides

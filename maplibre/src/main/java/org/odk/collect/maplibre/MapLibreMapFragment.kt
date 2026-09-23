@@ -8,8 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewmodel.viewModelFactory
-import org.maplibre.android.MapLibre
-import org.maplibre.android.WellKnownTileServer
 import org.maplibre.android.camera.CameraUpdateFactory
 import org.maplibre.android.geometry.LatLng
 import org.maplibre.android.geometry.LatLngBounds
@@ -139,24 +137,12 @@ class MapLibreMapFragment(private val configuration: Configuration) :
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        initializeMapLibre()
+        MapLibreSupport.initialize(requireContext())
 
         mapView = MapView(requireContext())
         mapView.getMapAsync { map -> onMapReady(map) }
 
         return mapView
-    }
-
-    private fun initializeMapLibre() {
-        MapLibre.getInstance(
-            requireContext(),
-            MapboxAccessToken.get(requireContext()),
-            WellKnownTileServer.Mapbox
-        )
-
-        // MapLibre makes no HTTP requests while the device is offline, and TileHttpServer serves
-        // reference layers over HTTP, so they would never load offline without this.
-        MapLibre.setConnected(true)
     }
 
     private fun onMapReady(map: MapLibreMap) {
