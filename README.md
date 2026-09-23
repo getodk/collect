@@ -148,8 +148,8 @@ Certain functions in ODK Collect depend on cloud services that require API keys 
 *Note: Mapbox will not be available as an option in compiled versions of Collect unless you follow the steps above. Mapbox will also not be available on x86 devices as the native libraries are excluded to reduce the APK size. If you need to use an x86 device, you can force the build to include x86 libs by include the `x86Libs` Gradle parameter. For example, to build a debug APK with x86 libs: `./gradlew assembleDebug -Px86Libs`.*
 
 **Carto API**: When the "Carto" option is selected in "Maps" settings, ODK Collect uses the Carto API for displaying maps in the geospatial question types (GeoPoint, GeoTrace, and GeoShape).  To enable this API:
-    1. [Get a Carto API key](https://carto.com/basemaps/apikey/).
-    1. Edit or create `secrets.properties` and set the `CARTO_API_KEY` property to your API key.  You should end up with a line that looks like this:
+  1. [Get a Carto API key](https://carto.com/basemaps/apikey/).
+  1. Edit or create `secrets.properties` and set the `CARTO_API_KEY` property to your API key.  You should end up with a line that looks like this:
         ```
         CARTO_API_KEY=AIbzvW8e0ub...
         ```
