@@ -26,8 +26,6 @@
 # Make sure TaskSpecs are kept as they are instantiated via reflection
 -keep public class * implements org.odk.collect.async.TaskSpec { *; }
 
--dontobfuscate
-
 # recommended okhttp rules
 # https://github.com/square/okhttp#r8--proguard
 -dontwarn javax.annotation.**

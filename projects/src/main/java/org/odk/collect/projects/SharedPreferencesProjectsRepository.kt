@@ -1,6 +1,7 @@
 package org.odk.collect.projects
 
 import com.google.gson.Gson
+import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken.getParameterized
 import org.odk.collect.shared.settings.Settings
 import org.odk.collect.shared.strings.UUIDGenerator
@@ -49,7 +50,7 @@ class SharedPreferencesProjectsRepository @JvmOverloads constructor(
     }
 
     override fun delete(uuid: String) {
-        val projects = getAll().toMutableList().minus(get(uuid))
+        val projects = getJsonProjects().filterNot { it.uuid == uuid }
         settings.save(key, gson.toJson(projects))
     }
 
@@ -68,13 +69,14 @@ class SharedPreferencesProjectsRepository @JvmOverloads constructor(
     }
 }
 
+// @SerializedName on every field keeps the JSON keys stable when obfuscation renames the fields
 private data class JsonProject(
-    val uuid: String,
-    val name: String,
-    val icon: String,
-    val color: String,
-    val createdAt: Long = 0, // Account for projects without timestamps (in older versions)
-    val isOldGoogleDriveProject: Boolean
+    @SerializedName("uuid") val uuid: String,
+    @SerializedName("name") val name: String,
+    @SerializedName("icon") val icon: String,
+    @SerializedName("color") val color: String,
+    @SerializedName("createdAt") val createdAt: Long = 0, // Account for projects without timestamps (in older versions)
+    @SerializedName("isOldGoogleDriveProject") val isOldGoogleDriveProject: Boolean
 )
 
 private fun JsonProject.toProject(): Project.Saved {

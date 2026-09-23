@@ -772,7 +772,7 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
             if (!allowMovingBackwards) {
                 FormController formController = getFormController();
                 if (formController != null) {
-                    new SaveFormIndexTask(this, formController.getFormIndex(), formController.getInstanceFile()).execute();
+                    new SaveFormIndexTask(this, formController.getXPath(formController.getFormIndex()), formController.getInstanceFile()).execute();
                 }
             }
         } catch (Exception e) {
