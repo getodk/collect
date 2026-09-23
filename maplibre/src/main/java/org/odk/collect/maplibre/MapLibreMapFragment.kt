@@ -1,7 +1,6 @@
 package org.odk.collect.maplibre
 
 import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -29,15 +28,12 @@ import org.maplibre.android.plugins.annotation.SymbolManager
 import org.maplibre.android.plugins.scalebar.ScaleBarOptions
 import org.maplibre.android.plugins.scalebar.ScaleBarPlugin
 import org.maplibre.android.style.layers.Layer
-import org.maplibre.android.style.layers.LineLayer
 import org.maplibre.android.style.layers.Property
-import org.maplibre.android.style.layers.PropertyFactory
 import org.maplibre.android.style.layers.RasterLayer
 import org.maplibre.android.style.layers.TransitionOptions
 import org.maplibre.android.style.sources.RasterSource
 import org.maplibre.android.style.sources.Source
 import org.maplibre.android.style.sources.TileSet
-import org.maplibre.android.style.sources.VectorSource
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragment.ErrorListener
 import org.odk.collect.maps.MapFragment.FeatureListener
@@ -691,79 +687,14 @@ class MapLibreMapFragment(private val configuration: Configuration) :
                 return
             }
 
-            val tileSet = createTileSet(mbtiles, it.getUrlTemplate(id))
             it.addSource(id, mbtiles)
 
-            if (mbtiles.layerType == MbtilesFile.LayerType.VECTOR) {
-                addOverlaySource(VectorSource(id, tileSet))
-                for (layer in mbtiles.vectorLayers) {
-                    // Pick a colour that's a function of the filename and layer name.
-                    // The colour will appear essentially random; the only purpose here
-                    // is to try to assign different colours to different layers, such
-                    // that each individual layer appears in its own consistent colour.
-                    val hue = ((id + "." + layer.name).hashCode() and 0x7fffffff) % 360
-                    addOverlayLayer(
-                        LineLayer(id + "." + layer.name, id)
-                            .withSourceLayer(layer.name)
-                            .withProperties(
-                                PropertyFactory.lineColor(
-                                    Color.HSVToColor(floatArrayOf(hue.toFloat(), 0.7f, 1f))
-                                ),
-                                PropertyFactory.lineWidth(1.0f),
-                                PropertyFactory.lineOpacity(0.7f)
-                            )
-                    )
-                }
-            }
-            if (mbtiles.layerType == MbtilesFile.LayerType.RASTER) {
-                addOverlaySource(RasterSource(id, tileSet))
-                addOverlayLayer(RasterLayer(id + ".raster", id))
-            }
+            val (source, layers) = mbtilesSourceAndLayers(id, mbtiles, it.getUrlTemplate(id))
+            addOverlaySource(source)
+            layers.forEach { layer -> addOverlayLayer(layer) }
+
             Timber.i("Added %s as a %s layer at /%s", file, mbtiles.layerType, id)
         }
-    }
-
-    private fun createTileSet(mbtiles: MbtilesFile, urlTemplate: String): TileSet {
-        val tileSet = TileSet("2.2.0", urlTemplate)
-
-        // Configure the TileSet using the metadata in the .mbtiles file.
-        try {
-            tileSet.name = mbtiles.getMetadata("name")
-            try {
-                tileSet.minZoom = mbtiles.getMetadata("minzoom").toFloat()
-                tileSet.maxZoom = mbtiles.getMetadata("maxzoom").toFloat()
-            } catch (e: NumberFormatException) {
-                // ignore
-            }
-            var parts = mbtiles.getMetadata("center").split(",").toTypedArray()
-            if (parts.size == 3) { // latitude, longitude, zoom
-                try {
-                    tileSet.setCenter(
-                        parts[0].toFloat(),
-                        parts[1].toFloat(),
-                        parts[2].toFloat()
-                    )
-                } catch (e: NumberFormatException) {
-                    // ignore
-                }
-            }
-            parts = mbtiles.getMetadata("bounds").split(",").toTypedArray()
-            if (parts.size == 4) { // left, bottom, right, top
-                try {
-                    tileSet.setBounds(
-                        parts[0].toFloat(),
-                        parts[1].toFloat(),
-                        parts[2].toFloat(),
-                        parts[3].toFloat()
-                    )
-                } catch (e: NumberFormatException) {
-                    // ignore
-                }
-            }
-        } catch (e: MbtilesFile.MbtilesException) {
-            Timber.w(e.message)
-        }
-        return tileSet
     }
 
     private fun addOverlayLayer(layer: Layer) {
