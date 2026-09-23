@@ -2,6 +2,7 @@ package org.odk.collect.maplibre
 
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.settings.keys.ProjectKeys.KEY_MAPBOX_MAP_STYLE
+import org.odk.collect.shared.settings.Settings
 import org.odk.collect.strings.R
 
 object Configurations {
@@ -85,7 +86,17 @@ class Configuration(
     val uri: BasemapUri? = null,
     val styleSetting: String? = null,
     val styleOptions: Map<String, StyleOption> = emptyMap()
-)
+) {
+    fun basemapUri(settings: Settings): BasemapUri {
+        return if (uri != null) {
+            uri
+        } else if (styleSetting != null) {
+            styleOptions.getValue(settings.getString(styleSetting)!!).uri
+        } else {
+            throw IllegalArgumentException("Invalid Configuration!")
+        }
+    }
+}
 
 class StyleOption(val name: Int, val uri: BasemapUri)
 
