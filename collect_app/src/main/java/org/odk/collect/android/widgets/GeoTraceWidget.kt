@@ -9,7 +9,6 @@ import org.javarosa.core.model.data.IAnswerData
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.widgets.interfaces.GeoDataRequester
-import org.odk.collect.android.widgets.utilities.GeoWidgetUtils
 import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils
 import org.odk.collect.androidshared.ui.ComposeThemeProvider.Companion.setContextThemedContent
 
@@ -27,17 +26,13 @@ class GeoTraceWidget(
 
     override fun onCreateWidgetView(context: Context, prompt: FormEntryPrompt, answerFontSize: Int): View {
         return ComposeView(context).apply {
-            val readOnly = questionDetails.isReadOnly
-            val answer = GeoWidgetUtils.getGeoPolyAnswerToDisplay(prompt.answerText)
-            val buttonFontSize = QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.BODY_LARGE)
-
             setContextThemedContent(ViewCompositionStrategy.DisposeOnDetachedFromWindowOrReleasedFromPool) {
                 GeoTraceWidgetContent(
                     dependencies.mediaWidgetAnswerViewModel,
                     formEntryPrompt,
-                    answer,
-                    readOnly,
-                    buttonFontSize,
+                    prompt.answerText,
+                    questionDetails.isReadOnly,
+                    QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.BODY_LARGE),
                     answerFontSize,
                     onGetLineClick = { geoDataRequester.requestGeoPoly(formEntryPrompt) },
                     onLongClick = { showContextMenu() }
