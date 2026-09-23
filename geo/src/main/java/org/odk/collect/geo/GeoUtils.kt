@@ -117,7 +117,6 @@ object GeoUtils {
     ) {
         val lifecycleOwner = this as Fragment
         locationTracker.bindToLifecycle(
-            lifecycleOwner.requireContext(),
             lifecycleOwner,
             retainMockAccuracy
         )

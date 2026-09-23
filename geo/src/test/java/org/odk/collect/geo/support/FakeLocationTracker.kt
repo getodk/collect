@@ -1,6 +1,5 @@
 package org.odk.collect.geo.support
 
-import android.content.Context
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -47,7 +46,6 @@ class FakeLocationTracker : LocationTracker {
     }
 
     override fun bindToLifecycle(
-        context: Context,
         lifecycle: LifecycleOwner,
         retainMockAccuracy: Boolean
     ) {
