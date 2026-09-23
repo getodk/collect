@@ -35,9 +35,7 @@ class BlockableFirebaseAnalytics(application: Application, private val crashRepo
 
     override fun setAnalyticsCollectionEnabled(isAnalyticsEnabled: Boolean) {
         firebaseAnalytics.setAnalyticsCollectionEnabled(isAnalyticsEnabled)
-        if (!crashReports) {
-            crashlytics.isCrashlyticsCollectionEnabled = isAnalyticsEnabled
-        }
+        crashlytics.isCrashlyticsCollectionEnabled = isAnalyticsEnabled && crashReports
     }
 
     override fun setUserProperty(name: String, value: String) {
