@@ -18,6 +18,8 @@ import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils
 import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.maps.traces.TraceDescription
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_GOOGLE
+import org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_OSM
 import org.odk.collect.settings.keys.ProjectKeys.KEY_BASEMAP_SOURCE
 import org.odk.collect.settings.keys.ProjectKeys.KEY_REFERENCE_LAYER
 import javax.inject.Provider
@@ -37,9 +39,13 @@ class MapLibreMapPreviewRenderer(
         callback: (Bitmap?) -> Unit
     ): () -> Unit {
         val basemapSource = settingsProvider.getUnprotectedSettings().getString(KEY_BASEMAP_SOURCE)
-        val configuration = Configurations.all[basemapSource]
+        val configuration = when (basemapSource) {
+            // Google Maps can't render off-screen, so its previews use OpenStreetMap instead
+            BASEMAP_SOURCE_GOOGLE -> Configurations.all.getValue(BASEMAP_SOURCE_OSM)
+            else -> Configurations.all[basemapSource]
+        }
 
-        if (configuration == null || trace.points.size < 2) {
+        if (configuration == null || !MapLibreSupport.isAvailable() || trace.points.size < 2) {
             callback(null)
             return {}
         }
