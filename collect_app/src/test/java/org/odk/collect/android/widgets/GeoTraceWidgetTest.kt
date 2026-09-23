@@ -10,6 +10,7 @@ import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
+import org.javarosa.core.model.Constants
 import org.javarosa.core.model.data.StringData
 import org.javarosa.form.api.FormEntryPrompt
 import org.junit.Rule
@@ -18,6 +19,7 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.odk.collect.android.formentry.questions.QuestionDetails
+import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.support.WidgetTestActivity
 import org.odk.collect.android.widgets.interfaces.GeoDataRequester
 import org.odk.collect.android.widgets.support.GeoWidgetHelpers.stringFromDoubleList
@@ -113,10 +115,15 @@ class GeoTraceWidgetTest {
 
     private fun createWidget(prompt: FormEntryPrompt) = GeoTraceWidget(
         composeRule.activity,
-        QuestionDetails(prompt),
+        QuestionDetails(asGeoTraceQuestion(prompt)),
         geoDataRequester,
         widgetDependencies()
     ).also {
         composeRule.activity.setContentView(it)
     }
+
+    private fun asGeoTraceQuestion(prompt: FormEntryPrompt) = MockFormEntryPromptBuilder(prompt)
+        .withControlType(Constants.CONTROL_INPUT)
+        .withDataType(Constants.DATATYPE_GEOTRACE)
+        .build()
 }

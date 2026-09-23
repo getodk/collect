@@ -51,6 +51,17 @@ fun WidgetAnswer(
                         onClick,
                         onLongClick
                     )
+                    Constants.DATATYPE_GEOTRACE -> {
+                        TextWidgetAnswer(
+                            modifier,
+                            null,
+                            GeoWidgetUtils.getGeoPolyAnswerToDisplay(answer) ?: "",
+                            fontSize,
+                            if (compact) Arrangement.Start else Arrangement.Center,
+                            onClick,
+                            onLongClick
+                        )
+                    }
                     else -> TextWidgetAnswer(
                         modifier,
                         null,
