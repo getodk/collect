@@ -12,7 +12,6 @@ import androidx.compose.ui.res.vectorResource
 import org.javarosa.core.model.Constants
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.widgets.image.ImageWidgetAnswer
-import org.odk.collect.android.widgets.utilities.GeoWidgetUtils
 import org.odk.collect.android.widgets.video.VideoWidgetAnswer
 import org.odk.collect.androidshared.system.ContextExt.getActivity
 import org.odk.collect.icons.R
@@ -41,17 +40,15 @@ fun WidgetAnswer(
                         onClick,
                         onLongClick
                     )
-                    Constants.DATATYPE_GEOTRACE -> {
-                        TextWidgetAnswer(
-                            modifier,
-                            null,
-                            GeoWidgetUtils.getGeoPolyAnswerToDisplay(answer) ?: "",
-                            fontSize,
-                            if (compact) Arrangement.Start else Arrangement.Center,
-                            onClick,
-                            onLongClick
-                        )
-                    }
+                    Constants.DATATYPE_GEOTRACE -> GeoTraceWidgetAnswer(
+                        modifier,
+                        answer,
+                        fontSize,
+                        if (compact) Arrangement.Start else Arrangement.Center,
+                        mediaWidgetAnswerViewModel,
+                        onClick,
+                        onLongClick
+                    )
                     else -> TextWidgetAnswer(
                         modifier,
                         null,
