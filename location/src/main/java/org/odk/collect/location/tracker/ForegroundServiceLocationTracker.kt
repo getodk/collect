@@ -59,7 +59,6 @@ class ForegroundServiceLocationTracker(private val application: Application) : L
     }
 
     override fun bindToLifecycle(
-        context: Context,
         lifecycle: LifecycleOwner,
         retainMockAccuracy: Boolean
     ) {
@@ -70,7 +69,7 @@ class ForegroundServiceLocationTracker(private val application: Application) : L
                 // Avoid starting service in background (even after `onResume`) due to Android
                 // issue: https://issuetracker.google.com/u/2/issues/110237673.
                 delayedCheckScope.launch {
-                    while (!isAppInForeground(context)) {
+                    while (!isAppInForeground(application)) {
                         delay(100.milliseconds)
                     }
 

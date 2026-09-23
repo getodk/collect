@@ -1,6 +1,5 @@
 package org.odk.collect.location.tracker
 
-import android.content.Context
 import androidx.lifecycle.LifecycleOwner
 import kotlinx.coroutines.flow.StateFlow
 import org.odk.collect.location.Location
@@ -35,7 +34,6 @@ interface LocationTracker {
     fun stop()
 
     fun bindToLifecycle(
-        context: Context,
         lifecycle: LifecycleOwner,
         retainMockAccuracy: Boolean = false
     )
