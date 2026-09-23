@@ -2,8 +2,10 @@ package org.odk.collect.android.widgets
 
 import android.app.Application
 import android.content.ComponentName
+import android.graphics.Bitmap
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
@@ -26,8 +28,9 @@ import org.odk.collect.android.widgets.support.GeoWidgetHelpers.stringFromDouble
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnly
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndAnswer
-import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetDependencies
 import org.odk.collect.androidtest.onNodeWithClickLabel
+import org.odk.collect.maps.MapPreviewRenderer
+import org.odk.collect.maps.traces.TraceDescription
 import org.odk.collect.strings.R.string
 import org.robolectric.Shadows.shadowOf
 
@@ -44,6 +47,8 @@ class GeoTraceWidgetTest {
     private val answer = stringFromDoubleList()
 
     private val geoDataRequester = mock<GeoDataRequester>()
+
+    private val mapPreviewRenderer = FakeMapPreviewRenderer()
 
     @Test
     fun `#getAnswer returns null when there is no answer`() {
@@ -66,6 +71,22 @@ class GeoTraceWidgetTest {
     @Test
     fun `the answer is displayed when there is one`() {
         createWidget(promptWithAnswer(StringData(answer)))
+        composeRule.onNodeWithText(answer).assertIsDisplayed()
+    }
+
+    @Test
+    fun `the map preview is displayed instead of the answer when it can be rendered`() {
+        mapPreviewRenderer.preview = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
+        createWidget(promptWithAnswer(StringData(answer)))
+        composeRule.onNodeWithTag(MAP_PREVIEW_TAG).assertIsDisplayed()
+        composeRule.onNodeWithText(answer).assertDoesNotExist()
+    }
+
+    @Test
+    fun `the answer is displayed instead of the map preview when it can't be rendered`() {
+        mapPreviewRenderer.preview = null
+        createWidget(promptWithAnswer(StringData(answer)))
+        composeRule.onNodeWithTag(MAP_PREVIEW_TAG).assertDoesNotExist()
         composeRule.onNodeWithText(answer).assertIsDisplayed()
     }
 
@@ -117,7 +138,7 @@ class GeoTraceWidgetTest {
         composeRule.activity,
         QuestionDetails(asGeoTraceQuestion(prompt)),
         geoDataRequester,
-        widgetDependencies()
+        QuestionWidget.Dependencies(mock(), MediaWidgetAnswerViewModel(mock(), mock(), mock(), mapPreviewRenderer))
     ).also {
         composeRule.activity.setContentView(it)
     }
@@ -126,4 +147,18 @@ class GeoTraceWidgetTest {
         .withControlType(Constants.CONTROL_INPUT)
         .withDataType(Constants.DATATYPE_GEOTRACE)
         .build()
+
+    private class FakeMapPreviewRenderer : MapPreviewRenderer {
+        var preview: Bitmap? = null
+
+        override fun render(
+            trace: TraceDescription,
+            width: Int,
+            height: Int,
+            callback: (Bitmap?) -> Unit
+        ): () -> Unit {
+            callback(preview)
+            return {}
+        }
+    }
 }
