@@ -287,14 +287,7 @@ class MapLibreMapFragment(private val configuration: Configuration) :
     private fun loadStyle(settings: Settings) {
         awaitingRemoteStyle = false
 
-        val uri = if (configuration.uri != null) {
-            configuration.uri
-        } else if (configuration.styleSetting != null) {
-            configuration.styleOptions.getValue(settings.getString(configuration.styleSetting)!!).uri
-        } else {
-            throw IllegalArgumentException("Invalid Configuration!")
-        }
-
+        val uri = configuration.basemapUri(settings)
         val uriValue = uri.value(uri.keyName?.let { keys.get(it) })
 
         when (uri) {
