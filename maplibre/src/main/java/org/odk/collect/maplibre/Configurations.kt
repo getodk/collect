@@ -108,7 +108,8 @@ class Configuration(
         }
 
         return Style.Builder()
-            .withSource(RasterSource("basemap_source", tileSet))
+            // Raster basemaps serve 256px tiles, while MapLibre assumes 512px ones by default
+            .withSource(RasterSource("basemap_source", tileSet, 256))
             .withLayer(RasterLayer("basemap_layer", "basemap_source"))
     }
 }
