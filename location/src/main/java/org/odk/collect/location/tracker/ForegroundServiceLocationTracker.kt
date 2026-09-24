@@ -1,15 +1,24 @@
 package org.odk.collect.location.tracker
 
+import android.app.ActivityManager
 import android.app.Application
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
+import android.content.Context
 import android.content.Intent
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import org.odk.collect.androidshared.data.getState
 import org.odk.collect.androidshared.ui.ReturnToAppActivity
 import org.odk.collect.androidshared.utils.UniqueIdGenerator
@@ -19,6 +28,7 @@ import org.odk.collect.location.LocationClientProvider
 import org.odk.collect.location.LocationDependencyComponentProvider
 import org.odk.collect.strings.localization.getLocalizedString
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.milliseconds
 
 private const val LOCATION_KEY = "location"
 
@@ -46,6 +56,38 @@ class ForegroundServiceLocationTracker(private val application: Application) : L
 
     override fun stop() {
         application.stopService(Intent(application, LocationTrackerService::class.java))
+    }
+
+    override fun bindToLifecycle(
+        lifecycle: LifecycleOwner,
+        retainMockAccuracy: Boolean
+    ) {
+        lifecycle.lifecycle.addObserver(object : DefaultLifecycleObserver {
+            var delayedCheckScope = CoroutineScope(Dispatchers.Main)
+
+            override fun onResume(owner: LifecycleOwner) {
+                // Avoid starting service in background (even after `onResume`) due to Android
+                // issue: https://issuetracker.google.com/u/2/issues/110237673.
+                delayedCheckScope.launch {
+                    while (!isAppInForeground(application)) {
+                        delay(100.milliseconds)
+                    }
+
+                    start(
+                        retainMockAccuracy = retainMockAccuracy,
+                        updateInterval = null,
+                        notification = false
+                    )
+                }
+            }
+
+            override fun onPause(owner: LifecycleOwner) {
+                delayedCheckScope.cancel()
+                delayedCheckScope = CoroutineScope(Dispatchers.Main)
+
+                stop()
+            }
+        })
     }
 }
 
@@ -154,4 +196,17 @@ class LocationTrackerService : Service(), LocationClient.LocationClientListener 
         private const val NOTIFICATION_IDENTIFIER = "location_tracking"
         private const val NOTIFICATION_CHANNEL = "location_tracking"
     }
+}
+
+private fun isAppInForeground(context: Context): Boolean {
+    val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+    val appProcesses = activityManager.runningAppProcesses ?: return false
+
+    for (appProcess in appProcesses) {
+        if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+            return true
+        }
+    }
+
+    return false
 }
