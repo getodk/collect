@@ -29,6 +29,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.fakes.FakePermissionsProvider;
+import org.odk.collect.android.widgets.geo.GeoPointMapDialogFragment;
 import org.odk.collect.android.widgets.geo.GeoPolyDialogFragment;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.odk.collect.geo.geopoint.GeoPointActivity;
@@ -102,6 +103,39 @@ public class ActivityGeoDataRequesterTest {
         Bundle bundle = startedIntent.getExtras();
         assertThat(bundle.getFloat(GeoPointActivity.EXTRA_ACCURACY_THRESHOLD), equalTo(ActivityGeoDataRequester.DEFAULT_ACCURACY_THRESHOLD));
         assertThat(bundle.getFloat(GeoPointActivity.EXTRA_UNACCEPTABLE_ACCURACY_THRESHOLD), equalTo(ActivityGeoDataRequester.DEFAULT_UNACCEPTABLE_ACCURACY_THRESHOLD));
+    }
+
+    @Test
+    public void requestGeoPoint_whenPromptHasMapsAppearance_opensMapDialog() {
+        when(prompt.getAppearanceHint()).thenReturn("maps");
+
+        activityGeoDataRequester.requestGeoPoint(prompt, waitingForDataRegistry);
+
+        MockDialogFragment mockFragment = (MockDialogFragment) testActivity.getSupportFragmentManager().getFragments().get(0);
+        assertThat(mockFragment.getFragmentClass(), equalTo(GeoPointMapDialogFragment.class));
+        assertNull(shadowActivity.getNextStartedActivity());
+    }
+
+    @Test
+    public void requestGeoPoint_whenPromptHasPlacementMapAppearance_opensMapDialog() {
+        when(prompt.getAppearanceHint()).thenReturn("placement-map");
+
+        activityGeoDataRequester.requestGeoPoint(prompt, waitingForDataRegistry);
+
+        MockDialogFragment mockFragment = (MockDialogFragment) testActivity.getSupportFragmentManager().getFragments().get(0);
+        assertThat(mockFragment.getFragmentClass(), equalTo(GeoPointMapDialogFragment.class));
+        assertNull(shadowActivity.getNextStartedActivity());
+    }
+
+    @Test
+    public void requestGeoPoint_whenPromptIsReadOnly_opensMapDialog() {
+        when(prompt.isReadOnly()).thenReturn(true);
+
+        activityGeoDataRequester.requestGeoPoint(prompt, waitingForDataRegistry);
+
+        MockDialogFragment mockFragment = (MockDialogFragment) testActivity.getSupportFragmentManager().getFragments().get(0);
+        assertThat(mockFragment.getFragmentClass(), equalTo(GeoPointMapDialogFragment.class));
+        assertNull(shadowActivity.getNextStartedActivity());
     }
 
     @Test

@@ -14,10 +14,6 @@
 
 package org.odk.collect.android.widgets;
 
-import static org.odk.collect.android.utilities.Appearances.MAPS;
-import static org.odk.collect.android.utilities.Appearances.PLACEMENT_MAP;
-import static org.odk.collect.android.utilities.Appearances.hasAppearance;
-
 import android.content.Context;
 import android.hardware.SensorManager;
 
@@ -41,6 +37,9 @@ import org.odk.collect.android.widgets.barcode.BarcodeWidget;
 import org.odk.collect.android.widgets.datetime.DateTimeWidget;
 import org.odk.collect.android.widgets.datetime.DateWidget;
 import org.odk.collect.android.widgets.datetime.TimeWidget;
+import org.odk.collect.android.widgets.geo.GeoPointWidget;
+import org.odk.collect.android.widgets.geo.GeoShapeWidget;
+import org.odk.collect.android.widgets.geo.GeoTraceWidget;
 import org.odk.collect.android.widgets.image.ImageWidget;
 import org.odk.collect.android.widgets.items.LabelWidget;
 import org.odk.collect.android.widgets.items.LikertWidget;
@@ -172,13 +171,8 @@ public class WidgetFactory {
                         }
                         break;
                     case Constants.DATATYPE_GEOPOINT:
-                        if (hasAppearance(questionDetails.getPrompt(), PLACEMENT_MAP) || hasAppearance(questionDetails.getPrompt(), MAPS)) {
-                            questionWidget = new GeoPointMapWidget(activity, questionDetails, waitingForDataRegistry,
-                                    new ActivityGeoDataRequester(permissionsProvider, activity), dependencies);
-                        } else {
-                            questionWidget = new GeoPointWidget(activity, questionDetails, waitingForDataRegistry,
-                                    new ActivityGeoDataRequester(permissionsProvider, activity), dependencies);
-                        }
+                        questionWidget = new GeoPointWidget(activity, questionDetails, waitingForDataRegistry,
+                                new ActivityGeoDataRequester(permissionsProvider, activity), dependencies);
                         break;
                     case Constants.DATATYPE_GEOSHAPE:
                         questionWidget = new GeoShapeWidget(activity, questionDetails,
