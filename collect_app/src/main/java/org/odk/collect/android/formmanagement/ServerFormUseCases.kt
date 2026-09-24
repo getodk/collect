@@ -11,6 +11,7 @@ import org.odk.collect.async.OngoingWorkListener
 import org.odk.collect.entities.LocalEntityUseCases
 import org.odk.collect.entities.server.EntitySource
 import org.odk.collect.entities.storage.EntitiesRepository
+import org.odk.collect.entities.storage.getLastUpdateTime
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.FormSource
 import org.odk.collect.forms.FormSourceException
@@ -119,11 +120,12 @@ object ServerFormUseCases {
     @JvmStatic
     fun copySavedFileFromPreviousFormVersionIfExists(
         formsRepository: FormsRepository,
-        formId: String,
+        form: Form,
         mediaDirPath: String
     ) {
-        val lastSavedFile: File? = formsRepository
-            .getAllByFormId(formId)
+        val allForms = formsRepository.getAllByFormId(form.formId)
+        val previousVersions = allForms.filterNot { it.dbId == form.dbId }
+        val lastSavedFile: File? = previousVersions
             .maxByOrNull { form -> form.date }
             ?.let {
                 File(it.formMediaPath, FileUtils.LAST_SAVED_FILENAME)
@@ -165,7 +167,7 @@ object ServerFormUseCases {
 
             val isEntityList = mediaFile.type != null
             if (isEntityList) {
-                val entityListName = getEntityListFromFileName(mediaFile)
+                val entityListName = getListNameFromMediaFile(mediaFile)
                 val localEntityList = entitiesRepository.getList(entityListName)
 
                 if (localEntityList == null || mediaFile.hash != localEntityList.hash) {
@@ -217,19 +219,15 @@ object ServerFormUseCases {
     }
 
     @JvmStatic
-    @Throws(FormSourceException::class)
     fun ingestEntityListsFromDownload(
-        formResult: FormResult,
         mediaFilesDownload: MediaFilesDownload,
         entitiesRepository: EntitiesRepository,
         entitySource: EntitySource,
-        formsRepository: FormsRepository
     ) {
         mediaFilesDownload.entityLists.forEach { entityListDownload ->
-            val listName = getEntityListFromFileName(entityListDownload.mediaFile)
             if (entityListDownload is EntityListDownload.Update) {
                 LocalEntityUseCases.updateLocalEntitiesFromServer(
-                    listName,
+                    entityListDownload.listName,
                     entityListDownload.file,
                     entitiesRepository,
                     entityListDownload.mediaFile
@@ -252,21 +250,44 @@ object ServerFormUseCases {
              * so will never get deleted.
              */
             LocalEntityUseCases.cleanUpDeletedOfflineEntities(
-                listName,
+                entityListDownload.listName,
                 entitiesRepository,
                 entitySource,
                 entityListDownload.mediaFile
             )
-
-            val entityListLastUpdated = entitiesRepository.getList(listName)?.lastUpdated
-            if (!formResult.isNew && entityListLastUpdated != null && entityListLastUpdated > formResult.form.getLastUpdated()) {
-                formsRepository.save(
-                    Form.Builder(formResult.form)
-                        .lastDetectedAttachmentsUpdateDate(entityListLastUpdated)
-                        .build()
-                )
-            }
         }
+    }
+
+    fun updateForm(
+        formFileDownload: FormFileDownload.Existing,
+        mediaFilesDownload: MediaFilesDownload,
+        entitiesRepository: EntitiesRepository,
+        formsRepository: FormsRepository,
+        time: Long
+    ): Form {
+        val existingForm = formFileDownload.form
+        val formBuilder = Form.Builder(existingForm)
+
+        val attachmentUpdateTime = if (mediaFilesDownload.newAttachmentsDownloaded) time else null
+        val entityLists = mediaFilesDownload.entityLists.map { it.listName }
+        if (entityLists.isNotEmpty()) {
+            formBuilder.usesEntities(true)
+        }
+
+        val entityListUpdate = entitiesRepository.getLastUpdateTime(entityLists)
+        val entityListUpdateTime =
+            if (entityListUpdate != null && entityListUpdate > existingForm.getLastUpdated()) {
+                entityListUpdate
+            } else {
+                null
+            }
+
+        val latestUpdateTime = listOfNotNull(attachmentUpdateTime, entityListUpdateTime).maxOrNull()
+        if (latestUpdateTime != null) {
+            formBuilder.lastDetectedAttachmentsUpdateDate(latestUpdateTime)
+        }
+
+        return formsRepository.save(formBuilder.build())
     }
 
     private fun downloadMediaFile(
@@ -290,14 +311,11 @@ object ServerFormUseCases {
         entitiesRepository: EntitiesRepository
     ) {
         val isCsv = mediaFile.filename.endsWith(".csv")
-        val mostLikelyInstanceId = getEntityListFromFileName(mediaFile)
+        val mostLikelyInstanceId = getListNameFromMediaFile(mediaFile)
         if (isCsv && entitiesRepository.getList(mostLikelyInstanceId) != null) {
             Analytics.setUserProperty("HasEntityListCollision", "true")
         }
     }
-
-    private fun getEntityListFromFileName(mediaFile: MediaFile) =
-        mediaFile.filename.substringBefore(".csv")
 
     private fun searchForExistingMediaFile(
         currentOrLastFormVersion: Form?,
@@ -346,16 +364,21 @@ data class MediaFilesDownload(
     val tempMediaPath: String,
     val newAttachmentsDownloaded: Boolean,
     val entityLists: List<EntityListDownload>
-) {
-    val entitiesDownloaded: Boolean
-        get() = entityLists.isNotEmpty()
+)
+
+sealed class FormFileDownload {
+    data class New(val file: File) : FormFileDownload()
+    data class Existing(val form: Form) : FormFileDownload()
 }
 
-sealed interface EntityListDownload {
-    val mediaFile: MediaFile
+sealed class EntityListDownload {
+    abstract val mediaFile: MediaFile
+    val listName: String by lazy { getListNameFromMediaFile(mediaFile) }
 
-    data class Update(override val mediaFile: MediaFile, val file: File) : EntityListDownload
-    data class Skipped(override val mediaFile: MediaFile) : EntityListDownload
+    data class Update(override val mediaFile: MediaFile, val file: File) : EntityListDownload()
+    data class Skipped(override val mediaFile: MediaFile) : EntityListDownload()
 }
 
-data class FormResult(val form: Form, val isNew: Boolean)
+private fun getListNameFromMediaFile(mediaFile: MediaFile): String {
+    return mediaFile.filename.substringBefore(".csv")
+}

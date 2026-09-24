@@ -13,13 +13,16 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.forms.FormSourceException.FetchError
+import org.odk.collect.forms.FormSourceException.ParseError
 import org.odk.collect.forms.FormSourceException.SecurityError
 import org.odk.collect.forms.FormSourceException.ServerNotOpenRosaError
+import org.odk.collect.forms.FormSourceException.Unreachable
 import org.odk.collect.openrosa.http.HttpGetResult
 import org.odk.collect.openrosa.http.OpenRosaConstants
 import org.odk.collect.openrosa.http.OpenRosaHttpInterface
 import org.odk.collect.openrosa.parse.OpenRosaResponseParser
 import org.odk.collect.openrosa.support.StubWebCredentialsProvider
+import org.odk.collect.shared.result.requireError
 import java.io.ByteArrayInputStream
 import java.net.SocketTimeoutException
 import java.net.URI
@@ -74,7 +77,7 @@ class OpenRosaClientTest {
 
             formListApi.fetchFormList()
             fail("No exception thrown!")
-        } catch (e: FormSourceException.Unreachable) {
+        } catch (e: Unreachable) {
             assertThat(e.serverUrl, equalTo("http://blah.com"))
         }
     }
@@ -129,7 +132,7 @@ class OpenRosaClientTest {
 
             formListApi.fetchFormList()
             fail("No exception thrown!")
-        } catch (e: FormSourceException.Unreachable) {
+        } catch (e: Unreachable) {
             assertThat(e.serverUrl, equalTo("http://blah.com"))
         }
     }
@@ -176,7 +179,7 @@ class OpenRosaClientTest {
             whenever(responseParser.parseFormList(any())).thenReturn(null)
             formListApi.fetchFormList()
             fail("No exception thrown!")
-        } catch (e: FormSourceException.ParseError) {
+        } catch (e: ParseError) {
             assertThat(e.serverUrl, equalTo("http://blah.com"))
         }
     }
@@ -223,7 +226,7 @@ class OpenRosaClientTest {
 
             formListApi.fetchManifest("http://blah.com/manifest")
             fail("No exception thrown!")
-        } catch (e: FormSourceException.Unreachable) {
+        } catch (e: Unreachable) {
             assertThat(e.serverUrl, equalTo("http://blah.com"))
         }
     }
@@ -270,7 +273,7 @@ class OpenRosaClientTest {
             whenever(responseParser.parseManifest(any())).thenReturn(null)
             formListApi.fetchManifest("http://blah.com/manifest")
             fail("No exception thrown!")
-        } catch (e: FormSourceException.ParseError) {
+        } catch (e: ParseError) {
             assertThat(e.serverUrl, equalTo("http://blah.com"))
         }
     }
@@ -294,7 +297,7 @@ class OpenRosaClientTest {
 
             formListApi.fetchManifest("http://blah.com/manifest")
             fail("No exception thrown!")
-        } catch (e: FormSourceException.ParseError) {
+        } catch (e: ParseError) {
             assertThat(e.serverUrl, equalTo("http://blah.com"))
         }
     }
@@ -341,24 +344,22 @@ class OpenRosaClientTest {
         val client =
             OpenRosaClient("http://blah.com", httpInterface, webCredentialsProvider, responseParser, "myDeviceId")
 
-        try {
-            whenever(
-                httpInterface.executeGetRequest(any(), any(), any())
-            ).thenReturn(
-                HttpGetResult(
-                    ByteArrayInputStream("<xml></xml>".toByteArray()),
-                    HashMap(),
-                    "hash",
-                    200
-                )
+        whenever(
+            httpInterface.executeGetRequest(any(), any(), any())
+        ).thenReturn(
+            HttpGetResult(
+                ByteArrayInputStream("<xml></xml>".toByteArray()),
+                HashMap(),
+                "hash",
+                200
             )
+        )
 
-            whenever(responseParser.parseIntegrityResponse(any())).thenReturn(emptyList())
-            client.fetchDeletedStates("http://blah.com/integrity", listOf("1", "2", "3"))
-            fail("No exception thrown!")
-        } catch (e: FormSourceException.ParseError) {
-            assertThat(e.serverUrl, equalTo("http://blah.com"))
-        }
+        whenever(responseParser.parseIntegrityResponse(any())).thenReturn(emptyList())
+        val exception = client
+            .fetchDeletedStates("http://blah.com/integrity", listOf("1", "2", "3"))
+            .requireError(ParseError::class)
+        assertThat(exception.serverUrl, equalTo("http://blah.com"))
     }
 
     @Test
@@ -366,28 +367,26 @@ class OpenRosaClientTest {
         val client =
             OpenRosaClient("http://blah.com", httpInterface, webCredentialsProvider, responseParser, "myDeviceId")
 
-        try {
-            whenever(
-                httpInterface.executeGetRequest(any(), any(), any())
-            ).thenReturn(
-                HttpGetResult(
-                    ByteArrayInputStream("<xml></xml>".toByteArray()),
-                    object : HashMap<String?, String?>() {
-                        init {
-                            put(OpenRosaConstants.VERSION_HEADER, "1.0")
-                        }
-                    },
-                    "hash",
-                    200
-                )
+        whenever(
+            httpInterface.executeGetRequest(any(), any(), any())
+        ).thenReturn(
+            HttpGetResult(
+                ByteArrayInputStream("<xml></xml>".toByteArray()),
+                object : HashMap<String?, String?>() {
+                    init {
+                        put(OpenRosaConstants.VERSION_HEADER, "1.0")
+                    }
+                },
+                "hash",
+                200
             )
+        )
 
-            whenever(responseParser.parseIntegrityResponse(any())).thenReturn(null)
-            client.fetchDeletedStates("http://blah.com/integrity", listOf("1", "2", "3"))
-            fail("No exception thrown!")
-        } catch (e: FormSourceException.ParseError) {
-            assertThat(e.serverUrl, equalTo("http://blah.com"))
-        }
+        whenever(responseParser.parseIntegrityResponse(any())).thenReturn(null)
+        val exception = client
+            .fetchDeletedStates("http://blah.com/integrity", listOf("1", "2", "3"))
+            .requireError(ParseError::class)
+        assertThat(exception.serverUrl, equalTo("http://blah.com"))
     }
 
     @Test
@@ -395,18 +394,16 @@ class OpenRosaClientTest {
         val client =
             OpenRosaClient("http://blah.com", httpInterface, webCredentialsProvider, responseParser, "myDeviceId")
 
-        try {
-            whenever(
-                httpInterface.executeGetRequest(any(), any(), any())
-            ).thenThrow(
-                UnknownHostException::class.java
-            )
+        whenever(
+            httpInterface.executeGetRequest(any(), any(), any())
+        ).thenThrow(
+            UnknownHostException::class.java
+        )
 
-            client.fetchDeletedStates("http://blah.com/integrity", listOf("1", "2", "3"))
-            fail("No exception thrown!")
-        } catch (e: FormSourceException.Unreachable) {
-            assertThat(e.serverUrl, equalTo("http://blah.com"))
-        }
+        val exception = client
+            .fetchDeletedStates("http://blah.com/integrity", listOf("1", "2", "3"))
+            .requireError(Unreachable::class)
+        assertThat(exception.serverUrl, equalTo("http://blah.com"))
     }
 
     @Test
@@ -414,18 +411,15 @@ class OpenRosaClientTest {
         val client =
             OpenRosaClient("http://blah.com", httpInterface, webCredentialsProvider, responseParser, "myDeviceId")
 
-        try {
-            whenever(
-                httpInterface.executeGetRequest(any(), any(), any())
-            ).thenThrow(
-                SocketTimeoutException::class.java
-            )
+        whenever(
+            httpInterface.executeGetRequest(any(), any(), any())
+        ).thenThrow(
+            SocketTimeoutException::class.java
+        )
 
-            client.fetchDeletedStates("http://blah.com/integrity", listOf("1", "2", "3"))
-            fail("No exception thrown!")
-        } catch (_: FetchError) {
-            // Pass
-        }
+        client
+            .fetchDeletedStates("http://blah.com/integrity", listOf("1", "2", "3"))
+            .requireError(FetchError::class)
     }
 
     @Test
@@ -433,18 +427,16 @@ class OpenRosaClientTest {
         val client =
             OpenRosaClient("http://blah.com", httpInterface, webCredentialsProvider, responseParser, "myDeviceId")
 
-        try {
-            whenever(
-                httpInterface.executeGetRequest(any(), any(), any())
-            ).thenThrow(
-                SSLException::class.java
-            )
+        whenever(
+            httpInterface.executeGetRequest(any(), any(), any())
+        ).thenThrow(
+            SSLException::class.java
+        )
 
-            client.fetchDeletedStates("http://blah.com/integrity", listOf("1", "2", "3"))
-            fail("No exception thrown!")
-        } catch (e: SecurityError) {
-            assertThat(e.serverUrl, equalTo("http://blah.com"))
-        }
+        val exception = client
+            .fetchDeletedStates("http://blah.com/integrity", listOf("1", "2", "3"))
+            .requireError(SecurityError::class)
+        assertThat(exception.serverUrl, equalTo("http://blah.com"))
     }
 
     companion object {

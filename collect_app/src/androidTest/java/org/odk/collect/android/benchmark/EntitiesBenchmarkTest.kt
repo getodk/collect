@@ -62,7 +62,7 @@ class EntitiesBenchmarkTest {
             .addProject()
 
             .clickGetBlankForm()
-            .benchmark("Downloading form with http cache", 40, benchmarker) {
+            .benchmark("Downloading form with http cache", 35, benchmarker) {
                 it.clickGetSelected()
             }
 

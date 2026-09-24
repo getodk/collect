@@ -64,6 +64,7 @@ dependencies {
     implementation(libs.androidxNavigationFragmentKtx)
     implementation(libs.androidxNavigationUi)
     implementation(libs.dagger)
+    implementation(libs.timber)
     ksp(libs.daggerCompiler)
 
     val composeBom = platform(libs.androidxComposeBom)
