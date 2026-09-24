@@ -1,8 +1,10 @@
 package org.odk.collect.android.injection.config
 
+import org.odk.collect.android.BuildConfig
 import org.odk.collect.maplibre.MapLibreDependencyModule
 import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.shared.injection.Keys
 
 class CollectMapLibreDependencyModule(
     private val appDependencyComponent: AppDependencyComponent
@@ -13,5 +15,9 @@ class CollectMapLibreDependencyModule(
 
     override fun providesSettingsProvider(): SettingsProvider {
         return appDependencyComponent.settingsProvider()
+    }
+
+    override fun providesKeys(): Keys {
+        return Keys(mapOf("carto" to BuildConfig.CARTO_API_KEY))
     }
 }
