@@ -1,9 +1,9 @@
 package org.odk.collect.android.widgets.utilities
 
 import android.content.Context
+import android.icu.text.DecimalFormat
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.shared.strings.StringUtils.removeEnd
-import java.text.DecimalFormat
 import kotlin.math.absoluteValue
 
 object GeoWidgetUtils {
@@ -20,8 +20,8 @@ object GeoWidgetUtils {
                 org.odk.collect.strings.R.string.gps_result,
                 formatCoordinate(parts[0].toDouble()),
                 formatCoordinate(parts[1].toDouble()),
-                formatMeters(parts[2].toDouble()),
-                formatMeters(parts[3].toDouble())
+                formatAltitude(parts[2].toDouble()),
+                formatAccuracy(parts[3].toDouble())
             )
         } catch (_: Exception) {
             ""
@@ -45,7 +45,12 @@ object GeoWidgetUtils {
         return DecimalFormat("0.000000").format(coordinate)
     }
 
-    private fun formatMeters(value: Double): String {
-        return DecimalFormat("#.##").format(value)
+    private fun formatAltitude(altitude: Double): String {
+        return DecimalFormat("0.#").format(altitude)
+    }
+
+    private fun formatAccuracy(accuracy: Double): String {
+        // At most two significant digits
+        return DecimalFormat("@#").format(accuracy)
     }
 }

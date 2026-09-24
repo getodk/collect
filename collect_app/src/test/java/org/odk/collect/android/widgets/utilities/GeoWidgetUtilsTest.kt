@@ -65,16 +65,45 @@ class GeoWidgetUtilsTest {
     }
 
     @Test
-    fun getAnswerToDisplay_roundsAltitudeAndAccuracyToTwoDecimalPlaces() {
+    fun getAnswerToDisplay_roundsAltitudeToOneDecimalPlace() {
         assertThat(
-            getGeoPointAnswerToDisplay(context, "1.0 2.0 5.126 8.4321"),
+            getGeoPointAnswerToDisplay(context, "1.0 2.0 5.126 0.0"),
             equalTo(
                 context.getString(
                     org.odk.collect.strings.R.string.gps_result,
                     "1.000000",
                     "2.000000",
-                    "5.13",
-                    "8.43"
+                    "5.1",
+                    "0"
+                )
+            )
+        )
+    }
+
+    @Test
+    fun getAnswerToDisplay_roundsAccuracyToTwoSignificantDigits() {
+        assertThat(
+            getGeoPointAnswerToDisplay(context, "1.0 2.0 0.0 0.0132"),
+            equalTo(
+                context.getString(
+                    org.odk.collect.strings.R.string.gps_result,
+                    "1.000000",
+                    "2.000000",
+                    "0",
+                    "0.013"
+                )
+            )
+        )
+
+        assertThat(
+            getGeoPointAnswerToDisplay(context, "1.0 2.0 0.0 342.33"),
+            equalTo(
+                context.getString(
+                    org.odk.collect.strings.R.string.gps_result,
+                    "1.000000",
+                    "2.000000",
+                    "0",
+                    "340"
                 )
             )
         )
