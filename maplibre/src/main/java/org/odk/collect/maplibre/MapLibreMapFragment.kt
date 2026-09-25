@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
@@ -24,6 +25,7 @@ import org.maplibre.android.maps.Style
 import org.maplibre.android.plugins.annotation.CircleManager
 import org.maplibre.android.plugins.annotation.FillManager
 import org.maplibre.android.plugins.annotation.LineManager
+import org.maplibre.android.plugins.annotation.OnSymbolDragListener
 import org.maplibre.android.plugins.annotation.Symbol
 import org.maplibre.android.plugins.annotation.SymbolManager
 import org.maplibre.android.plugins.scalebar.ScaleBarOptions
@@ -113,6 +115,20 @@ class MapLibreMapFragment(private val configuration: Configuration) :
         override fun onMoveEnd(detector: MoveGestureDetector) {
             getMapViewModel().onUserMove(getCenter(), getZoom())
         }
+    }
+
+    private val symbolDragListener = object : OnSymbolDragListener {
+        override fun onAnnotationDragStarted(annotation: Symbol) {
+            // The plugin hides the rest of the gesture from the map, which would fire a long press
+            MotionEvent.obtain(0, 0, MotionEvent.ACTION_CANCEL, 0f, 0f, 0).apply {
+                mapView.onTouchEvent(this)
+                recycle()
+            }
+        }
+
+        override fun onAnnotationDrag(annotation: Symbol) = Unit
+
+        override fun onAnnotationDragFinished(annotation: Symbol) = Unit
     }
 
     private val _mapViewModel by viewModels<MapViewModel> {
@@ -332,6 +348,7 @@ class MapLibreMapFragment(private val configuration: Configuration) :
             val symbolManager = SymbolManager(mapView, map, style).apply {
                 iconAllowOverlap = true
                 iconIgnorePlacement = true
+                addDragListener(symbolDragListener)
             }
             val lineManager = LineManager(mapView, map, style, symbolManager.layerId, null).apply {
                 setLineCap(Property.LINE_CAP_ROUND)
