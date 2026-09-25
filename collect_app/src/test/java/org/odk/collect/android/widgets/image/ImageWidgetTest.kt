@@ -41,7 +41,7 @@ class ImageWidgetTest : BinaryWidgetTest<ImageWidget, StringData>() {
     @get:Rule
     val composeRule = createAndroidComposeRule<WidgetTestActivity>()
     private val questionMediaManager = FakeQuestionMediaManager()
-    private val mediaWidgetAnswerViewModel = MediaWidgetAnswerViewModel(mock(), questionMediaManager, mock())
+    private val mediaWidgetAnswerViewModel = MediaWidgetAnswerViewModel(mock(), questionMediaManager, mock(), mock())
     private val dependencies = QuestionWidget.Dependencies(
         null,
         mediaWidgetAnswerViewModel

@@ -1,7 +1,12 @@
 package org.odk.collect.maplibre
 
+import org.maplibre.android.maps.Style
+import org.maplibre.android.style.layers.RasterLayer
+import org.maplibre.android.style.sources.RasterSource
+import org.maplibre.android.style.sources.TileSet
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.settings.keys.ProjectKeys.KEY_MAPBOX_MAP_STYLE
+import org.odk.collect.shared.settings.Settings
 import org.odk.collect.strings.R
 
 object Configurations {
@@ -85,7 +90,29 @@ class Configuration(
     val uri: BasemapUri? = null,
     val styleSetting: String? = null,
     val styleOptions: Map<String, StyleOption> = emptyMap()
-)
+) {
+    fun basemapUri(settings: Settings): BasemapUri {
+        return if (uri != null) {
+            uri
+        } else if (styleSetting != null) {
+            styleOptions.getValue(settings.getString(styleSetting)!!).uri
+        } else {
+            throw IllegalArgumentException("Invalid Configuration!")
+        }
+    }
+
+    fun rasterBasemapStyle(uri: BasemapUri.Raster): Style.Builder {
+        val tileSet = TileSet("2.1.0", uri.value).apply {
+            attribution = this@Configuration.attribution ?: ""
+            scheme = "xyz"
+        }
+
+        return Style.Builder()
+            // Raster basemaps serve 256px tiles, while MapLibre assumes 512px ones by default
+            .withSource(RasterSource("basemap_source", tileSet, 256))
+            .withLayer(RasterLayer("basemap_layer", "basemap_source"))
+    }
+}
 
 class StyleOption(val name: Int, val uri: BasemapUri)
 

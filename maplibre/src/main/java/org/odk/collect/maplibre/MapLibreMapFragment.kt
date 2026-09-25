@@ -1,7 +1,6 @@
 package org.odk.collect.maplibre
 
 import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -9,8 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewmodel.viewModelFactory
-import org.maplibre.android.MapLibre
-import org.maplibre.android.WellKnownTileServer
 import org.maplibre.android.camera.CameraUpdateFactory
 import org.maplibre.android.geometry.LatLng
 import org.maplibre.android.geometry.LatLngBounds
@@ -29,15 +26,9 @@ import org.maplibre.android.plugins.annotation.SymbolManager
 import org.maplibre.android.plugins.scalebar.ScaleBarOptions
 import org.maplibre.android.plugins.scalebar.ScaleBarPlugin
 import org.maplibre.android.style.layers.Layer
-import org.maplibre.android.style.layers.LineLayer
 import org.maplibre.android.style.layers.Property
-import org.maplibre.android.style.layers.PropertyFactory
-import org.maplibre.android.style.layers.RasterLayer
 import org.maplibre.android.style.layers.TransitionOptions
-import org.maplibre.android.style.sources.RasterSource
 import org.maplibre.android.style.sources.Source
-import org.maplibre.android.style.sources.TileSet
-import org.maplibre.android.style.sources.VectorSource
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragment.ErrorListener
 import org.odk.collect.maps.MapFragment.FeatureListener
@@ -49,7 +40,6 @@ import org.odk.collect.maps.MapViewModelMapFragment
 import org.odk.collect.maps.Zoom
 import org.odk.collect.maps.ZoomObserver
 import org.odk.collect.maps.circles.CircleDescription
-import org.odk.collect.maps.layers.MbtilesFile
 import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.maps.markers.MarkerDescription
 import org.odk.collect.maps.markers.MarkerIconCreator
@@ -59,9 +49,7 @@ import org.odk.collect.maps.traces.PolygonDescription
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys.KEY_MAPBOX_MAP_STYLE
 import org.odk.collect.shared.settings.Settings
-import timber.log.Timber
 import java.io.File
-import java.io.IOException
 import javax.inject.Inject
 
 class MapLibreMapFragment(private val configuration: Configuration) :
@@ -92,7 +80,7 @@ class MapLibreMapFragment(private val configuration: Configuration) :
 
     private var featureClickListener: FeatureListener? = null
     private var featureDragEndListener: FeatureListener? = null
-    private var tileServer: TileHttpServer? = null
+    private val referenceLayers = ReferenceLayers()
     private var referenceLayerFile: File? = null
     private var basemapTopLayer: String? = null
     private var awaitingRemoteStyle = false
@@ -142,16 +130,6 @@ class MapLibreMapFragment(private val configuration: Configuration) :
 
     override fun init(readyListener: ReadyListener?, errorListener: ErrorListener?) {
         mapReadyListener = readyListener
-
-        // MapLibre only knows how to fetch tiles via HTTP. If we want it to
-        // display tiles from a local file, we have to serve them locally over HTTP.
-        try {
-            tileServer = TileHttpServer().also {
-                it.start()
-            }
-        } catch (e: IOException) {
-            Timber.e(e, "Could not start the TileHttpServer")
-        }
     }
 
     override fun onCreateView(
@@ -159,24 +137,12 @@ class MapLibreMapFragment(private val configuration: Configuration) :
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        initializeMapLibre()
+        MapLibreSupport.initialize(requireContext())
 
         mapView = MapView(requireContext())
         mapView.getMapAsync { map -> onMapReady(map) }
 
         return mapView
-    }
-
-    private fun initializeMapLibre() {
-        MapLibre.getInstance(
-            requireContext(),
-            MapboxAccessToken.get(requireContext()),
-            WellKnownTileServer.Mapbox
-        )
-
-        // MapLibre makes no HTTP requests while the device is offline, and TileHttpServer serves
-        // reference layers over HTTP, so they would never load offline without this.
-        MapLibre.setConnected(true)
     }
 
     private fun onMapReady(map: MapLibreMap) {
@@ -262,7 +228,7 @@ class MapLibreMapFragment(private val configuration: Configuration) :
     }
 
     override fun onDestroy() {
-        tileServer?.destroy()
+        referenceLayers.destroy()
         MarkerIconCreator.clearCache()
         super.onDestroy()
     }
@@ -270,26 +236,9 @@ class MapLibreMapFragment(private val configuration: Configuration) :
     private fun loadStyle(settings: Settings) {
         awaitingRemoteStyle = false
 
-        val uri = if (configuration.uri != null) {
-            configuration.uri
-        } else if (configuration.styleSetting != null) {
-            configuration.styleOptions.getValue(settings.getString(configuration.styleSetting)!!).uri
-        } else {
-            throw IllegalArgumentException("Invalid Configuration!")
-        }
-
-        when (uri) {
+        when (val uri = configuration.basemapUri(settings)) {
             is BasemapUri.Raster -> {
-                val tileSet = TileSet("2.1.0", uri.value).apply {
-                    attribution = configuration.attribution ?: ""
-                    scheme = "xyz"
-                }
-
-                map?.setStyle(
-                    Style.Builder()
-                        .withSource(RasterSource("basemap_source", tileSet))
-                        .withLayer(RasterLayer("basemap_layer", "basemap_source"))
-                ) {
+                map?.setStyle(configuration.rasterBasemapStyle(uri)) {
                     basemapTopLayer = "basemap_layer"
                     onStyleLoaded(it)
                 }
@@ -678,92 +627,10 @@ class MapLibreMapFragment(private val configuration: Configuration) :
 
     private fun loadReferenceOverlay() {
         referenceLayerFile?.let {
-            addMbtiles(it.name, it)
+            val (source, layers) = referenceLayers.sourceAndLayers(it) ?: return
+            addOverlaySource(source)
+            layers.forEach { addOverlayLayer(it) }
         }
-    }
-
-    private fun addMbtiles(id: String, file: File) {
-        tileServer?.let {
-            val mbtiles: MbtilesFile = try {
-                MbtilesFile(file)
-            } catch (e: MbtilesFile.MbtilesException) {
-                Timber.w(e.message)
-                return
-            }
-
-            val tileSet = createTileSet(mbtiles, it.getUrlTemplate(id))
-            it.addSource(id, mbtiles)
-
-            if (mbtiles.layerType == MbtilesFile.LayerType.VECTOR) {
-                addOverlaySource(VectorSource(id, tileSet))
-                for (layer in mbtiles.vectorLayers) {
-                    // Pick a colour that's a function of the filename and layer name.
-                    // The colour will appear essentially random; the only purpose here
-                    // is to try to assign different colours to different layers, such
-                    // that each individual layer appears in its own consistent colour.
-                    val hue = ((id + "." + layer.name).hashCode() and 0x7fffffff) % 360
-                    addOverlayLayer(
-                        LineLayer(id + "." + layer.name, id)
-                            .withSourceLayer(layer.name)
-                            .withProperties(
-                                PropertyFactory.lineColor(
-                                    Color.HSVToColor(floatArrayOf(hue.toFloat(), 0.7f, 1f))
-                                ),
-                                PropertyFactory.lineWidth(1.0f),
-                                PropertyFactory.lineOpacity(0.7f)
-                            )
-                    )
-                }
-            }
-            if (mbtiles.layerType == MbtilesFile.LayerType.RASTER) {
-                addOverlaySource(RasterSource(id, tileSet))
-                addOverlayLayer(RasterLayer(id + ".raster", id))
-            }
-            Timber.i("Added %s as a %s layer at /%s", file, mbtiles.layerType, id)
-        }
-    }
-
-    private fun createTileSet(mbtiles: MbtilesFile, urlTemplate: String): TileSet {
-        val tileSet = TileSet("2.2.0", urlTemplate)
-
-        // Configure the TileSet using the metadata in the .mbtiles file.
-        try {
-            tileSet.name = mbtiles.getMetadata("name")
-            try {
-                tileSet.minZoom = mbtiles.getMetadata("minzoom").toFloat()
-                tileSet.maxZoom = mbtiles.getMetadata("maxzoom").toFloat()
-            } catch (e: NumberFormatException) {
-                // ignore
-            }
-            var parts = mbtiles.getMetadata("center").split(",").toTypedArray()
-            if (parts.size == 3) { // latitude, longitude, zoom
-                try {
-                    tileSet.setCenter(
-                        parts[0].toFloat(),
-                        parts[1].toFloat(),
-                        parts[2].toFloat()
-                    )
-                } catch (e: NumberFormatException) {
-                    // ignore
-                }
-            }
-            parts = mbtiles.getMetadata("bounds").split(",").toTypedArray()
-            if (parts.size == 4) { // left, bottom, right, top
-                try {
-                    tileSet.setBounds(
-                        parts[0].toFloat(),
-                        parts[1].toFloat(),
-                        parts[2].toFloat(),
-                        parts[3].toFloat()
-                    )
-                } catch (e: NumberFormatException) {
-                    // ignore
-                }
-            }
-        } catch (e: MbtilesFile.MbtilesException) {
-            Timber.w(e.message)
-        }
-        return tileSet
     }
 
     private fun addOverlayLayer(layer: Layer) {

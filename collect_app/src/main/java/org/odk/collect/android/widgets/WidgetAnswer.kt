@@ -40,6 +40,15 @@ fun WidgetAnswer(
                         onClick,
                         onLongClick
                     )
+                    Constants.DATATYPE_GEOTRACE -> GeoTraceWidgetAnswer(
+                        modifier,
+                        answer,
+                        fontSize,
+                        if (compact) Arrangement.Start else Arrangement.Center,
+                        mediaWidgetAnswerViewModel,
+                        onClick,
+                        onLongClick
+                    )
                     else -> TextWidgetAnswer(
                         modifier,
                         null,

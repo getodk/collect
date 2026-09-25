@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.fromHtml
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import org.odk.collect.android.utilities.HtmlUtils
 import org.odk.collect.androidshared.R.dimen
@@ -67,6 +68,7 @@ fun TextWidgetAnswer(
         }
         Text(
             text = annotatedAnswer,
+            textAlign = if (horizontalArrangement == Arrangement.Center) TextAlign.Center else TextAlign.Start,
             style = MaterialTheme.typography.bodyLarge.copy(
                 fontSize = fontSize?.sp ?: MaterialTheme.typography.bodyLarge.fontSize,
                 color = MaterialTheme.colorScheme.onSurface.copy(

@@ -194,6 +194,7 @@ import org.odk.collect.externalapp.ExternalAppUtils;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.location.LocationClient;
+import org.odk.collect.maps.MapPreviewRenderer;
 import org.odk.collect.material.MaterialProgressDialogFragment;
 import org.odk.collect.metadata.PropertyManager;
 import org.odk.collect.permissions.PermissionListener;
@@ -371,6 +372,9 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
     public ProjectDependencyModuleFactory projectDependencyModuleFactory;
 
     @Inject
+    public MapPreviewRenderer mapPreviewRenderer;
+
+    @Inject
     public SoftKeyboardController softKeyboardController;
 
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
@@ -447,7 +451,8 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
                 new HtmlPrinter(),
                 instancesDataService,
                 changeLockProvider,
-                projectDependencyModuleFactory
+                projectDependencyModuleFactory,
+                mapPreviewRenderer
         );
 
         DefaultDispatcherProvider dispatcherProvider = new DefaultDispatcherProvider();
