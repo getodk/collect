@@ -141,7 +141,6 @@ class ServerFormDownloader(
             }
 
             if (stateListener.isCancelled) {
-                cleanUp(formFileDownload, tempMediaPath)
                 throw DownloadingInterrupted()
             }
 
