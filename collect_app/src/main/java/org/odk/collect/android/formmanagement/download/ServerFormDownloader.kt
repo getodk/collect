@@ -310,7 +310,7 @@ class ServerFormDownloader(
     }
 }
 
-private fun getFormFileName(formName: String?, formsDirPath: String?): String {
+private fun getFormFileName(formName: String, formsDirPath: String): String {
     val formattedFormName = FormNameUtils.formatFilenameFromFormName(formName)
     var fileName = "$formattedFormName.xml"
     var i = 2
