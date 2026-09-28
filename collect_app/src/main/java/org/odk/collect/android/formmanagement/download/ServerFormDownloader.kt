@@ -95,7 +95,7 @@ class ServerFormDownloader(
             }
 
             installEverything(formFileDownload, mediaFilesDownload, formsDirPath).onError {
-                cleanUp(formFileDownload, mediaFilesDownload.tempMediaPath)
+                cleanUp(formFileDownload)
                 throw it
             }
         } finally {
@@ -106,7 +106,7 @@ class ServerFormDownloader(
         }
     }
 
-    @Throws(FormDownloadException::class, FormSourceException::class)
+    @Throws(FormDownloadException::class, FormSourceException::class, DownloadingInterrupted::class)
     private fun processOneForm(
         fd: ServerFormDetails,
         stateListener: OngoingWorkListener,
@@ -120,7 +120,6 @@ class ServerFormDownloader(
         val formFileDownload = try {
             downloadXform(fd.formName, fd.downloadUrl, stateListener, tempDir, formsDirPath)
         } catch (_: InterruptedException) {
-            cleanUp(null, tempMediaPath)
             throw DownloadingInterrupted()
         }
 
@@ -147,11 +146,11 @@ class ServerFormDownloader(
             Pair(formFileDownload, mediaFilesDownload)
         } catch (e: DownloadingInterrupted) {
             Timber.i(e)
-            cleanUp(formFileDownload, tempMediaPath)
+            cleanUp(formFileDownload)
             throw DownloadingInterrupted()
         } catch (e: InterruptedException) {
             Timber.i(e)
-            cleanUp(formFileDownload, tempMediaPath)
+            cleanUp(formFileDownload)
             throw DownloadingInterrupted()
         } catch (_: IOException) {
             throw DiskError()
@@ -233,7 +232,7 @@ class ServerFormDownloader(
         }
     }
 
-    private fun cleanUp(formFileDownload: FormFileDownload?, tempMediaPath: String) {
+    private fun cleanUp(formFileDownload: FormFileDownload?) {
         if (formFileDownload == null) {
             Timber.d("The user cancelled (or an exception happened) the download of a form at the very beginning.")
         } else {
@@ -247,8 +246,6 @@ class ServerFormDownloader(
                 }
             }
         }
-
-        FileUtils.purgeMediaPath(tempMediaPath)
     }
 
     private fun saveNewForm(
