@@ -35,8 +35,7 @@ import org.odk.collect.shared.result.runAndCatch
 import org.odk.collect.shared.result.toError
 import org.odk.collect.shared.result.toSuccess
 import org.odk.collect.shared.strings.Md5.getMd5Hash
-import timber.log.Timber.Forest.d
-import timber.log.Timber.Forest.i
+import timber.log.Timber
 import java.io.File
 import java.io.IOException
 import java.util.UUID
@@ -148,11 +147,11 @@ class ServerFormDownloader(
 
             Pair(formFileDownload, mediaFilesDownload)
         } catch (e: DownloadingInterrupted) {
-            i(e)
+            Timber.i(e)
             cleanUp(formFileDownload, tempMediaPath)
             throw DownloadingInterrupted()
         } catch (e: InterruptedException) {
-            i(e)
+            Timber.i(e)
             cleanUp(formFileDownload, tempMediaPath)
             throw DownloadingInterrupted()
         } catch (_: IOException) {
@@ -237,7 +236,7 @@ class ServerFormDownloader(
 
     private fun cleanUp(formFileDownload: FormFileDownload?, tempMediaPath: String) {
         if (formFileDownload == null) {
-            d("The user cancelled (or an exception happened) the download of a form at the very beginning.")
+            Timber.d("The user cancelled (or an exception happened) the download of a form at the very beginning.")
         } else {
             if (formFileDownload is FormFileDownload.New) {
                 val md5Hash = formFileDownload.file.getMd5Hash()
