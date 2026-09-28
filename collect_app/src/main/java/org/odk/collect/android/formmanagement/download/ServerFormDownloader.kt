@@ -146,11 +146,9 @@ class ServerFormDownloader(
             Pair(formFileDownload, mediaFilesDownload)
         } catch (e: DownloadingInterrupted) {
             Timber.i(e)
-            cleanUp(formFileDownload)
             throw DownloadingInterrupted()
         } catch (e: InterruptedException) {
             Timber.i(e)
-            cleanUp(formFileDownload)
             throw DownloadingInterrupted()
         } catch (_: IOException) {
             throw DiskError()
