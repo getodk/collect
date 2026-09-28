@@ -21,7 +21,6 @@ import org.odk.collect.shared.result.toError
 import org.odk.collect.shared.result.toSuccess
 import java.io.InputStream
 import java.net.HttpURLConnection
-import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import java.util.concurrent.Callable
 import javax.net.ssl.SSLException
@@ -143,7 +142,6 @@ class OpenRosaClient(
     private fun mapException(e: Exception): FormSourceException {
         return when (e) {
             is UnknownHostException -> Unreachable(serverUrl)
-            is SocketTimeoutException -> FetchError()
             is SSLException -> SecurityError(serverUrl)
             else -> FetchError()
         }
