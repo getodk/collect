@@ -323,7 +323,7 @@ private fun getFormFileName(formName: String, formsDirPath: String): String {
 private fun moveMediaFiles(tempMediaPath: String, form: Form): Result<File, IOException> {
     val tempMediaFolder = File(tempMediaPath)
     val formMediaDir = File(form.formMediaPath)
-    tempMediaFolder.listFiles()?.takeIf { it.isNotEmpty() }?.forEach { mediaFile ->
+    tempMediaFolder.listFiles()?.forEach { mediaFile ->
         runAndCatch {
             org.apache.commons.io.FileUtils.copyFileToDirectory(mediaFile, formMediaDir)
         }.onError {
