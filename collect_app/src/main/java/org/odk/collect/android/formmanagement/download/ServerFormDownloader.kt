@@ -94,10 +94,8 @@ class ServerFormDownloader(
                 throw FormSourceError(e)
             }
 
-            installEverything(formFileDownload, mediaFilesDownload, formsDirPath).onError {
-                cleanUp(formFileDownload)
-                throw it
-            }
+            installEverything(formFileDownload, mediaFilesDownload, formsDirPath)
+                .onError { throw it }
         } finally {
             tempDir.deleteDirectory()
             for (formToDelete in preExistingFormsWithSameIdAndVersion) {
@@ -180,6 +178,17 @@ class ServerFormDownloader(
             )
 
             Unit.toSuccess()
+        }.onError {
+            // Clean up form if we created it
+            if (formFileDownload is FormFileDownload.New) {
+                val md5Hash = formFileDownload.file.getMd5Hash()
+                if (md5Hash != null) {
+                    val form = formsRepository.getOneByMd5Hash(md5Hash)
+                    if (form != null) {
+                        formsRepository.delete(form.dbId)
+                    }
+                }
+            }
         }
     }
 
@@ -227,22 +236,6 @@ class ServerFormDownloader(
             formMetadataParser.readMetadata(formFileDownload.file)
         }.mapError {
             FormParsingError(it)
-        }
-    }
-
-    private fun cleanUp(formFileDownload: FormFileDownload?) {
-        if (formFileDownload == null) {
-            Timber.d("The user cancelled (or an exception happened) the download of a form at the very beginning.")
-        } else {
-            if (formFileDownload is FormFileDownload.New) {
-                val md5Hash = formFileDownload.file.getMd5Hash()
-                if (md5Hash != null) {
-                    val form = formsRepository.getOneByMd5Hash(md5Hash)
-                    if (form != null) {
-                        formsRepository.delete(form.dbId)
-                    }
-                }
-            }
         }
     }
 
