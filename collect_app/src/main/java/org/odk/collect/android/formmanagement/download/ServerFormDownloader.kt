@@ -281,7 +281,6 @@ class ServerFormDownloader(
     @Throws(
         FormSourceException::class,
         IOException::class,
-        DownloadingInterrupted::class,
         InterruptedException::class
     )
     private fun downloadXform(
