@@ -2,7 +2,6 @@ package org.odk.collect.shared.result
 
 import org.odk.collect.shared.result.Result.Error
 import org.odk.collect.shared.result.Result.Success
-import kotlin.reflect.KClass
 
 /**
  * Alternative to Kotlin's [kotlin.Result] that provides a typed error/failure value. This is
@@ -28,20 +27,6 @@ fun <T> runAndCatch(block: () -> T): Result<T, Exception> {
         block().toSuccess()
     } catch (e: Exception) {
         e.toError()
-    }
-}
-
-@Throws(AssertionError::class)
-fun <S, E : Any, C : E> Result<S, E>.requireError(clazz: KClass<C>): C {
-    val error = when (this) {
-        is Success -> throw AssertionError()
-        is Error -> value
-    }
-
-    return if (clazz.isInstance(error)) {
-        error as C
-    } else {
-        throw AssertionError()
     }
 }
 

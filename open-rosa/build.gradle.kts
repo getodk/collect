@@ -60,6 +60,7 @@ dependencies {
         exclude(group = "org.hamcrest", module = "hamcrest-all")
     }
 
+    testImplementation(project(":test-shared"))
     testImplementation(libs.junit)
     testImplementation(libs.hamcrest)
     testImplementation(libs.okhttp3Mockwebserver)

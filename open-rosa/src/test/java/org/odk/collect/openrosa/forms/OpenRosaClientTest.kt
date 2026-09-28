@@ -22,7 +22,7 @@ import org.odk.collect.openrosa.http.OpenRosaConstants
 import org.odk.collect.openrosa.http.OpenRosaHttpInterface
 import org.odk.collect.openrosa.parse.OpenRosaResponseParser
 import org.odk.collect.openrosa.support.StubWebCredentialsProvider
-import org.odk.collect.shared.result.requireError
+import org.odk.collect.testshared.requireError
 import java.io.ByteArrayInputStream
 import java.net.SocketTimeoutException
 import java.net.URI
