@@ -138,7 +138,7 @@ class ServerFormDownloader(
                     stateListener
                 )
             } else {
-                MediaFilesDownload(tempMediaPath, false, mutableListOf())
+                MediaFilesDownload(tempMediaPath, false, emptyList())
             }
 
             if (stateListener.isCancelled) {
