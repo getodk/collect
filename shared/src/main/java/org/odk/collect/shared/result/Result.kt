@@ -87,7 +87,3 @@ fun <S1, E, S2> Result<S1, E>.chain(block: (S1) -> Result<S2, E>): Result<S2, E>
         is Error -> this.asInstanceOf()
     }
 }
-
-fun <S, E> result(block: () -> S): Result<S, E> {
-    return block().toSuccess()
-}

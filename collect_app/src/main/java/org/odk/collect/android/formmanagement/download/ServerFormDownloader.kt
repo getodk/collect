@@ -30,7 +30,6 @@ import org.odk.collect.shared.result.chain
 import org.odk.collect.shared.result.map
 import org.odk.collect.shared.result.mapError
 import org.odk.collect.shared.result.onError
-import org.odk.collect.shared.result.result
 import org.odk.collect.shared.result.runAndCatch
 import org.odk.collect.shared.result.toError
 import org.odk.collect.shared.result.toSuccess
@@ -158,15 +157,17 @@ class ServerFormDownloader(
         mediaFilesDownload: MediaFilesDownload,
         formsDirPath: String
     ): Result<Unit, FormDownloadException> {
-        return result<Unit, FormDownloadException> {
-            ingestEntityListsFromDownload(
-                mediaFilesDownload,
-                entitiesRepository,
-                entitySource,
-            )
-        }.chain {
-            createOrUpdateForm(formFileDownload, mediaFilesDownload, formsDirPath)
-        }.chain { form ->
+        ingestEntityListsFromDownload(
+            mediaFilesDownload,
+            entitiesRepository,
+            entitySource,
+        )
+
+        return createOrUpdateForm(
+            formFileDownload,
+            mediaFilesDownload,
+            formsDirPath
+        ).chain { form ->
             moveMediaFiles(mediaFilesDownload.tempMediaPath, form)
                 .map { Pair(form, it) }
                 .mapError { DiskError() }
