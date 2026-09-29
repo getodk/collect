@@ -30,6 +30,7 @@ allprojects {
         lockAllConfigurations()
         // Can't be locked, see https://github.com/gradle/gradle/issues/21396
         ignoredDependencies.add("org.jetbrains.kotlin:kotlin-stdlib-common")
+        ignoredDependencies.add("com.fasterxml.jackson:jackson-bom")
     }
 
     configurations.all {
