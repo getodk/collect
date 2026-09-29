@@ -32,6 +32,17 @@ allprojects {
         ignoredDependencies.add("org.jetbrains.kotlin:kotlin-stdlib-common")
     }
 
+    configurations.all {
+        resolutionStrategy {
+            dependencySubstitution {
+                // https://github.com/FasterXML/jackson-bom/issues/52 If anything requests the broken 2.13.2.1 BOM, 
+                // intercept and swap it for a valid timestamp build
+                substitute(module("com.fasterxml.jackson:jackson-bom:2.13.2.1"))
+                    .using(module("com.fasterxml.jackson:jackson-bom:2.13.4.20221013"))
+            }
+        }
+    }
+
     // Regenerate every module's gradle.lockfile: ./gradlew resolveAndLockAll --write-locks
     tasks.register("resolveAndLockAll") {
         dependsOn(tasks.named("dependencies"))
