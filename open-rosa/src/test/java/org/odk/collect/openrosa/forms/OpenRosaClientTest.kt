@@ -439,6 +439,22 @@ class OpenRosaClientTest {
         assertThat(exception.serverUrl, equalTo("http://blah.com"))
     }
 
+    @Test
+    fun fetchDeletedStates_whenThereIsAnException_throwsFetchError() {
+        val client =
+            OpenRosaClient("http://blah.com", httpInterface, webCredentialsProvider, responseParser, "myDeviceId")
+
+        whenever(
+            httpInterface.executeGetRequest(any(), any(), any())
+        ).thenThrow(
+            Exception::class.java
+        )
+
+        client
+            .fetchDeletedStates("http://blah.com/integrity", listOf("1", "2", "3"))
+            .requireError(FetchError::class)
+    }
+
     companion object {
         private fun join(vararg strings: String): String {
             val bob = StringBuilder()
