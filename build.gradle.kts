@@ -49,7 +49,12 @@ allprojects {
         // Needs to go first to get specialty libraries https://stackoverflow.com/a/48438866/137744
         google()
 
-        mavenLocal() // Only used for javarosa_local dependency
+        mavenLocal {
+            content {
+                includeModule("org.getodk", "javarosa")
+            }
+        }
+
         mavenCentral()
 
         maven { url = uri("https://central.sonatype.com/repository/maven-snapshots") }
