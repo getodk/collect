@@ -118,10 +118,9 @@ object ServerFormUseCases {
     }
 
     @JvmStatic
-    fun copySavedFileFromPreviousFormVersionIfExists(
+    fun copySavedFileFromPreviousFormVersion(
         formsRepository: FormsRepository,
         form: Form,
-        mediaDirPath: String
     ) {
         val allForms = formsRepository.getAllByFormId(form.formId)
         val previousVersions = allForms.filterNot { it.dbId == form.dbId }
@@ -131,9 +130,10 @@ object ServerFormUseCases {
                 File(it.formMediaPath, FileUtils.LAST_SAVED_FILENAME)
             }
 
-        if (lastSavedFile != null && lastSavedFile.exists()) {
-            File(mediaDirPath).mkdir()
-            FileUtils.copyFile(lastSavedFile, File(mediaDirPath, FileUtils.LAST_SAVED_FILENAME))
+        val destination = File(form.formMediaPath, FileUtils.LAST_SAVED_FILENAME)
+        if (lastSavedFile != null && lastSavedFile.exists() && !destination.exists()) {
+            File(form.formMediaPath).mkdir()
+            FileUtils.copyFile(lastSavedFile, destination)
         }
     }
 

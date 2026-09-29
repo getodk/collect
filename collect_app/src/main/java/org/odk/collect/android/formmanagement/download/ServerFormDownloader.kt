@@ -172,12 +172,7 @@ class ServerFormDownloader(
                 .map { Pair(form, it) }
                 .mapError { DiskError() }
         }.chain { (form, formMediaDir) ->
-            ServerFormUseCases.copySavedFileFromPreviousFormVersionIfExists(
-                formsRepository,
-                form,
-                formMediaDir.absolutePath
-            )
-
+            ServerFormUseCases.copySavedFileFromPreviousFormVersion(formsRepository, form)
             Unit.toSuccess()
         }.onError {
             // Clean up form if we created it
