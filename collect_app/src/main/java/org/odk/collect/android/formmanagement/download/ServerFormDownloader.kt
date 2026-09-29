@@ -118,6 +118,8 @@ class ServerFormDownloader(
             downloadXform(fd.formName, fd.downloadUrl, stateListener, tempDir, formsDirPath)
         } catch (_: InterruptedException) {
             throw DownloadingInterrupted()
+        } catch (_: IOException) {
+            throw DiskError()
         }
 
         return try {
