@@ -101,7 +101,6 @@ android {
             resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
             resValue("string", "mapbox_access_token", mapboxAccessToken)
             buildConfigField("String", "SIGNATURE", "\"\"")
-
         }
 
         // Release build for the official ODK Collect app
@@ -388,6 +387,13 @@ dependencies {
     debugImplementation(libs.androidXComposeTooling)
     debugImplementation(libs.androidXComposeUiTestManifest)
     selfSignedReleaseImplementation libs.leakcanary
+}
+
+tasks.matching {
+    (it.name.startsWith('bundle') || it.name.startsWith('assemble')) &&
+        it.name.endsWith('Release')
+}.configureEach {
+    dependsOn(':maplibre:generateNativeDebugSymbols')
 }
 
 // Must be at bottom to prevent dependency collisions
