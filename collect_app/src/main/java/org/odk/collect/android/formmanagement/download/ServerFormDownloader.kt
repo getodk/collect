@@ -295,11 +295,14 @@ class ServerFormDownloader(
 private fun getFormFileName(formName: String, formsDirPath: String): String {
     val formattedFormName = FormNameUtils.formatFilenameFromFormName(formName)
     var fileName = "$formattedFormName.xml"
+    val existingForms = (File(formsDirPath).listFiles() ?: emptyArray()).map { it.name }
+
     var i = 2
-    while (File(formsDirPath + File.separator + fileName).exists()) {
+    while (existingForms.contains(fileName)) {
         fileName = formattedFormName + "_" + i + ".xml"
         i++
     }
+
     return fileName
 }
 
