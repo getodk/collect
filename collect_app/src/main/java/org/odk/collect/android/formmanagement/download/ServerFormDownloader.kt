@@ -179,12 +179,9 @@ class ServerFormDownloader(
         }.onError {
             // Clean up form if we created it
             if (formFileDownload is FormFileDownload.New) {
-                val md5Hash = formFileDownload.file.getMd5Hash()
-                if (md5Hash != null) {
-                    val form = formsRepository.getOneByMd5Hash(md5Hash)
-                    if (form != null) {
-                        formsRepository.delete(form.dbId)
-                    }
+                val form = formsRepository.getOneByMd5Hash(formFileDownload.hash)
+                if (form != null) {
+                    formsRepository.delete(form.dbId)
                 }
             }
         }
@@ -283,13 +280,14 @@ class ServerFormDownloader(
 
         // we've downloaded the file, and we may have renamed it
         // make sure it's not the same as a file we already have
-        val form = formsRepository.getOneByMd5Hash(tempFormFile.getMd5Hash()!!)
+        val hash = tempFormFile.getMd5Hash()!!
+        val form = formsRepository.getOneByMd5Hash(hash)
         if (form != null) {
             // delete the file we just downloaded, because it's a duplicate
             FileUtils.deleteAndReport(tempFormFile)
             return FormFileDownload.Existing(form)
         } else {
-            return FormFileDownload.New(tempFormFile)
+            return FormFileDownload.New(tempFormFile, hash)
         }
     }
 }
