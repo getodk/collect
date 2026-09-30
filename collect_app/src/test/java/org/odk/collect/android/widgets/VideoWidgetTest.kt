@@ -36,7 +36,7 @@ class VideoWidgetTest : FileWidgetTest<VideoWidget>() {
     private var destinationName: String? = null
     private var questionMediaManager = mock<QuestionMediaManager>()
     private var mediaUtils = mock<MediaUtils>()
-    private val mediaWidgetAnswerViewModel = MediaWidgetAnswerViewModel(mock(), questionMediaManager, mediaUtils)
+    private val mediaWidgetAnswerViewModel = MediaWidgetAnswerViewModel(mock(), questionMediaManager, mediaUtils, mock())
     private val dependencies = QuestionWidget.Dependencies(
         null,
         mediaWidgetAnswerViewModel

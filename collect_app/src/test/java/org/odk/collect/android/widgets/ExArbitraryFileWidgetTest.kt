@@ -36,7 +36,7 @@ class ExArbitraryFileWidgetTest : FileWidgetTest<ExArbitraryFileWidget>() {
     private val fileRequester = mock<FileRequester>()
     private val mediaUtils = mock<MediaUtils>()
     private val questionMediaManager = FakeQuestionMediaManager()
-    private val mediaWidgetAnswerViewModel = MediaWidgetAnswerViewModel(mock(), questionMediaManager, mediaUtils)
+    private val mediaWidgetAnswerViewModel = MediaWidgetAnswerViewModel(mock(), questionMediaManager, mediaUtils, mock())
     private val dependencies = QuestionWidget.Dependencies(
         null,
         mediaWidgetAnswerViewModel

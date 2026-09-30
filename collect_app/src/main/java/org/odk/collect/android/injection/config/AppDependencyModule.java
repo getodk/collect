@@ -114,9 +114,11 @@ import org.odk.collect.location.GoogleFusedLocationClient;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.location.LocationClientProvider;
 import org.odk.collect.maps.MapFragmentFactory;
+import org.odk.collect.maps.MapPreviewRenderer;
 import org.odk.collect.maps.layers.DirectoryReferenceLayerRepository;
 import org.odk.collect.maps.layers.ReferenceLayerRepository;
 import org.odk.collect.maplibre.Configurations;
+import org.odk.collect.maplibre.MapLibreMapPreviewRenderer;
 import org.odk.collect.maplibre.MapLibreSupport;
 import org.odk.collect.metadata.InstallIDProvider;
 import org.odk.collect.metadata.PropertyManager;
@@ -156,6 +158,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Named;
+import javax.inject.Provider;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -595,6 +598,12 @@ public class AppDependencyModule {
     @Provides
     public MapFragmentFactory providesMapFragmentFactory(SettingsProvider settingsProvider) {
         return new MapFragmentFactoryImpl(settingsProvider);
+    }
+
+    @Provides
+    @Singleton
+    public MapPreviewRenderer providesMapPreviewRenderer(Context context, SettingsProvider settingsProvider, Provider<ReferenceLayerRepository> referenceLayerRepository) {
+        return new MapLibreMapPreviewRenderer(context, settingsProvider, referenceLayerRepository);
     }
 
     @Provides
