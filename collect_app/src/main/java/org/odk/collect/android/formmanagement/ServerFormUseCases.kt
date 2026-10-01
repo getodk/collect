@@ -287,6 +287,7 @@ object ServerFormUseCases {
             formBuilder.lastDetectedAttachmentsUpdateDate(latestUpdateTime)
         }
 
+        formBuilder.deleted(false)
         return formsRepository.save(formBuilder.build())
     }
 

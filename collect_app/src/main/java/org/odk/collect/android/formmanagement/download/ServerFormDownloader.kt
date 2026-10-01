@@ -64,11 +64,7 @@ class ServerFormDownloader(
         }
 
         val preExistingFormsWithSameIdAndVersion = mutableListOf<Form>()
-        if (formOnDevice != null) {
-            if (formOnDevice.isDeleted) {
-                formsRepository.restore(formOnDevice.dbId)
-            }
-        } else {
+        if (formOnDevice == null) {
             preExistingFormsWithSameIdAndVersion.addAll(
                 formsRepository.getAllByFormIdAndVersion(form.formId, form.formVersion)
             )
@@ -171,9 +167,9 @@ class ServerFormDownloader(
             formsDirPath
         ).chain { form ->
             moveMediaFiles(mediaFilesDownload.tempMediaPath, form)
-                .map { Pair(form, it) }
+                .map { form }
                 .mapError { DiskError() }
-        }.chain { (form, formMediaDir) ->
+        }.chain { form ->
             ServerFormUseCases.copySavedFileFromPreviousFormVersion(formsRepository, form)
             Unit.toSuccess()
         }.onError {
