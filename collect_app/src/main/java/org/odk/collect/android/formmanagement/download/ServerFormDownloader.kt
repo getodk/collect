@@ -57,17 +57,8 @@ class ServerFormDownloader(
         progressReporter: ProgressReporter?,
         isCancelled: Supplier<Boolean>?
     ) {
-        val formOnDevice = if (!form.hash.isNullOrEmpty()) {
-            formsRepository.getOneByMd5Hash(form.hash)
-        } else {
+        if (form.hash.isNullOrEmpty()) {
             throw FormWithNoHash()
-        }
-
-        val preExistingFormsWithSameIdAndVersion = mutableListOf<Form>()
-        if (formOnDevice == null) {
-            preExistingFormsWithSameIdAndVersion.addAll(
-                formsRepository.getAllByFormIdAndVersion(form.formId, form.formVersion)
-            )
         }
 
         val tempDir = File(cacheDir, "download-" + UUID.randomUUID().toString())
@@ -93,9 +84,6 @@ class ServerFormDownloader(
                 .onError { throw it }
         } finally {
             tempDir.deleteDirectory()
-            for (formToDelete in preExistingFormsWithSameIdAndVersion) {
-                formsRepository.delete(formToDelete.dbId)
-            }
         }
     }
 
@@ -235,12 +223,20 @@ class ServerFormDownloader(
         formFile: File,
         entityAttachmentsDetected: Boolean
     ): Form {
+        val formId = formMetadata.id
+        val version = formMetadata.version
+
+        // Account for server returning update with same id/version
+        formsRepository.getAllByFormIdAndVersion(formId, version).forEach {
+            formsRepository.delete(it.dbId)
+        }
+
         val form = Form.Builder()
             .formFilePath(formFile.absolutePath)
             .formMediaPath(FileUtils.constructMediaPath(formFile.absolutePath))
             .displayName(formMetadata.title)
-            .version(formMetadata.version)
-            .formId(formMetadata.id)
+            .version(version)
+            .formId(formId)
             .submissionUri(formMetadata.submissionUri)
             .base64RSAPublicKey(formMetadata.base64RsaPublicKey)
             .autoDelete(formMetadata.autoDelete)
