@@ -21,7 +21,7 @@ interface LocationTracker {
     fun start(
         retainMockAccuracy: Boolean,
         updateInterval: Long? = null,
-        notification: Boolean = true
+        background: Boolean = true
     )
 
     fun start(retainMockAccuracy: Boolean) = start(retainMockAccuracy, null)

@@ -25,13 +25,14 @@ import javax.inject.Inject
 class ForegroundServiceLocationTracker(private val application: Application) : LocationTracker {
 
     private val locationClientHandler = LocationClientHandler(application, LOCATION_KEY)
+    private var stopper: (() -> Unit)? = null
 
     override fun getLocation(): StateFlow<Location?> {
         return application.getState().getFlow(LOCATION_KEY, null)
     }
 
-    override fun start(retainMockAccuracy: Boolean, updateInterval: Long?, notification: Boolean) {
-        if (notification) {
+    override fun start(retainMockAccuracy: Boolean, updateInterval: Long?, background: Boolean) {
+        if (background) {
             val intent = Intent(application, LocationTrackerService::class.java).also { intent ->
                 intent.putExtra(LocationTrackerService.EXTRA_RETAIN_MOCK_ACCURACY, retainMockAccuracy)
                 updateInterval?.let {
@@ -41,14 +42,20 @@ class ForegroundServiceLocationTracker(private val application: Application) : L
             }
 
             application.startForegroundService(intent)
+            stopper = {
+                application.stopService(Intent(application, LocationTrackerService::class.java))
+            }
         } else {
             locationClientHandler.start(retainMockAccuracy, updateInterval)
+            stopper = {
+                locationClientHandler.stop()
+            }
         }
     }
 
     override fun stop() {
-        application.stopService(Intent(application, LocationTrackerService::class.java))
-        locationClientHandler.stop()
+        stopper?.invoke()
+        stopper = null
     }
 
     override fun bindToLifecycle(
@@ -60,7 +67,7 @@ class ForegroundServiceLocationTracker(private val application: Application) : L
                 start(
                     retainMockAccuracy = retainMockAccuracy,
                     updateInterval = null,
-                    notification = false
+                    background = false
                 )
             }
 
@@ -112,9 +119,11 @@ class LocationTrackerService : Service() {
 
         val stateKey = intent?.getStringExtra(EXTRA_STATE_KEY)
         if (stateKey != null) {
-            locationClientHandler = LocationClientHandler(application, stateKey).also {
-                it.start(retainMockAccuracy, updateInterval)
+            if (locationClientHandler == null) {
+                locationClientHandler = LocationClientHandler(application, stateKey)
             }
+
+            locationClientHandler?.start(retainMockAccuracy, updateInterval)
         }
 
         return START_NOT_STICKY
