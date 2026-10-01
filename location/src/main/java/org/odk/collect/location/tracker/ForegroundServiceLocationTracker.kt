@@ -24,7 +24,7 @@ import javax.inject.Inject
 
 class ForegroundServiceLocationTracker(private val application: Application) : LocationTracker {
 
-    private val locationClientHandler = LocationClientHandler(application)
+    private val locationClientHandler = LocationClientHandler(application, LOCATION_KEY)
 
     override fun getLocation(): StateFlow<Location?> {
         return application.getState().getFlow(LOCATION_KEY, null)
@@ -37,6 +37,7 @@ class ForegroundServiceLocationTracker(private val application: Application) : L
                 updateInterval?.let {
                     intent.putExtra(LocationTrackerService.EXTRA_UPDATE_INTERVAL, it)
                 }
+                intent.putExtra(LocationTrackerService.EXTRA_STATE_KEY, LOCATION_KEY)
             }
 
             application.startForegroundService(intent)
@@ -68,6 +69,10 @@ class ForegroundServiceLocationTracker(private val application: Application) : L
             }
         })
     }
+
+    companion object {
+        private const val LOCATION_KEY = "location"
+    }
 }
 
 class LocationTrackerService : Service() {
@@ -75,9 +80,7 @@ class LocationTrackerService : Service() {
     @Inject
     lateinit var uniqueIdGenerator: UniqueIdGenerator
 
-    private val locationClientHandler: LocationClientHandler by lazy {
-        LocationClientHandler(application)
-    }
+    private var locationClientHandler: LocationClientHandler? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -107,12 +110,18 @@ class LocationTrackerService : Service() {
             null
         }
 
-        locationClientHandler.start(retainMockAccuracy, updateInterval)
+        val stateKey = intent?.getStringExtra(EXTRA_STATE_KEY)
+        if (stateKey != null) {
+            locationClientHandler = LocationClientHandler(application, stateKey).also {
+                it.start(retainMockAccuracy, updateInterval)
+            }
+        }
+
         return START_NOT_STICKY
     }
 
     override fun onDestroy() {
-        locationClientHandler.stop()
+        locationClientHandler?.stop()
     }
 
     private fun createNotification(): Notification {
@@ -149,13 +158,14 @@ class LocationTrackerService : Service() {
     companion object {
         const val EXTRA_RETAIN_MOCK_ACCURACY = "retain_mock_accuracy"
         const val EXTRA_UPDATE_INTERVAL = "update_interval"
+        const val EXTRA_STATE_KEY = "state_key"
 
         private const val NOTIFICATION_IDENTIFIER = "location_tracking"
         private const val NOTIFICATION_CHANNEL = "location_tracking"
     }
 }
 
-private class LocationClientHandler(private val application: Application) : LocationClient.LocationClientListener {
+private class LocationClientHandler(private val application: Application, val stateKey: String) : LocationClient.LocationClientListener {
 
     private val locationClient: LocationClient by lazy {
         LocationClientProvider.getClient(application)
@@ -173,13 +183,13 @@ private class LocationClientHandler(private val application: Application) : Loca
 
     fun stop() {
         locationClient.stop()
-        application.getState().setFlow(LOCATION_KEY, null)
+        application.getState().setFlow(stateKey, null)
     }
 
     override fun onClientStart() {
         locationClient.requestLocationUpdates {
             application.getState().setFlow(
-                LOCATION_KEY,
+                stateKey,
                 Location(it.latitude, it.longitude, it.altitude, it.accuracy)
             )
         }
@@ -193,5 +203,3 @@ private class LocationClientHandler(private val application: Application) : Loca
         // Ignored
     }
 }
-
-private const val LOCATION_KEY = "location"
