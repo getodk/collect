@@ -39,7 +39,7 @@ class ForegroundOrServiceLocationTrackerTest : LocationTrackerTest() {
     }
 
     @Before
-    fun fakeLocationClient() {
+    fun setup() {
         LocationClientProvider.setTestClient(locationClient)
     }
 
@@ -50,7 +50,7 @@ class ForegroundOrServiceLocationTrackerTest : LocationTrackerTest() {
     }
 
     @Test
-    fun start_whenRetainMockAccuracyIsTrue_setsRetainMockAccuracyOnClient() {
+    fun `#start when retain mock accuracy is true sets retain mock accuracy on client`() {
         locationTracker.start(retainMockAccuracy = true)
         runBackground()
 
@@ -58,7 +58,7 @@ class ForegroundOrServiceLocationTrackerTest : LocationTrackerTest() {
     }
 
     @Test
-    fun start_whenRetainMockAccuracyIsFalse_setsRetainMockAccuracyOnClient() {
+    fun `#start when retain mock accuracy is false sets retain mock accuracy on client`() {
         locationTracker.start(retainMockAccuracy = false)
         runBackground()
 
@@ -66,7 +66,7 @@ class ForegroundOrServiceLocationTrackerTest : LocationTrackerTest() {
     }
 
     @Test
-    fun start_whenUpdateIntervalIsNull_doesNotSetIntervalOnClient() {
+    fun `#start when update interval is null does not set interval on client`() {
         locationTracker.start(updateInterval = null)
         runBackground()
 
@@ -74,7 +74,7 @@ class ForegroundOrServiceLocationTrackerTest : LocationTrackerTest() {
     }
 
     @Test
-    fun start_whenUpdateIntervalIsNonNull_setsIntervalsOnClient() {
+    fun `#start when update interval is non-null sets intervals on client`() {
         locationTracker.start(updateInterval = 1000)
         runBackground()
 
@@ -82,7 +82,7 @@ class ForegroundOrServiceLocationTrackerTest : LocationTrackerTest() {
     }
 
     @Test
-    fun start_afterAnotherStart_updatesClient() {
+    fun `#start after another #start updates client`() {
         locationTracker.start(retainMockAccuracy = false, updateInterval = 1000L)
         runBackground()
 
@@ -95,7 +95,7 @@ class ForegroundOrServiceLocationTrackerTest : LocationTrackerTest() {
     }
 
     @Test
-    fun start_afterAnotherStart_whenNotInBackground_updatesClient() {
+    fun `#start after another #start when not in background updates client`() {
         locationTracker.start(retainMockAccuracy = false, updateInterval = 1000L, background = false)
 
         LocationClientProvider.setTestClient(FakeLocationClient()) // Make sure we use same instance
