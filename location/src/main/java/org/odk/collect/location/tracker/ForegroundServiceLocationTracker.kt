@@ -9,8 +9,6 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
-import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.LifecycleOwner
 import kotlinx.coroutines.flow.StateFlow
 import org.odk.collect.androidshared.data.getState
 import org.odk.collect.androidshared.ui.ReturnToAppActivity
@@ -56,25 +54,6 @@ class ForegroundServiceLocationTracker(private val application: Application) : L
     override fun stop() {
         stopper?.invoke()
         stopper = null
-    }
-
-    override fun bindToLifecycle(
-        lifecycle: LifecycleOwner,
-        retainMockAccuracy: Boolean
-    ) {
-        lifecycle.lifecycle.addObserver(object : DefaultLifecycleObserver {
-            override fun onResume(owner: LifecycleOwner) {
-                start(
-                    retainMockAccuracy = retainMockAccuracy,
-                    updateInterval = null,
-                    background = false
-                )
-            }
-
-            override fun onPause(owner: LifecycleOwner) {
-                stop()
-            }
-        })
     }
 
     companion object {

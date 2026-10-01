@@ -9,6 +9,7 @@ import org.odk.collect.geo.items.MappableData
 import org.odk.collect.geo.items.MappableItem
 import org.odk.collect.geo.items.MappableItemsDelegate
 import org.odk.collect.location.tracker.LocationTracker
+import org.odk.collect.location.tracker.bindToLifecycle
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.circles.CurrentLocationDelegate
