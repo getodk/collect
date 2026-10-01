@@ -23,7 +23,7 @@ import javax.inject.Inject
 class ForegroundOrServiceLocationTracker(private val application: Application) : LocationTracker {
 
     private val locationClientHandler = LocationClientHandler(application, LOCATION_KEY)
-    private var stopper: (() -> Unit)? = null
+    private var runMode: RunMode? = null
 
     override fun getLocation(): StateFlow<Location?> {
         return application.getState().getFlow(LOCATION_KEY, null)
@@ -31,8 +31,15 @@ class ForegroundOrServiceLocationTracker(private val application: Application) :
 
     override fun start(retainMockAccuracy: Boolean, updateInterval: Long?, background: Boolean) {
         if (background) {
+            if (runMode == RunMode.FOREGROUND) {
+                throw IllegalStateException()
+            }
+
             val intent = Intent(application, LocationTrackerService::class.java).also { intent ->
-                intent.putExtra(LocationTrackerService.EXTRA_RETAIN_MOCK_ACCURACY, retainMockAccuracy)
+                intent.putExtra(
+                    LocationTrackerService.EXTRA_RETAIN_MOCK_ACCURACY,
+                    retainMockAccuracy
+                )
                 updateInterval?.let {
                     intent.putExtra(LocationTrackerService.EXTRA_UPDATE_INTERVAL, it)
                 }
@@ -40,24 +47,35 @@ class ForegroundOrServiceLocationTracker(private val application: Application) :
             }
 
             application.startForegroundService(intent)
-            stopper = {
-                application.stopService(Intent(application, LocationTrackerService::class.java))
-            }
+            runMode = RunMode.BACKGROUND
         } else {
-            locationClientHandler.start(retainMockAccuracy, updateInterval)
-            stopper = {
-                locationClientHandler.stop()
+            if (runMode == RunMode.BACKGROUND) {
+                throw IllegalStateException()
             }
+
+            locationClientHandler.start(retainMockAccuracy, updateInterval)
+            runMode = RunMode.FOREGROUND
         }
     }
 
     override fun stop() {
-        stopper?.invoke()
-        stopper = null
+        when (runMode) {
+            RunMode.FOREGROUND -> locationClientHandler.stop()
+            RunMode.BACKGROUND -> {
+                application.stopService(Intent(application, LocationTrackerService::class.java))
+            }
+
+            null -> {}
+        }
     }
 
     companion object {
         private const val LOCATION_KEY = "location"
+
+        enum class RunMode {
+            FOREGROUND,
+            BACKGROUND
+        }
     }
 }
 
@@ -153,7 +171,8 @@ class LocationTrackerService : Service() {
     }
 }
 
-private class LocationClientHandler(private val application: Application, val stateKey: String) : LocationClient.LocationClientListener {
+private class LocationClientHandler(private val application: Application, val stateKey: String) :
+    LocationClient.LocationClientListener {
 
     private val locationClient: LocationClient by lazy {
         LocationClientProvider.getClient(application)
