@@ -75,12 +75,12 @@ class ServerFormDownloader(
                         get() = isCancelled?.get() ?: false
                 }
 
-                processOneForm(form, stateListener, tempDir, formsDirPath)
+                downloadFormFiles(form, stateListener, tempDir, formsDirPath)
             } catch (e: FormSourceException) {
                 throw FormSourceError(e)
             }
 
-            installEverything(formFileDownload, mediaFilesDownload, formsDirPath)
+            installForm(formFileDownload, mediaFilesDownload, formsDirPath)
                 .onError { throw it }
         } finally {
             tempDir.deleteDirectory()
@@ -88,7 +88,7 @@ class ServerFormDownloader(
     }
 
     @Throws(FormDownloadException::class, FormSourceException::class, DownloadingInterrupted::class)
-    private fun processOneForm(
+    private fun downloadFormFiles(
         fd: ServerFormDetails,
         stateListener: OngoingWorkListener,
         tempDir: File,
@@ -138,7 +138,7 @@ class ServerFormDownloader(
         }
     }
 
-    private fun installEverything(
+    private fun installForm(
         formFileDownload: FormFileDownload,
         mediaFilesDownload: MediaFilesDownload,
         formsDirPath: String
