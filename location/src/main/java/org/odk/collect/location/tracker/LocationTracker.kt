@@ -30,7 +30,7 @@ interface LocationTracker {
     fun start() = start(false, null)
 
     /**
-     * Stops tracking location. Does not reset the value returned by [LocationTracker.getCurrentLocation].
+     * Stops tracking location. Resets the value returned by [LocationTracker.getCurrentLocation].
      */
     fun stop()
 }
