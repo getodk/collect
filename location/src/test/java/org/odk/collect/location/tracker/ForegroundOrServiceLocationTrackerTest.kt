@@ -17,12 +17,12 @@ import org.odk.collect.location.LocationClientProvider
 import org.odk.collect.testshared.RobolectricHelpers
 
 @RunWith(AndroidJUnit4::class)
-class ForegroundServiceLocationTrackerTest : LocationTrackerTest() {
+class ForegroundOrServiceLocationTrackerTest : LocationTrackerTest() {
 
     private val application: Application = ApplicationProvider.getApplicationContext()
     private val locationClient = FakeLocationClient()
 
-    override val locationTracker: LocationTracker = ForegroundServiceLocationTracker(application)
+    override val locationTracker: LocationTracker = ForegroundOrServiceLocationTracker(application)
 
     override fun runBackground() {
         RobolectricHelpers.runServices(true)
