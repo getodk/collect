@@ -12,6 +12,8 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.audioclips.Clip;
 
+import java.io.File;
+
 import timber.log.Timber;
 
 public final class FormMediaUtils {
@@ -52,6 +54,12 @@ public final class FormMediaUtils {
         );
 
         return deriveReference(selectAudioURI, referenceManager);
+    }
+
+    @Nullable
+    public static File getMediaFile(@Nullable String originalURI, ReferenceManager referenceManager) {
+        String localURI = deriveReference(originalURI, referenceManager);
+        return localURI == null ? null : new File(localURI);
     }
 
     @Nullable

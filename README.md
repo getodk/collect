@@ -135,7 +135,7 @@ More information about using Android Debug Bridge with Collect can be found [her
 
 Certain functions in ODK Collect depend on cloud services that require API keys or authorization steps to work.  Here are the steps you need to take in order to use these functions in your development builds.
 
-**Google Maps API**: When the "Google Maps SDK" option is selected in the "User interface" settings, ODK Collect uses the Google Maps API for displaying maps in the geospatial question types (GeoPoint, GeoTrace, and GeoShape).  To enable this API:
+**Google Maps API**: When the "Google Maps" option is selected in "Maps" settings, ODK Collect uses the Google Maps API for displaying maps in the geospatial question types (GeoPoint, GeoTrace, and GeoShape).  To enable this API:
   1. [Get a Google Maps API key](https://developers.google.com/maps/documentation/android-api/signup).  Note that this requires a credit card number, though the card will not be charged immediately; some free API usage is permitted.  You should carefully read the terms before providing a credit card number.
   1. Edit or create `secrets.properties` and set the `GOOGLE_MAPS_API_KEY` property to your API key.  You should end up with a line that looks like this:
     ```
@@ -151,6 +151,13 @@ Certain functions in ODK Collect depend on cloud services that require API keys 
     ```
 
 *Note: The basemaps under "Mapbox" will not load in compiled versions of Collect unless you follow the steps above. The "OpenStreetMap", "USGS" and "Carto" sources are also rendered with MapLibre but need no access token. None of the MapLibre based sources are available on x86 devices, as the native library is excluded to reduce the APK size. If you need to use an x86 device, you can force the build to include x86 libs by including the `x86Libs` Gradle parameter. For example, to build a debug APK with x86 libs: `./gradlew assembleDebug -Px86Libs`.*
+
+**Carto API**: When the "Carto" option is selected in "Maps" settings, ODK Collect uses the Carto API for displaying maps in the geospatial question types (GeoPoint, GeoTrace, and GeoShape).  To enable this API:
+  1. [Get a Carto API key](https://carto.com/basemaps/apikey/).
+  1. Edit or create `secrets.properties` and set the `CARTO_API_KEY` property to your API key.  You should end up with a line that looks like this:
+        ```
+        CARTO_API_KEY=AIbzvW8e0ub...
+        ```
 
 ## Debugging JavaRosa
 

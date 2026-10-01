@@ -58,6 +58,7 @@ import org.odk.collect.maps.traces.LineDescription
 import org.odk.collect.maps.traces.PolygonDescription
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys.KEY_MAPBOX_MAP_STYLE
+import org.odk.collect.shared.injection.Keys
 import org.odk.collect.shared.settings.Settings
 import timber.log.Timber
 import java.io.File
@@ -132,6 +133,9 @@ class MapLibreMapFragment(private val configuration: Configuration) :
 
     @Inject
     lateinit var referenceLayerRepository: ReferenceLayerRepository
+
+    @Inject
+    lateinit var keys: Keys
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -280,7 +284,14 @@ class MapLibreMapFragment(private val configuration: Configuration) :
 
         when (uri) {
             is BasemapUri.Raster -> {
-                val tileSet = TileSet("2.1.0", uri.value).apply {
+                val tileUri = if (uri.keyName != null) {
+                    val key = keys.get(uri.keyName)
+                    uri.value(key)
+                } else {
+                    uri.value()
+                }
+
+                val tileSet = TileSet("2.1.0", tileUri).apply {
                     attribution = configuration.attribution ?: ""
                     scheme = "xyz"
                 }
@@ -296,7 +307,7 @@ class MapLibreMapFragment(private val configuration: Configuration) :
             }
 
             is BasemapUri.Mapbox -> {
-                loadRemoteStyle(uri.value)
+                loadRemoteStyle(uri.value())
             }
         }
     }
