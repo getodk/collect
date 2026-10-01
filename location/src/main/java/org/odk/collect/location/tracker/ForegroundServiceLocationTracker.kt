@@ -1,24 +1,17 @@
 package org.odk.collect.location.tracker
 
-import android.app.ActivityManager
 import android.app.Application
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
-import android.content.Context
 import android.content.Intent
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 import org.odk.collect.androidshared.data.getState
 import org.odk.collect.androidshared.ui.ReturnToAppActivity
 import org.odk.collect.androidshared.utils.UniqueIdGenerator
@@ -28,32 +21,33 @@ import org.odk.collect.location.LocationClientProvider
 import org.odk.collect.location.LocationDependencyComponentProvider
 import org.odk.collect.strings.localization.getLocalizedString
 import javax.inject.Inject
-import kotlin.time.Duration.Companion.milliseconds
 
 class ForegroundServiceLocationTracker(private val application: Application) : LocationTracker {
+
+    private val locationClientHandler = LocationClientHandler(application)
 
     override fun getLocation(): StateFlow<Location?> {
         return application.getState().getFlow(LOCATION_KEY, null)
     }
 
     override fun start(retainMockAccuracy: Boolean, updateInterval: Long?, notification: Boolean) {
-        val intent = Intent(application, LocationTrackerService::class.java).also { intent ->
-            intent.putExtra(LocationTrackerService.EXTRA_RETAIN_MOCK_ACCURACY, retainMockAccuracy)
-            intent.putExtra(LocationTrackerService.EXTRA_NOTIFICATION, notification)
-            updateInterval?.let {
-                intent.putExtra(LocationTrackerService.EXTRA_UPDATE_INTERVAL, it)
-            }
-        }
-
         if (notification) {
+            val intent = Intent(application, LocationTrackerService::class.java).also { intent ->
+                intent.putExtra(LocationTrackerService.EXTRA_RETAIN_MOCK_ACCURACY, retainMockAccuracy)
+                updateInterval?.let {
+                    intent.putExtra(LocationTrackerService.EXTRA_UPDATE_INTERVAL, it)
+                }
+            }
+
             application.startForegroundService(intent)
         } else {
-            application.startService(intent)
+            locationClientHandler.start(retainMockAccuracy, updateInterval)
         }
     }
 
     override fun stop() {
         application.stopService(Intent(application, LocationTrackerService::class.java))
+        locationClientHandler.stop()
     }
 
     override fun bindToLifecycle(
@@ -61,28 +55,15 @@ class ForegroundServiceLocationTracker(private val application: Application) : L
         retainMockAccuracy: Boolean
     ) {
         lifecycle.lifecycle.addObserver(object : DefaultLifecycleObserver {
-            var delayedCheckScope = CoroutineScope(Dispatchers.Main)
-
             override fun onResume(owner: LifecycleOwner) {
-                // Avoid starting service in background (even after `onResume`) due to Android
-                // issue: https://issuetracker.google.com/u/2/issues/110237673.
-                delayedCheckScope.launch {
-                    while (!isAppInForeground(application)) {
-                        delay(100.milliseconds)
-                    }
-
-                    start(
-                        retainMockAccuracy = retainMockAccuracy,
-                        updateInterval = null,
-                        notification = false
-                    )
-                }
+                start(
+                    retainMockAccuracy = retainMockAccuracy,
+                    updateInterval = null,
+                    notification = false
+                )
             }
 
             override fun onPause(owner: LifecycleOwner) {
-                delayedCheckScope.cancel()
-                delayedCheckScope = CoroutineScope(Dispatchers.Main)
-
                 stop()
             }
         })
@@ -109,13 +90,11 @@ class LocationTrackerService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if (intent?.getBooleanExtra(EXTRA_NOTIFICATION, true) ?: true) {
-            setupNotificationChannel()
-            startForeground(
-                uniqueIdGenerator.getInt(NOTIFICATION_IDENTIFIER),
-                createNotification()
-            )
-        }
+        setupNotificationChannel()
+        startForeground(
+            uniqueIdGenerator.getInt(NOTIFICATION_IDENTIFIER),
+            createNotification()
+        )
 
         val retainMockAccuracy = intent?.getBooleanExtra(
             EXTRA_RETAIN_MOCK_ACCURACY,
@@ -170,24 +149,10 @@ class LocationTrackerService : Service() {
     companion object {
         const val EXTRA_RETAIN_MOCK_ACCURACY = "retain_mock_accuracy"
         const val EXTRA_UPDATE_INTERVAL = "update_interval"
-        const val EXTRA_NOTIFICATION = "notification"
 
         private const val NOTIFICATION_IDENTIFIER = "location_tracking"
         private const val NOTIFICATION_CHANNEL = "location_tracking"
     }
-}
-
-private fun isAppInForeground(context: Context): Boolean {
-    val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-    val appProcesses = activityManager.runningAppProcesses ?: return false
-
-    for (appProcess in appProcesses) {
-        if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
-            return true
-        }
-    }
-
-    return false
 }
 
 private class LocationClientHandler(private val application: Application) : LocationClient.LocationClientListener {
