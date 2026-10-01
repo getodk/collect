@@ -23,6 +23,7 @@ import org.odk.collect.geo.GeoUtils
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.testshared.AssertionFramework
 
 @RunWith(AndroidJUnit4::class)
 class FormMapTest {
@@ -69,7 +70,7 @@ class FormMapTest {
 
             .inputText("Foo")
             .swipeToNextQuestion("Location")
-            .clickWidgetButton()
+            .clickOnString(org.odk.collect.strings.R.string.get_point, AssertionFramework.COMPOSE)
             .swipeToEndScreen()
             .clickSaveAndExitBackToMap()
 

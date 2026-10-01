@@ -1,9 +1,12 @@
 package org.odk.collect.android.widgets
 
+import android.view.View
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTouchInput
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.javarosa.core.model.Constants
@@ -90,6 +93,19 @@ class ExArbitraryFileWidgetTest : FileWidgetTest<ExArbitraryFileWidget>() {
         createWidget()
         composeRule.onNodeWithClickLabel(activity.getString(string.launch_app)).performClick()
         verify(fileRequester).launch(activity, ApplicationConstants.RequestCodes.EX_ARBITRARY_FILE_CHOOSER, formEntryPrompt)
+    }
+
+    @Test
+    fun `Long-pressing the button and the answer shows the context menu`() {
+        formEntryPrompt = MockFormEntryPromptBuilder(formEntryPrompt)
+            .withAnswer(StringData(initialAnswer.displayText))
+            .build()
+        val widget = createWidget()
+
+        composeRule.onNodeWithClickLabel(activity.getString(string.launch_app)).performTouchInput { longClick() }
+        composeRule.onNodeWithText(initialAnswer.displayText).performTouchInput { longClick() }
+
+        assertThat(viewsWithShownContextMenu, equalTo(listOf<View>(widget, widget)))
     }
 
     @Test

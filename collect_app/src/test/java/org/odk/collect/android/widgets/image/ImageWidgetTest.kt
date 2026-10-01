@@ -2,15 +2,21 @@ package org.odk.collect.android.widgets.image
 
 import android.content.Intent
 import android.provider.MediaStore
+import android.view.View
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTouchInput
+import androidx.core.graphics.createBitmap
 import coil3.ImageLoader
 import coil3.SingletonImageLoader
+import coil3.asImage
 import coil3.imageDecoderEnabled
 import coil3.request.ErrorResult
+import coil3.request.SuccessResult
 import net.bytebuddy.utility.RandomString
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -185,6 +191,29 @@ class ImageWidgetTest : BinaryWidgetTest<ImageWidget, StringData>() {
         createWidget()
         composeRule.onNodeWithClickLabel(activity.getString(string.open_file)).assertExists()
         composeRule.onNodeWithText(activity.getString(string.selected_invalid_image)).assertDoesNotExist()
+    }
+
+    @Test
+    fun `long-pressing the button and the answer shows the context menu`() {
+        SingletonImageLoader.setUnsafe { context ->
+            ImageLoader.Builder(context)
+                .components {
+                    add { chain -> SuccessResult(createBitmap(10, 10).asImage(), chain.request) }
+                }
+                .build()
+        }
+        val file = questionMediaManager.addAnswerFile(File.createTempFile("current", ".png"))
+
+        formEntryPrompt = MockFormEntryPromptBuilder(formEntryPrompt)
+            .withAnswerDisplayText(file.name)
+            .build()
+
+        val widget = createWidget()
+
+        composeRule.onNodeWithClickLabel(activity.getString(string.capture_image)).performTouchInput { longClick() }
+        composeRule.onNodeWithClickLabel(activity.getString(string.open_file)).performTouchInput { longClick() }
+
+        assertThat(viewsWithShownContextMenu, equalTo(listOf<View>(widget, widget)))
     }
 
     @OptIn(ExperimentalTestApi::class)
