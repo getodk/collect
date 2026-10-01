@@ -30,8 +30,6 @@ import org.odk.collect.strings.localization.getLocalizedString
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
 
-private const val LOCATION_KEY = "location"
-
 class ForegroundServiceLocationTracker(private val application: Application) : LocationTracker {
 
     override fun getLocation(): StateFlow<Location?> {
@@ -91,13 +89,13 @@ class ForegroundServiceLocationTracker(private val application: Application) : L
     }
 }
 
-class LocationTrackerService : Service(), LocationClient.LocationClientListener {
+class LocationTrackerService : Service() {
 
     @Inject
     lateinit var uniqueIdGenerator: UniqueIdGenerator
 
-    private val locationClient: LocationClient by lazy {
-        LocationClientProvider.getClient(application)
+    private val locationClientHandler: LocationClientHandler by lazy {
+        LocationClientHandler(application)
     }
 
     override fun onCreate() {
@@ -119,42 +117,23 @@ class LocationTrackerService : Service(), LocationClient.LocationClientListener 
             )
         }
 
-        locationClient.setRetainMockAccuracy(
-            intent?.getBooleanExtra(
-                EXTRA_RETAIN_MOCK_ACCURACY,
-                false
-            ) ?: false
-        )
+        val retainMockAccuracy = intent?.getBooleanExtra(
+            EXTRA_RETAIN_MOCK_ACCURACY,
+            false
+        ) ?: false
 
-        if (intent?.hasExtra(EXTRA_UPDATE_INTERVAL) == true) {
-            val interval = intent.getLongExtra(EXTRA_UPDATE_INTERVAL, -1)
-            locationClient.setUpdateInterval(interval)
+        val updateInterval = if (intent?.hasExtra(EXTRA_UPDATE_INTERVAL) == true) {
+            intent.getLongExtra(EXTRA_UPDATE_INTERVAL, -1)
+        } else {
+            null
         }
 
-        locationClient.start(this)
+        locationClientHandler.start(retainMockAccuracy, updateInterval)
         return START_NOT_STICKY
     }
 
     override fun onDestroy() {
-        locationClient.stop()
-        application.getState().setFlow(LOCATION_KEY, null)
-    }
-
-    override fun onClientStart() {
-        locationClient.requestLocationUpdates {
-            application.getState().setFlow(
-                LOCATION_KEY,
-                Location(it.latitude, it.longitude, it.altitude, it.accuracy)
-            )
-        }
-    }
-
-    override fun onClientStartFailure() {
-        // Ignored
-    }
-
-    override fun onClientStop() {
-        // Ignored
+        locationClientHandler.stop()
     }
 
     private fun createNotification(): Notification {
@@ -210,3 +189,44 @@ private fun isAppInForeground(context: Context): Boolean {
 
     return false
 }
+
+private class LocationClientHandler(private val application: Application) : LocationClient.LocationClientListener {
+
+    private val locationClient: LocationClient by lazy {
+        LocationClientProvider.getClient(application)
+    }
+
+    fun start(retainMockAccuracy: Boolean, updateInterval: Long?) {
+        locationClient.setRetainMockAccuracy(retainMockAccuracy)
+
+        updateInterval?.let {
+            locationClient.setUpdateInterval(it)
+        }
+
+        locationClient.start(this)
+    }
+
+    fun stop() {
+        locationClient.stop()
+        application.getState().setFlow(LOCATION_KEY, null)
+    }
+
+    override fun onClientStart() {
+        locationClient.requestLocationUpdates {
+            application.getState().setFlow(
+                LOCATION_KEY,
+                Location(it.latitude, it.longitude, it.altitude, it.accuracy)
+            )
+        }
+    }
+
+    override fun onClientStartFailure() {
+        // Ignored
+    }
+
+    override fun onClientStop() {
+        // Ignored
+    }
+}
+
+private const val LOCATION_KEY = "location"
