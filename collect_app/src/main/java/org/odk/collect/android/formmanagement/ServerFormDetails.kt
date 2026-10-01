@@ -16,10 +16,10 @@ package org.odk.collect.android.formmanagement
 import org.odk.collect.forms.ManifestFile
 import java.io.Serializable
 
-data class ServerFormDetails @JvmOverloads constructor(
-    val formName: String?,
-    val downloadUrl: String?,
-    val formId: String?,
+data class ServerFormDetails(
+    val formName: String,
+    val downloadUrl: String,
+    val formId: String,
     val formVersion: String?,
     val hash: String?,
     val manifest: ManifestFile?,
@@ -28,9 +28,9 @@ data class ServerFormDetails @JvmOverloads constructor(
 
     @Deprecated(message = "Use primary constructor instead")
     constructor(
-        formName: String?,
-        downloadUrl: String?,
-        formId: String?,
+        formName: String,
+        downloadUrl: String,
+        formId: String,
         formVersion: String?,
         hash: String?,
         isNotOnDevice: Boolean,

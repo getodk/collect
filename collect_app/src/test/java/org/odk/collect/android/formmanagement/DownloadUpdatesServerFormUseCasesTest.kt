@@ -3,9 +3,9 @@ package org.odk.collect.android.formmanagement
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
-import org.mockito.Mockito.any
 import org.mockito.Mockito.doAnswer
 import org.mockito.invocation.InvocationOnMock
+import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
 import org.mockito.stubbing.Answer
 import org.odk.collect.android.formmanagement.download.FormDownloadException
