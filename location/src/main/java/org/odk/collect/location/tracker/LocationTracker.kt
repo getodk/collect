@@ -22,7 +22,7 @@ interface LocationTracker {
     fun start(
         retainMockAccuracy: Boolean,
         updateInterval: Long? = null,
-        notification: Boolean = true
+        background: Boolean = true
     )
 
     fun start(retainMockAccuracy: Boolean) = start(retainMockAccuracy, null)
@@ -30,7 +30,7 @@ interface LocationTracker {
     fun start() = start(false, null)
 
     /**
-     * Stops tracking location. Does not reset the value returned by [LocationTracker.getCurrentLocation].
+     * Stops tracking location. Resets the value returned by [LocationTracker.getCurrentLocation].
      */
     fun stop()
 }
@@ -40,15 +40,15 @@ fun LocationTracker.getCurrentLocation(): Location? {
 }
 
 fun LocationTracker.bindToLifecycle(
-    lifecycleOwner: LifecycleOwner,
-    retainMockAccuracy: Boolean = false
+    lifecycle: LifecycleOwner,
+    retainMockAccuracy: Boolean
 ) {
-    lifecycleOwner.lifecycle.addObserver(object : DefaultLifecycleObserver {
+    lifecycle.lifecycle.addObserver(object : DefaultLifecycleObserver {
         override fun onResume(owner: LifecycleOwner) {
             start(
                 retainMockAccuracy = retainMockAccuracy,
                 updateInterval = null,
-                notification = false
+                background = false
             )
         }
 

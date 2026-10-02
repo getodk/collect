@@ -117,7 +117,11 @@ object GeoUtils {
         afterUpdate: (MapPoint) -> Unit = {}
     ) {
         val lifecycleOwner = this as Fragment
-        locationTracker.bindToLifecycle(lifecycleOwner, retainMockAccuracy)
+        locationTracker.bindToLifecycle(
+            lifecycleOwner,
+            retainMockAccuracy
+        )
+
         locationTracker.getLocation().asLiveData().observe(lifecycleOwner) {
             if (it != null) {
                 val mapPoint = it.toMapPoint()

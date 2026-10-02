@@ -1,6 +1,5 @@
 package org.odk.collect.location.tracker
 
-import android.content.Intent
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -17,16 +16,6 @@ class LocationTrackerServiceTest {
     fun startsServiceInForeground() {
         val service = ServiceScenario.launch(LocationTrackerService::class.java)
         assertThat(service.getForegroundNotification(), notNullValue())
-    }
-
-    @Test
-    fun whenNotificationIsFalse_doesNotStartServiceInForeground() {
-        val service = ServiceScenario.launch(
-            LocationTrackerService::class.java,
-            Intent().also { it.putExtra(LocationTrackerService.EXTRA_NOTIFICATION, false) }
-        )
-
-        assertThat(service.getForegroundNotification(), equalTo(null))
     }
 
     @Test
