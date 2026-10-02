@@ -7,9 +7,9 @@ interface FormDownloader {
 
     @Throws(FormDownloadException::class)
     fun downloadForm(
-        form: ServerFormDetails?,
+        form: ServerFormDetails,
         progressReporter: ProgressReporter?,
-        isCancelled: Supplier<Boolean?>?
+        isCancelled: Supplier<Boolean>?
     )
 
     interface ProgressReporter {

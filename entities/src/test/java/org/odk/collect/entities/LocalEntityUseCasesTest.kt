@@ -20,10 +20,13 @@ import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
 import org.odk.collect.entities.storage.EntityList
 import org.odk.collect.entities.storage.InMemEntitiesRepository
+import org.odk.collect.forms.FormSourceException
 import org.odk.collect.formstest.FormFixtures
 import org.odk.collect.shared.Query
 import org.odk.collect.shared.TempFiles
 import org.odk.collect.shared.debug.DebugLogger
+import org.odk.collect.shared.result.Result
+import org.odk.collect.shared.result.toSuccess
 import java.io.File
 import java.util.UUID
 
@@ -870,13 +873,13 @@ private class FakeEntitySource : EntitySource {
     override fun fetchDeletedStates(
         integrityUrl: String,
         ids: List<String>
-    ): List<Pair<String, Boolean>> {
+    ): Result<List<Pair<String, Boolean>>, FormSourceException> {
         accesses += 1
 
         if (integrityUrl == this.integrityUrl) {
             return ids.map {
                 Pair(it, deleted.contains(it))
-            }
+            }.toSuccess()
         } else {
             throw IllegalArgumentException()
         }
