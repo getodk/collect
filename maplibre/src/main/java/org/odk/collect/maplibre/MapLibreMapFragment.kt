@@ -120,6 +120,7 @@ class MapLibreMapFragment(private val configuration: Configuration) :
     private val symbolDragListener = object : OnSymbolDragListener {
         override fun onAnnotationDragStarted(annotation: Symbol) {
             // The plugin hides the rest of the gesture from the map, which would fire a long press
+            // https://github.com/maplibre/maplibre-plugins-android/issues/85
             MotionEvent.obtain(0, 0, MotionEvent.ACTION_CANCEL, 0f, 0f, 0).apply {
                 mapView.onTouchEvent(this)
                 recycle()
