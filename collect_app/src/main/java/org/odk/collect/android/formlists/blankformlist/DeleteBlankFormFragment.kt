@@ -22,6 +22,7 @@ import org.odk.collect.lists.selects.MultiSelectControlsFragment
 import org.odk.collect.lists.selects.MultiSelectListFragment
 import org.odk.collect.lists.selects.MultiSelectViewModel
 import org.odk.collect.lists.selects.SelectItem
+import org.odk.collect.material.MaterialProgressDialogFragment
 import org.odk.collect.strings.R.string
 
 class DeleteBlankFormFragment(
@@ -83,6 +84,16 @@ class DeleteBlankFormFragment(
         val blankFormListMenuProvider =
             BlankFormListMenuProvider(requireActivity(), blankFormListViewModel)
         menuHost.addMenuProvider(blankFormListMenuProvider, viewLifecycleOwner, State.RESUMED)
+
+        MaterialProgressDialogFragment.showOn(
+            viewLifecycleOwner,
+            blankFormListViewModel.isDeleting,
+            childFragmentManager
+        ) {
+            MaterialProgressDialogFragment().also {
+                it.message = getString(string.form_delete_message)
+            }
+        }
     }
 
     private fun onDeleteSelected(selected: LongArray) {

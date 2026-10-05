@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.map
 import org.odk.collect.android.backgroundwork.SyncFormsTaskSpec
 import org.odk.collect.android.backgroundwork.TaskData
 import org.odk.collect.android.formmanagement.FormsDataService
+import org.odk.collect.androidshared.async.TrackableWorker
 import org.odk.collect.androidshared.utils.UniqueIdGenerator
 import org.odk.collect.async.NotificationInfo
 import org.odk.collect.async.Scheduler
@@ -68,6 +69,9 @@ class BlankFormListViewModel(
             _filterText.value = value
         }
 
+    private val worker = TrackableWorker(scheduler)
+    val isDeleting: LiveData<Boolean> = worker.isWorking
+
     init {
         scheduler.immediate(
             background = {
@@ -112,7 +116,7 @@ class BlankFormListViewModel(
     }
 
     fun deleteForms(vararg databaseIds: Long) {
-        scheduler.immediate(
+        worker.immediate(
             background = {
                 databaseIds.forEach {
                     formsDataService.deleteForm(projectId, it)

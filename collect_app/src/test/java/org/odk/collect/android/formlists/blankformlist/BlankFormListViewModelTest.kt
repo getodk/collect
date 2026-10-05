@@ -8,6 +8,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.equalTo
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -405,6 +406,18 @@ class BlankFormListViewModelTest {
             form(dbId = 3, formId = "3", formName = "Form 2x")
         )
         assertFormItem(viewModel.formsToDisplay.getOrAwaitValue(scheduler)[1], form(dbId = 2, formId = "2"))
+    }
+
+    @Test
+    fun `isDeleting is true while deleting forms`() {
+        createViewModel()
+        assertThat(viewModel.isDeleting.getOrAwaitValue(), equalTo(false))
+
+        viewModel.deleteForms(1)
+        assertThat(viewModel.isDeleting.getOrAwaitValue(), equalTo(true))
+
+        scheduler.flush()
+        assertThat(viewModel.isDeleting.getOrAwaitValue(), equalTo(false))
     }
 
     private fun saveForms(vararg forms: Form) {

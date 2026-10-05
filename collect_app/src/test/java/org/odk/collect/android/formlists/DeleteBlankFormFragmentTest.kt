@@ -37,8 +37,10 @@ import org.odk.collect.android.formlists.blankformlist.BlankFormListItem
 import org.odk.collect.android.formlists.blankformlist.BlankFormListMenuProvider
 import org.odk.collect.android.formlists.blankformlist.BlankFormListViewModel
 import org.odk.collect.android.formlists.blankformlist.DeleteBlankFormFragment
+import org.odk.collect.android.formlists.savedformlist.DeleteSavedFormFragment
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
+import org.odk.collect.strings.R.string
 import org.odk.collect.testshared.RecyclerViewMatcher.Companion.withRecyclerView
 import org.odk.collect.testshared.ViewActions.clickOnItemWith
 import org.odk.collect.testshared.ViewMatchers.recyclerView
@@ -50,10 +52,12 @@ class DeleteBlankFormFragmentTest {
     private val menuHost = RecordingMenuHost()
 
     private val formsToDisplay = MutableLiveData<List<BlankFormListItem>>(emptyList())
+    private val isDeleting = MutableLiveData(false)
     private val blankFormListViewModel = mock<BlankFormListViewModel> {
         on { formsToDisplay } doReturn formsToDisplay
         on { isLoading } doReturn MutableLiveData()
         on { isOutOfSyncWithServer() } doReturn MutableLiveData()
+        on { isDeleting } doReturn isDeleting
     }
 
     private val viewModelFactory = object : ViewModelProvider.Factory {
@@ -141,6 +145,21 @@ class DeleteBlankFormFragmentTest {
         assertThat(menuProviders.size, equalTo(1))
         assertThat(menuProviders[0].first, equalTo(Lifecycle.State.RESUMED))
         assertThat(menuProviders[0].second, instanceOf(BlankFormListMenuProvider::class.java))
+    }
+
+    @Test
+    fun `shows progress while deleting forms`() {
+        fragmentScenarioLauncherRule.launchInContainer(DeleteSavedFormFragment::class.java)
+        formsToDisplay.value = listOf(
+            blankFormListItem(databaseId = 11, formName = "Form 1"),
+            blankFormListItem(databaseId = 12, formName = "Form 2")
+        )
+
+        isDeleting.value = true
+        onView(withText(string.form_delete_message)).inRoot(isDialog()).check(matches(isDisplayed()))
+
+        isDeleting.value = false
+        onView(withText(string.delete_file)).check(matches(isDisplayed()))
     }
 
     private fun launchFragment(): FragmentScenario<*> {
