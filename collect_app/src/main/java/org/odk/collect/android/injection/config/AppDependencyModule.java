@@ -97,6 +97,7 @@ import org.odk.collect.androidshared.system.TamperDetector;
 import org.odk.collect.androidshared.utils.ScreenUtils;
 import org.odk.collect.androidshared.utils.SettingsUniqueIdGenerator;
 import org.odk.collect.androidshared.utils.UniqueIdGenerator;
+import org.odk.collect.async.DefaultDispatcherProvider;
 import org.odk.collect.async.coroutines.CoroutineTaskRunner;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.async.SchedulerBuilder;
@@ -604,7 +605,7 @@ public class AppDependencyModule {
 
     @Provides
     public BlankFormListViewModel.Factory providesBlankFormListViewModel(InstancesRepositoryProvider instancesRepositoryProvider, Application application, FormsDataService formsDataService, Scheduler scheduler, SettingsProvider settingsProvider, ProjectsDataService projectsDataService, UniqueIdGenerator uniqueIdGenerator) {
-        return new BlankFormListViewModel.Factory(instancesRepositoryProvider.create(), application, formsDataService, scheduler, settingsProvider.getUnprotectedSettings(), projectsDataService.requireCurrentProject().getUuid(), uniqueIdGenerator);
+        return new BlankFormListViewModel.Factory(instancesRepositoryProvider.create(), application, formsDataService, scheduler, settingsProvider.getUnprotectedSettings(), projectsDataService.requireCurrentProject().getUuid(), uniqueIdGenerator, new DefaultDispatcherProvider());
     }
 
     @Provides

@@ -20,6 +20,7 @@ import org.mockito.kotlin.whenever
 import org.odk.collect.android.formmanagement.FormsDataService
 import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.androidshared.utils.InMemUniqueIdGenerator
+import org.odk.collect.androidtest.TestDispatcherProvider
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.forms.instances.Instance
@@ -45,6 +46,7 @@ class BlankFormListViewModelTest {
     }
 
     private val scheduler = FakeScheduler()
+    private val dispatcherProvider = TestDispatcherProvider()
     private val generalSettings = InMemSettings()
     private val changeLockProvider: ChangeLockProvider = mock()
     private val projectId = "projectId"
@@ -416,7 +418,7 @@ class BlankFormListViewModelTest {
         viewModel.deleteForms(1)
         assertThat(viewModel.isDeleting.getOrAwaitValue(), equalTo(true))
 
-        scheduler.flush()
+        dispatcherProvider.flush()
         assertThat(viewModel.isDeleting.getOrAwaitValue(), equalTo(false))
     }
 
@@ -447,7 +449,8 @@ class BlankFormListViewModelTest {
             generalSettings,
             projectId,
             showAllVersions,
-            InMemUniqueIdGenerator()
+            InMemUniqueIdGenerator(),
+            dispatcherProvider
         )
 
         if (runAllBackgroundTasks) {

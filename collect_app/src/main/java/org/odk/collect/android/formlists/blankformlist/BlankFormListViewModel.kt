@@ -12,8 +12,9 @@ import kotlinx.coroutines.flow.map
 import org.odk.collect.android.backgroundwork.SyncFormsTaskSpec
 import org.odk.collect.android.backgroundwork.TaskData
 import org.odk.collect.android.formmanagement.FormsDataService
-import org.odk.collect.androidshared.async.TrackableWorker
+import org.odk.collect.androidshared.async.TrackableScope
 import org.odk.collect.androidshared.utils.UniqueIdGenerator
+import org.odk.collect.async.DispatcherProvider
 import org.odk.collect.async.NotificationInfo
 import org.odk.collect.async.Scheduler
 import org.odk.collect.async.flowOnBackground
@@ -30,11 +31,12 @@ class BlankFormListViewModel(
     private val instancesRepository: InstancesRepository,
     private val application: Application,
     private val formsDataService: FormsDataService,
-    private val scheduler: Scheduler,
+    @Deprecated("use dispatcherProvider instead") private val scheduler: Scheduler,
     private val generalSettings: Settings,
     private val projectId: String,
     private val showAllVersions: Boolean = false,
-    private val uniqueIdGenerator: UniqueIdGenerator
+    private val uniqueIdGenerator: UniqueIdGenerator,
+    dispatcherProvider: DispatcherProvider
 ) : ViewModel() {
 
     private val _filterText = MutableStateFlow("")
@@ -69,8 +71,8 @@ class BlankFormListViewModel(
             _filterText.value = value
         }
 
-    private val worker = TrackableWorker(scheduler)
-    val isDeleting: LiveData<Boolean> = worker.isWorking
+    private val deleteScope = TrackableScope(dispatcherProvider.background)
+    val isDeleting: LiveData<Boolean> = deleteScope.isWorking.asLiveData()
 
     init {
         scheduler.immediate(
@@ -116,14 +118,11 @@ class BlankFormListViewModel(
     }
 
     fun deleteForms(vararg databaseIds: Long) {
-        worker.immediate(
-            background = {
-                databaseIds.forEach {
-                    formsDataService.deleteForm(projectId, it)
-                }
-            },
-            foreground = {}
-        )
+        deleteScope.launch {
+            databaseIds.forEach {
+                formsDataService.deleteForm(projectId, it)
+            }
+        }
     }
 
     private fun filterAndSortForms(
@@ -173,7 +172,8 @@ class BlankFormListViewModel(
         private val scheduler: Scheduler,
         private val generalSettings: Settings,
         private val projectId: String,
-        private val uniqueIdGenerator: UniqueIdGenerator
+        private val uniqueIdGenerator: UniqueIdGenerator,
+        private val dispatcherProvider: DispatcherProvider
     ) : ViewModelProvider.Factory {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -185,7 +185,8 @@ class BlankFormListViewModel(
                 generalSettings,
                 projectId,
                 !generalSettings.getBoolean(ProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS),
-                uniqueIdGenerator
+                uniqueIdGenerator,
+                dispatcherProvider
             ) as T
         }
     }

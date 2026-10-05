@@ -35,6 +35,7 @@ import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.ListFragmentStateAdapter
 import org.odk.collect.androidshared.utils.AppBarUtils.setupAppBarLayout
 import org.odk.collect.androidshared.utils.UniqueIdGenerator
+import org.odk.collect.async.DefaultDispatcherProvider
 import org.odk.collect.async.Scheduler
 import org.odk.collect.forms.instances.InstancesRepository
 import org.odk.collect.shared.settings.Settings
@@ -148,7 +149,8 @@ class DeleteFormsActivity : LocalizedActivity() {
                     generalSettings,
                     projectId,
                     showAllVersions = true,
-                    uniqueIdGenerator
+                    uniqueIdGenerator,
+                    DefaultDispatcherProvider()
                 )
 
                 SavedFormListViewModel::class.java -> SavedFormListViewModel(
