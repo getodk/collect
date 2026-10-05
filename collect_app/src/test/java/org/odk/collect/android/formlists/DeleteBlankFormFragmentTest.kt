@@ -37,7 +37,6 @@ import org.odk.collect.android.formlists.blankformlist.BlankFormListItem
 import org.odk.collect.android.formlists.blankformlist.BlankFormListMenuProvider
 import org.odk.collect.android.formlists.blankformlist.BlankFormListViewModel
 import org.odk.collect.android.formlists.blankformlist.DeleteBlankFormFragment
-import org.odk.collect.android.formlists.savedformlist.DeleteSavedFormFragment
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.strings.R.string
@@ -149,7 +148,7 @@ class DeleteBlankFormFragmentTest {
 
     @Test
     fun `shows progress while deleting forms`() {
-        fragmentScenarioLauncherRule.launchInContainer(DeleteSavedFormFragment::class.java)
+        launchFragment()
         formsToDisplay.value = listOf(
             blankFormListItem(databaseId = 11, formName = "Form 1"),
             blankFormListItem(databaseId = 12, formName = "Form 2")
