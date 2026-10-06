@@ -31,7 +31,7 @@ class ProjectDeleterTest {
     private val formUpdateScheduler = mock<FormUpdateScheduler>()
     private val instanceSubmitScheduler = mock<InstanceSubmitScheduler>()
     private val storagePathProvider = mock<StoragePathProvider>().apply {
-        whenever(getProjectRootDirPath(project1.uuid)).thenReturn("")
+        whenever(getProjectRootDirPath(project1.uuid)).thenReturn(TempFiles.createTempDir().absolutePath)
     }
     private val deleter = ProjectDeleter(
         projectsRepository,
