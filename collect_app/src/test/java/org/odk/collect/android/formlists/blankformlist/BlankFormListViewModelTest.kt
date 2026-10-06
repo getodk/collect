@@ -8,6 +8,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.equalTo
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -19,6 +20,7 @@ import org.mockito.kotlin.whenever
 import org.odk.collect.android.formmanagement.FormsDataService
 import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.androidshared.utils.InMemUniqueIdGenerator
+import org.odk.collect.androidtest.TestDispatcherProvider
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.forms.instances.Instance
@@ -44,6 +46,7 @@ class BlankFormListViewModelTest {
     }
 
     private val scheduler = FakeScheduler()
+    private val dispatcherProvider = TestDispatcherProvider()
     private val generalSettings = InMemSettings()
     private val changeLockProvider: ChangeLockProvider = mock()
     private val projectId = "projectId"
@@ -407,6 +410,18 @@ class BlankFormListViewModelTest {
         assertFormItem(viewModel.formsToDisplay.getOrAwaitValue(scheduler)[1], form(dbId = 2, formId = "2"))
     }
 
+    @Test
+    fun `isDeleting is true while deleting forms`() {
+        createViewModel()
+        assertThat(viewModel.isDeleting.getOrAwaitValue(), equalTo(false))
+
+        viewModel.deleteForms(1)
+        assertThat(viewModel.isDeleting.getOrAwaitValue(), equalTo(true))
+
+        dispatcherProvider.flush()
+        assertThat(viewModel.isDeleting.getOrAwaitValue(), equalTo(false))
+    }
+
     private fun saveForms(vararg forms: Form) {
         whenever(formsDataService.getForms(any())).thenReturn(MutableStateFlow(forms.toList()))
     }
@@ -434,7 +449,8 @@ class BlankFormListViewModelTest {
             generalSettings,
             projectId,
             showAllVersions,
-            InMemUniqueIdGenerator()
+            InMemUniqueIdGenerator(),
+            dispatcherProvider
         )
 
         if (runAllBackgroundTasks) {

@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger
 import java.util.function.Consumer
 import java.util.function.Supplier
 
+@Deprecated("Use TrackableScope instead")
 class TrackableWorker(private val scheduler: Scheduler) {
 
     private val _isWorking = MutableNonNullLiveData(false)
