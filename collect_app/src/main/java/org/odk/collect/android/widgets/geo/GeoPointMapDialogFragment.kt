@@ -9,6 +9,7 @@ import org.odk.collect.android.utilities.Appearances
 import org.odk.collect.android.utilities.FormEntryPromptUtils
 import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader
 import org.odk.collect.android.widgets.utilities.BindAttributes
+import org.odk.collect.android.widgets.utilities.GeoWidgetUtils
 import org.odk.collect.android.widgets.utilities.WidgetAnswerDialogFragment
 import org.odk.collect.async.DispatcherProvider
 import org.odk.collect.geo.GeoUtils.parseGeometryPoint
@@ -46,7 +47,7 @@ class GeoPointMapDialogFragment(
                 .toBoolean()
 
         val inputPoint = when (val answer = prompt.answerValue) {
-            is GeoPointData -> answer.toMapPoint()
+            is GeoPointData -> answer.toMapPoint().takeIf { GeoWidgetUtils.isWithinMapBounds(it) }
             null -> null
             else -> throw IllegalArgumentException()
         }

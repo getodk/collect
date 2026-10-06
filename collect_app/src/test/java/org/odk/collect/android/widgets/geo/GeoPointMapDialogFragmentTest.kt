@@ -85,6 +85,20 @@ class GeoPointMapDialogFragmentTest {
     }
 
     @Test
+    fun `configures GeoPointMapFragment without answer when it is out of map bounds`() {
+        prompt = MockFormEntryPromptBuilder(prompt)
+            .withAnswer(GeoPointData(doubleArrayOf(91.0, 181.0, 0.0, 0.0)))
+            .build()
+
+        launcherRule.launchAndAssertOnChild<GeoPointMapFragment>(
+            GeoPointMapDialogFragment::class,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ) {
+            assertThat(it.inputPoint, equalTo(null))
+        }
+    }
+
+    @Test
     fun `configures GeoPointMapFragment as not draggable for maps appearance`() {
         prompt = MockFormEntryPromptBuilder(prompt)
             .withAppearance(Appearances.MAPS)
