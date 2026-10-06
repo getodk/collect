@@ -67,6 +67,8 @@ class ForegroundOrServiceLocationTracker(private val application: Application) :
 
             null -> {}
         }
+
+        runMode = null
     }
 
     companion object {
