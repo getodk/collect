@@ -20,10 +20,14 @@ import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
 import org.odk.collect.entities.storage.EntityList
 import org.odk.collect.entities.storage.InMemEntitiesRepository
+import org.odk.collect.forms.FormSourceException
 import org.odk.collect.formstest.FormFixtures
 import org.odk.collect.shared.Query
 import org.odk.collect.shared.TempFiles
 import org.odk.collect.shared.debug.DebugLogger
+import org.odk.collect.shared.result.Result
+import org.odk.collect.shared.result.toError
+import org.odk.collect.shared.result.toSuccess
 import java.io.File
 import java.util.UUID
 
@@ -727,7 +731,7 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
-    fun `#updateOfflineLocalEntitiesFromServer removes offline entities that are deleted according to the entity source`() {
+    fun `#cleanUpDeletedOfflineEntities removes offline entities that are deleted according to the entity source`() {
         entitiesRepository.save(
             "songs",
             Entity.New("cathedrals", "Cathedrals", state = Entity.State.OFFLINE)
@@ -751,6 +755,32 @@ class LocalEntityUseCasesTest {
         assertThat(songs.size, equalTo(2))
         assertThat(songs[0].label, equalTo("Noah"))
         assertThat(songs[1].label, equalTo("Midnight City"))
+    }
+
+    @Test
+    fun `#cleanUpDeletedOfflineEntities ignores errors fetching deleted states from EntitySource`() {
+        entitiesRepository.save(
+            "songs",
+            Entity.New("cathedrals", "Cathedrals", state = Entity.State.OFFLINE)
+        )
+        entitiesRepository.save("songs", Entity.New("noah", "Noah", state = Entity.State.ONLINE))
+        entitiesRepository.save(
+            "songs",
+            Entity.New("midnightCity", "Midnight City", state = Entity.State.OFFLINE)
+        )
+
+        entitySource.delete("cathedrals")
+
+        entitySource.returnErrors = true
+        LocalEntityUseCases.cleanUpDeletedOfflineEntities(
+            "songs",
+            entitiesRepository,
+            entitySource,
+            FormFixtures.mediaFile(integrityUrl = entitySource.integrityUrl)
+        )
+
+        val songs = entitiesRepository.query("songs")
+        assertThat(songs.size, equalTo(3))
     }
 
     private fun createEntityList(vararg entities: Entity): File {
@@ -865,20 +895,25 @@ private class FakeEntitySource : EntitySource {
     var accesses: Int = 0
         private set
 
+    var returnErrors = false
+
     private val deleted = mutableListOf<String>()
 
     override fun fetchDeletedStates(
         integrityUrl: String,
         ids: List<String>
-    ): List<Pair<String, Boolean>> {
+    ): Result<List<Pair<String, Boolean>>, FormSourceException> {
         accesses += 1
-
-        if (integrityUrl == this.integrityUrl) {
-            return ids.map {
-                Pair(it, deleted.contains(it))
-            }
+        return if (returnErrors) {
+            FormSourceException.FetchError().toError()
         } else {
-            throw IllegalArgumentException()
+            if (integrityUrl == this.integrityUrl) {
+                ids.map {
+                    Pair(it, deleted.contains(it))
+                }.toSuccess()
+            } else {
+                throw IllegalArgumentException()
+            }
         }
     }
 

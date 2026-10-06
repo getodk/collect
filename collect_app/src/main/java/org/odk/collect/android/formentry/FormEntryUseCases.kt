@@ -25,6 +25,7 @@ import org.odk.collect.forms.instances.Instance
 import org.odk.collect.forms.instances.InstancesRepository
 import org.odk.collect.shared.debug.DebugLogger
 import java.io.File
+import java.io.IOException
 
 object FormEntryUseCases {
 
@@ -204,7 +205,9 @@ object FormEntryUseCases {
         return instancesRepository.getOneByPath(instancePath)
     }
 
-    private fun createFormDefFromCacheOrXml(xForm: File, formDefCache: FormDefCache): FormDef? {
+    @JvmStatic
+    @Throws(IOException::class, XFormParser.ParseException::class)
+    fun createFormDefFromCacheOrXml(xForm: File, formDefCache: FormDefCache): FormDef? {
         val formDefFromCache = formDefCache.readCache(xForm)
         if (formDefFromCache != null) {
             return formDefFromCache

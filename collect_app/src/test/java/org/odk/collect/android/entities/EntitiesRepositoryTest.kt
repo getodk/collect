@@ -11,6 +11,7 @@ import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
 import org.odk.collect.entities.storage.EntityList
 import org.odk.collect.entities.storage.QueryException
+import org.odk.collect.entities.storage.getLastUpdateTime
 import org.odk.collect.entities.storage.getListNames
 import org.odk.collect.entities.storage.propertyNames
 import org.odk.collect.shared.Query
@@ -850,5 +851,27 @@ abstract class EntitiesRepositoryTest {
 
         repository.cleanUpProperties("wines", setOf("rating"))
         assertThat(repository.getLists(), equalTo(emptyList()))
+    }
+
+    @Test
+    fun `#getLastUpdateTime returns the newest update time for the lists`() {
+        var time = 0L
+        val repository = buildSubject { time }
+
+        repository.addList("wines")
+        time = 2
+        repository.updateList("wines", "hash", false)
+
+        repository.addList("beers")
+        time = 3
+        repository.updateList("beers", "hash", false)
+
+        repository.addList("whiskys")
+        time = 1
+        repository.updateList("whiskys", "hash", false)
+
+        assertThat(repository.getLastUpdateTime(listOf("wines", "whiskys")), equalTo(2L))
+        assertThat(repository.getLastUpdateTime(listOf("wines", "whiskys", "beers")), equalTo(3L))
+        assertThat(repository.getLastUpdateTime(listOf("whiskys")), equalTo(1L))
     }
 }

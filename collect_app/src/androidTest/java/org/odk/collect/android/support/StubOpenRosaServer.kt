@@ -181,10 +181,7 @@ class StubOpenRosaServer : OpenRosaHttpInterface {
     fun addForm(formXML: String, mediaFiles: List<MediaFileItem> = emptyList()) {
         try {
             FileUtils.getResourceAsStream("forms/$formXML").use { formDefStream ->
-                addFormFromInputStream(
-                    formXML, mediaFiles,
-                    formDefStream!!
-                )
+                addFormFromInputStream(formXML, mediaFiles, formDefStream!!)
             }
         } catch (e: IOException) {
             throw RuntimeException(e)

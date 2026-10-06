@@ -37,7 +37,6 @@ import org.javarosa.core.model.instance.utils.DefaultAnswerResolver;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.xform.parse.XFormParser;
-import org.javarosa.xform.util.XFormUtils;
 import org.javarosa.xpath.XPathTypeMismatchException;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dynamicpreload.ExternalAnswerResolver;
@@ -46,6 +45,7 @@ import org.odk.collect.android.dynamicpreload.ExternalDataUseCases;
 import org.odk.collect.android.external.FormsContract;
 import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
+import org.odk.collect.android.formentry.FormEntryUseCases;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.JavaRosaFormController;
 import org.odk.collect.android.listeners.FormLoaderListener;
@@ -200,7 +200,7 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
 
         FormDef formDef = null;
         try {
-            formDef = createFormDefFromCacheOrXml(form.getFormFilePath(), formXml);
+            formDef = createFormDefFromCacheOrXml(formXml);
         } catch (StackOverflowError e) {
             Timber.e(e);
             errorMsg = getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.too_complex_form);
@@ -330,37 +330,18 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
         }
     }
 
-    private FormDef createFormDefFromCacheOrXml(String formPath, File formXml) throws XFormParser.ParseException {
+    private FormDef createFormDefFromCacheOrXml(File formXml) throws XFormParser.ParseException {
         publishProgress(
                 getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.survey_loading_reading_form_message));
 
-        final FormDef formDefFromCache = new ExternalizableFormDefCache().readCache(formXml);
-        if (formDefFromCache != null) {
-            return formDefFromCache;
+        ExternalizableFormDefCache formDefCache = new ExternalizableFormDefCache();
+
+        try {
+            return FormEntryUseCases.createFormDefFromCacheOrXml(formXml, formDefCache);
+        } catch (IOException e) {
+            Timber.e(e);
+            return null;
         }
-
-        // no binary, read from xml
-        final long start = System.currentTimeMillis();
-        String lastSavedSrc = FileUtils.getOrCreateLastSavedSrc(formXml);
-        FormDef formDefFromXml = XFormUtils.getFormFromFormXml(formPath, lastSavedSrc);
-        if (formDefFromXml == null) {
-            Timber.w("Error reading XForm file");
-            errorMsg = "Error reading XForm file";
-        } else {
-            Timber.i("Loaded in %.3f seconds.",
-                    (System.currentTimeMillis() - start) / 1000F);
-            formDef = formDefFromXml;
-
-            try {
-                new ExternalizableFormDefCache().writeCache(formDef, formXml.getPath());
-            } catch (IOException e) {
-                Timber.e(e);
-            }
-
-            return formDefFromXml;
-        }
-
-        return null;
     }
 
     private void processItemSets(File formMediaDir) {

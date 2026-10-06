@@ -28,45 +28,49 @@ public final class ExternalizableFormDefCache implements FormDefCache {
      * @param formPath - The form XML file
      */
     @Override
-    public void writeCache(FormDef formDef, String formPath) throws IOException {
-        final long formSaveStart = System.currentTimeMillis();
-        File cachedFormDefFile = ExternalizableFormDefCache.getCacheFile(new File(formPath));
-        final File tempCacheFile = File.createTempFile("cache", null,
-                new File(new StoragePathProvider().getOdkDirPath(StorageSubdirectory.CACHE)));
-        Timber.i("Started saving %s to the cache via temp file %s",
-                formDef.getTitle(), tempCacheFile.getName());
-
-        Exception caughtException = null;
+    public void writeCache(FormDef formDef, String formPath) {
         try {
-            DataOutputStream dos = new DataOutputStream(new FileOutputStream(tempCacheFile));
-            formDef.writeExternal(dos);
-            dos.close();
-        } catch (IOException exception) {
-            caughtException = exception;
-        }
+            final long formSaveStart = System.currentTimeMillis();
+            File cachedFormDefFile = ExternalizableFormDefCache.getCacheFile(new File(formPath));
+            final File tempCacheFile = File.createTempFile("cache", null,
+                    new File(new StoragePathProvider().getOdkDirPath(StorageSubdirectory.CACHE)));
+            Timber.i("Started saving %s to the cache via temp file %s",
+                    formDef.getTitle(), tempCacheFile.getName());
 
-        final boolean tempFileNeedsDeleting = caughtException != null; // There was an error creating it
-
-        // Delete or rename the temp file
-        if (tempFileNeedsDeleting) {
-            Timber.i("Deleting no-longer-wanted temp cache file %s for form %s",
-                    tempCacheFile.getName(), formDef.getTitle());
-            if (!tempCacheFile.delete()) {
-                Timber.e(new Error("Unable to delete " + tempCacheFile.getName()));
+            Exception caughtException = null;
+            try {
+                DataOutputStream dos = new DataOutputStream(new FileOutputStream(tempCacheFile));
+                formDef.writeExternal(dos);
+                dos.close();
+            } catch (IOException exception) {
+                caughtException = exception;
             }
-        } else {
-            if (tempCacheFile.renameTo(cachedFormDefFile)) {
-                Timber.i("Renamed %s to %s",
-                        tempCacheFile.getName(), cachedFormDefFile.getName());
-                Timber.i("Caching %s took %.3f seconds.", formDef.getTitle(),
-                        (System.currentTimeMillis() - formSaveStart) / 1000F);
+
+            final boolean tempFileNeedsDeleting = caughtException != null; // There was an error creating it
+
+            // Delete or rename the temp file
+            if (tempFileNeedsDeleting) {
+                Timber.i("Deleting no-longer-wanted temp cache file %s for form %s",
+                        tempCacheFile.getName(), formDef.getTitle());
+                if (!tempCacheFile.delete()) {
+                    Timber.e(new Error("Unable to delete " + tempCacheFile.getName()));
+                }
             } else {
-                Timber.e(new Error("Unable to rename temporary file " + tempCacheFile + " to cache file " + cachedFormDefFile));
+                if (tempCacheFile.renameTo(cachedFormDefFile)) {
+                    Timber.i("Renamed %s to %s",
+                            tempCacheFile.getName(), cachedFormDefFile.getName());
+                    Timber.i("Caching %s took %.3f seconds.", formDef.getTitle(),
+                            (System.currentTimeMillis() - formSaveStart) / 1000F);
+                } else {
+                    Timber.e(new Error("Unable to rename temporary file " + tempCacheFile + " to cache file " + cachedFormDefFile));
+                }
             }
-        }
 
-        if (caughtException != null) { // The client is no longer there, so log the exception
-            Timber.e(caughtException);
+            if (caughtException != null) { // The client is no longer there, so log the exception
+                Timber.e(caughtException);
+            }
+        } catch (IOException e) {
+            Timber.e(e);
         }
     }
 

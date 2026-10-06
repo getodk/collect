@@ -35,6 +35,11 @@ class CollectTestRule @JvmOverloads constructor(
     fun startAtFirstLaunch() = FirstLaunchPage()
 
     @JvmOverloads
+    fun withProject(testServer: StubOpenRosaServer, matchExactly: Boolean = false): MainMenuPage {
+        return withProject(testServer.url, matchExactly)
+    }
+
+    @JvmOverloads
     fun withProject(serverUrl: String, matchExactly: Boolean = false): MainMenuPage {
         return if (matchExactly) {
             startAtFirstLaunch()
