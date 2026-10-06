@@ -31,10 +31,28 @@ abstract class LocationTrackerTest {
     }
 
     @Test
+    fun `updates location when started in foreground`() {
+        locationTracker.start(background = false)
+
+        val location = Location(1.0, 2.0, 3.0, 4.0f)
+        setDeviceLocation(location)
+        assertThat(locationTracker.getCurrentLocation(), equalTo(location))
+    }
+
+    @Test
     fun `location is null when updates occur after stopping`() {
         locationTracker.start()
         locationTracker.stop()
         runBackground()
+
+        setDeviceLocation(Location(1.0, 2.0, 3.0, 4.0f))
+        assertThat(locationTracker.getCurrentLocation(), equalTo(null))
+    }
+
+    @Test
+    fun `location is null when updates occur after stopping from foreground`() {
+        locationTracker.start(background = false)
+        locationTracker.stop()
 
         setDeviceLocation(Location(1.0, 2.0, 3.0, 4.0f))
         assertThat(locationTracker.getCurrentLocation(), equalTo(null))
@@ -49,6 +67,16 @@ abstract class LocationTrackerTest {
 
         locationTracker.stop()
         runBackground()
+        assertThat(locationTracker.getCurrentLocation(), equalTo(null))
+    }
+
+    @Test
+    fun `#stop clears location from foreground`() {
+        locationTracker.start(background = false)
+
+        setDeviceLocation(Location(1.0, 2.0, 3.0, 4.0f))
+
+        locationTracker.stop()
         assertThat(locationTracker.getCurrentLocation(), equalTo(null))
     }
 
@@ -70,6 +98,19 @@ abstract class LocationTrackerTest {
 
         setDeviceLocation(Location(2.0, 2.0))
         runBackground()
+        assertThat(location.value, equalTo(Location(2.0, 2.0)))
+    }
+
+    @Test
+    fun `location is updated location after restarting in foreground`() {
+        val location = locationTracker.getLocation()
+
+        locationTracker.start(background = false)
+        setDeviceLocation(Location(1.0, 1.0))
+        locationTracker.stop()
+
+        locationTracker.start(background = false)
+        setDeviceLocation(Location(2.0, 2.0))
         assertThat(location.value, equalTo(Location(2.0, 2.0)))
     }
 
