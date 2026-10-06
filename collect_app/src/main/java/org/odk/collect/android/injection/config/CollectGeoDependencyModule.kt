@@ -8,7 +8,7 @@ import org.odk.collect.geo.GeoDependencyModule
 import org.odk.collect.location.LocationClient
 import org.odk.collect.location.satellites.GpsStatusSatelliteInfoClient
 import org.odk.collect.location.satellites.SatelliteInfoClient
-import org.odk.collect.location.tracker.ForegroundOrServiceLocationTracker
+import org.odk.collect.location.tracker.LocationClientLocationTracker
 import org.odk.collect.location.tracker.LocationTracker
 import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.maps.layers.ReferenceLayerRepository
@@ -25,7 +25,7 @@ class CollectGeoDependencyModule(
     }
 
     override fun providesLocationTracker(application: Application): LocationTracker {
-        return ForegroundOrServiceLocationTracker(application)
+        return LocationClientLocationTracker(application)
     }
 
     override fun providesLocationClient(): LocationClient {

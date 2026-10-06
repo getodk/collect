@@ -20,7 +20,7 @@ import org.odk.collect.location.LocationDependencyComponentProvider
 import org.odk.collect.strings.localization.getLocalizedString
 import javax.inject.Inject
 
-class ForegroundOrServiceLocationTracker(private val application: Application) : LocationTracker {
+class LocationClientLocationTracker(private val application: Application) : LocationTracker {
 
     private val locationClientHandler = LocationClientHandler(application, LOCATION_KEY)
     private var runMode: RunMode? = null
