@@ -769,6 +769,8 @@ class LocalEntityUseCasesTest {
             Entity.New("midnightCity", "Midnight City", state = Entity.State.OFFLINE)
         )
 
+        entitySource.delete("cathedrals")
+
         entitySource.returnErrors = true
         LocalEntityUseCases.cleanUpDeletedOfflineEntities(
             "songs",
