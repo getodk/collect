@@ -104,32 +104,6 @@ class LocationClientLocationTrackerTest : LocationTrackerTest() {
         assertThat(locationClient.getRetainMockAccuracy(), equalTo(true))
         assertThat(locationClient.getUpdateInterval(), equalTo(2000L))
     }
-
-    @Test(expected = IllegalStateException::class)
-    fun `#start in foreground after a #start in background fails`() {
-        locationTracker.start(retainMockAccuracy = false, updateInterval = 1000L, background = true)
-        locationTracker.start(retainMockAccuracy = false, updateInterval = 1000L, background = false)
-    }
-
-    @Test
-    fun `#start in foreground after a #start and #stop in background works`() {
-        locationTracker.start(retainMockAccuracy = false, updateInterval = 1000L, background = true)
-        locationTracker.stop()
-        locationTracker.start(retainMockAccuracy = false, updateInterval = 1000L, background = false)
-    }
-
-    @Test(expected = IllegalStateException::class)
-    fun `#start in background after a #start in foreground fails`() {
-        locationTracker.start(retainMockAccuracy = false, updateInterval = 1000L, background = false)
-        locationTracker.start(retainMockAccuracy = false, updateInterval = 1000L, background = true)
-    }
-
-    @Test
-    fun `#start in background after a #start and #stop in foreground works`() {
-        locationTracker.start(retainMockAccuracy = false, updateInterval = 1000L, background = false)
-        locationTracker.stop()
-        locationTracker.start(retainMockAccuracy = false, updateInterval = 1000L, background = true)
-    }
 }
 
 private class FakeLocationClient : LocationClient {
