@@ -106,13 +106,13 @@ class ForegroundOrServiceLocationTrackerTest : LocationTrackerTest() {
     }
 
     @Test(expected = IllegalStateException::class)
-    fun `#start in background after a #start in foreground fails`() {
+    fun `#start in foreground after a #start in background fails`() {
         locationTracker.start(retainMockAccuracy = false, updateInterval = 1000L, background = true)
         locationTracker.start(retainMockAccuracy = false, updateInterval = 1000L, background = false)
     }
 
     @Test(expected = IllegalStateException::class)
-    fun `#start in foreground after a #start in background fails`() {
+    fun `#start in background after a #start in foreground fails`() {
         locationTracker.start(retainMockAccuracy = false, updateInterval = 1000L, background = false)
         locationTracker.start(retainMockAccuracy = false, updateInterval = 1000L, background = true)
     }
