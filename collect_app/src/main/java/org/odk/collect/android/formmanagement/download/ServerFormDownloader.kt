@@ -103,7 +103,7 @@ class ServerFormDownloader(
         }
     }
 
-    @Throws(FormDownloadException::class, FormSourceException::class, DownloadingInterrupted::class)
+    @Throws(FormDownloadException::class, FormSourceException::class)
     private fun processOneForm(
         fd: ServerFormDetails,
         stateListener: OngoingWorkListener,
