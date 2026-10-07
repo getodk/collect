@@ -97,6 +97,15 @@ class GeoTraceWidgetTest {
     }
 
     @Test
+    fun `the answer is displayed instead of the map preview when it is out of map bounds`() {
+        val answer = "100.0 10.0 0.0 0.0;101.0 11.0 0.0 0.0"
+        mapPreviewRenderer.preview = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
+        createWidget(promptWithAnswer(StringData(answer)))
+        composeRule.onNodeWithTag(MAP_PREVIEW_TAG).assertDoesNotExist()
+        composeRule.onNodeWithText(answer).assertIsDisplayed()
+    }
+
+    @Test
     fun `the button is hidden when the question is read-only and there is no answer`() {
         createWidget(promptWithReadOnly())
         composeRule.onNodeWithClickLabel(string.view_line).assertDoesNotExist()
