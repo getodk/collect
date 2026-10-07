@@ -3,6 +3,7 @@ package org.odk.collect.maplibre
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.util.LruCache
 import org.json.JSONArray
 import org.json.JSONObject
 import org.maplibre.android.geometry.LatLng
@@ -36,13 +37,16 @@ class MapLibreMapPreviewRenderer(
 
     private val referenceLayers = ReferenceLayers()
 
+    private val cache = LruCache<List<Any?>, Bitmap>(10)
+
     override fun render(
         trace: TraceDescription,
         width: Int,
         height: Int,
         callback: (Bitmap?) -> Unit
     ): () -> Unit {
-        val basemapSource = settingsProvider.getUnprotectedSettings().getString(KEY_BASEMAP_SOURCE)
+        val settings = settingsProvider.getUnprotectedSettings()
+        val basemapSource = settings.getString(KEY_BASEMAP_SOURCE)
         val configuration = when (basemapSource) {
             // Google Maps can't render off-screen, so its previews use OpenStreetMap instead
             BASEMAP_SOURCE_GOOGLE -> Configurations.all.getValue(BASEMAP_SOURCE_OSM)
@@ -54,11 +58,28 @@ class MapLibreMapPreviewRenderer(
             return {}
         }
 
+        val key = listOf(
+            trace,
+            width,
+            height,
+            basemapSource,
+            configuration.styleSetting?.let { settings.getString(it) },
+            settings.getString(KEY_REFERENCE_LAYER)
+        )
+
+        cache.get(key)?.let {
+            callback(it)
+            return {}
+        }
+
         MapLibreSupport.initialize(context)
 
         var snapshotter = MapSnapshotter(context, snapshotOptions(basemap(configuration), trace, width, height))
         snapshotter.start(
-            { callback(it.bitmap) },
+            {
+                cache.put(key, it.bitmap)
+                callback(it.bitmap)
+            },
             {
                 // The basemap failed to load so retry without it
                 snapshotter = MapSnapshotter(context, snapshotOptions(blankBasemap(), trace, width, height))
