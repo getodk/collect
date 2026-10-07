@@ -1,12 +1,15 @@
 package org.odk.collect.android.widgets
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -14,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ImageBitmap
@@ -37,7 +41,7 @@ fun GeoTraceWidgetAnswer(
     onClick: () -> Unit,
     onLongClick: () -> Unit
 ) {
-    var preview by remember(answer) { mutableStateOf<ImageBitmap?>(null) }
+    var preview by remember(answer) { mutableStateOf<MapPreviewState>(MapPreviewState.Loading) }
 
     BoxWithConstraints(modifier = modifier.fillMaxWidth()) {
         val width = constraints.maxWidth
@@ -46,36 +50,43 @@ fun GeoTraceWidgetAnswer(
         DisposableEffect(answer, width, height) {
             val trace = LineDescription(GeoPolyUtils.parseGeometry(answer))
             val cancel = mediaWidgetAnswerViewModel.renderMapPreview(trace, width, height) {
-                preview = it?.asImageBitmap()
+                preview = if (it != null) MapPreviewState.Loaded(it.asImageBitmap()) else MapPreviewState.Failed
             }
 
             onDispose { cancel() }
         }
 
-        val currentPreview = preview
-        if (currentPreview != null) {
-            Image(
-                bitmap = currentPreview,
+        val previewModifier = Modifier
+            .fillMaxWidth()
+            .height(PREVIEW_HEIGHT)
+            .clip(MaterialTheme.shapes.large)
+            .combinedClickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = {
+                    if (MultiClickGuard.allowClick()) {
+                        onClick()
+                    }
+                },
+                onLongClick = onLongClick
+            )
+
+        when (val currentPreview = preview) {
+            MapPreviewState.Loading -> Box(
+                contentAlignment = Alignment.Center,
+                modifier = previewModifier.background(MaterialTheme.colorScheme.surfaceContainerHighest)
+            ) {
+                CircularProgressIndicator()
+            }
+
+            is MapPreviewState.Loaded -> Image(
+                bitmap = currentPreview.bitmap,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .testTag(MAP_PREVIEW_TAG)
-                    .fillMaxWidth()
-                    .height(PREVIEW_HEIGHT)
-                    .clip(MaterialTheme.shapes.large)
-                    .combinedClickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null,
-                        onClick = {
-                            if (MultiClickGuard.allowClick()) {
-                                onClick()
-                            }
-                        },
-                        onLongClick = onLongClick
-                    )
+                modifier = previewModifier.testTag(MAP_PREVIEW_TAG)
             )
-        } else {
-            TextWidgetAnswer(
+
+            MapPreviewState.Failed -> TextWidgetAnswer(
                 Modifier,
                 null,
                 GeoWidgetUtils.getGeoPolyAnswerToDisplay(answer) ?: "",
@@ -86,6 +97,12 @@ fun GeoTraceWidgetAnswer(
             )
         }
     }
+}
+
+private sealed interface MapPreviewState {
+    data object Loading : MapPreviewState
+    data class Loaded(val bitmap: ImageBitmap) : MapPreviewState
+    data object Failed : MapPreviewState
 }
 
 private val PREVIEW_HEIGHT = 200.dp
