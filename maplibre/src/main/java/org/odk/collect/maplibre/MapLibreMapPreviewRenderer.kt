@@ -24,12 +24,14 @@ import org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_GOOGLE
 import org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_OSM
 import org.odk.collect.settings.keys.ProjectKeys.KEY_BASEMAP_SOURCE
 import org.odk.collect.settings.keys.ProjectKeys.KEY_REFERENCE_LAYER
+import org.odk.collect.shared.injection.Keys
 import javax.inject.Provider
 
 class MapLibreMapPreviewRenderer(
     private val context: Context,
     private val settingsProvider: SettingsProvider,
-    private val referenceLayerRepository: Provider<ReferenceLayerRepository>
+    private val referenceLayerRepository: Provider<ReferenceLayerRepository>,
+    private val keys: Keys
 ) : MapPreviewRenderer {
 
     private val referenceLayers = ReferenceLayers()
@@ -101,8 +103,8 @@ class MapLibreMapPreviewRenderer(
 
     private fun basemap(configuration: Configuration): Style.Builder {
         return when (val uri = configuration.basemapUri(settingsProvider.getUnprotectedSettings())) {
-            is BasemapUri.Raster -> configuration.rasterBasemapStyle(uri).fromUri("asset://maplibre_empty_style.json")
-            is BasemapUri.Mapbox -> Style.Builder().fromUri(uri.value)
+            is BasemapUri.Raster -> configuration.rasterBasemapStyle(uri, keys).fromUri("asset://maplibre_empty_style.json")
+            is BasemapUri.Mapbox -> Style.Builder().fromUri(uri.value())
         }
     }
 

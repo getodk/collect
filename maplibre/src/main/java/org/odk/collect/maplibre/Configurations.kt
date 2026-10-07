@@ -6,6 +6,7 @@ import org.maplibre.android.style.sources.RasterSource
 import org.maplibre.android.style.sources.TileSet
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.settings.keys.ProjectKeys.KEY_MAPBOX_MAP_STYLE
+import org.odk.collect.shared.injection.Keys
 import org.odk.collect.shared.settings.Settings
 import org.odk.collect.strings.R
 
@@ -113,8 +114,15 @@ class Configuration(
         }
     }
 
-    fun rasterBasemapStyle(uri: BasemapUri.Raster): Style.Builder {
-        val tileSet = TileSet("2.1.0", uri.value).apply {
+    fun rasterBasemapStyle(uri: BasemapUri.Raster, keys: Keys): Style.Builder {
+        val tileUri = if (uri.keyName != null) {
+            val key = keys.get(uri.keyName)
+            uri.value(key)
+        } else {
+            uri.value()
+        }
+
+        val tileSet = TileSet("2.1.0", tileUri).apply {
             attribution = this@Configuration.attribution ?: ""
             scheme = "xyz"
         }
