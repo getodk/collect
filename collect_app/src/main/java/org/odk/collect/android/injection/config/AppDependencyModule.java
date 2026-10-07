@@ -149,6 +149,7 @@ import org.odk.collect.settings.importing.SettingsChangeHandler;
 import org.odk.collect.settings.keys.AppConfigurationKeys;
 import org.odk.collect.settings.keys.MetaKeys;
 import org.odk.collect.settings.keys.ProjectKeys;
+import org.odk.collect.shared.injection.Keys;
 import org.odk.collect.shared.strings.UUIDGenerator;
 import org.odk.collect.utilities.UserAgentProvider;
 import org.odk.collect.webpage.CustomTabsWebPageService;
@@ -156,6 +157,7 @@ import org.odk.collect.webpage.WebPageService;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Named;
@@ -604,7 +606,7 @@ public class AppDependencyModule {
     @Provides
     @Singleton
     public MapPreviewRenderer providesMapPreviewRenderer(Context context, SettingsProvider settingsProvider, Provider<ReferenceLayerRepository> referenceLayerRepository) {
-        return new MapLibreMapPreviewRenderer(context, settingsProvider, referenceLayerRepository);
+        return new MapLibreMapPreviewRenderer(context, settingsProvider, referenceLayerRepository, new Keys(Collections.singletonMap("carto", BuildConfig.CARTO_API_KEY)));
     }
 
     @Provides

@@ -262,7 +262,7 @@ class MapLibreMapFragment(private val configuration: Configuration) :
 
         when (uri) {
             is BasemapUri.Raster -> {
-                map?.setStyle(configuration.rasterBasemapStyle(uri)) {
+                map?.setStyle(configuration.rasterBasemapStyle(uri, keys)) {
                     basemapTopLayer = "basemap_layer"
                     onStyleLoaded(it)
                 }
