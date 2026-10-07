@@ -4,8 +4,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.util.LruCache
-import org.json.JSONArray
-import org.json.JSONObject
 import org.maplibre.android.geometry.LatLng
 import org.maplibre.android.geometry.LatLngBounds
 import org.maplibre.android.maps.Style
@@ -15,7 +13,8 @@ import org.maplibre.android.style.layers.LineLayer
 import org.maplibre.android.style.layers.Property
 import org.maplibre.android.style.layers.PropertyFactory
 import org.maplibre.android.style.sources.GeoJsonSource
-import org.odk.collect.maps.MapPoint
+import org.maplibre.geojson.LineString
+import org.maplibre.geojson.Point
 import org.odk.collect.maps.MapPreviewRenderer
 import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils
 import org.odk.collect.maps.layers.ReferenceLayerRepository
@@ -151,7 +150,7 @@ class MapLibreMapPreviewRenderer(
     }
 
     private fun addTrace(builder: Style.Builder, trace: TraceDescription) {
-        builder.withSource(GeoJsonSource("trace_source", geoJson(trace.points)))
+        builder.withSource(GeoJsonSource("trace_source", LineString.fromLngLats(trace.points.map { Point.fromLngLat(it.longitude, it.latitude) })))
         builder.withLayer(
             LineLayer("trace_layer", "trace_source").withProperties(
                 PropertyFactory.lineColor(trace.getStrokeColor()),
@@ -160,18 +159,5 @@ class MapLibreMapPreviewRenderer(
                 PropertyFactory.lineJoin(Property.LINE_JOIN_ROUND)
             )
         )
-    }
-
-    private fun geoJson(points: List<MapPoint>): String {
-        val coordinates = JSONArray().apply {
-            points.forEach {
-                put(JSONArray().put(it.longitude).put(it.latitude))
-            }
-        }
-
-        return JSONObject()
-            .put("type", "LineString")
-            .put("coordinates", coordinates)
-            .toString()
     }
 }
