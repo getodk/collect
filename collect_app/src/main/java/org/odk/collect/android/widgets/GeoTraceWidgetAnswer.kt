@@ -86,7 +86,7 @@ fun GeoTraceWidgetAnswer(
 
             is MapPreviewState.Loaded -> Image(
                 bitmap = currentPreview.bitmap,
-                contentDescription = null,
+                contentDescription = GeoWidgetUtils.getGeoPolyAnswerToDisplay(answer),
                 contentScale = ContentScale.Crop,
                 modifier = previewModifier.testTag(MAP_PREVIEW_TAG)
             )
