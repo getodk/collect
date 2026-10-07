@@ -49,8 +49,13 @@ fun GeoTraceWidgetAnswer(
 
         DisposableEffect(answer, width, height) {
             val trace = LineDescription(GeoPolyUtils.parseGeometry(answer))
-            val cancel = mediaWidgetAnswerViewModel.renderMapPreview(trace, width, height) {
-                preview = if (it != null) MapPreviewState.Loaded(it.asImageBitmap()) else MapPreviewState.Failed
+            val cancel = if (trace.points.all { GeoWidgetUtils.isWithinMapBounds(it) }) {
+                mediaWidgetAnswerViewModel.renderMapPreview(trace, width, height) {
+                    preview = if (it != null) MapPreviewState.Loaded(it.asImageBitmap()) else MapPreviewState.Failed
+                }
+            } else {
+                preview = MapPreviewState.Failed
+                {}
             }
 
             onDispose { cancel() }
