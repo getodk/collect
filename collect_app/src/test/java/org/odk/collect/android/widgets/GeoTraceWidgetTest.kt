@@ -3,11 +3,14 @@ package org.odk.collect.android.widgets
 import android.app.Application
 import android.content.ComponentName
 import android.graphics.Bitmap
+import android.view.View
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTouchInput
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
@@ -18,7 +21,10 @@ import org.javarosa.form.api.FormEntryPrompt
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.any
+import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
@@ -132,6 +138,30 @@ class GeoTraceWidgetTest {
         composeRule.onNodeWithClickLabel(string.view_or_change_line).performClick()
 
         verify(geoDataRequester).requestGeoPoly(prompt)
+    }
+
+    @Test
+    fun `long pressing the button or the answer shows the context menu`() {
+        val widget = createWidget(promptWithAnswer(StringData(answer)))
+        val listener = mock<View.OnCreateContextMenuListener>()
+        widget.setOnCreateContextMenuListener(listener)
+
+        composeRule.onNodeWithClickLabel(string.view_or_change_line).performTouchInput { longClick() }
+        composeRule.onNodeWithText(answer).performTouchInput { longClick() }
+
+        verify(listener, times(2)).onCreateContextMenu(any(), any(), anyOrNull())
+    }
+
+    @Test
+    fun `long pressing the map preview shows the context menu`() {
+        mapPreviewRenderer.preview = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
+        val widget = createWidget(promptWithAnswer(StringData(answer)))
+        val listener = mock<View.OnCreateContextMenuListener>()
+        widget.setOnCreateContextMenuListener(listener)
+
+        composeRule.onNodeWithTag(MAP_PREVIEW_TAG).performTouchInput { longClick() }
+
+        verify(listener).onCreateContextMenu(any(), any(), anyOrNull())
     }
 
     private fun createWidget(prompt: FormEntryPrompt) = GeoTraceWidget(
