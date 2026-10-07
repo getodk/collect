@@ -30,7 +30,7 @@ class FakeLocationTracker : LocationTracker {
     override fun start(
         retainMockAccuracy: Boolean,
         updateInterval: Long?,
-        notification: Boolean
+        background: Boolean
     ) {
         this.retainMockAccuracy = retainMockAccuracy
 
