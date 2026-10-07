@@ -81,7 +81,7 @@ abstract class LocationTrackerTest {
     }
 
     @Test
-    fun `location is updated location after restarting`() {
+    fun `location is updated after restarting`() {
         val location = locationTracker.getLocation()
 
         locationTracker.start()
@@ -102,7 +102,7 @@ abstract class LocationTrackerTest {
     }
 
     @Test
-    fun `location is updated location after restarting in foreground`() {
+    fun `location is updated after restarting in foreground`() {
         val location = locationTracker.getLocation()
 
         locationTracker.start(background = false)
