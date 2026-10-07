@@ -2,12 +2,14 @@ package org.odk.collect.maplibre
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Color
 import org.json.JSONArray
 import org.json.JSONObject
 import org.maplibre.android.geometry.LatLng
 import org.maplibre.android.geometry.LatLngBounds
 import org.maplibre.android.maps.Style
 import org.maplibre.android.snapshotter.MapSnapshotter
+import org.maplibre.android.style.layers.BackgroundLayer
 import org.maplibre.android.style.layers.LineLayer
 import org.maplibre.android.style.layers.Property
 import org.maplibre.android.style.layers.PropertyFactory
@@ -52,14 +54,36 @@ class MapLibreMapPreviewRenderer(
 
         MapLibreSupport.initialize(context)
 
+        var snapshotter = MapSnapshotter(context, snapshotOptions(basemap(configuration), trace, width, height))
+        snapshotter.start(
+            { callback(it.bitmap) },
+            {
+                // The basemap failed to load so retry without it
+                snapshotter = MapSnapshotter(context, snapshotOptions(blankBasemap(), trace, width, height))
+                snapshotter.start(
+                    { callback(it.bitmap) },
+                    { callback(null) }
+                )
+            }
+        )
+
+        return { snapshotter.cancel() }
+    }
+
+    private fun snapshotOptions(
+        basemap: Style.Builder,
+        trace: TraceDescription,
+        width: Int,
+        height: Int
+    ): MapSnapshotter.Options {
         // Leave a 10% margin on each side
         val horizontalPadding = (width * 0.1).toInt()
         val verticalPadding = (height * 0.1).toInt()
 
         val density = context.resources.displayMetrics.density
-        val options = MapSnapshotter.Options((width / density).toInt(), (height / density).toInt())
+        return MapSnapshotter.Options((width / density).toInt(), (height / density).toInt())
             .withPixelRatio(density)
-            .withStyleBuilder(buildStyle(configuration, trace))
+            .withStyleBuilder(buildStyle(basemap, trace))
             .withLogo(false)
             .withRegion(
                 LatLngBounds.Builder()
@@ -67,21 +91,12 @@ class MapLibreMapPreviewRenderer(
                     .build()
             )
             .withPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
-
-        val snapshotter = MapSnapshotter(context, options)
-        snapshotter.start(
-            { callback(it.bitmap) },
-            { callback(null) }
-        )
-
-        return { snapshotter.cancel() }
     }
 
-    private fun buildStyle(configuration: Configuration, trace: TraceDescription): Style.Builder {
-        val builder = basemap(configuration)
-        addReferenceLayer(builder)
-        addTrace(builder, trace)
-        return builder
+    private fun buildStyle(basemap: Style.Builder, trace: TraceDescription): Style.Builder {
+        addReferenceLayer(basemap)
+        addTrace(basemap, trace)
+        return basemap
     }
 
     private fun basemap(configuration: Configuration): Style.Builder {
@@ -89,6 +104,16 @@ class MapLibreMapPreviewRenderer(
             is BasemapUri.Raster -> configuration.rasterBasemapStyle(uri).fromUri("asset://maplibre_empty_style.json")
             is BasemapUri.Mapbox -> Style.Builder().fromUri(uri.value)
         }
+    }
+
+    private fun blankBasemap(): Style.Builder {
+        return Style.Builder()
+            .fromUri("asset://maplibre_empty_style.json")
+            .withLayer(
+                BackgroundLayer("background_layer").withProperties(
+                    PropertyFactory.backgroundColor(Color.rgb(224, 224, 224))
+                )
+            )
     }
 
     private fun addReferenceLayer(builder: Style.Builder) {
