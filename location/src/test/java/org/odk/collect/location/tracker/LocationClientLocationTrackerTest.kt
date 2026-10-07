@@ -10,11 +10,6 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito.mock
-import org.mockito.kotlin.any
-import org.mockito.kotlin.argWhere
-import org.mockito.kotlin.never
-import org.mockito.kotlin.verify
 import org.odk.collect.location.Location
 import org.odk.collect.location.LocationClient
 import org.odk.collect.location.LocationClient.LocationClientListener
@@ -22,12 +17,12 @@ import org.odk.collect.location.LocationClientProvider
 import org.odk.collect.testshared.RobolectricHelpers
 
 @RunWith(AndroidJUnit4::class)
-class ForegroundServiceLocationTrackerTest : LocationTrackerTest() {
+class LocationClientLocationTrackerTest : LocationTrackerTest() {
 
     private val application: Application = ApplicationProvider.getApplicationContext()
     private val locationClient = FakeLocationClient()
 
-    override val locationTracker: LocationTracker = ForegroundServiceLocationTracker(application)
+    override val locationTracker: LocationTracker = LocationClientLocationTracker(application)
 
     override fun runBackground() {
         RobolectricHelpers.runServices(true)
@@ -44,7 +39,7 @@ class ForegroundServiceLocationTrackerTest : LocationTrackerTest() {
     }
 
     @Before
-    fun fakeLocationClient() {
+    fun setup() {
         LocationClientProvider.setTestClient(locationClient)
     }
 
@@ -55,7 +50,7 @@ class ForegroundServiceLocationTrackerTest : LocationTrackerTest() {
     }
 
     @Test
-    fun start_whenRetainMockAccuracyIsTrue_setsRetainMockAccuracyOnClient() {
+    fun `#start when retain mock accuracy is true sets retain mock accuracy on client`() {
         locationTracker.start(retainMockAccuracy = true)
         runBackground()
 
@@ -63,7 +58,7 @@ class ForegroundServiceLocationTrackerTest : LocationTrackerTest() {
     }
 
     @Test
-    fun start_whenRetainMockAccuracyIsFalse_setsRetainMockAccuracyOnClient() {
+    fun `#start when retain mock accuracy is false sets retain mock accuracy on client`() {
         locationTracker.start(retainMockAccuracy = false)
         runBackground()
 
@@ -71,7 +66,7 @@ class ForegroundServiceLocationTrackerTest : LocationTrackerTest() {
     }
 
     @Test
-    fun start_whenUpdateIntervalIsNull_doesNotSetIntervalOnClient() {
+    fun `#start when update interval is null does not set interval on client`() {
         locationTracker.start(updateInterval = null)
         runBackground()
 
@@ -79,7 +74,7 @@ class ForegroundServiceLocationTrackerTest : LocationTrackerTest() {
     }
 
     @Test
-    fun start_whenUpdateIntervalIsNonNull_setsIntervalsOnClient() {
+    fun `#start when update interval is non-null sets intervals on client`() {
         locationTracker.start(updateInterval = 1000)
         runBackground()
 
@@ -87,10 +82,11 @@ class ForegroundServiceLocationTrackerTest : LocationTrackerTest() {
     }
 
     @Test
-    fun start_afterAnotherStart_updatesClient() {
+    fun `#start after another #start updates client`() {
         locationTracker.start(retainMockAccuracy = false, updateInterval = 1000L)
         runBackground()
 
+        LocationClientProvider.setTestClient(FakeLocationClient()) // Make sure we use same instance
         locationTracker.start(retainMockAccuracy = true, updateInterval = 2000L)
         runBackground()
 
@@ -99,37 +95,14 @@ class ForegroundServiceLocationTrackerTest : LocationTrackerTest() {
     }
 
     @Test
-    fun start_whenNotificationIsTrue_startsServiceInForeground() {
-        val application = mock<Application>()
-        val locationTracker = ForegroundServiceLocationTracker(application)
+    fun `#start after another #start when not in background updates client`() {
+        locationTracker.start(retainMockAccuracy = false, updateInterval = 1000L, background = false)
 
-        locationTracker.start(
-            retainMockAccuracy = false,
-            updateInterval = null,
-            notification = true
-        )
+        LocationClientProvider.setTestClient(FakeLocationClient()) // Make sure we use same instance
+        locationTracker.start(retainMockAccuracy = true, updateInterval = 2000L, background = false)
 
-        verify(application, never()).startService(any())
-        verify(application).startForegroundService(
-            argWhere { it.getBooleanExtra(LocationTrackerService.EXTRA_NOTIFICATION, false) }
-        )
-    }
-
-    @Test
-    fun start_whenNotificationIsFalse_doesNotStartServiceInForeground() {
-        val application = mock<Application>()
-        val locationTracker = ForegroundServiceLocationTracker(application)
-
-        locationTracker.start(
-            retainMockAccuracy = false,
-            updateInterval = null,
-            notification = false
-        )
-
-        verify(application, never()).startForegroundService(any())
-        verify(application).startService(
-            argWhere { !it.getBooleanExtra(LocationTrackerService.EXTRA_NOTIFICATION, false) }
-        )
+        assertThat(locationClient.getRetainMockAccuracy(), equalTo(true))
+        assertThat(locationClient.getUpdateInterval(), equalTo(2000L))
     }
 }
 
