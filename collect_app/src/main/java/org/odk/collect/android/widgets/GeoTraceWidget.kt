@@ -29,12 +29,12 @@ class GeoTraceWidget(
             setContextThemedContent(ViewCompositionStrategy.DisposeOnDetachedFromWindowOrReleasedFromPool) {
                 GeoTraceWidgetContent(
                     dependencies.mediaWidgetAnswerViewModel,
-                    formEntryPrompt,
+                    prompt,
                     prompt.answerText,
                     questionDetails.isReadOnly,
                     QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.BODY_LARGE),
                     answerFontSize,
-                    onGetLineClick = { geoDataRequester.requestGeoPoly(formEntryPrompt) },
+                    onGetLineClick = { geoDataRequester.requestGeoPoly(prompt) },
                     onLongClick = { showContextMenu() }
                 )
             }
