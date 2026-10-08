@@ -25,15 +25,14 @@ fun GeoTraceWidgetContent(
 ) {
     Column {
         if (!readOnly || !answer.isNullOrEmpty()) {
+            val buttonText = when {
+                readOnly -> stringResource(string.view_line)
+                answer.isNullOrEmpty() -> stringResource(string.get_line)
+                else -> stringResource(string.view_or_change_line)
+            }
             WidgetIconButton(
                 ImageVector.vectorResource(R.drawable.ic_outline_polyline_white_24),
-                if (readOnly) {
-                    stringResource(string.view_line)
-                } else if (answer.isNullOrEmpty()) {
-                    stringResource(string.get_line)
-                } else {
-                    stringResource(string.view_or_change_line)
-                },
+                buttonText,
                 buttonFontSize,
                 onGetLineClick,
                 onLongClick
