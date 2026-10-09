@@ -69,21 +69,13 @@ object Configurations {
                 "positron" to StyleOption(
                     name = R.string.carto_map_style_positron,
                     BasemapUri.Mapbox("carto") { key ->
-                        if (key != null) {
-                            "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json?key=$key"
-                        } else {
-                            "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
-                        }
+                        "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json?key=${key.orEmpty()}"
                     }
                 ),
                 "dark_matter" to StyleOption(
                     name = R.string.carto_map_style_dark_matter,
                     BasemapUri.Mapbox("carto") { key ->
-                        if (key != null) {
-                            "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json?key=$key"
-                        } else {
-                            "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json"
-                        }
+                        "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json?key=${key.orEmpty()}"
                     }
                 )
             )
