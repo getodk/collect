@@ -12,12 +12,14 @@ import org.odk.collect.android.utilities.QuestionMediaManager
 import org.odk.collect.android.utilities.getExistingAnswerFile
 import org.odk.collect.androidshared.utils.getVideoThumbnail
 import org.odk.collect.async.Scheduler
+import org.odk.collect.maps.MapPreviewRenderer
 import java.io.File
 
 class MediaWidgetAnswerViewModel(
     private val scheduler: Scheduler,
     private val questionMediaManager: QuestionMediaManager,
-    private val mediaUtils: MediaUtils
+    private val mediaUtils: MediaUtils,
+    val mapPreviewRenderer: MapPreviewRenderer
 ) : ViewModel() {
     fun getFrame(answer: String?, context: Context): StateFlow<ImageBitmap?> {
         val bitmapState = MutableStateFlow<ImageBitmap?>(null)
