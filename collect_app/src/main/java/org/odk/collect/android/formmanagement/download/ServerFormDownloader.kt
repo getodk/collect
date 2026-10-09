@@ -30,6 +30,7 @@ import org.odk.collect.shared.result.chain
 import org.odk.collect.shared.result.map
 import org.odk.collect.shared.result.mapError
 import org.odk.collect.shared.result.onError
+import org.odk.collect.shared.result.onSuccess
 import org.odk.collect.shared.result.runAndCatch
 import org.odk.collect.shared.result.toError
 import org.odk.collect.shared.result.toSuccess
@@ -142,7 +143,7 @@ class ServerFormDownloader(
         formFileDownload: FormFileDownload,
         mediaFilesDownload: MediaFilesDownload,
         formsDirPath: String
-    ): Result<Unit, FormDownloadException> {
+    ): Result<Any, FormDownloadException> {
         ingestEntityListsFromDownload(
             mediaFilesDownload,
             entitiesRepository,
@@ -157,9 +158,17 @@ class ServerFormDownloader(
             moveMediaFiles(mediaFilesDownload.tempMediaPath, form)
                 .map { form }
                 .mapError { DiskError() }
-        }.chain { form ->
+        }.onSuccess { form ->
             ServerFormUseCases.copySavedFileFromPreviousFormVersion(formsRepository, form)
-            Unit.toSuccess()
+        }.onSuccess { form ->
+            if (formFileDownload is FormFileDownload.New) {
+                // Account for server returning update with same id/version
+                formsRepository.getAllByFormIdAndVersion(form.formId, form.version).forEach {
+                    if (it.mD5Hash != form.mD5Hash) {
+                        formsRepository.delete(it.dbId)
+                    }
+                }
+            }
         }.onError {
             // Clean up form if we created it
             if (formFileDownload is FormFileDownload.New) {
@@ -225,11 +234,6 @@ class ServerFormDownloader(
     ): Form {
         val formId = formMetadata.id
         val version = formMetadata.version
-
-        // Account for server returning update with same id/version
-        formsRepository.getAllByFormIdAndVersion(formId, version).forEach {
-            formsRepository.delete(it.dbId)
-        }
 
         val form = Form.Builder()
             .formFilePath(formFile.absolutePath)
