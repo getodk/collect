@@ -29,6 +29,8 @@ import org.mockito.kotlin.verify
 import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.support.WidgetTestActivity
+import org.odk.collect.android.widgets.geo.GeoTraceWidget
+import org.odk.collect.android.widgets.geo.STATIC_MAP_TAG
 import org.odk.collect.android.widgets.interfaces.GeoDataRequester
 import org.odk.collect.android.widgets.support.GeoWidgetHelpers.stringFromDoubleList
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer

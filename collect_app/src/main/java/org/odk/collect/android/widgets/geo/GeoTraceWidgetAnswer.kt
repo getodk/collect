@@ -1,9 +1,11 @@
-package org.odk.collect.android.widgets
+package org.odk.collect.android.widgets.geo
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import org.odk.collect.android.widgets.MediaWidgetAnswerViewModel
+import org.odk.collect.android.widgets.TextWidgetAnswer
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils
 import org.odk.collect.geo.geopoly.GeoPolyUtils
 import org.odk.collect.maps.traces.LineDescription
