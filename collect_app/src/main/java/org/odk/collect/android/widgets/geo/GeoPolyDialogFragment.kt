@@ -15,6 +15,7 @@ import org.odk.collect.android.utilities.FormEntryPromptUtils
 import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader
 import org.odk.collect.android.widgets.utilities.AdditionalAttributes
 import org.odk.collect.android.widgets.utilities.BindAttributes
+import org.odk.collect.android.widgets.utilities.GeoWidgetUtils
 import org.odk.collect.android.widgets.utilities.WidgetAnswerDialogFragment
 import org.odk.collect.androidshared.ui.DisplayString
 import org.odk.collect.async.DispatcherProvider
@@ -71,7 +72,7 @@ class GeoPolyDialogFragment(
             is GeoShapeData -> answer.points.map { it.toMapPoint() }
             null -> emptyList()
             else -> throw IllegalArgumentException()
-        }
+        }.takeIf { points -> points.all { GeoWidgetUtils.isWithinMapBounds(it) } } ?: emptyList()
 
         val referenceGeometryMappableData by viewModels<ReferenceGeometryMappableData> {
             viewModelFactory {

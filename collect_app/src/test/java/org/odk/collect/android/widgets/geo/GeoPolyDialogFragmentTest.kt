@@ -1,4 +1,4 @@
-package org.odk.collect.android.widgets.utilities
+package org.odk.collect.android.widgets.geo
 
 import android.R
 import android.os.Bundle
@@ -31,8 +31,6 @@ import org.odk.collect.android.javarosawrapper.SuccessValidationResult
 import org.odk.collect.android.javarosawrapper.ValidationResult
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
-import org.odk.collect.android.widgets.geo.GeoPolyDialogFragment
-import org.odk.collect.android.widgets.geo.ReferenceGeometryMappableData
 import org.odk.collect.android.widgets.items.GeoSelectChoiceElements
 import org.odk.collect.android.widgets.support.FormElementFixtures.selectChoice
 import org.odk.collect.android.widgets.support.FormElementFixtures.treeElement
@@ -227,6 +225,34 @@ class GeoPolyDialogFragmentTest {
             bundleOf(ARG_FORM_INDEX to prompt.index)
         ) {
             assertThat(it.inputPolygon, equalTo(points))
+        }
+    }
+
+    @Test
+    fun `configures GeoPolyFragment inputPolygon without answer when any point is out of map bounds`() {
+        val points = listOf(MapPoint(0.0, 0.0, 1.0, 1.0), MapPoint(91.0, 181.0, 1.0, 1.0))
+        prompt = MockFormEntryPromptBuilder(prompt)
+            .withDataType(Constants.DATATYPE_GEOTRACE)
+            .withAnswer(geoTraceOf(points))
+            .build()
+
+        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
+            GeoPolyDialogFragment::class,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ) {
+            assertThat(it.inputPolygon, equalTo(emptyList()))
+        }
+
+        prompt = MockFormEntryPromptBuilder(prompt)
+            .withDataType(Constants.DATATYPE_GEOSHAPE)
+            .withAnswer(geoShapeOf(points))
+            .build()
+
+        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
+            GeoPolyDialogFragment::class,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ) {
+            assertThat(it.inputPolygon, equalTo(emptyList()))
         }
     }
 

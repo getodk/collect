@@ -162,6 +162,10 @@ public abstract class QuestionWidgetTest<W extends Widget, A extends IAnswerData
         assertThat(viewsRegisterForContextMenu.get(0), is(widget));
     }
 
+    protected List<View> getViewsWithShownContextMenu() {
+        return ((WidgetTestActivity) activity).viewsWithShownContextMenu;
+    }
+
     protected void widgetInComposeActivity(AndroidComposeTestRule composeRule, View widget) {
         composeRule.getActivity().setContentView(widget);
     }

@@ -1,4 +1,4 @@
-package org.odk.collect.android.widgets.utilities
+package org.odk.collect.android.widgets.geo
 
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
@@ -22,8 +22,6 @@ import org.odk.collect.android.formentry.FormEntryViewModel
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.utilities.Appearances
-import org.odk.collect.android.widgets.geo.GeoPointMapDialogFragment
-import org.odk.collect.android.widgets.geo.ReferenceGeometryMappableData
 import org.odk.collect.android.widgets.items.GeoSelectChoiceElements
 import org.odk.collect.android.widgets.support.FormElementFixtures.selectChoice
 import org.odk.collect.android.widgets.support.FormElementFixtures.treeElement
@@ -83,6 +81,20 @@ class GeoPointMapDialogFragmentTest {
             bundleOf(ARG_FORM_INDEX to prompt.index)
         ) {
             assertThat(it.inputPoint, equalTo(answer.toMapPoint()))
+        }
+    }
+
+    @Test
+    fun `configures GeoPointMapFragment without answer when it is out of map bounds`() {
+        prompt = MockFormEntryPromptBuilder(prompt)
+            .withAnswer(GeoPointData(doubleArrayOf(91.0, 181.0, 0.0, 0.0)))
+            .build()
+
+        launcherRule.launchAndAssertOnChild<GeoPointMapFragment>(
+            GeoPointMapDialogFragment::class,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ) {
+            assertThat(it.inputPoint, equalTo(null))
         }
     }
 
