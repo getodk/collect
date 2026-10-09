@@ -84,7 +84,7 @@ class GeoTraceWidgetTest {
     fun `the map preview is displayed instead of the answer when it can be rendered`() {
         mapPreviewRenderer.preview = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
         createWidget(promptWithAnswer(StringData(answer)))
-        composeRule.onNodeWithTag(MAP_PREVIEW_TAG).assertIsDisplayed()
+        composeRule.onNodeWithTag(STATIC_MAP_TAG).assertIsDisplayed()
         composeRule.onNodeWithText(answer).assertDoesNotExist()
     }
 
@@ -92,7 +92,7 @@ class GeoTraceWidgetTest {
     fun `the answer is displayed instead of the map preview when it can't be rendered`() {
         mapPreviewRenderer.preview = null
         createWidget(promptWithAnswer(StringData(answer)))
-        composeRule.onNodeWithTag(MAP_PREVIEW_TAG).assertDoesNotExist()
+        composeRule.onNodeWithTag(STATIC_MAP_TAG).assertDoesNotExist()
         composeRule.onNodeWithText(answer).assertIsDisplayed()
     }
 
@@ -101,7 +101,7 @@ class GeoTraceWidgetTest {
         val answer = "100.0 10.0 0.0 0.0;101.0 11.0 0.0 0.0"
         mapPreviewRenderer.preview = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
         createWidget(promptWithAnswer(StringData(answer)))
-        composeRule.onNodeWithTag(MAP_PREVIEW_TAG).assertDoesNotExist()
+        composeRule.onNodeWithTag(STATIC_MAP_TAG).assertDoesNotExist()
         composeRule.onNodeWithText(answer).assertIsDisplayed()
     }
 
@@ -168,7 +168,7 @@ class GeoTraceWidgetTest {
         val listener = mock<View.OnCreateContextMenuListener>()
         widget.setOnCreateContextMenuListener(listener)
 
-        composeRule.onNodeWithTag(MAP_PREVIEW_TAG).performTouchInput { longClick() }
+        composeRule.onNodeWithTag(STATIC_MAP_TAG).performTouchInput { longClick() }
 
         verify(listener).onCreateContextMenu(any(), any(), anyOrNull())
     }
