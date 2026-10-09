@@ -1,4 +1,4 @@
-package org.odk.collect.android.widgets
+package org.odk.collect.android.widgets.geo
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

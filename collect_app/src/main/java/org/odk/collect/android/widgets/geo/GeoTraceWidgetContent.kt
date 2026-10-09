@@ -1,4 +1,4 @@
-package org.odk.collect.android.widgets
+package org.odk.collect.android.widgets.geo
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -8,6 +8,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import org.javarosa.form.api.FormEntryPrompt
+import org.odk.collect.android.widgets.MediaWidgetAnswerViewModel
+import org.odk.collect.android.widgets.WidgetAnswer
+import org.odk.collect.android.widgets.WidgetIconButton
 import org.odk.collect.androidshared.ui.compose.marginStandard
 import org.odk.collect.icons.R
 import org.odk.collect.strings.R.string

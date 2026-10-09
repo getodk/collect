@@ -12,6 +12,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import org.javarosa.core.model.Constants
 import org.javarosa.form.api.FormEntryPrompt
+import org.odk.collect.android.widgets.geo.GeoTraceWidgetAnswer
 import org.odk.collect.android.widgets.image.ImageWidgetAnswer
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils
 import org.odk.collect.android.widgets.video.VideoWidgetAnswer
