@@ -509,16 +509,18 @@ public class ServerFormDownloaderTest {
     @Test
     public void whenMultipleFormsWithSameFormIdVersionDeleted_reDownloadUnDeletesFormWithSameHash() throws Exception {
         String xform = FormUtils.createXFormBody("deleted-form", "version", "A title");
-        Form form = buildForm("deleted-form", "version", getFormFilesPath(), xform)
+        Form form = formsRepository.save(
+                buildForm("deleted-form", "version", getFormFilesPath(), xform)
                 .deleted(true)
-                .build();
-        formsRepository.save(form);
+                .build()
+        );
 
         String xform2 = FormUtils.createXFormBody("deleted-form", "version", "A different title");
-        Form form2 = buildForm("deleted-form", "version", getFormFilesPath(), xform2)
-                .deleted(true)
-                .build();
-        formsRepository.save(form2);
+        Form form2 = formsRepository.save(
+                buildForm("deleted-form", "version", getFormFilesPath(), xform2)
+                        .deleted(true)
+                        .build()
+        );
 
         ServerFormDetails serverFormDetails = new ServerFormDetails(
                 form2.getDisplayName(),
@@ -535,8 +537,8 @@ public class ServerFormDownloaderTest {
 
         ServerFormDownloader downloader = new ServerFormDownloader(formSource, formsRepository, cacheDir, formsDir.getAbsolutePath(), FormMetadataParser.INSTANCE, clock::get, entitiesRepository, entitySource);
         downloader.downloadForm(serverFormDetails, null, null);
-        assertThat(formsRepository.get(1L).isDeleted(), is(true));
-        assertThat(formsRepository.get(2L).isDeleted(), is(false));
+        assertThat(formsRepository.get(form.getDbId()).isDeleted(), is(true));
+        assertThat(formsRepository.get(form2.getDbId()).isDeleted(), is(false));
     }
     //endregion
 

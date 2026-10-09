@@ -287,6 +287,7 @@ object ServerFormUseCases {
             formBuilder.lastDetectedAttachmentsUpdateDate(latestUpdateTime)
         }
 
+        formBuilder.deleted(false)
         return formsRepository.save(formBuilder.build())
     }
 
@@ -367,7 +368,7 @@ data class MediaFilesDownload(
 )
 
 sealed class FormFileDownload {
-    data class New(val file: File) : FormFileDownload()
+    data class New(val file: File, val hash: String) : FormFileDownload()
     data class Existing(val form: Form) : FormFileDownload()
 }
 

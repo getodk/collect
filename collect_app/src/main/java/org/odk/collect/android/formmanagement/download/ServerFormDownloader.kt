@@ -30,6 +30,7 @@ import org.odk.collect.shared.result.chain
 import org.odk.collect.shared.result.map
 import org.odk.collect.shared.result.mapError
 import org.odk.collect.shared.result.onError
+import org.odk.collect.shared.result.onSuccess
 import org.odk.collect.shared.result.runAndCatch
 import org.odk.collect.shared.result.toError
 import org.odk.collect.shared.result.toSuccess
@@ -57,21 +58,8 @@ class ServerFormDownloader(
         progressReporter: ProgressReporter?,
         isCancelled: Supplier<Boolean>?
     ) {
-        val formOnDevice = if (!form.hash.isNullOrEmpty()) {
-            formsRepository.getOneByMd5Hash(form.hash)
-        } else {
+        if (form.hash.isNullOrEmpty()) {
             throw FormWithNoHash()
-        }
-
-        val preExistingFormsWithSameIdAndVersion = mutableListOf<Form>()
-        if (formOnDevice != null) {
-            if (formOnDevice.isDeleted) {
-                formsRepository.restore(formOnDevice.dbId)
-            }
-        } else {
-            preExistingFormsWithSameIdAndVersion.addAll(
-                formsRepository.getAllByFormIdAndVersion(form.formId, form.formVersion)
-            )
         }
 
         val tempDir = File(cacheDir, "download-" + UUID.randomUUID().toString())
@@ -88,23 +76,20 @@ class ServerFormDownloader(
                         get() = isCancelled?.get() ?: false
                 }
 
-                processOneForm(form, stateListener, tempDir, formsDirPath)
+                downloadFormFiles(form, stateListener, tempDir, formsDirPath)
             } catch (e: FormSourceException) {
                 throw FormSourceError(e)
             }
 
-            installEverything(formFileDownload, mediaFilesDownload, formsDirPath)
+            installForm(formFileDownload, mediaFilesDownload, formsDirPath)
                 .onError { throw it }
         } finally {
             tempDir.deleteDirectory()
-            for (formToDelete in preExistingFormsWithSameIdAndVersion) {
-                formsRepository.delete(formToDelete.dbId)
-            }
         }
     }
 
     @Throws(FormDownloadException::class, FormSourceException::class)
-    private fun processOneForm(
+    private fun downloadFormFiles(
         fd: ServerFormDetails,
         stateListener: OngoingWorkListener,
         tempDir: File,
@@ -154,11 +139,11 @@ class ServerFormDownloader(
         }
     }
 
-    private fun installEverything(
+    private fun installForm(
         formFileDownload: FormFileDownload,
         mediaFilesDownload: MediaFilesDownload,
         formsDirPath: String
-    ): Result<Unit, FormDownloadException> {
+    ): Result<Any, FormDownloadException> {
         ingestEntityListsFromDownload(
             mediaFilesDownload,
             entitiesRepository,
@@ -171,20 +156,25 @@ class ServerFormDownloader(
             formsDirPath
         ).chain { form ->
             moveMediaFiles(mediaFilesDownload.tempMediaPath, form)
-                .map { Pair(form, it) }
+                .map { form }
                 .mapError { DiskError() }
-        }.chain { (form, formMediaDir) ->
+        }.onSuccess { form ->
             ServerFormUseCases.copySavedFileFromPreviousFormVersion(formsRepository, form)
-            Unit.toSuccess()
+        }.onSuccess { form ->
+            if (formFileDownload is FormFileDownload.New) {
+                // Account for server returning update with same id/version
+                formsRepository.getAllByFormIdAndVersion(form.formId, form.version).forEach {
+                    if (it.mD5Hash != form.mD5Hash) {
+                        formsRepository.delete(it.dbId)
+                    }
+                }
+            }
         }.onError {
             // Clean up form if we created it
             if (formFileDownload is FormFileDownload.New) {
-                val md5Hash = formFileDownload.file.getMd5Hash()
-                if (md5Hash != null) {
-                    val form = formsRepository.getOneByMd5Hash(md5Hash)
-                    if (form != null) {
-                        formsRepository.delete(form.dbId)
-                    }
+                val form = formsRepository.getOneByMd5Hash(formFileDownload.hash)
+                if (form != null) {
+                    formsRepository.delete(form.dbId)
                 }
             }
         }
@@ -242,12 +232,15 @@ class ServerFormDownloader(
         formFile: File,
         entityAttachmentsDetected: Boolean
     ): Form {
+        val formId = formMetadata.id
+        val version = formMetadata.version
+
         val form = Form.Builder()
             .formFilePath(formFile.absolutePath)
             .formMediaPath(FileUtils.constructMediaPath(formFile.absolutePath))
             .displayName(formMetadata.title)
-            .version(formMetadata.version)
-            .formId(formMetadata.id)
+            .version(version)
+            .formId(formId)
             .submissionUri(formMetadata.submissionUri)
             .base64RSAPublicKey(formMetadata.base64RsaPublicKey)
             .autoDelete(formMetadata.autoDelete)
@@ -283,13 +276,14 @@ class ServerFormDownloader(
 
         // we've downloaded the file, and we may have renamed it
         // make sure it's not the same as a file we already have
-        val form = formsRepository.getOneByMd5Hash(tempFormFile.getMd5Hash()!!)
+        val hash = tempFormFile.getMd5Hash()!!
+        val form = formsRepository.getOneByMd5Hash(hash)
         if (form != null) {
             // delete the file we just downloaded, because it's a duplicate
             FileUtils.deleteAndReport(tempFormFile)
             return FormFileDownload.Existing(form)
         } else {
-            return FormFileDownload.New(tempFormFile)
+            return FormFileDownload.New(tempFormFile, hash)
         }
     }
 }
@@ -297,11 +291,14 @@ class ServerFormDownloader(
 private fun getFormFileName(formName: String, formsDirPath: String): String {
     val formattedFormName = FormNameUtils.formatFilenameFromFormName(formName)
     var fileName = "$formattedFormName.xml"
+    val existingForms = (File(formsDirPath).listFiles() ?: emptyArray()).map { it.name }
+
     var i = 2
-    while (File(formsDirPath + File.separator + fileName).exists()) {
+    while (existingForms.contains(fileName)) {
         fileName = formattedFormName + "_" + i + ".xml"
         i++
     }
+
     return fileName
 }
 
