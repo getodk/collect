@@ -299,16 +299,11 @@ class MapLibreMapFragment(private val configuration: Configuration) :
             throw IllegalArgumentException("Invalid Configuration!")
         }
 
+        val uriValue = uri.value(uri.keyName?.let { keys.get(it) })
+
         when (uri) {
             is BasemapUri.Raster -> {
-                val tileUri = if (uri.keyName != null) {
-                    val key = keys.get(uri.keyName)
-                    uri.value(key)
-                } else {
-                    uri.value()
-                }
-
-                val tileSet = TileSet("2.1.0", tileUri).apply {
+                val tileSet = TileSet("2.1.0", uriValue).apply {
                     attribution = configuration.attribution ?: ""
                     scheme = "xyz"
                 }
@@ -324,7 +319,7 @@ class MapLibreMapFragment(private val configuration: Configuration) :
             }
 
             is BasemapUri.Mapbox -> {
-                loadRemoteStyle(uri.value())
+                loadRemoteStyle(uriValue)
             }
         }
     }

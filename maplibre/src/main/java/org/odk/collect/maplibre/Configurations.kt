@@ -68,22 +68,14 @@ object Configurations {
             styleOptions = mapOf(
                 "positron" to StyleOption(
                     name = R.string.carto_map_style_positron,
-                    BasemapUri.Raster("carto") { key ->
-                        if (key != null) {
-                            "https://1.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png?key=$key"
-                        } else {
-                            "https://1.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
-                        }
+                    BasemapUri.Mapbox("carto") { key ->
+                        "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json?key=${key.orEmpty()}"
                     }
                 ),
                 "dark_matter" to StyleOption(
                     name = R.string.carto_map_style_dark_matter,
-                    BasemapUri.Raster("carto") { key ->
-                        if (key != null) {
-                            "https://1.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png?key=$key"
-                        } else {
-                            "https://1.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png"
-                        }
+                    BasemapUri.Mapbox("carto") { key ->
+                        "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json?key=${key.orEmpty()}"
                     }
                 )
             )
@@ -107,9 +99,9 @@ sealed class BasemapUri(val keyName: String? = null, private val factory: (key: 
         return factory(key)
     }
 
-    class Raster(keyName: String?, factory: (key: String?) -> String) : BasemapUri(keyName, factory) {
+    class Raster(value: String) : BasemapUri(null, { value })
+
+    class Mapbox(keyName: String?, factory: (key: String?) -> String) : BasemapUri(keyName, factory) {
         constructor(value: String) : this(null, { value })
     }
-
-    class Mapbox(value: String) : BasemapUri(null, { value })
 }
