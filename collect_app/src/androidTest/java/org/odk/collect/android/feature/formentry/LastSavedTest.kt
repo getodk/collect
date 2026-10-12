@@ -37,7 +37,7 @@ class LastSavedTest {
     }
 
     @Test
-    fun carriesOverBetweenFormVersions() {
+    fun whenFormVersionIsUpdated_lastSaveLoadsInTheUpdate() {
         testDependencies.server.addForm(
             "One Question Last Saved",
             "one_question_last_saved",
@@ -62,6 +62,35 @@ class LastSavedTest {
         mainMenuPage.clickFillBlankForm()
             .clickRefresh()
             .clickOnForm("One Question Last Saved")
+            .assertText("32")
+    }
+
+    @Test
+    fun whenFormHashIsUpdated_lastSaveLoadsInTheUpdate() {
+        testDependencies.server.addForm(
+            "One Question Last Saved",
+            "one_question_last_saved",
+            "1",
+            "one-question-last-saved.xml"
+        )
+
+        val mainMenuPage = rule.withProject(testDependencies.server.url, matchExactly = true)
+            .startBlankForm("One Question Last Saved")
+            .fillOutAndFinalize(
+                FormEntryPage.QuestionAndAnswer("what is your age", "32")
+            )
+
+        testDependencies.server.removeForm("One Question Last Saved")
+        testDependencies.server.addForm(
+            "One Question Last Saved New Title",
+            "one_question_last_saved",
+            "1",
+            "one-question-last-saved-new-title.xml"
+        )
+
+        mainMenuPage.clickFillBlankForm()
+            .clickRefresh()
+            .clickOnForm("One Question Last Saved New Title")
             .assertText("32")
     }
 }
