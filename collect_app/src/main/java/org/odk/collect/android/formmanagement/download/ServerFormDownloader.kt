@@ -164,7 +164,7 @@ class ServerFormDownloader(
             if (formFileDownload is FormFileDownload.New) {
                 // Account for server returning update with same id/version
                 formsRepository.getAllByFormIdAndVersion(form.formId, form.version).forEach {
-                    if (it.mD5Hash != form.mD5Hash) {
+                    if (it.dbId != form.dbId) {
                         formsRepository.delete(it.dbId)
                     }
                 }
