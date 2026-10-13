@@ -26,7 +26,8 @@ fun GeoTraceWidgetAnswer(
     AsyncStaticMap(
         modifier = modifier,
         trace = trace,
-        renderer = mediaWidgetAnswerViewModel.mapPreviewRenderer,
+        configuration = mediaWidgetAnswerViewModel.getStaticMapConfiguration(),
+        cache = mediaWidgetAnswerViewModel.staticMapCache,
         contentDescription = answerToDisplay,
         onClick = onClick,
         onLongClick = onLongClick

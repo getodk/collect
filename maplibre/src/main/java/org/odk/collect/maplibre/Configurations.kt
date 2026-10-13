@@ -87,6 +87,10 @@ object Configurations {
             )
         ),
     )
+
+    fun basemapStyle(basemapSource: String, settings: Settings): String? {
+        return all[basemapSource]?.styleSetting?.let { settings.getString(it) }
+    }
 }
 
 class Configuration(
@@ -96,11 +100,11 @@ class Configuration(
     val styleSetting: String? = null,
     val styleOptions: Map<String, StyleOption> = emptyMap()
 ) {
-    fun basemapUri(settings: Settings): BasemapUri {
+    fun basemapUri(style: String?): BasemapUri {
         return if (uri != null) {
             uri
         } else if (styleSetting != null) {
-            styleOptions.getValue(settings.getString(styleSetting)!!).uri
+            styleOptions.getValue(style!!).uri
         } else {
             throw IllegalArgumentException("Invalid Configuration!")
         }

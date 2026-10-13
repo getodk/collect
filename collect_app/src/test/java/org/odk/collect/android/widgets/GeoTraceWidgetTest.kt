@@ -26,6 +26,7 @@ import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.support.WidgetTestActivity
@@ -37,8 +38,8 @@ import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithA
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnly
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndAnswer
 import org.odk.collect.androidtest.onNodeWithClickLabel
-import org.odk.collect.maps.MapPreviewRenderer
-import org.odk.collect.maps.traces.TraceDescription
+import org.odk.collect.maplibre.staticmap.StaticMapCache
+import org.odk.collect.maplibre.staticmap.StaticMapConfiguration
 import org.odk.collect.strings.R.string
 import org.robolectric.Shadows.shadowOf
 
@@ -56,7 +57,7 @@ class GeoTraceWidgetTest {
 
     private val geoDataRequester = mock<GeoDataRequester>()
 
-    private val mapPreviewRenderer = FakeMapPreviewRenderer()
+    private val staticMapCache = mock<StaticMapCache>()
 
     @Test
     fun `#getAnswer returns null when there is no answer`() {
@@ -84,7 +85,7 @@ class GeoTraceWidgetTest {
 
     @Test
     fun `the map preview is displayed instead of the answer when it can be rendered`() {
-        mapPreviewRenderer.preview = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
+        whenever(staticMapCache.get(any(), any(), any(), any())).thenReturn(Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888))
         createWidget(promptWithAnswer(StringData(answer)))
         composeRule.onNodeWithTag(STATIC_MAP_TAG).assertIsDisplayed()
         composeRule.onNodeWithText(answer).assertDoesNotExist()
@@ -92,7 +93,6 @@ class GeoTraceWidgetTest {
 
     @Test
     fun `the answer is displayed instead of the map preview when it can't be rendered`() {
-        mapPreviewRenderer.preview = null
         createWidget(promptWithAnswer(StringData(answer)))
         composeRule.onNodeWithTag(STATIC_MAP_TAG).assertDoesNotExist()
         composeRule.onNodeWithText(answer).assertIsDisplayed()
@@ -101,7 +101,7 @@ class GeoTraceWidgetTest {
     @Test
     fun `the answer is displayed instead of the map preview when it is out of map bounds`() {
         val answer = "100.0 10.0 0.0 0.0;101.0 11.0 0.0 0.0"
-        mapPreviewRenderer.preview = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
+        whenever(staticMapCache.get(any(), any(), any(), any())).thenReturn(Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888))
         createWidget(promptWithAnswer(StringData(answer)))
         composeRule.onNodeWithTag(STATIC_MAP_TAG).assertDoesNotExist()
         composeRule.onNodeWithText(answer).assertIsDisplayed()
@@ -165,7 +165,7 @@ class GeoTraceWidgetTest {
 
     @Test
     fun `long pressing the map preview shows the context menu`() {
-        mapPreviewRenderer.preview = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
+        whenever(staticMapCache.get(any(), any(), any(), any())).thenReturn(Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888))
         val widget = createWidget(promptWithAnswer(StringData(answer)))
         val listener = mock<View.OnCreateContextMenuListener>()
         widget.setOnCreateContextMenuListener(listener)
@@ -179,7 +179,7 @@ class GeoTraceWidgetTest {
         composeRule.activity,
         QuestionDetails(asGeoTraceQuestion(prompt)),
         geoDataRequester,
-        QuestionWidget.Dependencies(mock(), MediaWidgetAnswerViewModel(mock(), mock(), mock(), mapPreviewRenderer))
+        QuestionWidget.Dependencies(mock(), MediaWidgetAnswerViewModel(mock(), mock(), mock(), { StaticMapConfiguration("blah", null, null) }, staticMapCache))
     ).also {
         composeRule.activity.setContentView(it)
     }
@@ -188,18 +188,4 @@ class GeoTraceWidgetTest {
         .withControlType(Constants.CONTROL_INPUT)
         .withDataType(Constants.DATATYPE_GEOTRACE)
         .build()
-
-    private class FakeMapPreviewRenderer : MapPreviewRenderer {
-        var preview: Bitmap? = null
-
-        override fun render(
-            trace: TraceDescription,
-            width: Int,
-            height: Int,
-            callback: (Bitmap?) -> Unit
-        ): () -> Unit {
-            callback(preview)
-            return {}
-        }
-    }
 }

@@ -16,6 +16,8 @@ interface MapLibreDependencyComponentProvider {
 @Singleton
 interface MapLibreDependencyComponent {
     fun inject(mapLibreMapFragment: MapLibreMapFragment)
+
+    fun keys(): Keys
 }
 
 @Module

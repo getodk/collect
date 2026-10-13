@@ -1,9 +1,8 @@
-package org.odk.collect.maplibre
+package org.odk.collect.maplibre.staticmap
 
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.util.LruCache
 import org.maplibre.android.geometry.LatLng
 import org.maplibre.android.geometry.LatLngBounds
 import org.maplibre.android.maps.Style
@@ -15,73 +14,64 @@ import org.maplibre.android.style.layers.PropertyFactory
 import org.maplibre.android.style.sources.GeoJsonSource
 import org.maplibre.geojson.LineString
 import org.maplibre.geojson.Point
-import org.odk.collect.maps.MapPreviewRenderer
-import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils
-import org.odk.collect.maps.layers.ReferenceLayerRepository
+import org.odk.collect.maplibre.BasemapUri
+import org.odk.collect.maplibre.Configuration
+import org.odk.collect.maplibre.Configurations
+import org.odk.collect.maplibre.MapLibreDependencyComponentProvider
+import org.odk.collect.maplibre.MapLibreSupport
+import org.odk.collect.maplibre.MapUtils
+import org.odk.collect.maplibre.ReferenceLayers
 import org.odk.collect.maps.traces.TraceDescription
-import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_GOOGLE
 import org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_OSM
-import org.odk.collect.settings.keys.ProjectKeys.KEY_BASEMAP_SOURCE
-import org.odk.collect.settings.keys.ProjectKeys.KEY_REFERENCE_LAYER
 import org.odk.collect.shared.injection.Keys
-import javax.inject.Provider
+import java.io.File
 
-class MapLibreMapPreviewRenderer(
-    private val context: Context,
-    private val settingsProvider: SettingsProvider,
-    private val referenceLayerRepository: Provider<ReferenceLayerRepository>,
-    private val keys: Keys
-) : MapPreviewRenderer {
+/**
+ * Renders a static image of a map showing a line or a polygon.
+ */
+object StaticMapRenderer {
 
     private val referenceLayers = ReferenceLayers()
 
-    private val cache = LruCache<List<Any?>, Bitmap>(10)
-
-    override fun render(
+    fun render(
+        context: Context,
+        configuration: StaticMapConfiguration,
+        cache: StaticMapCache,
         trace: TraceDescription,
         width: Int,
         height: Int,
         callback: (Bitmap?) -> Unit
     ): () -> Unit {
-        val settings = settingsProvider.getUnprotectedSettings()
-        val basemapSource = settings.getString(KEY_BASEMAP_SOURCE)
-        val configuration = when (basemapSource) {
-            // Google Maps can't render off-screen, so its previews use OpenStreetMap instead
-            BASEMAP_SOURCE_GOOGLE -> Configurations.all.getValue(BASEMAP_SOURCE_OSM)
-            else -> Configurations.all[basemapSource]
-        }
-
-        if (configuration == null || !MapLibreSupport.isAvailable() || trace.points.size < 2) {
-            callback(null)
+        cache.get(configuration, trace, width, height)?.let {
+            callback(it)
             return {}
         }
 
-        val key = listOf(
-            trace,
-            width,
-            height,
-            basemapSource,
-            configuration.styleSetting?.let { settings.getString(it) },
-            settings.getString(KEY_REFERENCE_LAYER)
-        )
+        val basemapConfiguration = when (configuration.basemapSource) {
+            // Google Maps can't render off-screen, so its previews use OpenStreetMap instead
+            BASEMAP_SOURCE_GOOGLE -> Configurations.all.getValue(BASEMAP_SOURCE_OSM)
+            else -> Configurations.all[configuration.basemapSource]
+        }
 
-        cache.get(key)?.let {
-            callback(it)
+        if (basemapConfiguration == null || !MapLibreSupport.isAvailable() || trace.points.size < 2) {
+            callback(null)
             return {}
         }
 
         MapLibreSupport.initialize(context)
 
-        var snapshotter = MapSnapshotter(context, snapshotOptions(basemap(configuration), trace, width, height))
+        val style = basemapStyle(basemapConfiguration, configuration.basemapStyle, keys(context))
+
+        var snapshotter = MapSnapshotter(context, snapshotOptions(context, style, configuration.referenceLayer, trace, width, height))
         snapshotter.start(
             {
-                cache.put(key, it.bitmap)
+                cache.put(configuration, trace, width, height, it.bitmap)
                 callback(it.bitmap)
             },
             {
                 // The basemap failed to load so retry without it
-                snapshotter = MapSnapshotter(context, snapshotOptions(blankBasemap(), trace, width, height))
+                snapshotter = MapSnapshotter(context, snapshotOptions(context, blankBasemap(), configuration.referenceLayer, trace, width, height))
                 snapshotter.start(
                     { callback(it.bitmap) },
                     { callback(null) }
@@ -93,7 +83,9 @@ class MapLibreMapPreviewRenderer(
     }
 
     private fun snapshotOptions(
+        context: Context,
         basemap: Style.Builder,
+        referenceLayer: File?,
         trace: TraceDescription,
         width: Int,
         height: Int
@@ -105,7 +97,7 @@ class MapLibreMapPreviewRenderer(
         val density = context.resources.displayMetrics.density
         return MapSnapshotter.Options((width / density).toInt(), (height / density).toInt())
             .withPixelRatio(density)
-            .withStyleBuilder(buildStyle(basemap, trace))
+            .withStyleBuilder(buildStyle(basemap, referenceLayer, trace))
             .withLogo(false)
             .withRegion(
                 LatLngBounds.Builder()
@@ -115,18 +107,18 @@ class MapLibreMapPreviewRenderer(
             .withPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
     }
 
-    private fun buildStyle(basemap: Style.Builder, trace: TraceDescription): Style.Builder {
-        addReferenceLayer(basemap)
+    private fun buildStyle(basemap: Style.Builder, referenceLayer: File?, trace: TraceDescription): Style.Builder {
+        addReferenceLayer(basemap, referenceLayer)
         addTrace(basemap, trace)
         return basemap
     }
 
-    private fun basemap(configuration: Configuration): Style.Builder {
-        val uri = configuration.basemapUri(settingsProvider.getUnprotectedSettings())
+    private fun basemapStyle(basemapConfiguration: Configuration, style: String?, keys: Keys): Style.Builder {
+        val uri = basemapConfiguration.basemapUri(style)
         val uriValue = uri.value(keys)
 
         return when (uri) {
-            is BasemapUri.Raster -> configuration.rasterBasemapStyle(uriValue).fromUri("asset://maplibre_empty_style.json")
+            is BasemapUri.Raster -> basemapConfiguration.rasterBasemapStyle(uriValue).fromUri("asset://maplibre_empty_style.json")
             is BasemapUri.Mapbox -> Style.Builder().fromUri(uriValue)
         }
     }
@@ -141,11 +133,10 @@ class MapLibreMapPreviewRenderer(
             )
     }
 
-    private fun addReferenceLayer(builder: Style.Builder) {
-        val file = MapFragmentReferenceLayerUtils.getReferenceLayerFile(
-            settingsProvider.getUnprotectedSettings().getString(KEY_REFERENCE_LAYER),
-            referenceLayerRepository.get()
-        ) ?: return
+    private fun addReferenceLayer(builder: Style.Builder, file: File?) {
+        if (file == null) {
+            return
+        }
 
         val (source, layers) = referenceLayers.sourceAndLayers(file) ?: return
         builder.withSource(source)
@@ -162,5 +153,11 @@ class MapLibreMapPreviewRenderer(
                 PropertyFactory.lineJoin(Property.LINE_JOIN_ROUND)
             )
         )
+    }
+
+    private fun keys(context: Context): Keys {
+        return (context.applicationContext as MapLibreDependencyComponentProvider)
+            .mapLibreDependencyComponent
+            .keys()
     }
 }

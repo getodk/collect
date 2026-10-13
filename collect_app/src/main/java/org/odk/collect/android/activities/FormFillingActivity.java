@@ -194,7 +194,8 @@ import org.odk.collect.externalapp.ExternalAppUtils;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.location.LocationClient;
-import org.odk.collect.maps.MapPreviewRenderer;
+import org.odk.collect.maplibre.staticmap.StaticMapCache;
+import org.odk.collect.maplibre.staticmap.StaticMapConfiguration;
 import org.odk.collect.material.MaterialProgressDialogFragment;
 import org.odk.collect.metadata.PropertyManager;
 import org.odk.collect.permissions.PermissionListener;
@@ -213,6 +214,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 
 import timber.log.Timber;
 
@@ -372,7 +374,10 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
     public ProjectDependencyModuleFactory projectDependencyModuleFactory;
 
     @Inject
-    public MapPreviewRenderer mapPreviewRenderer;
+    public Provider<StaticMapConfiguration> staticMapConfiguration;
+
+    @Inject
+    public StaticMapCache staticMapCache;
 
     @Inject
     public SoftKeyboardController softKeyboardController;
@@ -452,7 +457,8 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
                 instancesDataService,
                 changeLockProvider,
                 projectDependencyModuleFactory,
-                mapPreviewRenderer
+                staticMapConfiguration,
+                staticMapCache
         );
 
         DefaultDispatcherProvider dispatcherProvider = new DefaultDispatcherProvider();

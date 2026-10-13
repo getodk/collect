@@ -25,7 +25,8 @@ import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.async.Scheduler
 import org.odk.collect.audiorecorder.recording.AudioRecorder
 import org.odk.collect.location.LocationClient
-import org.odk.collect.maps.MapPreviewRenderer
+import org.odk.collect.maplibre.staticmap.StaticMapCache
+import org.odk.collect.maplibre.staticmap.StaticMapConfiguration
 import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.printer.HtmlPrinter
@@ -33,6 +34,7 @@ import org.odk.collect.qrcode.zxing.QRCodeCreatorImpl
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.strings.localization.LocalizedActivity
 import javax.inject.Inject
+import javax.inject.Provider
 
 class FormHierarchyFragmentHostActivity : LocalizedActivity(), CollectComposeThemeProvider {
 
@@ -91,7 +93,10 @@ class FormHierarchyFragmentHostActivity : LocalizedActivity(), CollectComposeThe
     lateinit var projectDependencyModuleFactory: ProjectDependencyModuleFactory
 
     @Inject
-    lateinit var mapPreviewRenderer: MapPreviewRenderer
+    lateinit var staticMapConfiguration: Provider<StaticMapConfiguration>
+
+    @Inject
+    lateinit var staticMapCache: StaticMapCache
 
     private val sessionId by lazy { intent.getStringExtra(EXTRA_SESSION_ID)!! }
     private val viewModelFactory by lazy {
@@ -117,7 +122,8 @@ class FormHierarchyFragmentHostActivity : LocalizedActivity(), CollectComposeThe
             instancesDataService,
             changeLockProvider,
             projectDependencyModuleFactory,
-            mapPreviewRenderer
+            staticMapConfiguration,
+            staticMapCache
         )
     }
 

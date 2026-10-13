@@ -12,14 +12,17 @@ import org.odk.collect.android.utilities.QuestionMediaManager
 import org.odk.collect.android.utilities.getExistingAnswerFile
 import org.odk.collect.androidshared.utils.getVideoThumbnail
 import org.odk.collect.async.Scheduler
-import org.odk.collect.maps.MapPreviewRenderer
+import org.odk.collect.maplibre.staticmap.StaticMapCache
+import org.odk.collect.maplibre.staticmap.StaticMapConfiguration
 import java.io.File
+import javax.inject.Provider
 
 class MediaWidgetAnswerViewModel(
     private val scheduler: Scheduler,
     private val questionMediaManager: QuestionMediaManager,
     private val mediaUtils: MediaUtils,
-    val mapPreviewRenderer: MapPreviewRenderer
+    private val staticMapConfiguration: Provider<StaticMapConfiguration>,
+    val staticMapCache: StaticMapCache
 ) : ViewModel() {
     fun getFrame(answer: String?, context: Context): StateFlow<ImageBitmap?> {
         val bitmapState = MutableStateFlow<ImageBitmap?>(null)
@@ -37,6 +40,10 @@ class MediaWidgetAnswerViewModel(
 
     fun getImage(answer: String?): File? {
         return questionMediaManager.getExistingAnswerFile(answer)
+    }
+
+    fun getStaticMapConfiguration(): StaticMapConfiguration {
+        return staticMapConfiguration.get()
     }
 
     fun openFile(activity: Activity, answer: String?, mimeType: String? = null) {
