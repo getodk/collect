@@ -123,7 +123,7 @@ class MapLibreMapPreviewRenderer(
 
     private fun basemap(configuration: Configuration): Style.Builder {
         val uri = configuration.basemapUri(settingsProvider.getUnprotectedSettings())
-        val uriValue = uri.value(uri.keyName?.let { keys.get(it) })
+        val uriValue = uri.value(keys)
 
         return when (uri) {
             is BasemapUri.Raster -> configuration.rasterBasemapStyle(uriValue).fromUri("asset://maplibre_empty_style.json")

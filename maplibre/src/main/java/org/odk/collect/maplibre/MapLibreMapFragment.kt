@@ -258,7 +258,7 @@ class MapLibreMapFragment(private val configuration: Configuration) :
         awaitingRemoteStyle = false
 
         val uri = configuration.basemapUri(settings)
-        val uriValue = uri.value(uri.keyName?.let { keys.get(it) })
+        val uriValue = uri.value(keys)
 
         when (uri) {
             is BasemapUri.Raster -> {
