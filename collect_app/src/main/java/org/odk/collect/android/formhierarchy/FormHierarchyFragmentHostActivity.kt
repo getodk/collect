@@ -26,7 +26,7 @@ import org.odk.collect.async.Scheduler
 import org.odk.collect.audiorecorder.recording.AudioRecorder
 import org.odk.collect.location.LocationClient
 import org.odk.collect.maplibre.staticmap.StaticMapCache
-import org.odk.collect.maplibre.staticmap.StaticMapConfiguration
+import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.printer.HtmlPrinter
@@ -34,7 +34,6 @@ import org.odk.collect.qrcode.zxing.QRCodeCreatorImpl
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.strings.localization.LocalizedActivity
 import javax.inject.Inject
-import javax.inject.Provider
 
 class FormHierarchyFragmentHostActivity : LocalizedActivity(), CollectComposeThemeProvider {
 
@@ -93,7 +92,7 @@ class FormHierarchyFragmentHostActivity : LocalizedActivity(), CollectComposeThe
     lateinit var projectDependencyModuleFactory: ProjectDependencyModuleFactory
 
     @Inject
-    lateinit var staticMapConfiguration: Provider<StaticMapConfiguration>
+    lateinit var referenceLayerRepository: ReferenceLayerRepository
 
     @Inject
     lateinit var staticMapCache: StaticMapCache
@@ -122,7 +121,7 @@ class FormHierarchyFragmentHostActivity : LocalizedActivity(), CollectComposeThe
             instancesDataService,
             changeLockProvider,
             projectDependencyModuleFactory,
-            staticMapConfiguration,
+            referenceLayerRepository,
             staticMapCache
         )
     }

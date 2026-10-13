@@ -12,16 +12,21 @@ import org.odk.collect.android.utilities.QuestionMediaManager
 import org.odk.collect.android.utilities.getExistingAnswerFile
 import org.odk.collect.androidshared.utils.getVideoThumbnail
 import org.odk.collect.async.Scheduler
+import org.odk.collect.maplibre.Configurations
 import org.odk.collect.maplibre.staticmap.StaticMapCache
 import org.odk.collect.maplibre.staticmap.StaticMapConfiguration
+import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils
+import org.odk.collect.maps.layers.ReferenceLayerRepository
+import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.keys.ProjectKeys
 import java.io.File
-import javax.inject.Provider
 
 class MediaWidgetAnswerViewModel(
     private val scheduler: Scheduler,
     private val questionMediaManager: QuestionMediaManager,
     private val mediaUtils: MediaUtils,
-    private val staticMapConfiguration: Provider<StaticMapConfiguration>,
+    private val settingsProvider: SettingsProvider,
+    private val referenceLayerRepository: ReferenceLayerRepository,
     val staticMapCache: StaticMapCache
 ) : ViewModel() {
     fun getFrame(answer: String?, context: Context): StateFlow<ImageBitmap?> {
@@ -43,7 +48,17 @@ class MediaWidgetAnswerViewModel(
     }
 
     fun getStaticMapConfiguration(): StaticMapConfiguration {
-        return staticMapConfiguration.get()
+        val settings = settingsProvider.getUnprotectedSettings()
+        val basemapSource = settings.getString(ProjectKeys.KEY_BASEMAP_SOURCE)!!
+
+        return StaticMapConfiguration(
+            basemapSource,
+            Configurations.basemapStyle(basemapSource, settings),
+            MapFragmentReferenceLayerUtils.getReferenceLayerFile(
+                settings.getString(ProjectKeys.KEY_REFERENCE_LAYER),
+                referenceLayerRepository
+            )
+        )
     }
 
     fun openFile(activity: Activity, answer: String?, mimeType: String? = null) {

@@ -116,12 +116,10 @@ import org.odk.collect.location.LocationClient;
 import org.odk.collect.location.LocationClientProvider;
 import org.odk.collect.maps.MapFragmentFactory;
 import org.odk.collect.maps.layers.DirectoryReferenceLayerRepository;
-import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils;
 import org.odk.collect.maps.layers.ReferenceLayerRepository;
 import org.odk.collect.maplibre.Configurations;
 import org.odk.collect.maplibre.MapLibreSupport;
 import org.odk.collect.maplibre.staticmap.StaticMapCache;
-import org.odk.collect.maplibre.staticmap.StaticMapConfiguration;
 import org.odk.collect.metadata.InstallIDProvider;
 import org.odk.collect.metadata.PropertyManager;
 import org.odk.collect.metadata.SettingsInstallIDProvider;
@@ -150,7 +148,6 @@ import org.odk.collect.settings.importing.SettingsChangeHandler;
 import org.odk.collect.settings.keys.AppConfigurationKeys;
 import org.odk.collect.settings.keys.MetaKeys;
 import org.odk.collect.settings.keys.ProjectKeys;
-import org.odk.collect.shared.settings.Settings;
 import org.odk.collect.shared.strings.UUIDGenerator;
 import org.odk.collect.utilities.UserAgentProvider;
 import org.odk.collect.webpage.CustomTabsWebPageService;
@@ -606,21 +603,6 @@ public class AppDependencyModule {
     @Singleton
     public StaticMapCache providesStaticMapCache() {
         return new StaticMapCache();
-    }
-
-    @Provides
-    public StaticMapConfiguration providesStaticMapConfiguration(SettingsProvider settingsProvider, ReferenceLayerRepository referenceLayerRepository) {
-        Settings settings = settingsProvider.getUnprotectedSettings();
-        String basemapSource = settings.getString(ProjectKeys.KEY_BASEMAP_SOURCE);
-
-        return new StaticMapConfiguration(
-                basemapSource,
-                Configurations.INSTANCE.basemapStyle(basemapSource, settings),
-                MapFragmentReferenceLayerUtils.INSTANCE.getReferenceLayerFile(
-                        settings.getString(ProjectKeys.KEY_REFERENCE_LAYER),
-                        referenceLayerRepository
-                )
-        );
     }
 
     @Provides

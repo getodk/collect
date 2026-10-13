@@ -36,14 +36,13 @@ import org.odk.collect.async.Scheduler
 import org.odk.collect.audiorecorder.recording.AudioRecorder
 import org.odk.collect.location.LocationClient
 import org.odk.collect.maplibre.staticmap.StaticMapCache
-import org.odk.collect.maplibre.staticmap.StaticMapConfiguration
+import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.printer.HtmlPrinter
 import org.odk.collect.qrcode.zxing.QRCodeCreator
 import org.odk.collect.settings.SettingsProvider
 import java.util.function.BiConsumer
-import javax.inject.Provider
 
 class FormEntryViewModelFactory(
     private val mode: String?,
@@ -67,7 +66,7 @@ class FormEntryViewModelFactory(
     private val instancesDataService: InstancesDataService,
     private val changeLockProvider: ChangeLockProvider,
     private val projectDependencyModuleFactory: ProjectDependencyModuleFactory,
-    private val staticMapConfiguration: Provider<StaticMapConfiguration>,
+    private val referenceLayerRepository: ReferenceLayerRepository,
     private val staticMapCache: StaticMapCache
 ) : ViewModelProvider.Factory {
 
@@ -152,7 +151,8 @@ class FormEntryViewModelFactory(
                 scheduler,
                 createFormSaveViewModel(extras.createSavedStateHandle()),
                 mediaUtils,
-                staticMapConfiguration,
+                settingsProvider,
+                referenceLayerRepository,
                 staticMapCache
             )
 

@@ -39,7 +39,8 @@ import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithR
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndAnswer
 import org.odk.collect.androidtest.onNodeWithClickLabel
 import org.odk.collect.maplibre.staticmap.StaticMapCache
-import org.odk.collect.maplibre.staticmap.StaticMapConfiguration
+import org.odk.collect.settings.InMemSettingsProvider
+import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.strings.R.string
 import org.robolectric.Shadows.shadowOf
 
@@ -175,13 +176,19 @@ class GeoTraceWidgetTest {
         verify(listener).onCreateContextMenu(any(), any(), anyOrNull())
     }
 
-    private fun createWidget(prompt: FormEntryPrompt) = GeoTraceWidget(
-        composeRule.activity,
-        QuestionDetails(asGeoTraceQuestion(prompt)),
-        geoDataRequester,
-        QuestionWidget.Dependencies(mock(), MediaWidgetAnswerViewModel(mock(), mock(), mock(), { StaticMapConfiguration("blah", null, null) }, staticMapCache))
-    ).also {
-        composeRule.activity.setContentView(it)
+    private fun createWidget(prompt: FormEntryPrompt): GeoTraceWidget {
+        val settingsProvider = InMemSettingsProvider().also {
+            it.getUnprotectedSettings().save(ProjectKeys.KEY_BASEMAP_SOURCE, "blah")
+        }
+
+        return GeoTraceWidget(
+            composeRule.activity,
+            QuestionDetails(asGeoTraceQuestion(prompt)),
+            geoDataRequester,
+            QuestionWidget.Dependencies(mock(), MediaWidgetAnswerViewModel(mock(), mock(), mock(), settingsProvider, mock(), staticMapCache))
+        ).also {
+            composeRule.activity.setContentView(it)
+        }
     }
 
     private fun asGeoTraceQuestion(prompt: FormEntryPrompt) = MockFormEntryPromptBuilder(prompt)
