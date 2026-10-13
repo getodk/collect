@@ -25,7 +25,6 @@ import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.async.Scheduler
 import org.odk.collect.audiorecorder.recording.AudioRecorder
 import org.odk.collect.location.LocationClient
-import org.odk.collect.maplibre.staticmap.StaticMapCache
 import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.permissions.PermissionsProvider
@@ -94,9 +93,6 @@ class FormHierarchyFragmentHostActivity : LocalizedActivity(), CollectComposeThe
     @Inject
     lateinit var referenceLayerRepository: ReferenceLayerRepository
 
-    @Inject
-    lateinit var staticMapCache: StaticMapCache
-
     private val sessionId by lazy { intent.getStringExtra(EXTRA_SESSION_ID)!! }
     private val viewModelFactory by lazy {
         FormEntryViewModelFactory(
@@ -121,8 +117,7 @@ class FormHierarchyFragmentHostActivity : LocalizedActivity(), CollectComposeThe
             instancesDataService,
             changeLockProvider,
             projectDependencyModuleFactory,
-            referenceLayerRepository,
-            staticMapCache
+            referenceLayerRepository
         )
     }
 

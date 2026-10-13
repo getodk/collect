@@ -194,7 +194,6 @@ import org.odk.collect.externalapp.ExternalAppUtils;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.location.LocationClient;
-import org.odk.collect.maplibre.staticmap.StaticMapCache;
 import org.odk.collect.maps.layers.ReferenceLayerRepository;
 import org.odk.collect.material.MaterialProgressDialogFragment;
 import org.odk.collect.metadata.PropertyManager;
@@ -376,9 +375,6 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
     public ReferenceLayerRepository referenceLayerRepository;
 
     @Inject
-    public StaticMapCache staticMapCache;
-
-    @Inject
     public SoftKeyboardController softKeyboardController;
 
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
@@ -456,8 +452,7 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
                 instancesDataService,
                 changeLockProvider,
                 projectDependencyModuleFactory,
-                referenceLayerRepository,
-                staticMapCache
+                referenceLayerRepository
         );
 
         DefaultDispatcherProvider dispatcherProvider = new DefaultDispatcherProvider();

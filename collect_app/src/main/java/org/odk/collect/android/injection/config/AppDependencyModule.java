@@ -119,7 +119,6 @@ import org.odk.collect.maps.layers.DirectoryReferenceLayerRepository;
 import org.odk.collect.maps.layers.ReferenceLayerRepository;
 import org.odk.collect.maplibre.Configurations;
 import org.odk.collect.maplibre.MapLibreSupport;
-import org.odk.collect.maplibre.staticmap.StaticMapCache;
 import org.odk.collect.metadata.InstallIDProvider;
 import org.odk.collect.metadata.PropertyManager;
 import org.odk.collect.metadata.SettingsInstallIDProvider;
@@ -597,12 +596,6 @@ public class AppDependencyModule {
     @Provides
     public MapFragmentFactory providesMapFragmentFactory(SettingsProvider settingsProvider) {
         return new MapFragmentFactoryImpl(settingsProvider);
-    }
-
-    @Provides
-    @Singleton
-    public StaticMapCache providesStaticMapCache() {
-        return new StaticMapCache();
     }
 
     @Provides

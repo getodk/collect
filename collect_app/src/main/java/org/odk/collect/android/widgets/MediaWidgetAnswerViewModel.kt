@@ -27,7 +27,7 @@ class MediaWidgetAnswerViewModel(
     private val mediaUtils: MediaUtils,
     private val settingsProvider: SettingsProvider,
     private val referenceLayerRepository: ReferenceLayerRepository,
-    val staticMapCache: StaticMapCache
+    val staticMapCache: StaticMapCache = StaticMapCache()
 ) : ViewModel() {
     fun getFrame(answer: String?, context: Context): StateFlow<ImageBitmap?> {
         val bitmapState = MutableStateFlow<ImageBitmap?>(null)
