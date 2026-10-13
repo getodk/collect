@@ -8,6 +8,7 @@ import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
+import org.odk.collect.android.formmanagement.support.FormListFixtures
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.FormListItem
 import org.odk.collect.forms.FormSource
@@ -37,15 +38,21 @@ class FetchFormDetailsServerFormUseCasesTest {
 
     @Test
     fun whenFormHasManifestUrl_returnsMediaFilesInDetails() {
-        whenever(formSource.fetchFormList()).thenReturn(
-            listOf(FORM_WITHOUT_MANIFEST, FORM_WITH_MANIFEST)
+        val form = FormListFixtures.formListItem()
+        val manifestUrl = "http://example.com/manifest"
+        val formWithManifest = FormListFixtures.formListItem(manifestUrl = manifestUrl)
+        whenever(formSource.fetchFormList()).thenReturn(listOf(form, formWithManifest))
+
+        val mediaFile = FormListFixtures.mediaFile()
+        whenever(formSource.fetchManifest(manifestUrl)).thenReturn(
+            FormListFixtures.manifestFile(listOf(mediaFile))
         )
 
         val serverFormDetails = ServerFormUseCases.fetchFormDetails(formsRepository, formSource)
-        assertThat(getFormFromList(serverFormDetails, "form-1").manifest, nullValue())
+        assertThat(getFormFromList(serverFormDetails, form.formID).manifest, nullValue())
         assertThat(
-            getFormFromList(serverFormDetails, "form-2").manifest!!.mediaFiles,
-            contains(MEDIA_FILE)
+            getFormFromList(serverFormDetails, formWithManifest.formID).manifest!!.mediaFiles,
+            contains(mediaFile)
         )
     }
 
@@ -354,8 +361,7 @@ private val MEDIA_FILE = MediaFile(
     "http://example.com/media-file"
 )
 
-private val FORM_WITHOUT_MANIFEST =
-    FormListItem("http://example.com/form-1", "form-1", "1", "form-1-hash", "Form 1", null)
+private val FORM_WITHOUT_MANIFEST = FormListFixtures.formListItem()
 
 private val FORM_WITH_MANIFEST = FormListItem(
     "http://example.com/form-2",
