@@ -89,7 +89,7 @@ object Configurations {
     )
 
     fun basemapStyle(basemapSource: String, settings: Settings): String? {
-        return all[basemapSource]?.styleSetting?.let { settings.getString(it) }
+        return all[basemapSource]?.basemapStyle(settings)
     }
 }
 
@@ -100,6 +100,10 @@ class Configuration(
     val styleSetting: String? = null,
     val styleOptions: Map<String, StyleOption> = emptyMap()
 ) {
+    fun basemapStyle(settings: Settings): String? {
+        return styleSetting?.let { settings.getString(it) }
+    }
+
     fun basemapUri(style: String?): BasemapUri {
         return if (uri != null) {
             uri
