@@ -24,7 +24,7 @@ class FetchFormDetailsServerFormUseCasesTest {
     private val formSource = mock<FormSource>()
 
     @Test
-    fun whenFormHasManifestUrl_returnsMediaFilesInDetails() {
+    fun `#fetchFormDetails returns media files in details when form has manifest URL`() {
         val form = FormListFixtures.formListItem()
         val manifestUrl = "http://example.com/manifest"
         val formWithManifest = FormListFixtures.formListItem(manifestUrl = manifestUrl)
@@ -44,7 +44,7 @@ class FetchFormDetailsServerFormUseCasesTest {
     }
 
     @Test
-    fun whenFormDoesNotExist_isNew() {
+    fun `#fetchFormDetails returns New type when form does not exist`() {
         val form = FormListFixtures.formListItem()
         whenever(formSource.fetchFormList()).thenReturn(listOf(form))
 
@@ -54,7 +54,7 @@ class FetchFormDetailsServerFormUseCasesTest {
     }
 
     @Test
-    fun whenAFormIsSoftDeleted_isNew() {
+    fun `#fetchFormDetails returns New type when a form is soft deleted`() {
         val form = FormListFixtures.formListItem()
         whenever(formSource.fetchFormList()).thenReturn(listOf(form))
         formsRepository.save(
@@ -73,7 +73,7 @@ class FetchFormDetailsServerFormUseCasesTest {
     }
 
     @Test
-    fun whenAFormExists_andListContainsNewVersionWithDifferentHash_isUpdatedVersion() {
+    fun `#fetchFormDetails returns UpdatedVersion type when a form exists and list contains new version with different hash`() {
         val form = FormListFixtures.formListItem()
         whenever(formSource.fetchFormList()).thenReturn(listOf(form))
         formsRepository.save(
@@ -91,7 +91,7 @@ class FetchFormDetailsServerFormUseCasesTest {
     }
 
     @Test
-    fun whenAFormExists_andListContainsSameVersionWithDifferentHash_isUpdatedHash() {
+    fun `#fetchFormDetails returns UpdatedHash type when a form exists and list contains same version with different hash`() {
         val form = FormListFixtures.formListItem()
         whenever(formSource.fetchFormList()).thenReturn(listOf(form))
         formsRepository.save(
@@ -109,7 +109,7 @@ class FetchFormDetailsServerFormUseCasesTest {
     }
 
     @Test
-    fun whenAFormExists_andHasNewMediaFileOnServer_isUpdatedMedia() {
+    fun `#fetchFormDetails returns UpdatedMedia type when a form exists and has new media file on server`() {
         val manifestUrl = "http://example.com/manifest"
         val form = FormListFixtures.formListItem(manifestUrl = manifestUrl)
         whenever(formSource.fetchFormList()).thenReturn(listOf(form))
@@ -135,7 +135,7 @@ class FetchFormDetailsServerFormUseCasesTest {
     }
 
     @Test
-    fun whenAFormExists_andHasUpdatedMediaFileOnServer_isUpdatedMedia() {
+    fun `#fetchFormDetails returns UpdatedMedia type when a form exists and has updated media file on server`() {
         val manifestUrl = "http://example.com/manifest"
         val form = FormListFixtures.formListItem(manifestUrl = manifestUrl)
         whenever(formSource.fetchFormList()).thenReturn(listOf(form))
@@ -165,7 +165,7 @@ class FetchFormDetailsServerFormUseCasesTest {
     }
 
     @Test
-    fun whenAFormExists_andItsNewerVersionWithUpdatedMediaFilesHasBeenAlreadyDownloaded_isOnDevice() {
+    fun `#fetchFormDetails returns OnDevice type when a form exists and its newer version with updated media files has been already downloaded`() {
         val manifestUrl = "http://example.com/manifest"
         val form = FormListFixtures.formListItem(manifestUrl = manifestUrl)
         whenever(formSource.fetchFormList()).thenReturn(listOf(form))
@@ -208,7 +208,7 @@ class FetchFormDetailsServerFormUseCasesTest {
     }
 
     @Test
-    fun whenAFormExists_andItsNewerVersionHasBeenAlreadyDownloadedButThenSoftDeleted_isNew() {
+    fun `#fetchFormDetails returns New type when a form exists and its newer version has been already downloaded but then soft deleted`() {
         val form = FormListFixtures.formListItem()
         whenever(formSource.fetchFormList()).thenReturn(listOf(form))
 
@@ -236,7 +236,7 @@ class FetchFormDetailsServerFormUseCasesTest {
     }
 
     @Test
-    fun whenAFormExists_andItsNewerVersionWithMediaFilesHasBeenAlreadyDownloadedButThenSoftDeleted_isNew() {
+    fun `#fetchFormDetails returns New type when a form exists and its newer version with media files has been already downloaded but then soft deleted`() {
         val manifestUrl = "http://example.com/manifest"
         val form = FormListFixtures.formListItem(manifestUrl = manifestUrl)
         whenever(formSource.fetchFormList()).thenReturn(listOf(form))
@@ -280,7 +280,7 @@ class FetchFormDetailsServerFormUseCasesTest {
     }
 
     @Test
-    fun whenAFormExists_andIsNotUpdatedOnServer_andDoesNotHaveAManifest_isOnDevice() {
+    fun `#fetchFormDetails returns OnDevice type when a form exists and is not updated on server and does not have a manifest`() {
         val form = FormListFixtures.formListItem()
         whenever(formSource.fetchFormList()).thenReturn(listOf(form))
 
@@ -299,7 +299,7 @@ class FetchFormDetailsServerFormUseCasesTest {
     }
 
     @Test
-    fun whenFormExists_andMediaFilesExist_isOnDevice() {
+    fun `#fetchFormDetails returns OnDevice type when form exists and media files exist`() {
         val manifestUrl = "http://example.com/manifest"
         val form = FormListFixtures.formListItem(manifestUrl = manifestUrl)
         whenever(formSource.fetchFormList()).thenReturn(listOf(form))
@@ -329,7 +329,7 @@ class FetchFormDetailsServerFormUseCasesTest {
     }
 
     @Test
-    fun whenAFormExists_andIsUpdatedOnServer_andDoesNotHaveNewMedia_isUpdatedVersion() {
+    fun `#fetchFormDetails returns UpdatedVersion type when a form exists and is updated on server and does not have new media`() {
         val manifestUrl = "http://example.com/manifest"
         val form = FormListFixtures.formListItem(manifestUrl = manifestUrl)
         whenever(formSource.fetchFormList()).thenReturn(listOf(form))
@@ -359,7 +359,7 @@ class FetchFormDetailsServerFormUseCasesTest {
     }
 
     @Test
-    fun whenAFormExists_andItsNewerVersionWithManifestIsAvailableButHasNullHash_isOnDevice() {
+    fun `#fetchFormDetails returns OnDevice type when a form exists and its newer version with manifest is available but has null hash`() {
         val form =
             FormListFixtures.formListItem(manifestUrl = "http://example.com/manifest", hash = null)
         whenever(formSource.fetchFormList()).thenReturn(listOf(form))
