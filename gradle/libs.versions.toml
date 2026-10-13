@@ -67,7 +67,7 @@ danlewAndroidJoda = { group = "net.danlew", name = "android.joda", version = "2.
 rarepebbleColorpicker = { group = "com.github.martin-stone", name = "hsv-alpha-color-picker-android", version = "3.1.0" }
 commonsIo = { group = "commons-io", name = "commons-io", version = "2.22.0" }
 opencsv = { group = "com.opencsv", name = "opencsv", version = "5.12.0" }
-javarosa = { group = "org.getodk", name = "javarosa", version = "d17c920-SNAPSHOT" } # Online
+javarosa = { group = "org.getodk", name = "javarosa", version = { strictly = "d17c920-SNAPSHOT" } } # Online (strictly: Gradle orders commit hash snapshots below releases, so without it stale lockfiles silently keep the old version instead of failing the build)
 # javarosa = { group = "org.getodk", name = "javarosa", version = "local" } # Local
 karumiDexter = { group = "com.karumi", name = "dexter", version = "6.2.3" }
 zxingAndroidEmbedded = { group = "com.journeyapps", name = "zxing-android-embedded", version = "4.3.0" }
