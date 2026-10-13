@@ -31,7 +31,7 @@ import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.support.WidgetTestActivity
 import org.odk.collect.android.widgets.geo.GeoTraceWidget
-import org.odk.collect.android.widgets.geo.STATIC_MAP_TAG
+import org.odk.collect.android.widgets.geo.StaticMapSemantics
 import org.odk.collect.android.widgets.interfaces.GeoDataRequester
 import org.odk.collect.android.widgets.support.GeoWidgetHelpers.stringFromDoubleList
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer
@@ -87,14 +87,14 @@ class GeoTraceWidgetTest {
     fun `the map preview is displayed instead of the answer when it can be rendered`() {
         whenever(staticMapCache.get(any(), any(), any(), any())).thenReturn(Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888))
         createWidget(promptWithAnswer(StringData(answer)))
-        composeRule.onNodeWithTag(STATIC_MAP_TAG).assertIsDisplayed()
+        composeRule.onNodeWithTag(StaticMapSemantics.TAG).assertIsDisplayed()
         composeRule.onNodeWithText(answer).assertDoesNotExist()
     }
 
     @Test
     fun `the answer is displayed instead of the map preview when it can't be rendered`() {
         createWidget(promptWithAnswer(StringData(answer)))
-        composeRule.onNodeWithTag(STATIC_MAP_TAG).assertDoesNotExist()
+        composeRule.onNodeWithTag(StaticMapSemantics.TAG).assertDoesNotExist()
         composeRule.onNodeWithText(answer).assertIsDisplayed()
     }
 
@@ -103,7 +103,7 @@ class GeoTraceWidgetTest {
         val answer = "100.0 10.0 0.0 0.0;101.0 11.0 0.0 0.0"
         whenever(staticMapCache.get(any(), any(), any(), any())).thenReturn(Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888))
         createWidget(promptWithAnswer(StringData(answer)))
-        composeRule.onNodeWithTag(STATIC_MAP_TAG).assertDoesNotExist()
+        composeRule.onNodeWithTag(StaticMapSemantics.TAG).assertDoesNotExist()
         composeRule.onNodeWithText(answer).assertIsDisplayed()
     }
 
@@ -170,7 +170,7 @@ class GeoTraceWidgetTest {
         val listener = mock<View.OnCreateContextMenuListener>()
         widget.setOnCreateContextMenuListener(listener)
 
-        composeRule.onNodeWithTag(STATIC_MAP_TAG).performTouchInput { longClick() }
+        composeRule.onNodeWithTag(StaticMapSemantics.TAG).performTouchInput { longClick() }
 
         verify(listener).onCreateContextMenu(any(), any(), anyOrNull())
     }

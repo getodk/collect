@@ -91,7 +91,7 @@ fun AsyncStaticMap(
                 bitmap = currentState.bitmap,
                 contentDescription = contentDescription,
                 contentScale = ContentScale.Crop,
-                modifier = mapModifier.testTag(STATIC_MAP_TAG)
+                modifier = mapModifier.testTag(StaticMapSemantics.TAG)
             )
 
             StaticMapState.Failed -> failure()
@@ -107,4 +107,6 @@ private sealed interface StaticMapState {
 
 private val STATIC_MAP_HEIGHT = 200.dp
 
-internal const val STATIC_MAP_TAG = "static_map"
+internal object StaticMapSemantics {
+    const val TAG = "StaticMap"
+}
