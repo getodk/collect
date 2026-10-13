@@ -30,8 +30,9 @@ fun GeoTraceWidgetAnswer(
         cache = mediaWidgetAnswerViewModel.staticMapCache,
         contentDescription = answerToDisplay,
         onClick = onClick,
-        onLongClick = onLongClick
-    ) {
-        TextWidgetAnswer(Modifier, null, answerToDisplay ?: "", fontSize, horizontalArrangement, onClick, onLongClick)
-    }
+        onLongClick = onLongClick,
+        failure = {
+            TextWidgetAnswer(Modifier, null, answerToDisplay ?: "", fontSize, horizontalArrangement, onClick, onLongClick)
+        }
+    )
 }
