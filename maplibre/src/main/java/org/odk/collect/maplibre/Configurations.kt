@@ -125,7 +125,7 @@ class Configuration(
 
 class StyleOption(val name: Int, val uri: BasemapUri)
 
-sealed class BasemapUri(val keyName: String? = null, private val factory: (key: String?) -> String) {
+sealed class BasemapUri(private val keyName: String? = null, private val factory: (key: String?) -> String) {
 
     fun value(keys: Keys): String {
         return factory(keyName?.let { keys.get(it) })
