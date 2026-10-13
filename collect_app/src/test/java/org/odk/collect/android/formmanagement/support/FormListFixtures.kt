@@ -12,13 +12,14 @@ object FormListFixtures {
 
     fun formListItem(
         formId: String = idGenerator.nextInt().toString(),
-        manifestUrl: String? = null
+        manifestUrl: String? = null,
+        hash: String? = "$formId-hash"
     ): FormListItem {
         return FormListItem(
             "http://example.com/forms/$formId",
             formId,
             "1",
-            "$formId-hash",
+            hash,
             "Form $formId",
             manifestUrl
         )
