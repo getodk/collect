@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import org.odk.collect.android.widgets.MediaWidgetAnswerViewModel
 import org.odk.collect.androidshared.system.ContextExt.getActivity
-import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
+import org.odk.collect.androidshared.ui.multiclicksafe.multiClickSafe
 
 @Composable
 fun ImageWidgetAnswer(
@@ -52,11 +52,7 @@ fun ImageWidgetAnswer(
                     .wrapContentWidth(Alignment.Start)
                     .clip(MaterialTheme.shapes.large)
                     .combinedClickable(
-                        onClick = {
-                            if (MultiClickGuard.allowClick()) {
-                                mediaWidgetAnswerViewModel.openFile(context.getActivity(), answer, "image/*")
-                            }
-                        },
+                        onClick = multiClickSafe { mediaWidgetAnswerViewModel.openFile(context.getActivity(), answer, "image/*") },
                         onLongClick = onLongClick,
                         onClickLabel = stringResource(org.odk.collect.strings.R.string.open_file)
                     )

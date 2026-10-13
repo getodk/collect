@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.sp
 import org.odk.collect.android.utilities.HtmlUtils
 import org.odk.collect.androidshared.R.dimen
 import org.odk.collect.androidshared.ui.compose.marginSmall
-import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
+import org.odk.collect.androidshared.ui.multiclicksafe.multiClickSafe
 
 @Composable
 fun TextWidgetAnswer(
@@ -53,11 +53,7 @@ fun TextWidgetAnswer(
             .combinedClickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
-                onClick = {
-                    if (MultiClickGuard.allowClick()) {
-                        onClick()
-                    }
-                },
+                onClick = multiClickSafe(onClick),
                 onLongClick = onLongClick,
                 onClickLabel = onClickLabel
             ),

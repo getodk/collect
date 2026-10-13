@@ -27,7 +27,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils
-import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
+import org.odk.collect.androidshared.ui.multiclicksafe.multiClickSafe
 import org.odk.collect.maplibre.staticmap.StaticMapCache
 import org.odk.collect.maplibre.staticmap.StaticMapConfiguration
 import org.odk.collect.maplibre.staticmap.StaticMapLoader
@@ -71,11 +71,7 @@ fun AsyncStaticMap(
             .combinedClickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
-                onClick = {
-                    if (MultiClickGuard.allowClick()) {
-                        onClick()
-                    }
-                },
+                onClick = multiClickSafe(onClick),
                 onLongClick = onLongClick
             )
 
