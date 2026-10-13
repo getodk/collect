@@ -28,13 +28,13 @@ import org.odk.collect.shared.injection.Keys
 import java.io.File
 
 /**
- * Renders a static image of a map showing a line or a polygon.
+ * Loads a static image of a map showing a line or a polygon, rendering it off-screen if it isn't cached.
  */
-object StaticMapRenderer {
+object StaticMapLoader {
 
     private val referenceLayers = ReferenceLayers()
 
-    fun render(
+    fun load(
         context: Context,
         configuration: StaticMapConfiguration,
         cache: StaticMapCache,

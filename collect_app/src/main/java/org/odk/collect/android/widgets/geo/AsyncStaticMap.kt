@@ -30,7 +30,7 @@ import org.odk.collect.android.widgets.utilities.GeoWidgetUtils
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 import org.odk.collect.maplibre.staticmap.StaticMapCache
 import org.odk.collect.maplibre.staticmap.StaticMapConfiguration
-import org.odk.collect.maplibre.staticmap.StaticMapRenderer
+import org.odk.collect.maplibre.staticmap.StaticMapLoader
 import org.odk.collect.maps.traces.TraceDescription
 
 @Composable
@@ -53,7 +53,7 @@ fun AsyncStaticMap(
 
         DisposableEffect(trace, configuration, width, height) {
             val cancel = if (trace.points.all { GeoWidgetUtils.isWithinMapBounds(it) }) {
-                StaticMapRenderer.render(context, configuration, cache, trace, width, height) {
+                StaticMapLoader.load(context, configuration, cache, trace, width, height) {
                     state = if (it != null) StaticMapState.Loaded(it.asImageBitmap()) else StaticMapState.Failed
                 }
             } else {
