@@ -263,8 +263,6 @@ interface FormController {
 
     fun getQuestionPromptConstraintText(index: FormIndex?): String?
 
-    fun getQuestionPromptRequiredText(index: FormIndex?): String?
-
     fun currentCaptionPromptIsQuestion(): Boolean
 
     /**
