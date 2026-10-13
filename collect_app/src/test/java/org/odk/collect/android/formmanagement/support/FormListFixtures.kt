@@ -29,10 +29,13 @@ object FormListFixtures {
         return ManifestFile("hash", mediaFiles = mediaFiles)
     }
 
-    fun mediaFile(name: String = idGenerator.nextInt().toString()): MediaFile {
+    fun mediaFile(
+        name: String = idGenerator.nextInt().toString(),
+        hash: String = getMd5Hash(ByteArrayInputStream("blah".toByteArray()))!!
+    ): MediaFile {
         return MediaFile(
             "$name.file",
-            getMd5Hash(ByteArrayInputStream("blah".toByteArray()))!!,
+            hash,
             "http://example.com/media-files/$name"
         )
     }

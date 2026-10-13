@@ -14,9 +14,7 @@ import org.odk.collect.forms.FormsRepository
 import org.odk.collect.formstest.FormUtils
 import org.odk.collect.formstest.InMemFormsRepository
 import org.odk.collect.shared.TempFiles
-import java.io.BufferedWriter
-import java.io.File
-import java.io.FileWriter
+import org.odk.collect.shared.strings.Md5.getMd5Hash
 
 class FetchFormDetailsServerFormUseCasesTest {
 
@@ -157,7 +155,7 @@ class FetchFormDetailsServerFormUseCasesTest {
         )
 
         val oldMediaFile = TempFiles.createTempFile(mediaDir, mediaFile.filename)
-        writeToFile(oldMediaFile, "blah before")
+        oldMediaFile.writeText("blah before")
 
         val serverFormDetails = ServerFormUseCases.fetchFormDetails(formsRepository, formSource)
         val formDetails = getFormFromList(serverFormDetails, form.formID)
@@ -187,7 +185,7 @@ class FetchFormDetailsServerFormUseCasesTest {
         )
 
         val mediaFile1 = TempFiles.createTempFile(mediaDir1, mediaFile.filename)
-        writeToFile(mediaFile1, "old blah")
+        mediaFile1.writeText("old blah")
 
         val mediaDir2 = TempFiles.createTempDir()
         formsRepository.save(
@@ -200,7 +198,7 @@ class FetchFormDetailsServerFormUseCasesTest {
                 .build()
         )
         val mediaFile2 = TempFiles.createTempFile(mediaDir2, mediaFile.filename)
-        writeToFile(mediaFile2, "blah")
+        mediaFile2.writeText("blah")
 
         val serverFormDetails = ServerFormUseCases.fetchFormDetails(formsRepository, formSource)
         val formDetails = getFormFromList(serverFormDetails, form.formID)
@@ -258,7 +256,7 @@ class FetchFormDetailsServerFormUseCasesTest {
         )
 
         val mediaFile1 = TempFiles.createTempFile(mediaDir1, mediaFile.filename)
-        writeToFile(mediaFile1, "blah")
+        mediaFile1.writeText("blah")
 
         val mediaDir2 = TempFiles.createTempDir()
         formsRepository.save(
@@ -272,7 +270,7 @@ class FetchFormDetailsServerFormUseCasesTest {
                 .build()
         )
         val mediaFile2 = TempFiles.createTempFile(mediaDir2, mediaFile.filename)
-        writeToFile(mediaFile2, "blah")
+        mediaFile2.writeText("blah")
 
         val serverFormDetails = ServerFormUseCases.fetchFormDetails(formsRepository, formSource)
         val formDetails = getFormFromList(serverFormDetails, form.formID)
@@ -321,7 +319,7 @@ class FetchFormDetailsServerFormUseCasesTest {
         )
 
         val localMediaFile = TempFiles.createTempFile(mediaDir, mediaFile.filename)
-        writeToFile(localMediaFile, "blah")
+        localMediaFile.writeText("blah")
 
         val serverFormDetails = ServerFormUseCases.fetchFormDetails(formsRepository, formSource)
         val formDetails = getFormFromList(serverFormDetails, form.formID)
@@ -351,7 +349,7 @@ class FetchFormDetailsServerFormUseCasesTest {
         )
 
         val localMediaFile = TempFiles.createTempFile(mediaDir, mediaFile.filename)
-        writeToFile(localMediaFile, "blah")
+        localMediaFile.writeText("blah")
 
         val serverFormDetails = ServerFormUseCases.fetchFormDetails(formsRepository, formSource)
         val formDetails = getFormFromList(serverFormDetails, form.formID)
@@ -378,10 +376,36 @@ class FetchFormDetailsServerFormUseCasesTest {
         assertThat(formDetails.type, equalTo(ServerFormDetails.Type.OnDevice))
     }
 
-    private fun writeToFile(mediaFile: File, content: String) {
-        val bw = BufferedWriter(FileWriter(mediaFile))
-        bw.write(content)
-        bw.close()
+    @Test
+    fun `#fetchFormDetails returns UpdatedMedia type when a form exists and there is a new media file with the same contents as an existing one`() {
+        val manifestUrl = "http://example.com/manifest"
+        val form = FormListFixtures.formListItem(manifestUrl = manifestUrl)
+        whenever(formSource.fetchFormList()).thenReturn(listOf(form))
+
+        val mediaDir = TempFiles.createTempDir()
+        formsRepository.save(
+            Form.Builder()
+                .formId(form.formID)
+                .version(form.version)
+                .md5Hash(form.hash)
+                .formFilePath(FormUtils.createXFormFile(form.formID, form.hash).absolutePath)
+                .formMediaPath(mediaDir.absolutePath)
+                .build()
+        )
+
+        val localMediaFile = TempFiles.createTempFile(mediaDir, "file1")
+        localMediaFile.writeText("blah")
+        val localMediaFileHash = localMediaFile.getMd5Hash()!!
+
+        val mediaFile1 = FormListFixtures.mediaFile(name = "file1", localMediaFileHash)
+        val mediaFile2 = FormListFixtures.mediaFile(name = "file2", localMediaFileHash)
+        whenever(formSource.fetchManifest(manifestUrl)).thenReturn(
+            FormListFixtures.manifestFile(listOf(mediaFile1, mediaFile2))
+        )
+
+        val serverFormDetails = ServerFormUseCases.fetchFormDetails(formsRepository, formSource)
+        val formDetails = getFormFromList(serverFormDetails, form.formID)
+        assertThat(formDetails.type, equalTo(ServerFormDetails.Type.UpdatedMedia))
     }
 
     private fun getFormFromList(
