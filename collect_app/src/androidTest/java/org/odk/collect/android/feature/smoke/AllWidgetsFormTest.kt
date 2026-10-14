@@ -76,7 +76,7 @@ class AllWidgetsFormTest {
             .swipeToNextQuestion("Geopoint widget")
             .swipeToNextQuestion("Geopoint widget")
             .swipeToNextQuestion("Geotrace widget")
-            .clickOnString(string.get_line)
+            .clickOnString(string.get_line, AssertionFramework.COMPOSE)
             .pressBack(FormEntryPage("All widgets"))
             .swipeToNextQuestion("Geoshape widget")
             .clickOnString(string.get_polygon)

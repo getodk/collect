@@ -20,3 +20,9 @@ fun View.setMultiClickSafeOnClickListener(listener: (View) -> Unit) {
         }
     })
 }
+
+fun multiClickSafe(onClick: () -> Unit): () -> Unit = {
+    if (MultiClickGuard.allowClick()) {
+        onClick()
+    }
+}

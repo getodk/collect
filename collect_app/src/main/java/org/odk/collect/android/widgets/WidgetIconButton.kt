@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.odk.collect.androidshared.R.dimen
 import org.odk.collect.androidshared.ui.compose.marginSmall
-import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
+import org.odk.collect.androidshared.ui.multiclicksafe.multiClickSafe
 
 @Composable
 fun WidgetIconButton(
@@ -52,11 +52,7 @@ fun WidgetIconButton(
             .background(backgroundColor)
             .combinedClickable(
                 enabled = enabled,
-                onClick = {
-                    if (MultiClickGuard.allowClick()) {
-                        onClick()
-                    }
-                },
+                onClick = multiClickSafe(onClick),
                 onLongClick = onLongClick,
                 onClickLabel = text
             )

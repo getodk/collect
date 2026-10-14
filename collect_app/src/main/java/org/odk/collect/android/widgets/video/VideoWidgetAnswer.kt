@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.odk.collect.android.widgets.MediaWidgetAnswerViewModel
 import org.odk.collect.androidshared.system.ContextExt.getActivity
-import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
+import org.odk.collect.androidshared.ui.multiclicksafe.multiClickSafe
 
 @Composable
 fun VideoWidgetAnswer(
@@ -46,11 +46,7 @@ fun VideoWidgetAnswer(
             .heightIn(max = 200.dp)
             .clip(MaterialTheme.shapes.large)
             .combinedClickable(
-                onClick = {
-                    if (MultiClickGuard.allowClick()) {
-                        mediaWidgetAnswerViewModel.openFile(context.getActivity(), answer, "video/*")
-                    }
-                },
+                onClick = multiClickSafe { mediaWidgetAnswerViewModel.openFile(context.getActivity(), answer, "video/*") },
                 onLongClick = onLongClick,
                 onClickLabel = stringResource(org.odk.collect.strings.R.string.play_video)
             ),

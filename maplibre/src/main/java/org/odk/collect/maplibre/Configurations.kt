@@ -2,6 +2,7 @@ package org.odk.collect.maplibre
 
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.settings.keys.ProjectKeys.KEY_MAPBOX_MAP_STYLE
+import org.odk.collect.shared.injection.Keys
 import org.odk.collect.strings.R
 
 object Configurations {
@@ -93,10 +94,10 @@ class Configuration(
 
 class StyleOption(val name: Int, val uri: BasemapUri)
 
-sealed class BasemapUri(val keyName: String? = null, private val factory: (key: String?) -> String) {
+sealed class BasemapUri(private val keyName: String? = null, private val factory: (key: String?) -> String) {
 
-    fun value(key: String? = null): String {
-        return factory(key)
+    fun value(keys: Keys): String {
+        return factory(keyName?.let { keys.get(it) })
     }
 
     class Raster(value: String) : BasemapUri(null, { value })

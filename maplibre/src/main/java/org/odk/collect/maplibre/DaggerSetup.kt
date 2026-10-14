@@ -3,6 +3,7 @@ package org.odk.collect.maplibre
 import dagger.Component
 import dagger.Module
 import dagger.Provides
+import org.odk.collect.maplibre.staticmap.MapLibreStaticMapLoader
 import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.shared.injection.Keys
@@ -16,6 +17,8 @@ interface MapLibreDependencyComponentProvider {
 @Singleton
 interface MapLibreDependencyComponent {
     fun inject(mapLibreMapFragment: MapLibreMapFragment)
+
+    fun inject(mapLibreStaticMapLoader: MapLibreStaticMapLoader)
 }
 
 @Module
