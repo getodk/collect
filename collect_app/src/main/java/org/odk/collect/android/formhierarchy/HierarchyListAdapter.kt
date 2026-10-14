@@ -19,12 +19,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import org.odk.collect.android.R
 import org.odk.collect.android.widgets.MediaWidgetAnswerViewModel
-import org.odk.collect.maplibre.staticmap.StaticMapLoader
 
 class HierarchyListAdapter(
     private val hierarchyItems: List<HierarchyItem>,
     private val mediaWidgetAnswerViewModel: MediaWidgetAnswerViewModel,
-    private val staticMapLoader: StaticMapLoader,
     private val listener: OnElementClickListener
 ) : RecyclerView.Adapter<HierarchyListAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -46,7 +44,7 @@ class HierarchyListAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val element = hierarchyItems[position]
 
-        holder.view.setElement(element, mediaWidgetAnswerViewModel, staticMapLoader) {
+        holder.view.setElement(element, mediaWidgetAnswerViewModel) {
             listener.onElementClick(element)
         }
 

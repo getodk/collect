@@ -12,15 +12,16 @@ import org.odk.collect.android.widgets.QuestionWidget
 import org.odk.collect.android.widgets.interfaces.GeoDataRequester
 import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils
 import org.odk.collect.androidshared.ui.ComposeThemeProvider.Companion.setContextThemedContent
+import org.odk.collect.maplibre.staticmap.MapLibreStaticMapLoader
 import org.odk.collect.maplibre.staticmap.StaticMapLoader
 
 @SuppressLint("ViewConstructor")
-class GeoTraceWidget(
+class GeoTraceWidget @JvmOverloads constructor(
     context: Context,
     questionDetails: QuestionDetails,
     private val geoDataRequester: GeoDataRequester,
     private val dependencies: Dependencies,
-    private val staticMapLoader: StaticMapLoader
+    private val staticMapLoader: StaticMapLoader = MapLibreStaticMapLoader(context)
 ) : QuestionWidget(context, dependencies, questionDetails) {
 
     init {

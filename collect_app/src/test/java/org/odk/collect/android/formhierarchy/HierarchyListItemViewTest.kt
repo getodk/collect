@@ -40,7 +40,7 @@ class HierarchyListItemViewTest {
         composeRule.setContent {
             AndroidView(factory = {
                 view.also {
-                    it.setElement(HierarchyItem.Question(mock<FormIndex>(), "foo", "bar", mock<FormEntryPrompt>()), mock<MediaWidgetAnswerViewModel>(), mock(), {})
+                    it.setElement(HierarchyItem.Question(mock<FormIndex>(), "foo", "bar", mock<FormEntryPrompt>()), mock<MediaWidgetAnswerViewModel>(), {})
                 }
             })
         }
@@ -61,7 +61,7 @@ class HierarchyListItemViewTest {
         composeRule.setContent {
             AndroidView(factory = {
                 view.also {
-                    it.setElement(HierarchyItem.Question(mock<FormIndex>(), "foo", "<h1>bar</h1>", mock<FormEntryPrompt>()), mock<MediaWidgetAnswerViewModel>(), mock(), {})
+                    it.setElement(HierarchyItem.Question(mock<FormIndex>(), "foo", "<h1>bar</h1>", mock<FormEntryPrompt>()), mock<MediaWidgetAnswerViewModel>(), {})
                 }
             })
         }
@@ -77,7 +77,7 @@ class HierarchyListItemViewTest {
     fun `Group item should contain group label, primary text and icon`() {
         val view = HierarchyListItemView(context, R.layout.hierarchy_group_item)
 
-        view.setElement(HierarchyItem.VisibleGroup(mock<FormIndex>(), "foo"), mock<MediaWidgetAnswerViewModel>(), mock(), {})
+        view.setElement(HierarchyItem.VisibleGroup(mock<FormIndex>(), "foo"), mock<MediaWidgetAnswerViewModel>(), {})
 
         assertThat(view.findViewById<ImageView>(R.id.icon).visibility, equalTo(View.VISIBLE))
 
@@ -92,7 +92,7 @@ class HierarchyListItemViewTest {
     fun `Repeatable group item should contain group label, primary text and icon`() {
         val view = HierarchyListItemView(context, R.layout.hierarchy_repeatable_group_item)
 
-        view.setElement(HierarchyItem.RepeatableGroup(mock<FormIndex>(), "foo"), mock<MediaWidgetAnswerViewModel>(), mock(), {})
+        view.setElement(HierarchyItem.RepeatableGroup(mock<FormIndex>(), "foo"), mock<MediaWidgetAnswerViewModel>(), {})
 
         assertThat(view.findViewById<ImageView>(R.id.icon).visibility, equalTo(View.VISIBLE))
 
@@ -107,7 +107,7 @@ class HierarchyListItemViewTest {
     fun `Repeatable group instance item should contain only primary text`() {
         val view = HierarchyListItemView(context, R.layout.hierarchy_repeatable_group_instance_item)
 
-        view.setElement(HierarchyItem.RepeatInstance(mock<FormIndex>(), "foo"), mock<MediaWidgetAnswerViewModel>(), mock(), {})
+        view.setElement(HierarchyItem.RepeatInstance(mock<FormIndex>(), "foo"), mock<MediaWidgetAnswerViewModel>(), {})
 
         assertThat(view.findViewById<MaterialTextView>(R.id.primary_text).visibility, equalTo(View.VISIBLE))
         assertThat(view.findViewById<MaterialTextView>(R.id.primary_text).text.toString(), equalTo("foo"))

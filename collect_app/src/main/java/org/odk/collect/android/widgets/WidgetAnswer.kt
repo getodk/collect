@@ -5,6 +5,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AttachFile
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -18,6 +19,7 @@ import org.odk.collect.android.widgets.utilities.GeoWidgetUtils
 import org.odk.collect.android.widgets.video.VideoWidgetAnswer
 import org.odk.collect.androidshared.system.ContextExt.getActivity
 import org.odk.collect.icons.R
+import org.odk.collect.maplibre.staticmap.MapLibreStaticMapLoader
 import org.odk.collect.maplibre.staticmap.StaticMapLoader
 
 @Composable
@@ -28,7 +30,7 @@ fun WidgetAnswer(
     fontSize: Int? = null,
     compact: Boolean = false,
     mediaWidgetAnswerViewModel: MediaWidgetAnswerViewModel,
-    staticMapLoader: StaticMapLoader? = null,
+    staticMapLoader: StaticMapLoader = rememberStaticMapLoader(),
     onClick: () -> Unit = {},
     onLongClick: () -> Unit = {}
 ) {
@@ -60,7 +62,7 @@ fun WidgetAnswer(
                         fontSize,
                         if (compact) Arrangement.Start else Arrangement.Center,
                         mediaWidgetAnswerViewModel,
-                        staticMapLoader!!,
+                        staticMapLoader,
                         onClick,
                         onLongClick
                     )
@@ -102,4 +104,10 @@ fun WidgetAnswer(
             )
         }
     }
+}
+
+@Composable
+private fun rememberStaticMapLoader(): StaticMapLoader {
+    val context = LocalContext.current
+    return remember(context) { MapLibreStaticMapLoader(context) }
 }
