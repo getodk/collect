@@ -126,8 +126,6 @@ open class StubFormController : FormController {
 
     override fun getQuestionPromptConstraintText(index: FormIndex?): String? = null
 
-    override fun getQuestionPromptRequiredText(index: FormIndex?): String? = null
-
     override fun currentCaptionPromptIsQuestion(): Boolean = false
 
     override fun isGroupRelevant(): Boolean = false

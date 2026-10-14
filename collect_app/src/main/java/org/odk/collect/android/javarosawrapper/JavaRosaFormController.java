@@ -30,7 +30,6 @@ import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.SubmissionProfile;
 import org.javarosa.core.model.ValidateOutcome;
 import org.javarosa.core.model.actions.setgeopoint.SetGeopointActionHandler;
-import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.instance.FormInstance;
@@ -43,9 +42,6 @@ import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.model.xform.XFormSerializingVisitor;
 import org.javarosa.model.xform.XPathReference;
-import org.javarosa.xform.parse.XFormParser;
-import org.javarosa.xpath.XPathParseTool;
-import org.javarosa.xpath.expr.XPathExpression;
 import org.odk.collect.android.dynamicpreload.ExternalDataUtil;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.audit.AsyncTaskAuditEventWriter;
@@ -431,7 +427,7 @@ public class JavaRosaFormController implements FormController {
             }
             validationResult = new FailedValidationResult(index, status, errorMessage, org.odk.collect.strings.R.string.invalid_answer_error);
         } else if (status == FormEntryController.ANSWER_REQUIRED_BUT_EMPTY) {
-            errorMessage = getQuestionPromptRequiredText(index);
+            errorMessage = getQuestionPrompt(index).getRequiredText();
             if (errorMessage == null) {
                 errorMessage = getQuestionPrompt(index).getSpecialFormQuestionText("requiredMsg");
             }
@@ -847,43 +843,6 @@ public class JavaRosaFormController implements FormController {
 
     public boolean currentCaptionPromptIsQuestion() {
         return getCaptionPrompt().getFormElement() instanceof QuestionDef;
-    }
-
-    public String getQuestionPromptRequiredText(FormIndex index) {
-        // look for the text under the requiredMsg bind attribute
-        String constraintText = getBindAttribute(index, XFormParser.NAMESPACE_JAVAROSA,
-                "requiredMsg");
-        if (constraintText != null) {
-            XPathExpression xpathRequiredMsg;
-            try {
-                xpathRequiredMsg = XPathParseTool.parseXPath("string(" + constraintText + ")");
-            } catch (Exception e) {
-                // Expected in probably most cases.
-                // This is a string literal, so no need to evaluate anything.
-                return constraintText;
-            }
-
-            if (xpathRequiredMsg != null) {
-                try {
-                    FormDef form = formEntryController.getModel().getForm();
-                    TreeElement treeElement = form.getMainInstance().resolveReference(
-                            index.getReference());
-                    EvaluationContext ec = new EvaluationContext(form.getEvaluationContext(),
-                            treeElement.getRef());
-                    Object value = xpathRequiredMsg.eval(form.getMainInstance(), ec);
-                    if (!value.equals("")) {
-                        return (String) value;
-                    }
-                    return null;
-                } catch (Exception e) {
-                    Timber.e(e, "Error evaluating a valid-looking required xpath ");
-                    return constraintText;
-                }
-            } else {
-                return constraintText;
-            }
-        }
-        return null;
     }
 
     public FormEntryCaption[] getGroupsForIndex(FormIndex index) {

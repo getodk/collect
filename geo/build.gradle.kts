@@ -27,6 +27,12 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
+    packaging {
+        resources {
+            pickFirsts += "META-INF/FastDoubleParser-LICENSE"
+        }
+    }
+
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
