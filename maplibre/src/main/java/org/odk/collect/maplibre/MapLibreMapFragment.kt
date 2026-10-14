@@ -83,7 +83,7 @@ class MapLibreMapFragment(private val configuration: Configuration) :
 
     private var featureClickListener: FeatureListener? = null
     private var featureDragEndListener: FeatureListener? = null
-    private val referenceLayers = ReferenceLayers()
+    private val referenceLayersServer = ReferenceLayersServer()
     private var referenceLayerFile: File? = null
     private var basemapTopLayer: String? = null
     private var awaitingRemoteStyle = false
@@ -249,7 +249,7 @@ class MapLibreMapFragment(private val configuration: Configuration) :
     }
 
     override fun onDestroy() {
-        referenceLayers.destroy()
+        referenceLayersServer.destroy()
         MarkerIconCreator.clearCache()
         super.onDestroy()
     }
@@ -652,7 +652,7 @@ class MapLibreMapFragment(private val configuration: Configuration) :
 
     private fun loadReferenceOverlay() {
         referenceLayerFile?.let {
-            val (source, layers) = referenceLayers.sourceAndLayers(it) ?: return
+            val (source, layers) = referenceLayersServer.sourceAndLayers(it) ?: return
             addOverlaySource(source)
             layers.forEach { addOverlayLayer(it) }
         }

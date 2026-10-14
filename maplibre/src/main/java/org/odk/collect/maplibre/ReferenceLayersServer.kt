@@ -18,7 +18,7 @@ import java.io.IOException
  * MapLibre only knows how to fetch tiles via HTTP, so to display tiles from a reference layer file
  * they have to be served locally over HTTP.
  */
-internal class ReferenceLayers {
+internal class ReferenceLayersServer {
 
     private val tileServer = lazy {
         try {

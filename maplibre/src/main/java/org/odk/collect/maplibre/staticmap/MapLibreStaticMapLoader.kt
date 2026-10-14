@@ -20,7 +20,7 @@ import org.odk.collect.maplibre.Configurations
 import org.odk.collect.maplibre.MapLibreDependencyComponentProvider
 import org.odk.collect.maplibre.MapLibreSupport
 import org.odk.collect.maplibre.MapUtils
-import org.odk.collect.maplibre.ReferenceLayers
+import org.odk.collect.maplibre.ReferenceLayersServer
 import org.odk.collect.maps.traces.TraceDescription
 import org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_GOOGLE
 import org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_OSM
@@ -32,7 +32,7 @@ import java.io.File
  */
 object MapLibreStaticMapLoader : StaticMapLoader {
 
-    private val referenceLayers = ReferenceLayers()
+    private val referenceLayersServer = ReferenceLayersServer()
 
     override fun load(
         context: Context,
@@ -138,7 +138,7 @@ object MapLibreStaticMapLoader : StaticMapLoader {
             return
         }
 
-        val (source, layers) = referenceLayers.sourceAndLayers(file) ?: return
+        val (source, layers) = referenceLayersServer.sourceAndLayers(file) ?: return
         builder.withSource(source)
         layers.forEach { builder.withLayer(it) }
     }
