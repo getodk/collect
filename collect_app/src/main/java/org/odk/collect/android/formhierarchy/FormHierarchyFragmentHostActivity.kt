@@ -25,7 +25,6 @@ import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.async.Scheduler
 import org.odk.collect.audiorecorder.recording.AudioRecorder
 import org.odk.collect.location.LocationClient
-import org.odk.collect.maplibre.staticmap.MapLibreStaticMapLoader
 import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.permissions.PermissionsProvider
@@ -118,8 +117,7 @@ class FormHierarchyFragmentHostActivity : LocalizedActivity(), CollectComposeThe
             instancesDataService,
             changeLockProvider,
             projectDependencyModuleFactory,
-            referenceLayerRepository,
-            MapLibreStaticMapLoader(this)
+            referenceLayerRepository
         )
     }
 

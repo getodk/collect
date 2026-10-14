@@ -71,6 +71,8 @@ import org.odk.collect.androidshared.system.CameraUtils;
 import org.odk.collect.androidshared.system.IntentLauncherImpl;
 import org.odk.collect.audioclips.AudioPlayer;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
+import org.odk.collect.maplibre.staticmap.MapLibreStaticMapLoader;
+import org.odk.collect.maplibre.staticmap.StaticMapLoader;
 import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.webpage.CustomTabsWebPageService;
 
@@ -97,6 +99,7 @@ public class WidgetFactory {
     private final StringRequester stringRequester;
     private final FormController formController;
     private final MediaWidgetAnswerViewModel mediaWidgetAnswerViewModel;
+    private final StaticMapLoader staticMapLoader;
 
     public WidgetFactory(FragmentActivity activity,
                          boolean useExternalRecorder,
@@ -127,6 +130,7 @@ public class WidgetFactory {
         this.stringRequester = stringRequester;
         this.formController = formController;
         this.mediaWidgetAnswerViewModel = mediaWidgetAnswerViewModel;
+        this.staticMapLoader = new MapLibreStaticMapLoader(activity);
     }
 
     public QuestionWidget createWidgetFromPrompt(FormEntryPrompt prompt, PermissionsProvider permissionsProvider) {
@@ -179,7 +183,7 @@ public class WidgetFactory {
                                 new ActivityGeoDataRequester(permissionsProvider, activity), dependencies);
                         break;
                     case Constants.DATATYPE_GEOTRACE:
-                        questionWidget = new GeoTraceWidget(activity, questionDetails, new ActivityGeoDataRequester(permissionsProvider, activity), dependencies);
+                        questionWidget = new GeoTraceWidget(activity, questionDetails, new ActivityGeoDataRequester(permissionsProvider, activity), dependencies, staticMapLoader);
                         break;
                     case Constants.DATATYPE_BARCODE:
                         questionWidget = new BarcodeWidget(activity, questionDetails, dependencies, waitingForDataRegistry, new CameraUtils());

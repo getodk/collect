@@ -13,11 +13,13 @@ import org.odk.collect.android.widgets.WidgetAnswer
 import org.odk.collect.android.widgets.WidgetIconButton
 import org.odk.collect.androidshared.ui.compose.marginStandard
 import org.odk.collect.icons.R
+import org.odk.collect.maplibre.staticmap.StaticMapLoader
 import org.odk.collect.strings.R.string
 
 @Composable
 fun GeoTraceWidgetContent(
     mediaWidgetAnswerViewModel: MediaWidgetAnswerViewModel,
+    staticMapLoader: StaticMapLoader,
     formEntryPrompt: FormEntryPrompt,
     answer: String?,
     readOnly: Boolean,
@@ -48,6 +50,7 @@ fun GeoTraceWidgetContent(
             answer,
             answerFontSize,
             mediaWidgetAnswerViewModel = mediaWidgetAnswerViewModel,
+            staticMapLoader = staticMapLoader,
             onLongClick = onLongClick
         )
     }

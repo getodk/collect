@@ -194,7 +194,6 @@ import org.odk.collect.externalapp.ExternalAppUtils;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.location.LocationClient;
-import org.odk.collect.maplibre.staticmap.MapLibreStaticMapLoader;
 import org.odk.collect.maps.layers.ReferenceLayerRepository;
 import org.odk.collect.material.MaterialProgressDialogFragment;
 import org.odk.collect.metadata.PropertyManager;
@@ -453,8 +452,7 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
                 instancesDataService,
                 changeLockProvider,
                 projectDependencyModuleFactory,
-                referenceLayerRepository,
-                new MapLibreStaticMapLoader(this)
+                referenceLayerRepository
         );
 
         DefaultDispatcherProvider dispatcherProvider = new DefaultDispatcherProvider();

@@ -18,6 +18,7 @@ import org.odk.collect.android.widgets.utilities.GeoWidgetUtils
 import org.odk.collect.android.widgets.video.VideoWidgetAnswer
 import org.odk.collect.androidshared.system.ContextExt.getActivity
 import org.odk.collect.icons.R
+import org.odk.collect.maplibre.staticmap.StaticMapLoader
 
 @Composable
 fun WidgetAnswer(
@@ -27,6 +28,7 @@ fun WidgetAnswer(
     fontSize: Int? = null,
     compact: Boolean = false,
     mediaWidgetAnswerViewModel: MediaWidgetAnswerViewModel,
+    staticMapLoader: StaticMapLoader? = null,
     onClick: () -> Unit = {},
     onLongClick: () -> Unit = {}
 ) {
@@ -58,6 +60,7 @@ fun WidgetAnswer(
                         fontSize,
                         if (compact) Arrangement.Start else Arrangement.Center,
                         mediaWidgetAnswerViewModel,
+                        staticMapLoader!!,
                         onClick,
                         onLongClick
                     )

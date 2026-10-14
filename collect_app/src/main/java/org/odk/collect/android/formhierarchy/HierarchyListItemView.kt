@@ -13,6 +13,7 @@ import org.odk.collect.android.widgets.WidgetAnswer
 import org.odk.collect.androidshared.ui.ComposeThemeProvider.Companion.setContextThemedContent
 import org.odk.collect.androidshared.ui.compose.RemeasureHostOnCompose
 import org.odk.collect.androidshared.ui.compose.marginStandard
+import org.odk.collect.maplibre.staticmap.StaticMapLoader
 
 class HierarchyListItemView(context: Context, layoutResId: Int) : FrameLayout(context) {
     init {
@@ -22,6 +23,7 @@ class HierarchyListItemView(context: Context, layoutResId: Int) : FrameLayout(co
     fun setElement(
         item: HierarchyItem,
         mediaWidgetAnswerViewModel: MediaWidgetAnswerViewModel,
+        staticMapLoader: StaticMapLoader,
         onCLick: () -> Unit
     ) {
         findViewById<MaterialTextView>(R.id.primary_text).text = item.primaryText
@@ -34,6 +36,7 @@ class HierarchyListItemView(context: Context, layoutResId: Int) : FrameLayout(co
                         answer = item.secondaryText,
                         compact = true,
                         mediaWidgetAnswerViewModel = mediaWidgetAnswerViewModel,
+                        staticMapLoader = staticMapLoader,
                         onClick = onCLick
                     )
                 }

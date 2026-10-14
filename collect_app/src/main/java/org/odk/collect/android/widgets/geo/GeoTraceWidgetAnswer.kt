@@ -8,6 +8,7 @@ import org.odk.collect.android.widgets.MediaWidgetAnswerViewModel
 import org.odk.collect.android.widgets.TextWidgetAnswer
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils
 import org.odk.collect.geo.geopoly.GeoPolyUtils
+import org.odk.collect.maplibre.staticmap.StaticMapLoader
 import org.odk.collect.maps.traces.LineDescription
 
 @Composable
@@ -17,6 +18,7 @@ fun GeoTraceWidgetAnswer(
     fontSize: Int?,
     horizontalArrangement: Arrangement.Horizontal,
     mediaWidgetAnswerViewModel: MediaWidgetAnswerViewModel,
+    staticMapLoader: StaticMapLoader,
     onClick: () -> Unit,
     onLongClick: () -> Unit
 ) {
@@ -28,7 +30,7 @@ fun GeoTraceWidgetAnswer(
         trace = trace,
         configuration = mediaWidgetAnswerViewModel.getStaticMapConfiguration(),
         cache = mediaWidgetAnswerViewModel.staticMapCache,
-        staticMapLoader = mediaWidgetAnswerViewModel.staticMapLoader,
+        staticMapLoader = staticMapLoader,
         contentDescription = answerToDisplay,
         onClick = onClick,
         onLongClick = onLongClick,

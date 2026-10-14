@@ -16,7 +16,6 @@ import org.odk.collect.maplibre.Configurations
 import org.odk.collect.maplibre.basemapStyle
 import org.odk.collect.maplibre.staticmap.StaticMapCache
 import org.odk.collect.maplibre.staticmap.StaticMapConfiguration
-import org.odk.collect.maplibre.staticmap.StaticMapLoader
 import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils
 import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.settings.SettingsProvider
@@ -28,8 +27,7 @@ class MediaWidgetAnswerViewModel(
     private val questionMediaManager: QuestionMediaManager,
     private val mediaUtils: MediaUtils,
     private val settingsProvider: SettingsProvider,
-    private val referenceLayerRepository: ReferenceLayerRepository,
-    val staticMapLoader: StaticMapLoader
+    private val referenceLayerRepository: ReferenceLayerRepository
 ) : ViewModel() {
     val staticMapCache = StaticMapCache()
 

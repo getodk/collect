@@ -60,6 +60,8 @@ import org.odk.collect.androidshared.ui.SnackbarUtils;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.maplibre.staticmap.MapLibreStaticMapLoader;
+import org.odk.collect.maplibre.staticmap.StaticMapLoader;
 import org.odk.collect.material.MaterialProgressDialogFragment;
 
 import java.text.SimpleDateFormat;
@@ -85,6 +87,7 @@ public class FormHierarchyFragment extends Fragment {
     private final Scheduler scheduler;
     private final InstancesDataService instancesDataService;
     private final String currentProjectId;
+    private StaticMapLoader staticMapLoader;
 
     public FormHierarchyFragment(
             boolean viewOnly,
@@ -107,6 +110,7 @@ public class FormHierarchyFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
+        staticMapLoader = new MapLibreStaticMapLoader(context);
         formEntryViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(FormEntryViewModel.class);
         formHierarchyViewModel = new ViewModelProvider(
                 this,
@@ -336,6 +340,7 @@ public class FormHierarchyFragment extends Fragment {
             recyclerView.setAdapter(new HierarchyListAdapter(
                     formHierarchyViewModel.getElementsToDisplay(),
                     viewModelProvider.get(MediaWidgetAnswerViewModel.class),
+                    staticMapLoader,
                     this::onElementClick)
             );
 

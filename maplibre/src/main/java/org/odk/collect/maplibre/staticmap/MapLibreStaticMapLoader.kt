@@ -39,7 +39,6 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
     lateinit var keys: Keys
 
     private val context = context.applicationContext
-    private val referenceLayersServer = ReferenceLayersServer()
 
     init {
         (this.context as MapLibreDependencyComponentProvider)
@@ -166,5 +165,10 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
                 PropertyFactory.lineJoin(Property.LINE_JOIN_ROUND)
             )
         )
+    }
+
+    private companion object {
+        // Shared by all loaders so that widgets, which are recreated often, don't each start a server
+        val referenceLayersServer = ReferenceLayersServer()
     }
 }

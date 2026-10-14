@@ -187,7 +187,8 @@ class GeoTraceWidgetTest {
             composeRule.activity,
             QuestionDetails(asGeoTraceQuestion(prompt)),
             geoDataRequester,
-            QuestionWidget.Dependencies(mock(), MediaWidgetAnswerViewModel(mock(), mock(), mock(), settingsProvider, mock(), staticMapLoader))
+            QuestionWidget.Dependencies(mock(), MediaWidgetAnswerViewModel(mock(), mock(), mock(), settingsProvider, mock())),
+            staticMapLoader
         ).also {
             composeRule.activity.setContentView(it)
         }
