@@ -13,6 +13,7 @@ import org.odk.collect.android.utilities.getExistingAnswerFile
 import org.odk.collect.androidshared.utils.getVideoThumbnail
 import org.odk.collect.async.Scheduler
 import org.odk.collect.maplibre.Configurations
+import org.odk.collect.maplibre.basemapStyle
 import org.odk.collect.maplibre.staticmap.MapLibreStaticMapLoader
 import org.odk.collect.maplibre.staticmap.StaticMapCache
 import org.odk.collect.maplibre.staticmap.StaticMapConfiguration

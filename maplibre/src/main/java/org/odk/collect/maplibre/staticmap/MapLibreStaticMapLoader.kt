@@ -21,6 +21,8 @@ import org.odk.collect.maplibre.MapLibreDependencyComponentProvider
 import org.odk.collect.maplibre.MapLibreSupport
 import org.odk.collect.maplibre.MapUtils
 import org.odk.collect.maplibre.ReferenceLayersServer
+import org.odk.collect.maplibre.basemapUri
+import org.odk.collect.maplibre.rasterBasemapStyle
 import org.odk.collect.maps.traces.TraceDescription
 import org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_GOOGLE
 import org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_OSM
