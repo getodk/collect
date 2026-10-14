@@ -39,6 +39,7 @@ fun AsyncStaticMap(
     trace: TraceDescription,
     configuration: StaticMapConfiguration,
     cache: StaticMapCache,
+    staticMapLoader: StaticMapLoader,
     contentDescription: String?,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
@@ -53,7 +54,7 @@ fun AsyncStaticMap(
 
         DisposableEffect(trace, configuration, width, height) {
             val cancel = if (trace.points.all { GeoWidgetUtils.isWithinMapBounds(it) }) {
-                StaticMapLoader.load(context, configuration, cache, trace, width, height) {
+                staticMapLoader.load(context, configuration, cache, trace, width, height) {
                     state = if (it != null) StaticMapState.Loaded(it.asImageBitmap()) else StaticMapState.Failed
                 }
             } else {

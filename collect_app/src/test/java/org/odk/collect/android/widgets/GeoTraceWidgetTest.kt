@@ -2,6 +2,7 @@ package org.odk.collect.android.widgets
 
 import android.app.Application
 import android.content.ComponentName
+import android.content.Context
 import android.graphics.Bitmap
 import android.view.View
 import androidx.compose.ui.test.assertIsDisplayed
@@ -26,7 +27,6 @@ import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.whenever
 import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.support.WidgetTestActivity
@@ -39,6 +39,9 @@ import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithR
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndAnswer
 import org.odk.collect.androidtest.onNodeWithClickLabel
 import org.odk.collect.maplibre.staticmap.StaticMapCache
+import org.odk.collect.maplibre.staticmap.StaticMapConfiguration
+import org.odk.collect.maplibre.staticmap.StaticMapLoader
+import org.odk.collect.maps.traces.TraceDescription
 import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.strings.R.string
@@ -58,7 +61,7 @@ class GeoTraceWidgetTest {
 
     private val geoDataRequester = mock<GeoDataRequester>()
 
-    private val staticMapCache = mock<StaticMapCache>()
+    private val staticMapLoader = FakeStaticMapLoader()
 
     @Test
     fun `#getAnswer returns null when there is no answer`() {
@@ -86,7 +89,7 @@ class GeoTraceWidgetTest {
 
     @Test
     fun `the map preview is displayed instead of the answer when it can be rendered`() {
-        whenever(staticMapCache.get(any(), any(), any(), any())).thenReturn(Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888))
+        staticMapLoader.bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
         createWidget(promptWithAnswer(StringData(answer)))
         composeRule.onNodeWithTag(StaticMapSemantics.TAG).assertIsDisplayed()
         composeRule.onNodeWithText(answer).assertDoesNotExist()
@@ -102,7 +105,7 @@ class GeoTraceWidgetTest {
     @Test
     fun `the answer is displayed instead of the map preview when it is out of map bounds`() {
         val answer = "100.0 10.0 0.0 0.0;101.0 11.0 0.0 0.0"
-        whenever(staticMapCache.get(any(), any(), any(), any())).thenReturn(Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888))
+        staticMapLoader.bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
         createWidget(promptWithAnswer(StringData(answer)))
         composeRule.onNodeWithTag(StaticMapSemantics.TAG).assertDoesNotExist()
         composeRule.onNodeWithText(answer).assertIsDisplayed()
@@ -166,7 +169,7 @@ class GeoTraceWidgetTest {
 
     @Test
     fun `long pressing the map preview shows the context menu`() {
-        whenever(staticMapCache.get(any(), any(), any(), any())).thenReturn(Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888))
+        staticMapLoader.bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
         val widget = createWidget(promptWithAnswer(StringData(answer)))
         val listener = mock<View.OnCreateContextMenuListener>()
         widget.setOnCreateContextMenuListener(listener)
@@ -185,7 +188,7 @@ class GeoTraceWidgetTest {
             composeRule.activity,
             QuestionDetails(asGeoTraceQuestion(prompt)),
             geoDataRequester,
-            QuestionWidget.Dependencies(mock(), MediaWidgetAnswerViewModel(mock(), mock(), mock(), settingsProvider, mock(), staticMapCache))
+            QuestionWidget.Dependencies(mock(), MediaWidgetAnswerViewModel(mock(), mock(), mock(), settingsProvider, mock(), staticMapLoader))
         ).also {
             composeRule.activity.setContentView(it)
         }
@@ -195,4 +198,21 @@ class GeoTraceWidgetTest {
         .withControlType(Constants.CONTROL_INPUT)
         .withDataType(Constants.DATATYPE_GEOTRACE)
         .build()
+
+    private class FakeStaticMapLoader : StaticMapLoader {
+        var bitmap: Bitmap? = null
+
+        override fun load(
+            context: Context,
+            configuration: StaticMapConfiguration,
+            cache: StaticMapCache,
+            trace: TraceDescription,
+            width: Int,
+            height: Int,
+            callback: (Bitmap?) -> Unit
+        ): () -> Unit {
+            callback(bitmap)
+            return {}
+        }
+    }
 }

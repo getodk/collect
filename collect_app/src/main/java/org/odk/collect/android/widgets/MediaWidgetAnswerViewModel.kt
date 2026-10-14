@@ -13,8 +13,10 @@ import org.odk.collect.android.utilities.getExistingAnswerFile
 import org.odk.collect.androidshared.utils.getVideoThumbnail
 import org.odk.collect.async.Scheduler
 import org.odk.collect.maplibre.Configurations
+import org.odk.collect.maplibre.staticmap.MapLibreStaticMapLoader
 import org.odk.collect.maplibre.staticmap.StaticMapCache
 import org.odk.collect.maplibre.staticmap.StaticMapConfiguration
+import org.odk.collect.maplibre.staticmap.StaticMapLoader
 import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils
 import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.settings.SettingsProvider
@@ -27,8 +29,10 @@ class MediaWidgetAnswerViewModel(
     private val mediaUtils: MediaUtils,
     private val settingsProvider: SettingsProvider,
     private val referenceLayerRepository: ReferenceLayerRepository,
-    val staticMapCache: StaticMapCache = StaticMapCache()
+    val staticMapLoader: StaticMapLoader = MapLibreStaticMapLoader
 ) : ViewModel() {
+    val staticMapCache = StaticMapCache()
+
     fun getFrame(answer: String?, context: Context): StateFlow<ImageBitmap?> {
         val bitmapState = MutableStateFlow<ImageBitmap?>(null)
 

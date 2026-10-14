@@ -28,6 +28,7 @@ fun GeoTraceWidgetAnswer(
         trace = trace,
         configuration = mediaWidgetAnswerViewModel.getStaticMapConfiguration(),
         cache = mediaWidgetAnswerViewModel.staticMapCache,
+        staticMapLoader = mediaWidgetAnswerViewModel.staticMapLoader,
         contentDescription = answerToDisplay,
         onClick = onClick,
         onLongClick = onLongClick,
