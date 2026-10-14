@@ -57,7 +57,7 @@ class MediaWidgetAnswerViewModel(
 
         return StaticMapConfiguration(
             basemapSource,
-            Configurations.basemapStyle(basemapSource, settings),
+            Configurations.all[basemapSource]?.basemapStyle(settings),
             MapFragmentReferenceLayerUtils.getReferenceLayerFile(
                 settings.getString(ProjectKeys.KEY_REFERENCE_LAYER),
                 referenceLayerRepository

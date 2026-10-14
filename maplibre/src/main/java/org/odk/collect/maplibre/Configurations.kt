@@ -87,10 +87,6 @@ object Configurations {
             )
         ),
     )
-
-    fun basemapStyle(basemapSource: String, settings: Settings): String? {
-        return all[basemapSource]?.basemapStyle(settings)
-    }
 }
 
 class Configuration(
