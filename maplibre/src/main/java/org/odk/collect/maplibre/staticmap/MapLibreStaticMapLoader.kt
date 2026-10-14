@@ -28,16 +28,26 @@ import org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_GOOGLE
 import org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_OSM
 import org.odk.collect.shared.injection.Keys
 import java.io.File
+import javax.inject.Inject
 
 /**
  * Loads a static image of a map showing a line or a polygon, rendering it off-screen if it isn't cached.
  */
-object MapLibreStaticMapLoader : StaticMapLoader {
+class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
 
+    @Inject
+    lateinit var keys: Keys
+
+    private val context = context.applicationContext
     private val referenceLayersServer = ReferenceLayersServer()
 
+    init {
+        (this.context as MapLibreDependencyComponentProvider)
+            .mapLibreDependencyComponent
+            .inject(this)
+    }
+
     override fun load(
-        context: Context,
         configuration: StaticMapConfiguration,
         cache: StaticMapCache,
         trace: TraceDescription,
@@ -64,7 +74,7 @@ object MapLibreStaticMapLoader : StaticMapLoader {
 
         MapLibreSupport.initialize(context)
 
-        val style = basemapStyle(basemapConfiguration, configuration.basemapStyle, keys(context))
+        val style = basemapStyle(basemapConfiguration, configuration.basemapStyle, keys)
 
         var snapshotter = MapSnapshotter(context, snapshotOptions(context, style, configuration.referenceLayer, trace, width, height))
         snapshotter.start(
@@ -156,11 +166,5 @@ object MapLibreStaticMapLoader : StaticMapLoader {
                 PropertyFactory.lineJoin(Property.LINE_JOIN_ROUND)
             )
         )
-    }
-
-    private fun keys(context: Context): Keys {
-        return (context.applicationContext as MapLibreDependencyComponentProvider)
-            .mapLibreDependencyComponent
-            .keys()
     }
 }

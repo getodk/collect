@@ -14,7 +14,6 @@ import org.odk.collect.androidshared.utils.getVideoThumbnail
 import org.odk.collect.async.Scheduler
 import org.odk.collect.maplibre.Configurations
 import org.odk.collect.maplibre.basemapStyle
-import org.odk.collect.maplibre.staticmap.MapLibreStaticMapLoader
 import org.odk.collect.maplibre.staticmap.StaticMapCache
 import org.odk.collect.maplibre.staticmap.StaticMapConfiguration
 import org.odk.collect.maplibre.staticmap.StaticMapLoader
@@ -30,7 +29,7 @@ class MediaWidgetAnswerViewModel(
     private val mediaUtils: MediaUtils,
     private val settingsProvider: SettingsProvider,
     private val referenceLayerRepository: ReferenceLayerRepository,
-    val staticMapLoader: StaticMapLoader = MapLibreStaticMapLoader
+    val staticMapLoader: StaticMapLoader
 ) : ViewModel() {
     val staticMapCache = StaticMapCache()
 

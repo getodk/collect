@@ -22,7 +22,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
@@ -50,11 +49,10 @@ fun AsyncStaticMap(
     BoxWithConstraints(modifier = modifier.fillMaxWidth()) {
         val width = constraints.maxWidth
         val height = with(LocalDensity.current) { STATIC_MAP_HEIGHT.roundToPx() }
-        val context = LocalContext.current
 
         DisposableEffect(trace, configuration, width, height) {
             val cancel = if (trace.points.all { GeoWidgetUtils.isWithinMapBounds(it) }) {
-                staticMapLoader.load(context, configuration, cache, trace, width, height) {
+                staticMapLoader.load(configuration, cache, trace, width, height) {
                     state = if (it != null) StaticMapState.Loaded(it.asImageBitmap()) else StaticMapState.Failed
                 }
             } else {

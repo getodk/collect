@@ -2,7 +2,6 @@ package org.odk.collect.android.widgets
 
 import android.app.Application
 import android.content.ComponentName
-import android.content.Context
 import android.graphics.Bitmap
 import android.view.View
 import androidx.compose.ui.test.assertIsDisplayed
@@ -203,7 +202,6 @@ class GeoTraceWidgetTest {
         var bitmap: Bitmap? = null
 
         override fun load(
-            context: Context,
             configuration: StaticMapConfiguration,
             cache: StaticMapCache,
             trace: TraceDescription,

@@ -35,6 +35,7 @@ import org.odk.collect.android.widgets.viewmodels.QuestionViewModel
 import org.odk.collect.async.Scheduler
 import org.odk.collect.audiorecorder.recording.AudioRecorder
 import org.odk.collect.location.LocationClient
+import org.odk.collect.maplibre.staticmap.StaticMapLoader
 import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.permissions.PermissionsProvider
@@ -65,7 +66,8 @@ class FormEntryViewModelFactory(
     private val instancesDataService: InstancesDataService,
     private val changeLockProvider: ChangeLockProvider,
     private val projectDependencyModuleFactory: ProjectDependencyModuleFactory,
-    private val referenceLayerRepository: ReferenceLayerRepository
+    private val referenceLayerRepository: ReferenceLayerRepository,
+    private val staticMapLoader: StaticMapLoader
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
@@ -150,7 +152,8 @@ class FormEntryViewModelFactory(
                 createFormSaveViewModel(extras.createSavedStateHandle()),
                 mediaUtils,
                 settingsProvider,
-                referenceLayerRepository
+                referenceLayerRepository,
+                staticMapLoader
             )
 
             else -> throw IllegalArgumentException()
