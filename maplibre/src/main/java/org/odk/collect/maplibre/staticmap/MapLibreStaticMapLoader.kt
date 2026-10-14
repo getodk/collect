@@ -45,8 +45,9 @@ object MapLibreStaticMapLoader : StaticMapLoader {
         height: Int,
         callback: (Bitmap?) -> Unit
     ): () -> Unit {
-        cache.get(configuration, trace, width, height)?.let {
-            callback(it)
+        val cachedBitmap = cache.get(configuration, trace, width, height)
+        if (cachedBitmap != null) {
+            callback(cachedBitmap)
             return {}
         }
 
