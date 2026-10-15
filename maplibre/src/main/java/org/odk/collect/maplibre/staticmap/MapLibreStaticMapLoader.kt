@@ -12,7 +12,10 @@ import org.maplibre.android.style.layers.FillLayer
 import org.maplibre.android.style.layers.LineLayer
 import org.maplibre.android.style.layers.Property
 import org.maplibre.android.style.layers.PropertyFactory
+import org.maplibre.android.style.layers.RasterLayer
 import org.maplibre.android.style.sources.GeoJsonSource
+import org.maplibre.android.style.sources.RasterSource
+import org.maplibre.android.style.sources.TileSet
 import org.maplibre.geojson.LineString
 import org.maplibre.geojson.Point
 import org.maplibre.geojson.Polygon
@@ -64,7 +67,7 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
         }
 
         val basemapConfiguration = when (configuration.basemapSource) {
-            // Google Maps can't render off-screen, so its previews use OpenStreetMap instead
+            // Without Google tiles (no API key or no session) Google previews use OpenStreetMap instead
             BASEMAP_SOURCE_GOOGLE -> Configurations.all.getValue(BASEMAP_SOURCE_OSM)
             else -> Configurations.all[configuration.basemapSource]
         }
@@ -76,8 +79,38 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
 
         MapLibreSupport.initialize(context)
 
-        val style = basemapStyle(basemapConfiguration, configuration.basemapStyle, keys)
+        val fallbackStyle = basemapStyle(basemapConfiguration, configuration.basemapStyle, keys)
 
+        val googleApiKey = keys.get("google")
+        if (configuration.basemapSource == BASEMAP_SOURCE_GOOGLE && !googleApiKey.isNullOrBlank()) {
+            var cancelled = false
+            var cancelSnapshot: () -> Unit = {}
+
+            GoogleMapTilesClient.getSession(googleApiKey, configuration.basemapStyle) { session ->
+                if (!cancelled) {
+                    val style = if (session != null) googleBasemapStyle(googleApiKey, session) else fallbackStyle
+                    cancelSnapshot = snapshot(style, configuration, cache, trace, width, height, callback)
+                }
+            }
+
+            return {
+                cancelled = true
+                cancelSnapshot()
+            }
+        }
+
+        return snapshot(fallbackStyle, configuration, cache, trace, width, height, callback)
+    }
+
+    private fun snapshot(
+        style: Style.Builder,
+        configuration: StaticMapConfiguration,
+        cache: StaticMapCache,
+        trace: TraceDescription,
+        width: Int,
+        height: Int,
+        callback: (Bitmap?) -> Unit
+    ): () -> Unit {
         var snapshotter = MapSnapshotter(context, snapshotOptions(context, style, configuration.referenceLayer, trace, width, height))
         snapshotter.start(
             {
@@ -136,6 +169,17 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
             is BasemapUri.Raster -> basemapConfiguration.rasterBasemapStyle(uriValue).fromUri("asset://maplibre_empty_style.json")
             is BasemapUri.Mapbox -> Style.Builder().fromUri(uriValue)
         }
+    }
+
+    private fun googleBasemapStyle(apiKey: String, session: String): Style.Builder {
+        val tileSet = TileSet("2.1.0", "https://tile.googleapis.com/v1/2dtiles/{z}/{x}/{y}?session=$session&key=$apiKey").apply {
+            scheme = "xyz"
+        }
+
+        return Style.Builder()
+            .fromUri("asset://maplibre_empty_style.json")
+            .withSource(RasterSource("basemap_source", tileSet, 256))
+            .withLayer(RasterLayer("basemap_layer", "basemap_source"))
     }
 
     private fun blankBasemap(): Style.Builder {

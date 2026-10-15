@@ -53,9 +53,15 @@ class MediaWidgetAnswerViewModel(
         val settings = settingsProvider.getUnprotectedSettings()
         val basemapSource = settings.getString(ProjectKeys.KEY_BASEMAP_SOURCE)!!
 
+        val basemapStyle = if (basemapSource == ProjectKeys.BASEMAP_SOURCE_GOOGLE) {
+            settings.getString(ProjectKeys.KEY_GOOGLE_MAP_STYLE)
+        } else {
+            Configurations.all[basemapSource]?.basemapStyle(settings)
+        }
+
         return StaticMapConfiguration(
             basemapSource,
-            Configurations.all[basemapSource]?.basemapStyle(settings),
+            basemapStyle,
             MapFragmentReferenceLayerUtils.getReferenceLayerFile(
                 settings.getString(ProjectKeys.KEY_REFERENCE_LAYER),
                 referenceLayerRepository
