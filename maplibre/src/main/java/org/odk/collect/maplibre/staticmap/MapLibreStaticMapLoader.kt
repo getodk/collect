@@ -79,24 +79,37 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
         val fallbackStyle = basemapStyle(basemapConfiguration, configuration.basemapStyle, keys)
 
         val googleApiKey = keys.get("google")
-        if (configuration.basemapSource == BASEMAP_SOURCE_GOOGLE && !googleApiKey.isNullOrBlank()) {
-            var cancelled = false
-            var cancelSnapshot: () -> Unit = {}
+        return if (configuration.basemapSource == BASEMAP_SOURCE_GOOGLE && !googleApiKey.isNullOrBlank()) {
+            snapshotWithGoogleTiles(googleApiKey, fallbackStyle, configuration, cache, trace, width, height, callback)
+        } else {
+            snapshot(fallbackStyle, configuration, cache, trace, width, height, callback)
+        }
+    }
 
-            GoogleMapTilesClient.getSession(googleApiKey, configuration.basemapStyle) { session ->
-                if (!cancelled) {
-                    val style = if (session != null) googleBasemapStyle(googleApiKey, session) else fallbackStyle
-                    cancelSnapshot = snapshot(style, configuration, cache, trace, width, height, callback)
-                }
-            }
+    private fun snapshotWithGoogleTiles(
+        apiKey: String,
+        fallbackStyle: Style.Builder,
+        configuration: StaticMapConfiguration,
+        cache: StaticMapCache,
+        trace: TraceDescription,
+        width: Int,
+        height: Int,
+        callback: (Bitmap?) -> Unit
+    ): () -> Unit {
+        var cancelled = false
+        var cancelSnapshot: () -> Unit = {}
 
-            return {
-                cancelled = true
-                cancelSnapshot()
+        GoogleMapTilesClient.getSession(apiKey, configuration.basemapStyle) { session ->
+            if (!cancelled) {
+                val style = if (session != null) googleBasemapStyle(apiKey, session) else fallbackStyle
+                cancelSnapshot = snapshot(style, configuration, cache, trace, width, height, callback)
             }
         }
 
-        return snapshot(fallbackStyle, configuration, cache, trace, width, height, callback)
+        return {
+            cancelled = true
+            cancelSnapshot()
+        }
     }
 
     private fun snapshot(
