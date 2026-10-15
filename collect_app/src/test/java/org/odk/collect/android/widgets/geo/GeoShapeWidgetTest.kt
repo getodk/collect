@@ -178,12 +178,12 @@ class GeoShapeWidgetTest {
         verify(listener).onCreateContextMenu(any(), any(), anyOrNull())
     }
 
-    private fun createWidget(prompt: FormEntryPrompt): GeoShapeWidget {
+    private fun createWidget(prompt: FormEntryPrompt): GeoPolyWidget {
         val settingsProvider = InMemSettingsProvider().also {
             it.getUnprotectedSettings().save(ProjectKeys.KEY_BASEMAP_SOURCE, "blah")
         }
 
-        return GeoShapeWidget(
+        return GeoPolyWidget(
             composeRule.activity,
             QuestionDetails(asGeoShapeQuestion(prompt)),
             geoDataRequester,

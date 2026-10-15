@@ -29,7 +29,7 @@ import org.mockito.kotlin.verify
 import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.support.WidgetTestActivity
-import org.odk.collect.android.widgets.geo.GeoTraceWidget
+import org.odk.collect.android.widgets.geo.GeoPolyWidget
 import org.odk.collect.android.widgets.geo.StaticMapSemantics
 import org.odk.collect.android.widgets.interfaces.GeoDataRequester
 import org.odk.collect.android.widgets.support.GeoWidgetHelpers.stringFromDoubleList
@@ -178,12 +178,12 @@ class GeoTraceWidgetTest {
         verify(listener).onCreateContextMenu(any(), any(), anyOrNull())
     }
 
-    private fun createWidget(prompt: FormEntryPrompt): GeoTraceWidget {
+    private fun createWidget(prompt: FormEntryPrompt): GeoPolyWidget {
         val settingsProvider = InMemSettingsProvider().also {
             it.getUnprotectedSettings().save(ProjectKeys.KEY_BASEMAP_SOURCE, "blah")
         }
 
-        return GeoTraceWidget(
+        return GeoPolyWidget(
             composeRule.activity,
             QuestionDetails(asGeoTraceQuestion(prompt)),
             geoDataRequester,
