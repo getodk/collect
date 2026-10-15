@@ -12,10 +12,7 @@ import org.maplibre.android.style.layers.FillLayer
 import org.maplibre.android.style.layers.LineLayer
 import org.maplibre.android.style.layers.Property
 import org.maplibre.android.style.layers.PropertyFactory
-import org.maplibre.android.style.layers.RasterLayer
 import org.maplibre.android.style.sources.GeoJsonSource
-import org.maplibre.android.style.sources.RasterSource
-import org.maplibre.android.style.sources.TileSet
 import org.maplibre.geojson.LineString
 import org.maplibre.geojson.Point
 import org.maplibre.geojson.Polygon
@@ -172,14 +169,8 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
     }
 
     private fun googleBasemapStyle(apiKey: String, session: String): Style.Builder {
-        val tileSet = TileSet("2.1.0", "https://tile.googleapis.com/v1/2dtiles/{z}/{x}/{y}?session=$session&key=$apiKey").apply {
-            scheme = "xyz"
-        }
-
-        return Style.Builder()
+        return rasterBasemapStyle("https://tile.googleapis.com/v1/2dtiles/{z}/{x}/{y}?session=$session&key=$apiKey")
             .fromUri("asset://maplibre_empty_style.json")
-            .withSource(RasterSource("basemap_source", tileSet, 256))
-            .withLayer(RasterLayer("basemap_layer", "basemap_source"))
     }
 
     private fun blankBasemap(): Style.Builder {
