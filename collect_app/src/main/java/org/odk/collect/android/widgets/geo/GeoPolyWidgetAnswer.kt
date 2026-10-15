@@ -2,19 +2,18 @@ package org.odk.collect.android.widgets.geo
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import org.odk.collect.android.widgets.MediaWidgetAnswerViewModel
 import org.odk.collect.android.widgets.TextWidgetAnswer
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils
-import org.odk.collect.geo.geopoly.GeoPolyUtils
 import org.odk.collect.maplibre.staticmap.StaticMapLoader
-import org.odk.collect.maps.traces.PolygonDescription
+import org.odk.collect.maps.traces.TraceDescription
 
 @Composable
-fun GeoShapeWidgetAnswer(
+fun GeoPolyWidgetAnswer(
     modifier: Modifier,
     answer: String,
+    trace: TraceDescription,
     fontSize: Int?,
     horizontalArrangement: Arrangement.Horizontal,
     mediaWidgetAnswerViewModel: MediaWidgetAnswerViewModel,
@@ -22,12 +21,11 @@ fun GeoShapeWidgetAnswer(
     onClick: () -> Unit,
     onLongClick: () -> Unit
 ) {
-    val shape = remember(answer) { PolygonDescription(GeoPolyUtils.parseGeometry(answer)) }
     val answerToDisplay = GeoWidgetUtils.getGeoPolyAnswerToDisplay(answer)
 
     AsyncStaticMap(
         modifier = modifier,
-        trace = shape,
+        trace = trace,
         configuration = mediaWidgetAnswerViewModel.getStaticMapConfiguration(),
         cache = mediaWidgetAnswerViewModel.staticMapCache,
         staticMapLoader = staticMapLoader,
