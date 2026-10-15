@@ -5,7 +5,6 @@ import android.content.Context
 import android.view.View
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import org.javarosa.core.model.Constants
 import org.javarosa.core.model.data.IAnswerData
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.formentry.questions.QuestionDetails
@@ -32,33 +31,17 @@ class GeoPolyWidget @JvmOverloads constructor(
     override fun onCreateWidgetView(context: Context, prompt: FormEntryPrompt, answerFontSize: Int): View {
         return ComposeView(context).apply {
             setContextThemedContent(ViewCompositionStrategy.DisposeOnDetachedFromWindowOrReleasedFromPool) {
-                val buttonFontSize = QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.BODY_LARGE)
-
-                if (prompt.dataType == Constants.DATATYPE_GEOSHAPE) {
-                    GeoShapeWidgetContent(
-                        dependencies.mediaWidgetAnswerViewModel,
-                        staticMapLoader,
-                        prompt,
-                        prompt.answerText,
-                        questionDetails.isReadOnly,
-                        buttonFontSize,
-                        answerFontSize,
-                        onGetPolygonClick = { geoDataRequester.requestGeoPoly(prompt) },
-                        onLongClick = { showContextMenu() }
-                    )
-                } else {
-                    GeoTraceWidgetContent(
-                        dependencies.mediaWidgetAnswerViewModel,
-                        staticMapLoader,
-                        prompt,
-                        prompt.answerText,
-                        questionDetails.isReadOnly,
-                        buttonFontSize,
-                        answerFontSize,
-                        onGetLineClick = { geoDataRequester.requestGeoPoly(prompt) },
-                        onLongClick = { showContextMenu() }
-                    )
-                }
+                GeoPolyWidgetContent(
+                    dependencies.mediaWidgetAnswerViewModel,
+                    staticMapLoader,
+                    prompt,
+                    prompt.answerText,
+                    questionDetails.isReadOnly,
+                    QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.BODY_LARGE),
+                    answerFontSize,
+                    onGetGeoPolyClick = { geoDataRequester.requestGeoPoly(prompt) },
+                    onLongClick = { showContextMenu() }
+                )
             }
         }
     }
