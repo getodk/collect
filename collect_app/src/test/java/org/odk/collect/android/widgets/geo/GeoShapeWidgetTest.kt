@@ -2,10 +2,12 @@ package org.odk.collect.android.widgets.geo
 
 import android.app.Application
 import android.content.ComponentName
+import android.graphics.Bitmap
 import android.view.View
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.longClick
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
@@ -13,6 +15,7 @@ import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
+import org.javarosa.core.model.Constants
 import org.javarosa.core.model.data.StringData
 import org.javarosa.form.api.FormEntryPrompt
 import org.junit.Rule
@@ -24,14 +27,22 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.odk.collect.android.formentry.questions.QuestionDetails
+import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.support.WidgetTestActivity
+import org.odk.collect.android.widgets.MediaWidgetAnswerViewModel
+import org.odk.collect.android.widgets.QuestionWidget
 import org.odk.collect.android.widgets.interfaces.GeoDataRequester
 import org.odk.collect.android.widgets.support.GeoWidgetHelpers.stringFromDoubleList
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnly
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndAnswer
-import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetDependencies
 import org.odk.collect.androidtest.onNodeWithClickLabel
+import org.odk.collect.maplibre.staticmap.StaticMapCache
+import org.odk.collect.maplibre.staticmap.StaticMapConfiguration
+import org.odk.collect.maplibre.staticmap.StaticMapLoader
+import org.odk.collect.maps.traces.TraceDescription
+import org.odk.collect.settings.InMemSettingsProvider
+import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.strings.R.string
 import org.robolectric.Shadows.shadowOf
 
@@ -48,6 +59,8 @@ class GeoShapeWidgetTest {
     private val answer = stringFromDoubleList()
 
     private val geoDataRequester = mock<GeoDataRequester>()
+
+    private val staticMapLoader = FakeStaticMapLoader()
 
     @Test
     fun `#getAnswer returns null when there is no answer`() {
@@ -70,6 +83,30 @@ class GeoShapeWidgetTest {
     @Test
     fun `the answer is displayed when there is one`() {
         createWidget(promptWithAnswer(StringData(answer)))
+        composeRule.onNodeWithText(answer).assertIsDisplayed()
+    }
+
+    @Test
+    fun `the map preview is displayed instead of the answer when it can be rendered`() {
+        staticMapLoader.bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
+        createWidget(promptWithAnswer(StringData(answer)))
+        composeRule.onNodeWithTag(StaticMapSemantics.TAG).assertIsDisplayed()
+        composeRule.onNodeWithText(answer).assertDoesNotExist()
+    }
+
+    @Test
+    fun `the answer is displayed instead of the map preview when it can't be rendered`() {
+        createWidget(promptWithAnswer(StringData(answer)))
+        composeRule.onNodeWithTag(StaticMapSemantics.TAG).assertDoesNotExist()
+        composeRule.onNodeWithText(answer).assertIsDisplayed()
+    }
+
+    @Test
+    fun `the answer is displayed instead of the map preview when it is out of map bounds`() {
+        val answer = "100.0 10.0 0.0 0.0;101.0 11.0 0.0 0.0;100.0 11.0 0.0 0.0;100.0 10.0 0.0 0.0"
+        staticMapLoader.bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
+        createWidget(promptWithAnswer(StringData(answer)))
+        composeRule.onNodeWithTag(StaticMapSemantics.TAG).assertDoesNotExist()
         composeRule.onNodeWithText(answer).assertIsDisplayed()
     }
 
@@ -129,12 +166,52 @@ class GeoShapeWidgetTest {
         verify(listener, times(2)).onCreateContextMenu(any(), any(), anyOrNull())
     }
 
-    private fun createWidget(prompt: FormEntryPrompt) = GeoShapeWidget(
-        composeRule.activity,
-        QuestionDetails(prompt),
-        geoDataRequester,
-        widgetDependencies()
-    ).also {
-        composeRule.activity.setContentView(it)
+    @Test
+    fun `long pressing the map preview shows the context menu`() {
+        staticMapLoader.bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
+        val widget = createWidget(promptWithAnswer(StringData(answer)))
+        val listener = mock<View.OnCreateContextMenuListener>()
+        widget.setOnCreateContextMenuListener(listener)
+
+        composeRule.onNodeWithTag(StaticMapSemantics.TAG).performTouchInput { longClick() }
+
+        verify(listener).onCreateContextMenu(any(), any(), anyOrNull())
+    }
+
+    private fun createWidget(prompt: FormEntryPrompt): GeoShapeWidget {
+        val settingsProvider = InMemSettingsProvider().also {
+            it.getUnprotectedSettings().save(ProjectKeys.KEY_BASEMAP_SOURCE, "blah")
+        }
+
+        return GeoShapeWidget(
+            composeRule.activity,
+            QuestionDetails(asGeoShapeQuestion(prompt)),
+            geoDataRequester,
+            QuestionWidget.Dependencies(mock(), MediaWidgetAnswerViewModel(mock(), mock(), mock(), settingsProvider, mock())),
+            staticMapLoader
+        ).also {
+            composeRule.activity.setContentView(it)
+        }
+    }
+
+    private fun asGeoShapeQuestion(prompt: FormEntryPrompt) = MockFormEntryPromptBuilder(prompt)
+        .withControlType(Constants.CONTROL_INPUT)
+        .withDataType(Constants.DATATYPE_GEOSHAPE)
+        .build()
+
+    private class FakeStaticMapLoader : StaticMapLoader {
+        var bitmap: Bitmap? = null
+
+        override fun load(
+            configuration: StaticMapConfiguration,
+            cache: StaticMapCache,
+            trace: TraceDescription,
+            width: Int,
+            height: Int,
+            callback: (Bitmap?) -> Unit
+        ): () -> Unit {
+            callback(bitmap)
+            return {}
+        }
     }
 }

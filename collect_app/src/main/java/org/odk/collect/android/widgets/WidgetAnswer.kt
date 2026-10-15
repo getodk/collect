@@ -13,6 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import org.javarosa.core.model.Constants
 import org.javarosa.form.api.FormEntryPrompt
+import org.odk.collect.android.widgets.geo.GeoShapeWidgetAnswer
 import org.odk.collect.android.widgets.geo.GeoTraceWidgetAnswer
 import org.odk.collect.android.widgets.image.ImageWidgetAnswer
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils
@@ -57,6 +58,16 @@ fun WidgetAnswer(
                         onLongClick
                     )
                     Constants.DATATYPE_GEOTRACE -> GeoTraceWidgetAnswer(
+                        modifier,
+                        answer,
+                        fontSize,
+                        if (compact) Arrangement.Start else Arrangement.Center,
+                        mediaWidgetAnswerViewModel,
+                        staticMapLoader,
+                        onClick,
+                        onLongClick
+                    )
+                    Constants.DATATYPE_GEOSHAPE -> GeoShapeWidgetAnswer(
                         modifier,
                         answer,
                         fontSize,

@@ -10,16 +10,18 @@ import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.widgets.QuestionWidget
 import org.odk.collect.android.widgets.interfaces.GeoDataRequester
-import org.odk.collect.android.widgets.utilities.GeoWidgetUtils
 import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils
 import org.odk.collect.androidshared.ui.ComposeThemeProvider.Companion.setContextThemedContent
+import org.odk.collect.maplibre.staticmap.MapLibreStaticMapLoader
+import org.odk.collect.maplibre.staticmap.StaticMapLoader
 
 @SuppressLint("ViewConstructor")
-class GeoShapeWidget(
+class GeoShapeWidget @JvmOverloads constructor(
     context: Context,
     questionDetails: QuestionDetails,
     private val geoDataRequester: GeoDataRequester,
-    private val dependencies: Dependencies
+    private val dependencies: Dependencies,
+    private val staticMapLoader: StaticMapLoader = MapLibreStaticMapLoader(context)
 ) : QuestionWidget(context, dependencies, questionDetails) {
 
     init {
@@ -31,8 +33,9 @@ class GeoShapeWidget(
             setContextThemedContent(ViewCompositionStrategy.DisposeOnDetachedFromWindowOrReleasedFromPool) {
                 GeoShapeWidgetContent(
                     dependencies.mediaWidgetAnswerViewModel,
+                    staticMapLoader,
                     prompt,
-                    GeoWidgetUtils.getGeoPolyAnswerToDisplay(prompt.answerText),
+                    prompt.answerText,
                     questionDetails.isReadOnly,
                     QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.BODY_LARGE),
                     answerFontSize,
