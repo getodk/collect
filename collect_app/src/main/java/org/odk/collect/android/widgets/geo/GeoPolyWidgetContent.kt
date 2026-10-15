@@ -1,5 +1,7 @@
 package org.odk.collect.android.widgets.geo
 
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -29,17 +31,17 @@ fun GeoPolyWidgetContent(
     onGetGeoPolyClick: () -> Unit,
     onLongClick: () -> Unit
 ) {
-    val isShape = formEntryPrompt.dataType == Constants.DATATYPE_GEOSHAPE
+    val button = if (formEntryPrompt.dataType == Constants.DATATYPE_GEOSHAPE) GeoPolyButton.SHAPE else GeoPolyButton.TRACE
 
     Column {
         if (!readOnly || !answer.isNullOrEmpty()) {
             val buttonText = when {
-                readOnly -> stringResource(if (isShape) string.view_polygon else string.view_line)
-                answer.isNullOrEmpty() -> stringResource(if (isShape) string.get_polygon else string.get_line)
-                else -> stringResource(if (isShape) string.view_or_change_polygon else string.view_or_change_line)
+                readOnly -> stringResource(button.view)
+                answer.isNullOrEmpty() -> stringResource(button.get)
+                else -> stringResource(button.viewOrChange)
             }
             WidgetIconButton(
-                ImageVector.vectorResource(if (isShape) R.drawable.ic_outline_polygon_white_24 else R.drawable.ic_outline_polyline_white_24),
+                ImageVector.vectorResource(button.icon),
                 buttonText,
                 buttonFontSize,
                 onGetGeoPolyClick,
@@ -57,4 +59,14 @@ fun GeoPolyWidgetContent(
             onLongClick = onLongClick
         )
     }
+}
+
+private enum class GeoPolyButton(
+    @DrawableRes val icon: Int,
+    @StringRes val get: Int,
+    @StringRes val view: Int,
+    @StringRes val viewOrChange: Int
+) {
+    TRACE(R.drawable.ic_outline_polyline_white_24, string.get_line, string.view_line, string.view_or_change_line),
+    SHAPE(R.drawable.ic_outline_polygon_white_24, string.get_polygon, string.view_polygon, string.view_or_change_polygon)
 }
