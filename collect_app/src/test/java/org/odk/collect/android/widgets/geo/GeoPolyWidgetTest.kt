@@ -1,4 +1,4 @@
-package org.odk.collect.android.widgets
+package org.odk.collect.android.widgets.geo
 
 import android.app.Application
 import android.content.ComponentName
@@ -15,6 +15,7 @@ import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
+import org.hamcrest.Matchers.instanceOf
 import org.javarosa.core.model.Constants
 import org.javarosa.core.model.data.StringData
 import org.javarosa.form.api.FormEntryPrompt
@@ -29,8 +30,8 @@ import org.mockito.kotlin.verify
 import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.support.WidgetTestActivity
-import org.odk.collect.android.widgets.geo.GeoPolyWidget
-import org.odk.collect.android.widgets.geo.StaticMapSemantics
+import org.odk.collect.android.widgets.MediaWidgetAnswerViewModel
+import org.odk.collect.android.widgets.QuestionWidget
 import org.odk.collect.android.widgets.interfaces.GeoDataRequester
 import org.odk.collect.android.widgets.support.GeoWidgetHelpers.stringFromDoubleList
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer
@@ -40,6 +41,8 @@ import org.odk.collect.androidtest.onNodeWithClickLabel
 import org.odk.collect.maplibre.staticmap.StaticMapCache
 import org.odk.collect.maplibre.staticmap.StaticMapConfiguration
 import org.odk.collect.maplibre.staticmap.StaticMapLoader
+import org.odk.collect.maps.traces.LineDescription
+import org.odk.collect.maps.traces.PolygonDescription
 import org.odk.collect.maps.traces.TraceDescription
 import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
@@ -47,7 +50,7 @@ import org.odk.collect.strings.R.string
 import org.robolectric.Shadows.shadowOf
 
 @RunWith(AndroidJUnit4::class)
-class GeoTraceWidgetTest {
+class GeoPolyWidgetTest {
     init {
         shadowOf(getApplicationContext<Application>().packageManager)
             .addActivityIfNotPresent(ComponentName(getApplicationContext(), WidgetTestActivity::class.java))
@@ -111,31 +114,63 @@ class GeoTraceWidgetTest {
     }
 
     @Test
+    fun `a geotrace answer is shown on the map as a line`() {
+        createWidget(promptWithAnswer(StringData(answer)), Constants.DATATYPE_GEOTRACE)
+        composeRule.waitForIdle()
+        assertThat(staticMapLoader.trace, instanceOf(LineDescription::class.java))
+    }
+
+    @Test
+    fun `a geoshape answer is shown on the map as a polygon`() {
+        createWidget(promptWithAnswer(StringData(answer)), Constants.DATATYPE_GEOSHAPE)
+        composeRule.waitForIdle()
+        assertThat(staticMapLoader.trace, instanceOf(PolygonDescription::class.java))
+    }
+
+    @Test
     fun `the button is hidden when the question is read-only and there is no answer`() {
         createWidget(promptWithReadOnly())
         composeRule.onNodeWithClickLabel(string.view_line).assertDoesNotExist()
     }
 
     @Test
-    fun `the button has correct text when the question is read-only and there is an answer`() {
-        createWidget(promptWithReadOnlyAndAnswer(StringData(answer)))
+    fun `the button has correct text for a geotrace when the question is read-only and there is an answer`() {
+        createWidget(promptWithReadOnlyAndAnswer(StringData(answer)), Constants.DATATYPE_GEOTRACE)
         composeRule.onNodeWithClickLabel(string.view_line).assertIsDisplayed()
     }
 
     @Test
-    fun `the button has correct text when the question is not read-only and there is no answer`() {
-        createWidget(promptWithAnswer(null))
+    fun `the button has correct text for a geotrace when the question is not read-only and there is no answer`() {
+        createWidget(promptWithAnswer(null), Constants.DATATYPE_GEOTRACE)
         composeRule.onNodeWithClickLabel(string.get_line).assertIsDisplayed()
     }
 
     @Test
-    fun `the button has correct text when the question is not read-only and there is an answer`() {
-        createWidget(promptWithAnswer(StringData(answer)))
+    fun `the button has correct text for a geotrace when the question is not read-only and there is an answer`() {
+        createWidget(promptWithAnswer(StringData(answer)), Constants.DATATYPE_GEOTRACE)
         composeRule.onNodeWithClickLabel(string.view_or_change_line).assertIsDisplayed()
     }
 
     @Test
-    fun `clicking the button requests a geotrace`() {
+    fun `the button has correct text for a geoshape when the question is read-only and there is an answer`() {
+        createWidget(promptWithReadOnlyAndAnswer(StringData(answer)), Constants.DATATYPE_GEOSHAPE)
+        composeRule.onNodeWithClickLabel(string.view_polygon).assertIsDisplayed()
+    }
+
+    @Test
+    fun `the button has correct text for a geoshape when the question is not read-only and there is no answer`() {
+        createWidget(promptWithAnswer(null), Constants.DATATYPE_GEOSHAPE)
+        composeRule.onNodeWithClickLabel(string.get_polygon).assertIsDisplayed()
+    }
+
+    @Test
+    fun `the button has correct text for a geoshape when the question is not read-only and there is an answer`() {
+        createWidget(promptWithAnswer(StringData(answer)), Constants.DATATYPE_GEOSHAPE)
+        composeRule.onNodeWithClickLabel(string.view_or_change_polygon).assertIsDisplayed()
+    }
+
+    @Test
+    fun `clicking the button requests a geopoly`() {
         val prompt = promptWithAnswer(null)
         createWidget(prompt)
 
@@ -145,7 +180,7 @@ class GeoTraceWidgetTest {
     }
 
     @Test
-    fun `clicking the button requests a geotrace when there is an answer`() {
+    fun `clicking the button requests a geopoly when there is an answer`() {
         val prompt = promptWithAnswer(StringData(answer))
         createWidget(prompt)
 
@@ -178,14 +213,14 @@ class GeoTraceWidgetTest {
         verify(listener).onCreateContextMenu(any(), any(), anyOrNull())
     }
 
-    private fun createWidget(prompt: FormEntryPrompt): GeoPolyWidget {
+    private fun createWidget(prompt: FormEntryPrompt, dataType: Int = Constants.DATATYPE_GEOTRACE): GeoPolyWidget {
         val settingsProvider = InMemSettingsProvider().also {
             it.getUnprotectedSettings().save(ProjectKeys.KEY_BASEMAP_SOURCE, "blah")
         }
 
         return GeoPolyWidget(
             composeRule.activity,
-            QuestionDetails(asGeoTraceQuestion(prompt)),
+            QuestionDetails(asGeoPolyQuestion(prompt, dataType)),
             geoDataRequester,
             QuestionWidget.Dependencies(mock(), MediaWidgetAnswerViewModel(mock(), mock(), mock(), settingsProvider, mock())),
             staticMapLoader
@@ -194,13 +229,14 @@ class GeoTraceWidgetTest {
         }
     }
 
-    private fun asGeoTraceQuestion(prompt: FormEntryPrompt) = MockFormEntryPromptBuilder(prompt)
+    private fun asGeoPolyQuestion(prompt: FormEntryPrompt, dataType: Int) = MockFormEntryPromptBuilder(prompt)
         .withControlType(Constants.CONTROL_INPUT)
-        .withDataType(Constants.DATATYPE_GEOTRACE)
+        .withDataType(dataType)
         .build()
 
     private class FakeStaticMapLoader : StaticMapLoader {
         var bitmap: Bitmap? = null
+        var trace: TraceDescription? = null
 
         override fun load(
             configuration: StaticMapConfiguration,
@@ -210,6 +246,7 @@ class GeoTraceWidgetTest {
             height: Int,
             callback: (Bitmap?) -> Unit
         ): () -> Unit {
+            this.trace = trace
             callback(bitmap)
             return {}
         }
