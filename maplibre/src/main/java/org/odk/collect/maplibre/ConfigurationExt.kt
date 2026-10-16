@@ -1,6 +1,5 @@
 package org.odk.collect.maplibre
 
-import org.maplibre.android.maps.Style
 import org.odk.collect.shared.settings.Settings
 
 fun Configuration.basemapStyle(settings: Settings): String? {
@@ -15,8 +14,4 @@ fun Configuration.basemapUri(style: String?): BasemapUri {
     } else {
         throw IllegalArgumentException("Invalid Configuration!")
     }
-}
-
-fun Configuration.rasterBasemapStyle(tileUri: String): Style.Builder {
-    return rasterBasemapStyle(tileUri, attribution)
 }

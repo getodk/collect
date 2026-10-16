@@ -176,7 +176,7 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
         val uriValue = uri.value(keys)
 
         return when (uri) {
-            is BasemapUri.Raster -> basemapConfiguration.rasterBasemapStyle(uriValue).fromUri("asset://maplibre_empty_style.json")
+            is BasemapUri.Raster -> rasterBasemapStyle(uriValue, basemapConfiguration.attribution).fromUri("asset://maplibre_empty_style.json")
             is BasemapUri.Mapbox -> Style.Builder().fromUri(uriValue)
         }
     }
