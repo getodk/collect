@@ -101,8 +101,12 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
 
         GoogleMapTilesClient.getSession(apiKey, configuration.basemapStyle) { session ->
             if (!cancelled) {
-                val style = if (session != null) googleBasemapStyle(apiKey, session) else fallbackStyle
-                cancelSnapshot = snapshot(style, configuration, cache, trace, width, height, callback)
+                cancelSnapshot = if (session != null) {
+                    snapshot(googleBasemapStyle(apiKey, session), configuration, cache, trace, width, height, callback)
+                } else {
+                    // Not cached so that Google is tried again next time
+                    snapshot(fallbackStyle, configuration, null, trace, width, height, callback)
+                }
             }
         }
 
@@ -115,7 +119,7 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
     private fun snapshot(
         style: Style.Builder,
         configuration: StaticMapConfiguration,
-        cache: StaticMapCache,
+        cache: StaticMapCache?,
         trace: TraceDescription,
         width: Int,
         height: Int,
@@ -124,7 +128,7 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
         var snapshotter = MapSnapshotter(context, snapshotOptions(context, style, configuration.referenceLayer, trace, width, height))
         snapshotter.start(
             {
-                cache.put(configuration, trace, width, height, it.bitmap)
+                cache?.put(configuration, trace, width, height, it.bitmap)
                 callback(it.bitmap)
             },
             {
