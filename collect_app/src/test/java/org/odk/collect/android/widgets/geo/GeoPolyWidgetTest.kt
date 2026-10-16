@@ -15,7 +15,6 @@ import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
-import org.hamcrest.Matchers.instanceOf
 import org.javarosa.core.model.Constants
 import org.javarosa.core.model.data.StringData
 import org.javarosa.form.api.FormEntryPrompt
@@ -38,6 +37,7 @@ import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithA
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnly
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndAnswer
 import org.odk.collect.androidtest.onNodeWithClickLabel
+import org.odk.collect.geo.geopoly.GeoPolyUtils
 import org.odk.collect.maplibre.staticmap.StaticMapCache
 import org.odk.collect.maplibre.staticmap.StaticMapConfiguration
 import org.odk.collect.maplibre.staticmap.StaticMapLoader
@@ -117,14 +117,14 @@ class GeoPolyWidgetTest {
     fun `a geotrace answer is shown on the map as a line`() {
         createWidget(promptWithAnswer(StringData(answer)), Constants.DATATYPE_GEOTRACE)
         composeRule.waitForIdle()
-        assertThat(staticMapLoader.trace, instanceOf(LineDescription::class.java))
+        assertThat(staticMapLoader.trace, equalTo(LineDescription(GeoPolyUtils.parseGeometry(answer))))
     }
 
     @Test
     fun `a geoshape answer is shown on the map as a polygon`() {
         createWidget(promptWithAnswer(StringData(answer)), Constants.DATATYPE_GEOSHAPE)
         composeRule.waitForIdle()
-        assertThat(staticMapLoader.trace, instanceOf(PolygonDescription::class.java))
+        assertThat(staticMapLoader.trace, equalTo(PolygonDescription(GeoPolyUtils.parseGeometry(answer))))
     }
 
     @Test
