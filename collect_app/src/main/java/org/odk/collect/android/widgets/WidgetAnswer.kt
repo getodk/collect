@@ -18,12 +18,9 @@ import org.odk.collect.android.widgets.image.ImageWidgetAnswer
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils
 import org.odk.collect.android.widgets.video.VideoWidgetAnswer
 import org.odk.collect.androidshared.system.ContextExt.getActivity
-import org.odk.collect.geo.geopoly.GeoPolyUtils
 import org.odk.collect.icons.R
 import org.odk.collect.maplibre.staticmap.MapLibreStaticMapLoader
 import org.odk.collect.maplibre.staticmap.StaticMapLoader
-import org.odk.collect.maps.traces.LineDescription
-import org.odk.collect.maps.traces.PolygonDescription
 
 @Composable
 fun WidgetAnswer(
@@ -59,21 +56,10 @@ fun WidgetAnswer(
                         onClick,
                         onLongClick
                     )
-                    Constants.DATATYPE_GEOTRACE -> GeoPolyWidgetAnswer(
+                    Constants.DATATYPE_GEOTRACE, Constants.DATATYPE_GEOSHAPE -> GeoPolyWidgetAnswer(
                         modifier,
                         answer,
-                        remember(answer) { LineDescription(GeoPolyUtils.parseGeometry(answer)) },
-                        fontSize,
-                        if (compact) Arrangement.Start else Arrangement.Center,
-                        mediaWidgetAnswerViewModel,
-                        staticMapLoader,
-                        onClick,
-                        onLongClick
-                    )
-                    Constants.DATATYPE_GEOSHAPE -> GeoPolyWidgetAnswer(
-                        modifier,
-                        answer,
-                        remember(answer) { PolygonDescription(GeoPolyUtils.parseGeometry(answer)) },
+                        prompt.dataType == Constants.DATATYPE_GEOSHAPE,
                         fontSize,
                         if (compact) Arrangement.Start else Arrangement.Center,
                         mediaWidgetAnswerViewModel,
