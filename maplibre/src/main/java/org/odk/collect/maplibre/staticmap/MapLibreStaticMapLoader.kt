@@ -32,6 +32,12 @@ import org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_OSM
 import org.odk.collect.shared.injection.Keys
 import java.io.File
 import javax.inject.Inject
+import kotlin.math.PI
+import kotlin.math.ln
+import kotlin.math.log2
+import kotlin.math.min
+import kotlin.math.round
+import kotlin.math.tan
 
 /**
  * Loads a static image of a map showing a line or a polygon, rendering it off-screen if it isn't cached.
@@ -100,13 +106,19 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
         var cancelSnapshot: () -> Unit = {}
 
         GoogleMapTilesClient.getSession(apiKey, configuration.basemapStyle) { session ->
-            if (!cancelled) {
-                cancelSnapshot = if (session != null) {
-                    snapshot(googleBasemapStyle(apiKey, session), configuration, cache, trace, width, height, callback)
-                } else {
-                    // Not cached so that Google is tried again next time
-                    snapshot(fallbackStyle, configuration, null, trace, width, height, callback)
+            if (cancelled) {
+                return@getSession
+            }
+
+            if (session != null) {
+                getGoogleCopyright(apiKey, session, trace, width, height) { copyright ->
+                    if (!cancelled) {
+                        cancelSnapshot = snapshot(googleBasemapStyle(apiKey, session, copyright), configuration, cache, trace, width, height, callback)
+                    }
                 }
+            } else {
+                // Not cached so that Google is tried again next time
+                cancelSnapshot = snapshot(fallbackStyle, configuration, null, trace, width, height, callback)
             }
         }
 
@@ -152,20 +164,15 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
         width: Int,
         height: Int
     ): MapSnapshotter.Options {
-        // Leave a 10% margin on each side
-        val horizontalPadding = (width * 0.1).toInt()
-        val verticalPadding = (height * 0.1).toInt()
+        val horizontalPadding = (width * PADDING).toInt()
+        val verticalPadding = (height * PADDING).toInt()
 
         val density = context.resources.displayMetrics.density
         return MapSnapshotter.Options((width / density).toInt(), (height / density).toInt())
             .withPixelRatio(density)
             .withStyleBuilder(buildStyle(basemap, referenceLayer, trace))
             .withLogo(false)
-            .withRegion(
-                LatLngBounds.Builder()
-                    .includes(trace.points.map { LatLng(it.latitude, it.longitude) })
-                    .build()
-            )
+            .withRegion(bounds(trace))
             .withPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
     }
 
@@ -185,8 +192,42 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
         }
     }
 
-    private fun googleBasemapStyle(apiKey: String, session: String): Style.Builder {
-        return rasterBasemapStyle("https://tile.googleapis.com/v1/2dtiles/{z}/{x}/{y}?session=$session&key=$apiKey")
+    private fun getGoogleCopyright(apiKey: String, session: String, trace: TraceDescription, width: Int, height: Int, callback: (String?) -> Unit) {
+        val density = context.resources.displayMetrics.density
+        val bounds = bounds(trace)
+
+        // The zoom the snapshot ends up at, as the copyright depends on it
+        val lonZoom = log2(360 * width / density * (1 - 2 * PADDING) / (256 * bounds.longitudeSpan))
+        val latZoom = log2(2 * PI * height / density * (1 - 2 * PADDING) / (256 * (mercatorY(bounds.latitudeNorth) - mercatorY(bounds.latitudeSouth))))
+        val zoom = round(min(lonZoom, latZoom)).coerceIn(0.0, 22.0).toInt()
+
+        GoogleMapTilesClient.getCopyright(
+            apiKey,
+            session,
+            zoom,
+            bounds.latitudeNorth,
+            bounds.latitudeSouth,
+            bounds.longitudeEast,
+            bounds.longitudeWest,
+            callback
+        )
+    }
+
+    private fun bounds(trace: TraceDescription): LatLngBounds {
+        return LatLngBounds.Builder()
+            .includes(trace.points.map { LatLng(it.latitude, it.longitude) })
+            .build()
+    }
+
+    private fun mercatorY(latitude: Double): Double {
+        return ln(tan(PI / 4 + Math.toRadians(latitude) / 2))
+    }
+
+    private fun googleBasemapStyle(apiKey: String, session: String, copyright: String?): Style.Builder {
+        val attribution = listOfNotNull("Google Maps", copyright)
+            .joinToString(" ") { "<a href=\"https://www.google.com/maps\">$it</a>" }
+
+        return rasterBasemapStyle(GoogleMapTilesClient.getTilesUrl(apiKey, session), attribution)
             .fromUri("asset://maplibre_empty_style.json")
     }
 
@@ -237,5 +278,8 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
     private companion object {
         // Shared by all loaders so that widgets, which are recreated often, don't each start a server
         val referenceLayersServer = ReferenceLayersServer()
+
+        // The margin left on each side of the trace, as a fraction of the map size
+        const val PADDING = 0.1
     }
 }

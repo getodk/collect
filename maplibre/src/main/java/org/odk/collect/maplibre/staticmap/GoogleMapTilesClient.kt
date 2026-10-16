@@ -32,19 +32,40 @@ object GoogleMapTilesClient {
         }
     }
 
+    fun getCopyright(apiKey: String, session: String, zoom: Int, north: Double, south: Double, east: Double, west: Double, callback: (String?) -> Unit) {
+        scope.launch {
+            val url = "https://tile.googleapis.com/tile/v1/viewport?session=$session&key=$apiKey" +
+                "&zoom=$zoom&north=$north&south=$south&east=$east&west=$west"
+            val copyright = request(url) { it.optString("copyright").ifBlank { null } }
+
+            withContext(Dispatchers.Main) { callback(copyright) }
+        }
+    }
+
+    fun getTilesUrl(apiKey: String, session: String): String {
+        return "https://tile.googleapis.com/v1/2dtiles/{z}/{x}/{y}?session=$session&key=$apiKey"
+    }
+
     private fun createSession(apiKey: String, style: String?): Session? {
+        return request("https://tile.googleapis.com/v1/createSession?key=$apiKey", requestBody(style)) {
+            Session(it.getString("session"), it.getString("expiry").toLong() * 1000)
+        }
+    }
+
+    private fun <T> request(url: String, body: JSONObject? = null, parse: (JSONObject) -> T): T? {
         return try {
-            val connection = URL("https://tile.googleapis.com/v1/createSession?key=$apiKey").openConnection() as HttpURLConnection
+            val connection = URL(url).openConnection() as HttpURLConnection
             try {
                 connection.connectTimeout = TIMEOUT
                 connection.readTimeout = TIMEOUT
-                connection.requestMethod = "POST"
-                connection.doOutput = true
-                connection.setRequestProperty("Content-Type", "application/json")
-                connection.outputStream.use { it.write(requestBody(style).toString().toByteArray()) }
+                if (body != null) {
+                    connection.requestMethod = "POST"
+                    connection.doOutput = true
+                    connection.setRequestProperty("Content-Type", "application/json")
+                    connection.outputStream.use { it.write(body.toString().toByteArray()) }
+                }
 
-                val response = JSONObject(connection.inputStream.bufferedReader().use { it.readText() })
-                Session(response.getString("session"), response.getString("expiry").toLong() * 1000)
+                parse(JSONObject(connection.inputStream.bufferedReader().use { it.readText() }))
             } finally {
                 connection.disconnect()
             }
