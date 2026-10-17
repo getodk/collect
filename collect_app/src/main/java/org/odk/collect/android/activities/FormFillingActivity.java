@@ -162,8 +162,7 @@ import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.SavepointsRepositoryProvider;
 import org.odk.collect.android.utilities.SoftKeyboardController;
-import org.odk.collect.android.widgets.geo.GeoShapeWidget;
-import org.odk.collect.android.widgets.geo.GeoTraceWidget;
+import org.odk.collect.android.widgets.geo.GeoPolyWidget;
 import org.odk.collect.android.widgets.MediaWidgetAnswerViewModel;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.datetime.DateTimeWidget;
@@ -979,7 +978,7 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
      * Clears the answer on the screen.
      */
     private void clearAnswer(QuestionWidget qw) {
-        if (qw instanceof GeoTraceWidget || qw instanceof GeoShapeWidget) {
+        if (qw instanceof GeoPolyWidget) {
             formEntryViewModel.answerQuestion(qw.getFormEntryPrompt().getIndex(), null);
         } else if (qw.getAnswer() != null || qw instanceof DateTimeWidget) {
             qw.clearAnswer();

@@ -79,7 +79,7 @@ class AllWidgetsFormTest {
             .clickOnString(string.get_line, AssertionFramework.COMPOSE)
             .pressBack(FormEntryPage("All widgets"))
             .swipeToNextQuestion("Geoshape widget")
-            .clickOnString(string.get_polygon)
+            .clickOnString(string.get_polygon, AssertionFramework.COMPOSE)
             .pressBack(FormEntryPage("All widgets"))
             .swipeToNextQuestion("OSM integration")
 

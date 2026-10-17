@@ -8,12 +8,14 @@ import org.maplibre.android.geometry.LatLngBounds
 import org.maplibre.android.maps.Style
 import org.maplibre.android.snapshotter.MapSnapshotter
 import org.maplibre.android.style.layers.BackgroundLayer
+import org.maplibre.android.style.layers.FillLayer
 import org.maplibre.android.style.layers.LineLayer
 import org.maplibre.android.style.layers.Property
 import org.maplibre.android.style.layers.PropertyFactory
 import org.maplibre.android.style.sources.GeoJsonSource
 import org.maplibre.geojson.LineString
 import org.maplibre.geojson.Point
+import org.maplibre.geojson.Polygon
 import org.odk.collect.maplibre.BasemapUri
 import org.odk.collect.maplibre.Configuration
 import org.odk.collect.maplibre.Configurations
@@ -23,12 +25,19 @@ import org.odk.collect.maplibre.MapUtils
 import org.odk.collect.maplibre.ReferenceLayersServer
 import org.odk.collect.maplibre.basemapUri
 import org.odk.collect.maplibre.rasterBasemapStyle
+import org.odk.collect.maps.traces.PolygonDescription
 import org.odk.collect.maps.traces.TraceDescription
 import org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_GOOGLE
 import org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_OSM
 import org.odk.collect.shared.injection.Keys
 import java.io.File
 import javax.inject.Inject
+import kotlin.math.PI
+import kotlin.math.ln
+import kotlin.math.log2
+import kotlin.math.min
+import kotlin.math.round
+import kotlin.math.tan
 
 /**
  * Loads a static image of a map showing a line or a polygon, rendering it off-screen if it isn't cached.
@@ -61,7 +70,7 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
         }
 
         val basemapConfiguration = when (configuration.basemapSource) {
-            // Google Maps can't render off-screen, so its previews use OpenStreetMap instead
+            // Without Google tiles (no API key or no session) Google previews use OpenStreetMap instead
             BASEMAP_SOURCE_GOOGLE -> Configurations.all.getValue(BASEMAP_SOURCE_OSM)
             else -> Configurations.all[configuration.basemapSource]
         }
@@ -73,12 +82,65 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
 
         MapLibreSupport.initialize(context)
 
-        val style = basemapStyle(basemapConfiguration, configuration.basemapStyle, keys)
+        val fallbackStyle = basemapStyle(basemapConfiguration, configuration.basemapStyle, keys)
 
+        val googleApiKey = keys.get("google")
+        return if (configuration.basemapSource == BASEMAP_SOURCE_GOOGLE && !googleApiKey.isNullOrBlank()) {
+            snapshotWithGoogleTiles(googleApiKey, fallbackStyle, configuration, cache, trace, width, height, callback)
+        } else {
+            snapshot(fallbackStyle, configuration, cache, trace, width, height, callback)
+        }
+    }
+
+    private fun snapshotWithGoogleTiles(
+        apiKey: String,
+        fallbackStyle: Style.Builder,
+        configuration: StaticMapConfiguration,
+        cache: StaticMapCache,
+        trace: TraceDescription,
+        width: Int,
+        height: Int,
+        callback: (Bitmap?) -> Unit
+    ): () -> Unit {
+        var cancelled = false
+        var cancelSnapshot: () -> Unit = {}
+
+        GoogleMapTilesClient.getSession(apiKey, configuration.basemapStyle) { session ->
+            if (cancelled) {
+                return@getSession
+            }
+
+            if (session != null) {
+                getGoogleCopyright(apiKey, session, trace, width, height) { copyright ->
+                    if (!cancelled) {
+                        cancelSnapshot = snapshot(googleBasemapStyle(apiKey, session, copyright), configuration, cache, trace, width, height, callback)
+                    }
+                }
+            } else {
+                // Not cached so that Google is tried again next time
+                cancelSnapshot = snapshot(fallbackStyle, configuration, null, trace, width, height, callback)
+            }
+        }
+
+        return {
+            cancelled = true
+            cancelSnapshot()
+        }
+    }
+
+    private fun snapshot(
+        style: Style.Builder,
+        configuration: StaticMapConfiguration,
+        cache: StaticMapCache?,
+        trace: TraceDescription,
+        width: Int,
+        height: Int,
+        callback: (Bitmap?) -> Unit
+    ): () -> Unit {
         var snapshotter = MapSnapshotter(context, snapshotOptions(context, style, configuration.referenceLayer, trace, width, height))
         snapshotter.start(
             {
-                cache.put(configuration, trace, width, height, it.bitmap)
+                cache?.put(configuration, trace, width, height, it.bitmap)
                 callback(it.bitmap)
             },
             {
@@ -102,20 +164,15 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
         width: Int,
         height: Int
     ): MapSnapshotter.Options {
-        // Leave a 10% margin on each side
-        val horizontalPadding = (width * 0.1).toInt()
-        val verticalPadding = (height * 0.1).toInt()
+        val horizontalPadding = (width * PADDING).toInt()
+        val verticalPadding = (height * PADDING).toInt()
 
         val density = context.resources.displayMetrics.density
         return MapSnapshotter.Options((width / density).toInt(), (height / density).toInt())
             .withPixelRatio(density)
             .withStyleBuilder(buildStyle(basemap, referenceLayer, trace))
             .withLogo(false)
-            .withRegion(
-                LatLngBounds.Builder()
-                    .includes(trace.points.map { LatLng(it.latitude, it.longitude) })
-                    .build()
-            )
+            .withRegion(bounds(trace))
             .withPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
     }
 
@@ -130,9 +187,48 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
         val uriValue = uri.value(keys)
 
         return when (uri) {
-            is BasemapUri.Raster -> basemapConfiguration.rasterBasemapStyle(uriValue).fromUri("asset://maplibre_empty_style.json")
+            is BasemapUri.Raster -> rasterBasemapStyle(uriValue, basemapConfiguration.attribution).fromUri("asset://maplibre_empty_style.json")
             is BasemapUri.Mapbox -> Style.Builder().fromUri(uriValue)
         }
+    }
+
+    private fun getGoogleCopyright(apiKey: String, session: String, trace: TraceDescription, width: Int, height: Int, callback: (String?) -> Unit) {
+        val density = context.resources.displayMetrics.density
+        val bounds = bounds(trace)
+
+        // The zoom the snapshot ends up at, as the copyright depends on it
+        val lonZoom = log2(360 * width / density * (1 - 2 * PADDING) / (256 * bounds.longitudeSpan))
+        val latZoom = log2(2 * PI * height / density * (1 - 2 * PADDING) / (256 * (mercatorY(bounds.latitudeNorth) - mercatorY(bounds.latitudeSouth))))
+        val zoom = round(min(lonZoom, latZoom)).coerceIn(0.0, 22.0).toInt()
+
+        GoogleMapTilesClient.getCopyright(
+            apiKey,
+            session,
+            zoom,
+            bounds.latitudeNorth,
+            bounds.latitudeSouth,
+            bounds.longitudeEast,
+            bounds.longitudeWest,
+            callback
+        )
+    }
+
+    private fun bounds(trace: TraceDescription): LatLngBounds {
+        return LatLngBounds.Builder()
+            .includes(trace.points.map { LatLng(it.latitude, it.longitude) })
+            .build()
+    }
+
+    private fun mercatorY(latitude: Double): Double {
+        return ln(tan(PI / 4 + Math.toRadians(latitude) / 2))
+    }
+
+    private fun googleBasemapStyle(apiKey: String, session: String, copyright: String?): Style.Builder {
+        val attribution = listOfNotNull("Google Maps", copyright)
+            .joinToString(" ") { "<a href=\"https://www.google.com/maps\">$it</a>" }
+
+        return rasterBasemapStyle(GoogleMapTilesClient.getTilesUrl(apiKey, session), attribution)
+            .fromUri("asset://maplibre_empty_style.json")
     }
 
     private fun blankBasemap(): Style.Builder {
@@ -156,7 +252,19 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
     }
 
     private fun addTrace(builder: Style.Builder, trace: TraceDescription) {
-        builder.withSource(GeoJsonSource("trace_source", LineString.fromLngLats(trace.points.map { Point.fromLngLat(it.longitude, it.latitude) })))
+        val points = trace.points.map { Point.fromLngLat(it.longitude, it.latitude) }
+
+        if (trace is PolygonDescription) {
+            builder.withSource(GeoJsonSource("trace_source", Polygon.fromLngLats(listOf(points))))
+            builder.withLayer(
+                FillLayer("trace_fill_layer", "trace_source").withProperties(
+                    PropertyFactory.fillColor(trace.getFillColor())
+                )
+            )
+        } else {
+            builder.withSource(GeoJsonSource("trace_source", LineString.fromLngLats(points)))
+        }
+
         builder.withLayer(
             LineLayer("trace_layer", "trace_source").withProperties(
                 PropertyFactory.lineColor(trace.getStrokeColor()),
@@ -170,5 +278,8 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
     private companion object {
         // Shared by all loaders so that widgets, which are recreated often, don't each start a server
         val referenceLayersServer = ReferenceLayersServer()
+
+        // The margin left on each side of the trace, as a fraction of the map size
+        const val PADDING = 0.1
     }
 }
