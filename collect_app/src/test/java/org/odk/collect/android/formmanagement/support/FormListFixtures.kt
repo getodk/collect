@@ -34,7 +34,7 @@ object FormListFixtures {
         hash: String = getMd5Hash(ByteArrayInputStream("blah".toByteArray()))!!
     ): MediaFile {
         return MediaFile(
-            "$name.file",
+            name,
             hash,
             "http://example.com/media-files/$name"
         )
