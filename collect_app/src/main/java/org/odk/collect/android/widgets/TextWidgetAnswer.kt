@@ -70,7 +70,7 @@ fun TextWidgetAnswer(
         }
         Text(
             text = annotatedAnswer,
-            textAlign = if (horizontalArrangement == Arrangement.Center) TextAlign.Center else TextAlign.Start,
+            textAlign = TextAlign.Start,
             style = MaterialTheme.typography.bodyLarge.copy(
                 fontSize = fontSize?.sp ?: MaterialTheme.typography.bodyLarge.fontSize,
                 lineHeight = 1.5.em,
