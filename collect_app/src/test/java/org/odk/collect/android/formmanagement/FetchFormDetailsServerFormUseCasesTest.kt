@@ -61,7 +61,7 @@ class FetchFormDetailsServerFormUseCasesTest {
                 .version(form.version)
                 .md5Hash(form.hash)
                 .deleted(true)
-                .formFilePath(FormUtils.createXFormFile(form.formID, form.hash).absolutePath)
+                .formFilePath(FormUtils.createXFormFile(form.formID, form.version).absolutePath)
                 .build()
         )
 
@@ -388,7 +388,7 @@ class FetchFormDetailsServerFormUseCasesTest {
                 .formId(form.formID)
                 .version(form.version)
                 .md5Hash(form.hash)
-                .formFilePath(FormUtils.createXFormFile(form.formID, form.hash).absolutePath)
+                .formFilePath(FormUtils.createXFormFile(form.formID, form.version).absolutePath)
                 .formMediaPath(mediaDir.absolutePath)
                 .build()
         )
