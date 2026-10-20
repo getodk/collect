@@ -351,12 +351,12 @@ object ServerFormUseCases {
             return false
         }
 
-        val localMediaHashes = FormUtils.getMediaFiles(existingForm)
-            .map { it.getMd5Hash() }
-            .toSet()
+        val localHashesByName = FormUtils.getMediaFiles(existingForm)
+            .associate { it.name to it.getMd5Hash() }
 
         return newMediaFiles.any {
-            !it.filename.endsWith(".zip") && it.hash !in localMediaHashes
+            val matchingFileHash = localHashesByName[it.filename]
+            !it.filename.endsWith(".zip") && matchingFileHash != it.hash
         }
     }
 }

@@ -43,7 +43,7 @@ object TempFiles {
 
     @JvmStatic
     fun createTempFile(parent: File, name: String): File {
-        return File(parent, name + getRandomName(parent)).also {
+        return File(parent, name).also {
             it.createNewFile()
             it.deleteOnExit()
         }
