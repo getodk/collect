@@ -368,8 +368,11 @@ data class MediaFilesDownload(
 )
 
 sealed class FormFileDownload {
-    data class New(val file: File, val hash: String) : FormFileDownload()
-    data class Existing(val form: Form) : FormFileDownload()
+
+    abstract val tempDir: File
+
+    data class New(val file: File, val hash: String, override val tempDir: File) : FormFileDownload()
+    data class Existing(val form: Form, override val tempDir: File) : FormFileDownload()
 }
 
 sealed class EntityListDownload {

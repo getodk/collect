@@ -20,7 +20,7 @@ class UpdateFormServerFormUseCasesTest {
         entitiesRepository.addList("fields")
         entitiesRepository.updateList("fields", "hash", false)
 
-        val formFileDownload = FormFileDownload.Existing(form)
+        val formFileDownload = FormFileDownload.Existing(form, TempFiles.createTempDir())
         val mediaFileDownload = MediaFilesDownload(
             TempFiles.createTempFile().absolutePath,
             true,
@@ -49,7 +49,7 @@ class UpdateFormServerFormUseCasesTest {
         entitiesRepository.addList("fields")
         entitiesRepository.updateList("fields", "hash", false)
 
-        val formFileDownload = FormFileDownload.Existing(form)
+        val formFileDownload = FormFileDownload.Existing(form, TempFiles.createTempDir())
         val mediaFileDownload = MediaFilesDownload(
             TempFiles.createTempFile().absolutePath,
             true,
