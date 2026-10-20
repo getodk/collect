@@ -4,6 +4,8 @@ import android.app.Application
 import android.content.ComponentName
 import android.graphics.Bitmap
 import android.view.View
+import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.longClick
@@ -115,16 +117,18 @@ class GeoPolyWidgetTest {
 
     @Test
     fun `a geotrace answer is shown on the map as a line`() {
+        staticMapLoader.bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
         createWidget(promptWithAnswer(StringData(answer)), Constants.DATATYPE_GEOTRACE)
-        composeRule.waitForIdle()
-        assertThat(staticMapLoader.trace, equalTo(LineDescription(GeoPolyUtils.parseGeometry(answer))))
+        composeRule.onNodeWithTag(StaticMapSemantics.TAG)
+            .assert(SemanticsMatcher.expectValue(StaticMapSemantics.traceProperty, LineDescription(GeoPolyUtils.parseGeometry(answer))))
     }
 
     @Test
     fun `a geoshape answer is shown on the map as a polygon`() {
+        staticMapLoader.bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
         createWidget(promptWithAnswer(StringData(answer)), Constants.DATATYPE_GEOSHAPE)
-        composeRule.waitForIdle()
-        assertThat(staticMapLoader.trace, equalTo(PolygonDescription(GeoPolyUtils.parseGeometry(answer))))
+        composeRule.onNodeWithTag(StaticMapSemantics.TAG)
+            .assert(SemanticsMatcher.expectValue(StaticMapSemantics.traceProperty, PolygonDescription(GeoPolyUtils.parseGeometry(answer))))
     }
 
     @Test
@@ -236,7 +240,6 @@ class GeoPolyWidgetTest {
 
     private class FakeStaticMapLoader : StaticMapLoader {
         var bitmap: Bitmap? = null
-        var trace: TraceDescription? = null
 
         override fun load(
             configuration: StaticMapConfiguration,
@@ -246,7 +249,6 @@ class GeoPolyWidgetTest {
             height: Int,
             callback: (Bitmap?) -> Unit
         ): () -> Unit {
-            this.trace = trace
             callback(bitmap)
             return {}
         }
