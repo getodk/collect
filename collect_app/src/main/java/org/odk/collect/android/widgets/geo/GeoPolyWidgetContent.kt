@@ -31,17 +31,17 @@ fun GeoPolyWidgetContent(
     onGetGeoPolyClick: () -> Unit,
     onLongClick: () -> Unit
 ) {
-    val button = if (formEntryPrompt.dataType == Constants.DATATYPE_GEOSHAPE) GeoPolyButton.SHAPE else GeoPolyButton.TRACE
+    val buttonDetails = if (formEntryPrompt.dataType == Constants.DATATYPE_GEOSHAPE) GeoPolyButtonDetails.SHAPE else GeoPolyButtonDetails.TRACE
 
     Column {
         if (!readOnly || !answer.isNullOrEmpty()) {
             val buttonText = when {
-                readOnly -> stringResource(button.view)
-                answer.isNullOrEmpty() -> stringResource(button.get)
-                else -> stringResource(button.viewOrChange)
+                readOnly -> stringResource(buttonDetails.view)
+                answer.isNullOrEmpty() -> stringResource(buttonDetails.get)
+                else -> stringResource(buttonDetails.viewOrChange)
             }
             WidgetIconButton(
-                ImageVector.vectorResource(button.icon),
+                ImageVector.vectorResource(buttonDetails.icon),
                 buttonText,
                 buttonFontSize,
                 onGetGeoPolyClick,
@@ -61,7 +61,7 @@ fun GeoPolyWidgetContent(
     }
 }
 
-private enum class GeoPolyButton(
+private enum class GeoPolyButtonDetails(
     @DrawableRes val icon: Int,
     @StringRes val get: Int,
     @StringRes val view: Int,
