@@ -85,6 +85,7 @@ object ServerFormUseCases {
         }
     }
 
+    @JvmStatic
     fun downloadForms(
         forms: List<ServerFormDetails>,
         formDownloader: FormDownloader,
