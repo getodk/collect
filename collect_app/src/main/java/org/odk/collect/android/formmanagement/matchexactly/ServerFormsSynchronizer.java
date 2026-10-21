@@ -4,9 +4,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.odk.collect.android.formmanagement.LocalFormUseCases;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
-import org.odk.collect.android.formmanagement.ServerFormUseCases;
 import org.odk.collect.android.formmanagement.download.FormDownloadException;
 import org.odk.collect.android.formmanagement.download.FormDownloader;
+import org.odk.collect.android.formmanagement.download.FormDownloaderKt;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormSource;
 import org.odk.collect.forms.FormSourceException;
@@ -47,7 +47,7 @@ public class ServerFormsSynchronizer {
                 .filter(form -> form.getType() != ServerFormDetails.Type.OnDevice)
                 .toList();
 
-        Map<@NotNull ServerFormDetails, @Nullable FormDownloadException> downloadResult = ServerFormUseCases.downloadForms(formsToDownload, formDownloader, null, null);
+        Map<@NotNull ServerFormDetails, @Nullable FormDownloadException> downloadResult = FormDownloaderKt.downloadForms(formDownloader, formsToDownload, null, null);
         boolean isError = downloadResult.values().stream().anyMatch(Objects::nonNull);
         if (isError) {
             throw new FormSourceException.FetchError();

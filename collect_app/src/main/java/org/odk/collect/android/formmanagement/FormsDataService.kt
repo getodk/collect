@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import org.odk.collect.android.formmanagement.download.FormDownloadException
 import org.odk.collect.android.formmanagement.download.ServerFormDownloader
+import org.odk.collect.android.formmanagement.download.downloadForms
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer
 import org.odk.collect.android.formmanagement.metadata.FormMetadataParser
 import org.odk.collect.android.notifications.Notifier
@@ -89,12 +90,13 @@ class FormsDataService(
                 val formDownloader =
                     formDownloader(projectDependencyModule, clock)
 
-                results.putAll(ServerFormUseCases.downloadForms(
-                    forms,
-                    formDownloader,
-                    progressReporter,
-                    isCancelled
-                ))
+                results.putAll(
+                    formDownloader.downloadForms(
+                        forms,
+                        progressReporter,
+                        isCancelled
+                    )
+                )
             }
         }
         return results
@@ -120,9 +122,8 @@ class FormsDataService(
                     val updatedForms = serverForms.filter { it.isUpdated() }
                     if (updatedForms.isNotEmpty()) {
                         if (projectDependencies.generalSettings.getBoolean(ProjectKeys.KEY_AUTOMATIC_UPDATE)) {
-                            val results = ServerFormUseCases.downloadForms(
-                                updatedForms,
-                                formDownloader
+                            val results = formDownloader.downloadForms(
+                                updatedForms
                             )
 
                             notifier.onUpdatesDownloaded(results, projectId)
@@ -158,7 +159,12 @@ class FormsDataService(
                 val formDownloader = formDownloader(projectDependencies, clock)
 
                 val serverFormsSynchronizer = ServerFormsSynchronizer(
-                    { repository, source -> ServerFormUseCases.fetchFormDetails(repository, source) },
+                    { repository, source ->
+                        ServerFormUseCases.fetchFormDetails(
+                            repository,
+                            source
+                        )
+                    },
                     projectDependencies.formsRepository,
                     projectDependencies.instancesRepository,
                     formDownloader,
