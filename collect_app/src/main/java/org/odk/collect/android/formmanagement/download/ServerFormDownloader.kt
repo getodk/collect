@@ -52,27 +52,12 @@ class ServerFormDownloader(
     private val entitySource: EntitySource
 ) : FormDownloader {
 
-    @Throws(FormDownloadException::class)
     override fun downloadForm(
         form: ServerFormDetails,
         progressReporter: ProgressReporter?,
-        isCancelled: Supplier<Boolean>?
-    ) {
-        val formDownload = downloadFormFiles(form, progressReporter, isCancelled, formsDirPath)
-            .onError { throw it }
-
-        formDownload.chain { (formFileDownload, mediaFilesDownload) ->
-            installForm(formFileDownload, mediaFilesDownload, formsDirPath)
-        }.onError { throw it }
-    }
-
-    private fun downloadFormFiles(
-        fd: ServerFormDetails,
-        progressReporter: ProgressReporter?,
         isCancelled: Supplier<Boolean>?,
-        formsDirPath: String
     ): Result<Pair<FormFileDownload, MediaFilesDownload>, FormDownloadException> {
-        if (fd.hash.isNullOrEmpty()) {
+        if (form.hash.isNullOrEmpty()) {
             return FormWithNoHash().toError()
         }
 
@@ -93,7 +78,7 @@ class ServerFormDownloader(
             // get the xml file
             // if we've downloaded a duplicate, this gives us the original file
             val formFileDownload = try {
-                downloadXform(fd.formName, fd.downloadUrl, stateListener, tempDir, formsDirPath)
+                downloadXform(form.formName, form.downloadUrl, stateListener, tempDir, formsDirPath)
             } catch (_: InterruptedException) {
                 throw DownloadingInterrupted()
             } catch (_: IOException) {
@@ -102,9 +87,9 @@ class ServerFormDownloader(
 
             try {
                 // download media files if there are any
-                val mediaFilesDownload = if (fd.manifest != null && !fd.manifest.mediaFiles.isEmpty()) {
+                val mediaFilesDownload = if (form.manifest != null && !form.manifest.mediaFiles.isEmpty()) {
                     ServerFormUseCases.downloadMediaFiles(
-                        fd,
+                        form,
                         formSource,
                         formsRepository,
                         tempMediaPath,
@@ -141,10 +126,9 @@ class ServerFormDownloader(
         }
     }
 
-    private fun installForm(
+    override fun processForm(
         formFileDownload: FormFileDownload,
         mediaFilesDownload: MediaFilesDownload,
-        formsDirPath: String
     ): Result<Any, FormDownloadException> {
         ingestEntityListsFromDownload(
             mediaFilesDownload,
