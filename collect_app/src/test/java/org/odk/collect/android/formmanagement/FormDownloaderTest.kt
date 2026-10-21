@@ -10,12 +10,13 @@ import org.mockito.kotlin.mock
 import org.mockito.stubbing.Answer
 import org.odk.collect.android.formmanagement.download.FormDownloadException
 import org.odk.collect.android.formmanagement.download.FormDownloader
+import org.odk.collect.android.formmanagement.download.downloadForms
 import org.odk.collect.forms.ManifestFile
 
-class DownloadUpdatesServerFormUseCasesTest {
+class FormDownloaderTest {
 
     @Test
-    fun `#downloadUpdates returns completed downloads when cancelled`() {
+    fun `#downloadForms returns completed downloads when cancelled`() {
         val formDownloader = mock<FormDownloader>()
 
         val serverForms = listOf(
@@ -37,11 +38,7 @@ class DownloadUpdatesServerFormUseCasesTest {
             }
         }).`when`(formDownloader).downloadForm(any(), any(), any())
 
-        val results = ServerFormUseCases.downloadForms(
-            serverForms,
-            formDownloader
-        )
-
+        val results = formDownloader.downloadForms(serverForms)
         assertThat(results.size, equalTo(1))
         assertThat(results[serverForms[0]], equalTo(null))
     }
