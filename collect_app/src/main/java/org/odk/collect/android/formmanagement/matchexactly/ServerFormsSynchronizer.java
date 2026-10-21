@@ -1,7 +1,10 @@
 package org.odk.collect.android.formmanagement.matchexactly;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.odk.collect.android.formmanagement.LocalFormUseCases;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
+import org.odk.collect.android.formmanagement.ServerFormUseCases;
 import org.odk.collect.android.formmanagement.download.FormDownloadException;
 import org.odk.collect.android.formmanagement.download.FormDownloader;
 import org.odk.collect.forms.Form;
@@ -11,6 +14,8 @@ import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.instances.InstancesRepository;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class ServerFormsSynchronizer {
 
@@ -37,21 +42,14 @@ public class ServerFormsSynchronizer {
             }
         });
 
-        boolean downloadException = false;
+        List<ServerFormDetails> formsToDownload = formList
+                .stream()
+                .filter(form -> form.getType() != ServerFormDetails.Type.OnDevice)
+                .toList();
 
-        for (ServerFormDetails form : formList) {
-            if (form.getType() != ServerFormDetails.Type.OnDevice) {
-                try {
-                    formDownloader.downloadForm(form, null, null);
-                } catch (FormDownloadException.DownloadingInterrupted e) {
-                    return;
-                } catch (FormDownloadException e) {
-                    downloadException = true;
-                }
-            }
-        }
-
-        if (downloadException) {
+        Map<@NotNull ServerFormDetails, @Nullable FormDownloadException> downloadResult = ServerFormUseCases.downloadForms(formsToDownload, formDownloader, null, null);
+        boolean isError = downloadResult.values().stream().anyMatch(Objects::nonNull);
+        if (isError) {
             throw new FormSourceException.FetchError();
         }
     }
