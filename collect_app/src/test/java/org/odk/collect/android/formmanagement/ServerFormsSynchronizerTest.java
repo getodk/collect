@@ -10,6 +10,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static java.util.Arrays.asList;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.Test;
 import org.odk.collect.android.formmanagement.download.FormDownloadException;
 import org.odk.collect.android.formmanagement.download.FormDownloader;
@@ -22,10 +24,17 @@ import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.formstest.FormUtils;
 import org.odk.collect.formstest.InMemFormsRepository;
 import org.odk.collect.formstest.InMemInstancesRepository;
+import org.odk.collect.shared.TempFiles;
+import org.odk.collect.shared.result.Result;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
+
+import kotlin.Pair;
+import kotlin.Unit;
 
 public class ServerFormsSynchronizerTest {
 
@@ -105,28 +114,40 @@ public class ServerFormsSynchronizerTest {
         when(serverFormDetailsFetcher.fetchFormDetails(formsRepository, formSource)).thenReturn(serverForms);
 
         FormDownloader formDownloader = mock(FormDownloader.class);
-        doThrow(new FormDownloadException.FormSourceError(new FormSourceException.FetchError())).when(formDownloader).downloadForm(serverForms.get(0), null, null);
+        doThrow(new FormDownloadException.FormSourceError(new FormSourceException.FetchError())).when(formDownloader).downloadAndProcessForm(serverForms.get(0), null, null);
 
         ServerFormsSynchronizer synchronizer = new ServerFormsSynchronizer(serverFormDetailsFetcher, formsRepository, instancesRepository, formDownloader, formSource);
 
         try {
             synchronizer.synchronize();
         } catch (FormSourceException.FetchError e) {
-            verify(formDownloader).downloadForm(serverForms.get(1), null, null);
+            verify(formDownloader).downloadAndProcessForm(serverForms.get(1), null, null);
         }
     }
 
     private static class RecordingFormDownloader implements FormDownloader {
 
-        private final List<String> formsDownloaded = new ArrayList<>();
-
-        @Override
-        public void downloadForm(ServerFormDetails form, ProgressReporter progressReporter, Supplier<Boolean> isCancelled) {
-            formsDownloaded.add(form.getFormId());
-        }
+        private final List<String> formsProcessed = new ArrayList<>();
 
         public List<String> getDownloadedForms() {
-            return formsDownloaded;
+            return formsProcessed;
+        }
+
+        @Override
+        public @NotNull Result<@NotNull Pair<@NotNull FormFileDownload, @NotNull MediaFilesDownload>, @NotNull FormDownloadException> downloadForm(@NotNull ServerFormDetails form, @Nullable ProgressReporter progressReporter, @Nullable Supplier<@NotNull Boolean> isCancelled) {
+            File tempDir = TempFiles.createTempDir();
+            File formFile = TempFiles.createTempFile(tempDir, form.getFormId());
+            File mediaDir = TempFiles.createTempDir(tempDir);
+            return new Result.Success<>(
+                    new Pair<>(new FormFileDownload.New(formFile, "blah", tempDir), new MediaFilesDownload(mediaDir.getAbsolutePath(), false, Collections.emptyList()))
+            );
+        }
+
+        @Override
+        public @NotNull Result<@NotNull Object, @NotNull FormDownloadException> processForm(@NotNull FormFileDownload formFileDownload, @NotNull MediaFilesDownload mediaFilesDownload) {
+            FormFileDownload.New newDownload = (FormFileDownload.New) formFileDownload;
+            formsProcessed.add(newDownload.getFile().getName());
+            return new Result.Success<>(Unit.INSTANCE);
         }
     }
 }
