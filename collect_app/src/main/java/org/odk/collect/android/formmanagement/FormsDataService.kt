@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.StateFlow
 import org.odk.collect.android.formmanagement.download.FormDownloadException
 import org.odk.collect.android.formmanagement.download.ServerFormDownloader
 import org.odk.collect.android.formmanagement.download.downloadForms
-import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer
 import org.odk.collect.android.formmanagement.metadata.FormMetadataParser
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.projects.ProjectDependencyModule
@@ -156,23 +155,35 @@ class FormsDataService(
                 startSync(projectId)
                 syncWithStorage(projectId)
 
-                val formDownloader = formDownloader(projectDependencies, clock)
-
-                val serverFormsSynchronizer = ServerFormsSynchronizer(
-                    { repository, source ->
-                        ServerFormUseCases.fetchFormDetails(
-                            repository,
-                            source
-                        )
-                    },
-                    projectDependencies.formsRepository,
-                    projectDependencies.instancesRepository,
-                    formDownloader,
-                    projectDependencies.formSource
-                )
-
                 val exception = try {
-                    serverFormsSynchronizer.synchronize()
+                    val formsRepository = projectDependencies.formsRepository
+                    val instancesRepository = projectDependencies.instancesRepository
+                    val formList = ServerFormUseCases.fetchFormDetails(
+                        formsRepository,
+                        projectDependencies.formSource
+                    )
+
+                    val formsOnDevice: List<Form> = formsRepository.getAll()
+                    val formsToDelete = formsOnDevice
+                        .filterNot { deviceForm -> formList.any { it.formId == deviceForm.formId } }
+                    val formsToDownload = formList
+                        .filter { it.type != ServerFormDetails.Type.OnDevice }
+
+                    formsToDelete
+                        .forEach {
+                            LocalFormUseCases.deleteForm(
+                                formsRepository,
+                                instancesRepository,
+                                it.dbId
+                            )
+                        }
+
+                    formDownloader(projectDependencies, clock).downloadForms(
+                        formsToDownload,
+                        null,
+                        null
+                    )
+
                     if (notify) {
                         notifier.onSync(null, projectId)
                     }
