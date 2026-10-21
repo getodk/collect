@@ -36,7 +36,7 @@ class FormDownloaderTest {
                     throw FormDownloadException.DownloadingInterrupted()
                 }
             }
-        }).`when`(formDownloader).downloadForm(any(), any(), any())
+        }).`when`(formDownloader).downloadAndProcessForm(any(), any(), any())
 
         val results = formDownloader.downloadForms(serverForms)
         assertThat(results.size, equalTo(1))
