@@ -4,9 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
+import org.odk.collect.android.formmanagement.FormFileDownload
 import org.odk.collect.android.formmanagement.download.FormDownloadException
 import org.odk.collect.android.formmanagement.download.ServerFormDownloader
 import org.odk.collect.android.formmanagement.download.downloadAndProcessForms
+import org.odk.collect.android.formmanagement.download.downloadForms
 import org.odk.collect.android.formmanagement.metadata.FormMetadataParser
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.projects.ProjectDependencyModule
@@ -17,8 +19,10 @@ import org.odk.collect.forms.Form
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.projects.ProjectDependencyFactory
 import org.odk.collect.settings.keys.ProjectKeys
+import org.odk.collect.shared.result.Result
 import java.io.File
 import java.util.function.Supplier
+import kotlin.Pair
 
 class FormsDataService(
     appState: AppState,
@@ -178,13 +182,16 @@ class FormsDataService(
                             )
                         }
 
-                    val downloadResults = formDownloader(projectDependencies, clock).downloadAndProcessForms(
-                        formsToDownload,
-                        null,
-                        null
-                    )
+                    val formDownloader = formDownloader(projectDependencies, clock)
+                    val downloadResults = formDownloader.downloadForms(formsToDownload, null, null)
+                    if (downloadResults.any { it is Result.Error }) {
+                        throw FormSourceException.FetchError()
+                    }
 
-                    if (downloadResults.values.any { it != null }) {
+                    val processResults = downloadResults.filterIsInstance<Result.Success<Pair<FormFileDownload, MediaFilesDownload>, FormDownloadException>>().map {
+                        formDownloader.processForm(it.value.first, it.value.second)
+                    }
+                    if (processResults.any { it is Result.Error }) {
                         throw FormSourceException.FetchError()
                     }
 
