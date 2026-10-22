@@ -1,7 +1,6 @@
 package org.odk.collect.android.formmanagement.download
 
-import org.odk.collect.android.formmanagement.FormFileDownload
-import org.odk.collect.android.formmanagement.MediaFilesDownload
+import org.odk.collect.android.formmanagement.FormDownload
 import org.odk.collect.android.formmanagement.ServerFormDetails
 import org.odk.collect.shared.result.Result
 import org.odk.collect.shared.result.chain
@@ -19,8 +18,8 @@ interface FormDownloader {
         val formDownload = downloadForm(form, progressReporter, isCancelled)
             .onError { throw it }
 
-        formDownload.chain { (formFileDownload, mediaFilesDownload) ->
-            processForm(formFileDownload, mediaFilesDownload)
+        formDownload.chain {
+            processForm(it)
         }.onError { throw it }
     }
 
@@ -28,12 +27,9 @@ interface FormDownloader {
         form: ServerFormDetails,
         progressReporter: ProgressReporter?,
         isCancelled: Supplier<Boolean>?,
-    ): Result<Pair<FormFileDownload, MediaFilesDownload>, FormDownloadException>
+    ): Result<FormDownload, FormDownloadException>
 
-    fun processForm(
-        formFileDownload: FormFileDownload,
-        mediaFilesDownload: MediaFilesDownload,
-    ): Result<Any, FormDownloadException>
+    fun processForm(formDownload: FormDownload): Result<Any, FormDownloadException>
 
     interface ProgressReporter {
         fun onDownloadingMediaFile(count: Int)
@@ -50,7 +46,7 @@ fun FormDownloader.downloadAndProcessForms(
     forms.zip(downloadResults).forEach { (formDetails, result) ->
         when (result) {
             is Result.Success -> {
-                processForm(result.value.first, result.value.second)
+                processForm(result.value)
                 results[formDetails] = null
             }
 
@@ -67,7 +63,7 @@ fun FormDownloader.downloadForms(
     forms: List<ServerFormDetails>,
     progressReporter: ((Int, Int) -> Unit)? = null,
     isCancelled: (() -> Boolean)? = null
-): List<Result<Pair<FormFileDownload, MediaFilesDownload>, FormDownloadException>> {
+): List<Result<FormDownload, FormDownloadException>> {
     return forms.mapIndexed { index, details ->
         downloadForm(
             details,
