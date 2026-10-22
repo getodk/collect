@@ -178,11 +178,15 @@ class FormsDataService(
                             )
                         }
 
-                    formDownloader(projectDependencies, clock).downloadForms(
+                    val downloadResults = formDownloader(projectDependencies, clock).downloadForms(
                         formsToDownload,
                         null,
                         null
                     )
+
+                    if (downloadResults.values.any { it != null }) {
+                        throw FormSourceException.FetchError()
+                    }
 
                     if (notify) {
                         notifier.onSync(null, projectId)
