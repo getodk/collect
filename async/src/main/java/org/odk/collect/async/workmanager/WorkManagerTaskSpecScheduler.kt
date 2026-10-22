@@ -19,12 +19,13 @@ import java.util.concurrent.TimeUnit
 class WorkManagerTaskSpecScheduler(private val workManager: WorkManager) : TaskSpecScheduler {
     override fun schedule(
         tag: String,
-        spec: TaskSpec,
+        specs: List<TaskSpec>,
         inputData: Map<String, String>,
         networkConstraint: Scheduler.NetworkType?,
         repeatPeriod: Long?
     ) {
         val constraints = getConstraints(networkConstraint)
+        val spec = specs.first()
         val workManagerInputData = Data.Builder()
             .putString(TaskSpecWorker.DATA_TASK_SPEC_CLASS, spec.javaClass.name)
             .putBoolean(

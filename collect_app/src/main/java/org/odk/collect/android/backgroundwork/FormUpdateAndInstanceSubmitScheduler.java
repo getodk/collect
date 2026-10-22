@@ -3,6 +3,7 @@ package org.odk.collect.android.backgroundwork;
 import static org.odk.collect.android.backgroundwork.BackgroundWorkUtils.getPeriodInMilliseconds;
 import static org.odk.collect.settings.enums.StringIdEnumUtils.getFormUpdateMode;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
+import static java.util.Arrays.asList;
 
 import android.app.Application;
 
@@ -52,13 +53,13 @@ public class FormUpdateAndInstanceSubmitScheduler implements FormUpdateScheduler
     private void scheduleAutoUpdate(long periodInMilliseconds, String projectId) {
         HashMap<String, String> inputData = new HashMap<>();
         inputData.put(TaskData.DATA_PROJECT_ID, projectId);
-        scheduler.networkDeferredRepeat(getAutoUpdateTag(projectId), new AutoUpdateTaskSpec(), periodInMilliseconds, inputData);
+        scheduler.networkDeferredRepeat(getAutoUpdateTag(projectId), asList(new AutoUpdateTaskSpec()), periodInMilliseconds, inputData);
     }
 
     private void scheduleMatchExactly(long periodInMilliseconds, String projectId) {
         HashMap<String, String> inputData = new HashMap<>();
         inputData.put(TaskData.DATA_PROJECT_ID, projectId);
-        scheduler.networkDeferredRepeat(getMatchExactlyTag(projectId), new SyncFormsTaskSpec(), periodInMilliseconds, inputData);
+        scheduler.networkDeferredRepeat(getMatchExactlyTag(projectId), asList(new SyncFormsTaskSpec()), periodInMilliseconds, inputData);
     }
 
     @Override
