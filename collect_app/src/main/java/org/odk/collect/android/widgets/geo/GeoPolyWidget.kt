@@ -16,7 +16,7 @@ import org.odk.collect.maplibre.staticmap.MapLibreStaticMapLoader
 import org.odk.collect.maplibre.staticmap.StaticMapLoader
 
 @SuppressLint("ViewConstructor")
-class GeoTraceWidget @JvmOverloads constructor(
+class GeoPolyWidget @JvmOverloads constructor(
     context: Context,
     questionDetails: QuestionDetails,
     private val geoDataRequester: GeoDataRequester,
@@ -31,7 +31,7 @@ class GeoTraceWidget @JvmOverloads constructor(
     override fun onCreateWidgetView(context: Context, prompt: FormEntryPrompt, answerFontSize: Int): View {
         return ComposeView(context).apply {
             setContextThemedContent(ViewCompositionStrategy.DisposeOnDetachedFromWindowOrReleasedFromPool) {
-                GeoTraceWidgetContent(
+                GeoPolyWidgetContent(
                     dependencies.mediaWidgetAnswerViewModel,
                     staticMapLoader,
                     prompt,
@@ -39,7 +39,7 @@ class GeoTraceWidget @JvmOverloads constructor(
                     questionDetails.isReadOnly,
                     QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.BODY_LARGE),
                     answerFontSize,
-                    onGetLineClick = { geoDataRequester.requestGeoPoly(prompt) },
+                    onGetGeoPolyClick = { geoDataRequester.requestGeoPoly(prompt) },
                     onLongClick = { showContextMenu() }
                 )
             }

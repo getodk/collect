@@ -38,8 +38,7 @@ import org.odk.collect.android.widgets.datetime.DateTimeWidget;
 import org.odk.collect.android.widgets.datetime.DateWidget;
 import org.odk.collect.android.widgets.datetime.TimeWidget;
 import org.odk.collect.android.widgets.geo.GeoPointWidget;
-import org.odk.collect.android.widgets.geo.GeoShapeWidget;
-import org.odk.collect.android.widgets.geo.GeoTraceWidget;
+import org.odk.collect.android.widgets.geo.GeoPolyWidget;
 import org.odk.collect.android.widgets.image.ImageWidget;
 import org.odk.collect.android.widgets.items.LabelWidget;
 import org.odk.collect.android.widgets.items.LikertWidget;
@@ -175,11 +174,8 @@ public class WidgetFactory {
                                 new ActivityGeoDataRequester(permissionsProvider, activity), dependencies);
                         break;
                     case Constants.DATATYPE_GEOSHAPE:
-                        questionWidget = new GeoShapeWidget(activity, questionDetails,
-                                new ActivityGeoDataRequester(permissionsProvider, activity), dependencies);
-                        break;
                     case Constants.DATATYPE_GEOTRACE:
-                        questionWidget = new GeoTraceWidget(activity, questionDetails, new ActivityGeoDataRequester(permissionsProvider, activity), dependencies);
+                        questionWidget = new GeoPolyWidget(activity, questionDetails, new ActivityGeoDataRequester(permissionsProvider, activity), dependencies);
                         break;
                     case Constants.DATATYPE_BARCODE:
                         questionWidget = new BarcodeWidget(activity, questionDetails, dependencies, waitingForDataRegistry, new CameraUtils());

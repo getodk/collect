@@ -8,12 +8,14 @@ import org.maplibre.android.geometry.LatLngBounds
 import org.maplibre.android.maps.Style
 import org.maplibre.android.snapshotter.MapSnapshotter
 import org.maplibre.android.style.layers.BackgroundLayer
+import org.maplibre.android.style.layers.FillLayer
 import org.maplibre.android.style.layers.LineLayer
 import org.maplibre.android.style.layers.Property
 import org.maplibre.android.style.layers.PropertyFactory
 import org.maplibre.android.style.sources.GeoJsonSource
 import org.maplibre.geojson.LineString
 import org.maplibre.geojson.Point
+import org.maplibre.geojson.Polygon
 import org.odk.collect.maplibre.BasemapUri
 import org.odk.collect.maplibre.Configuration
 import org.odk.collect.maplibre.Configurations
@@ -23,6 +25,7 @@ import org.odk.collect.maplibre.MapUtils
 import org.odk.collect.maplibre.ReferenceLayersServer
 import org.odk.collect.maplibre.basemapUri
 import org.odk.collect.maplibre.rasterBasemapStyle
+import org.odk.collect.maps.traces.PolygonDescription
 import org.odk.collect.maps.traces.TraceDescription
 import org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_GOOGLE
 import org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_OSM
@@ -156,7 +159,19 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
     }
 
     private fun addTrace(builder: Style.Builder, trace: TraceDescription) {
-        builder.withSource(GeoJsonSource("trace_source", LineString.fromLngLats(trace.points.map { Point.fromLngLat(it.longitude, it.latitude) })))
+        val points = trace.points.map { Point.fromLngLat(it.longitude, it.latitude) }
+
+        if (trace is PolygonDescription) {
+            builder.withSource(GeoJsonSource("trace_source", Polygon.fromLngLats(listOf(points))))
+            builder.withLayer(
+                FillLayer("trace_fill_layer", "trace_source").withProperties(
+                    PropertyFactory.fillColor(trace.getFillColor())
+                )
+            )
+        } else {
+            builder.withSource(GeoJsonSource("trace_source", LineString.fromLngLats(points)))
+        }
+
         builder.withLayer(
             LineLayer("trace_layer", "trace_source").withProperties(
                 PropertyFactory.lineColor(trace.getStrokeColor()),

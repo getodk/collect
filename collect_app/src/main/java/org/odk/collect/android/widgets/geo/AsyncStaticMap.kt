@@ -24,6 +24,8 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.SemanticsPropertyKey
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils
 import org.odk.collect.androidshared.ui.multiclicksafe.multiClickSafe
@@ -86,7 +88,9 @@ fun AsyncStaticMap(
                 bitmap = currentState.bitmap,
                 contentDescription = contentDescription,
                 contentScale = ContentScale.Crop,
-                modifier = mapModifier.testTag(StaticMapSemantics.TAG)
+                modifier = mapModifier
+                    .testTag(StaticMapSemantics.TAG)
+                    .semantics { set(StaticMapSemantics.traceProperty, trace) }
             )
 
             StaticMapState.Failed -> failure()
@@ -104,4 +108,5 @@ private val STATIC_MAP_HEIGHT = 200.dp
 
 internal object StaticMapSemantics {
     const val TAG = "StaticMap"
+    val traceProperty = SemanticsPropertyKey<TraceDescription>("trace")
 }

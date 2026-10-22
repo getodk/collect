@@ -10,11 +10,13 @@ import org.odk.collect.android.widgets.utilities.GeoWidgetUtils
 import org.odk.collect.geo.geopoly.GeoPolyUtils
 import org.odk.collect.maplibre.staticmap.StaticMapLoader
 import org.odk.collect.maps.traces.LineDescription
+import org.odk.collect.maps.traces.PolygonDescription
 
 @Composable
-fun GeoTraceWidgetAnswer(
+fun GeoPolyWidgetAnswer(
     modifier: Modifier,
     answer: String,
+    isPolygon: Boolean,
     fontSize: Int?,
     horizontalArrangement: Arrangement.Horizontal,
     mediaWidgetAnswerViewModel: MediaWidgetAnswerViewModel,
@@ -22,8 +24,11 @@ fun GeoTraceWidgetAnswer(
     onClick: () -> Unit,
     onLongClick: () -> Unit
 ) {
-    val trace = remember(answer) { LineDescription(GeoPolyUtils.parseGeometry(answer)) }
     val answerToDisplay = GeoWidgetUtils.getGeoPolyAnswerToDisplay(answer)
+    val trace = remember(answer, isPolygon) {
+        val points = GeoPolyUtils.parseGeometry(answer)
+        if (isPolygon) PolygonDescription(points) else LineDescription(points)
+    }
 
     AsyncStaticMap(
         modifier = modifier,
