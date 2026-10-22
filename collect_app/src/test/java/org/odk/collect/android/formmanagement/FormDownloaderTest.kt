@@ -10,7 +10,7 @@ import org.mockito.kotlin.mock
 import org.mockito.stubbing.Answer
 import org.odk.collect.android.formmanagement.download.FormDownloadException
 import org.odk.collect.android.formmanagement.download.FormDownloader
-import org.odk.collect.android.formmanagement.download.downloadForms
+import org.odk.collect.android.formmanagement.download.downloadAndProcessForms
 import org.odk.collect.forms.ManifestFile
 
 class FormDownloaderTest {
@@ -38,7 +38,7 @@ class FormDownloaderTest {
             }
         }).`when`(formDownloader).downloadAndProcessForm(any(), any(), any())
 
-        val results = formDownloader.downloadForms(serverForms)
+        val results = formDownloader.downloadAndProcessForms(serverForms)
         assertThat(results.size, equalTo(1))
         assertThat(results[serverForms[0]], equalTo(null))
     }

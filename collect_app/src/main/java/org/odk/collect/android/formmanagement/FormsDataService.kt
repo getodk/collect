@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import org.odk.collect.android.formmanagement.download.FormDownloadException
 import org.odk.collect.android.formmanagement.download.ServerFormDownloader
-import org.odk.collect.android.formmanagement.download.downloadForms
+import org.odk.collect.android.formmanagement.download.downloadAndProcessForms
 import org.odk.collect.android.formmanagement.metadata.FormMetadataParser
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.projects.ProjectDependencyModule
@@ -90,7 +90,7 @@ class FormsDataService(
                     formDownloader(projectDependencyModule, clock)
 
                 results.putAll(
-                    formDownloader.downloadForms(
+                    formDownloader.downloadAndProcessForms(
                         forms,
                         progressReporter,
                         isCancelled
@@ -121,7 +121,7 @@ class FormsDataService(
                     val updatedForms = serverForms.filter { it.isUpdated() }
                     if (updatedForms.isNotEmpty()) {
                         if (projectDependencies.generalSettings.getBoolean(ProjectKeys.KEY_AUTOMATIC_UPDATE)) {
-                            val results = formDownloader.downloadForms(
+                            val results = formDownloader.downloadAndProcessForms(
                                 updatedForms
                             )
 
@@ -178,7 +178,7 @@ class FormsDataService(
                             )
                         }
 
-                    val downloadResults = formDownloader(projectDependencies, clock).downloadForms(
+                    val downloadResults = formDownloader(projectDependencies, clock).downloadAndProcessForms(
                         formsToDownload,
                         null,
                         null
