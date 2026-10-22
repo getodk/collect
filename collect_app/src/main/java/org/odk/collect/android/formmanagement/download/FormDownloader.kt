@@ -40,33 +40,43 @@ interface FormDownloader {
     }
 }
 
-fun FormDownloader.downloadForms(
+fun FormDownloader.downloadAndProcessForms(
     forms: List<ServerFormDetails>,
     progressReporter: ((Int, Int) -> Unit)? = null,
     isCancelled: (() -> Boolean)? = null,
 ): Map<ServerFormDetails, FormDownloadException?> {
+    val downloadResults = downloadForms(forms, progressReporter, isCancelled)
     val results = mutableMapOf<ServerFormDetails, FormDownloadException?>()
-    for (index in forms.indices) {
-        val form = forms[index]
+    forms.zip(downloadResults).forEach { (formDetails, result) ->
+        when (result) {
+            is Result.Success -> {
+                processForm(result.value.first, result.value.second)
+                results[formDetails] = null
+            }
 
-        try {
-            downloadAndProcessForm(
-                form,
-                object : FormDownloader.ProgressReporter {
-                    override fun onDownloadingMediaFile(count: Int) {
-                        progressReporter?.invoke(index, count)
-                    }
-                },
-                { isCancelled?.invoke() ?: false }
-            )
-
-            results[form] = null
-        } catch (e: FormDownloadException.DownloadingInterrupted) {
-            break
-        } catch (e: FormDownloadException) {
-            results[form] = e
+            is Result.Error -> {
+                results[formDetails] = result.value
+            }
         }
     }
 
     return results
+}
+
+fun FormDownloader.downloadForms(
+    forms: List<ServerFormDetails>,
+    progressReporter: ((Int, Int) -> Unit)? = null,
+    isCancelled: (() -> Boolean)? = null
+): List<Result<Pair<FormFileDownload, MediaFilesDownload>, FormDownloadException>> {
+    return forms.mapIndexed { index, details ->
+        downloadForm(
+            details,
+            object : FormDownloader.ProgressReporter {
+                override fun onDownloadingMediaFile(count: Int) {
+                    progressReporter?.invoke(index, count)
+                }
+            },
+            { isCancelled?.invoke() ?: false }
+        )
+    }
 }
