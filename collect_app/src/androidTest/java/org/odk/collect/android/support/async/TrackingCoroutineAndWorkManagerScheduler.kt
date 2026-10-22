@@ -22,7 +22,8 @@ import org.odk.collect.async.workmanager.WorkManagerTaskSpecScheduler
 import java.util.function.Consumer
 import java.util.function.Supplier
 
-class TrackingCoroutineAndWorkManagerScheduler(private val networkStateProvider: NetworkStateProvider) : Scheduler {
+class TrackingCoroutineAndWorkManagerScheduler(private val networkStateProvider: NetworkStateProvider) :
+    Scheduler {
 
     private val wrappedScheduler: Scheduler
     private val deferredTasks: MutableList<DeferredTask> = ArrayList()
@@ -81,17 +82,17 @@ class TrackingCoroutineAndWorkManagerScheduler(private val networkStateProvider:
         networkConstraint: Scheduler.NetworkType?
     ) {
         cancelDeferred(tag)
-        deferredTasks.add(DeferredTask(tag, spec, null, inputData, networkConstraint))
+        deferredTasks.add(DeferredTask(tag, listOf(spec), null, inputData, networkConstraint))
     }
 
     override fun networkDeferredRepeat(
         tag: String,
-        spec: TaskSpec,
+        specs: List<TaskSpec>,
         repeatPeriod: Long,
         inputData: Map<String, String>
     ) {
         cancelDeferred(tag)
-        deferredTasks.add(DeferredTask(tag, spec, repeatPeriod, inputData, null))
+        deferredTasks.add(DeferredTask(tag, specs, repeatPeriod, inputData, null))
     }
 
     override fun cancelDeferred(tag: String) {
@@ -108,8 +109,17 @@ class TrackingCoroutineAndWorkManagerScheduler(private val networkStateProvider:
             val applicationContext = ApplicationProvider.getApplicationContext<Context>()
             deferredTasks.removeIf { deferredTask ->
                 if (deferredTask.networkConstraint == null || deferredTask.networkConstraint == networkStateProvider.currentNetwork) {
-                    deferredTask.spec.getTask(applicationContext, deferredTask.inputData, isLastUniqueExecution) { isStopped }
-                        .get()
+                    deferredTask.specs.fold(deferredTask.inputData) { inputData, spec ->
+                        val task = spec.getTask(
+                            context = applicationContext,
+                            inputData = inputData,
+                            isLastUniqueExecution = isLastUniqueExecution,
+                            isStopped = { isStopped }
+                        )
+
+                        task.get().outputData
+                    }
+
                     deferredTask.repeatPeriod == null
                 } else {
                     false
@@ -130,7 +140,7 @@ class TrackingCoroutineAndWorkManagerScheduler(private val networkStateProvider:
 
     class DeferredTask(
         val tag: String,
-        val spec: TaskSpec,
+        val specs: List<TaskSpec>,
         val repeatPeriod: Long?,
         val inputData: Map<String, String>,
         val networkConstraint: Scheduler.NetworkType?
@@ -149,7 +159,7 @@ class TestSchedulerTaskSpec : TaskSpec {
         inputData: Map<String, String>,
         isLastUniqueExecution: Boolean,
         isStopped: () -> Boolean
-    ): Supplier<Boolean> {
+    ): Supplier<TaskSpec.Result> {
         wrappedSpec = Class.forName(inputData[DATA_WRAPPED_SPEC]!!)
             .getConstructor()
             .newInstance() as TaskSpec

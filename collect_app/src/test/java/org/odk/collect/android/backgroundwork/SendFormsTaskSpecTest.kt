@@ -17,6 +17,7 @@ import org.odk.collect.android.instancemanagement.InstancesDataService
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.support.CollectHelpers
+import org.odk.collect.async.TaskSpec
 import org.odk.collect.metadata.PropertyManager
 import org.odk.collect.openrosa.http.OpenRosaHttpInterface
 import org.odk.collect.testshared.RobolectricHelpers
@@ -54,7 +55,7 @@ class SendFormsTaskSpecTest {
         val inputData = mapOf(TaskData.DATA_PROJECT_ID to projectId)
         val spec = SendFormsTaskSpec()
         val task = spec.getTask(ApplicationProvider.getApplicationContext(), inputData, true) { false }
-        assertThat(task.get(), equalTo(false))
+        assertThat(task.get(), equalTo(TaskSpec.Result.Failure()))
     }
 
     @Test
@@ -64,6 +65,6 @@ class SendFormsTaskSpecTest {
         val inputData = mapOf(TaskData.DATA_PROJECT_ID to projectId)
         val spec = SendFormsTaskSpec()
         val task = spec.getTask(ApplicationProvider.getApplicationContext(), inputData, true) { false }
-        assertThat(task.get(), equalTo(true))
+        assertThat(task.get(), equalTo(TaskSpec.Result.Success()))
     }
 }

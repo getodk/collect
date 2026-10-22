@@ -1,26 +1,28 @@
 package org.odk.collect.async.workmanager
 
 import android.content.Context
+import androidx.work.Constraints
+import androidx.work.Data
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequest
+import androidx.work.PeriodicWorkRequest
+import androidx.work.WorkManager
+import androidx.work.WorkRequest
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import org.odk.collect.analytics.Analytics
+import org.odk.collect.async.RunResult
 import org.odk.collect.async.Scheduler
 import org.odk.collect.async.TaskSpec
 import org.odk.collect.async.network.ConnectivityProvider
 import org.odk.collect.async.run
+import java.util.concurrent.TimeUnit
 
 class TaskSpecWorker(
-    context: Context,
+    private val context: Context,
     workerParams: WorkerParameters
 ) : Worker(context, workerParams) {
     private var isStopped = false
-
-    private val taskSpec: TaskSpec by lazy {
-        Class
-            .forName(inputData.getString(DATA_TASK_SPEC_CLASS)!!)
-            .getConstructor()
-            .newInstance() as TaskSpec
-    }
 
     private val stringInputData: Map<String, String> by lazy {
         inputData.keyValueMap.mapValues { it.value.toString() }
@@ -29,13 +31,18 @@ class TaskSpecWorker(
     private val connectivityProvider: ConnectivityProvider = ConnectivityProvider(context)
 
     override fun doWork(): Result {
+        val tag = tags.first()
         val cellularOnly = inputData.getBoolean(DATA_CELLULAR_ONLY, false)
         if (cellularOnly && connectivityProvider.currentNetwork != Scheduler.NetworkType.CELLULAR) {
-            Analytics.Companion.setUserProperty("SawMeteredNonCellular", "true")
+            Analytics.setUserProperty("SawMeteredNonCellular", "true")
             return Result.retry()
         }
 
-        val result = taskSpec.run(
+        val taskSpecs = inputData.getStringArray(DATA_TASK_SPEC_CLASSES)!!.map {
+            Class.forName(it).getConstructor().newInstance() as TaskSpec
+        }
+
+        val result = taskSpecs.first().run(
             applicationContext,
             stringInputData,
             runAttemptCount,
@@ -43,10 +50,44 @@ class TaskSpecWorker(
             { isStopped }
         )
 
+        val nextWorkRequest = getNextWorkRequest(
+            result,
+            taskSpecs,
+            tag,
+            cellularOnly
+        )
+
+        if (nextWorkRequest is OneTimeWorkRequest) {
+            WorkManager.getInstance(context)
+                .beginUniqueWork(tag, ExistingWorkPolicy.REPLACE, nextWorkRequest).enqueue()
+        }
+
         return when (result) {
-            TaskSpec.Result.SUCCESS -> Result.success()
-            TaskSpec.Result.FAILURE -> Result.failure()
-            TaskSpec.Result.RETRY -> Result.retry()
+            is RunResult.Success -> Result.success()
+            is RunResult.Retry -> Result.retry()
+            is RunResult.Failure -> Result.failure()
+            RunResult.Error -> Result.failure()
+        }
+    }
+
+    private fun getNextWorkRequest(
+        result: RunResult,
+        taskSpecs: List<TaskSpec>,
+        tag: String,
+        cellularOnly: Boolean
+    ): WorkRequest? {
+        val outputData = result.outputData
+        return if (taskSpecs.size > 1 && outputData != null) {
+            getWorkRequest(
+                taskSpecs.drop(1),
+                tag,
+                Constraints.Builder().build(),
+                outputData,
+                null,
+                cellularOnly
+            )
+        } else {
+            null
         }
     }
 
@@ -56,7 +97,58 @@ class TaskSpecWorker(
     }
 
     companion object {
-        const val DATA_TASK_SPEC_CLASS = "taskSpecClass"
+        const val DATA_TASK_SPEC_CLASSES = "taskSpecClasses"
         const val DATA_CELLULAR_ONLY = "cellularOnly"
+
+        fun getInputData(
+            specs: List<TaskSpec>,
+            inputData: Map<String, String>,
+            cellularOnly: Boolean
+        ): Data {
+            return Data.Builder()
+                .putStringArray(
+                    DATA_TASK_SPEC_CLASSES,
+                    specs.map { it.javaClass.name }.toTypedArray()
+                )
+                .putBoolean(DATA_CELLULAR_ONLY, cellularOnly)
+                .putAll(inputData)
+                .build()
+        }
+
+        fun getWorkRequest(
+            specs: List<TaskSpec>,
+            tag: String,
+            constraints: Constraints,
+            inputData: Map<String, String>,
+            repeatPeriod: Long?,
+            cellularOnly: Boolean
+        ): WorkRequest {
+            val builder = if (repeatPeriod != null) {
+                PeriodicWorkRequest.Builder(
+                    TaskSpecWorker::class.java,
+                    repeatPeriod,
+                    TimeUnit.MILLISECONDS
+                )
+            } else {
+                OneTimeWorkRequest.Builder(TaskSpecWorker::class.java)
+            }
+
+            builder.addTag(tag)
+                .setInputData(getInputData(specs, inputData, cellularOnly))
+                .setConstraints(constraints)
+
+            val firstSpec = specs.first()
+            firstSpec.backoffPolicy?.let { backoffPolicy ->
+                firstSpec.backoffDelay?.let { backoffDelay ->
+                    builder.setBackoffCriteria(
+                        backoffPolicy,
+                        backoffDelay,
+                        TimeUnit.MILLISECONDS
+                    )
+                }
+            }
+
+            return builder.build()
+        }
     }
 }

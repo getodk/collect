@@ -15,6 +15,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.async.TaskSpec
+import org.odk.collect.async.TaskSpec.Result
 import java.util.concurrent.Executors
 import java.util.function.Supplier
 
@@ -28,9 +29,10 @@ class TaskSpecWorkerTest {
             context = ApplicationProvider.getApplicationContext(),
             executor = Executors.newSingleThreadExecutor(),
             inputData = Data.Builder()
-                .putString(TaskSpecWorker.DATA_TASK_SPEC_CLASS, TestTaskSpec::class.java.name)
+                .putStringArray(TaskSpecWorker.DATA_TASK_SPEC_CLASSES, arrayOf(TestTaskSpec::class.java.name))
                 .build(),
-            runAttemptCount = 0 // without setting this explicitly attempts in tests are counted starting from 1 instead of 0 like in production code
+            runAttemptCount = 0, // without setting this explicitly attempts in tests are counted starting from 1 instead of 0 like in production code
+            tags = listOf("test")
         ).build()
 
         TestTaskSpec.reset()
@@ -38,13 +40,13 @@ class TaskSpecWorkerTest {
 
     @Test
     fun `when task returns true work should succeed`() {
-        TestTaskSpec.doReturn(true)
+        TestTaskSpec.doReturn(Result.Success())
         assertThat(worker.doWork(), `is`(ListenableWorker.Result.success()))
     }
 
     @Test
     fun `when task returns false, retries if maxRetries not specified`() {
-        TestTaskSpec.doReturn(false)
+        TestTaskSpec.doReturn(Result.Failure())
         assertThat(worker.doWork(), `is`(ListenableWorker.Result.retry()))
     }
 
@@ -52,7 +54,7 @@ class TaskSpecWorkerTest {
     fun `when task returns false, retries if maxRetries is specified and is higher than runAttemptCount`() {
         TestTaskSpec
             .withMaxRetries(1)
-            .doReturn(false)
+            .doReturn(Result.Failure())
 
         assertThat(worker.doWork(), `is`(ListenableWorker.Result.retry()))
     }
@@ -61,7 +63,7 @@ class TaskSpecWorkerTest {
     fun `when task returns false, fails if maxRetries is specified and is equal to runAttemptCount`() {
         TestTaskSpec
             .withMaxRetries(0)
-            .doReturn(false)
+            .doReturn(Result.Failure())
 
         assertThat(worker.doWork(), `is`(ListenableWorker.Result.failure()))
     }
@@ -70,7 +72,7 @@ class TaskSpecWorkerTest {
     fun `when task returns false, fails if maxRetries is specified and is lower than runAttemptCount`() {
         TestTaskSpec
             .withMaxRetries(-1)
-            .doReturn(false)
+            .doReturn(Result.Failure())
 
         assertThat(worker.doWork(), `is`(ListenableWorker.Result.failure()))
     }
@@ -78,7 +80,7 @@ class TaskSpecWorkerTest {
     @Test
     fun `when maxRetries is not specified, task called with isLastUniqueExecution true`() {
         TestTaskSpec
-            .doReturn(false)
+            .doReturn(Result.Failure())
 
         worker.doWork()
         assertThat(TestTaskSpec.wasLastUniqueExecution, equalTo(true))
@@ -88,7 +90,7 @@ class TaskSpecWorkerTest {
     fun `when maxRetries is specified and it is higher than runAttemptCount, task called with isLastUniqueExecution false`() {
         TestTaskSpec
             .withMaxRetries(1)
-            .doReturn(false)
+            .doReturn(Result.Failure())
 
         worker.doWork()
         assertThat(TestTaskSpec.wasLastUniqueExecution, equalTo(false))
@@ -98,7 +100,7 @@ class TaskSpecWorkerTest {
     fun `when maxRetries is specified and it is equal to runAttemptCount, task called with isLastUniqueExecution true`() {
         TestTaskSpec
             .withMaxRetries(0)
-            .doReturn(false)
+            .doReturn(Result.Failure())
 
         worker.doWork()
         assertThat(TestTaskSpec.wasLastUniqueExecution, equalTo(true))
@@ -108,7 +110,7 @@ class TaskSpecWorkerTest {
     fun `when maxRetries is specified and it is lower than runAttemptCount, task called with isLastUniqueExecution true`() {
         TestTaskSpec
             .withMaxRetries(-1)
-            .doReturn(false)
+            .doReturn(Result.Failure())
 
         worker.doWork()
         assertThat(TestTaskSpec.wasLastUniqueExecution, equalTo(true))
@@ -131,7 +133,7 @@ private class TestTaskSpec : TaskSpec {
     companion object {
 
         private var maxRetries: Int? = null
-        private var returnValue = true
+        private var returnValue: Result = Result.Success()
         private var exception: Throwable? = null
 
         var wasLastUniqueExecution = false
@@ -141,14 +143,14 @@ private class TestTaskSpec : TaskSpec {
             private set
 
         fun reset() {
-            returnValue = true
+            returnValue = Result.Success()
             maxRetries = null
             exception = null
             wasLastUniqueExecution = false
             onExceptionCalledWith = null
         }
 
-        fun doReturn(value: Boolean): Companion {
+        fun doReturn(value: Result): Companion {
             returnValue = value
             return this
         }
@@ -172,7 +174,7 @@ private class TestTaskSpec : TaskSpec {
         inputData: Map<String, String>,
         isLastUniqueExecution: Boolean,
         isStopped: (() -> Boolean)
-    ): Supplier<Boolean> {
+    ): Supplier<Result> {
         wasLastUniqueExecution = isLastUniqueExecution
 
         return Supplier {

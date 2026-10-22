@@ -50,7 +50,7 @@ object SchedulerBuilder {
             ) {
                 taskSpecScheduler.schedule(
                     tag,
-                    spec,
+                    listOf(spec),
                     inputData,
                     networkConstraint = networkConstraint
                 )
@@ -58,11 +58,11 @@ object SchedulerBuilder {
 
             override fun networkDeferredRepeat(
                 tag: String,
-                spec: TaskSpec,
+                specs: List<TaskSpec>,
                 repeatPeriod: Long,
                 inputData: Map<String, String>
             ) {
-                taskSpecScheduler.schedule(tag, spec, inputData, repeatPeriod = repeatPeriod)
+                taskSpecScheduler.schedule(tag, specs, inputData, repeatPeriod = repeatPeriod)
             }
 
             override fun cancelDeferred(tag: String) {
