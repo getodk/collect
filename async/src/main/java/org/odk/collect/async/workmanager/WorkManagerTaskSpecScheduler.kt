@@ -3,7 +3,6 @@ package org.odk.collect.async.workmanager
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import androidx.work.Constraints
-import androidx.work.Data
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
@@ -14,55 +13,38 @@ import androidx.work.WorkManager
 import org.odk.collect.async.Scheduler
 import org.odk.collect.async.TaskSpec
 import org.odk.collect.async.TaskSpecScheduler
-import java.util.concurrent.TimeUnit
 
 class WorkManagerTaskSpecScheduler(private val workManager: WorkManager) : TaskSpecScheduler {
     override fun schedule(
         tag: String,
-        spec: TaskSpec,
+        specs: List<TaskSpec>,
         inputData: Map<String, String>,
         networkConstraint: Scheduler.NetworkType?,
         repeatPeriod: Long?
     ) {
         val constraints = getConstraints(networkConstraint)
-        val workManagerInputData = Data.Builder()
-            .putString(TaskSpecWorker.DATA_TASK_SPEC_CLASS, spec.javaClass.name)
-            .putBoolean(
-                TaskSpecWorker.DATA_CELLULAR_ONLY,
-                networkConstraint == Scheduler.NetworkType.CELLULAR
-            )
-            .putAll(inputData)
-            .build()
+        val cellularOnly = networkConstraint == Scheduler.NetworkType.CELLULAR
+        val workRequest = TaskSpecWorker.getWorkRequest(
+            specs,
+            tag,
+            constraints,
+            inputData,
+            repeatPeriod,
+            cellularOnly
+        )
 
-        if (repeatPeriod != null) {
-            val builder = PeriodicWorkRequest.Builder(
-                TaskSpecWorker::class.java,
-                repeatPeriod,
-                TimeUnit.MILLISECONDS
-            )
-                .addTag(tag)
-                .setInputData(workManagerInputData)
-                .setConstraints(constraints)
-
-            spec.backoffPolicy?.let { backoffPolicy ->
-                spec.backoffDelay?.let { backoffDelay ->
-                    builder.setBackoffCriteria(backoffPolicy, backoffDelay, TimeUnit.MILLISECONDS)
-                }
+        when (workRequest) {
+            is PeriodicWorkRequest -> {
+                workManager.enqueueUniquePeriodicWork(
+                    tag,
+                    ExistingPeriodicWorkPolicy.REPLACE,
+                    workRequest
+                )
             }
 
-            workManager.enqueueUniquePeriodicWork(
-                tag,
-                ExistingPeriodicWorkPolicy.REPLACE,
-                builder.build()
-            )
-        } else {
-            val workRequest = OneTimeWorkRequest.Builder(TaskSpecWorker::class.java)
-                .addTag(tag)
-                .setConstraints(constraints)
-                .setInputData(workManagerInputData)
-                .build()
-
-            workManager.beginUniqueWork(tag, ExistingWorkPolicy.REPLACE, workRequest).enqueue()
+            is OneTimeWorkRequest -> {
+                workManager.beginUniqueWork(tag, ExistingWorkPolicy.REPLACE, workRequest).enqueue()
+            }
         }
     }
 
