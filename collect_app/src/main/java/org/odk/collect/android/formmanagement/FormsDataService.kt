@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
-import org.odk.collect.android.formmanagement.FormFileDownload
 import org.odk.collect.android.formmanagement.download.FormDownloadException
 import org.odk.collect.android.formmanagement.download.ServerFormDownloader
 import org.odk.collect.android.formmanagement.download.downloadAndProcessForms
@@ -22,7 +21,6 @@ import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.result.Result
 import java.io.File
 import java.util.function.Supplier
-import kotlin.Pair
 
 class FormsDataService(
     appState: AppState,
@@ -188,8 +186,8 @@ class FormsDataService(
                         throw FormSourceException.FetchError()
                     }
 
-                    val processResults = downloadResults.filterIsInstance<Result.Success<Pair<FormFileDownload, MediaFilesDownload>, FormDownloadException>>().map {
-                        formDownloader.processForm(it.value.first, it.value.second)
+                    val processResults = downloadResults.filterIsInstance<Result.Success<FormDownload, FormDownloadException>>().map {
+                        formDownloader.processForm(it.value)
                     }
                     if (processResults.any { it is Result.Error }) {
                         throw FormSourceException.FetchError()

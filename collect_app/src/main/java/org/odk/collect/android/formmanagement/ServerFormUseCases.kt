@@ -225,13 +225,13 @@ object ServerFormUseCases {
     }
 
     fun updateForm(
-        formFileDownload: FormFileDownload.Existing,
+        formDownload: FormDownload.Existing,
         mediaFilesDownload: MediaFilesDownload,
         entitiesRepository: EntitiesRepository,
         formsRepository: FormsRepository,
         time: Long
     ): Form {
-        val existingForm = formFileDownload.form
+        val existingForm = formDownload.form
         val formBuilder = Form.Builder(existingForm)
 
         val attachmentUpdateTime = if (mediaFilesDownload.newAttachmentsDownloaded) time else null
@@ -333,12 +333,23 @@ data class MediaFilesDownload(
     val entityLists: List<EntityListDownload>
 )
 
-sealed class FormFileDownload {
+sealed class FormDownload {
 
     abstract val tempDir: File
+    abstract val mediaFilesDownload: MediaFilesDownload
 
-    data class New(val file: File, val hash: String, override val tempDir: File) : FormFileDownload()
-    data class Existing(val form: Form, override val tempDir: File) : FormFileDownload()
+    data class New(
+        val file: File,
+        val hash: String,
+        override val tempDir: File,
+        override val mediaFilesDownload: MediaFilesDownload
+    ) : FormDownload()
+
+    data class Existing(
+        val form: Form,
+        override val tempDir: File,
+        override val mediaFilesDownload: MediaFilesDownload
+    ) : FormDownload()
 }
 
 sealed class EntityListDownload {
