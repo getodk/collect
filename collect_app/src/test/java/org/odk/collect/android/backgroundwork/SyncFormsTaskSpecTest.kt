@@ -19,6 +19,7 @@ import org.odk.collect.android.injection.config.ProjectDependencyModuleFactory
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.androidshared.utils.UniqueIdGenerator
+import org.odk.collect.async.TaskSpec
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
 
@@ -84,11 +85,11 @@ class SyncFormsTaskSpecTest {
         }
         whenever(formsDataService.matchFormsWithServer(eq("projectId"), any(), any())).thenReturn(true)
         var result = SyncFormsTaskSpec().getTask(ApplicationProvider.getApplicationContext(), inputData, true) { false }.get()
-        assertThat(result, `is`(true))
+        assertThat(result, `is`(TaskSpec.Result.Success()))
 
         whenever(formsDataService.matchFormsWithServer(eq("projectId"), any(), any())).thenReturn(false)
         result = SyncFormsTaskSpec().getTask(ApplicationProvider.getApplicationContext(), inputData, false) { false }.get()
-        assertThat(result, `is`(false))
+        assertThat(result, `is`(TaskSpec.Result.Failure()))
     }
 
     @Test
