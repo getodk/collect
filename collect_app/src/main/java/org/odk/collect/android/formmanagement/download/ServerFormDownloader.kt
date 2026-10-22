@@ -1,6 +1,6 @@
 package org.odk.collect.android.formmanagement.download
 
-import org.odk.collect.android.formmanagement.FormFileDownload
+import org.odk.collect.android.formmanagement.FormDownload
 import org.odk.collect.android.formmanagement.MediaFilesDownload
 import org.odk.collect.android.formmanagement.ServerFormDetails
 import org.odk.collect.android.formmanagement.ServerFormUseCases
@@ -56,7 +56,7 @@ class ServerFormDownloader(
         form: ServerFormDetails,
         progressReporter: ProgressReporter?,
         isCancelled: Supplier<Boolean>?,
-    ): Result<Pair<FormFileDownload, MediaFilesDownload>, FormDownloadException> {
+    ): Result<FormDownload, FormDownloadException> {
         if (form.hash.isNullOrEmpty()) {
             return FormWithNoHash().toError()
         }
@@ -87,25 +87,39 @@ class ServerFormDownloader(
 
             try {
                 // download media files if there are any
-                val mediaFilesDownload = if (form.manifest != null && !form.manifest.mediaFiles.isEmpty()) {
-                    ServerFormUseCases.downloadMediaFiles(
-                        form,
-                        formSource,
-                        formsRepository,
-                        tempMediaPath,
-                        tempDir,
-                        entitiesRepository,
-                        stateListener
-                    )
-                } else {
-                    MediaFilesDownload(tempMediaPath, false, emptyList())
-                }
+                val mediaFilesDownload =
+                    if (form.manifest != null && !form.manifest.mediaFiles.isEmpty()) {
+                        ServerFormUseCases.downloadMediaFiles(
+                            form,
+                            formSource,
+                            formsRepository,
+                            tempMediaPath,
+                            tempDir,
+                            entitiesRepository,
+                            stateListener
+                        )
+                    } else {
+                        MediaFilesDownload(tempMediaPath, false, emptyList())
+                    }
 
                 if (stateListener.isCancelled) {
                     throw DownloadingInterrupted()
                 }
 
-                Pair(formFileDownload, mediaFilesDownload)
+                when (formFileDownload) {
+                    is FormFileDownload.Existing -> {
+                        FormDownload.Existing(formFileDownload.form, tempDir, mediaFilesDownload)
+                    }
+
+                    is FormFileDownload.New -> {
+                        FormDownload.New(
+                            formFileDownload.file,
+                            formFileDownload.hash,
+                            tempDir,
+                            mediaFilesDownload
+                        )
+                    }
+                }
             } catch (e: DownloadingInterrupted) {
                 Timber.i(e)
                 throw DownloadingInterrupted()
@@ -126,28 +140,25 @@ class ServerFormDownloader(
         }
     }
 
-    override fun processForm(
-        formFileDownload: FormFileDownload,
-        mediaFilesDownload: MediaFilesDownload,
-    ): Result<Any, FormDownloadException> {
+    override fun processForm(formDownload: FormDownload): Result<Any, FormDownloadException> {
         ingestEntityListsFromDownload(
-            mediaFilesDownload,
+            formDownload.mediaFilesDownload,
             entitiesRepository,
             entitySource,
         )
 
         return createOrUpdateForm(
-            formFileDownload,
-            mediaFilesDownload,
+            formDownload,
+            formDownload.mediaFilesDownload,
             formsDirPath
         ).chain { form ->
-            moveMediaFiles(mediaFilesDownload.tempMediaPath, form)
+            moveMediaFiles(formDownload.mediaFilesDownload.tempMediaPath, form)
                 .map { form }
                 .mapError { DiskError() }
         }.onSuccess { form ->
             ServerFormUseCases.copySavedFileFromPreviousFormVersion(formsRepository, form)
         }.onSuccess { form ->
-            if (formFileDownload is FormFileDownload.New) {
+            if (formDownload is FormDownload.New) {
                 // Account for server returning update with same id/version
                 formsRepository.getAllByFormIdAndVersion(form.formId, form.version).forEach {
                     if (it.dbId != form.dbId) {
@@ -157,28 +168,28 @@ class ServerFormDownloader(
             }
         }.onError {
             // Clean up form if we created it
-            if (formFileDownload is FormFileDownload.New) {
-                val form = formsRepository.getOneByMd5Hash(formFileDownload.hash)
+            if (formDownload is FormDownload.New) {
+                val form = formsRepository.getOneByMd5Hash(formDownload.hash)
                 if (form != null) {
                     formsRepository.delete(form.dbId)
                 }
             }
         }.also {
-            formFileDownload.tempDir.deleteDirectory()
+            formDownload.tempDir.deleteDirectory()
         }
     }
 
     private fun createOrUpdateForm(
-        formFileDownload: FormFileDownload,
+        formDownload: FormDownload,
         mediaFilesDownload: MediaFilesDownload,
         formsDirPath: String
     ): Result<Form, FormDownloadException> {
         val entityLists = mediaFilesDownload.entityLists
 
-        return when (formFileDownload) {
-            is FormFileDownload.Existing -> {
+        return when (formDownload) {
+            is FormDownload.Existing -> {
                 ServerFormUseCases.updateForm(
-                    formFileDownload,
+                    formDownload,
                     mediaFilesDownload,
                     entitiesRepository,
                     formsRepository,
@@ -186,13 +197,13 @@ class ServerFormDownloader(
                 ).toSuccess()
             }
 
-            is FormFileDownload.New -> {
-                parseFormMetadata(formFileDownload).chain {
+            is FormDownload.New -> {
+                parseFormMetadata(formDownload).chain {
                     if (!isSubmissionOk(it)) {
                         InvalidSubmission().toError()
                     } else {
-                        val formFile = File(formsDirPath, formFileDownload.file.name)
-                        FileUtils.copyFile(formFileDownload.file, formFile)
+                        val formFile = File(formsDirPath, formDownload.file.name)
+                        FileUtils.copyFile(formDownload.file, formFile)
 
                         val newForm = saveNewForm(
                             it,
@@ -207,9 +218,9 @@ class ServerFormDownloader(
         }
     }
 
-    private fun parseFormMetadata(formFileDownload: FormFileDownload.New): Result<FormMetadata, FormParsingError> {
+    private fun parseFormMetadata(formDownload: FormDownload.New): Result<FormMetadata, FormParsingError> {
         return runAndCatch {
-            formMetadataParser.readMetadata(formFileDownload.file)
+            formMetadataParser.readMetadata(formDownload.file)
         }.mapError {
             FormParsingError(it)
         }
@@ -269,9 +280,9 @@ class ServerFormDownloader(
         if (form != null) {
             // delete the file we just downloaded, because it's a duplicate
             FileUtils.deleteAndReport(tempFormFile)
-            return FormFileDownload.Existing(form, tempDir)
+            return FormFileDownload.Existing(form)
         } else {
-            return FormFileDownload.New(tempFormFile, hash, tempDir)
+            return FormFileDownload.New(tempFormFile, hash)
         }
     }
 }
@@ -310,4 +321,9 @@ private fun moveMediaFiles(tempMediaPath: String, form: Form): Result<File, IOEx
 private fun isSubmissionOk(formMetadata: FormMetadata): Boolean {
     val submission = formMetadata.submissionUri
     return submission == null || isUrlValid(submission)
+}
+
+private sealed class FormFileDownload {
+    data class New(val file: File, val hash: String) : FormFileDownload()
+    data class Existing(val form: Form) : FormFileDownload()
 }
