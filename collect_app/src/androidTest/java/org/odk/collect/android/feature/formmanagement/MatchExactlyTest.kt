@@ -54,12 +54,37 @@ class MatchExactlyTest {
     }
 
     @Test
-    fun whenMatchExactlyEnabled_clickingFillBlankForm_andClickingRefresh_whenThereIsAnError_showsNotification_andClickingNotification_returnsToApp() {
+    fun whenMatchExactlyEnabled_clickingFillBlankForm_andClickingRefresh_whenThereIsAnErrorFetchingList_showsNotification_andClickingNotification_returnsToApp() {
         testDependencies.server.alwaysReturnError()
 
         rule.startAtMainMenu()
+            .setServer(testDependencies.server.url)
+            .enableMatchExactly()
+            .clickFillBlankForm()
+            .clickRefreshWithError()
+
+        notificationDrawerRule
+            .open()
+            .assertNotification("ODK Collect", "Form update failed", "Demo project")
+            .clickNotification(
+                "ODK Collect",
+                "Form update failed",
+                FillBlankFormPage()
+            ).pressBack(MainMenuPage())
+    }
+
+    @Test
+    fun whenMatchExactlyEnabled_clickingFillBlankForm_andClickingRefresh_whenThereIsAnErrorDownloadingAForm_showsNotification_andClickingNotification_returnsToApp() {
+        testDependencies.server.errorOnFetchingForms()
+        testDependencies.server.addForm(
+            "One Question Updated",
+            "one_question",
+            "2",
+            "one-question-updated.xml"
+        )
+
+        rule.startAtMainMenu()
             .copyForm("one-question.xml")
-            .copyForm("one-question-repeat.xml")
             .setServer(testDependencies.server.url)
             .enableMatchExactly()
             .clickFillBlankForm()
