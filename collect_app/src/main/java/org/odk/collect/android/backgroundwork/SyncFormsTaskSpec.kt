@@ -26,13 +26,18 @@ class SyncFormsTaskSpec : TaskSpec {
         inputData: Map<String, String>,
         isLastUniqueExecution: Boolean,
         isStopped: (() -> Boolean)
-    ): Supplier<Boolean> {
+    ): Supplier<Map<String, String>?> {
         DaggerUtils.getComponent(context).inject(this)
 
         return Supplier {
             val projectId = inputData[TaskData.DATA_PROJECT_ID]
             if (projectId != null) {
-                formsDataService.matchFormsWithServer(projectId, isLastUniqueExecution, isStopped)
+                val result = formsDataService.matchFormsWithServer(projectId, isLastUniqueExecution, isStopped)
+                if (result) {
+                    emptyMap()
+                } else {
+                    null
+                }
             } else {
                 throw IllegalArgumentException("No project ID provided!")
             }

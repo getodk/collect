@@ -37,13 +37,13 @@ class AutoUpdateTaskSpec : TaskSpec {
         inputData: Map<String, String>,
         isLastUniqueExecution: Boolean,
         isStopped: (() -> Boolean)
-    ): Supplier<Boolean> {
+    ): Supplier<Map<String, String>?> {
         DaggerUtils.getComponent(context).inject(this)
         return Supplier {
             val projectId = inputData[TaskData.DATA_PROJECT_ID]
             if (projectId != null) {
                 formsDataService.downloadUpdates(projectId)
-                true
+                emptyMap()
             } else {
                 throw IllegalArgumentException("No project ID provided!")
             }

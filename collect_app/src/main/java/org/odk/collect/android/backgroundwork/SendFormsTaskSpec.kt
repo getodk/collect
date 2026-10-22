@@ -35,13 +35,18 @@ class SendFormsTaskSpec : TaskSpec {
         inputData: Map<String, String>,
         isLastUniqueExecution: Boolean,
         isStopped: (() -> Boolean)
-    ): Supplier<Boolean> {
+    ): Supplier<Map<String, String>?> {
         DaggerUtils.getComponent(context).inject(this)
         return Supplier {
             val projectId = inputData[TaskData.DATA_PROJECT_ID]
             val formAutoSend = inputData[TaskData.DATA_FORM_AUTO_SEND] != null
             if (projectId != null) {
-                instancesDataService.autoSendInstances(projectId, formAutoSend)
+                val result = instancesDataService.autoSendInstances(projectId, formAutoSend)
+                if (result) {
+                    emptyMap()
+                } else {
+                    null
+                }
             } else {
                 throw IllegalArgumentException("No project ID provided!")
             }

@@ -22,17 +22,17 @@ interface TaskSpec {
         inputData: Map<String, String>,
         isLastUniqueExecution: Boolean,
         isStopped: (() -> Boolean)
-    ): Supplier<Boolean>
+    ): Supplier<Map<String, String>?>
 
     /**
      * Called if an exception is thrown while executing the work.
      */
     fun onException(exception: Throwable)
 
-    enum class Result {
-        SUCCESS,
-        FAILURE,
-        RETRY
+    sealed class Result {
+        data class SUCCESS(val outputData: Map<String, String>) : Result()
+        data object FAILURE : Result()
+        data object RETRY : Result()
     }
 }
 
@@ -45,11 +45,12 @@ fun TaskSpec.run(
 ): TaskSpec.Result {
     try {
         val isLastUniqueExecution = maxRetries?.let { runAttemptCount >= it } ?: true
-        val completed = getTask(context, inputData, isForeground || isLastUniqueExecution, isStopped).get()
+        val outputData =
+            getTask(context, inputData, isForeground || isLastUniqueExecution, isStopped).get()
         val maxRetries = this.maxRetries
 
-        return if (completed) {
-            TaskSpec.Result.SUCCESS
+        return if (outputData != null) {
+            TaskSpec.Result.SUCCESS(outputData)
         } else if (!isForeground && (maxRetries == null || runAttemptCount < maxRetries)) {
             TaskSpec.Result.RETRY
         } else {

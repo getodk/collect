@@ -1,6 +1,7 @@
 package org.odk.collect.async.workmanager
 
 import android.content.Context
+import androidx.work.Data
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import org.odk.collect.analytics.Analytics
@@ -44,7 +45,11 @@ class TaskSpecWorker(
         )
 
         return when (result) {
-            TaskSpec.Result.SUCCESS -> Result.success()
+            is TaskSpec.Result.SUCCESS -> {
+                val outputData = Data.Builder().putAll(result.outputData).build()
+                Result.success(outputData)
+            }
+
             TaskSpec.Result.FAILURE -> Result.failure()
             TaskSpec.Result.RETRY -> Result.retry()
         }
