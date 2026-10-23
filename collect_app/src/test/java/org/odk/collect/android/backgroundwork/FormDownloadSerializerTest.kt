@@ -64,4 +64,24 @@ class FormDownloadSerializerTest {
             equalTo(formDownload)
         )
     }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun `throws IllegalArgumentException if Existing has form without db ID`() {
+        val formDownload = FormDownload.Existing(
+            form = FormFixtures.form(),
+            tempDir = TempFiles.createTempDir(),
+            mediaFilesDownload = MediaFilesDownload(
+                tempMediaPath = TempFiles.createTempDir().absolutePath,
+                newAttachmentsDownloaded = false,
+                entityLists = listOf(
+                    EntityListDownload.Update(
+                        mediaFile = FormFixtures.mediaFile(),
+                        file = TempFiles.createTempFile()
+                    )
+                )
+            )
+        )
+
+        FormDownloadSerializer.serialize(formDownload)
+    }
 }
