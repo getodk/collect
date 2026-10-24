@@ -162,16 +162,16 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
         val points = trace.points.map { Point.fromLngLat(it.longitude, it.latitude) }
 
         if (trace is PolygonDescription) {
-            builder.withSource(GeoJsonSource("trace_source", Polygon.fromLngLats(listOf(points))))
+            builder.withSource(GeoJsonSource("trace_fill_source", Polygon.fromLngLats(listOf(points))))
             builder.withLayer(
-                FillLayer("trace_fill_layer", "trace_source").withProperties(
+                FillLayer("trace_fill_layer", "trace_fill_source").withProperties(
                     PropertyFactory.fillColor(trace.getFillColor())
                 )
             )
-        } else {
-            builder.withSource(GeoJsonSource("trace_source", LineString.fromLngLats(points)))
         }
 
+        // A polygon's outline is drawn as a line because MapLibre doesn't render polygons with (almost) no area
+        builder.withSource(GeoJsonSource("trace_source", LineString.fromLngLats(points)))
         builder.withLayer(
             LineLayer("trace_layer", "trace_source").withProperties(
                 PropertyFactory.lineColor(trace.getStrokeColor()),
