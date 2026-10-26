@@ -40,7 +40,8 @@ object Configurations {
         ProjectKeys.BASEMAP_SOURCE_OSM to Configuration(
             name = R.string.basemap_source_osm,
             attribution = "<a href=\"https://www.openstreetmap.org/copyright\">© OpenStreetMap contributors</a>",
-            uri = BasemapUri.Raster("https://tile.openstreetmap.org/{z}/{x}/{y}.png")
+            uri = BasemapUri.Raster("https://tile.openstreetmap.org/{z}/{x}/{y}.png"),
+            maxZoom = 19f
         ),
         ProjectKeys.BASEMAP_SOURCE_USGS to Configuration(
             name = R.string.basemap_source_usgs,
@@ -89,7 +90,8 @@ class Configuration(
     val attribution: String? = null,
     val uri: BasemapUri? = null,
     val styleSetting: String? = null,
-    val styleOptions: Map<String, StyleOption> = emptyMap()
+    val styleOptions: Map<String, StyleOption> = emptyMap(),
+    val maxZoom: Float? = null
 )
 
 class StyleOption(val name: Int, val uri: BasemapUri)
