@@ -28,7 +28,6 @@ import org.odk.collect.maplibre.rasterBasemapStyle
 import org.odk.collect.maps.traces.PolygonDescription
 import org.odk.collect.maps.traces.TraceDescription
 import org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_GOOGLE
-import org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_OSM
 import org.odk.collect.shared.injection.Keys
 import java.io.File
 import javax.inject.Inject
@@ -63,25 +62,65 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
             return {}
         }
 
-        val basemapConfiguration = when (configuration.basemapSource) {
-            // Google Maps can't render off-screen, so its previews use OpenStreetMap instead
-            BASEMAP_SOURCE_GOOGLE -> Configurations.all.getValue(BASEMAP_SOURCE_OSM)
-            else -> Configurations.all[configuration.basemapSource]
-        }
-
-        if (basemapConfiguration == null || !MapLibreSupport.isAvailable() || trace.points.size < 2) {
+        if (!MapLibreSupport.isAvailable() || trace.points.size < 2) {
             callback(null)
             return {}
         }
 
         MapLibreSupport.initialize(context)
 
-        val style = basemapStyle(basemapConfiguration, configuration.basemapStyle, keys)
+        return if (configuration.basemapSource == BASEMAP_SOURCE_GOOGLE) {
+            snapshotWithGoogleTiles(keys.get("google").orEmpty(), configuration, cache, trace, width, height, callback)
+        } else {
+            val basemapConfiguration = Configurations.all.getValue(configuration.basemapSource)
+            snapshot(basemapStyle(basemapConfiguration, configuration.basemapStyle, keys), configuration, cache, trace, width, height, callback)
+        }
+    }
 
+    private fun snapshotWithGoogleTiles(
+        apiKey: String,
+        configuration: StaticMapConfiguration,
+        cache: StaticMapCache,
+        trace: TraceDescription,
+        width: Int,
+        height: Int,
+        callback: (Bitmap?) -> Unit
+    ): () -> Unit {
+        var cancelled = false
+        var cancelSnapshot: () -> Unit = {}
+
+        GoogleMapTilesClient.getSession(apiKey, configuration.basemapStyle) { session ->
+            if (cancelled) {
+                return@getSession
+            }
+
+            if (session != null) {
+                cancelSnapshot = snapshot(googleBasemapStyle(apiKey, session), configuration, cache, trace, width, height, callback)
+            } else {
+                // Not cached so that Google is tried again next time
+                cancelSnapshot = snapshot(blankBasemap(), configuration, null, trace, width, height, callback)
+            }
+        }
+
+        return {
+            cancelled = true
+            cancelSnapshot()
+        }
+    }
+
+    private fun snapshot(
+        style: Style.Builder,
+        configuration: StaticMapConfiguration,
+        cache: StaticMapCache?,
+        trace: TraceDescription,
+        width: Int,
+        height: Int,
+        callback: (Bitmap?) -> Unit
+    ): () -> Unit {
         var snapshotter = MapSnapshotter(context, snapshotOptions(context, style, configuration.referenceLayer, trace, width, height))
         snapshotter.start(
             {
-                cache.put(configuration, trace, width, height, it.bitmap)
+                cache?.put(configuration, trace, width, height, it.bitmap)
                 callback(it.bitmap)
             },
             {
@@ -133,9 +172,14 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
         val uriValue = uri.value(keys)
 
         return when (uri) {
-            is BasemapUri.Raster -> basemapConfiguration.rasterBasemapStyle(uriValue).fromUri("asset://maplibre_empty_style.json")
+            is BasemapUri.Raster -> rasterBasemapStyle(uriValue, basemapConfiguration.attribution, basemapConfiguration.maxZoom).fromUri("asset://maplibre_empty_style.json")
             is BasemapUri.Mapbox -> Style.Builder().fromUri(uriValue)
         }
+    }
+
+    private fun googleBasemapStyle(apiKey: String, session: String): Style.Builder {
+        return rasterBasemapStyle(GoogleMapTilesClient.getTilesUrl(apiKey, session), null, null)
+            .fromUri("asset://maplibre_empty_style.json")
     }
 
     private fun blankBasemap(): Style.Builder {
