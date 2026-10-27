@@ -27,9 +27,9 @@ private class OneRetryTaskSpec() : TaskSpec {
         inputData: Map<String, String>,
         isLastUniqueExecution: Boolean,
         isStopped: () -> Boolean
-    ): Supplier<Boolean> {
+    ): Supplier<Map<String, String>?> {
         return Supplier {
-            false
+            null
         }
     }
 
