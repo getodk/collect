@@ -31,6 +31,8 @@ import org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_GOOGLE
 import org.odk.collect.shared.injection.Keys
 import java.io.File
 import javax.inject.Inject
+import kotlin.math.log2
+import kotlin.math.max
 
 /**
  * Loads a static image of a map showing a line or a polygon, rendering it off-screen if it isn't cached.
@@ -95,7 +97,13 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
             }
 
             if (session != null) {
-                cancelSnapshot = snapshot(googleBasemapStyle(apiKey, session), configuration, cache, trace, width, height, callback)
+                getGoogleCopyright(apiKey, session, trace, width) { copyright ->
+                    if (!cancelled) {
+                        // Not cached without the copyright so that it's requested again next time
+                        val snapshotCache = if (copyright != null) cache else null
+                        cancelSnapshot = snapshot(googleBasemapStyle(apiKey, session, copyright), configuration, snapshotCache, trace, width, height, callback)
+                    }
+                }
             } else {
                 // Not cached so that Google is tried again next time
                 cancelSnapshot = snapshot(blankBasemap(), configuration, null, trace, width, height, callback)
@@ -153,11 +161,7 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
             .withPixelRatio(density)
             .withStyleBuilder(buildStyle(basemap, referenceLayer, trace))
             .withLogo(false)
-            .withRegion(
-                LatLngBounds.Builder()
-                    .includes(trace.points.map { LatLng(it.latitude, it.longitude) })
-                    .build()
-            )
+            .withRegion(bounds(trace))
             .withPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
     }
 
@@ -177,8 +181,36 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
         }
     }
 
-    private fun googleBasemapStyle(apiKey: String, session: String): Style.Builder {
-        return rasterBasemapStyle(GoogleMapTilesClient.getTilesUrl(apiKey, session), null, null)
+    private fun getGoogleCopyright(apiKey: String, session: String, trace: TraceDescription, width: Int, callback: (String?) -> Unit) {
+        val bounds = bounds(trace)
+        GoogleMapTilesClient.getCopyright(apiKey, session, estimateZoom(bounds, width), bounds, callback)
+    }
+
+    /**
+     * Roughly the zoom at which the line or polygon fills the map, which is close enough for the
+     * copyright.
+     */
+    private fun estimateZoom(bounds: LatLngBounds, width: Int): Int {
+        val mapWidth = width / context.resources.displayMetrics.density.toDouble()
+        val traceSpan = max(bounds.longitudeSpan, bounds.latitudeSpan)
+
+        // At zoom 0 the whole world (360°) fits in one tile and every zoom level doubles its size
+        val zoomToFillMap = log2(mapWidth / TILE_SIZE * 360 / traceSpan)
+
+        return zoomToFillMap.toInt().coerceIn(0, GOOGLE_MAX_ZOOM)
+    }
+
+    private fun bounds(trace: TraceDescription): LatLngBounds {
+        return LatLngBounds.Builder()
+            .includes(trace.points.map { LatLng(it.latitude, it.longitude) })
+            .build()
+    }
+
+    private fun googleBasemapStyle(apiKey: String, session: String, copyright: String?): Style.Builder {
+        val attribution = listOfNotNull("Google Maps", copyright)
+            .joinToString(" ") { "<a href=\"https://www.google.com/maps\">$it</a>" }
+
+        return rasterBasemapStyle(GoogleMapTilesClient.getTilesUrl(apiKey, session), attribution, null)
             .fromUri("asset://maplibre_empty_style.json")
     }
 
@@ -229,5 +261,11 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
     private companion object {
         // Shared by all loaders so that widgets, which are recreated often, don't each start a server
         val referenceLayersServer = ReferenceLayersServer()
+
+        // The Map Tiles API only accepts zoom levels up to this one
+        const val GOOGLE_MAX_ZOOM = 22
+
+        // Width of a map tile in dp
+        const val TILE_SIZE = 256
     }
 }
