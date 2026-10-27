@@ -9,6 +9,7 @@ import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.projects.DeleteProjectResult
 import org.odk.collect.android.projects.ProjectDeleter
+import org.odk.collect.formstest.InMemInstancesRepository
 import org.odk.collect.projects.InMemProjectsRepository
 import org.odk.collect.projects.Project
 import org.odk.collect.settings.InMemSettingsProvider
@@ -18,8 +19,9 @@ class GoogleDriveProjectsDeleterTest {
     private val projectsRepository = InMemProjectsRepository()
     private val settingsProvider = InMemSettingsProvider()
     private val projectDeleter = mock<ProjectDeleter>()
+    private val instancesRepository = InMemInstancesRepository()
 
-    private val googleDriveProjectsDeleter = GoogleDriveProjectsDeleter(projectsRepository, settingsProvider, projectDeleter)
+    private val googleDriveProjectsDeleter = GoogleDriveProjectsDeleter(projectsRepository, settingsProvider, projectDeleter) { instancesRepository }
 
     @Test
     fun `GoogleDriveProjectsDeleter should have null key`() {

@@ -523,8 +523,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public GoogleDriveProjectsDeleter providesGoogleDriveProjectsDeleter(ProjectsRepository projectsRepository, SettingsProvider settingsProvider, ProjectDeleter projectDeleter) {
-        return new GoogleDriveProjectsDeleter(projectsRepository, settingsProvider, projectDeleter);
+    public GoogleDriveProjectsDeleter providesGoogleDriveProjectsDeleter(ProjectsRepository projectsRepository, SettingsProvider settingsProvider, ProjectDeleter projectDeleter, InstancesRepositoryProvider instancesRepositoryProvider) {
+        return new GoogleDriveProjectsDeleter(projectsRepository, settingsProvider, projectDeleter, instancesRepositoryProvider);
     }
 
     @Provides
