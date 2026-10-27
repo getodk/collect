@@ -6,6 +6,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import org.mockito.kotlin.mock
+import org.odk.collect.async.TaskSpec.Result
 import java.util.function.Supplier
 
 class TaskSpecTest {
@@ -13,7 +14,7 @@ class TaskSpecTest {
     @Test
     fun `#run doesn't return retry if isForeground is true`() {
         val result = OneRetryTaskSpec().run(mock(), emptyMap(), 1, true, { false })
-        assertThat(result, equalTo(TaskSpec.Result.FAILURE))
+        assertThat(result, equalTo(RunResult.Failure))
     }
 }
 
@@ -27,9 +28,9 @@ private class OneRetryTaskSpec() : TaskSpec {
         inputData: Map<String, String>,
         isLastUniqueExecution: Boolean,
         isStopped: () -> Boolean
-    ): Supplier<Map<String, String>?> {
+    ): Supplier<Result> {
         return Supplier {
-            null
+            Result.Failure()
         }
     }
 

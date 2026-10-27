@@ -15,6 +15,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.async.TaskSpec
+import org.odk.collect.async.TaskSpec.Result
 import java.util.concurrent.Executors
 import java.util.function.Supplier
 
@@ -38,13 +39,13 @@ class TaskSpecWorkerTest {
 
     @Test
     fun `when task returns true work should succeed`() {
-        TestTaskSpec.doReturn(emptyMap())
+        TestTaskSpec.doReturn(Result.Success())
         assertThat(worker.doWork(), `is`(ListenableWorker.Result.success()))
     }
 
     @Test
     fun `when task returns false, retries if maxRetries not specified`() {
-        TestTaskSpec.doReturn(null)
+        TestTaskSpec.doReturn(Result.Failure())
         assertThat(worker.doWork(), `is`(ListenableWorker.Result.retry()))
     }
 
@@ -52,7 +53,7 @@ class TaskSpecWorkerTest {
     fun `when task returns false, retries if maxRetries is specified and is higher than runAttemptCount`() {
         TestTaskSpec
             .withMaxRetries(1)
-            .doReturn(null)
+            .doReturn(Result.Failure())
 
         assertThat(worker.doWork(), `is`(ListenableWorker.Result.retry()))
     }
@@ -61,7 +62,7 @@ class TaskSpecWorkerTest {
     fun `when task returns false, fails if maxRetries is specified and is equal to runAttemptCount`() {
         TestTaskSpec
             .withMaxRetries(0)
-            .doReturn(null)
+            .doReturn(Result.Failure())
 
         assertThat(worker.doWork(), `is`(ListenableWorker.Result.failure()))
     }
@@ -70,7 +71,7 @@ class TaskSpecWorkerTest {
     fun `when task returns false, fails if maxRetries is specified and is lower than runAttemptCount`() {
         TestTaskSpec
             .withMaxRetries(-1)
-            .doReturn(null)
+            .doReturn(Result.Failure())
 
         assertThat(worker.doWork(), `is`(ListenableWorker.Result.failure()))
     }
@@ -78,7 +79,7 @@ class TaskSpecWorkerTest {
     @Test
     fun `when maxRetries is not specified, task called with isLastUniqueExecution true`() {
         TestTaskSpec
-            .doReturn(null)
+            .doReturn(Result.Failure())
 
         worker.doWork()
         assertThat(TestTaskSpec.wasLastUniqueExecution, equalTo(true))
@@ -88,7 +89,7 @@ class TaskSpecWorkerTest {
     fun `when maxRetries is specified and it is higher than runAttemptCount, task called with isLastUniqueExecution false`() {
         TestTaskSpec
             .withMaxRetries(1)
-            .doReturn(null)
+            .doReturn(Result.Failure())
 
         worker.doWork()
         assertThat(TestTaskSpec.wasLastUniqueExecution, equalTo(false))
@@ -98,7 +99,7 @@ class TaskSpecWorkerTest {
     fun `when maxRetries is specified and it is equal to runAttemptCount, task called with isLastUniqueExecution true`() {
         TestTaskSpec
             .withMaxRetries(0)
-            .doReturn(null)
+            .doReturn(Result.Failure())
 
         worker.doWork()
         assertThat(TestTaskSpec.wasLastUniqueExecution, equalTo(true))
@@ -108,7 +109,7 @@ class TaskSpecWorkerTest {
     fun `when maxRetries is specified and it is lower than runAttemptCount, task called with isLastUniqueExecution true`() {
         TestTaskSpec
             .withMaxRetries(-1)
-            .doReturn(null)
+            .doReturn(Result.Failure())
 
         worker.doWork()
         assertThat(TestTaskSpec.wasLastUniqueExecution, equalTo(true))
@@ -131,7 +132,7 @@ private class TestTaskSpec : TaskSpec {
     companion object {
 
         private var maxRetries: Int? = null
-        private var returnValue: Map<String, String>? = emptyMap()
+        private var returnValue: Result = Result.Success()
         private var exception: Throwable? = null
 
         var wasLastUniqueExecution = false
@@ -141,14 +142,14 @@ private class TestTaskSpec : TaskSpec {
             private set
 
         fun reset() {
-            returnValue = emptyMap()
+            returnValue = Result.Success()
             maxRetries = null
             exception = null
             wasLastUniqueExecution = false
             onExceptionCalledWith = null
         }
 
-        fun doReturn(value: Map<String, String>?): Companion {
+        fun doReturn(value: Result): Companion {
             returnValue = value
             return this
         }
@@ -172,7 +173,7 @@ private class TestTaskSpec : TaskSpec {
         inputData: Map<String, String>,
         isLastUniqueExecution: Boolean,
         isStopped: (() -> Boolean)
-    ): Supplier<Map<String, String>?> {
+    ): Supplier<Result> {
         wasLastUniqueExecution = isLastUniqueExecution
 
         return Supplier {

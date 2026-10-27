@@ -65,7 +65,9 @@ interface Scheduler {
 
     /**
      * Schedule chained tasks to run in the background repeatedly even if the app isn't running.
-     * The tasks will only be run when the network is available.
+     * The tasks will only be run when the network is available. Chained tasks are dependent on
+     * previous tasks finishing and will receive the output data from the previous task's
+     * [TaskSpec.Result] (whether [TaskSpec.Result.Success] or [TaskSpec.Result.Failure]).
      *
      * @param tag used to identify this task in future. Previously scheduled tasks using the same
      * tag will be replaced

@@ -10,8 +10,8 @@ interface TaskSpec {
     val backoffDelay: Long?
 
     /**
-     * Should return the work to be carried out by the task. The return value of the work
-     * indicates whether the work completed (true) or needs to be run again later (false)
+     * Should return the work to be carried out by the task. The output data in the returned
+     * [Result] will be passed to chained tasks.
      *
      * @param isLastUniqueExecution if a task specifies maxRetries all retries form one logical
      * group. We want to know which task execution is the last one to for example notify a user only
@@ -22,7 +22,7 @@ interface TaskSpec {
         inputData: Map<String, String>,
         isLastUniqueExecution: Boolean,
         isStopped: (() -> Boolean)
-    ): Supplier<Map<String, String>?>
+    ): Supplier<Result>
 
     /**
      * Called if an exception is thrown while executing the work.
@@ -30,9 +30,10 @@ interface TaskSpec {
     fun onException(exception: Throwable)
 
     sealed class Result {
-        data class SUCCESS(val outputData: Map<String, String>) : Result()
-        data object FAILURE : Result()
-        data object RETRY : Result()
+        abstract val outputData: Map<String, String>
+
+        data class Success(override val outputData: Map<String, String> = emptyMap()) : Result()
+        data class Failure(override val outputData: Map<String, String> = emptyMap()) : Result()
     }
 }
 
@@ -42,22 +43,34 @@ fun TaskSpec.run(
     runAttemptCount: Int,
     isForeground: Boolean,
     isStopped: () -> Boolean
-): TaskSpec.Result {
+): RunResult {
     try {
         val isLastUniqueExecution = maxRetries?.let { runAttemptCount >= it } ?: true
-        val outputData =
+        val result =
             getTask(context, inputData, isForeground || isLastUniqueExecution, isStopped).get()
         val maxRetries = this.maxRetries
 
-        return if (outputData != null) {
-            TaskSpec.Result.SUCCESS(outputData)
-        } else if (!isForeground && (maxRetries == null || runAttemptCount < maxRetries)) {
-            TaskSpec.Result.RETRY
-        } else {
-            TaskSpec.Result.FAILURE
+        return when (result) {
+            is TaskSpec.Result.Success -> {
+                RunResult.Success(result.outputData)
+            }
+
+            is TaskSpec.Result.Failure -> {
+                if (!isForeground && (maxRetries == null || runAttemptCount < maxRetries)) {
+                    RunResult.Retry(result.outputData)
+                } else {
+                    RunResult.Failure
+                }
+            }
         }
     } catch (t: Throwable) {
         onException(t)
-        return TaskSpec.Result.FAILURE
+        return RunResult.Failure
     }
+}
+
+sealed class RunResult {
+    data class Success(val outputData: Map<String, String>) : RunResult()
+    data class Retry(val outputData: Map<String, String>) : RunResult()
+    data object Failure : RunResult()
 }

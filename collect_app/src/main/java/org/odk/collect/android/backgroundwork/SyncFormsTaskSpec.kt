@@ -7,6 +7,7 @@ import org.odk.collect.android.formmanagement.FormsDataService
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.async.TaskSpec
+import org.odk.collect.async.TaskSpec.Result
 import java.util.function.Supplier
 import javax.inject.Inject
 
@@ -26,7 +27,7 @@ class SyncFormsTaskSpec : TaskSpec {
         inputData: Map<String, String>,
         isLastUniqueExecution: Boolean,
         isStopped: (() -> Boolean)
-    ): Supplier<Map<String, String>?> {
+    ): Supplier<Result> {
         DaggerUtils.getComponent(context).inject(this)
 
         return Supplier {
@@ -34,9 +35,9 @@ class SyncFormsTaskSpec : TaskSpec {
             if (projectId != null) {
                 val result = formsDataService.matchFormsWithServer(projectId, isLastUniqueExecution, isStopped)
                 if (result) {
-                    emptyMap()
+                    Result.Success()
                 } else {
-                    null
+                    Result.Failure()
                 }
             } else {
                 throw IllegalArgumentException("No project ID provided!")

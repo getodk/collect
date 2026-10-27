@@ -9,6 +9,7 @@ import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import org.odk.collect.analytics.Analytics
+import org.odk.collect.async.RunResult
 import org.odk.collect.async.Scheduler
 import org.odk.collect.async.TaskSpec
 import org.odk.collect.async.network.ConnectivityProvider
@@ -50,13 +51,13 @@ class TaskSpecWorker(
         )
 
         return when (result) {
-            is TaskSpec.Result.SUCCESS -> {
+            is RunResult.Success -> {
                 val outputData = Data.Builder().putAll(result.outputData).build()
                 Result.success(outputData)
             }
 
-            TaskSpec.Result.FAILURE -> Result.failure()
-            TaskSpec.Result.RETRY -> Result.retry()
+            is RunResult.Retry -> Result.retry()
+            RunResult.Failure -> Result.failure()
         }
     }
 
