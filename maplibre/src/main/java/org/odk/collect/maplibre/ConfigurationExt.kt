@@ -24,6 +24,8 @@ fun Configuration.rasterBasemapStyle(tileUri: String): Style.Builder {
     val tileSet = TileSet("2.1.0", tileUri).apply {
         attribution = this@rasterBasemapStyle.attribution ?: ""
         scheme = "xyz"
+        // Above the server's highest zoom level MapLibre scales up its tiles instead of requesting missing ones
+        this@rasterBasemapStyle.maxZoom?.let { maxZoom = it }
     }
 
     return Style.Builder()
