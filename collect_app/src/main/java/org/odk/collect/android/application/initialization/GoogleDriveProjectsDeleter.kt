@@ -35,13 +35,8 @@ class GoogleDriveProjectsDeleter(
     }
 
     private fun hasUnsentInstances(projectId: String): Boolean {
-        return instancesRepositoryProvider.create(projectId).getCountByStatus(
-            Instance.STATUS_INCOMPLETE,
-            Instance.STATUS_INVALID,
-            Instance.STATUS_VALID,
-            Instance.STATUS_NEW_EDIT,
-            Instance.STATUS_COMPLETE,
-            Instance.STATUS_SUBMISSION_FAILED
-        ) > 0
+        return instancesRepositoryProvider.create(projectId).getAll().any {
+            it.status != Instance.STATUS_SUBMITTED
+        }
     }
 }
