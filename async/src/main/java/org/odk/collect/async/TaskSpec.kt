@@ -59,18 +59,24 @@ fun TaskSpec.run(
                 if (!isForeground && (maxRetries == null || runAttemptCount < maxRetries)) {
                     RunResult.Retry(result.outputData)
                 } else {
-                    RunResult.Failure
+                    RunResult.Failure(result.outputData)
                 }
             }
         }
     } catch (t: Throwable) {
         onException(t)
-        return RunResult.Failure
+        return RunResult.Error
     }
 }
 
 sealed class RunResult {
-    data class Success(val outputData: Map<String, String>) : RunResult()
-    data class Retry(val outputData: Map<String, String>) : RunResult()
-    data object Failure : RunResult()
+
+    abstract val outputData: Map<String, String>?
+
+    data class Success(override val outputData: Map<String, String>) : RunResult()
+    data class Retry(override val outputData: Map<String, String>) : RunResult()
+    data class Failure(override val outputData: Map<String, String>) : RunResult()
+    data object Error : RunResult() {
+        override val outputData: Map<String, String>? = null
+    }
 }

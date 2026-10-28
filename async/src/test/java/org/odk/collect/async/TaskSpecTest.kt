@@ -14,7 +14,7 @@ class TaskSpecTest {
     @Test
     fun `#run doesn't return retry if isForeground is true`() {
         val result = OneRetryTaskSpec().run(mock(), emptyMap(), 1, true, { false })
-        assertThat(result, equalTo(RunResult.Failure))
+        assertThat(result, equalTo(RunResult.Failure(emptyMap())))
     }
 }
 

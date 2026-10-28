@@ -3,17 +3,16 @@ package org.odk.collect.async.workmanager
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import androidx.work.Constraints
-import androidx.work.Data
 import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequest
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import org.odk.collect.async.Scheduler
 import org.odk.collect.async.TaskSpec
 import org.odk.collect.async.TaskSpecScheduler
-import org.odk.collect.async.workmanager.TaskSpecWorker.Companion.DATA_CELLULAR_ONLY
-import java.util.concurrent.TimeUnit
 
 class WorkManagerTaskSpecScheduler(private val workManager: WorkManager) : TaskSpecScheduler {
     override fun schedule(
@@ -25,33 +24,27 @@ class WorkManagerTaskSpecScheduler(private val workManager: WorkManager) : TaskS
     ) {
         val constraints = getConstraints(networkConstraint)
         val cellularOnly = networkConstraint == Scheduler.NetworkType.CELLULAR
+        val workRequest = TaskSpecWorker.getWorkRequest(
+            specs,
+            tag,
+            constraints,
+            inputData,
+            repeatPeriod,
+            cellularOnly
+        )
 
-        if (repeatPeriod != null) {
-            val workManagerInputData = Data.Builder()
-                .putStringArray(
-                    SchedulerWorker.DATA_TASK_SPEC_CLASSES,
-                    specs.map { it.javaClass.name }.toTypedArray()
+        when (workRequest) {
+            is PeriodicWorkRequest -> {
+                workManager.enqueueUniquePeriodicWork(
+                    tag,
+                    ExistingPeriodicWorkPolicy.REPLACE,
+                    workRequest
                 )
-                .putBoolean(DATA_CELLULAR_ONLY, cellularOnly)
-                .putAll(inputData)
-                .build()
+            }
 
-            val builder = PeriodicWorkRequest.Builder(
-                SchedulerWorker::class.java,
-                repeatPeriod,
-                TimeUnit.MILLISECONDS
-            )
-                .addTag(tag)
-                .setInputData(workManagerInputData)
-                .setConstraints(constraints)
-
-            workManager.enqueueUniquePeriodicWork(
-                tag,
-                ExistingPeriodicWorkPolicy.REPLACE,
-                builder.build()
-            )
-        } else {
-            TaskSpecWorker.enqueueSpecs(workManager, specs, inputData, tag, constraints, cellularOnly)
+            is OneTimeWorkRequest -> {
+                workManager.beginUniqueWork(tag, ExistingWorkPolicy.REPLACE, workRequest).enqueue()
+            }
         }
     }
 
