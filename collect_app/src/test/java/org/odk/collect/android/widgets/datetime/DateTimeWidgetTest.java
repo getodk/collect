@@ -7,7 +7,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.DateData;
 import org.javarosa.core.model.data.DateTimeData;
-import org.javarosa.core.model.data.TimeData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
@@ -150,7 +149,7 @@ public class DateTimeWidgetTest {
 
     @Test
     public void clickingSetTimeButton_callsDisplayTimePickerDialogWithSelectedTime_whenPromptHasAnswer() {
-        FormEntryPrompt prompt = promptWithQuestionDefAndAnswer(questionDef, new TimeData(localDateTime.toDateTime().toDate()));
+        FormEntryPrompt prompt = promptWithQuestionDefAndAnswer(questionDef, new DateTimeData(localDateTime.toDateTime().toDate()));
         DateTimeWidget widget = createWidget(prompt);
         widget.binding.timeWidget.timeButton.performClick();
 
