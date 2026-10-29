@@ -141,6 +141,7 @@ Certain functions in ODK Collect depend on cloud services that require API keys 
     ```
     GOOGLE_MAPS_API_KEY=AIbzvW8e0ub...
     ```
+  1. To see Google map previews in the GeoTrace and GeoShape answers, also enable the [Map Tiles API](https://console.cloud.google.com/apis/library/tile.googleapis.com) in the Google Cloud project that owns the API key.
 
 **MapLibre Maps SDK for Android**: When the "Mapbox" basemap source is selected in Settings > Maps, ODK Collect uses the MapLibre SDK for displaying maps in the geospatial question types (GeoPoint, GeoTrace, and GeoShape).  To enable this API:
   1. [Create a Mapbox account](https://www.mapbox.com/signup/).  Note that signing up with the "Pay-As-You-Go" plan does not require a credit card.  Mapbox provides free API usage up to the monthly thresholds documented at [https://www.mapbox.com/pricing](https://www.mapbox.com/pricing).  If your usage exceeds these thresholds, you will receive e-mail with instructions on how to add a credit card for payment; services will remain live until the end of the 30-day billing term, after which the account will be deactivated and will require a credit card to reactivate.
