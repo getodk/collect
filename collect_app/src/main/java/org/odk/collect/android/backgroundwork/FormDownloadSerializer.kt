@@ -14,71 +14,75 @@ object FormDownloadSerializer {
 
     private val gson = Gson()
 
-    fun serialize(formDownload: FormDownload): String {
-        val json = JsonObject()
+    fun serialize(formDownloads: List<FormDownload>): String {
+        val jsonArray = gson.toJsonTree(formDownloads.map { formDownload ->
+            val json = JsonObject()
 
-        when (formDownload) {
-            is FormDownload.New -> {
-                json.addProperty("type", "New")
-                json.addProperty("file", formDownload.file.absolutePath)
-                json.addProperty("hash", formDownload.hash)
-                json.addProperty("tempDir", formDownload.tempDir.absolutePath)
-                json.add(
-                    "mediaFilesDownload",
-                    serializeMediaFilesDownload(formDownload.mediaFilesDownload)
-                )
-            }
-
-            is FormDownload.Existing -> {
-                json.addProperty("type", "Existing")
-
-                if (formDownload.form.dbId != null) {
-                    json.addProperty("formDbId", formDownload.form.dbId)
-                } else {
-                    throw IllegalArgumentException()
+            when (formDownload) {
+                is FormDownload.New -> {
+                    json.addProperty("type", "New")
+                    json.addProperty("file", formDownload.file.absolutePath)
+                    json.addProperty("hash", formDownload.hash)
+                    json.addProperty("tempDir", formDownload.tempDir.absolutePath)
+                    json.add(
+                        "mediaFilesDownload",
+                        serializeMediaFilesDownload(formDownload.mediaFilesDownload)
+                    )
                 }
 
-                json.addProperty("tempDir", formDownload.tempDir.absolutePath)
-                json.add(
-                    "mediaFilesDownload",
-                    serializeMediaFilesDownload(formDownload.mediaFilesDownload)
-                )
-            }
-        }
+                is FormDownload.Existing -> {
+                    json.addProperty("type", "Existing")
 
-        return json.toString()
+                    if (formDownload.form.dbId != null) {
+                        json.addProperty("formDbId", formDownload.form.dbId)
+                    } else {
+                        throw IllegalArgumentException()
+                    }
+
+                    json.addProperty("tempDir", formDownload.tempDir.absolutePath)
+                    json.add(
+                        "mediaFilesDownload",
+                        serializeMediaFilesDownload(formDownload.mediaFilesDownload)
+                    )
+                }
+            }
+            json
+        }).asJsonArray
+
+        return jsonArray.toString()
     }
 
-    fun deserialize(json: String, formsRepository: FormsRepository): FormDownload {
-        val jsonObject = JsonParser.parseString(json).asJsonObject
-        val type = jsonObject.get("type").asString
+    fun deserialize(json: String, formsRepository: FormsRepository): List<FormDownload> {
+        val jsonArray = JsonParser.parseString(json).asJsonArray
+        return jsonArray.map { element ->
+            val jsonObject = element.asJsonObject
+            when (val type = jsonObject.get("type").asString) {
+                "New" -> {
+                    val file = File(jsonObject.get("file").asString)
+                    val hash = jsonObject.get("hash").asString
+                    val tempDir = File(jsonObject.get("tempDir").asString)
+                    val mediaFilesDownload =
+                        deserializeMediaFilesDownload(jsonObject.getAsJsonObject("mediaFilesDownload"))
+                    FormDownload.New(file, hash, tempDir, mediaFilesDownload)
+                }
 
-        return when (type) {
-            "New" -> {
-                val file = File(jsonObject.get("file").asString)
-                val hash = jsonObject.get("hash").asString
-                val tempDir = File(jsonObject.get("tempDir").asString)
-                val mediaFilesDownload =
-                    deserializeMediaFilesDownload(jsonObject.getAsJsonObject("mediaFilesDownload"))
-                FormDownload.New(file, hash, tempDir, mediaFilesDownload)
+                "Existing" -> {
+                    val formDbId =
+                        if (jsonObject.has("formDbId") && !jsonObject.get("formDbId").isJsonNull) {
+                            jsonObject.get("formDbId").asLong
+                        } else {
+                            throw IllegalStateException("Form dbId is null")
+                        }
+                    val form = formsRepository.get(formDbId)
+                        ?: throw IllegalStateException("Form with dbId $formDbId not found")
+                    val tempDir = File(jsonObject.get("tempDir").asString)
+                    val mediaFilesDownload =
+                        deserializeMediaFilesDownload(jsonObject.getAsJsonObject("mediaFilesDownload"))
+                    FormDownload.Existing(form, tempDir, mediaFilesDownload)
+                }
+
+                else -> throw IllegalArgumentException("Unknown FormDownload type: $type")
             }
-
-            "Existing" -> {
-                val formDbId =
-                    if (jsonObject.has("formDbId") && !jsonObject.get("formDbId").isJsonNull) {
-                        jsonObject.get("formDbId").asLong
-                    } else {
-                        throw IllegalStateException("Form dbId is null")
-                    }
-                val form = formsRepository.get(formDbId)
-                    ?: throw IllegalStateException("Form with dbId $formDbId not found")
-                val tempDir = File(jsonObject.get("tempDir").asString)
-                val mediaFilesDownload =
-                    deserializeMediaFilesDownload(jsonObject.getAsJsonObject("mediaFilesDownload"))
-                FormDownload.Existing(form, tempDir, mediaFilesDownload)
-            }
-
-            else -> throw IllegalArgumentException("Unknown FormDownload type: $type")
         }
     }
 
