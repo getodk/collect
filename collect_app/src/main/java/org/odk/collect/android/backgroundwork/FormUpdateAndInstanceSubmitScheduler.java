@@ -59,7 +59,7 @@ public class FormUpdateAndInstanceSubmitScheduler implements FormUpdateScheduler
     private void scheduleMatchExactly(long periodInMilliseconds, String projectId) {
         HashMap<String, String> inputData = new HashMap<>();
         inputData.put(TaskData.DATA_PROJECT_ID, projectId);
-        scheduler.networkDeferredRepeat(getMatchExactlyTag(projectId), asList(new SyncFormsTaskSpec()), periodInMilliseconds, inputData);
+        scheduler.networkDeferredRepeat(getMatchExactlyTag(projectId), asList(new SyncFormsDownloadTaskSpec(), new SyncFormsProcessTaskSpec()), periodInMilliseconds, inputData);
     }
 
     @Override
