@@ -15,8 +15,8 @@ class FormDownloadSerializerTest {
     private val formsRepository = InMemFormsRepository()
 
     @Test
-    fun `serializes and deserializes New`() {
-        val formDownload = FormDownload.New(
+    fun `serializes and deserializes`() {
+        val formDownloadNew = FormDownload.New(
             file = TempFiles.createTempFile(),
             hash = "hash",
             tempDir = TempFiles.createTempDir(),
@@ -32,18 +32,8 @@ class FormDownloadSerializerTest {
             )
         )
 
-        val serialized = FormDownloadSerializer.serialize(formDownload)
-        assertThat(
-            FormDownloadSerializer.deserialize(serialized, formsRepository),
-            equalTo(formDownload)
-        )
-    }
-
-    @Test
-    fun `serializes and deserializes Existing`() {
         val form = formsRepository.save(FormFixtures.form())
-
-        val formDownload = FormDownload.Existing(
+        val formDownloadExisting = FormDownload.Existing(
             form = form,
             tempDir = TempFiles.createTempDir(),
             mediaFilesDownload = MediaFilesDownload(
@@ -58,10 +48,11 @@ class FormDownloadSerializerTest {
             )
         )
 
-        val serialized = FormDownloadSerializer.serialize(formDownload)
+        val serialized =
+            FormDownloadSerializer.serialize(listOf(formDownloadNew, formDownloadExisting))
         assertThat(
             FormDownloadSerializer.deserialize(serialized, formsRepository),
-            equalTo(formDownload)
+            equalTo(listOf(formDownloadNew, formDownloadExisting))
         )
     }
 
@@ -82,6 +73,6 @@ class FormDownloadSerializerTest {
             )
         )
 
-        FormDownloadSerializer.serialize(formDownload)
+        FormDownloadSerializer.serialize(listOf(formDownload))
     }
 }
