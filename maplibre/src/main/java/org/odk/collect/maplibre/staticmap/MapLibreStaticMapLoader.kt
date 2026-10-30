@@ -29,6 +29,7 @@ import org.odk.collect.maps.traces.PolygonDescription
 import org.odk.collect.maps.traces.TraceDescription
 import org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_GOOGLE
 import org.odk.collect.shared.injection.Keys
+import org.odk.collect.strings.R
 import java.io.File
 import javax.inject.Inject
 import kotlin.math.log2
@@ -172,12 +173,9 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
     }
 
     private fun basemapStyle(basemapConfiguration: Configuration, style: String?, keys: Keys): Style.Builder {
-        val uri = basemapConfiguration.basemapUri(style)
-        val uriValue = uri.value(keys)
-
-        return when (uri) {
-            is BasemapUri.Raster -> rasterBasemapStyle(uriValue, basemapConfiguration.attribution, basemapConfiguration.maxZoom).fromUri("asset://maplibre_empty_style.json")
-            is BasemapUri.Mapbox -> Style.Builder().fromUri(uriValue)
+        return when (val uri = basemapConfiguration.basemapUri(style)) {
+            is BasemapUri.Raster -> basemapConfiguration.rasterBasemapStyle(style, keys).fromUri("asset://maplibre_empty_style.json")
+            is BasemapUri.Mapbox -> Style.Builder().fromUri(uri.value(keys))
         }
     }
 
@@ -210,8 +208,11 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
         val attribution = listOfNotNull("Google Maps", copyright)
             .joinToString(" ") { "<a href=\"https://www.google.com/maps\">$it</a>" }
 
-        return rasterBasemapStyle(GoogleMapTilesClient.getTilesUrl(apiKey, session), attribution, null)
-            .fromUri("asset://maplibre_empty_style.json")
+        return Configuration(
+            name = R.string.basemap_source_google,
+            uri = BasemapUri.Raster(GoogleMapTilesClient.getTilesUrl(apiKey, session)),
+            attribution = attribution
+        ).rasterBasemapStyle(null, keys).fromUri("asset://maplibre_empty_style.json")
     }
 
     private fun blankBasemap(): Style.Builder {

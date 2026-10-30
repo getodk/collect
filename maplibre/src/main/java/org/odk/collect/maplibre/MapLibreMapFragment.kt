@@ -257,19 +257,18 @@ class MapLibreMapFragment(private val configuration: Configuration) :
     private fun loadStyle(settings: Settings) {
         awaitingRemoteStyle = false
 
-        val uri = configuration.basemapUri(configuration.basemapStyle(settings))
-        val uriValue = uri.value(keys)
+        val style = configuration.basemapStyle(settings)
 
-        when (uri) {
+        when (val uri = configuration.basemapUri(style)) {
             is BasemapUri.Raster -> {
-                map?.setStyle(rasterBasemapStyle(uriValue, configuration.attribution, configuration.maxZoom)) {
+                map?.setStyle(configuration.rasterBasemapStyle(style, keys)) {
                     basemapTopLayer = "basemap_layer"
                     onStyleLoaded(it)
                 }
             }
 
             is BasemapUri.Mapbox -> {
-                loadRemoteStyle(uriValue)
+                loadRemoteStyle(uri.value(keys))
             }
         }
     }
