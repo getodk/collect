@@ -19,6 +19,7 @@ import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.instancemanagement.InstancesDataService
 import org.odk.collect.async.TaskSpec
+import org.odk.collect.async.TaskSpec.Result
 import java.util.function.Supplier
 import javax.inject.Inject
 
@@ -35,13 +36,18 @@ class SendFormsTaskSpec : TaskSpec {
         inputData: Map<String, String>,
         isLastUniqueExecution: Boolean,
         isStopped: (() -> Boolean)
-    ): Supplier<Boolean> {
+    ): Supplier<Result> {
         DaggerUtils.getComponent(context).inject(this)
         return Supplier {
             val projectId = inputData[TaskData.DATA_PROJECT_ID]
             val formAutoSend = inputData[TaskData.DATA_FORM_AUTO_SEND] != null
             if (projectId != null) {
-                instancesDataService.autoSendInstances(projectId, formAutoSend)
+                val result = instancesDataService.autoSendInstances(projectId, formAutoSend)
+                if (result) {
+                    Result.Success()
+                } else {
+                    Result.Failure()
+                }
             } else {
                 throw IllegalArgumentException("No project ID provided!")
             }
