@@ -3,9 +3,7 @@ package org.odk.collect.maplibre.staticmap
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import org.maplibre.android.geometry.LatLng
 import org.maplibre.android.geometry.LatLngBounds
 import org.maplibre.android.maps.Style
@@ -35,6 +33,7 @@ import org.odk.collect.shared.injection.Keys
 import org.odk.collect.strings.R
 import java.io.File
 import javax.inject.Inject
+import kotlin.coroutines.resume
 import kotlin.math.log2
 import kotlin.math.max
 
@@ -47,7 +46,6 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
     lateinit var keys: Keys
 
     private val context = context.applicationContext
-    private val scope = CoroutineScope(Dispatchers.Main)
 
     init {
         (this.context as MapLibreDependencyComponentProvider)
@@ -55,92 +53,75 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
             .inject(this)
     }
 
-    override fun load(
+    override suspend fun load(
         configuration: StaticMapConfiguration,
         cache: StaticMapCache,
         trace: TraceDescription,
         width: Int,
-        height: Int,
-        callback: (Bitmap?) -> Unit
-    ): () -> Unit {
+        height: Int
+    ): Bitmap? {
         val cachedBitmap = cache.get(configuration, trace, width, height)
         if (cachedBitmap != null) {
-            callback(cachedBitmap)
-            return {}
+            return cachedBitmap
         }
 
         if (!MapLibreSupport.isAvailable() || trace.points.size < 2) {
-            callback(null)
-            return {}
+            return null
         }
 
         MapLibreSupport.initialize(context)
 
         return if (configuration.basemapSource == BASEMAP_SOURCE_GOOGLE) {
-            snapshotWithGoogleTiles(keys.get("google").orEmpty(), configuration, cache, trace, width, height, callback)
+            snapshotWithGoogleTiles(keys.get("google").orEmpty(), configuration, cache, trace, width, height)
         } else {
             val basemapConfiguration = Configurations.all.getValue(configuration.basemapSource)
-            snapshot(basemapStyle(basemapConfiguration, configuration.basemapStyle, keys), configuration, cache, trace, width, height, callback)
+            snapshot(basemapStyle(basemapConfiguration, configuration.basemapStyle, keys), configuration, cache, trace, width, height)
         }
     }
 
-    private fun snapshotWithGoogleTiles(
+    private suspend fun snapshotWithGoogleTiles(
         apiKey: String,
         configuration: StaticMapConfiguration,
         cache: StaticMapCache,
         trace: TraceDescription,
         width: Int,
-        height: Int,
-        callback: (Bitmap?) -> Unit
-    ): () -> Unit {
-        var cancelSnapshot: () -> Unit = {}
+        height: Int
+    ): Bitmap? {
+        val session = GoogleMapTilesClient.getSession(apiKey, configuration.basemapStyle)
+            // Not cached so that Google is tried again next time
+            ?: return snapshot(blankBasemap(), configuration, null, trace, width, height)
 
-        val job = scope.launch {
-            val session = GoogleMapTilesClient.getSession(apiKey, configuration.basemapStyle)
-            cancelSnapshot = if (session != null) {
-                val bounds = bounds(trace)
-                val copyright = GoogleMapTilesClient.getCopyright(apiKey, session, estimateZoom(bounds, width), bounds)
-                // Not cached without the copyright so that it's requested again next time
-                val snapshotCache = if (copyright != null) cache else null
-                snapshot(googleBasemapStyle(apiKey, session, copyright), configuration, snapshotCache, trace, width, height, callback)
-            } else {
-                // Not cached so that Google is tried again next time
-                snapshot(blankBasemap(), configuration, null, trace, width, height, callback)
-            }
-        }
-
-        return {
-            job.cancel()
-            cancelSnapshot()
-        }
+        val bounds = bounds(trace)
+        val copyright = GoogleMapTilesClient.getCopyright(apiKey, session, estimateZoom(bounds, width), bounds)
+        // Not cached without the copyright so that it's requested again next time
+        val snapshotCache = if (copyright != null) cache else null
+        return snapshot(googleBasemapStyle(apiKey, session, copyright), configuration, snapshotCache, trace, width, height)
     }
 
-    private fun snapshot(
+    private suspend fun snapshot(
         style: Style.Builder,
         configuration: StaticMapConfiguration,
         cache: StaticMapCache?,
         trace: TraceDescription,
         width: Int,
-        height: Int,
-        callback: (Bitmap?) -> Unit
-    ): () -> Unit {
-        var snapshotter = MapSnapshotter(context, snapshotOptions(context, style, configuration.referenceLayer, trace, width, height))
-        snapshotter.start(
-            {
-                cache?.put(configuration, trace, width, height, it.bitmap)
-                callback(it.bitmap)
-            },
-            {
-                // The basemap failed to load so retry without it
-                snapshotter = MapSnapshotter(context, snapshotOptions(context, blankBasemap(), configuration.referenceLayer, trace, width, height))
-                snapshotter.start(
-                    { callback(it.bitmap) },
-                    { callback(null) }
-                )
-            }
-        )
+        height: Int
+    ): Bitmap? {
+        val bitmap = takeSnapshot(snapshotOptions(context, style, configuration.referenceLayer, trace, width, height))
+        if (bitmap != null) {
+            cache?.put(configuration, trace, width, height, bitmap)
+            return bitmap
+        }
 
-        return { snapshotter.cancel() }
+        // The basemap failed to load so retry without it
+        return takeSnapshot(snapshotOptions(context, blankBasemap(), configuration.referenceLayer, trace, width, height))
+    }
+
+    private suspend fun takeSnapshot(options: MapSnapshotter.Options): Bitmap? {
+        return suspendCancellableCoroutine { continuation ->
+            val snapshotter = MapSnapshotter(context, options)
+            snapshotter.start({ continuation.resume(it.bitmap) }, { continuation.resume(null) })
+            continuation.invokeOnCancellation { snapshotter.cancel() }
+        }
     }
 
     private fun snapshotOptions(
