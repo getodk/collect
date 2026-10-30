@@ -26,7 +26,7 @@ class TaskSpecWorker(
     private val connectivityProvider: ConnectivityProvider = ConnectivityProvider(context)
 
     override fun doWork(): Result {
-        val tag = tags.first()
+        val tag = inputData.getString(DATA_TAG) ?: throw IllegalArgumentException()
         val cellularOnly = inputData.getBoolean(DATA_CELLULAR_ONLY, false)
         return if (!cellularOnly || connectivityProvider.currentNetwork == Scheduler.NetworkType.CELLULAR) {
             val taskSpecs = inputData.getStringArray(DATA_TASK_SPEC_CLASSES)!!.map {
@@ -94,6 +94,7 @@ class TaskSpecWorker(
     companion object {
         const val DATA_TASK_SPEC_CLASSES = "taskSpecClasses"
         const val DATA_CELLULAR_ONLY = "cellularOnly"
+        const val DATA_TAG = "tag"
 
         fun getWorkRequest(
             specs: List<TaskSpec>,
@@ -114,7 +115,7 @@ class TaskSpecWorker(
             constraints: Constraints
         ): WorkRequest.Builder<T, U> {
             this.addTag(tag)
-                .setInputData(getInputData(specs, inputData, cellularOnly))
+                .setInputData(getInputData(tag, specs, inputData, cellularOnly))
                 .setConstraints(constraints)
 
             val firstSpec = specs.first()
@@ -132,6 +133,7 @@ class TaskSpecWorker(
         }
 
         private fun getInputData(
+            tag: String,
             specs: List<TaskSpec>,
             inputData: Map<String, String>,
             cellularOnly: Boolean
@@ -143,6 +145,7 @@ class TaskSpecWorker(
                     specs.map { it.javaClass.name }.toTypedArray()
                 )
                 .putBoolean(DATA_CELLULAR_ONLY, cellularOnly)
+                .putString(DATA_TAG, tag)
                 .build()
         }
     }
