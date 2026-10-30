@@ -88,14 +88,17 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
         height: Int
     ): Bitmap? {
         val session = GoogleMapTilesClient.getSession(apiKey, configuration.basemapStyle)
-            // Not cached so that Google is tried again next time
-            ?: return snapshot(blankBasemap(), configuration, null, trace, width, height)
 
-        val bounds = bounds(trace)
-        val copyright = GoogleMapTilesClient.getCopyright(apiKey, session, estimateZoom(bounds, width), bounds)
-        // Not cached without the copyright so that it's requested again next time
-        val snapshotCache = if (copyright != null) cache else null
-        return snapshot(googleBasemapStyle(apiKey, session, copyright), configuration, snapshotCache, trace, width, height)
+        return if (session == null) {
+            // Not cached so that Google is tried again next time
+            blankSnapshot(configuration, trace, width, height)
+        } else {
+            val bounds = bounds(trace)
+            val copyright = GoogleMapTilesClient.getCopyright(apiKey, session, estimateZoom(bounds, width), bounds)
+            // Not cached without the copyright so that it's requested again next time
+            val snapshotCache = if (copyright != null) cache else null
+            snapshot(googleBasemapStyle(apiKey, session, copyright), configuration, snapshotCache, trace, width, height)
+        }
     }
 
     private suspend fun snapshot(
@@ -113,6 +116,10 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
         }
 
         // The basemap failed to load so retry without it
+        return blankSnapshot(configuration, trace, width, height)
+    }
+
+    private suspend fun blankSnapshot(configuration: StaticMapConfiguration, trace: TraceDescription, width: Int, height: Int): Bitmap? {
         return takeSnapshot(snapshotOptions(context, blankBasemap(), configuration.referenceLayer, trace, width, height))
     }
 
