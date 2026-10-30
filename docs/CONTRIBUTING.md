@@ -66,6 +66,8 @@ To contribute code to ODK Collect, you will need to open a [pull request](https:
 
 1. Point out decisions you made and what alternatives you considered. If you're unsure about a particular approach, ask a question to make your own thinking clear and help the reviewer identify controversial parts of the proposed solution. For example: "here I returned a result object to represent the status after the transaction. I also considered throwing an exception in case of error but I didn't like that it made it unclear where an error happened. Which do you prefer and why?" This is particularly important for [work in progress pull requests](#work-in-progress-pull-requests).
 
+1. When updating a PR with the default branch, rebase it instead of creating a new merge commit.
+
 1. Follow the guidelines below.
 
 ## The review process
