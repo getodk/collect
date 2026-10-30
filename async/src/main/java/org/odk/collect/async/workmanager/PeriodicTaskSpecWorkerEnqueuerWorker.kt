@@ -8,18 +8,21 @@ import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import org.odk.collect.async.TaskSpec
+import org.odk.collect.async.workmanager.TaskSpecWorker.Companion.DATA_TAG
 
 class PeriodicTaskSpecWorkerEnqueuerWorker(
     private val context: Context,
-    workerParams: WorkerParameters
+    private val workerParams: WorkerParameters
 ) : Worker(context, workerParams) {
 
     override fun doWork(): Result {
         val workManager = WorkManager.getInstance(context)
-        val tag = tags.first()
+        val tag = inputData.getString(DATA_TAG) ?: throw IllegalArgumentException()
 
         val enqueuedOrRunningTasks = workManager.getWorkInfosForUniqueWork(tag).get()
+            .filter { it.id != workerParams.id }
             .filter { it.state == WorkInfo.State.ENQUEUED || it.state == WorkInfo.State.RUNNING }
+
         if (enqueuedOrRunningTasks.isNotEmpty()) {
             return Result.retry()
         }
