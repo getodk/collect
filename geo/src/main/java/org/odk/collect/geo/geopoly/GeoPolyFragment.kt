@@ -83,7 +83,6 @@ class GeoPolyFragment @JvmOverloads constructor(
     private var previousState: Bundle? = null
 
     private var featureId = -1 // will be a positive featureId once map is ready
-    private var originalPoly: List<MapPoint>? = null
     private var intervalIndex: Int = DEFAULT_INTERVAL_INDEX
     private var accuracyThresholdIndex: Int = DEFAULT_ACCURACY_THRESHOLD_INDEX
     private var mapInitialized = false
@@ -91,7 +90,7 @@ class GeoPolyFragment @JvmOverloads constructor(
     private val onBackPressedCallback: OnBackPressedCallback =
         object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (!readOnly && originalPoly != viewModel.points.value) {
+                if (!readOnly && inputPolygon != viewModel.points.value) {
                     showBackDialog()
                 } else {
                     cancel()
@@ -239,8 +238,6 @@ class GeoPolyFragment @JvmOverloads constructor(
         binding.zoom.setOnClickListener {
             currentLocationDelegate.zoomToCurrentLocation(map)
         }
-
-        originalPoly = inputPolygon
 
         map.setClickListener(this::onClick)
         // Also allow long press to place point to match prior versions
@@ -442,7 +439,7 @@ class GeoPolyFragment @JvmOverloads constructor(
 
     private fun discard() {
         val geoString = GeoUtils.formatPointsResultString(
-            (originalPoly ?: emptyList()).toMutableList(),
+            inputPolygon.toMutableList(),
             outputMode == OutputMode.GEOSHAPE
         )
 
