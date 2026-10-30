@@ -3,6 +3,7 @@ package org.odk.collect.maplibre.staticmap
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
+import kotlinx.coroutines.suspendCancellableCoroutine
 import org.maplibre.android.geometry.LatLng
 import org.maplibre.android.geometry.LatLngBounds
 import org.maplibre.android.maps.Style
@@ -28,10 +29,13 @@ import org.odk.collect.maplibre.rasterBasemapStyle
 import org.odk.collect.maps.traces.PolygonDescription
 import org.odk.collect.maps.traces.TraceDescription
 import org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_GOOGLE
-import org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_OSM
 import org.odk.collect.shared.injection.Keys
+import org.odk.collect.strings.R
 import java.io.File
 import javax.inject.Inject
+import kotlin.coroutines.resume
+import kotlin.math.log2
+import kotlin.math.max
 
 /**
  * Loads a static image of a map showing a line or a polygon, rendering it off-screen if it isn't cached.
@@ -49,52 +53,82 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
             .inject(this)
     }
 
-    override fun load(
+    override suspend fun load(
         configuration: StaticMapConfiguration,
         cache: StaticMapCache,
         trace: TraceDescription,
         width: Int,
-        height: Int,
-        callback: (Bitmap?) -> Unit
-    ): () -> Unit {
+        height: Int
+    ): Bitmap? {
         val cachedBitmap = cache.get(configuration, trace, width, height)
         if (cachedBitmap != null) {
-            callback(cachedBitmap)
-            return {}
+            return cachedBitmap
         }
 
-        val basemapConfiguration = when (configuration.basemapSource) {
-            // Google Maps can't render off-screen, so its previews use OpenStreetMap instead
-            BASEMAP_SOURCE_GOOGLE -> Configurations.all.getValue(BASEMAP_SOURCE_OSM)
-            else -> Configurations.all[configuration.basemapSource]
-        }
-
-        if (basemapConfiguration == null || !MapLibreSupport.isAvailable() || trace.points.size < 2) {
-            callback(null)
-            return {}
+        if (!MapLibreSupport.isAvailable() || trace.points.size < 2) {
+            return null
         }
 
         MapLibreSupport.initialize(context)
 
-        val style = basemapStyle(basemapConfiguration, configuration.basemapStyle, keys)
+        return if (configuration.basemapSource == BASEMAP_SOURCE_GOOGLE) {
+            snapshotWithGoogleTiles(keys.get("google").orEmpty(), configuration, cache, trace, width, height)
+        } else {
+            val basemapConfiguration = Configurations.all.getValue(configuration.basemapSource)
+            snapshot(basemapStyle(basemapConfiguration, configuration.basemapStyle, keys), configuration, cache, trace, width, height)
+        }
+    }
 
-        var snapshotter = MapSnapshotter(context, snapshotOptions(context, style, configuration.referenceLayer, trace, width, height))
-        snapshotter.start(
-            {
-                cache.put(configuration, trace, width, height, it.bitmap)
-                callback(it.bitmap)
-            },
-            {
-                // The basemap failed to load so retry without it
-                snapshotter = MapSnapshotter(context, snapshotOptions(context, blankBasemap(), configuration.referenceLayer, trace, width, height))
-                snapshotter.start(
-                    { callback(it.bitmap) },
-                    { callback(null) }
-                )
-            }
-        )
+    private suspend fun snapshotWithGoogleTiles(
+        apiKey: String,
+        configuration: StaticMapConfiguration,
+        cache: StaticMapCache,
+        trace: TraceDescription,
+        width: Int,
+        height: Int
+    ): Bitmap? {
+        val session = GoogleMapTilesClient.getSession(apiKey, configuration.basemapStyle)
 
-        return { snapshotter.cancel() }
+        return if (session == null) {
+            // Not cached so that Google is tried again next time
+            blankSnapshot(configuration, trace, width, height)
+        } else {
+            val bounds = bounds(trace)
+            val copyright = GoogleMapTilesClient.getCopyright(apiKey, session, estimateZoom(bounds, width), bounds)
+            // Not cached without the copyright so that it's requested again next time
+            val snapshotCache = if (copyright != null) cache else null
+            snapshot(googleBasemapStyle(apiKey, session, copyright), configuration, snapshotCache, trace, width, height)
+        }
+    }
+
+    private suspend fun snapshot(
+        style: Style.Builder,
+        configuration: StaticMapConfiguration,
+        cache: StaticMapCache?,
+        trace: TraceDescription,
+        width: Int,
+        height: Int
+    ): Bitmap? {
+        val bitmap = takeSnapshot(snapshotOptions(context, style, configuration.referenceLayer, trace, width, height))
+        if (bitmap != null) {
+            cache?.put(configuration, trace, width, height, bitmap)
+            return bitmap
+        }
+
+        // The basemap failed to load so retry without it
+        return blankSnapshot(configuration, trace, width, height)
+    }
+
+    private suspend fun blankSnapshot(configuration: StaticMapConfiguration, trace: TraceDescription, width: Int, height: Int): Bitmap? {
+        return takeSnapshot(snapshotOptions(context, blankBasemap(), configuration.referenceLayer, trace, width, height))
+    }
+
+    private suspend fun takeSnapshot(options: MapSnapshotter.Options): Bitmap? {
+        return suspendCancellableCoroutine { continuation ->
+            val snapshotter = MapSnapshotter(context, options)
+            snapshotter.start({ continuation.resume(it.bitmap) }, { continuation.resume(null) })
+            continuation.invokeOnCancellation { snapshotter.cancel() }
+        }
     }
 
     private fun snapshotOptions(
@@ -114,11 +148,7 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
             .withPixelRatio(density)
             .withStyleBuilder(buildStyle(basemap, referenceLayer, trace))
             .withLogo(false)
-            .withRegion(
-                LatLngBounds.Builder()
-                    .includes(trace.points.map { LatLng(it.latitude, it.longitude) })
-                    .build()
-            )
+            .withRegion(bounds(trace))
             .withPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
     }
 
@@ -129,13 +159,41 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
     }
 
     private fun basemapStyle(basemapConfiguration: Configuration, style: String?, keys: Keys): Style.Builder {
-        val uri = basemapConfiguration.basemapUri(style)
-        val uriValue = uri.value(keys)
-
-        return when (uri) {
-            is BasemapUri.Raster -> basemapConfiguration.rasterBasemapStyle(uriValue).fromUri("asset://maplibre_empty_style.json")
-            is BasemapUri.Mapbox -> Style.Builder().fromUri(uriValue)
+        return when (val uri = basemapConfiguration.basemapUri(style)) {
+            is BasemapUri.Raster -> basemapConfiguration.rasterBasemapStyle(style, keys).fromUri("asset://maplibre_empty_style.json")
+            is BasemapUri.Mapbox -> Style.Builder().fromUri(uri.value(keys))
         }
+    }
+
+    /**
+     * Roughly the zoom at which the line or polygon fills the map, which is close enough for the
+     * copyright.
+     */
+    private fun estimateZoom(bounds: LatLngBounds, width: Int): Int {
+        val mapWidth = width / context.resources.displayMetrics.density.toDouble()
+        val traceSpan = max(bounds.longitudeSpan, bounds.latitudeSpan)
+
+        // At zoom 0 the whole world (360°) fits in one tile and every zoom level doubles its size
+        val zoomToFillMap = log2(mapWidth / TILE_SIZE * 360 / traceSpan)
+
+        return zoomToFillMap.toInt().coerceIn(0, GOOGLE_MAX_ZOOM)
+    }
+
+    private fun bounds(trace: TraceDescription): LatLngBounds {
+        return LatLngBounds.Builder()
+            .includes(trace.points.map { LatLng(it.latitude, it.longitude) })
+            .build()
+    }
+
+    private fun googleBasemapStyle(apiKey: String, session: String, copyright: String?): Style.Builder {
+        val attribution = listOfNotNull("Google Maps", copyright)
+            .joinToString(" ") { "<a href=\"https://www.google.com/maps\">$it</a>" }
+
+        return Configuration(
+            name = R.string.basemap_source_google,
+            uri = BasemapUri.Raster(GoogleMapTilesClient.getTilesUrl(apiKey, session)),
+            attribution = attribution
+        ).rasterBasemapStyle(null, keys).fromUri("asset://maplibre_empty_style.json")
     }
 
     private fun blankBasemap(): Style.Builder {
@@ -185,5 +243,11 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
     private companion object {
         // Shared by all loaders so that widgets, which are recreated often, don't each start a server
         val referenceLayersServer = ReferenceLayersServer()
+
+        // The Map Tiles API only accepts zoom levels up to this one
+        const val GOOGLE_MAX_ZOOM = 22
+
+        // Width of a map tile in dp
+        const val TILE_SIZE = 256
     }
 }

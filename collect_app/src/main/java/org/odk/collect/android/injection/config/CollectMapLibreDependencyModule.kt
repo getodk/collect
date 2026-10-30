@@ -18,6 +18,11 @@ class CollectMapLibreDependencyModule(
     }
 
     override fun providesKeys(): Keys {
-        return Keys(mapOf("carto" to BuildConfig.CARTO_API_KEY))
+        return Keys(
+            mapOf(
+                "carto" to BuildConfig.CARTO_API_KEY,
+                "google" to BuildConfig.GOOGLE_MAPS_API_KEY
+            )
+        )
     }
 }
