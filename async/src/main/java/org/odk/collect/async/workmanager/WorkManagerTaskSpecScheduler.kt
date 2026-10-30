@@ -6,13 +6,14 @@ import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequest
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import org.odk.collect.async.Scheduler
 import org.odk.collect.async.TaskSpec
 import org.odk.collect.async.TaskSpecScheduler
+import org.odk.collect.async.workmanager.TaskSpecWorker.Companion.setup
+import java.util.concurrent.TimeUnit
 
 class WorkManagerTaskSpecScheduler(private val workManager: WorkManager) : TaskSpecScheduler {
     override fun schedule(
@@ -24,27 +25,29 @@ class WorkManagerTaskSpecScheduler(private val workManager: WorkManager) : TaskS
     ) {
         val constraints = getConstraints(networkConstraint)
         val cellularOnly = networkConstraint == Scheduler.NetworkType.CELLULAR
-        val workRequest = TaskSpecWorker.getWorkRequest(
-            specs,
-            tag,
-            constraints,
-            inputData,
-            repeatPeriod,
-            cellularOnly
-        )
 
-        when (workRequest) {
-            is PeriodicWorkRequest -> {
-                workManager.enqueueUniquePeriodicWork(
-                    tag,
-                    ExistingPeriodicWorkPolicy.REPLACE,
-                    workRequest
-                )
-            }
+        if (repeatPeriod != null) {
+            val workRequest = PeriodicWorkRequest.Builder(
+                PeriodicTaskSpecWorkerEnqueuerWorker::class.java,
+                repeatPeriod,
+                TimeUnit.MILLISECONDS
+            ).setup(tag, specs, inputData, cellularOnly, constraints).build()
 
-            is OneTimeWorkRequest -> {
-                workManager.beginUniqueWork(tag, ExistingWorkPolicy.REPLACE, workRequest).enqueue()
-            }
+            workManager.enqueueUniquePeriodicWork(
+                tag,
+                ExistingPeriodicWorkPolicy.REPLACE,
+                workRequest
+            )
+        } else {
+            val workRequest = TaskSpecWorker.getWorkRequest(
+                specs,
+                tag,
+                constraints,
+                inputData,
+                cellularOnly
+            )
+
+            workManager.enqueueUniqueWork(tag, ExistingWorkPolicy.REPLACE, workRequest)
         }
     }
 
