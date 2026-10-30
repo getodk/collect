@@ -30,8 +30,8 @@ object GoogleMapTilesClient {
     fun getSession(apiKey: String, style: String?, callback: (String?) -> Unit) {
         scope.launch {
             val current = sessionMutex.withLock {
-                session?.takeIf { it.style == style && it.expiryMillis > System.currentTimeMillis() }
-                    ?: createSession(apiKey, style)?.also { session = it }
+                val existingSession = session?.takeIf { it.style == style && it.expiryMillis > System.currentTimeMillis() }
+                existingSession ?: createSession(apiKey, style)?.also { session = it }
             }
 
             withContext(Dispatchers.Main) { callback(current?.token) }
