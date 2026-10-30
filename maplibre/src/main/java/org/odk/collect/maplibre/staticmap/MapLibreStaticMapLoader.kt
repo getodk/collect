@@ -3,6 +3,9 @@ package org.odk.collect.maplibre.staticmap
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.maplibre.android.geometry.LatLng
 import org.maplibre.android.geometry.LatLngBounds
 import org.maplibre.android.maps.Style
@@ -44,6 +47,7 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
     lateinit var keys: Keys
 
     private val context = context.applicationContext
+    private val scope = CoroutineScope(Dispatchers.Main)
 
     init {
         (this.context as MapLibreDependencyComponentProvider)
@@ -89,30 +93,24 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
         height: Int,
         callback: (Bitmap?) -> Unit
     ): () -> Unit {
-        var cancelled = false
         var cancelSnapshot: () -> Unit = {}
 
-        GoogleMapTilesClient.getSession(apiKey, configuration.basemapStyle) { session ->
-            if (cancelled) {
-                return@getSession
-            }
-
-            if (session != null) {
-                getGoogleCopyright(apiKey, session, trace, width) { copyright ->
-                    if (!cancelled) {
-                        // Not cached without the copyright so that it's requested again next time
-                        val snapshotCache = if (copyright != null) cache else null
-                        cancelSnapshot = snapshot(googleBasemapStyle(apiKey, session, copyright), configuration, snapshotCache, trace, width, height, callback)
-                    }
-                }
+        val job = scope.launch {
+            val session = GoogleMapTilesClient.getSession(apiKey, configuration.basemapStyle)
+            cancelSnapshot = if (session != null) {
+                val bounds = bounds(trace)
+                val copyright = GoogleMapTilesClient.getCopyright(apiKey, session, estimateZoom(bounds, width), bounds)
+                // Not cached without the copyright so that it's requested again next time
+                val snapshotCache = if (copyright != null) cache else null
+                snapshot(googleBasemapStyle(apiKey, session, copyright), configuration, snapshotCache, trace, width, height, callback)
             } else {
                 // Not cached so that Google is tried again next time
-                cancelSnapshot = snapshot(blankBasemap(), configuration, null, trace, width, height, callback)
+                snapshot(blankBasemap(), configuration, null, trace, width, height, callback)
             }
         }
 
         return {
-            cancelled = true
+            job.cancel()
             cancelSnapshot()
         }
     }
@@ -177,11 +175,6 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
             is BasemapUri.Raster -> basemapConfiguration.rasterBasemapStyle(style, keys).fromUri("asset://maplibre_empty_style.json")
             is BasemapUri.Mapbox -> Style.Builder().fromUri(uri.value(keys))
         }
-    }
-
-    private fun getGoogleCopyright(apiKey: String, session: String, trace: TraceDescription, width: Int, callback: (String?) -> Unit) {
-        val bounds = bounds(trace)
-        GoogleMapTilesClient.getCopyright(apiKey, session, estimateZoom(bounds, width), bounds, callback)
     }
 
     /**

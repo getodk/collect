@@ -1,8 +1,6 @@
 package org.odk.collect.maplibre.staticmap
 
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -21,38 +19,28 @@ import java.util.concurrent.TimeUnit
  * See https://developers.google.com/maps/documentation/tile/session_tokens
  */
 object GoogleMapTilesClient {
-    private val scope = CoroutineScope(Dispatchers.IO)
-
     // Makes concurrent requests for a session wait for the first one, so that only one session is created
     private val sessionMutex = Mutex()
     private var session: Session? = null
 
-    fun getSession(apiKey: String, style: String?, callback: (String?) -> Unit) {
-        scope.launch {
-            val current = sessionMutex.withLock {
-                val existingSession = session?.takeIf { it.style == style && it.expiryMillis > System.currentTimeMillis() }
-                existingSession ?: createSession(apiKey, style)?.also { session = it }
-            }
-
-            withContext(Dispatchers.Main) { callback(current?.token) }
-        }
+    suspend fun getSession(apiKey: String, style: String?): String? {
+        return sessionMutex.withLock {
+            val existingSession = session?.takeIf { it.style == style && it.expiryMillis > System.currentTimeMillis() }
+            existingSession ?: createSession(apiKey, style)?.also { session = it }
+        }?.token
     }
 
-    fun getCopyright(apiKey: String, session: String, zoom: Int, bounds: LatLngBounds, callback: (String?) -> Unit) {
-        scope.launch {
-            val url = "https://tile.googleapis.com/tile/v1/viewport?session=$session&key=$apiKey&zoom=$zoom" +
-                "&north=${bounds.latitudeNorth}&south=${bounds.latitudeSouth}&east=${bounds.longitudeEast}&west=${bounds.longitudeWest}"
-            val copyright = request(url) { it.optString("copyright").ifBlank { null } }
-
-            withContext(Dispatchers.Main) { callback(copyright) }
-        }
+    suspend fun getCopyright(apiKey: String, session: String, zoom: Int, bounds: LatLngBounds): String? {
+        val url = "https://tile.googleapis.com/tile/v1/viewport?session=$session&key=$apiKey&zoom=$zoom" +
+            "&north=${bounds.latitudeNorth}&south=${bounds.latitudeSouth}&east=${bounds.longitudeEast}&west=${bounds.longitudeWest}"
+        return request(url) { it.optString("copyright").ifBlank { null } }
     }
 
     fun getTilesUrl(apiKey: String, session: String): String {
         return "https://tile.googleapis.com/v1/2dtiles/{z}/{x}/{y}?session=$session&key=$apiKey"
     }
 
-    private fun createSession(apiKey: String, style: String?): Session? {
+    private suspend fun createSession(apiKey: String, style: String?): Session? {
         val locale = Locale.getDefault()
         val body = JSONObject()
             .put("language", locale.toLanguageTag())
@@ -74,24 +62,26 @@ object GoogleMapTilesClient {
         }
     }
 
-    private fun <T> request(url: String, body: JSONObject? = null, parse: (JSONObject) -> T): T? {
-        return try {
-            val connection = URL(url).openConnection() as HttpURLConnection
+    private suspend fun <T> request(url: String, body: JSONObject? = null, parse: (JSONObject) -> T): T? {
+        return withContext(Dispatchers.IO) {
             try {
-                connection.connectTimeout = TIMEOUT
-                connection.readTimeout = TIMEOUT
-                if (body != null) {
-                    connection.doOutput = true
-                    connection.setRequestProperty("Content-Type", "application/json")
-                    connection.outputStream.use { it.write(body.toString().toByteArray()) }
-                }
+                val connection = URL(url).openConnection() as HttpURLConnection
+                try {
+                    connection.connectTimeout = TIMEOUT
+                    connection.readTimeout = TIMEOUT
+                    if (body != null) {
+                        connection.doOutput = true
+                        connection.setRequestProperty("Content-Type", "application/json")
+                        connection.outputStream.use { it.write(body.toString().toByteArray()) }
+                    }
 
-                parse(JSONObject(connection.inputStream.bufferedReader().use { it.readText() }))
-            } finally {
-                connection.disconnect()
+                    parse(JSONObject(connection.inputStream.bufferedReader().use { it.readText() }))
+                } finally {
+                    connection.disconnect()
+                }
+            } catch (_: Exception) {
+                null
             }
-        } catch (_: Exception) {
-            null
         }
     }
 
