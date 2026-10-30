@@ -69,6 +69,13 @@ interface Scheduler {
      * previous tasks finishing and will receive the output data from the previous task's
      * [TaskSpec.Result] (whether [TaskSpec.Result.Success] or [TaskSpec.Result.Failure]).
      *
+     * Only one task from a chain will run at once. If a chained task attempts to start while
+     * another is running, it will fail to start and retry later, and no down-chain tasks will be
+     * scheduled.
+     *
+     * If a task in the chain retries, any down chain tasks that are currently pending will be
+     * cancelled.
+     *
      * @param tag used to identify this task in future. Previously scheduled tasks using the same
      * tag will be replaced
      * @param specs defines the task to be run in a chain
