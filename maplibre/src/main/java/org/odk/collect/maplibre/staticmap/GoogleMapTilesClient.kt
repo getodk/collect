@@ -53,7 +53,23 @@ object GoogleMapTilesClient {
     }
 
     private fun createSession(apiKey: String, style: String?): Session? {
-        return request("https://tile.googleapis.com/v1/createSession?key=$apiKey", requestBody(style)) {
+        val locale = Locale.getDefault()
+        val body = JSONObject()
+            .put("language", locale.toLanguageTag())
+            .put("region", locale.country.ifEmpty { "US" })
+
+        when (style) {
+            MAP_TYPE_SATELLITE -> body.put("mapType", "satellite")
+            MAP_TYPE_HYBRID -> body
+                .put("mapType", "satellite")
+                .put("layerTypes", JSONArray().put("layerRoadmap"))
+            MAP_TYPE_TERRAIN -> body
+                .put("mapType", "terrain")
+                .put("layerTypes", JSONArray().put("layerRoadmap"))
+            else -> body.put("mapType", "roadmap")
+        }
+
+        return request("https://tile.googleapis.com/v1/createSession?key=$apiKey", body) {
             Session(it.getString("session"), TimeUnit.SECONDS.toMillis(it.getLong("expiry")), style)
         }
     }
@@ -76,24 +92,6 @@ object GoogleMapTilesClient {
             }
         } catch (_: Exception) {
             null
-        }
-    }
-
-    private fun requestBody(style: String?): JSONObject {
-        val locale = Locale.getDefault()
-        val body = JSONObject()
-            .put("language", locale.toLanguageTag())
-            .put("region", locale.country.ifEmpty { "US" })
-
-        return when (style) {
-            MAP_TYPE_SATELLITE -> body.put("mapType", "satellite")
-            MAP_TYPE_HYBRID -> body
-                .put("mapType", "satellite")
-                .put("layerTypes", JSONArray().put("layerRoadmap"))
-            MAP_TYPE_TERRAIN -> body
-                .put("mapType", "terrain")
-                .put("layerTypes", JSONArray().put("layerRoadmap"))
-            else -> body.put("mapType", "roadmap")
         }
     }
 
