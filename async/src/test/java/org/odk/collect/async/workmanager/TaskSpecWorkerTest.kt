@@ -30,9 +30,9 @@ class TaskSpecWorkerTest {
             executor = Executors.newSingleThreadExecutor(),
             inputData = Data.Builder()
                 .putStringArray(TaskSpecWorker.DATA_TASK_SPEC_CLASSES, arrayOf(TestTaskSpec::class.java.name))
+                .putString(TaskSpecWorker.DATA_TAG, "test")
                 .build(),
             runAttemptCount = 0, // without setting this explicitly attempts in tests are counted starting from 1 instead of 0 like in production code
-            tags = listOf("test")
         ).build()
 
         TestTaskSpec.reset()
