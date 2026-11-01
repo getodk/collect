@@ -87,31 +87,27 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
         width: Int,
         height: Int
     ): Bitmap? {
-        val session = GoogleMapTilesClient.getSession(apiKey, configuration.basemapStyle)
+        val bounds = bounds(trace)
+        val tiles = GoogleMapTilesClient.getTiles(apiKey, configuration.basemapStyle, estimateZoom(bounds, width), bounds)
 
-        return if (session == null) {
-            // Not cached so that Google is tried again next time
+        return if (tiles == null) {
             blankSnapshot(configuration, trace, width, height)
         } else {
-            val bounds = bounds(trace)
-            val copyright = GoogleMapTilesClient.getCopyright(apiKey, session, estimateZoom(bounds, width), bounds)
-            // Not cached without the copyright so that it's requested again next time
-            val snapshotCache = if (copyright != null) cache else null
-            snapshot(googleBasemapStyle(apiKey, session, copyright), configuration, snapshotCache, trace, width, height)
+            snapshot(googleBasemapStyle(tiles), configuration, cache, trace, width, height)
         }
     }
 
     private suspend fun snapshot(
         style: Style.Builder,
         configuration: StaticMapConfiguration,
-        cache: StaticMapCache?,
+        cache: StaticMapCache,
         trace: TraceDescription,
         width: Int,
         height: Int
     ): Bitmap? {
         val bitmap = takeSnapshot(snapshotOptions(context, style, configuration.referenceLayer, trace, width, height))
         if (bitmap != null) {
-            cache?.put(configuration, trace, width, height, bitmap)
+            cache.put(configuration, trace, width, height, bitmap)
             return bitmap
         }
 
@@ -185,13 +181,13 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
             .build()
     }
 
-    private fun googleBasemapStyle(apiKey: String, session: String, copyright: String?): Style.Builder {
-        val attribution = listOfNotNull("Google Maps", copyright)
+    private fun googleBasemapStyle(tiles: GoogleMapTilesClient.Tiles): Style.Builder {
+        val attribution = listOfNotNull("Google Maps", tiles.copyright.ifBlank { null })
             .joinToString(" ") { "<a href=\"https://www.google.com/maps\">$it</a>" }
 
         return Configuration(
             name = R.string.basemap_source_google,
-            uri = BasemapUri.Raster(GoogleMapTilesClient.getTilesUrl(apiKey, session)),
+            uri = BasemapUri.Raster(tiles.url),
             attribution = attribution
         ).rasterBasemapStyle(null, keys).fromUri("asset://maplibre_empty_style.json")
     }

@@ -23,21 +23,27 @@ object GoogleMapTilesClient {
     private val sessionMutex = Mutex()
     private var session: Session? = null
 
-    suspend fun getSession(apiKey: String, style: String?): String? {
+    /**
+     * Returns the URL of the tiles and the copyright for the area within [bounds] at [zoom], or
+     * null if either can't be fetched.
+     */
+    suspend fun getTiles(apiKey: String, style: String?, zoom: Int, bounds: LatLngBounds): Tiles? {
+        val session = getSession(apiKey, style) ?: return null
+        val copyright = getCopyright(apiKey, session, zoom, bounds) ?: return null
+        return Tiles("https://tile.googleapis.com/v1/2dtiles/{z}/{x}/{y}?session=$session&key=$apiKey", copyright)
+    }
+
+    private suspend fun getSession(apiKey: String, style: String?): String? {
         return sessionMutex.withLock {
             val existingSession = session?.takeIf { it.style == style && it.expiryMillis > System.currentTimeMillis() }
             existingSession ?: createSession(apiKey, style)?.also { session = it }
         }?.token
     }
 
-    suspend fun getCopyright(apiKey: String, session: String, zoom: Int, bounds: LatLngBounds): String? {
+    private suspend fun getCopyright(apiKey: String, session: String, zoom: Int, bounds: LatLngBounds): String? {
         val url = "https://tile.googleapis.com/tile/v1/viewport?session=$session&key=$apiKey&zoom=$zoom" +
             "&north=${bounds.latitudeNorth}&south=${bounds.latitudeSouth}&east=${bounds.longitudeEast}&west=${bounds.longitudeWest}"
-        return request(url) { it.optString("copyright").ifBlank { null } }
-    }
-
-    fun getTilesUrl(apiKey: String, session: String): String {
-        return "https://tile.googleapis.com/v1/2dtiles/{z}/{x}/{y}?session=$session&key=$apiKey"
+        return request(url) { it.optString("copyright") }
     }
 
     private suspend fun createSession(apiKey: String, style: String?): Session? {
@@ -84,6 +90,8 @@ object GoogleMapTilesClient {
             }
         }
     }
+
+    class Tiles(val url: String, val copyright: String)
 
     private class Session(val token: String, val expiryMillis: Long, val style: String?)
 
