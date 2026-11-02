@@ -292,7 +292,7 @@ public class Collect extends Application implements
     public MapLibreDependencyComponent getMapLibreDependencyComponent() {
         if (mapLibreDependencyComponent == null) {
             mapLibreDependencyComponent = DaggerMapLibreDependencyComponent.builder()
-                    .mapLibreDependencyModule(new CollectMapLibreDependencyModule(applicationComponent))
+                    .mapLibreDependencyModule(new CollectMapLibreDependencyModule(this, applicationComponent))
                     .build();
         }
 
