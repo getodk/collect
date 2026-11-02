@@ -28,16 +28,13 @@ object GoogleMapTilesClient {
      * null if either can't be fetched.
      */
     suspend fun getTiles(apiKey: String, style: String?, zoom: Int, bounds: LatLngBounds): Tiles? {
-        val session = getSession(apiKey, style) ?: return null
-        val copyright = getCopyright(apiKey, session, zoom, bounds) ?: return null
-        return Tiles("https://tile.googleapis.com/v1/2dtiles/{z}/{x}/{y}?session=$session&key=$apiKey", copyright)
-    }
-
-    private suspend fun getSession(apiKey: String, style: String?): String? {
-        return sessionMutex.withLock {
+        val currentSession = sessionMutex.withLock {
             val existingSession = session?.takeIf { it.style == style && it.expiryMillis > System.currentTimeMillis() }
             existingSession ?: createSession(apiKey, style)?.also { session = it }
-        }?.token
+        } ?: return null
+
+        val copyright = getCopyright(apiKey, currentSession.token, zoom, bounds) ?: return null
+        return Tiles("https://tile.googleapis.com/v1/2dtiles/{z}/{x}/{y}?session=${currentSession.token}&key=$apiKey", copyright)
     }
 
     private suspend fun getCopyright(apiKey: String, session: String, zoom: Int, bounds: LatLngBounds): String? {
