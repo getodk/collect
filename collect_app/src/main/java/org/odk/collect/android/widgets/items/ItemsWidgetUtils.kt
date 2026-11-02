@@ -18,7 +18,15 @@ object ItemsWidgetUtils {
         selectChoiceLoader: SelectChoiceLoader
     ): List<SelectChoice> {
         return try {
-            selectChoiceLoader.loadSelectChoices(prompt)
+            val choices = selectChoiceLoader.loadSelectChoices(prompt)
+
+            val choicesWithValue = choices.filterNot { it.value.isNullOrEmpty() }
+            val skippedCount = choices.size - choicesWithValue.size
+            if (skippedCount > 0) {
+                widget.showWarning(widget.context.resources.getQuantityString(org.odk.collect.strings.R.plurals.choices_without_value_skipped, skippedCount, skippedCount))
+            }
+
+            choicesWithValue
         } catch (e: FileNotFoundException) {
             widget.showWarning(widget.context.getString(org.odk.collect.strings.R.string.file_missing, e.message))
             emptyList()
