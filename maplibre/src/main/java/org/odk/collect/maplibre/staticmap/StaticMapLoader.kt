@@ -4,12 +4,11 @@ import android.graphics.Bitmap
 import org.odk.collect.maps.traces.TraceDescription
 
 interface StaticMapLoader {
-    fun load(
+    suspend fun load(
         configuration: StaticMapConfiguration,
         cache: StaticMapCache,
         trace: TraceDescription,
         width: Int,
-        height: Int,
-        callback: (Bitmap?) -> Unit
-    ): () -> Unit
+        height: Int
+    ): Bitmap?
 }

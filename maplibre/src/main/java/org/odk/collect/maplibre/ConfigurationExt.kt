@@ -4,6 +4,7 @@ import org.maplibre.android.maps.Style
 import org.maplibre.android.style.layers.RasterLayer
 import org.maplibre.android.style.sources.RasterSource
 import org.maplibre.android.style.sources.TileSet
+import org.odk.collect.shared.injection.Keys
 import org.odk.collect.shared.settings.Settings
 
 fun Configuration.basemapStyle(settings: Settings): String? {
@@ -20,8 +21,8 @@ fun Configuration.basemapUri(style: String?): BasemapUri {
     }
 }
 
-fun Configuration.rasterBasemapStyle(tileUri: String): Style.Builder {
-    val tileSet = TileSet("2.1.0", tileUri).apply {
+fun Configuration.rasterBasemapStyle(style: String?, keys: Keys): Style.Builder {
+    val tileSet = TileSet("2.1.0", basemapUri(style).value(keys)).apply {
         attribution = this@rasterBasemapStyle.attribution ?: ""
         scheme = "xyz"
         // Above the server's highest zoom level MapLibre scales up its tiles instead of requesting missing ones

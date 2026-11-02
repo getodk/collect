@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -52,17 +52,14 @@ fun AsyncStaticMap(
         val width = constraints.maxWidth
         val height = with(LocalDensity.current) { STATIC_MAP_HEIGHT.roundToPx() }
 
-        DisposableEffect(trace, configuration, width, height) {
-            val cancel = if (trace.points.all { GeoWidgetUtils.isWithinMapBounds(it) }) {
-                staticMapLoader.load(configuration, cache, trace, width, height) {
-                    state = if (it != null) StaticMapState.Loaded(it.asImageBitmap()) else StaticMapState.Failed
-                }
+        LaunchedEffect(trace, configuration, width, height) {
+            val bitmap = if (trace.points.all { GeoWidgetUtils.isWithinMapBounds(it) }) {
+                staticMapLoader.load(configuration, cache, trace, width, height)
             } else {
-                state = StaticMapState.Failed
-                {}
+                null
             }
 
-            onDispose { cancel() }
+            state = if (bitmap != null) StaticMapState.Loaded(bitmap.asImageBitmap()) else StaticMapState.Failed
         }
 
         val mapModifier = Modifier

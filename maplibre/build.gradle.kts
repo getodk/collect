@@ -33,6 +33,7 @@ dependencies {
     implementation(project(":strings"))
     implementation(libs.androidxFragmentKtx)
     implementation(libs.androidxPreferenceKtx)
+    implementation(libs.kotlinxCoroutinesAndroid)
     implementation(libs.timber)
     implementation(libs.dagger)
     ksp(libs.daggerCompiler)

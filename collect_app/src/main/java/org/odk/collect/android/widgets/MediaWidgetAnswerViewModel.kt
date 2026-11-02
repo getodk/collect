@@ -52,15 +52,13 @@ class MediaWidgetAnswerViewModel(
     fun getStaticMapConfiguration(): StaticMapConfiguration {
         val settings = settingsProvider.getUnprotectedSettings()
         val basemapSource = settings.getString(ProjectKeys.KEY_BASEMAP_SOURCE)!!
-
-        return StaticMapConfiguration(
-            basemapSource,
-            Configurations.all[basemapSource]?.basemapStyle(settings),
-            MapFragmentReferenceLayerUtils.getReferenceLayerFile(
-                settings.getString(ProjectKeys.KEY_REFERENCE_LAYER),
-                referenceLayerRepository
-            )
+        val basemapStyle = Configurations.all[basemapSource]?.basemapStyle(settings)
+        val referenceLayer = MapFragmentReferenceLayerUtils.getReferenceLayerFile(
+            settings.getString(ProjectKeys.KEY_REFERENCE_LAYER),
+            referenceLayerRepository
         )
+
+        return StaticMapConfiguration(basemapSource, basemapStyle, referenceLayer)
     }
 
     fun openFile(activity: Activity, answer: String?, mimeType: String? = null) {

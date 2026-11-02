@@ -318,7 +318,7 @@ public class AppDependencyModule {
         JSONObject deviceUnsupportedSettings = new JSONObject();
         if (!MapLibreSupport.isAvailable()) {
             try {
-                List<String> unsupportedBasemaps = new ArrayList<>(Configurations.INSTANCE.getAll().keySet());
+                List<String> unsupportedBasemaps = new ArrayList<>(Configurations.INSTANCE.getMapLibre().keySet());
 
                 deviceUnsupportedSettings.put(
                         AppConfigurationKeys.GENERAL,

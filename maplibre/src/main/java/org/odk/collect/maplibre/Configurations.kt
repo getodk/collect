@@ -6,7 +6,7 @@ import org.odk.collect.shared.injection.Keys
 import org.odk.collect.strings.R
 
 object Configurations {
-    val all = mapOf(
+    val mapLibre = mapOf(
         ProjectKeys.BASEMAP_SOURCE_MAPBOX to Configuration(
             name = R.string.basemap_source_mapbox,
             styleSetting = KEY_MAPBOX_MAP_STYLE,
@@ -83,6 +83,15 @@ object Configurations {
             )
         ),
     )
+
+    val google = mapOf(
+        ProjectKeys.BASEMAP_SOURCE_GOOGLE to Configuration(
+            name = R.string.basemap_source_google,
+            styleSetting = ProjectKeys.KEY_GOOGLE_MAP_STYLE
+        ),
+    )
+
+    val all = mapLibre + google
 }
 
 class Configuration(

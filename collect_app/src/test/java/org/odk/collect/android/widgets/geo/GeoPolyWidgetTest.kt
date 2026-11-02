@@ -241,16 +241,14 @@ class GeoPolyWidgetTest {
     private class FakeStaticMapLoader : StaticMapLoader {
         var bitmap: Bitmap? = null
 
-        override fun load(
+        override suspend fun load(
             configuration: StaticMapConfiguration,
             cache: StaticMapCache,
             trace: TraceDescription,
             width: Int,
-            height: Int,
-            callback: (Bitmap?) -> Unit
-        ): () -> Unit {
-            callback(bitmap)
-            return {}
+            height: Int
+        ): Bitmap? {
+            return bitmap
         }
     }
 }
