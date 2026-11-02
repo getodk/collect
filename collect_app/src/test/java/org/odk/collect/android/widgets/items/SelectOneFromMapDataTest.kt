@@ -137,6 +137,35 @@ class SelectOneFromMapDataTest {
     }
 
     @Test
+    fun `choices without a value are not included in mappable items`() {
+        val choices = listOf(
+            selectChoice(
+                value = "",
+                item = treeElement(
+                    children = listOf(treeElement(GeoSelectChoiceElements.GEOMETRY, "12.0 -1.0 305 0"))
+                )
+            ),
+            selectChoice(
+                value = "b",
+                item = treeElement(
+                    children = listOf(treeElement(GeoSelectChoiceElements.GEOMETRY, "12.1 -1.0 305 0"))
+                )
+            )
+        )
+
+        val prompt = MockFormEntryPromptBuilder()
+            .withLongText("Which is your favourite place?")
+            .withSelectChoices(choices)
+            .withSelectChoiceText(mapOf(choices[0] to "A", choices[1] to "B"))
+            .build()
+
+        val data = loadDataForPrompt(prompt)
+        assertThat(data.getItemCount().value, equalTo(2))
+        assertThat(data.getMappableItems().value!!.map { it.name }, equalTo(listOf("B")))
+        assertThat(data.getMappableItems().value!!.map { it.id }, equalTo(listOf(1L)))
+    }
+
+    @Test
     fun `additional children are returned as properties`() {
         val choices = listOf(
             selectChoice(
