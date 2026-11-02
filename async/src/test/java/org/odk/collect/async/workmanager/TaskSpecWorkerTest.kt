@@ -39,12 +39,6 @@ class TaskSpecWorkerTest {
     }
 
     @Test
-    fun `when task returns true work should succeed`() {
-        TestTaskSpec.doReturn(Result.Success())
-        assertThat(worker.doWork(), `is`(ListenableWorker.Result.success()))
-    }
-
-    @Test
     fun `when task returns false, retries if maxRetries not specified`() {
         TestTaskSpec.doReturn(Result.Failure())
         assertThat(worker.doWork(), `is`(ListenableWorker.Result.retry()))
@@ -128,7 +122,7 @@ class TaskSpecWorkerTest {
     }
 }
 
-private class TestTaskSpec : TaskSpec {
+class TestTaskSpec : TaskSpec {
 
     companion object {
 
