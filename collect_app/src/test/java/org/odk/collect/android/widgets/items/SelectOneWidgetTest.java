@@ -241,7 +241,7 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
     }
 
     @Test
-    public void whenAChoiceValueIsNull_selecting_doesNotSetAnswer() {
+    public void whenAChoiceValueIsNull_choiceIsNotShown() {
         SelectChoice selectChoice = new SelectChoice(); // The two arg constructor protects against null values
         selectChoice.setTextID("1");
 
@@ -250,9 +250,7 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
                 .build();
 
         SelectOneWidget widget = getWidget();
-        populateRecyclerView(widget);
-
-        clickChoice(widget, 0);
+        assertThat(widget.getChoiceCount(), is(0));
         assertThat(widget.getAnswer(), nullValue());
     }
 
