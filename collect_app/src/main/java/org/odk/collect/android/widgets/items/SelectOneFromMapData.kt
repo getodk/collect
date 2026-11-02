@@ -50,6 +50,7 @@ class SelectOneFromMapData(
         )
         val mappableItems =
             MappableItemsParser.parseChoices(selectChoices, options, prompt::getSelectChoiceText)
+                .filterNot { selectChoices[it.id.toInt()].value.isNullOrEmpty() }
 
         return Pair(selectChoices.size, mappableItems)
     }
