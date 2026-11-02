@@ -122,8 +122,8 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
     private suspend fun takeSnapshot(options: MapSnapshotter.Options): Bitmap? {
         return suspendCancellableCoroutine { continuation ->
             val snapshotter = MapSnapshotter(context, options)
-            snapshotter.start({ continuation.resume(it.bitmap) }, { continuation.resume(null) })
             continuation.invokeOnCancellation { snapshotter.cancel() }
+            snapshotter.start({ continuation.resume(it.bitmap) }, { continuation.resume(null) })
         }
     }
 
