@@ -1,6 +1,7 @@
 package org.odk.collect.async.workmanager
 
 import android.content.Context
+import android.net.NetworkCapabilities
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.work.BackoffPolicy
@@ -11,9 +12,11 @@ import androidx.work.testing.TestDriver
 import androidx.work.testing.WorkManagerTestInitHelper
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
+import org.hamcrest.Matchers.hasItem
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.odk.collect.async.Scheduler
 import org.odk.collect.async.TaskSpec
 import java.util.UUID
 import java.util.function.Supplier
@@ -239,6 +242,75 @@ class WorkManagerTaskSpecSchedulerTest {
     }
 
     @Test
+    fun `sets connected constraints when networkConstraint is not specified`() {
+        TestTaskSpec.doReturn(TaskSpec.Result.Success())
+
+        taskSpecScheduler.schedule(
+            tag = "cellular",
+            specs = listOf(TestTaskSpec()),
+            inputData = emptyMap(),
+            networkConstraint = null,
+            repeatPeriod = null
+        )
+
+        val workInfo = workManager.getEnqueuedTask()
+        val requiredNetworkRequest = workInfo.constraints.requiredNetworkRequest
+        assertThat(
+            requiredNetworkRequest?.capabilities?.asIterable(),
+            hasItem(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        )
+        assertThat(requiredNetworkRequest?.transportTypes?.isEmpty(), equalTo(true))
+    }
+
+    @Test
+    fun `sets cellular constraints when networkConstraint is specified`() {
+        TestTaskSpec.doReturn(TaskSpec.Result.Success())
+
+        taskSpecScheduler.schedule(
+            tag = "cellular",
+            specs = listOf(TestTaskSpec()),
+            inputData = emptyMap(),
+            networkConstraint = Scheduler.NetworkType.CELLULAR,
+            repeatPeriod = null
+        )
+
+        val workInfo = workManager.getEnqueuedTask()
+        val requiredNetworkRequest = workInfo.constraints.requiredNetworkRequest
+        assertThat(
+            requiredNetworkRequest?.capabilities?.asIterable(),
+            hasItem(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        )
+        assertThat(
+            requiredNetworkRequest?.transportTypes?.asIterable(),
+            hasItem(NetworkCapabilities.TRANSPORT_CELLULAR)
+        )
+    }
+
+    @Test
+    fun `sets wifi constraints when networkConstraint is specified`() {
+        TestTaskSpec.doReturn(TaskSpec.Result.Success())
+
+        taskSpecScheduler.schedule(
+            tag = "wifi",
+            specs = listOf(TestTaskSpec()),
+            inputData = emptyMap(),
+            networkConstraint = Scheduler.NetworkType.WIFI,
+            repeatPeriod = null
+        )
+
+        val workInfo = workManager.getEnqueuedTask()
+        val requiredNetworkRequest = workInfo.constraints.requiredNetworkRequest
+        assertThat(
+            requiredNetworkRequest?.capabilities?.asIterable(),
+            hasItem(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        )
+        assertThat(
+            requiredNetworkRequest?.transportTypes?.asIterable(),
+            hasItem(NetworkCapabilities.TRANSPORT_WIFI)
+        )
+    }
+
+    @Test
     fun `sets periodicity correctly when repeatPeriod specified`() {
         TestTaskSpec.doReturn(TaskSpec.Result.Success())
 
@@ -328,10 +400,48 @@ class WorkManagerTaskSpecSchedulerTest {
         testDriver.setAllConstraintsMetForEnqueued(workManager)
         assertThat(TestTaskSpec.runCount, equalTo(2))
     }
+
+    @Test
+    fun `sets constraints for each task in the chain when there is a repeat period`() {
+        TestTaskSpec.doReturn(TaskSpec.Result.Success())
+
+        taskSpecScheduler.schedule(
+            tag = "tag",
+            specs = listOf(TestTaskSpec(), TestTaskSpec()),
+            inputData = emptyMap(),
+            networkConstraint = Scheduler.NetworkType.WIFI,
+            repeatPeriod = 15.minutes.inWholeMilliseconds
+        )
+
+        val workId = workManager.getEnqueuedTask().id
+        testDriver.setAllConstraintsMet(workId)
+
+        val firstStep = workManager.getEnqueuedTask(periodic = false)
+        assertThat(
+            firstStep.constraints.requiredNetworkRequest?.capabilities?.asIterable(),
+            hasItem(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        )
+        assertThat(
+            firstStep.constraints.requiredNetworkRequest?.transportTypes?.asIterable(),
+            hasItem(NetworkCapabilities.TRANSPORT_WIFI)
+        )
+
+        testDriver.setAllConstraintsMet(firstStep.id)
+
+        val secondStep = workManager.getEnqueuedTask(periodic = false)
+        assertThat(
+            secondStep.constraints.requiredNetworkRequest?.capabilities?.asIterable(),
+            hasItem(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        )
+        assertThat(
+            secondStep.constraints.requiredNetworkRequest?.transportTypes?.asIterable(),
+            hasItem(NetworkCapabilities.TRANSPORT_WIFI)
+        )
+    }
 }
 
-private fun WorkManager.getEnqueuedTask(): WorkInfo {
-    val enqueuedTasks = this.getEnqueuedTasks()
+private fun WorkManager.getEnqueuedTask(periodic: Boolean = true): WorkInfo {
+    val enqueuedTasks = this.getEnqueuedTasks().filter { periodic || it.periodicityInfo == null }
     assertThat(enqueuedTasks.size, equalTo(1))
     return enqueuedTasks[0]
 }
