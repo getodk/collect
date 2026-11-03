@@ -47,7 +47,6 @@ dependencies {
     implementation(libs.cameraxView)
     implementation(libs.cameraxLifecycle)
     implementation(libs.cameraxCamera2)
-    implementation("com.google.guava:guava:33.0.0-android") // Guava is a dependency required by CameraX. It shouldn't be used in any other context and should be removed when no longer necessary.
     implementation(libs.dagger)
     ksp(libs.daggerCompiler)
 
