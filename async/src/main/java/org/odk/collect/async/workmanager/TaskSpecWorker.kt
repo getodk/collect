@@ -1,9 +1,12 @@
 package org.odk.collect.async.workmanager
 
 import android.content.Context
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import androidx.work.Constraints
 import androidx.work.Data
 import androidx.work.ExistingWorkPolicy
+import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import androidx.work.WorkRequest
@@ -77,7 +80,6 @@ class TaskSpecWorker(
             getWorkRequest(
                 taskSpecs.drop(1),
                 tag,
-                Constraints.Builder().build(),
                 outputData,
                 cellularOnly
             )
@@ -99,9 +101,9 @@ class TaskSpecWorker(
         fun getWorkRequest(
             specs: List<TaskSpec>,
             tag: String,
-            constraints: Constraints,
             inputData: Map<String, String>,
-            cellularOnly: Boolean
+            cellularOnly: Boolean,
+            constraints: Constraints = getConstraints()
         ): OneTimeWorkRequest {
             val builder = OneTimeWorkRequest.Builder(TaskSpecWorker::class.java)
             return builder.setup(tag, specs, inputData, cellularOnly, constraints).build()
@@ -130,6 +132,30 @@ class TaskSpecWorker(
             }
 
             return this
+        }
+
+        fun getConstraints(networkConstraint: Scheduler.NetworkType? = null): Constraints {
+            val networkRequest = NetworkRequest.Builder().apply {
+                addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+
+                when (networkConstraint) {
+                    Scheduler.NetworkType.WIFI -> addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+                    Scheduler.NetworkType.CELLULAR -> addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
+                    else -> Unit
+                }
+            }.build()
+
+            val networkType = when (networkConstraint) {
+                Scheduler.NetworkType.WIFI -> NetworkType.UNMETERED
+                Scheduler.NetworkType.CELLULAR -> NetworkType.METERED
+                else -> NetworkType.CONNECTED
+            }
+
+            val constraints = Constraints
+                .Builder()
+                .setRequiredNetworkRequest(networkRequest, networkType)
+                .build()
+            return constraints
         }
 
         private fun getInputData(
