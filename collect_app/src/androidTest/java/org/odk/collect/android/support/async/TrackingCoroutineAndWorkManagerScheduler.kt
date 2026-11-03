@@ -99,10 +99,6 @@ class TrackingCoroutineAndWorkManagerScheduler(private val networkStateProvider:
         deferredTasks.removeIf { t: DeferredTask -> t.tag == tag }
     }
 
-    override fun isDeferredRunning(tag: String): Boolean {
-        return wrappedScheduler.isDeferredRunning(tag)
-    }
-
     @JvmOverloads
     fun runDeferredTasks(isLastUniqueExecution: Boolean = true, isStopped: Boolean = false) {
         if (networkStateProvider.isDeviceOnline) {

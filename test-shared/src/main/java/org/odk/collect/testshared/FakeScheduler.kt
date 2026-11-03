@@ -150,10 +150,6 @@ class FakeScheduler : Scheduler {
         return repeatTasks.isNotEmpty()
     }
 
-    override fun isDeferredRunning(tag: String): Boolean {
-        return false
-    }
-
     override fun cancelDeferred(tag: String) {}
 }
 
