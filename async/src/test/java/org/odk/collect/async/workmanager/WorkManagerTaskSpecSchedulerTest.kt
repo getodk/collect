@@ -7,6 +7,7 @@ import androidx.work.BackoffPolicy
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import androidx.work.WorkQuery
+import androidx.work.testing.TestDriver
 import androidx.work.testing.WorkManagerTestInitHelper
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -16,6 +17,7 @@ import org.junit.runner.RunWith
 import org.odk.collect.async.TaskSpec
 import java.util.UUID
 import java.util.function.Supplier
+import kotlin.time.Duration.Companion.minutes
 
 @RunWith(AndroidJUnit4::class)
 class WorkManagerTaskSpecSchedulerTest {
@@ -235,6 +237,97 @@ class WorkManagerTaskSpecSchedulerTest {
         assertThat(workManager.getWorkInfo(workId).state, equalTo(WorkInfo.State.FAILED))
         assertThat(TestTaskSpec.onExceptionCalledWith, equalTo(exception))
     }
+
+    @Test
+    fun `when there is a repeatPeriod, sets the periodicity correctly`() {
+        TestTaskSpec.doReturn(TaskSpec.Result.Success())
+
+        taskSpecScheduler.schedule(
+            tag = "tag",
+            specs = listOf(TestTaskSpec()),
+            inputData = emptyMap(),
+            networkConstraint = null,
+            repeatPeriod = 15.minutes.inWholeMilliseconds
+        )
+
+        val workId = workManager.getEnqueuedTask().id
+        assertThat(
+            workManager.getWorkInfo(workId).periodicityInfo!!.repeatIntervalMillis,
+            equalTo(15.minutes.inWholeMilliseconds)
+        )
+    }
+
+    @Test
+    fun `when there is a repeatPeriod, runs the task repeatedly`() {
+        TestTaskSpec.doReturn(TaskSpec.Result.Success())
+
+        taskSpecScheduler.schedule(
+            tag = "tag",
+            specs = listOf(TestTaskSpec()),
+            inputData = emptyMap(),
+            networkConstraint = null,
+            repeatPeriod = 15.minutes.inWholeMilliseconds
+        )
+
+        val workId = workManager.getEnqueuedTask().id
+        testDriver.setAllConstraintsMet(workId)
+        testDriver.setAllConstraintsMetForEnqueued(workManager)
+        assertThat(TestTaskSpec.runCount, equalTo(1))
+
+        testDriver.setPeriodDelayMet(workId)
+        testDriver.setAllConstraintsMet(workId)
+        testDriver.setAllConstraintsMetForEnqueued(workManager)
+        assertThat(TestTaskSpec.runCount, equalTo(2))
+    }
+
+    @Test
+    fun `when there is a repeatPeriod, and a task in the chain is left from last repeat, replaces it`() {
+        TestTaskSpec.doReturn(TaskSpec.Result.Success())
+
+        taskSpecScheduler.schedule(
+            tag = "tag",
+            specs = listOf(TestTaskSpec()),
+            inputData = emptyMap(),
+            networkConstraint = null,
+            repeatPeriod = 15.minutes.inWholeMilliseconds
+        )
+
+        val workId = workManager.getEnqueuedTask().id
+        testDriver.setAllConstraintsMet(workId)
+        assertThat(TestTaskSpec.runCount, equalTo(0))
+
+        testDriver.setPeriodDelayMet(workId)
+        testDriver.setAllConstraintsMet(workId)
+        testDriver.setAllConstraintsMetForEnqueued(workManager)
+        assertThat(TestTaskSpec.runCount, equalTo(1))
+    }
+
+    @Test
+    fun `when task in the chain is left from a different repeat, does not replace it`() {
+        TestTaskSpec.doReturn(TaskSpec.Result.Success())
+
+        taskSpecScheduler.schedule(
+            tag = "tag1",
+            specs = listOf(TestTaskSpec()),
+            inputData = emptyMap(),
+            networkConstraint = null,
+            repeatPeriod = 15.minutes.inWholeMilliseconds
+        )
+
+        testDriver.setAllConstraintsMet(workManager.getWorkInfosByTag("tag1").get()[0].id)
+
+        taskSpecScheduler.schedule(
+            tag = "tag2",
+            specs = listOf(TestTaskSpec()),
+            inputData = emptyMap(),
+            networkConstraint = null,
+            repeatPeriod = 15.minutes.inWholeMilliseconds
+        )
+
+        testDriver.setAllConstraintsMet(workManager.getWorkInfosByTag("tag2").get()[0].id)
+        testDriver.setAllConstraintsMetForEnqueued(workManager)
+        assertThat(TestTaskSpec.runCount, equalTo(2))
+    }
 }
 
 private fun WorkManager.getEnqueuedTask(): WorkInfo {
@@ -251,6 +344,16 @@ private fun WorkManager.getWorkInfo(workId: UUID): WorkInfo {
     return getWorkInfoById(workId).get()!!
 }
 
+private fun TestDriver.setAllConstraintsMetForEnqueued(workManager: WorkManager) {
+    workManager.getEnqueuedTasks().forEach {
+        try {
+            this.setAllConstraintsMet(it.id)
+        } catch (_: Exception) {
+            // Ignored
+        }
+    }
+}
+
 private class TestTaskSpec : TaskSpec {
 
     companion object {
@@ -265,12 +368,16 @@ private class TestTaskSpec : TaskSpec {
         var onExceptionCalledWith: Throwable? = null
             private set
 
+        var runCount: Int = 0
+            private set
+
         fun reset() {
             returnValue = TaskSpec.Result.Success()
             maxRetries = null
             exception = null
             wasLastUniqueExecution = false
             onExceptionCalledWith = null
+            runCount = 0
         }
 
         fun doReturn(value: TaskSpec.Result): Companion {
@@ -301,6 +408,7 @@ private class TestTaskSpec : TaskSpec {
         wasLastUniqueExecution = isLastUniqueExecution
 
         return Supplier {
+            runCount++
             exception?.let {
                 throw it
             }
@@ -313,4 +421,3 @@ private class TestTaskSpec : TaskSpec {
         onExceptionCalledWith = exception
     }
 }
-
