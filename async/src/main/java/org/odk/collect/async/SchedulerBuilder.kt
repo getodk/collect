@@ -69,10 +69,6 @@ object SchedulerBuilder {
                 taskSpecScheduler.cancel(tag)
             }
 
-            override fun isDeferredRunning(tag: String): Boolean {
-                return taskSpecScheduler.isRunning(tag)
-            }
-
             override fun repeat(
                 foreground: Runnable,
                 repeatPeriod: Long

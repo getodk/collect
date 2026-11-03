@@ -94,11 +94,6 @@ interface Scheduler {
     fun cancelDeferred(tag: String)
 
     /**
-     * Returns true if a deferred task scheduled with tag is currently running
-     */
-    fun isDeferredRunning(tag: String): Boolean
-
-    /**
      * Run a task and then repeat in the foreground
      *
      * @param foreground the task to be run
