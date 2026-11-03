@@ -35,7 +35,7 @@ class WorkManagerTaskSpecSchedulerTest {
     }
 
     @Test
-    fun `when task returns Success work should succeed`() {
+    fun `work succeeds when task returns Success`() {
         TestTaskSpec.doReturn(TaskSpec.Result.Success())
 
         taskSpecScheduler.schedule(
@@ -53,7 +53,7 @@ class WorkManagerTaskSpecSchedulerTest {
     }
 
     @Test
-    fun `when task returns Failure, retries if maxRetries not specified`() {
+    fun `retries when task returns Failure and maxRetries not specified`() {
         TestTaskSpec.doReturn(TaskSpec.Result.Failure())
 
         taskSpecScheduler.schedule(
@@ -73,7 +73,7 @@ class WorkManagerTaskSpecSchedulerTest {
     }
 
     @Test
-    fun `when task returns Failure, retries if maxRetries is specified and is higher than runAttemptCount`() {
+    fun `retries when task returns Failure with maxRetries higher than runAttemptCount`() {
         TestTaskSpec
             .withMaxRetries(1)
             .doReturn(TaskSpec.Result.Failure())
@@ -98,7 +98,7 @@ class WorkManagerTaskSpecSchedulerTest {
     }
 
     @Test
-    fun `when task returns Failure, fails if maxRetries is specified and is equal to runAttemptCount`() {
+    fun `fails when task returns Failure with maxRetries equal to runAttemptCount`() {
         TestTaskSpec
             .withMaxRetries(0)
             .doReturn(TaskSpec.Result.Failure())
@@ -118,7 +118,7 @@ class WorkManagerTaskSpecSchedulerTest {
     }
 
     @Test
-    fun `when task returns Failure, fails if maxRetries is specified and is lower than runAttemptCount`() {
+    fun `fails when task returns Failure with maxRetries lower than runAttemptCount`() {
         TestTaskSpec
             .withMaxRetries(-1)
             .doReturn(TaskSpec.Result.Failure())
@@ -138,7 +138,7 @@ class WorkManagerTaskSpecSchedulerTest {
     }
 
     @Test
-    fun `when maxRetries is not specified, task called with isLastUniqueExecution true`() {
+    fun `runs with isLastUniqueExecution true when maxRetries not specified`() {
         TestTaskSpec
             .doReturn(TaskSpec.Result.Failure())
 
@@ -157,7 +157,7 @@ class WorkManagerTaskSpecSchedulerTest {
     }
 
     @Test
-    fun `when maxRetries is specified and it is higher than runAttemptCount, task called with isLastUniqueExecution false`() {
+    fun `runs with isLastUniqueExecution false when maxRetries higher than runAttemptCount`() {
         TestTaskSpec
             .withMaxRetries(1)
             .doReturn(TaskSpec.Result.Failure())
@@ -177,7 +177,7 @@ class WorkManagerTaskSpecSchedulerTest {
     }
 
     @Test
-    fun `when maxRetries is specified and it is equal to runAttemptCount, task called with isLastUniqueExecution true`() {
+    fun `runs with isLastUniqueExecution true when maxRetries equal to runAttemptCount`() {
         TestTaskSpec
             .withMaxRetries(0)
             .doReturn(TaskSpec.Result.Failure())
@@ -197,7 +197,7 @@ class WorkManagerTaskSpecSchedulerTest {
     }
 
     @Test
-    fun `when maxRetries is specified and it is lower than runAttemptCount, task called with isLastUniqueExecution true`() {
+    fun `runs with isLastUniqueExecution true when maxRetries lower than runAttemptCount`() {
         TestTaskSpec
             .withMaxRetries(-1)
             .doReturn(TaskSpec.Result.Failure())
@@ -217,7 +217,7 @@ class WorkManagerTaskSpecSchedulerTest {
     }
 
     @Test
-    fun `when there is an exception, work should fail`() {
+    fun `fails when task throws exception`() {
         val exception = IllegalStateException()
 
         TestTaskSpec
@@ -239,7 +239,7 @@ class WorkManagerTaskSpecSchedulerTest {
     }
 
     @Test
-    fun `when there is a repeatPeriod, sets the periodicity correctly`() {
+    fun `sets periodicity correctly when repeatPeriod specified`() {
         TestTaskSpec.doReturn(TaskSpec.Result.Success())
 
         taskSpecScheduler.schedule(
@@ -258,7 +258,7 @@ class WorkManagerTaskSpecSchedulerTest {
     }
 
     @Test
-    fun `when there is a repeatPeriod, runs the task repeatedly`() {
+    fun `runs task repeatedly when repeatPeriod specified`() {
         TestTaskSpec.doReturn(TaskSpec.Result.Success())
 
         taskSpecScheduler.schedule(
@@ -281,7 +281,7 @@ class WorkManagerTaskSpecSchedulerTest {
     }
 
     @Test
-    fun `when there is a repeatPeriod, and a task in the chain is left from last repeat, replaces it`() {
+    fun `replaces existing task when repeatPeriod specified and task left from last repeat`() {
         TestTaskSpec.doReturn(TaskSpec.Result.Success())
 
         taskSpecScheduler.schedule(
@@ -303,7 +303,7 @@ class WorkManagerTaskSpecSchedulerTest {
     }
 
     @Test
-    fun `when task in the chain is left from a different repeat, does not replace it`() {
+    fun `does not replace existing task when task left from different repeat`() {
         TestTaskSpec.doReturn(TaskSpec.Result.Success())
 
         taskSpecScheduler.schedule(
