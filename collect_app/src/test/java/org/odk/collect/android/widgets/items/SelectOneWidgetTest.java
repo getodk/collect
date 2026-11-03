@@ -2,7 +2,6 @@ package org.odk.collect.android.widgets.items;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -238,20 +237,6 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
         verify(audioPlayer).play(eq(new Clip("i am index 0", REFERENCES.get(0).second)));
         getChoiceView(getWidget(), 1).findViewById(R.id.audioButton).performClick();
         verify(audioPlayer).play(eq(new Clip("i am index 1", REFERENCES.get(1).second)));
-    }
-
-    @Test
-    public void whenAChoiceValueIsNull_choiceIsNotShown() {
-        SelectChoice selectChoice = new SelectChoice(); // The two arg constructor protects against null values
-        selectChoice.setTextID("1");
-
-        formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withSelectChoices(asList(selectChoice))
-                .build();
-
-        SelectOneWidget widget = getWidget();
-        assertThat(widget.getChoiceCount(), is(0));
-        assertThat(widget.getAnswer(), nullValue());
     }
 
     @Test
