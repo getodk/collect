@@ -402,7 +402,7 @@ class WorkManagerTaskSpecSchedulerTest {
     }
 
     @Test
-    fun `sets constraints for each task in the chain when there is a repeat period`() {
+    fun `sets constraints for each task in the chain when a repeatPeriod is specified`() {
         TestTaskSpec.doReturn(TaskSpec.Result.Success())
 
         taskSpecScheduler.schedule(
@@ -437,6 +437,25 @@ class WorkManagerTaskSpecSchedulerTest {
             secondStep.constraints.requiredNetworkRequest?.transportTypes?.asIterable(),
             hasItem(NetworkCapabilities.TRANSPORT_WIFI)
         )
+    }
+
+    @Test
+    fun `#cancel cancels tasks in the chain when a repeatPeriod is speficied`() {
+        TestTaskSpec.doReturn(TaskSpec.Result.Success())
+
+        taskSpecScheduler.schedule(
+            tag = "tag",
+            specs = listOf(TestTaskSpec()),
+            inputData = emptyMap(),
+            networkConstraint = Scheduler.NetworkType.WIFI,
+            repeatPeriod = 15.minutes.inWholeMilliseconds
+        )
+
+        val workId = workManager.getEnqueuedTask().id
+        testDriver.setAllConstraintsMet(workId)
+
+        taskSpecScheduler.cancel("tag")
+        assertThat(workManager.getEnqueuedTasks(), equalTo(emptyList()))
     }
 }
 

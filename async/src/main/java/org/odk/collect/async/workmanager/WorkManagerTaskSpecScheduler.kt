@@ -56,6 +56,7 @@ class WorkManagerTaskSpecScheduler(private val workManager: WorkManager) : TaskS
 
     override fun cancel(tag: String) {
         workManager.cancelUniqueWork(tag)
+        workManager.cancelUniqueWork(PeriodicTaskSpecWorkerEnqueuerWorker.chainTaskName(tag))
     }
 
     override fun cancelAll() {
