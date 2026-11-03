@@ -30,8 +30,15 @@ class TaskSpecWorker(
 
     override fun doWork(): Result {
         val tag = inputData.getString(DATA_TAG) ?: throw IllegalArgumentException()
-        val cellularOnly = inputData.getBoolean(DATA_CELLULAR_ONLY, false)
-        return if (!cellularOnly || connectivityProvider.currentNetwork == Scheduler.NetworkType.CELLULAR) {
+        val networkConstraint = inputData.getInt(DATA_NETWORK_CONSTRAINT, -1).let {
+            if (it != -1) {
+                Scheduler.NetworkType.entries[it]
+            } else {
+                null
+            }
+        }
+
+        return if (networkConstraint != Scheduler.NetworkType.CELLULAR || connectivityProvider.currentNetwork == Scheduler.NetworkType.CELLULAR) {
             val taskSpecs = inputData.getStringArray(DATA_TASK_SPEC_CLASSES)!!.map {
                 Class.forName(it).getConstructor().newInstance() as TaskSpec
             }
@@ -49,7 +56,7 @@ class TaskSpecWorker(
                 result,
                 taskSpecs,
                 tag,
-                cellularOnly
+                networkConstraint
             )
 
             if (nextWorkRequest != null) {
@@ -73,7 +80,7 @@ class TaskSpecWorker(
         result: RunResult,
         taskSpecs: List<TaskSpec>,
         tag: String,
-        cellularOnly: Boolean
+        networkConstraint: Scheduler.NetworkType?
     ): OneTimeWorkRequest? {
         val outputData = result.outputData
         return if (taskSpecs.size > 1 && outputData != null) {
@@ -81,7 +88,7 @@ class TaskSpecWorker(
                 taskSpecs.drop(1),
                 tag,
                 outputData,
-                cellularOnly
+                networkConstraint
             )
         } else {
             null
@@ -95,30 +102,28 @@ class TaskSpecWorker(
 
     companion object {
         const val DATA_TASK_SPEC_CLASSES = "taskSpecClasses"
-        const val DATA_CELLULAR_ONLY = "cellularOnly"
+        const val DATA_NETWORK_CONSTRAINT = "networkConstraint"
         const val DATA_TAG = "tag"
 
         fun getWorkRequest(
             specs: List<TaskSpec>,
             tag: String,
             inputData: Map<String, String>,
-            cellularOnly: Boolean,
-            constraints: Constraints = getConstraints()
+            networkConstraint: Scheduler.NetworkType?
         ): OneTimeWorkRequest {
             val builder = OneTimeWorkRequest.Builder(TaskSpecWorker::class.java)
-            return builder.setup(tag, specs, inputData, cellularOnly, constraints).build()
+            return builder.setup(tag, specs, inputData, networkConstraint).build()
         }
 
         fun <T : WorkRequest.Builder<T, *>, U : WorkRequest> WorkRequest.Builder<T, U>.setup(
             tag: String,
             specs: List<TaskSpec>,
             inputData: Map<String, String>,
-            cellularOnly: Boolean,
-            constraints: Constraints
+            networkConstraint: Scheduler.NetworkType?,
         ): WorkRequest.Builder<T, U> {
             this.addTag(tag)
-                .setInputData(getInputData(tag, specs, inputData, cellularOnly))
-                .setConstraints(constraints)
+                .setInputData(getInputData(tag, specs, inputData, networkConstraint))
+                .setConstraints(getConstraints(networkConstraint))
 
             val firstSpec = specs.first()
             firstSpec.backoffPolicy?.let { backoffPolicy ->
@@ -134,7 +139,7 @@ class TaskSpecWorker(
             return this
         }
 
-        fun getConstraints(networkConstraint: Scheduler.NetworkType? = null): Constraints {
+        private fun getConstraints(networkConstraint: Scheduler.NetworkType? = null): Constraints {
             val networkRequest = NetworkRequest.Builder().apply {
                 addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
 
@@ -162,7 +167,7 @@ class TaskSpecWorker(
             tag: String,
             specs: List<TaskSpec>,
             inputData: Map<String, String>,
-            cellularOnly: Boolean
+            networkConstraint: Scheduler.NetworkType?
         ): Data {
             return Data.Builder()
                 .putAll(inputData)
@@ -170,7 +175,11 @@ class TaskSpecWorker(
                     DATA_TASK_SPEC_CLASSES,
                     specs.map { it.javaClass.name }.toTypedArray()
                 )
-                .putBoolean(DATA_CELLULAR_ONLY, cellularOnly)
+                .also {
+                    if (networkConstraint != null) {
+                        it.putInt(DATA_NETWORK_CONSTRAINT, networkConstraint.ordinal)
+                    }
+                }
                 .putString(DATA_TAG, tag)
                 .build()
         }

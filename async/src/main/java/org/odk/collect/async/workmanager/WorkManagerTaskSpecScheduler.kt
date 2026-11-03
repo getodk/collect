@@ -8,7 +8,6 @@ import androidx.work.WorkManager
 import org.odk.collect.async.Scheduler
 import org.odk.collect.async.TaskSpec
 import org.odk.collect.async.TaskSpecScheduler
-import org.odk.collect.async.workmanager.TaskSpecWorker.Companion.getConstraints
 import org.odk.collect.async.workmanager.TaskSpecWorker.Companion.setup
 import java.util.concurrent.TimeUnit
 
@@ -20,15 +19,12 @@ class WorkManagerTaskSpecScheduler(private val workManager: WorkManager) : TaskS
         networkConstraint: Scheduler.NetworkType?,
         repeatPeriod: Long?
     ) {
-        val constraints = getConstraints(networkConstraint)
-        val cellularOnly = networkConstraint == Scheduler.NetworkType.CELLULAR
-
         if (repeatPeriod != null) {
             val workRequest = PeriodicWorkRequest.Builder(
                 PeriodicTaskSpecWorkerEnqueuerWorker::class.java,
                 repeatPeriod,
                 TimeUnit.MILLISECONDS
-            ).setup(tag, specs, inputData, cellularOnly, constraints).build()
+            ).setup(tag, specs, inputData, networkConstraint).build()
 
             workManager.enqueueUniquePeriodicWork(
                 tag,
@@ -40,8 +36,7 @@ class WorkManagerTaskSpecScheduler(private val workManager: WorkManager) : TaskS
                 specs,
                 tag,
                 inputData,
-                cellularOnly,
-                constraints
+                networkConstraint
             )
 
             workManager.enqueueUniqueWork(tag, ExistingWorkPolicy.REPLACE, workRequest)
