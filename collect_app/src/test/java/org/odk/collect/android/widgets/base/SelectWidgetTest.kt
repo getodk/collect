@@ -34,14 +34,15 @@ abstract class SelectWidgetTest<W : Widget, A : IAnswerData> : QuestionWidgetTes
             .withSelectChoices(
                 listOf(
                     SelectChoice("A", "a"),
-                    SelectChoice("B", "")
+                    SelectChoice("B", ""),
+                    SelectChoice().also { it.textID = "C" } // The two arg constructor protects against null values
                 )
             )
             .build()
 
         val warning = (widget as QuestionWidget).findViewById<TextView>(R.id.warning_text)
         assertThat(warning.visibility, equalTo(View.VISIBLE))
-        assertThat(warning.text.toString(), equalTo("1 choice has no value and is not shown."))
+        assertThat(warning.text.toString(), equalTo("2 choices have no value and are not shown."))
     }
 
     private fun createSelectChoices(): List<SelectChoice> {
