@@ -32,6 +32,11 @@ allprojects {
         ignoredDependencies.add("org.jetbrains.kotlin:kotlin-stdlib-common")
     }
 
+    // Robolectric needs access to JDK internals, see https://robolectric.org/getting-started/
+    tasks.withType<Test>().configureEach {
+        jvmArgs("--add-opens=java.base/jdk.internal.access=ALL-UNNAMED")
+    }
+
     // Regenerate every module's gradle.lockfile: ./gradlew resolveAndLockAll --write-locks
     tasks.register("resolveAndLockAll") {
         dependsOn(tasks.named("dependencies"))
