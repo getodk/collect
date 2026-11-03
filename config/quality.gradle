@@ -7,10 +7,10 @@ apply plugin: 'checkstyle'
 checkstyle.toolVersion = '14.3.0'
 
 tasks.register("checkstyle", Checkstyle) {
-    configFile file("$configDir/checkstyle.xml")
+    configFile = file("$configDir/checkstyle.xml")
 
-    ignoreFailures false // Fail early
-    showViolations true
+    ignoreFailures = false // Fail early
+    showViolations = true
 
     source 'src'
     include '**/*.java'
@@ -37,10 +37,10 @@ tasks.register("pmd", Pmd) {
 
     reports {
         xml {
-            enabled false
+            required = false
         }
         html {
-            enabled true
+            required = true
         }
     }
 }
