@@ -37,7 +37,13 @@ class PeriodicTaskSpecWorkerEnqueuerWorker(
             networkConstraint
         )
 
-        workManager.enqueueUniqueWork("$tag:periodic_step", ExistingWorkPolicy.REPLACE, workRequest)
+        workManager.enqueueUniqueWork(chainTaskName(tag), ExistingWorkPolicy.REPLACE, workRequest)
         return Result.success()
+    }
+
+    companion object {
+        fun chainTaskName(tag: String): String {
+            return "$tag:periodic_step"
+        }
     }
 }
