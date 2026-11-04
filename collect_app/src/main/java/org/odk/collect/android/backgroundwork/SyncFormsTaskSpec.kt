@@ -9,6 +9,7 @@ import org.odk.collect.android.injection.config.ProjectDependencyModuleFactory
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.async.TaskSpec
 import org.odk.collect.async.TaskSpec.Result
+import org.odk.collect.async.clearAndBlock
 import java.util.function.Supplier
 import javax.inject.Inject
 
@@ -18,6 +19,9 @@ class SyncFormsTaskSpec : TaskSpec {
 
     @Inject
     lateinit var notifier: Notifier
+
+    @Inject
+    lateinit var projectDependencyModuleFactory: ProjectDependencyModuleFactory
 
     override val maxRetries = 3
     override val backoffPolicy = BackoffPolicy.EXPONENTIAL
@@ -34,16 +38,16 @@ class SyncFormsTaskSpec : TaskSpec {
         return Supplier {
             val projectId = inputData[TaskData.DATA_PROJECT_ID]
             if (projectId != null) {
-                val result = formsDataService.matchFormsWithServer(
-                    projectId,
-                    isLastUniqueExecution,
-                    isStopped
-                )
-                if (result) {
-                    Result.Success()
-                } else {
-                    Result.Failure()
+                val workQueue = projectDependencyModuleFactory.create(projectId).formProcessingQueue
+                workQueue.clearAndBlock {
+                    formsDataService.matchFormsWithServer(
+                        projectId,
+                        isLastUniqueExecution,
+                        isStopped
+                    )
                 }
+
+                Result.Success()
             } else {
                 throw IllegalArgumentException("No project ID provided!")
             }
@@ -62,6 +66,9 @@ class SyncFormsDownloadTaskSpec : TaskSpec {
     @Inject
     lateinit var notifier: Notifier
 
+    @Inject
+    lateinit var projectDependencyModuleFactory: ProjectDependencyModuleFactory
+
     override val maxRetries = 3
     override val backoffPolicy = BackoffPolicy.EXPONENTIAL
     override val backoffDelay: Long = 60_000
@@ -77,15 +84,12 @@ class SyncFormsDownloadTaskSpec : TaskSpec {
         return Supplier {
             val projectId = inputData[TaskData.DATA_PROJECT_ID]
             if (projectId != null) {
-                val formDownloads =
+                val workQueue = projectDependencyModuleFactory.create(projectId).formProcessingQueue
+                workQueue.add {
                     formsDataService.downloadFormList(projectId, isStopped) ?: emptyList()
-                val serializedFormDownloads = FormDownloadSerializer.serialize(formDownloads)
-                val outputData = mapOf(
-                    TaskData.DATA_PROJECT_ID to projectId,
-                    SyncFormsProcessTaskSpec.DATA_FORM_DOWNLOADS to serializedFormDownloads
-                )
+                }
 
-                Result.Success(outputData)
+                Result.Success(mapOf(TaskData.DATA_PROJECT_ID to projectId))
             } else {
                 throw IllegalArgumentException("No project ID provided!")
             }
@@ -123,18 +127,13 @@ class SyncFormsProcessTaskSpec : TaskSpec {
             val projectId = inputData[TaskData.DATA_PROJECT_ID]
 
             if (projectId != null) {
-                val formsRepository =
-                    projectDependencyModuleFactory.create(projectId).formsRepository
-                val formDownloads = inputData[DATA_FORM_DOWNLOADS]?.let {
-                    FormDownloadSerializer.deserialize(it, formsRepository)
-                }
-
-                if (formDownloads != null) {
+                val workQueue = projectDependencyModuleFactory.create(projectId).formProcessingQueue
+                workQueue.consume { formDownloads ->
                     formsDataService.processFormDownloads(projectId, formDownloads)
                     Result.Success()
-                } else {
-                    throw IllegalArgumentException("No form downloads provided!")
                 }
+
+                Result.Success()
             } else {
                 throw IllegalArgumentException("No project ID provided!")
             }

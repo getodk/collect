@@ -6,6 +6,7 @@ import org.odk.collect.android.projects.ProjectDependencyModule
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.storage.StoragePaths
 import org.odk.collect.android.utilities.ChangeLockProvider
+import org.odk.collect.android.utilities.FormProcessingQueueFactory
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.utilities.SavepointsRepositoryProvider
@@ -26,6 +27,7 @@ class ProjectDependencyModuleFactory @Inject constructor(
     private val openRosaClientProvider: OpenRosaClientProvider,
     private val savepointsRepositoryProvider: SavepointsRepositoryProvider,
     private val entitiesRepositoryProvider: EntitiesRepositoryProvider,
+    private val formProcessingQueueFactory: FormProcessingQueueFactory,
 ) : ProjectDependencyFactory<ProjectDependencyModule> {
     override fun create(projectId: String): ProjectDependencyModule {
         return ProjectDependencyModule(
@@ -39,7 +41,8 @@ class ProjectDependencyModuleFactory @Inject constructor(
             savepointsRepositoryProvider,
             entitiesRepositoryProvider,
             { openRosaClientProvider.create(projectId) },
-            DebugLoggerFactory(storagePathProvider)
+            DebugLoggerFactory(storagePathProvider),
+            formProcessingQueueFactory,
         )
     }
 }
