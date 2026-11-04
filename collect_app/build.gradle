@@ -163,11 +163,8 @@ android {
             useLegacyPackaging = true
         }
         resources {
-            // These library licenses will be referenced in-app
-            excludes += ['META-INF/ASL-2.0.txt', 'META-INF/LGPL-3.0.txt']
-
             // Pick first occurrence of any files that cause conflicts
-            pickFirsts += ['META-INF/DEPENDENCIES', 'META-INF/FastDoubleParser-LICENSE', 'META-INF/FastDoubleParser-ThirdParty-LICENSE', 'META-INF/LICENSE', 'META-INF/LICENSE.txt', 'META-INF/NOTICE', 'META-INF/NOTICE.txt', 'META-INF/Schubfach-LICENSE', 'META-INF/services/com.fasterxml.jackson.core.JsonFactory', 'META-INF/services/com.fasterxml.jackson.core.ObjectCodec', 'META-INF/services/javax.ws.rs.ext.MessageBodyReader', 'META-INF/services/javax.ws.rs.ext.MessageBodyWriter', 'draftv4/schema', 'draftv3/schema']
+            pickFirsts += ['META-INF/FastDoubleParser-LICENSE', 'META-INF/FastDoubleParser-ThirdParty-LICENSE', 'META-INF/LICENSE', 'META-INF/LICENSE.txt', 'META-INF/NOTICE', 'META-INF/NOTICE.txt', 'META-INF/Schubfach-LICENSE']
         }
 
         // To ensure that ODK Collect is installable on all devices, we don't use
@@ -178,12 +175,6 @@ android {
             exclude 'lib/x86/libmaplibre.so'
             exclude 'lib/x86_64/libmaplibre.so'
         }
-
-        /* Exclude large properties files used by BouncyCastle's Picnic implementation (which
-           Collect doesn't use). */
-        exclude 'org/bouncycastle/pqc/crypto/picnic/lowmcL5.bin.properties'
-        exclude 'org/bouncycastle/pqc/crypto/picnic/lowmcL3.bin.properties'
-        exclude 'org/bouncycastle/pqc/crypto/picnic/lowmcL1.bin.properties'
     }
 
     compileOptions {
