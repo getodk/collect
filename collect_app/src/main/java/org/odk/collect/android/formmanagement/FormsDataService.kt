@@ -255,14 +255,16 @@ class FormsDataService(
                         downloadResults.filterIsInstance<Result.Success<FormDownload, FormDownloadException>>()
                     val errors = downloadResults.filterIsInstance<Result.Error<FormDownload, FormDownloadException>>()
 
-                    if (errors.isNotEmpty() && isStopped()) {
-                        notifier.onSyncStopped(projectId)
+                    if (errors.isNotEmpty()) {
+                        notifier.onSync(FormSourceException.FetchError(), projectId)
                     }
 
                     successes.map { it.value }
-                } catch (_: FormSourceException) {
+                } catch (e: FormSourceException) {
                     if (isStopped()) {
                         notifier.onSyncStopped(projectId)
+                    } else {
+                        notifier.onSync(e, projectId)
                     }
 
                     null

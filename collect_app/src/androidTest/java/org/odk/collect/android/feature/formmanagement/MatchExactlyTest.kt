@@ -186,6 +186,52 @@ class MatchExactlyTest {
     }
 
     @Test
+    fun whenMatchExactlyEnabled_andThereIsAnErrorFetchingList_showsNotification_andClickingNotification_returnsToApp() {
+        testDependencies.server.alwaysReturnError()
+
+        rule.startAtMainMenu()
+            .setServer(testDependencies.server.url)
+            .enableMatchExactly()
+
+        testDependencies.scheduler.runDeferredTasks()
+
+        notificationDrawerRule
+            .open()
+            .assertNotification("ODK Collect", "Form update failed", "Demo project")
+            .clickNotification(
+                "ODK Collect",
+                "Form update failed",
+                MainMenuPage()
+            )
+    }
+
+    @Test
+    fun whenMatchExactlyEnabled_andThereIsAnErrorDownloadingAForm_showsNotification_andClickingNotification_returnsToApp() {
+        testDependencies.server.errorOnFetchingForms()
+        testDependencies.server.addForm(
+            "One Question Updated",
+            "one_question",
+            "2",
+            "one-question-updated.xml"
+        )
+
+        rule.startAtMainMenu()
+            .setServer(testDependencies.server.url)
+            .enableMatchExactly()
+
+        testDependencies.scheduler.runDeferredTasks()
+
+        notificationDrawerRule
+            .open()
+            .assertNotification("ODK Collect", "Form update failed", "Demo project")
+            .clickNotification(
+                "ODK Collect",
+                "Form update failed",
+                MainMenuPage()
+            )
+    }
+
+    @Test
     fun whenMatchExactlyEnabled_hidesGetBlankFormsAndDeleteBlankForms() {
         rule.startAtMainMenu()
             .copyForm("one-question.xml")
