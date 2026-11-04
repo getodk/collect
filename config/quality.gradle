@@ -14,7 +14,6 @@ tasks.register("checkstyle", Checkstyle) {
 
     source 'src'
     include '**/*.java'
-    exclude '**/gen/**'
     classpath = files()
 }
 
@@ -33,7 +32,6 @@ tasks.register("pmd", Pmd) {
 
     source 'src'
     include '**/*.java'
-    exclude '**/gen/**'
 
     reports {
         xml {
