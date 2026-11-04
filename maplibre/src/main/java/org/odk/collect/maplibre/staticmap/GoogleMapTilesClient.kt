@@ -4,11 +4,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONArray
 import org.json.JSONObject
 import org.maplibre.android.geometry.LatLngBounds
-import java.net.HttpURLConnection
-import java.net.URL
+import org.odk.collect.maplibre.MapLibreSupport
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
@@ -68,19 +70,13 @@ object GoogleMapTilesClient {
     private suspend fun <T> request(url: String, body: JSONObject? = null, parse: (JSONObject) -> T): T? {
         return withContext(Dispatchers.IO) {
             try {
-                val connection = URL(url).openConnection() as HttpURLConnection
-                try {
-                    connection.connectTimeout = TIMEOUT
-                    connection.readTimeout = TIMEOUT
-                    if (body != null) {
-                        connection.doOutput = true
-                        connection.setRequestProperty("Content-Type", "application/json")
-                        connection.outputStream.use { it.write(body.toString().toByteArray()) }
-                    }
+                val request = Request.Builder().url(url)
+                if (body != null) {
+                    request.post(body.toString().toRequestBody("application/json".toMediaType()))
+                }
 
-                    parse(JSONObject(connection.inputStream.bufferedReader().use { it.readText() }))
-                } finally {
-                    connection.disconnect()
+                MapLibreSupport.httpClient.newCall(request.build()).execute().use { response ->
+                    if (response.isSuccessful) parse(JSONObject(response.body.string())) else null
                 }
             } catch (_: Exception) {
                 null
@@ -96,8 +92,6 @@ object GoogleMapTilesClient {
     private const val MAP_TYPE_SATELLITE = "2"
     private const val MAP_TYPE_TERRAIN = "3"
     private const val MAP_TYPE_HYBRID = "4"
-
-    private const val TIMEOUT = 10_000
 
     const val HOST = "tile.googleapis.com"
 }

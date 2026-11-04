@@ -1,10 +1,21 @@
 package org.odk.collect.maplibre
 
 import android.content.Context
+import okhttp3.Dispatcher
+import okhttp3.OkHttpClient
 import org.maplibre.android.MapLibre
 import org.maplibre.android.WellKnownTileServer
+import org.maplibre.android.module.http.HttpRequestUtil
 
 object MapLibreSupport {
+    private lateinit var applicationContext: Context
+
+    val httpClient by lazy {
+        OkHttpClient.Builder()
+            .dispatcher(Dispatcher().apply { maxRequestsPerHost = 20 })
+            .addInterceptor(AndroidAppHeadersInterceptor(applicationContext))
+            .build()
+    }
 
     fun initialize(context: Context) {
         MapLibre.getInstance(
@@ -16,6 +27,9 @@ object MapLibreSupport {
         // MapLibre makes no HTTP requests while the device is offline, and TileHttpServer serves
         // reference layers over HTTP, so they would never load offline without this.
         MapLibre.setConnected(true)
+
+        applicationContext = context.applicationContext
+        HttpRequestUtil.setOkHttpClient { httpClient.newCall(it) }
     }
 
     /**

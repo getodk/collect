@@ -34,6 +34,7 @@ dependencies {
     implementation(libs.androidxFragmentKtx)
     implementation(libs.androidxPreferenceKtx)
     implementation(libs.kotlinxCoroutinesAndroid)
+    implementation(libs.okHttp)
     implementation(libs.timber)
     implementation(libs.dagger)
     ksp(libs.daggerCompiler)
