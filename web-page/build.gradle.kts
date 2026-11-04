@@ -43,7 +43,6 @@ dependencies {
 
     implementation(project(":androidshared"))
     implementation(project(":strings"))
-    implementation(libs.androidMaterial)
     implementation(libs.androidxBrowser)
 
     testImplementation(libs.androidxTestExtJunit)

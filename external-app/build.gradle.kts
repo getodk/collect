@@ -33,7 +33,6 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidxCoreKtx)
 
     testImplementation(libs.junit)
     testImplementation(libs.hamcrest)

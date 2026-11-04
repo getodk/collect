@@ -37,7 +37,6 @@ android {
 dependencies {
     coreLibraryDesugaring(libs.desugar)
 
-    implementation(libs.androidxCoreKtx)
     implementation(project(":shared"))
 
     testImplementation(project(":test-shared"))

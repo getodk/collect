@@ -47,7 +47,6 @@ dependencies {
     implementation(project(":maps"))
     implementation(project(":settings"))
     implementation(project(":strings"))
-    implementation(project(":icons"))
 
     implementation(libs.androidxPreferenceKtx)
     implementation(libs.playServicesMaps)

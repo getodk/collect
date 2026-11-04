@@ -55,7 +55,6 @@ dependencies {
     implementation(project(":androidshared"))
     implementation(project(":external-app"))
     implementation(project(":async"))
-    implementation(project(":analytics"))
     implementation(project(":permissions"))
     implementation(project(":settings"))
     implementation(project(":maps"))
@@ -75,8 +74,6 @@ dependencies {
     implementation(composeBom)
     implementation(libs.androidXComposeMaterial)
     implementation(libs.androidXComposeMaterialIconsExtended)
-    implementation(libs.androidXComposePreview)
-    debugImplementation(libs.androidXComposeTooling)
 
     debugImplementation(project(":fragments-test"))
 

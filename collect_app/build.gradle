@@ -268,7 +268,6 @@ dependencies {
 
     implementation libs.androidxStartup
     implementation libs.androidxCoreKtx
-    implementation libs.androidxBrowser
     implementation libs.androidxAppcompat
     implementation libs.androidxWorkRuntime
 
@@ -313,7 +312,6 @@ dependencies {
     // Android Architecture Components:
     implementation libs.androidxLifecycleRuntimeKtx
     implementation libs.androidxLifecycleLivedataKtx
-    implementation libs.androidxLifecycleViewmodelCompose
     implementation libs.androidxViewpager2
 
     // Dagger:
@@ -324,8 +322,6 @@ dependencies {
     kspTest libs.daggerCompiler
 
     // Dagger Android:
-    implementation libs.daggerAndroid
-    ksp libs.daggerAndroidProcessor
 
     implementation libs.armen101AudioRecorderView
 
@@ -385,7 +381,6 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
 
-    androidTestImplementation libs.androidxWorkTesting
     androidTestImplementation libs.uiautomator
     androidTestImplementation libs.mockitoKotlin
     androidTestImplementation libs.hamcrest

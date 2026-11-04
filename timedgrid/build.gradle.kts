@@ -46,7 +46,6 @@ dependencies {
     implementation(project(":androidshared"))
     implementation(project(":strings"))
 
-    implementation(libs.androidxFragmentKtx)
     implementation(libs.androidMaterial)
     implementation(libs.androidxAppcompat)
     implementation(libs.androidFlexbox)

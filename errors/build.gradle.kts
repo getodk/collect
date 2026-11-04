@@ -43,7 +43,6 @@ dependencies {
 
     implementation(project(":strings"))
     implementation(project(":androidshared"))
-    implementation(libs.androidxCoreKtx)
     implementation(libs.androidxAppcompat)
     implementation(libs.androidxRecyclerview)
     implementation(libs.androidMaterial)

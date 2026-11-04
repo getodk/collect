@@ -33,7 +33,6 @@ dependencies {
     implementation(project(":androidshared"))
     implementation(project(":async"))
     implementation(libs.androidxActivity)
-    implementation(libs.androidxCoreKtx)
     implementation(libs.androidxLifecycleViewmodelKtx)
     implementation(libs.androidxLifecycleLivedataKtx)
 

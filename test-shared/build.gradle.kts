@@ -41,8 +41,6 @@ dependencies {
     implementation(project(":web-page"))
     implementation(libs.androidxRecyclerview)
     implementation(libs.androidxCoreKtx)
-    implementation(libs.androidxWorkRuntime)
-    implementation(libs.androidxAppcompat)
     implementation(libs.robolectric)
     implementation(libs.junit)
     implementation(libs.okhttp3Mockwebserver)
@@ -52,7 +50,4 @@ dependencies {
     implementation(libs.danlewAndroidJoda)
     implementation(libs.androidXComposeUiTestJunit4)
     implementation(libs.androidXComposeUiTest)
-    implementation(libs.androidxFragmentTesting) {
-        exclude(group = "androidx.test", module = "monitor") // fixes issue https://github.com/android/android-test/issues/731
-    }
 }
