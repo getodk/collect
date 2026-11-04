@@ -106,6 +106,16 @@ class WorkQueueTest {
         addJob.join()
         verify(consumer, never()).invoke(any())
     }
+
+    @Test
+    fun `#consume calls afterConsume after consumer`() {
+        val onClear = mock<(List<Int>) -> Unit>()
+        val workQueue = WorkQueue(afterConsume = onClear)
+
+        workQueue.add { listOf(4, 5, 6) }
+        workQueue.consume { verify(onClear, never()).invoke(any()) }
+        verify(onClear).invoke(listOf(4, 5, 6))
+    }
 }
 
 private fun mockConsumer(): (List<Int>) -> Unit = mock()
