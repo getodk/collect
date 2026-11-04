@@ -37,7 +37,6 @@ android {
 dependencies {
     coreLibraryDesugaring(libs.desugar)
 
-    implementation(project(":permissions"))
     implementation(project(":settings"))
     implementation(project(":shared"))
 
@@ -48,5 +47,4 @@ dependencies {
 
     testImplementation(libs.hamcrest)
     testImplementation(libs.junit)
-    testImplementation(libs.mockitoKotlin)
 }

@@ -40,7 +40,6 @@ android {
 dependencies {
     coreLibraryDesugaring(libs.desugar)
 
-    implementation(project(":icons"))
     implementation(project(":strings"))
     implementation(project(":shared"))
     implementation(project(":async"))
@@ -58,7 +57,6 @@ dependencies {
     implementation(libs.androidXComposeMaterial)
 
     testImplementation(project(":test-shared"))
-    testImplementation(project(":androidtest"))
     testImplementation(libs.junit)
     testImplementation(libs.androidxTestExtJunit)
     testImplementation(libs.androidxTestEspressoCore)
