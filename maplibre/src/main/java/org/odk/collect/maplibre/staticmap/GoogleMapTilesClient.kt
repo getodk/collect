@@ -34,11 +34,11 @@ object GoogleMapTilesClient {
         } ?: return null
 
         val copyright = getCopyright(apiKey, currentSession.token, zoom, bounds) ?: return null
-        return Tiles("https://tile.googleapis.com/v1/2dtiles/{z}/{x}/{y}?session=${currentSession.token}&key=$apiKey", copyright)
+        return Tiles("https://$HOST/v1/2dtiles/{z}/{x}/{y}?session=${currentSession.token}&key=$apiKey", copyright)
     }
 
     private suspend fun getCopyright(apiKey: String, session: String, zoom: Int, bounds: LatLngBounds): String? {
-        val url = "https://tile.googleapis.com/tile/v1/viewport?session=$session&key=$apiKey&zoom=$zoom" +
+        val url = "https://$HOST/tile/v1/viewport?session=$session&key=$apiKey&zoom=$zoom" +
             "&north=${bounds.latitudeNorth}&south=${bounds.latitudeSouth}&east=${bounds.longitudeEast}&west=${bounds.longitudeWest}"
         return request(url) { it.optString("copyright") }
     }
@@ -60,7 +60,7 @@ object GoogleMapTilesClient {
             else -> body.put("mapType", "roadmap")
         }
 
-        return request("https://tile.googleapis.com/v1/createSession?key=$apiKey", body) {
+        return request("https://$HOST/v1/createSession?key=$apiKey", body) {
             Session(it.getString("session"), TimeUnit.SECONDS.toMillis(it.getLong("expiry")), style)
         }
     }
@@ -98,4 +98,6 @@ object GoogleMapTilesClient {
     private const val MAP_TYPE_HYBRID = "4"
 
     private const val TIMEOUT = 10_000
+
+    const val HOST = "tile.googleapis.com"
 }
