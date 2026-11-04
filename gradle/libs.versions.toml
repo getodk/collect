@@ -73,8 +73,6 @@ karumiDexter = { group = "com.karumi", name = "dexter", version = "6.2.3" }
 zxingAndroidEmbedded = { group = "com.journeyapps", name = "zxing-android-embedded", version = "4.3.0" }
 dagger = { group = "com.google.dagger", name = "dagger", version.ref = "dagger" }
 daggerCompiler = { group = "com.google.dagger", name = "dagger-compiler", version.ref = "dagger" }
-daggerAndroid = { group = "com.google.dagger", name = "dagger-android", version.ref = "dagger" }
-daggerAndroidProcessor = { group = "com.google.dagger", name = "dagger-android-processor", version.ref = "dagger" }
 kotlinxCoroutinesAndroid = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 kotlinxCoroutinesTest = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
 armen101AudioRecorderView = { group = "com.github.Armen101", name = "AudioRecordView", version = "1.0.5" }
@@ -112,7 +110,6 @@ androidxFragmentTesting = { group = "androidx.fragment", name = "fragment-testin
 androidxArchCoreTesting = { group = "androidx.arch.core", name = "core-testing", version = "2.2.0" }
 androidxWorkTesting = { group = "androidx.work", name = "work-testing", version.ref = "work" }
 androidxTestCoreKtx = { group = "androidx.test", name = "core-ktx", version = "1.7.0" }
-androidxTestRules = { group = "androidx.test", name = "rules", version = "1.7.0" }
 androidxTestEspressoContrib = { group = "androidx.test.espresso", name = "espresso-contrib", version.ref = "espresso" }
 androidxTestEspressoCore = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso" }
 androidxTestEspressoIntents = { group = "androidx.test.espresso", name = "espresso-intents", version.ref = "espresso" }
