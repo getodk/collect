@@ -49,7 +49,6 @@ dependencies {
     implementation(libs.timber)
     implementation(libs.okHttp)
     implementation(libs.okHttpDigest)
-    implementation(libs.okHttpTls)
     implementation(libs.commonsIo)
     implementation(libs.slf4jApi)
     implementation(libs.javarosa) {
@@ -60,6 +59,7 @@ dependencies {
     }
 
     testImplementation(project(":test-shared"))
+    testImplementation(libs.okHttpTls)
     testImplementation(libs.junit)
     testImplementation(libs.hamcrest)
     testImplementation(libs.okhttp3Mockwebserver)
