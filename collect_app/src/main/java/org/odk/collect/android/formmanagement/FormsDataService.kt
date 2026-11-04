@@ -18,8 +18,8 @@ import org.odk.collect.forms.Form
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.projects.ProjectDependencyFactory
 import org.odk.collect.settings.keys.ProjectKeys
+import org.odk.collect.shared.TempFiles
 import org.odk.collect.shared.result.Result
-import java.io.File
 import java.util.function.Supplier
 
 class FormsDataService(
@@ -323,7 +323,7 @@ private fun formDownloader(
     return ServerFormDownloader(
         projectDependencyModule.formSource,
         projectDependencyModule.formsRepository,
-        File(projectDependencyModule.cacheDir),
+        TempFiles.createTempDir(),
         projectDependencyModule.formsDir,
         FormMetadataParser,
         clock,
