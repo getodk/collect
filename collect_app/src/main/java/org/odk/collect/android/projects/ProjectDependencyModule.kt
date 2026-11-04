@@ -1,7 +1,9 @@
 package org.odk.collect.android.projects
 
+import org.odk.collect.android.formmanagement.FormDownload
 import org.odk.collect.android.storage.StoragePaths
 import org.odk.collect.android.utilities.ChangeLocks
+import org.odk.collect.async.WorkQueue
 import org.odk.collect.entities.debug.EntityEvent
 import org.odk.collect.entities.server.EntitySource
 import org.odk.collect.entities.storage.EntitiesRepository
@@ -29,7 +31,8 @@ data class ProjectDependencyModule(
     private val savepointsRepositoryFactory: ProjectDependencyFactory<SavepointsRepository>,
     private val entitiesRepositoryFactory: ProjectDependencyFactory<EntitiesRepository>,
     private val entitySourceFactory: ProjectDependencyFactory<EntitySource>,
-    private val debugLoggerFactory: ProjectDependencyFactory<DebugLogger<EntityEvent>>
+    private val debugLoggerFactory: ProjectDependencyFactory<DebugLogger<EntityEvent>>,
+    private val formProcessingQueueFactory: ProjectDependencyFactory<WorkQueue<FormDownload>>,
 ) {
     val generalSettings by projectDependency(projectId, settingsFactory)
     val formsRepository by projectDependency(projectId, formsRepositoryFactory)
@@ -45,4 +48,5 @@ data class ProjectDependencyModule(
     val instancesDir by projectDependency(projectId, storagePathsFactory) { it.instancesDir }
     val entitySource by projectDependency(projectId, entitySourceFactory)
     val debugLogger by projectDependency(projectId, debugLoggerFactory)
+    val formProcessingQueue by projectDependency(projectId, formProcessingQueueFactory)
 }
