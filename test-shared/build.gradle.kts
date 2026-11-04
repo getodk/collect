@@ -48,6 +48,6 @@ dependencies {
     implementation(libs.androidxTestEspressoContrib)
     implementation(libs.androidMaterial)
     implementation(libs.danlewAndroidJoda)
+    implementation(platform(libs.androidxComposeBom))
     implementation(libs.androidXComposeUiTestJunit4)
-    implementation(libs.androidXComposeUiTest)
 }

@@ -45,7 +45,7 @@ androidxFragmentKtx = { group = "androidx.fragment", name = "fragment-ktx", vers
 androidMaterial = { group = "com.google.android.material", name = "material", version = "1.14.0" }
 androidFlexbox = { group = "com.google.android.flexbox", name = "flexbox", version = "3.0.0" }
 androidxComposeBom = { group = "androidx.compose", name = "compose-bom", version = "2026.09.00" }
-androidXComposeMaterial = { group = "androidx.compose.material3", name = "material3", version = { strictly = "1.4.0" } } # Keep in sync with androidxComposeBom, forced because play-services-oss-licenses pulls in an alpha version
+androidXComposeMaterial = { group = "androidx.compose.material3", name = "material3" }
 androidXComposeMaterialIconsExtended = { group = "androidx.compose.material", name = "material-icons-extended" }
 androidXComposePreview = { group = "androidx.compose.ui", name = "ui-tooling-preview"}
 androidXComposeTooling = { group = "androidx.compose.ui", name = "ui-tooling"}
@@ -118,7 +118,6 @@ okhttp3Mockwebserver = { group = "com.squareup.okhttp3", name = "mockwebserver",
 hamcrest = { group = "org.hamcrest", name = "hamcrest", version = "3.0" }
 robolectric = { group = "org.robolectric", name = "robolectric", version = "4.17" }
 uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version = "2.4.0" }
-androidXComposeUiTest = { group = "androidx.compose.ui", name = "ui-test", version = "1.12.1" }
 
 [plugins]
 androidApplication = { id = "com.android.application" }
