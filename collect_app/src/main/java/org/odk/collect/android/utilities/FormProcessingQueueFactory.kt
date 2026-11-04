@@ -15,7 +15,7 @@ class FormProcessingQueueFactory : ProjectDependencyFactory<WorkQueue<FormDownlo
         return synchronized(this) {
             queues.getOrPut(projectId) {
                 WorkQueue(
-                    afterConsume = { formDownloads ->
+                    onClear = { formDownloads ->
                         formDownloads.forEach { it.tempDir.deleteDirectory() }
                     }
                 )

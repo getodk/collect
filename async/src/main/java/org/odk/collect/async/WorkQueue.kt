@@ -3,10 +3,10 @@ package org.odk.collect.async
 import kotlinx.coroutines.sync.Mutex
 
 /**
- * @param afterConsume run after the queue is consumed with the values consume. Allows any
- * resources releated to the items to be cleaned up.
+ * @param onClear run after the queue is consumed with the values consume. Allows any
+ * resources related to the items to be cleaned up.
  */
-class WorkQueue<T>(private val afterConsume: (List<T>) -> Unit = {}) {
+class WorkQueue<T>(private val onClear: (List<T>) -> Unit = {}) {
 
     private var itemList = mutableListOf<T>()
     private var lock = Mutex()
@@ -17,14 +17,16 @@ class WorkQueue<T>(private val afterConsume: (List<T>) -> Unit = {}) {
             itemList.clear()
 
             consumer(consumed)
-            afterConsume(consumed)
+            onClear(consumed)
         }
 
         return false
     }
 
-    fun add(producer: () -> List<T>): Boolean {
+    fun set(producer: () -> List<T>): Boolean {
         return lock.tryAcquire {
+            onClear(itemList.toList())
+            itemList.clear()
             itemList.addAll(producer())
         }
     }
@@ -47,5 +49,8 @@ class WorkQueue<T>(private val afterConsume: (List<T>) -> Unit = {}) {
 }
 
 fun <T> WorkQueue<T>.clearAndBlock(work: () -> Unit) {
-    this.consume { work() }
+    this.set {
+        work()
+        emptyList()
+    }
 }

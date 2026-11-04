@@ -85,7 +85,7 @@ class SyncFormsDownloadTaskSpec : TaskSpec {
             val projectId = inputData[TaskData.DATA_PROJECT_ID]
             if (projectId != null) {
                 val workQueue = projectDependencyModuleFactory.create(projectId).formProcessingQueue
-                workQueue.add {
+                workQueue.set {
                     formsDataService.downloadFormList(projectId, isStopped) ?: emptyList()
                 }
 

@@ -16,9 +16,9 @@ import java.util.concurrent.CountDownLatch
 class WorkQueueTest {
 
     @Test
-    fun `#add adds item for consumption`() {
+    fun `#set adds item for consumption`() {
         val workQueue = WorkQueue<Int>()
-        workQueue.add { listOf(5) }
+        workQueue.set { listOf(5) }
 
         val consumer = mockConsumer()
         workQueue.consume(consumer)
@@ -26,24 +26,24 @@ class WorkQueueTest {
     }
 
     @Test
-    fun `#add adds items in order`() {
+    fun `#set replaces previous items`() {
         val workQueue = WorkQueue<Int>()
-        workQueue.add { listOf(5, 6) }
-        workQueue.add { listOf(7) }
+        workQueue.set { listOf(5, 6) }
+        workQueue.set { listOf(7) }
 
         val consumer = mockConsumer()
         workQueue.consume(consumer)
-        verify(consumer).invoke(listOf(5, 6, 7))
+        verify(consumer).invoke(listOf(7))
     }
 
     @Test
-    fun `#add returns false if queue is locked`() = runBlocking {
+    fun `#set returns false if queue is locked`() = runBlocking {
         val workQueue = WorkQueue<Int>()
         val testBarrier = CountDownLatch(1)
         val addJobBarrier = CountDownLatch(1)
 
         val addJob = CoroutineScope(Dispatchers.IO).launch {
-            workQueue.add {
+            workQueue.set {
                 testBarrier.countDown()
                 addJobBarrier.await()
                 listOf(1, 2, 3)
@@ -51,7 +51,7 @@ class WorkQueueTest {
         }
 
         testBarrier.await()
-        val result = workQueue.add { listOf(4, 5, 6) }
+        val result = workQueue.set { listOf(4, 5, 6) }
         assertThat(result, equalTo(false))
 
         addJobBarrier.countDown()
@@ -63,16 +63,27 @@ class WorkQueueTest {
     }
 
     @Test
-    fun `#add returns true if queue is not locked`() {
+    fun `#set returns true if queue is not locked`() {
         val workQueue = WorkQueue<Int>()
-        val result = workQueue.add { listOf(4, 5, 6) }
+        val result = workQueue.set { listOf(4, 5, 6) }
         assertThat(result, equalTo(true))
+    }
+
+    @Test
+    fun `#set calls onClear`() {
+        val onClear = mock<(List<Int>) -> Unit>()
+        val workQueue = WorkQueue(onClear = onClear)
+
+        workQueue.set { listOf(1, 2, 3) }
+        verify(onClear).invoke(emptyList())
+        workQueue.set { listOf(4, 5, 6) }
+        verify(onClear).invoke(listOf(1, 2, 3))
     }
 
     @Test
     fun `#consume clears items`() {
         val workQueue = WorkQueue<Int>()
-        workQueue.add { listOf(5, 6) }
+        workQueue.set { listOf(5, 6) }
 
         val consumer1 = mockConsumer()
         workQueue.consume(consumer1)
@@ -90,7 +101,7 @@ class WorkQueueTest {
         val addJobBarrier = CountDownLatch(1)
 
         val addJob = CoroutineScope(Dispatchers.IO).launch {
-            workQueue.add {
+            workQueue.set {
                 testBarrier.countDown()
                 addJobBarrier.await()
                 listOf(1, 2, 3)
@@ -108,12 +119,12 @@ class WorkQueueTest {
     }
 
     @Test
-    fun `#consume calls afterConsume after consumer`() {
+    fun `#consume calls onClear after consumer`() {
         val onClear = mock<(List<Int>) -> Unit>()
-        val workQueue = WorkQueue(afterConsume = onClear)
+        val workQueue = WorkQueue(onClear = onClear)
 
-        workQueue.add { listOf(4, 5, 6) }
-        workQueue.consume { verify(onClear, never()).invoke(any()) }
+        workQueue.set { listOf(4, 5, 6) }
+        workQueue.consume { verify(onClear, never()).invoke(listOf(4, 5, 6)) }
         verify(onClear).invoke(listOf(4, 5, 6))
     }
 }
