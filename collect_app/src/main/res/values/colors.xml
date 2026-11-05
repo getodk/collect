@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimaryLight">#3e9fcc</color>
+    <color name="colorPrimaryLight">#0A80A3</color>
     <color name="colorOnPrimaryLight">#ffffff</color>
     <color name="colorPrimaryContainerLight">#bfe9ff</color>
     <color name="colorOnPrimaryContainerLight">#001f2a</color>
@@ -8,7 +8,7 @@
     <color name="colorOnSurfaceLight">#001f2a</color>
     <color name="colorSurfaceContainerHighestLight">#f2f2f2</color>
 
-    <color name="colorPrimaryDark">#4cbcf0</color>
+    <color name="colorPrimaryDark">#0A80A3</color>
     <color name="colorOnPrimaryDark">#003547</color>
     <color name="colorPrimaryContainerDark">#004d65</color>
     <color name="colorOnPrimaryContainerDark">#bfe9ff</color>
