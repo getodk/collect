@@ -2,9 +2,6 @@
 <network-security-config>
     <base-config cleartextTrafficPermitted="true">
         <trust-anchors>
-            <!-- Explicitly trust Let's Encrypt ISRG Root X1 which is not available to Android < 7.1.1 -->
-            <certificates src="@raw/isrgrootx1"/>
-
             <certificates src="system"/>
         </trust-anchors>
     </base-config>
