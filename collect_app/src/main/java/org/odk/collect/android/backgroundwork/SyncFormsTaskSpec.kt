@@ -66,9 +66,6 @@ class SyncFormsDownloadTaskSpec : TaskSpec {
     @Inject
     lateinit var notifier: Notifier
 
-    @Inject
-    lateinit var projectDependencyModuleFactory: ProjectDependencyModuleFactory
-
     override val maxRetries = 3
     override val backoffPolicy = BackoffPolicy.EXPONENTIAL
     override val backoffDelay: Long = 60_000
@@ -84,11 +81,7 @@ class SyncFormsDownloadTaskSpec : TaskSpec {
         return Supplier {
             val projectId = inputData[TaskData.DATA_PROJECT_ID]
             if (projectId != null) {
-                val workQueue = projectDependencyModuleFactory.create(projectId).formProcessingQueue
-                workQueue.set {
-                    formsDataService.downloadFormList(projectId, isStopped) ?: emptyList()
-                }
-
+                formsDataService.downloadFormList(projectId, isStopped)
                 Result.Success(mapOf(TaskData.DATA_PROJECT_ID to projectId))
             } else {
                 throw IllegalArgumentException("No project ID provided!")
@@ -108,9 +101,6 @@ class SyncFormsProcessTaskSpec : TaskSpec {
     @Inject
     lateinit var notifier: Notifier
 
-    @Inject
-    lateinit var projectDependencyModuleFactory: ProjectDependencyModuleFactory
-
     override val maxRetries = 3
     override val backoffPolicy = BackoffPolicy.EXPONENTIAL
     override val backoffDelay: Long = 60_000
@@ -127,12 +117,7 @@ class SyncFormsProcessTaskSpec : TaskSpec {
             val projectId = inputData[TaskData.DATA_PROJECT_ID]
 
             if (projectId != null) {
-                val workQueue = projectDependencyModuleFactory.create(projectId).formProcessingQueue
-                workQueue.consume { formDownloads ->
-                    formsDataService.processFormDownloads(projectId, formDownloads)
-                    Result.Success()
-                }
-
+                formsDataService.processFormDownloads(projectId)
                 Result.Success()
             } else {
                 throw IllegalArgumentException("No project ID provided!")
@@ -142,9 +127,5 @@ class SyncFormsProcessTaskSpec : TaskSpec {
 
     override fun onException(exception: Throwable) {
         Analytics.logNonFatal(exception)
-    }
-
-    companion object {
-        const val DATA_FORM_DOWNLOADS = "formDownloads"
     }
 }

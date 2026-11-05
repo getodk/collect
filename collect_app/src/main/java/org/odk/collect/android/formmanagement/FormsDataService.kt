@@ -219,68 +219,71 @@ class FormsDataService(
         }
     }
 
-    fun downloadFormList(projectId: String, isStopped: () -> Boolean): List<FormDownload>? {
+    fun downloadFormList(projectId: String, isStopped: () -> Boolean) {
         val projectDependencies = projectDependencyModuleFactory.create(projectId)
-        return projectDependencies.formsLock.withLock { acquiredLock ->
-            if (acquiredLock) {
-                syncWithStorage(projectId)
+        val formProcessingQueue = projectDependencies.formProcessingQueue
+        formProcessingQueue.set {
+            try {
+                val formsRepository = projectDependencies.formsRepository
+                val instancesRepository = projectDependencies.instancesRepository
+                val formList = ServerFormUseCases.fetchFormDetails(
+                    formsRepository,
+                    projectDependencies.formSource
+                )
 
-                try {
-                    val formsRepository = projectDependencies.formsRepository
-                    val instancesRepository = projectDependencies.instancesRepository
-                    val formList = ServerFormUseCases.fetchFormDetails(
-                        formsRepository,
-                        projectDependencies.formSource
-                    )
+                val formsOnDevice: List<Form> = formsRepository.getAll()
+                val formsToDelete = formsOnDevice
+                    .filterNot { deviceForm -> formList.any { it.formId == deviceForm.formId } }
+                val formsToDownload = formList
+                    .filter { it.type != ServerFormDetails.Type.OnDevice }
 
-                    val formsOnDevice: List<Form> = formsRepository.getAll()
-                    val formsToDelete = formsOnDevice
-                        .filterNot { deviceForm -> formList.any { it.formId == deviceForm.formId } }
-                    val formsToDownload = formList
-                        .filter { it.type != ServerFormDetails.Type.OnDevice }
-
-                    formsToDelete
-                        .forEach {
-                            LocalFormUseCases.deleteForm(
-                                formsRepository,
-                                instancesRepository,
-                                it.dbId
-                            )
-                        }
-
-                    val formDownloader = formDownloader(projectDependencies, clock)
-                    val downloadResults = formDownloader.downloadForms(formsToDownload, null, null)
-
-                    val successes =
-                        downloadResults.filterIsInstance<Result.Success<FormDownload, FormDownloadException>>()
-                    val errors = downloadResults.filterIsInstance<Result.Error<FormDownload, FormDownloadException>>()
-
-                    if (errors.isNotEmpty()) {
-                        notifier.onSync(FormSourceException.FetchError(), projectId)
+                formsToDelete
+                    .forEach {
+                        LocalFormUseCases.deleteForm(
+                            formsRepository,
+                            instancesRepository,
+                            it.dbId
+                        )
                     }
 
-                    successes.map { it.value }
-                } catch (e: FormSourceException) {
-                    if (isStopped()) {
-                        notifier.onSyncStopped(projectId)
-                    } else {
-                        notifier.onSync(e, projectId)
-                    }
+                val formDownloader = formDownloader(projectDependencies, clock)
+                val downloadResults = formDownloader.downloadForms(formsToDownload, null, null)
 
-                    null
+                val successes =
+                    downloadResults.filterIsInstance<Result.Success<FormDownload, FormDownloadException>>()
+                val errors =
+                    downloadResults.filterIsInstance<Result.Error<FormDownload, FormDownloadException>>()
+
+                if (errors.isNotEmpty()) {
+                    notifier.onSync(FormSourceException.FetchError(), projectId)
                 }
-            } else {
-                null
+
+                successes.map { it.value }
+            } catch (e: FormSourceException) {
+                if (isStopped()) {
+                    notifier.onSyncStopped(projectId)
+                } else {
+                    notifier.onSync(e, projectId)
+                }
+
+                emptyList()
             }
         }
     }
 
-    fun processFormDownloads(projectId: String, formDownloads: List<FormDownload>) {
+    fun processFormDownloads(projectId: String) {
         val projectDependencies = projectDependencyModuleFactory.create(projectId)
-
-        val formDownloader = formDownloader(projectDependencies, clock)
-        formDownloads.forEach { formDownloader.processForm(it) }
-        update(projectId)
+        projectDependencies.formsLock.withLock { acquiredLock ->
+            if (acquiredLock) {
+                val formProcessingQueue =
+                    projectDependencyModuleFactory.create(projectId).formProcessingQueue
+                formProcessingQueue.consume { formDownloads ->
+                    val formDownloader = formDownloader(projectDependencies, clock)
+                    formDownloads.forEach { formDownloader.processForm(it) }
+                    update(projectId)
+                }
+            }
+        }
     }
 
     fun deleteForm(projectId: String, formId: Long) {
