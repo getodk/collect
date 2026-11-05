@@ -9,11 +9,5 @@ android {
         minSdk = libs.versions.minSdk.get().toInt()
     }
 
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-        }
-    }
-
     namespace = "org.odk.collect.nbistubs"
 }
