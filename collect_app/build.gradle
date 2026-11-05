@@ -131,7 +131,6 @@ android {
         }
 
         debug {
-            debuggable(true)
             resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
             resValue("string", "mapbox_access_token", mapboxAccessToken)
             buildConfigField("String", "CARTO_API_KEY", cartoApiKey != null ? "\"${cartoApiKey}\"" : "null")
