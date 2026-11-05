@@ -14,3 +14,7 @@ dependencies {
     testImplementation(libs.junit)
     testImplementation(libs.hamcrest)
 }
+
+tasks.register("testDebug") {
+    dependsOn("test")
+}
