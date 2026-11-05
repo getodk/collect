@@ -23,9 +23,9 @@ class SyncFormsTaskSpec : TaskSpec {
     @Inject
     lateinit var projectDependencyModuleFactory: ProjectDependencyModuleFactory
 
-    override val maxRetries = 3
-    override val backoffPolicy = BackoffPolicy.EXPONENTIAL
-    override val backoffDelay: Long = 60_000
+    override val maxRetries = null
+    override val backoffPolicy = null
+    override val backoffDelay = null
 
     override fun getTask(
         context: Context,
