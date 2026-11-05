@@ -60,7 +60,6 @@ android {
         versionCode project.hasProperty('versionCode') ? project.getProperties()['versionCode'].toInteger() : 5112
         versionName getVersionName()
         testInstrumentationRunner('androidx.test.runner.AndroidJUnitRunner')
-        vectorDrawables.useSupportLibrary = true
     }
 
     base {
