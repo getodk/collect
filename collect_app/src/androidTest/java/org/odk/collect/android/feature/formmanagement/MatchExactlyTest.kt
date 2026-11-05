@@ -29,11 +29,13 @@ class MatchExactlyTest {
 
     @Test
     fun whenMatchExactlyEnabled_clickingFillBlankForm_andClickingRefresh_getsLatestFormsFromServer() {
+        testDependencies.server.addForm("one-question.xml")
+        testDependencies.server.addForm("one-question-repeat.xml")
+
         val page = rule.startAtMainMenu()
-            .copyForm("one-question.xml")
-            .copyForm("one-question-repeat.xml")
             .setServer(testDependencies.server.url)
             .enableMatchExactly()
+            .also { testDependencies.scheduler.runDeferredTasks() }
             .clickFillBlankForm()
             .assertText("One Question")
             .assertText("One Question Repeat")
@@ -46,6 +48,7 @@ class MatchExactlyTest {
         )
 
         testDependencies.server.addForm("Two Question", "two_question", "1", "two-question.xml")
+        testDependencies.server.removeForm("One Question Repeat")
 
         page.clickRefresh()
             .assertText("Two Question") // Check new form downloaded
@@ -55,11 +58,13 @@ class MatchExactlyTest {
 
     @Test
     fun whenMatchExactlyEnabled_clickingFillBlankForm_andClickingRefresh_whenThereIsAnErrorFetchingList_showsNotification_andClickingNotification_returnsToApp() {
-        testDependencies.server.alwaysReturnError()
-
         rule.startAtMainMenu()
             .setServer(testDependencies.server.url)
             .enableMatchExactly()
+            .also {
+                testDependencies.scheduler.runDeferredTasks()
+                testDependencies.server.alwaysReturnError()
+            }
             .clickFillBlankForm()
             .clickRefreshWithError()
 
@@ -75,18 +80,15 @@ class MatchExactlyTest {
 
     @Test
     fun whenMatchExactlyEnabled_clickingFillBlankForm_andClickingRefresh_whenThereIsAnErrorDownloadingAForm_showsNotification_andClickingNotification_returnsToApp() {
-        testDependencies.server.errorOnFetchingForms()
-        testDependencies.server.addForm(
-            "One Question Updated",
-            "one_question",
-            "2",
-            "one-question-updated.xml"
-        )
-
         rule.startAtMainMenu()
-            .copyForm("one-question.xml")
             .setServer(testDependencies.server.url)
             .enableMatchExactly()
+            .also {
+                testDependencies.scheduler.runDeferredTasks()
+
+                testDependencies.server.addForm("one-question.xml")
+                testDependencies.server.errorOnFetchingForms()
+            }
             .clickFillBlankForm()
             .clickRefreshWithError()
 
@@ -102,13 +104,13 @@ class MatchExactlyTest {
 
     @Test
     fun whenMatchExactlyEnabled_clickingFillBlankForm_andClickingRefresh_whenThereIsAnError_showsNotification_andClickingShowDetails_showsErrorDetails() {
-        testDependencies.server.alwaysReturnError()
-
         rule.startAtMainMenu()
-            .copyForm("one-question.xml")
-            .copyForm("one-question-repeat.xml")
             .setServer(testDependencies.server.url)
             .enableMatchExactly()
+            .also {
+                testDependencies.scheduler.runDeferredTasks()
+                testDependencies.server.alwaysReturnError()
+            }
             .clickFillBlankForm()
             .clickRefreshWithError()
 
@@ -127,62 +129,58 @@ class MatchExactlyTest {
 
     @Test
     fun whenMatchExactlyEnabled_clickingFillBlankForm_andClickingRefresh_whenThereIsAnAuthenticationError_promptsForCredentials() {
-        testDependencies.server.addForm(
-            "One Question Updated",
-            "one_question",
-            "2",
-            "one-question-updated.xml"
-        )
-
-        testDependencies.server.setCredentials("Klay", "Thompson")
+        testDependencies.server.addForm("one-question.xml")
 
         rule.startAtMainMenu()
-            .copyForm("one-question.xml")
-            .copyForm("one-question-repeat.xml")
             .setServer(testDependencies.server.url)
             .enableMatchExactly()
+            .also {
+                testDependencies.scheduler.runDeferredTasks()
+                testDependencies.server.setCredentials("Klay", "Thompson")
+            }
             .clickFillBlankForm()
             .clickRefreshWithAuthError()
             .fillUsername("Klay")
             .fillPassword("Thompson")
             .clickOK(FillBlankFormPage())
             .clickRefresh()
-            .assertText("One Question Updated")
+            .assertText("One Question")
     }
 
     @Test
     fun whenMatchExactlyEnabled_getsLatestFormsFromServer_automaticallyAndRepeatedly() {
+        testDependencies.server.addForm("one-question.xml")
+        testDependencies.server.addForm("one-question-repeat.xml")
+
+        // Initial download
         var page = rule.startAtMainMenu()
-            .copyForm("one-question.xml")
-            .copyForm("one-question-repeat.xml")
             .setServer(testDependencies.server.url)
             .enableMatchExactly()
+            .also {
+                testDependencies.scheduler.runDeferredTasks()
+            }.clickFillBlankForm()
+            .assertText("One Question")
+            .assertText("One Question Repeat")
 
+        testDependencies.server.addForm("Two Question", "two_question", "1", "two-question.xml")
         testDependencies.server.addForm(
             "One Question Updated",
             "one_question",
             "2",
             "one-question-updated.xml"
         )
-
-        testDependencies.server.addForm("Two Question", "two_question", "1", "two-question.xml")
+        testDependencies.server.removeForm("One Question Repeat")
 
         testDependencies.scheduler.runDeferredTasks()
+        page = page
+            .assertText("Two Question") // Check new form downloaded
+            .assertText("One Question Updated") // Check updated form updated
+            .assertTextDoesNotExist("One Question Repeat") // Check deleted form deleted
 
-        page = page.clickFillBlankForm()
+        testDependencies.scheduler.runDeferredTasks()
+        page.assertText("One Question Updated")
             .assertText("Two Question")
-            .assertText("One Question Updated")
             .assertTextDoesNotExist("One Question Repeat")
-            .pressBack(MainMenuPage())
-
-        testDependencies.server.removeForm("Two Question")
-
-        testDependencies.scheduler.runDeferredTasks()
-
-        page.assertOnPage()
-            .clickFillBlankForm()
-            .assertText("One Question Updated")
-            .assertTextDoesNotExist("Two Question")
     }
 
     @Test
@@ -234,8 +232,6 @@ class MatchExactlyTest {
     @Test
     fun whenMatchExactlyEnabled_hidesGetBlankFormsAndDeleteBlankForms() {
         rule.startAtMainMenu()
-            .copyForm("one-question.xml")
-            .copyForm("one-question-repeat.xml")
             .enableMatchExactly()
             .assertTextDoesNotExist(org.odk.collect.strings.R.string.get_forms)
             .clickDeleteSavedForm()
@@ -245,8 +241,6 @@ class MatchExactlyTest {
     @Test
     fun whenMatchExactlyDisabled_stopsSyncingAutomatically() {
         rule.startAtMainMenu()
-            .copyForm("one-question.xml")
-            .copyForm("one-question-repeat.xml")
             .setServer(testDependencies.server.url)
             .enableMatchExactly()
             .enableManualUpdates()
@@ -256,19 +250,23 @@ class MatchExactlyTest {
 
     @Test
     fun whenMatchExactlyEnabled_getsLatestFormsFromServerDuringFillingAFormWithoutEntities() {
-        testDependencies.server.addForm(
-            "One Question Updated",
-            "one_question",
-            "2",
-            "one-question-updated.xml"
-        )
+        testDependencies.server.addForm("one-question.xml")
 
         rule.startAtMainMenu()
-            .copyForm("one-question.xml")
             .setServer(testDependencies.server.url)
             .enableMatchExactly()
-            .startBlankForm("One Question")
             .also { testDependencies.scheduler.runDeferredTasks() }
+            .startBlankForm("One Question")
+            .also {
+                testDependencies.server.addForm(
+                    "One Question Updated",
+                    "one_question",
+                    "2",
+                    "one-question-updated.xml"
+                )
+
+                testDependencies.scheduler.runDeferredTasks()
+            }
             .pressBackAndDiscardForm()
             .clickFillBlankForm()
             .assertFormExists("One Question Updated")
@@ -276,20 +274,24 @@ class MatchExactlyTest {
 
     @Test
     fun whenMatchExactlyEnabled_doesNotGetLatestFormsFromServerDuringFillingAFormWithEntities() {
-        testDependencies.server.addForm(
-            "One Question Updated",
-            "one_question",
-            "2",
-            "one-question-updated.xml"
-        )
+        testDependencies.server.addForm("one-question-entity-registration.xml")
+        testDependencies.server.addForm("one-question.xml")
 
         rule.startAtMainMenu()
-            .copyForm("one-question-entity-registration.xml")
-            .copyForm("one-question.xml")
             .setServer(testDependencies.server.url)
             .enableMatchExactly()
-            .startBlankForm("One Question Entity Registration")
             .also { testDependencies.scheduler.runDeferredTasks() }
+            .startBlankForm("One Question Entity Registration")
+            .also {
+                testDependencies.server.addForm(
+                    "One Question Updated",
+                    "one_question",
+                    "2",
+                    "one-question-updated.xml"
+                )
+
+                testDependencies.scheduler.runDeferredTasks()
+            }
             .pressBackAndDiscardForm()
             .clickFillBlankForm()
             .assertFormDoesNotExist("One Question Updated")
