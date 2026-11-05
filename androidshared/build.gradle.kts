@@ -10,7 +10,6 @@ android {
 
     buildFeatures {
         viewBinding = true
-        compose = true
     }
 
     defaultConfig {
