@@ -17,12 +17,6 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-        }
-    }
-
     namespace = "org.odk.collect.testshared"
 }
 
