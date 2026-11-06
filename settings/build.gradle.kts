@@ -27,6 +27,7 @@ dependencies {
     implementation(project(":shared"))
     implementation(project(":projects"))
 
+    implementation(libs.androidxAnnotation)
     implementation(libs.jsonSchemaValidator)
 
     testImplementation(libs.junit)
