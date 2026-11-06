@@ -48,7 +48,7 @@ fun AsyncStaticMap(
 ) {
     var state by remember(trace, configuration) { mutableStateOf<StaticMapState>(StaticMapState.Loading) }
 
-    BoxWithConstraints(modifier = modifier.fillMaxWidth()) {
+    BoxWithConstraints(modifier = modifier) {
         val width = constraints.maxWidth
         val height = with(LocalDensity.current) { STATIC_MAP_HEIGHT.roundToPx() }
 
