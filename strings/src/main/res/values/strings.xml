@@ -481,6 +481,11 @@
     <string name="file_invalid">File: %s is invalid.</string>
     <!-- Displayed when a form media file such as an image for a question label or an audio file for a choice is missing -->
     <string name="file_missing">File: %s is missing.</string>
+    <!-- Warning displayed in a select question when some of its choices have no value (name) and are therefore not shown -->
+    <plurals name="choices_without_value_skipped">
+        <item quantity="one">%d choice has no value and is not shown.</item>
+        <item quantity="other">%d choices have no value and are not shown.</item>
+    </plurals>
 
     <!-- Heading for a dialog which prompts the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification. -->
     <string name="enter_identity">Enter identity</string>
