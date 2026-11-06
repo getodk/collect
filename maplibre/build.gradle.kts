@@ -46,8 +46,9 @@ dependencies {
         exclude(group = "org.maplibre.gl", module = "android-sdk")
     }
 
+    testImplementation(project(":test-shared"))
     testImplementation(libs.junit)
     testImplementation(libs.hamcrest)
-    testImplementation(libs.androidxTestExtJunit)
-    testImplementation(libs.robolectric)
+    testImplementation(libs.mockitoKotlin)
+    testImplementation(libs.okhttp3Mockwebserver)
 }

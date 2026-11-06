@@ -1,68 +1,68 @@
 package org.odk.collect.maplibre
 
-import android.app.Application
+import android.content.Context
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
 import android.content.pm.Signature
-import android.content.pm.SigningInfo
-import androidx.test.core.app.ApplicationProvider
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import okhttp3.OkHttpClient
-import okhttp3.Protocol
 import okhttp3.Request
-import okhttp3.Response
+import okhttp3.mockwebserver.MockResponse
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.nullValue
-import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.Shadows.shadowOf
+import org.mockito.kotlin.any
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.eq
+import org.mockito.kotlin.mock
+import org.odk.collect.testshared.MockWebServerRule
 
-@RunWith(AndroidJUnit4::class)
 class AndroidAppHeadersInterceptorTest {
-    private val application = ApplicationProvider.getApplicationContext<Application>()
-    private val sentRequests = mutableListOf<Request>()
+    @get:Rule
+    val mockWebServerRule = MockWebServerRule()
 
-    private val client = OkHttpClient.Builder()
-        .addInterceptor(AndroidAppHeadersInterceptor(application, "tile.googleapis.com"))
-        .addInterceptor { chain ->
-            sentRequests.add(chain.request())
-            Response.Builder()
-                .request(chain.request())
-                .protocol(Protocol.HTTP_2)
-                .code(200)
-                .message("OK")
-                .build()
-        }
-        .build()
+    private val signature = mock<Signature> {
+        on { toByteArray() } doReturn "abc".toByteArray()
+    }
 
-    @Before
-    fun setup() {
-        val packageInfo = shadowOf(application.packageManager).getInternalMutablePackageInfo(application.packageName)
-        packageInfo.signingInfo = SigningInfo().also {
-            shadowOf(it).setSignatures(arrayOf(Signature("abc".toByteArray())))
-        }
+    private val packageManager = mock<PackageManager> {
+        on { getPackageInfo(eq("org.odk.collect"), any<Int>()) } doReturn PackageInfo().apply { signatures = arrayOf(signature) }
+    }
+
+    private val context = mock<Context> {
+        on { packageName } doReturn "org.odk.collect"
+        on { packageManager } doReturn packageManager
     }
 
     @Test
     fun `adds Android app headers to requests sent to the host`() {
-        client
-            .newCall(Request.Builder().url("https://tile.googleapis.com/v1/2dtiles/1/1/1").build())
-            .execute()
+        val server = mockWebServerRule.start()
+        server.enqueue(MockResponse())
 
-        val request = sentRequests.single()
-        assertThat(request.header("X-Android-Package"), equalTo(application.packageName))
+        val client = OkHttpClient.Builder()
+            .addInterceptor(AndroidAppHeadersInterceptor(context, server.hostName))
+            .build()
+        client.newCall(Request.Builder().url(server.url("/")).build()).execute().close()
+
+        val request = server.takeRequest()
+        assertThat(request.getHeader("X-Android-Package"), equalTo("org.odk.collect"))
         // SHA-1 of "abc"
-        assertThat(request.header("X-Android-Cert"), equalTo("A9993E364706816ABA3E25717850C26C9CD0D89D"))
+        assertThat(request.getHeader("X-Android-Cert"), equalTo("A9993E364706816ABA3E25717850C26C9CD0D89D"))
     }
 
     @Test
     fun `does not add Android app headers to other requests`() {
-        client
-            .newCall(Request.Builder().url("https://tile.openstreetmap.org/1/1/1.png").build())
-            .execute()
+        val server = mockWebServerRule.start()
+        server.enqueue(MockResponse())
 
-        val request = sentRequests.single()
-        assertThat(request.header("X-Android-Package"), nullValue())
-        assertThat(request.header("X-Android-Cert"), nullValue())
+        val client = OkHttpClient.Builder()
+            .addInterceptor(AndroidAppHeadersInterceptor(context, "tile.googleapis.com"))
+            .build()
+        client.newCall(Request.Builder().url(server.url("/")).build()).execute().close()
+
+        val request = server.takeRequest()
+        assertThat(request.getHeader("X-Android-Package"), nullValue())
+        assertThat(request.getHeader("X-Android-Cert"), nullValue())
     }
 }
