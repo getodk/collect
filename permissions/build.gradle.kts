@@ -35,7 +35,6 @@ dependencies {
     implementation(libs.karumiDexter)
     implementation(libs.timber)
 
-
     testImplementation(project(":androidtest"))
     testImplementation(project(":test-shared"))
     testImplementation(libs.androidxTestExtJunit)
