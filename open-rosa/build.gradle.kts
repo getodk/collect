@@ -25,10 +25,6 @@ android {
             isReturnDefaultValues = true
         }
     }
-
-    buildFeatures {
-        viewBinding = true
-    }
 }
 
 dependencies {
