@@ -5,9 +5,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayCircle
 import androidx.compose.material3.Icon
@@ -24,6 +24,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.window.core.layout.WindowSizeClass
 import org.odk.collect.android.widgets.MediaWidgetAnswerViewModel
 import org.odk.collect.androidshared.system.ContextExt.getActivity
 import org.odk.collect.androidshared.ui.multiclicksafe.multiClickSafe
@@ -42,7 +43,7 @@ fun VideoWidgetAnswer(
 
     Box(
         modifier = modifier
-            .fillMaxWidth()
+            .widthIn(max = WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND.dp)
             .heightIn(max = 200.dp)
             .clip(MaterialTheme.shapes.large)
             .combinedClickable(
