@@ -88,7 +88,7 @@ class MapLibreStaticMapLoader(context: Context) : StaticMapLoader {
         height: Int
     ): Bitmap? {
         val bounds = bounds(trace)
-        val tiles = GoogleMapTilesClient.getTiles(apiKey, configuration.basemapStyle, estimateZoom(bounds, width), bounds)
+        val tiles = GoogleMapTilesClient.getTiles(MapLibreSupport.httpClient, apiKey, configuration.basemapStyle, estimateZoom(bounds, width), bounds)
 
         return if (tiles == null) {
             blankSnapshot(configuration, trace, width, height)

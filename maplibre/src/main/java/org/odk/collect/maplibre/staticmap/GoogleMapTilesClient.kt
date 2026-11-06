@@ -5,12 +5,12 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONArray
 import org.json.JSONObject
 import org.maplibre.android.geometry.LatLngBounds
-import org.odk.collect.maplibre.MapLibreSupport
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
@@ -29,23 +29,23 @@ object GoogleMapTilesClient {
      * Returns the URL of the tiles and the copyright for the area within [bounds] at [zoom], or
      * null if either can't be fetched.
      */
-    suspend fun getTiles(apiKey: String, style: String?, zoom: Int, bounds: LatLngBounds): Tiles? {
+    suspend fun getTiles(httpClient: OkHttpClient, apiKey: String, style: String?, zoom: Int, bounds: LatLngBounds): Tiles? {
         val currentSession = sessionMutex.withLock {
             val existingSession = session?.takeIf { it.style == style && it.expiryMillis > System.currentTimeMillis() }
-            existingSession ?: createSession(apiKey, style)?.also { session = it }
+            existingSession ?: createSession(httpClient, apiKey, style)?.also { session = it }
         } ?: return null
 
-        val copyright = getCopyright(apiKey, currentSession.token, zoom, bounds) ?: return null
+        val copyright = getCopyright(httpClient, apiKey, currentSession.token, zoom, bounds) ?: return null
         return Tiles("https://$HOST/v1/2dtiles/{z}/{x}/{y}?session=${currentSession.token}&key=$apiKey", copyright)
     }
 
-    private suspend fun getCopyright(apiKey: String, session: String, zoom: Int, bounds: LatLngBounds): String? {
+    private suspend fun getCopyright(httpClient: OkHttpClient, apiKey: String, session: String, zoom: Int, bounds: LatLngBounds): String? {
         val url = "https://$HOST/tile/v1/viewport?session=$session&key=$apiKey&zoom=$zoom" +
             "&north=${bounds.latitudeNorth}&south=${bounds.latitudeSouth}&east=${bounds.longitudeEast}&west=${bounds.longitudeWest}"
-        return request(url) { it.optString("copyright") }
+        return request(httpClient, url) { it.optString("copyright") }
     }
 
-    private suspend fun createSession(apiKey: String, style: String?): Session? {
+    private suspend fun createSession(httpClient: OkHttpClient, apiKey: String, style: String?): Session? {
         val locale = Locale.getDefault()
         val body = JSONObject()
             .put("language", locale.toLanguageTag())
@@ -62,12 +62,12 @@ object GoogleMapTilesClient {
             else -> body.put("mapType", "roadmap")
         }
 
-        return request("https://$HOST/v1/createSession?key=$apiKey", body) {
+        return request(httpClient, "https://$HOST/v1/createSession?key=$apiKey", body) {
             Session(it.getString("session"), TimeUnit.SECONDS.toMillis(it.getLong("expiry")), style)
         }
     }
 
-    private suspend fun <T> request(url: String, body: JSONObject? = null, parse: (JSONObject) -> T): T? {
+    private suspend fun <T> request(httpClient: OkHttpClient, url: String, body: JSONObject? = null, parse: (JSONObject) -> T): T? {
         return withContext(Dispatchers.IO) {
             try {
                 val request = Request.Builder().url(url)
@@ -75,7 +75,7 @@ object GoogleMapTilesClient {
                     request.post(body.toString().toRequestBody("application/json".toMediaType()))
                 }
 
-                MapLibreSupport.httpClient.newCall(request.build()).execute().use { response ->
+                httpClient.newCall(request.build()).execute().use { response ->
                     if (response.isSuccessful) parse(JSONObject(response.body.string())) else null
                 }
             } catch (_: Exception) {
