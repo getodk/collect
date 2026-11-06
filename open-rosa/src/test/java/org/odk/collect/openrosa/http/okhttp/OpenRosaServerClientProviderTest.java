@@ -12,7 +12,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.odk.collect.openrosa.http.HttpCredentials;
 import org.odk.collect.openrosa.http.OpenRosaConstants;
-import org.odk.collect.openrosa.support.MockWebServerRule;
+import org.odk.collect.testshared.MockWebServerRule;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

@@ -45,6 +45,7 @@ dependencies {
     implementation(libs.androidxAppcompat)
     implementation(libs.robolectric)
     implementation(libs.junit)
+    implementation(libs.okhttp3Mockwebserver)
     implementation(libs.androidxTestEspressoIntents)
     implementation(libs.androidxTestEspressoContrib)
     implementation(libs.androidMaterial)
