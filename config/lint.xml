@@ -2,10 +2,9 @@
 <lint>
     <!-- suppress newly failing checks -->
     <!-- make sure classes referenced in the manifest or in a layout file are in the project -->
-    <issue id="MissingRegistered" severity="warning" />
+    <issue id="MissingClass" severity="warning" />
     <issue id="AppCompatResource" severity="warning" />
     <issue id="StaticFieldLeak" severity="warning" />
-    <issue id="UnusedIds" severity="error" />
     <issue id="AppLinkUrlError" severity="warning" />
     <issue id="OutdatedLibrary" severity="warning" />
 
@@ -45,8 +44,7 @@
     <issue id="UnusedResources" severity="error">
         <ignore path="res/values/dimens.xml" />
         <ignore path="res/values/leak_canary_config.xml" />
-        <ignore regexp="ga_trackingId|google_crash_reporting_api_key|project_id|third_party_licenses|third_party_license_metadata|com.google.firebase.crashlytics.version_control_info" />
-        <ignore regexp="sms_invalid_phone_number_description" />
+        <ignore regexp="google_crash_reporting_api_key|project_id|third_party_licenses|third_party_license_metadata|com.google.firebase.crashlytics.version_control_info" />
         <ignore regexp="mapbox_access_token" />
     </issue>
 

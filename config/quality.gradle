@@ -4,17 +4,16 @@ def configDir = "${project.rootDir}/config"
 
 apply plugin: 'checkstyle'
 
-checkstyle.toolVersion = '13.7.0'
+checkstyle.toolVersion = '14.3.0'
 
 tasks.register("checkstyle", Checkstyle) {
-    configFile file("$configDir/checkstyle.xml")
+    configFile = file("$configDir/checkstyle.xml")
 
-    ignoreFailures false // Fail early
-    showViolations true
+    ignoreFailures = false // Fail early
+    showViolations = true
 
     source 'src'
     include '**/*.java'
-    exclude '**/gen/**'
     classpath = files()
 }
 
@@ -23,7 +22,7 @@ tasks.register("checkstyle", Checkstyle) {
 apply plugin: 'pmd'
 
 pmd {
-    toolVersion = '7.26.0'
+    toolVersion = '7.28.0'
 }
 
 tasks.register("pmd", Pmd) {
@@ -33,14 +32,13 @@ tasks.register("pmd", Pmd) {
 
     source 'src'
     include '**/*.java'
-    exclude '**/gen/**'
 
     reports {
         xml {
-            enabled false
+            required = false
         }
         html {
-            enabled true
+            required = true
         }
     }
 }

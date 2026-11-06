@@ -50,7 +50,6 @@ android {
     buildFeatures {
         viewBinding true
         buildConfig true
-        compose true
         resValues true
     }
 
@@ -61,7 +60,6 @@ android {
         versionCode project.hasProperty('versionCode') ? project.getProperties()['versionCode'].toInteger() : 5112
         versionName getVersionName()
         testInstrumentationRunner('androidx.test.runner.AndroidJUnitRunner')
-        vectorDrawables.useSupportLibrary = true
     }
 
     base {
@@ -133,7 +131,6 @@ android {
         }
 
         debug {
-            debuggable(true)
             resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
             resValue("string", "mapbox_access_token", mapboxAccessToken)
             buildConfigField("String", "CARTO_API_KEY", cartoApiKey != null ? "\"${cartoApiKey}\"" : "null")
@@ -163,11 +160,8 @@ android {
             useLegacyPackaging = true
         }
         resources {
-            // These library licenses will be referenced in-app
-            excludes += ['META-INF/ASL-2.0.txt', 'META-INF/LGPL-3.0.txt']
-
             // Pick first occurrence of any files that cause conflicts
-            pickFirsts += ['META-INF/DEPENDENCIES', 'META-INF/FastDoubleParser-LICENSE', 'META-INF/LICENSE', 'META-INF/LICENSE.txt', 'META-INF/NOTICE', 'META-INF/NOTICE.txt', 'META-INF/services/com.fasterxml.jackson.core.JsonFactory', 'META-INF/services/com.fasterxml.jackson.core.ObjectCodec', 'META-INF/services/javax.ws.rs.ext.MessageBodyReader', 'META-INF/services/javax.ws.rs.ext.MessageBodyWriter', 'draftv4/schema', 'draftv3/schema']
+            pickFirsts += ['META-INF/FastDoubleParser-LICENSE', 'META-INF/FastDoubleParser-ThirdParty-LICENSE', 'META-INF/LICENSE', 'META-INF/LICENSE.txt', 'META-INF/NOTICE', 'META-INF/NOTICE.txt', 'META-INF/Schubfach-LICENSE']
         }
 
         // To ensure that ODK Collect is installable on all devices, we don't use
@@ -178,12 +172,6 @@ android {
             exclude 'lib/x86/libmaplibre.so'
             exclude 'lib/x86_64/libmaplibre.so'
         }
-
-        /* Exclude large properties files used by BouncyCastle's Picnic implementation (which
-           Collect doesn't use). */
-        exclude 'org/bouncycastle/pqc/crypto/picnic/lowmcL5.bin.properties'
-        exclude 'org/bouncycastle/pqc/crypto/picnic/lowmcL3.bin.properties'
-        exclude 'org/bouncycastle/pqc/crypto/picnic/lowmcL1.bin.properties'
     }
 
     compileOptions {
@@ -268,7 +256,6 @@ dependencies {
 
     implementation libs.androidxStartup
     implementation libs.androidxCoreKtx
-    implementation libs.androidxBrowser
     implementation libs.androidxAppcompat
     implementation libs.androidxWorkRuntime
 
@@ -313,7 +300,6 @@ dependencies {
     // Android Architecture Components:
     implementation libs.androidxLifecycleRuntimeKtx
     implementation libs.androidxLifecycleLivedataKtx
-    implementation libs.androidxLifecycleViewmodelCompose
     implementation libs.androidxViewpager2
 
     // Dagger:
@@ -324,8 +310,6 @@ dependencies {
     kspTest libs.daggerCompiler
 
     // Dagger Android:
-    implementation libs.daggerAndroid
-    ksp libs.daggerAndroidProcessor
 
     implementation libs.armen101AudioRecorderView
 
@@ -385,7 +369,6 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
 
-    androidTestImplementation libs.androidxWorkTesting
     androidTestImplementation libs.uiautomator
     androidTestImplementation libs.mockitoKotlin
     androidTestImplementation libs.hamcrest
