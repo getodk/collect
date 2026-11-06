@@ -34,6 +34,7 @@ dependencies {
     implementation(libs.androidxFragmentKtx)
     implementation(libs.androidxPreferenceKtx)
     implementation(libs.kotlinxCoroutinesAndroid)
+    implementation(libs.okHttp)
     implementation(libs.timber)
     implementation(libs.dagger)
     ksp(libs.daggerCompiler)
@@ -44,4 +45,10 @@ dependencies {
     implementation(libs.maplibreScalebarPlugin) {
         exclude(group = "org.maplibre.gl", module = "android-sdk")
     }
+
+    testImplementation(project(":test-shared"))
+    testImplementation(libs.junit)
+    testImplementation(libs.hamcrest)
+    testImplementation(libs.mockitoKotlin)
+    testImplementation(libs.okhttp3Mockwebserver)
 }

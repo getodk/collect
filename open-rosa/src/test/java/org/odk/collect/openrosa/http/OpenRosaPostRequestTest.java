@@ -16,7 +16,7 @@ import androidx.annotation.NonNull;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.odk.collect.openrosa.support.MockWebServerRule;
+import org.odk.collect.testshared.MockWebServerRule;
 
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
