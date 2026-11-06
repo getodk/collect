@@ -21,7 +21,11 @@ android {
 
     packaging {
         resources {
-            pickFirsts += "META-INF/FastDoubleParser-LICENSE"
+            pickFirsts += listOf(
+                "META-INF/FastDoubleParser-LICENSE",
+                "META-INF/FastDoubleParser-ThirdParty-LICENSE",
+                "META-INF/Schubfach-LICENSE"
+            )
         }
     }
 }
