@@ -15,7 +15,6 @@ import org.hamcrest.Matchers.nullValue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.odk.collect.maplibre.staticmap.GoogleMapTilesClient
 import org.robolectric.Shadows.shadowOf
 
 @RunWith(AndroidJUnit4::class)
@@ -24,7 +23,7 @@ class AndroidAppHeadersInterceptorTest {
     private val sentRequests = mutableListOf<Request>()
 
     private val client = OkHttpClient.Builder()
-        .addInterceptor(AndroidAppHeadersInterceptor(application))
+        .addInterceptor(AndroidAppHeadersInterceptor(application, "tile.googleapis.com"))
         .addInterceptor { chain ->
             sentRequests.add(chain.request())
             Response.Builder()
@@ -45,9 +44,9 @@ class AndroidAppHeadersInterceptorTest {
     }
 
     @Test
-    fun `adds Android app headers to Google Map Tiles API requests`() {
+    fun `adds Android app headers to requests sent to the host`() {
         client
-            .newCall(Request.Builder().url("https://${GoogleMapTilesClient.HOST}/v1/2dtiles/1/1/1").build())
+            .newCall(Request.Builder().url("https://tile.googleapis.com/v1/2dtiles/1/1/1").build())
             .execute()
 
         val request = sentRequests.single()

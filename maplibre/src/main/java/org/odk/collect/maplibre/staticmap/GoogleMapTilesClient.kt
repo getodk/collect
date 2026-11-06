@@ -29,23 +29,23 @@ object GoogleMapTilesClient {
      * Returns the URL of the tiles and the copyright for the area within [bounds] at [zoom], or
      * null if either can't be fetched.
      */
-    suspend fun getTiles(httpClient: OkHttpClient, apiKey: String, style: String?, zoom: Int, bounds: LatLngBounds): Tiles? {
+    suspend fun getTiles(httpClient: OkHttpClient, host: String, apiKey: String, style: String?, zoom: Int, bounds: LatLngBounds): Tiles? {
         val currentSession = sessionMutex.withLock {
             val existingSession = session?.takeIf { it.style == style && it.expiryMillis > System.currentTimeMillis() }
-            existingSession ?: createSession(httpClient, apiKey, style)?.also { session = it }
+            existingSession ?: createSession(httpClient, host, apiKey, style)?.also { session = it }
         } ?: return null
 
-        val copyright = getCopyright(httpClient, apiKey, currentSession.token, zoom, bounds) ?: return null
-        return Tiles("https://$HOST/v1/2dtiles/{z}/{x}/{y}?session=${currentSession.token}&key=$apiKey", copyright)
+        val copyright = getCopyright(httpClient, host, apiKey, currentSession.token, zoom, bounds) ?: return null
+        return Tiles("https://$host/v1/2dtiles/{z}/{x}/{y}?session=${currentSession.token}&key=$apiKey", copyright)
     }
 
-    private suspend fun getCopyright(httpClient: OkHttpClient, apiKey: String, session: String, zoom: Int, bounds: LatLngBounds): String? {
-        val url = "https://$HOST/tile/v1/viewport?session=$session&key=$apiKey&zoom=$zoom" +
+    private suspend fun getCopyright(httpClient: OkHttpClient, host: String, apiKey: String, session: String, zoom: Int, bounds: LatLngBounds): String? {
+        val url = "https://$host/tile/v1/viewport?session=$session&key=$apiKey&zoom=$zoom" +
             "&north=${bounds.latitudeNorth}&south=${bounds.latitudeSouth}&east=${bounds.longitudeEast}&west=${bounds.longitudeWest}"
         return request(httpClient, url) { it.optString("copyright") }
     }
 
-    private suspend fun createSession(httpClient: OkHttpClient, apiKey: String, style: String?): Session? {
+    private suspend fun createSession(httpClient: OkHttpClient, host: String, apiKey: String, style: String?): Session? {
         val locale = Locale.getDefault()
         val body = JSONObject()
             .put("language", locale.toLanguageTag())
@@ -62,7 +62,7 @@ object GoogleMapTilesClient {
             else -> body.put("mapType", "roadmap")
         }
 
-        return request(httpClient, "https://$HOST/v1/createSession?key=$apiKey", body) {
+        return request(httpClient, "https://$host/v1/createSession?key=$apiKey", body) {
             Session(it.getString("session"), TimeUnit.SECONDS.toMillis(it.getLong("expiry")), style)
         }
     }
@@ -92,6 +92,4 @@ object GoogleMapTilesClient {
     private const val MAP_TYPE_SATELLITE = "2"
     private const val MAP_TYPE_TERRAIN = "3"
     private const val MAP_TYPE_HYBRID = "4"
-
-    const val HOST = "tile.googleapis.com"
 }

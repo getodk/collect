@@ -8,12 +8,14 @@ import org.maplibre.android.WellKnownTileServer
 import org.maplibre.android.module.http.HttpRequestUtil
 
 object MapLibreSupport {
+    const val GOOGLE_TILES_HOST = "tile.googleapis.com"
+
     private lateinit var applicationContext: Context
 
     val httpClient by lazy {
         OkHttpClient.Builder()
             .dispatcher(Dispatcher().apply { maxRequestsPerHost = 20 })
-            .addInterceptor(AndroidAppHeadersInterceptor(applicationContext))
+            .addInterceptor(AndroidAppHeadersInterceptor(applicationContext, GOOGLE_TILES_HOST))
             .build()
     }
 
