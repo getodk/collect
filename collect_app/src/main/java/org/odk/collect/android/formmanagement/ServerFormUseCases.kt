@@ -2,8 +2,6 @@ package org.odk.collect.android.formmanagement
 
 import org.apache.commons.io.FileUtils.copyFileToDirectory
 import org.odk.collect.analytics.Analytics
-import org.odk.collect.android.formmanagement.download.FormDownloadException
-import org.odk.collect.android.formmanagement.download.FormDownloader
 import org.odk.collect.android.instancemanagement.send.autosend.getLastUpdated
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.android.utilities.FormUtils
@@ -83,38 +81,6 @@ object ServerFormUseCases {
                 type
             )
         }
-    }
-
-    fun downloadForms(
-        forms: List<ServerFormDetails>,
-        formDownloader: FormDownloader,
-        progressReporter: ((Int, Int) -> Unit)? = null,
-        isCancelled: (() -> Boolean)? = null,
-    ): Map<ServerFormDetails, FormDownloadException?> {
-        val results = mutableMapOf<ServerFormDetails, FormDownloadException?>()
-        for (index in forms.indices) {
-            val form = forms[index]
-
-            try {
-                formDownloader.downloadForm(
-                    form,
-                    object : FormDownloader.ProgressReporter {
-                        override fun onDownloadingMediaFile(count: Int) {
-                            progressReporter?.invoke(index, count)
-                        }
-                    },
-                    { isCancelled?.invoke() ?: false }
-                )
-
-                results[form] = null
-            } catch (e: FormDownloadException.DownloadingInterrupted) {
-                break
-            } catch (e: FormDownloadException) {
-                results[form] = e
-            }
-        }
-
-        return results
     }
 
     @JvmStatic
@@ -259,13 +225,13 @@ object ServerFormUseCases {
     }
 
     fun updateForm(
-        formFileDownload: FormFileDownload.Existing,
+        formDownload: FormDownload.Existing,
         mediaFilesDownload: MediaFilesDownload,
         entitiesRepository: EntitiesRepository,
         formsRepository: FormsRepository,
         time: Long
     ): Form {
-        val existingForm = formFileDownload.form
+        val existingForm = formDownload.form
         val formBuilder = Form.Builder(existingForm)
 
         val attachmentUpdateTime = if (mediaFilesDownload.newAttachmentsDownloaded) time else null
@@ -367,9 +333,23 @@ data class MediaFilesDownload(
     val entityLists: List<EntityListDownload>
 )
 
-sealed class FormFileDownload {
-    data class New(val file: File, val hash: String) : FormFileDownload()
-    data class Existing(val form: Form) : FormFileDownload()
+sealed class FormDownload {
+
+    abstract val tempDir: File
+    abstract val mediaFilesDownload: MediaFilesDownload
+
+    data class New(
+        val file: File,
+        val hash: String,
+        override val tempDir: File,
+        override val mediaFilesDownload: MediaFilesDownload
+    ) : FormDownload()
+
+    data class Existing(
+        val form: Form,
+        override val tempDir: File,
+        override val mediaFilesDownload: MediaFilesDownload
+    ) : FormDownload()
 }
 
 sealed class EntityListDownload {

@@ -6,7 +6,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import org.odk.collect.android.formmanagement.download.FormDownloadException
 import org.odk.collect.android.formmanagement.download.ServerFormDownloader
-import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer
+import org.odk.collect.android.formmanagement.download.downloadAndProcessForms
+import org.odk.collect.android.formmanagement.download.downloadForms
 import org.odk.collect.android.formmanagement.metadata.FormMetadataParser
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.projects.ProjectDependencyModule
@@ -17,7 +18,8 @@ import org.odk.collect.forms.Form
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.projects.ProjectDependencyFactory
 import org.odk.collect.settings.keys.ProjectKeys
-import java.io.File
+import org.odk.collect.shared.TempFiles
+import org.odk.collect.shared.result.Result
 import java.util.function.Supplier
 
 class FormsDataService(
@@ -89,12 +91,13 @@ class FormsDataService(
                 val formDownloader =
                     formDownloader(projectDependencyModule, clock)
 
-                results.putAll(ServerFormUseCases.downloadForms(
-                    forms,
-                    formDownloader,
-                    progressReporter,
-                    isCancelled
-                ))
+                results.putAll(
+                    formDownloader.downloadAndProcessForms(
+                        forms,
+                        progressReporter,
+                        isCancelled
+                    )
+                )
             }
         }
         return results
@@ -120,9 +123,8 @@ class FormsDataService(
                     val updatedForms = serverForms.filter { it.isUpdated() }
                     if (updatedForms.isNotEmpty()) {
                         if (projectDependencies.generalSettings.getBoolean(ProjectKeys.KEY_AUTOMATIC_UPDATE)) {
-                            val results = ServerFormUseCases.downloadForms(
-                                updatedForms,
-                                formDownloader
+                            val results = formDownloader.downloadAndProcessForms(
+                                updatedForms
                             )
 
                             notifier.onUpdatesDownloaded(results, projectId)
@@ -155,18 +157,44 @@ class FormsDataService(
                 startSync(projectId)
                 syncWithStorage(projectId)
 
-                val formDownloader = formDownloader(projectDependencies, clock)
-
-                val serverFormsSynchronizer = ServerFormsSynchronizer(
-                    { repository, source -> ServerFormUseCases.fetchFormDetails(repository, source) },
-                    projectDependencies.formsRepository,
-                    projectDependencies.instancesRepository,
-                    formDownloader,
-                    projectDependencies.formSource
-                )
-
                 val exception = try {
-                    serverFormsSynchronizer.synchronize()
+                    val formsRepository = projectDependencies.formsRepository
+                    val instancesRepository = projectDependencies.instancesRepository
+                    val formList = ServerFormUseCases.fetchFormDetails(
+                        formsRepository,
+                        projectDependencies.formSource
+                    )
+
+                    val formsOnDevice: List<Form> = formsRepository.getAll()
+                    val formsToDelete = formsOnDevice
+                        .filterNot { deviceForm -> formList.any { it.formId == deviceForm.formId } }
+                    val formsToDownload = formList
+                        .filter { it.type != ServerFormDetails.Type.OnDevice }
+
+                    formsToDelete
+                        .forEach {
+                            LocalFormUseCases.deleteForm(
+                                formsRepository,
+                                instancesRepository,
+                                it.dbId
+                            )
+                        }
+
+                    val formDownloader = formDownloader(projectDependencies, clock)
+                    val downloadResults = formDownloader.downloadForms(formsToDownload, null, null)
+                    if (downloadResults.any { it is Result.Error }) {
+                        throw FormSourceException.FetchError()
+                    }
+
+                    val processResults =
+                        downloadResults.filterIsInstance<Result.Success<FormDownload, FormDownloadException>>()
+                            .map {
+                                formDownloader.processForm(it.value)
+                            }
+                    if (processResults.any { it is Result.Error }) {
+                        throw FormSourceException.FetchError()
+                    }
+
                     if (notify) {
                         notifier.onSync(null, projectId)
                     }
@@ -187,6 +215,73 @@ class FormsDataService(
                 exception == null
             } else {
                 false
+            }
+        }
+    }
+
+    fun downloadFormList(projectId: String, isStopped: () -> Boolean) {
+        val projectDependencies = projectDependencyModuleFactory.create(projectId)
+        val formProcessingQueue = projectDependencies.formProcessingQueue
+        formProcessingQueue.set {
+            try {
+                val formsRepository = projectDependencies.formsRepository
+                val instancesRepository = projectDependencies.instancesRepository
+                val formList = ServerFormUseCases.fetchFormDetails(
+                    formsRepository,
+                    projectDependencies.formSource
+                )
+
+                val formsOnDevice: List<Form> = formsRepository.getAll()
+                val formsToDelete = formsOnDevice
+                    .filterNot { deviceForm -> formList.any { it.formId == deviceForm.formId } }
+                val formsToDownload = formList
+                    .filter { it.type != ServerFormDetails.Type.OnDevice }
+
+                formsToDelete
+                    .forEach {
+                        LocalFormUseCases.deleteForm(
+                            formsRepository,
+                            instancesRepository,
+                            it.dbId
+                        )
+                    }
+
+                val formDownloader = formDownloader(projectDependencies, clock)
+                val downloadResults = formDownloader.downloadForms(formsToDownload, null, null)
+
+                val successes =
+                    downloadResults.filterIsInstance<Result.Success<FormDownload, FormDownloadException>>()
+                val errors =
+                    downloadResults.filterIsInstance<Result.Error<FormDownload, FormDownloadException>>()
+
+                if (errors.isNotEmpty()) {
+                    notifier.onSync(FormSourceException.FetchError(), projectId)
+                }
+
+                successes.map { it.value }
+            } catch (e: FormSourceException) {
+                if (isStopped()) {
+                    notifier.onSyncStopped(projectId)
+                } else {
+                    notifier.onSync(e, projectId)
+                }
+
+                emptyList()
+            }
+        }
+    }
+
+    fun processFormDownloads(projectId: String) {
+        val projectDependencies = projectDependencyModuleFactory.create(projectId)
+        projectDependencies.formsLock.withLock { acquiredLock ->
+            if (acquiredLock) {
+                val formProcessingQueue =
+                    projectDependencyModuleFactory.create(projectId).formProcessingQueue
+                formProcessingQueue.consume { formDownloads ->
+                    val formDownloader = formDownloader(projectDependencies, clock)
+                    formDownloads.forEach { formDownloader.processForm(it) }
+                    update(projectId)
+                }
             }
         }
     }
@@ -233,7 +328,7 @@ private fun formDownloader(
     return ServerFormDownloader(
         projectDependencyModule.formSource,
         projectDependencyModule.formsRepository,
-        File(projectDependencyModule.cacheDir),
+        TempFiles.createTempDir(),
         projectDependencyModule.formsDir,
         FormMetadataParser,
         clock,

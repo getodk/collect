@@ -45,6 +45,7 @@ class InstanceSubmitterTest {
             mock(),
             mock(),
             mock(),
+            mock(),
             mock()
         )
     }
