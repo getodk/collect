@@ -45,4 +45,9 @@ dependencies {
     implementation(libs.maplibreScalebarPlugin) {
         exclude(group = "org.maplibre.gl", module = "android-sdk")
     }
+
+    testImplementation(libs.junit)
+    testImplementation(libs.hamcrest)
+    testImplementation(libs.androidxTestExtJunit)
+    testImplementation(libs.robolectric)
 }
