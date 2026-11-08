@@ -194,6 +194,27 @@ class GeoPolyWidgetTest {
     }
 
     @Test
+    fun `clicking the map preview requests a geopoly`() {
+        staticMapLoader.bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
+        val prompt = promptWithAnswer(StringData(answer))
+        createWidget(prompt)
+
+        composeRule.onNodeWithTag(StaticMapSemantics.TAG).performClick()
+
+        verify(geoDataRequester).requestGeoPoly(prompt)
+    }
+
+    @Test
+    fun `clicking the answer requests a geopoly when the map preview can't be rendered`() {
+        val prompt = promptWithAnswer(StringData(answer))
+        createWidget(prompt)
+
+        composeRule.onNodeWithText(answer).performClick()
+
+        verify(geoDataRequester).requestGeoPoly(prompt)
+    }
+
+    @Test
     fun `long pressing the button or the answer shows the context menu`() {
         val widget = createWidget(promptWithAnswer(StringData(answer)))
         val listener = mock<View.OnCreateContextMenuListener>()
