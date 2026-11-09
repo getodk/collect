@@ -219,10 +219,10 @@ class FormsDataService(
         }
     }
 
-    fun downloadFormList(projectId: String, isStopped: () -> Boolean) {
+    fun downloadFormList(projectId: String, isStopped: () -> Boolean): DownloadFormListResult {
         val projectDependencies = projectDependencyModuleFactory.create(projectId)
         val formProcessingQueue = projectDependencies.formProcessingQueue
-        formProcessingQueue.set {
+        return formProcessingQueue.set {
             if (hasLock) {
                 try {
                     val formsRepository = projectDependencies.formsRepository
@@ -256,24 +256,27 @@ class FormsDataService(
                         downloadResults.filterIsInstance<Result.Error<FormDownload, FormDownloadException>>()
 
                     if (errors.isNotEmpty()) {
-                        notifier.onSync(FormSourceException.FetchError(), projectId)
-                    }
-
-                    replace(successes.map { it.value })
-                } catch (e: FormSourceException) {
-                    if (isStopped()) {
-                        notifier.onSyncStopped(projectId)
+                        DownloadFormListResult.ERROR
                     } else {
-                        notifier.onSync(e, projectId)
+                        replace(successes.map { it.value })
+                        DownloadFormListResult.SUCCESS
                     }
-
+                } catch (e: FormSourceException) {
                     replace(emptyList())
+
+                    if (isStopped()) {
+                        DownloadFormListResult.STOPPED
+                    } else {
+                        DownloadFormListResult.ERROR
+                    }
                 }
+            } else {
+                DownloadFormListResult.BLOCKED
             }
         }
     }
 
-    fun processFormDownloads(projectId: String) {
+    fun processFormDownloads(projectId: String, downloadFormListResult: DownloadFormListResult) {
         val projectDependencies = projectDependencyModuleFactory.create(projectId)
         projectDependencies.formsLock.withLock { acquiredLock ->
             if (acquiredLock) {
@@ -285,6 +288,18 @@ class FormsDataService(
                     update(projectId)
                 }
             }
+        }
+
+        when (downloadFormListResult) {
+            DownloadFormListResult.ERROR -> {
+                notifier.onSync(FormSourceException.FetchError(), projectId)
+            }
+
+            DownloadFormListResult.STOPPED -> {
+                notifier.onSyncStopped(projectId)
+            }
+
+            DownloadFormListResult.SUCCESS, DownloadFormListResult.BLOCKED -> {}
         }
     }
 
@@ -320,6 +335,13 @@ class FormsDataService(
 
     private fun finishSyncWithStorage(projectId: String) {
         syncing.set(projectId, false)
+    }
+
+    enum class DownloadFormListResult {
+        SUCCESS,
+        ERROR,
+        STOPPED,
+        BLOCKED
     }
 }
 

@@ -81,8 +81,13 @@ class SyncFormsDownloadTaskSpec : TaskSpec {
         return Supplier {
             val projectId = inputData[TaskData.DATA_PROJECT_ID]
             if (projectId != null) {
-                formsDataService.downloadFormList(projectId, isStopped)
-                Result.Success(mapOf(TaskData.DATA_PROJECT_ID to projectId))
+                val result = formsDataService.downloadFormList(projectId, isStopped)
+                Result.Success(
+                    mapOf(
+                        TaskData.DATA_PROJECT_ID to projectId,
+                        SyncFormsProcessTaskSpec.DATA_DOWNLOAD_FORM_LIST_RESULT to result.ordinal.toString()
+                    )
+                )
             } else {
                 throw IllegalArgumentException("No project ID provided!")
             }
@@ -115,9 +120,14 @@ class SyncFormsProcessTaskSpec : TaskSpec {
 
         return Supplier {
             val projectId = inputData[TaskData.DATA_PROJECT_ID]
+            val downloadFormListResult = inputData[DATA_DOWNLOAD_FORM_LIST_RESULT]
 
-            if (projectId != null) {
-                formsDataService.processFormDownloads(projectId)
+            if (projectId != null && downloadFormListResult != null) {
+                formsDataService.processFormDownloads(
+                    projectId,
+                    FormsDataService.DownloadFormListResult.entries[downloadFormListResult.toInt()]
+                )
+
                 Result.Success()
             } else {
                 throw IllegalArgumentException("No project ID provided!")
@@ -127,5 +137,9 @@ class SyncFormsProcessTaskSpec : TaskSpec {
 
     override fun onException(exception: Throwable) {
         Analytics.logNonFatal(exception)
+    }
+
+    companion object {
+        const val DATA_DOWNLOAD_FORM_LIST_RESULT = "downloadFormListResult"
     }
 }
