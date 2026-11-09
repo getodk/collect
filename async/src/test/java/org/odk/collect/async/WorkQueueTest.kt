@@ -4,6 +4,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
@@ -80,6 +82,30 @@ class WorkQueueTest {
             replace(listOf(4, 5, 6))
         }
         verify(onClear).invoke(listOf(1, 2, 3))
+    }
+
+    @Test
+    fun `#set exposes lock value`() = runBlocking {
+        val workQueue = WorkQueue<Int>()
+        val testBarrier = CountDownLatch(1)
+        val addJobBarrier = CountDownLatch(1)
+
+        val addJob = CoroutineScope(Dispatchers.IO).launch {
+            workQueue.set {
+                testBarrier.countDown()
+                addJobBarrier.await()
+            }
+        }
+
+        testBarrier.await()
+        val lockedResult = workQueue.set { hasLock }
+        assertThat(lockedResult, equalTo(false))
+
+        addJobBarrier.countDown()
+        addJob.join()
+
+        val unlockedResult = workQueue.set { hasLock }
+        assertThat(unlockedResult, equalTo(true))
     }
 
     @Test
