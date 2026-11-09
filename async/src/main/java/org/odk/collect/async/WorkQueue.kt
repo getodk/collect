@@ -2,44 +2,38 @@ package org.odk.collect.async
 
 import kotlinx.coroutines.sync.Mutex
 
-/**
- * @param onClear run after the queue is consumed with the values consume. Allows any
- * resources related to the items to be cleaned up.
- */
 class WorkQueue<T>(private val onClear: (List<T>) -> Unit = {}) {
 
     private var itemList = mutableListOf<T>()
     private var lock = Mutex()
 
-    fun consume(consumer: (List<T>) -> Unit): Boolean {
-        lock.tryAcquire {
-            val consumed = itemList.toList()
-            itemList.clear()
+    fun consume(consumer: (List<T>) -> Unit) {
+        lock.tryAcquire { acquired ->
+            if (acquired) {
+                val consumed = itemList.toList()
+                itemList.clear()
 
-            consumer(consumed)
-            onClear(consumed)
-        }
-
-        return false
-    }
-
-    fun set(producer: () -> List<T>): Boolean {
-        return lock.tryAcquire {
-            onClear(itemList.toList())
-            itemList.clear()
-            itemList.addAll(producer())
+                consumer(consumed)
+                onClear(consumed)
+            }
         }
     }
 
-    private fun <U> Mutex.tryAcquire(work: () -> U): Boolean {
+    fun <U> set(block: WorkQueueScope<T>.() -> U): U {
+        return lock.tryAcquire { acquired ->
+            if (acquired) {
+                val scope = WorkQueueScopeImpl(itemList, onClear)
+                block(scope)
+            } else {
+                block(WorkQueueScopeLocked())
+            }
+        }
+    }
+
+    private fun <U> Mutex.tryAcquire(work: (Boolean) -> U): U {
         val acquired = this.tryLock()
         try {
-            if (acquired) {
-                work()
-                return true
-            } else {
-                return false
-            }
+            return work(acquired)
         } finally {
             if (acquired) {
                 this.unlock()
@@ -48,9 +42,29 @@ class WorkQueue<T>(private val onClear: (List<T>) -> Unit = {}) {
     }
 }
 
+interface WorkQueueScope<T> {
+    fun replace(items: List<T>)
+}
+
+private class WorkQueueScopeImpl<T>(
+    private val itemList: MutableList<T>,
+    private val onClear: (List<T>) -> Unit
+) : WorkQueueScope<T> {
+
+    override fun replace(items: List<T>) {
+        onClear(itemList.toList())
+        itemList.clear()
+        itemList.addAll(items)
+    }
+}
+
+private class WorkQueueScopeLocked<T> : WorkQueueScope<T> {
+    override fun replace(items: List<T>) {
+    }
+}
+
 fun <T> WorkQueue<T>.clearAndBlock(work: () -> Unit) {
-    this.set {
+    this.consume {
         work()
-        emptyList()
     }
 }
