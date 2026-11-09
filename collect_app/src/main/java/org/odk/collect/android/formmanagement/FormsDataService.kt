@@ -223,50 +223,52 @@ class FormsDataService(
         val projectDependencies = projectDependencyModuleFactory.create(projectId)
         val formProcessingQueue = projectDependencies.formProcessingQueue
         formProcessingQueue.set {
-            try {
-                val formsRepository = projectDependencies.formsRepository
-                val instancesRepository = projectDependencies.instancesRepository
-                val formList = ServerFormUseCases.fetchFormDetails(
-                    formsRepository,
-                    projectDependencies.formSource
-                )
+            if (hasLock) {
+                try {
+                    val formsRepository = projectDependencies.formsRepository
+                    val instancesRepository = projectDependencies.instancesRepository
+                    val formList = ServerFormUseCases.fetchFormDetails(
+                        formsRepository,
+                        projectDependencies.formSource
+                    )
 
-                val formsOnDevice: List<Form> = formsRepository.getAll()
-                val formsToDelete = formsOnDevice
-                    .filterNot { deviceForm -> formList.any { it.formId == deviceForm.formId } }
-                val formsToDownload = formList
-                    .filter { it.type != ServerFormDetails.Type.OnDevice }
+                    val formsOnDevice: List<Form> = formsRepository.getAll()
+                    val formsToDelete = formsOnDevice
+                        .filterNot { deviceForm -> formList.any { it.formId == deviceForm.formId } }
+                    val formsToDownload = formList
+                        .filter { it.type != ServerFormDetails.Type.OnDevice }
 
-                formsToDelete
-                    .forEach {
-                        LocalFormUseCases.deleteForm(
-                            formsRepository,
-                            instancesRepository,
-                            it.dbId
-                        )
+                    formsToDelete
+                        .forEach {
+                            LocalFormUseCases.deleteForm(
+                                formsRepository,
+                                instancesRepository,
+                                it.dbId
+                            )
+                        }
+
+                    val formDownloader = formDownloader(projectDependencies, clock)
+                    val downloadResults = formDownloader.downloadForms(formsToDownload, null, null)
+
+                    val successes =
+                        downloadResults.filterIsInstance<Result.Success<FormDownload, FormDownloadException>>()
+                    val errors =
+                        downloadResults.filterIsInstance<Result.Error<FormDownload, FormDownloadException>>()
+
+                    if (errors.isNotEmpty()) {
+                        notifier.onSync(FormSourceException.FetchError(), projectId)
                     }
 
-                val formDownloader = formDownloader(projectDependencies, clock)
-                val downloadResults = formDownloader.downloadForms(formsToDownload, null, null)
+                    replace(successes.map { it.value })
+                } catch (e: FormSourceException) {
+                    if (isStopped()) {
+                        notifier.onSyncStopped(projectId)
+                    } else {
+                        notifier.onSync(e, projectId)
+                    }
 
-                val successes =
-                    downloadResults.filterIsInstance<Result.Success<FormDownload, FormDownloadException>>()
-                val errors =
-                    downloadResults.filterIsInstance<Result.Error<FormDownload, FormDownloadException>>()
-
-                if (errors.isNotEmpty()) {
-                    notifier.onSync(FormSourceException.FetchError(), projectId)
+                    replace(emptyList())
                 }
-
-                replace(successes.map { it.value })
-            } catch (e: FormSourceException) {
-                if (isStopped()) {
-                    notifier.onSyncStopped(projectId)
-                } else {
-                    notifier.onSync(e, projectId)
-                }
-
-                replace(emptyList())
             }
         }
     }

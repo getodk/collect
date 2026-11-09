@@ -22,10 +22,10 @@ class WorkQueue<T>(private val onClear: (List<T>) -> Unit = {}) {
     fun <U> set(block: WorkQueueScope<T>.() -> U): U {
         return lock.tryAcquire { acquired ->
             if (acquired) {
-                val scope = WorkQueueScopeImpl(itemList, onClear)
+                val scope = UnlockedWorkQueueScope(itemList, onClear)
                 block(scope)
             } else {
-                block(WorkQueueScopeLocked())
+                block(LockedWorkQueueScopeLocked())
             }
         }
     }
@@ -43,13 +43,16 @@ class WorkQueue<T>(private val onClear: (List<T>) -> Unit = {}) {
 }
 
 interface WorkQueueScope<T> {
+
+    val hasLock: Boolean
     fun replace(items: List<T>)
 }
 
-private class WorkQueueScopeImpl<T>(
+private class UnlockedWorkQueueScope<T>(
     private val itemList: MutableList<T>,
     private val onClear: (List<T>) -> Unit
 ) : WorkQueueScope<T> {
+    override val hasLock: Boolean = true
 
     override fun replace(items: List<T>) {
         onClear(itemList.toList())
@@ -58,13 +61,13 @@ private class WorkQueueScopeImpl<T>(
     }
 }
 
-private class WorkQueueScopeLocked<T> : WorkQueueScope<T> {
+private class LockedWorkQueueScopeLocked<T> : WorkQueueScope<T> {
+    override val hasLock: Boolean = false
+
     override fun replace(items: List<T>) {
     }
 }
 
 fun <T> WorkQueue<T>.clearAndBlock(work: () -> Unit) {
-    this.consume {
-        work()
-    }
+    this.consume { work() }
 }
