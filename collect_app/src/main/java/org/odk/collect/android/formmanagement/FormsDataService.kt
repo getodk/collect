@@ -258,7 +258,7 @@ class FormsDataService(
                     notifier.onSync(FormSourceException.FetchError(), projectId)
                 }
 
-                successes.map { it.value }
+                replace(successes.map { it.value })
             } catch (e: FormSourceException) {
                 if (isStopped()) {
                     notifier.onSyncStopped(projectId)
@@ -266,7 +266,7 @@ class FormsDataService(
                     notifier.onSync(e, projectId)
                 }
 
-                emptyList()
+                replace(emptyList())
             }
         }
     }
