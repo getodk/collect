@@ -121,9 +121,13 @@
   <!--Title of the end of form screen-->
   <string name="save_enter_data_description">Ti trovi alla fine di \"%s\".</string>
   <!--Text shown in an information box on the end of form screen when auto-send is off or the device is offline-->
+  <string name="form_editing_disabled_after_finalizing">Non modificabile dopo la finalizzazione</string>
   <!--Text shown in an information box on the end of form screen when auto-send is on and the device is online-->
+  <string name="form_editing_disabled_after_sending">Non modificabile dopo l\'invio</string>
   <!--Text shown in an information box on the end of form screen when auto-send is off and the form allows edits after finalize/send-->
+  <string name="form_editing_enabled_after_finalizing">Modificabile dopo la finalizzazione</string>
   <!--Text shown in an information box on the end of form screen when auto-send is on and the form allows edits after finalize/send-->
+  <string name="form_editing_enabled_after_sending">Modificabile dopo l\'invio</string>
   <!--Details shown in an information box on the end of form screen when the form does not allow edits after finalize/send-->
   <string name="form_editing_disabled_hint">Se devi apportare modifiche al modulo, \"Salva come bozza\" finché non sei pronto per l\'invio.</string>
   <!--Details shown in an information box on the end of form screen when the form allows edits after finalization-->
@@ -204,12 +208,19 @@
   <string name="number_picker_title">Selezionatore numerico</string>
   <string name="invalid_range_widget">Questo widget ha parametri invalidi!</string>
   <!--Content description for a horizontal slider used in range widgets-->
+  <string name="horizontal_slider">Cursore orizzontale</string>
   <!--Content description for a vertical slider used in range widgets-->
+  <string name="vertical_slider">Cursore verticale</string>
   <!--Content description for the label showing the current value of the slider-->
+  <string name="current_slider_value">Valore attuale del cursore</string>
   <!--Content description for each tick mark on the slider indicating discrete steps-->
+  <string name="slider_tick">Tacca del cursore</string>
   <!--Content description for the draggable thumb handle of the slider-->
+  <string name="slider_thumb">Maniglia del cursore</string>
   <!--Content description for the label at the start (minimum) of the slider-->
+  <string name="slider_start_label">Etichetta iniziale del cursore</string>
   <!--Content description for the label at the end (maximum) of the slider-->
+  <string name="slider_end_label">Etichetta finale del cursore</string>
   <string name="svg_file_does_not_exist">Il file SVG non esiste!</string>
   <string name="capture_image">Scatta Foto</string>
   <string name="choose_image">Seleziona Foto</string>
@@ -462,7 +473,8 @@
   <!--Text for option where layer should be available to the current project only-->
   <string name="current_project_option">Solo il progetto attuale</string>
   <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
-  <string name="delete_layer_confirmation_message">Sei sicuro di voler eliminare il %1$s livello non in linea?</string>
+  <string name="delete_layer_confirmation_message">Sei sicuro di voler eliminare il livello offline %1$s?</string>
+  <string name="record_geopoint">Aggiungi indicatore</string>
   <string name="location_accuracy">Precisione: %1$s </string>
   <string name="location_accuracy_unacceptable">⚠️ Precisione: %1$s (inaccettabile)</string>
   <string name="provider_disabled_error">Attenzione, i Sistemi di Posizionamento sono disabilitati!</string>
@@ -532,8 +544,8 @@
   <string name="collection_status_auto_minutes">Punti inseriti: %1$d (salva ogni %2$d min)</string>
   <string name="collection_status_auto_seconds_accuracy">Punti inseriti: %1$d (salva ogni %2$d sec, precisione %3$d m)</string>
   <string name="collection_status_auto_minutes_accuracy">Punti inseriti: %1$d (salva ogni %2$d min, precisione %3$d m)</string>
-  <string name="geopoint_instruction">Long press to place mark or tap add marker button</string>
-  <string name="geopoint_no_draggable_instruction">Tocca Aggiungi Posizione.</string>
+  <string name="geopoint_instruction">Tieni premuto per posizionare un indicatore o tocca il pulsante Aggiungi indicatore</string>
+  <string name="geopoint_no_draggable_instruction">Tocca il pulsante Aggiungi indicatore.</string>
   <string name="discard">Annulla</string>
   <string name="select_item_count">%s: %d (%d mostrato sulla mappa)</string>
   <string name="select_item">Selezionare</string>
@@ -913,7 +925,7 @@
   <string name="fs_create_media_folder_error">Non puoi creare la cartella media \'%s\'.</string>
   <string name="fs_file_copy_error">Non puoi copiare \'%1$s\' in \'%2$s\'. Motivo: %3$s</string>
   <string name="select_odk_shortcut">Seleziona scorciatoia ODK</string>
-  <string name="background_audio_help">Questo formulario registra l\'audio dal microfono del tuo dispositivo.\n\nPuoi utilizzare l\'indicatore del volume per assicurarti che il microfono sia abbastanza vicino al suono che devi registrare.\n\nPer interrompere la registrazione esci da questo formulario.\n\ nPer maggiori informazioni contatta la persona che ti ha chiesto di raccogliere i dati.</string>
+  <string name="background_audio_help">Questo formulario registra l\'audio dal microfono del tuo dispositivo.\n\nPuoi utilizzare l\'indicatore del volume per assicurarti che il microfono sia abbastanza vicino al suono che devi registrare.\n\nPer interrompere la registrazione esci da questo formulario.\n\nPer maggiori informazioni contatta la persona che ti ha chiesto di raccogliere i dati.</string>
   <string name="loading">Caricando…</string>
   <!--##############################################
      # Projects
@@ -1020,6 +1032,7 @@
   <string name="crash_last_run">Si è verificato un arresto anomalo l\'ultima volta che l\'app era in esecuzione!</string>
   <string name="cant_start_app">Impossibile avviare l\'app!</string>
   <!--Message shown when the app crashed due to running out of memory last time it was run.-->
+  <string name="crash_oom_description">Il dispositivo ha esaurito la memoria. Prova a chiudere le altre app e a riaprire il formulario. Se il problema persiste, il formulario o i suoi dati potrebbero essere troppo grandi o complessi per questo dispositivo. Contatta la persona che ti ha chiesto di usare il formulario.</string>
   <!--##############################################
     # Google Drive deprecation
     ##############################################-->
@@ -1106,9 +1119,9 @@
     <item quantity="other">%d bozze contengono errori che devono essere risolti prima di essere finalizzati.</item>
   </plurals>
   <!--Message shown after bulk finalization when some drafts finalize successfully and others fail-->
-  <string name="bulk_finalize_partial_success">%d bozze finalizzate. %d le bozze contengono errori che devono essere risolti prima di essere finalizzati.</string>
+  <string name="bulk_finalize_partial_success">%d bozze finalizzate. %d bozze contengono errori da correggere prima della finalizzazione.</string>
   <!--Message shown when some drafts finalize successfully but others need to be finalized manually-->
-  <string name="bulk_finalize_unsupported">%dbozze finalizzate. Le bozze rimanenti devono essere finalizzate manualmente.</string>
+  <string name="bulk_finalize_unsupported">%d bozze finalizzate. Le bozze rimanenti devono essere finalizzate manualmente.</string>
   <!--Displayed above a draft that has constraints that aren't met or required questions that aren't answered or both. Should match the wording for the 'Check for errors' feature.-->
   <string name="draft_errors">Errori</string>
   <!--Displayed above a draft that has no constraint violations and in which all required questions have been answered. Should match the wording for the 'Check for errors' feature.-->
@@ -1188,7 +1201,7 @@
   <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
   <string name="newer_finalized_edit_found_dialog_title">Modifica ultima versione?</string>
   <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="newer_finalized_edit_found_dialog_message">\'Questo invio è stato precedentemente modificato.\n\nDesideri modificare l\'\'ultima versione finalizzata il\' EEE, MMM dd, yyyy \'at\' HH:mm\'?\'</string>
+  <string name="newer_finalized_edit_found_dialog_message">\'Questo invio è stato precedentemente modificato.\n\nDesideri modificare l\'\'ultima versione finalizzata il\' EEE, MMM dd, yyyy \'alle\' HH:mm\'?\'</string>
   <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
   <string name="newer_finalized_edit_found_dialog_positive_button">Modifica ultimo Modulo</string>
   <!--Text for the snackbar shown when editing of a finalized form begins-->

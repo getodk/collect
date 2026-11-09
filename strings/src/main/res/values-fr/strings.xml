@@ -121,7 +121,7 @@
   <!--Title of the end of form screen-->
   <string name="save_enter_data_description">Vous êtes à la fin de \"%s\".</string>
   <!--Text shown in an information box on the end of form screen when auto-send is off or the device is offline-->
-  <string name="form_editing_disabled_after_finalizing">Ne peut éditer après finalisation</string>
+  <string name="form_editing_disabled_after_finalizing">Ne pourra être édité après finalisation</string>
   <!--Text shown in an information box on the end of form screen when auto-send is on and the device is online-->
   <string name="form_editing_disabled_after_sending">Ne peut éditer après envoi</string>
   <!--Text shown in an information box on the end of form screen when auto-send is off and the form allows edits after finalize/send-->
@@ -129,7 +129,7 @@
   <!--Text shown in an information box on the end of form screen when auto-send is on and the form allows edits after finalize/send-->
   <string name="form_editing_enabled_after_sending">Peut éditer après envoi</string>
   <!--Details shown in an information box on the end of form screen when the form does not allow edits after finalize/send-->
-  <string name="form_editing_disabled_hint">Si vous devrez modifier ce formulaire prochainement, choisissez \"Enregistrer comme brouillon\" jusqu\'à ce que vous soyez prêt à l\'envoyer.</string>
+  <string name="form_editing_disabled_hint">Si vous devez modifier ce formulaire prochainement, choisissez \"Enregistrer comme brouillon\" jusqu\'à ce que vous soyez prêt à l\'envoyer.</string>
   <!--Details shown in an information box on the end of form screen when the form allows edits after finalization-->
   <string name="form_editing_enabled_after_finalizing_hint">Pour modifier les données après avoir finalisé votre formulaire, trouvé le dans \"Prêt à envoyer\" et appuyez sur l\'icône d\'édition.</string>
   <!--Details shown in an information box on the end of form screen when the form allows edits after sending-->

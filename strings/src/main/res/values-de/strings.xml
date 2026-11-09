@@ -208,12 +208,19 @@
   <string name="number_picker_title">Zahlenwähler</string>
   <string name="invalid_range_widget">Dieses Widget hat ungültige Parameter!</string>
   <!--Content description for a horizontal slider used in range widgets-->
+  <string name="horizontal_slider">Horizontaler Schieberegler</string>
   <!--Content description for a vertical slider used in range widgets-->
+  <string name="vertical_slider">Vertikaler Schieberegler</string>
   <!--Content description for the label showing the current value of the slider-->
+  <string name="current_slider_value">Aktueller Wert des Schiebereglers</string>
   <!--Content description for each tick mark on the slider indicating discrete steps-->
+  <string name="slider_tick">Schiebereglermarkierung</string>
   <!--Content description for the draggable thumb handle of the slider-->
+  <string name="slider_thumb">Schiebereglervorschaubild</string>
   <!--Content description for the label at the start (minimum) of the slider-->
+  <string name="slider_start_label">Startwert des Schiebereglers</string>
   <!--Content description for the label at the end (maximum) of the slider-->
+  <string name="slider_end_label">Endwert des Schiebereglers</string>
   <string name="svg_file_does_not_exist">SVG-Datei existiert nicht!</string>
   <string name="capture_image">Foto machen</string>
   <string name="choose_image">Bild auswählen</string>
@@ -466,6 +473,7 @@
   <string name="current_project_option">Nur aktuelles Projekt</string>
   <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
   <string name="delete_layer_confirmation_message">Möchten sie wirklich die %1$s Offline-Ebene löschen?</string>
+  <string name="record_geopoint">Markierung hinzufügen</string>
   <string name="location_accuracy">Genauigkeit: %1$s</string>
   <string name="location_accuracy_unacceptable">⚠️ Genauigkeit: %1$s (inakzeptabel)</string>
   <string name="provider_disabled_error">Standortdienste sind nicht aktiviert!</string>
@@ -1020,6 +1028,7 @@
   <string name="crash_last_run">Es gab einen Absturz beim letzten Lauf der App!</string>
   <string name="cant_start_app">Kann die App nicht starten!</string>
   <!--Message shown when the app crashed due to running out of memory last time it was run.-->
+  <string name="crash_oom_description">Der Arbeitsspeicher Ihres Geräts war zu gering. Versuchen Sie andere Apps zu schließen und öffnen Sie das Formular erneut. Sollte das Problem weiter bestehen, sind das Formular oder dessen Daten möglicherweise zu groß oder zu komplex für dieses Gerät. Bitte wenden Sie sich an die Person, die Sie gebeten hat, das Formular zu verwenden.</string>
   <!--##############################################
     # Google Drive deprecation
     ##############################################-->

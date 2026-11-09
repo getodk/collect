@@ -121,9 +121,13 @@
   <!--Title of the end of form screen-->
   <string name="save_enter_data_description">Você está no fim de \"%s\".</string>
   <!--Text shown in an information box on the end of form screen when auto-send is off or the device is offline-->
+  <string name="form_editing_disabled_after_finalizing">Não é possível editar após finalizar</string>
   <!--Text shown in an information box on the end of form screen when auto-send is on and the device is online-->
+  <string name="form_editing_disabled_after_sending">Não é possível editar após enviar</string>
   <!--Text shown in an information box on the end of form screen when auto-send is off and the form allows edits after finalize/send-->
+  <string name="form_editing_enabled_after_finalizing">É possível editar após finalizar</string>
   <!--Text shown in an information box on the end of form screen when auto-send is on and the form allows edits after finalize/send-->
+  <string name="form_editing_enabled_after_sending">É possível editar após enviar</string>
   <!--Details shown in an information box on the end of form screen when the form does not allow edits after finalize/send-->
   <string name="form_editing_disabled_hint">Se você precisa fazer alterações em seu formulário, utilize \"Salvar como rascunho\" até que você esteja pronto para enviar.</string>
   <!--Details shown in an information box on the end of form screen when the form allows edits after finalization-->
@@ -204,12 +208,19 @@
   <string name="number_picker_title">Teclado para escolher números</string>
   <string name="invalid_range_widget">Esta ferramenta possui parâmetros inválidos!</string>
   <!--Content description for a horizontal slider used in range widgets-->
+  <string name="horizontal_slider">Barra de rolagem horizontal</string>
   <!--Content description for a vertical slider used in range widgets-->
+  <string name="vertical_slider">Barra de rolagem vertical</string>
   <!--Content description for the label showing the current value of the slider-->
+  <string name="current_slider_value">Valor atual da barra de rolagem</string>
   <!--Content description for each tick mark on the slider indicating discrete steps-->
+  <string name="slider_tick">Marcador da barra de rolagem</string>
   <!--Content description for the draggable thumb handle of the slider-->
+  <string name="slider_thumb">Cursor da barra de rolagem</string>
   <!--Content description for the label at the start (minimum) of the slider-->
+  <string name="slider_start_label">Rótulo do início da barra de rolagem</string>
   <!--Content description for the label at the end (maximum) of the slider-->
+  <string name="slider_end_label">Rótulo do final da barra de rolagem</string>
   <string name="svg_file_does_not_exist">O arquivo SVG não existe!</string>
   <string name="capture_image">Tirar Foto</string>
   <string name="choose_image">Escolher Imagem</string>
@@ -463,6 +474,7 @@
   <string name="current_project_option">Apenas o projeto atual</string>
   <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
   <string name="delete_layer_confirmation_message">Você tem certeza que deseja excluir a camada offline %1$s?</string>
+  <string name="record_geopoint">Adicionar marcador</string>
   <string name="location_accuracy">Precisão: %1$s</string>
   <string name="location_accuracy_unacceptable">⚠️ Precisão: %1$s (inaceitável)</string>
   <string name="provider_disabled_error">Desculpe, provedor de localização desabilitado!</string>
@@ -1020,6 +1032,7 @@
   <string name="crash_last_run">Houve um \"crash\" na última vez que o app foi executado!</string>
   <string name="cant_start_app">Não foi possível executar o app!</string>
   <!--Message shown when the app crashed due to running out of memory last time it was run.-->
+  <string name="crash_oom_description">O seu aparelho está sem memória livre. Tente fechar outros aplicativos e reabrir o formulário. Se o problema persistir, o formulário ou os dados dele podem ser muito grandes ou muito complexos para esse aparelho. Por favor, contate a pessoa que pediu que você utilizasse esse formulário.</string>
   <!--##############################################
     # Google Drive deprecation
     ##############################################-->
