@@ -152,11 +152,11 @@ Hãy mở lại ứng dụng sau khi bạn đã được cấp quyền.</string>
   <string name="quit_form_title">Lưu biểu mẫu?</string>
   <string name="save_explanation">Bạn có thể lưu biểu mẫu này và truy cập nó từ các bản nháp bất kỳ lúc nào.</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="save_explanation_with_last_saved">\'Biểu mẫu này được lưu lần cuối trên\' EEE, dd MM, yyyy \'vào lúc\' HH:mm. Hãy lưu như bản nháp để giữ lại những thay đổi.\'</string>
+  <string name="save_explanation_with_last_saved">\'Biểu mẫu này được lưu lần cuối trên\' EEE, dd MM, yyyy \'vào lúc\' HH:mm\'. Hãy lưu như bản nháp để giữ lại những thay đổi.\'</string>
   <string name="quit_form_continue_title">Tiếp tục chỉnh sửa?</string>
   <string name="discard_form_warning">Nếu bạn hủy biểu mẫu, bạn sẽ mất tất cả những thay đổi mà bạn đã thực hiện đến lúc này.</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="discard_changes_warning">\'Biểu mẫu này được lưu lần cuối trên\' EEE, dd MM, yyyy \'vào lúc\' HH:mm. Nếu bạn hủy bỏ thay đổi, bạn sẽ mất mọi thay đổi bạn đã thực hiện kể từ thời điểm này\'</string>
+  <string name="discard_changes_warning">\'Biểu mẫu này được lưu lần cuối trên\' EEE, dd MM, yyyy \'vào lúc\' HH:mm\'. Nếu bạn hủy bỏ thay đổi, bạn sẽ mất mọi thay đổi bạn đã thực hiện kể từ thời điểm này\'</string>
   <string name="saving_form">Đang lưu biểu mẫu</string>
   <string name="survey_saving_validating_message">Đang kiểm tra các câu trả lời…</string>
   <string name="survey_saving_collecting_message">Đang thu thập dữ liệu…</string>

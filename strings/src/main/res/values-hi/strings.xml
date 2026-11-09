@@ -845,7 +845,7 @@
   <!--Title displayed in a dialog before starting a form if there is a work to recover-->
   <string name="savepoint_recovery_dialog_title">अपना काम रिकवर करें?</string>
   <!--Message displayed in a dialog before starting a form if there is a work to recover. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="savepoint_recovery_dialog_message">\'Collect\' अचानक\' EEE, MMM dd, yyyy \'समय\' HH:mm \'पर बंद हो गया और आपका काम सेव कर लिया गया।\n\nक्या आप इसे रिकवर करना चाहते हैं या हटाना चाहते हैं?\'</string>
+  <string name="savepoint_recovery_dialog_message">\'Collect अचानक\' EEE, MMM dd, yyyy \'समय\' HH:mm \'पर बंद हो गया और आपका काम सेव कर लिया गया।\n\nक्या आप इसे रिकवर करना चाहते हैं या हटाना चाहते हैं?\'</string>
   <!--Text for the button that accepts the recovery of the work-->
   <!--Text for the button that declines the recovery of the work-->
   <string name="do_not_recover">छोड़ दें </string>
