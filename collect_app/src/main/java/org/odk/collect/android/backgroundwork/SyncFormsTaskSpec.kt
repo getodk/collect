@@ -123,7 +123,7 @@ class SyncFormsProcessTaskSpec : TaskSpec {
             val downloadFormListResult = inputData[DATA_DOWNLOAD_FORM_LIST_RESULT]
 
             if (projectId != null && downloadFormListResult != null) {
-                formsDataService.processFormDownloads(
+                formsDataService.processFormList(
                     projectId,
                     FormsDataService.DownloadFormListResult.entries[downloadFormListResult.toInt()]
                 )
