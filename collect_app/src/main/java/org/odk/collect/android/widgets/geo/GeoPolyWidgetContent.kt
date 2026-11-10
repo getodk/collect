@@ -56,6 +56,7 @@ fun GeoPolyWidgetContent(
             answerFontSize,
             mediaWidgetAnswerViewModel = mediaWidgetAnswerViewModel,
             staticMapLoader = staticMapLoader,
+            onClick = onGetGeoPolyClick,
             onLongClick = onLongClick
         )
     }
