@@ -30,12 +30,21 @@ assertThat(ClassToTest.methodReturnsNull(), equalTo(null));
 
 ### Backtick test naming
 
-Tests written in Kotlin should use [backtick enclosed method names](https://kotlinlang.org/docs/coding-conventions.html#names-for-test-methods) and use `#` JavaDoc syntax to refer to an object member's in unit tests:
+Tests written in Kotlin should use [backtick enclosed method names](https://kotlinlang.org/docs/coding-conventions.html#names-for-test-methods). Use `#` JavaDoc syntax only at the start of the name when the test directly refers to a member (method, property etc.) of the class under test:
 
 ```kotlin
 @Test
 fun `#getHello returns hello string`() {
     assertThat(subject.getHello(), equalTo("hello"))
+}
+```
+
+Don't use `#` when the test describes a behavior rather than a function — for example in a UI test you might write something like:
+
+```kotlin
+@Test
+fun `clicking save finishes the form`() {
+    // ...
 }
 ```
 
