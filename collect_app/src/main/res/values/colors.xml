@@ -9,7 +9,7 @@
     <color name="colorSurfaceContainerHighestLight">#f2f2f2</color>
 
     <color name="colorPrimaryDark">#0A80A3</color>
-    <color name="colorOnPrimaryDark">#003547</color>
+    <color name="colorOnPrimaryDark">#ffffff</color>
     <color name="colorPrimaryContainerDark">#004d65</color>
     <color name="colorOnPrimaryContainerDark">#bfe9ff</color>
     <color name="colorSurfaceDark">#001117</color>
