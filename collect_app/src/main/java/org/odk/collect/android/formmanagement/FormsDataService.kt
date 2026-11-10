@@ -276,10 +276,12 @@ class FormsDataService(
         }
     }
 
-    fun processFormDownloads(projectId: String, downloadFormListResult: DownloadFormListResult) {
+    fun processFormList(projectId: String, downloadFormListResult: DownloadFormListResult) {
         val projectDependencies = projectDependencyModuleFactory.create(projectId)
         projectDependencies.formsLock.withLock { acquiredLock ->
             if (acquiredLock) {
+                startSync(projectId)
+
                 val formProcessingQueue =
                     projectDependencyModuleFactory.create(projectId).formProcessingQueue
                 formProcessingQueue.consume { formDownloads ->
@@ -287,6 +289,8 @@ class FormsDataService(
                     formDownloads.forEach { formDownloader.processForm(it) }
                     update(projectId)
                 }
+
+                finishSyncWithServer(projectId, null)
             }
         }
 
@@ -299,7 +303,9 @@ class FormsDataService(
                 notifier.onSyncStopped(projectId)
             }
 
-            DownloadFormListResult.SUCCESS, DownloadFormListResult.BLOCKED -> {}
+            DownloadFormListResult.SUCCESS, DownloadFormListResult.BLOCKED -> {
+                notifier.onSync(null, projectId)
+            }
         }
     }
 
