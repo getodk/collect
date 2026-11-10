@@ -1,9 +1,12 @@
 package org.odk.collect.android.widgets.geo
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.window.core.layout.WindowSizeClass
 import org.odk.collect.android.widgets.MediaWidgetAnswerViewModel
 import org.odk.collect.android.widgets.TextWidgetAnswer
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils
@@ -31,7 +34,7 @@ fun GeoPolyWidgetAnswer(
     }
 
     AsyncStaticMap(
-        modifier = modifier,
+        modifier = modifier.widthIn(max = WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND.dp),
         trace = trace,
         configuration = mediaWidgetAnswerViewModel.getStaticMapConfiguration(),
         cache = mediaWidgetAnswerViewModel.staticMapCache,
