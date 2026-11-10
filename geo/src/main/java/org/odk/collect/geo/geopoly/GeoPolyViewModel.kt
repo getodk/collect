@@ -17,7 +17,7 @@ import org.odk.collect.location.tracker.LocationTracker
 import org.odk.collect.maps.MapPoint
 
 class GeoPolyViewModel(
-    outputMode: OutputMode,
+    private val outputMode: OutputMode,
     points: List<MapPoint>,
     retainMockAccuracy: Boolean,
     private val locationTracker: LocationTracker,
@@ -36,13 +36,10 @@ class GeoPolyViewModel(
     var inputActive: StateFlow<Boolean> = _inputActive
         private set
 
+    private val originalPoints = points
     private val _points = MutableStateFlow(
-        if (points.isNotEmpty()) {
-            if (outputMode == OutputMode.GEOSHAPE) {
-                points.subList(0, points.size - 1)
-            } else {
-                points
-            }
+        if (outputMode == OutputMode.GEOSHAPE) {
+            points.dropClosingPoint()
         } else {
             points
         }
@@ -129,5 +126,20 @@ class GeoPolyViewModel(
         locationTracker.stop()
     }
 
+    fun hasBeenModified(): Boolean {
+        return when (outputMode) {
+            OutputMode.GEOTRACE -> points.value != originalPoints
+            OutputMode.GEOSHAPE -> points.value != originalPoints.dropClosingPoint()
+        }
+    }
+
     data class GeoPoly(val points: List<MapPoint>, val isValid: Boolean)
+}
+
+private fun List<MapPoint>.dropClosingPoint(): List<MapPoint> {
+    return if (this.isNotEmpty()) {
+        this.subList(0, this.size - 1)
+    } else {
+        this
+    }
 }

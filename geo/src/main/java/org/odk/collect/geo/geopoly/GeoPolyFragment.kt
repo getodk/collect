@@ -90,7 +90,7 @@ class GeoPolyFragment @JvmOverloads constructor(
     private val onBackPressedCallback: OnBackPressedCallback =
         object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (!readOnly && inputPolygon != viewModel.points.value) {
+                if (!readOnly && viewModel.hasBeenModified()) {
                     showBackDialog()
                 } else {
                     cancel()

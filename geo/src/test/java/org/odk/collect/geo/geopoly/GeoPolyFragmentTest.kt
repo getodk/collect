@@ -365,6 +365,31 @@ class GeoPolyFragmentTest {
     }
 
     @Test
+    fun `pressing back sets cancel result when polygon has not been modified`() {
+        val onBackPressedDispatcher = OnBackPressedDispatcher()
+        val scenario = launcherRule.launchInContainer {
+            GeoPolyFragment(
+                { onBackPressedDispatcher },
+                OutputMode.GEOSHAPE,
+                inputPolygon = listOf(
+                    MapPoint(1.0, 2.0, 3.0, 4.0),
+                    MapPoint(2.0, 3.0, 3.0, 4.0),
+                    MapPoint(1.0, 2.0, 3.0, 4.0)
+                )
+            )
+        }
+
+        val resultListener = FragmentResultRecorder()
+        scenario.setFragmentResultListener(GeoPolyFragment.REQUEST_GEOPOLY, resultListener)
+
+        onBackPressedDispatcher.onBackPressed()
+
+        val result = resultListener.getAll().last()
+        assertThat(result.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
+        assertThat(result.second.getString(GeoPolyFragment.RESULT_GEOPOLY), equalTo(null))
+    }
+
+    @Test
     fun `pressing back and clicking cancel sets no result when polygon has been modified`() {
         val onBackPressedDispatcher = OnBackPressedDispatcher()
         val scenario = launcherRule.launchInContainer {
