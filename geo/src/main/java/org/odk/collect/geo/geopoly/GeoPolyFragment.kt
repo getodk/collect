@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.map
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -102,7 +103,6 @@ class GeoPolyFragment @JvmOverloads constructor(
         viewModelFactory {
             addInitializer(GeoPolyViewModel::class) {
                 GeoPolyViewModel(
-                    outputMode,
                     inputPolygon,
                     retainMockAccuracy,
                     locationTracker,
@@ -141,7 +141,7 @@ class GeoPolyFragment @JvmOverloads constructor(
 
         requireLocationPermissions(requireActivity())
 
-        viewModel.points.asLiveData().observe(this) {
+        viewModel.geoPoly.map { it.points }.observe(this) {
             setChangeResult(it)
         }
     }
@@ -301,7 +301,7 @@ class GeoPolyFragment @JvmOverloads constructor(
 
             if (outputMode == OutputMode.GEOSHAPE) {
                 val polygonDescription = PolygonDescription(
-                    points,
+                    if (points.isNotEmpty()) points.subList(0, points.size - 1) else points,
                     draggable = !readOnly,
                     strokeColor = color,
                     fillColor = color,

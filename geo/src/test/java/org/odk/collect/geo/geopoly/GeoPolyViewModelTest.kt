@@ -24,7 +24,6 @@ class GeoPolyViewModelTest {
     fun `#fixedAlerts is null until after invalid message is non-null`() {
         val invalidMessage = MutableLiveData<DisplayString?>(null)
         val viewModel = GeoPolyViewModel(
-            GeoPolyFragment.OutputMode.GEOTRACE,
             emptyList(),
             false,
             FakeLocationTracker(),
@@ -45,7 +44,6 @@ class GeoPolyViewModelTest {
     fun `#fixedAlerts is null after repeated invalid message nulls after a non-null`() {
         val invalidMessage = MutableLiveData<DisplayString?>(null)
         val viewModel = GeoPolyViewModel(
-            GeoPolyFragment.OutputMode.GEOTRACE,
             emptyList(),
             false,
             FakeLocationTracker(),
@@ -63,7 +61,6 @@ class GeoPolyViewModelTest {
     fun `#onCleared stops LocationTracker`() {
         val locationTracker = FakeLocationTracker()
         val viewModel = GeoPolyViewModel(
-            GeoPolyFragment.OutputMode.GEOTRACE,
             emptyList(),
             false,
             locationTracker,
