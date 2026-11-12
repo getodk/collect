@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- https://github.com/material-components/material-components-android/issues/2810 -->
+<resources>
+    <style name="Widget.Collect.Material.Button.OutlinedButton" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:textColor">@color/m3_outlined_button_foreground_color_selector</item>
+        <item name="iconTint">@color/m3_outlined_button_foreground_color_selector</item>
+    </style>
+
+    <style name="Widget.Collect.Material.Button.OutlinedButton.Icon" parent="Widget.Material3.Button.OutlinedButton.Icon">
+        <item name="android:textColor">@color/m3_outlined_button_foreground_color_selector</item>
+        <item name="iconTint">@color/m3_outlined_button_foreground_color_selector</item>
+    </style>
+</resources>
