@@ -4,7 +4,7 @@ import androidx.core.graphics.toColorInt
 
 object MapConsts {
     @JvmField
-    val DEFAULT_STROKE_COLOR = "#3e9fcc".toColorInt()
+    val DEFAULT_STROKE_COLOR = "#0A80A3".toColorInt()
 
     @JvmField
     val DEFAULT_HIGHLIGHT_COLOR = "#1F5976".toColorInt()
