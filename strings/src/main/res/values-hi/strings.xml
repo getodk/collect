@@ -745,7 +745,7 @@
   <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
   <string name="configure_with_qr_code">क्यूआर कोड के साथ कॉन्फ़िगर करें</string>
   <!--Text for the button that allows for manually entering project details. Should be short-->
-  <string name="configure_manually"></string>
+  <string name="configure_manually">मैन्युअल रूप से दर्ज करें</string>
   <string name="project_config_tip">अपना प्रोजेक्ट जोड़ने के बाद, आप इसे सेटिंग्स में कॉन्फ़िगर कर सकते हैं।</string>
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <string name="dont_have_project">क्या अभी तक कोई प्रोजेक्ट नहीं है?</string>
