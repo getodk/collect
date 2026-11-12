@@ -1,14 +1,24 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools" xmlns:oat="http://schema.getodk.org/odkAndroidTools">
   <!--Text for the topmost button on the main screen. It should be short and action-oriented.-->
+  <string name="enter_data">Bắt đầu biểu mẫu mới</string>
   <!--Text for an action button on the main screen.-->
+  <string name="review_data">Các bản nháp</string>
   <!--Text for an action button on the main screen.-->
+  <string name="send_data">Sẵn sàng để gửi</string>
   <!--Text for an action button on the main screen.-->
+  <string name="view_sent_forms">Đã gửi</string>
   <!--Text for an action button on the main screen.-->
+  <string name="get_forms">Tải biểu mẫu xuống</string>
   <!--Text for an action button on the main screen.-->
+  <string name="manage_files">Xóa biểu mẫu</string>
+  <string name="saved_forms">Các biểu mẫu đã được lưu</string>
+  <string name="version_number">Phiên bản %s</string>
+  <string name="id_number">ID: %s</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="added_on_date_at_time">\'Được thêm vào\' EEE, MMM dd, yyyy \'lúc\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="updated_on_date_at_time">\'Đã cập nhật trên\' EEE, dd MM yyyy \'vào lúc\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="saved_on_date_at_time">\'Được lưu vào\' EEE, MMM dd, yyyy \'lúc\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
@@ -18,17 +28,49 @@
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="sending_failed_on_date_at_time">\'Sending failed on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="deleted_on_date_at_time">\'Đã xóa trên\' EEE, dd MM yyyy \'vào lúc\' HH:mm</string>
+  <string name="submission_deleted">Đã xóa biểu mẫu gửi lên</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="modified_on_date_at_time">\'Đã chỉnh sửa trên\' EEE, dd MM yyyy \'vào lúc\' HH:mm</string>
+  <string name="encrypted_form">Biểu mẫu được mã hóa</string>
+  <string name="deleted_form">Biểu mẫu đã bị xóa</string>
+  <string name="sort_the_list">Sắp xếp danh sách</string>
+  <string name="sort_by">Sắp xếp theo</string>
+  <string name="sort_by_name_asc">Tên, A-Z</string>
+  <string name="sort_by_name_desc">Tên, Z-A</string>
+  <string name="sort_by_date_desc">Ngày tháng, mới ở trên</string>
+  <string name="sort_by_date_asc">Ngày tháng, cũ ở trên</string>
   <!--A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first.-->
+  <string name="sort_by_last_saved">Lưu gần nhất</string>
+  <string name="filter_the_list">Lọc danh sách</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
+  <string name="search">Tìm kiếm</string>
+  <string name="not_granted_permission">Thao tác bạn muốn bắt đầu yêu cầu quyền nhưng chưa được cấp</string>
+  <string name="storage_runtime_permission_denied_title">Quyền lưu trữ</string>
+  <string name="storage_runtime_permission_denied_desc">Không có những quyền này Collect không thể truy cập biểu mẫu của bạn hoặc lưu câu trả lời.
+Hãy mở lại ứng dụng sau khi bạn đã được cấp quyền.</string>
+  <string name="location_runtime_permissions_denied_title">Quyền định vị trí</string>
   <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
+  <string name="location_runtime_permissions_denied_desc">Không có quyền <b>định vị trí chính xác</b> Collect không thể ghi nhận vị trí của bạn. Xin thử lại sau khi đã có quyền định vị.</string>
+  <string name="camera_runtime_permission_denied_title">Quyền dùng camera</string>
+  <string name="camera_runtime_permission_denied_desc">Không có quyền này Collect không thể truy cập camera. Hãy cấp quyền và thử lại.</string>
+  <string name="record_audio_runtime_permission_denied_title">Quyền thu âm</string>
+  <string name="record_audio_runtime_permission_denied_desc">Không có quyền này Collect không thể truy cập micro của ban. Hãy cấp quyền và thử lại.</string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
   <!--Accessibility description of the form map button (e.g. used by screen readers). This button is shown next to every form definition in Fill Blank Form. When tapped, a map of all filled forms for that form definition is shown.-->
+  <string name="open_form_map">Mở bản đồ biểu mẫu</string>
+  <string name="instance_scan_count">%1$d forms added.</string>
   <string name="finished_disk_scan">Hoàn thành tìm kiếm. Tất cả các biểu mẫu đã được tải.</string>
+  <string name="xform_parse_error">XForm parse error for %1$s: %2$s is missing or invalid.</string>
   <string name="loading_form">Tải biểu mẫu</string>
+  <string name="survey_loading_reading_form_message">Đang đọc định nghĩa biểu mẫu…</string>
+  <string name="survey_loading_reading_data_message">Đang đọc dữ liệu khảo sát</string>
+  <string name="survey_loading_reading_csv_message">Đang đọc tệp tin CSV…</string>
   <string name="parse_error">Xin lỗi, không thể phân tích biểu mẫu.</string>
+  <string name="loading_form_failed">Có lỗi khi tải biểu mẫu. Xin thử lại.</string>
+  <string name="cannot_edit_completed_form">Biểu mẫu này không thể chỉnh sửa một khi đã được ghi nhận là đã hoàn thành. Nó có thể đã được mã hóa.</string>
   <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
   <string name="savepoint_used">Những thay đổi chưa ghi lại được phục hồi từ điểm đã lưu!</string>
   <!--Displayed in the form filling menu when a form definition specifies multiple languages-->
@@ -36,6 +78,7 @@
   <!--Text for button displayed in the form filling menu to see the form's table of contents-->
   <string name="view_hierarchy">Di chuyển đến</string>
   <!--Text for button displayed in the form filling menu to save the form-->
+  <string name="save_all_answers">Lưu như là bản nháp</string>
   <!--Text of button from the form's table of contents to jump to the beginning of the form-->
   <string name="jump_to_beginning">Về đầu tiên</string>
   <!--Text of button from the form's table of contents to jump to the end of the form-->
@@ -43,11 +86,19 @@
   <!--Text of button from the form's table of contents to navigate out of a group or a repeat-->
   <string name="jump_to_previous">Về trước</string>
   <!--Text of button from the form's table of contents to edit a finalized form-->
+  <string name="edit_finalized_form">Chỉnh sửa biểu mẫu đã hoàn thành</string>
   <!--Displayed below group names in a form's table of contents-->
+  <string name="group_label">Nhóm</string>
   <!--Displayed below repeat names in a form's table of contents-->
+  <string name="repeatable_group_label">Nhóm lặp lại</string>
+  <string name="exit">Thoát</string>
   <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
+  <string name="add_repeat_question">Thêm \"%s\"?</string>
   <!--Text of button from the 'Add new repeat' dialog to confirm adding a repeat-->
   <!--Text of button from the 'Add new repeat' dialog to cancel adding a repeat-->
+  <string name="do_not_add_repeat">Không thêm</string>
+  <string name="add_another_menu">Thêm khác</string>
+  <string name="add_another_question">Thêm khác?</string>
   <!--Title of overlay menu displayed when long pressing on a question in a form-->
   <string name="edit_prompt">Sửa thông tin</string>
   <string name="clearanswer_confirm">Xoá câu trả lời \"%s\"?</string>
@@ -62,26 +113,56 @@
   <string name="delete_repeat_no">Huỷ</string>
   <string name="invalid_answer_error">Xin lỗi, phản hồi này không đúng!</string>
   <string name="required_answer_error">Xin lỗi, câu trả lời được yêu cầu điền!</string>
+  <string name="success_form_validation">Thành công! Biểu mẫu của bạn không có lỗi.</string>
+  <string name="invalid_space_in_answer_singular">Cảnh báo: giá trị %s có khoảng trống</string>
+  <string name="invalid_space_in_answer_plural">Cảnh báo: các giá trị %s có khoảng trống</string>
+  <string name="too_complex_form">Biểu mẫu quá phức tạp đối với thiết bị này. Thử đơn giản hóa các biểu thức hoặc tìm kiếm sự giúp đỡ trên diễn đàn</string>
+  <string name="survey_internal_error">Lỗi nội bộ (internal error): bước nhắc (prompt) lỗi.</string>
   <!--Title of the end of form screen-->
   <string name="save_enter_data_description">Bạn đang ở phần kết thúc của \"%s\".</string>
   <!--Text shown in an information box on the end of form screen when auto-send is off or the device is offline-->
+  <string name="form_editing_disabled_after_finalizing">Không thể chỉnh sửa sau khi hoàn thành.</string>
   <!--Text shown in an information box on the end of form screen when auto-send is on and the device is online-->
+  <string name="form_editing_disabled_after_sending">Không thể chỉnh sửa sau khi gửi.</string>
   <!--Text shown in an information box on the end of form screen when auto-send is off and the form allows edits after finalize/send-->
+  <string name="form_editing_enabled_after_finalizing">Có thể chỉnh sửa sau khi hoàn thành.</string>
   <!--Text shown in an information box on the end of form screen when auto-send is on and the form allows edits after finalize/send-->
+  <string name="form_editing_enabled_after_sending">Có thể chỉnh sửa sau khi gửi.
+</string>
   <!--Details shown in an information box on the end of form screen when the form does not allow edits after finalize/send-->
+  <string name="form_editing_disabled_hint">Nếu bạn muốn chỉnh sửa biểu mẫu, \"Lưu như bản nháp\" cho đến khi bạn sẵn sàng gửi.</string>
   <!--Details shown in an information box on the end of form screen when the form allows edits after finalization-->
+  <string name="form_editing_enabled_after_finalizing_hint">Để chỉnh sửa sau khi hoàn thành biểu mẫu, hãy chọn \"Sẵn sàng để gửi\", mở biểu mẫu và chọn biểu tượng chỉnh sửa.</string>
   <!--Details shown in an information box on the end of form screen when the form allows edits after sending-->
+  <string name="form_editing_enabled_after_sending_hint">Để chỉnh sửa sau khi gửi biểu mẫu, hãy chọn \"Đã gửi\", mở biểu mẫu và chọn biểu tượng chỉnh sửa.</string>
   <!--Button text for saving as draft-->
+  <string name="save_as_draft">Lưu như là bản nháp</string>
   <!--Button text for finalizing a submission. Displayed instead of "Send" when auto-send is off or the device is offline-->
+  <string name="finalize">Hoàn thành</string>
   <!--Button text for sending a submission.-->
+  <string name="send">Gửi</string>
   <string name="data_saved_error">Xin lỗi, biểu mẫu không lưu được!</string>
   <string name="data_saved_ok">Biểu mẫu đã được lưu!</string>
   <string name="save_point_error">Lỗi lưu lại điểm khôi phục: %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <string name="do_not_save">Hủy biểu mẫu</string>
+  <string name="discard_changes">Hủy thay đổi</string>
   <string name="keep_changes">Lưu thay đổi</string>
+  <string name="keep_editing">Giữ chỉnh sửa.</string>
+  <string name="quit_form_title">Lưu biểu mẫu?</string>
+  <string name="save_explanation">Bạn có thể lưu biểu mẫu này và truy cập nó từ các bản nháp bất kỳ lúc nào.</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="save_explanation_with_last_saved">\'Biểu mẫu này được lưu lần cuối trên\' EEE, dd MM, yyyy \'vào lúc\' HH:mm\'. Hãy lưu như bản nháp để giữ lại những thay đổi.\'</string>
+  <string name="quit_form_continue_title">Tiếp tục chỉnh sửa?</string>
+  <string name="discard_form_warning">Nếu bạn hủy biểu mẫu, bạn sẽ mất tất cả những thay đổi mà bạn đã thực hiện đến lúc này.</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="discard_changes_warning">\'Biểu mẫu này được lưu lần cuối trên\' EEE, dd MM, yyyy \'vào lúc\' HH:mm\'. Nếu bạn hủy bỏ thay đổi, bạn sẽ mất mọi thay đổi bạn đã thực hiện kể từ thời điểm này\'</string>
   <string name="saving_form">Đang lưu biểu mẫu</string>
+  <string name="survey_saving_validating_message">Đang kiểm tra các câu trả lời…</string>
+  <string name="survey_saving_collecting_message">Đang thu thập dữ liệu…</string>
+  <string name="survey_saving_saving_message">Đang lưu vào thẻ nhớ…</string>
+  <string name="survey_saving_finalizing_message">Kết thúc lưu vào thẻ nhớ</string>
+  <string name="survey_saving_encrypting_message">Đang mã hóa dữ liệu…</string>
   <!--Displayed when an attempt is made to start form filling, but the form is broken-->
   <!--Text displayed when audio recording fails to start-->
   <!--Text displayed when user tries to start recording while the mic is already in use-->
@@ -350,6 +431,7 @@
   <string name="reset_settings_button_reset">Reset</string>
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <string name="save_mid">Lưu như là bản nháp</string>
   <!--##############################################
      # ABOUT
      ##############################################-->
