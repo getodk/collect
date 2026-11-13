@@ -29,15 +29,16 @@ class PeriodicTaskSpecWorkerEnqueuerWorker(
             Class.forName(it).getConstructor().newInstance() as TaskSpec
         }
 
+        val chainTaskTag = chainTaskName(tag)
         val stringInputData = inputData.keyValueMap.mapValues { it.value.toString() }
         val workRequest = TaskSpecWorker.getWorkRequest(
             taskSpecs,
-            tag,
+            chainTaskTag,
             stringInputData,
             networkConstraint
         )
 
-        workManager.enqueueUniqueWork(chainTaskName(tag), ExistingWorkPolicy.REPLACE, workRequest)
+        workManager.enqueueUniqueWork(chainTaskTag, ExistingWorkPolicy.REPLACE, workRequest)
         return Result.success()
     }
 

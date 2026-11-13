@@ -353,6 +353,31 @@ class WorkManagerTaskSpecSchedulerTest {
     }
 
     @Test
+    fun `runs task chain repeatedly when repeatPeriod specified`() {
+        TestTaskSpec.doReturn(TaskSpec.Result.Success())
+
+        taskSpecScheduler.schedule(
+            tag = "tag",
+            specs = listOf(TestTaskSpec(), TestTaskSpec()),
+            inputData = emptyMap(),
+            networkConstraint = null,
+            repeatPeriod = 15.minutes.inWholeMilliseconds
+        )
+
+        val workId = workManager.getEnqueuedTask().id
+        testDriver.setAllConstraintsMet(workId)
+        testDriver.setAllConstraintsMetForEnqueued(workManager) // Run first step
+        testDriver.setAllConstraintsMetForEnqueued(workManager) // Run second step
+        assertThat(TestTaskSpec.runCount, equalTo(2))
+
+        testDriver.setPeriodDelayMet(workId)
+        testDriver.setAllConstraintsMet(workId)
+        testDriver.setAllConstraintsMetForEnqueued(workManager) // Run first step
+        testDriver.setAllConstraintsMetForEnqueued(workManager) // Run second step
+        assertThat(TestTaskSpec.runCount, equalTo(4))
+    }
+
+    @Test
     fun `replaces existing task when repeatPeriod specified and task left from last repeat`() {
         TestTaskSpec.doReturn(TaskSpec.Result.Success())
 
