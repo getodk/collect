@@ -36,6 +36,6 @@ class SettingLanguageTest {
             .clickOnUserInterface()
             .clickOnLanguage()
             .clickOnSelectedLanguage("svenska (Sverige)")
-            .assertText("Börja nytt formulär")
+            .assertText("Påbörja nytt formulär")
     }
 }
