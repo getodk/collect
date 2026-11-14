@@ -11,14 +11,6 @@ android {
 
     defaultConfig {
         minSdk = libs.versions.minSdk.get().toInt()
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-        }
     }
 
     compileOptions {
@@ -32,10 +24,6 @@ android {
             isIncludeAndroidResources = true
         }
     }
-
-    buildFeatures {
-        viewBinding = true
-    }
 }
 
 dependencies {
@@ -43,7 +31,6 @@ dependencies {
 
     implementation(project(":androidshared"))
     implementation(project(":strings"))
-    implementation(libs.androidMaterial)
     implementation(libs.androidxBrowser)
 
     testImplementation(libs.androidxTestExtJunit)

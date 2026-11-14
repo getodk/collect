@@ -9,14 +9,6 @@ android {
 
     defaultConfig {
         minSdk = libs.versions.minSdk.get().toInt()
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-        }
     }
 
     compileOptions {
@@ -33,7 +25,6 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidxCoreKtx)
 
     testImplementation(libs.junit)
     testImplementation(libs.hamcrest)

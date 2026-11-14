@@ -7,25 +7,25 @@ references:
   android_config_small: &android_config_small
     working_directory: ~/work
     docker:
-      - image: cimg/android:2026.07
+      - image: cimg/android:2026.10
     resource_class: small
 
   android_config: &android_config
     working_directory: ~/work
     docker:
-      - image: cimg/android:2026.07
+      - image: cimg/android:2026.10
     resource_class: large
 
   android_config_large: &android_config_large
     working_directory: ~/work
     docker:
-      - image: cimg/android:2026.07
+      - image: cimg/android:2026.10
     resource_class: xlarge
 
   gcloud_config: &gcloud_config
     working_directory: ~/work
     docker:
-      - image: cimg/gcp:2025.01
+      - image: cimg/gcp:2026.10
     resource_class: small
 
 jobs:

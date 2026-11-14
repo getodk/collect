@@ -14,14 +14,6 @@ android {
 
     defaultConfig {
         minSdk = libs.versions.minSdk.get().toInt()
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-        }
     }
 
     compileOptions {
@@ -70,7 +62,6 @@ dependencies {
     val composeBom = platform(libs.androidxComposeBom)
     implementation(composeBom)
     implementation(libs.androidXComposeMaterial)
-    implementation(libs.androidXConstraintLayoutCompose)
     implementation(libs.runtime.livedata)
     implementation(libs.androidXComposePreview)
     debugImplementation(libs.androidXComposeTooling)

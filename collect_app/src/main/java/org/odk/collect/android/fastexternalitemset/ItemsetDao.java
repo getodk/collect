@@ -172,7 +172,6 @@ public class ItemsetDao {
         return selectionString.toString();
     }
 
-    @SuppressWarnings("PMD.AvoidThrowingNewInstanceOfSameException")
     private String[] getSelectionArgs(List<String> arguments, String nodesetStr, FormController formController, XPathParseTool pathParseTool, FormEntryPrompt formEntryPrompt) throws XPathSyntaxException {
         // +1 is for the list_name
         String[] selectionArgs = new String[arguments.size() + 1];

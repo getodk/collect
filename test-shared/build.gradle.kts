@@ -9,20 +9,12 @@ android {
 
     defaultConfig {
         minSdk = libs.versions.minSdk.get().toInt()
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-        }
     }
 
     namespace = "org.odk.collect.testshared"
@@ -41,8 +33,6 @@ dependencies {
     implementation(project(":web-page"))
     implementation(libs.androidxRecyclerview)
     implementation(libs.androidxCoreKtx)
-    implementation(libs.androidxWorkRuntime)
-    implementation(libs.androidxAppcompat)
     implementation(libs.robolectric)
     implementation(libs.junit)
     implementation(libs.okhttp3Mockwebserver)
@@ -50,9 +40,6 @@ dependencies {
     implementation(libs.androidxTestEspressoContrib)
     implementation(libs.androidMaterial)
     implementation(libs.danlewAndroidJoda)
+    implementation(platform(libs.androidxComposeBom))
     implementation(libs.androidXComposeUiTestJunit4)
-    implementation(libs.androidXComposeUiTest)
-    implementation(libs.androidxFragmentTesting) {
-        exclude(group = "androidx.test", module = "monitor") // fixes issue https://github.com/android/android-test/issues/731
-    }
 }
