@@ -64,18 +64,26 @@ interface Scheduler {
     )
 
     /**
-     * Schedule a task to run in the background repeatedly even if the app isn't running. The task
-     * will only be run when the network is available.
+     * Schedule chained tasks to run in the background repeatedly even if the app isn't running.
+     * The tasks will only be run when the network is available. Chained tasks are dependent on
+     * previous tasks finishing and will receive the output data from the previous task's
+     * [TaskSpec.Result] (whether [TaskSpec.Result.Success] or [TaskSpec.Result.Failure]).
+     *
+     * Only one task from a chain will run at once. If another repeat of the chain starts and tasks
+     * from the chain from a previous repeat are still pending/running, they will be replaced.
+     *
+     * If a task in the chain retries, any down chain tasks that are currently pending will be
+     * cancelled.
      *
      * @param tag used to identify this task in future. Previously scheduled tasks using the same
      * tag will be replaced
-     * @param spec defines the task to be run
+     * @param specs defines the task to be run in a chain
      * @param repeatPeriod the period between each run of the task
      * @param inputData a map of input data that can be accessed by the task
      */
     fun networkDeferredRepeat(
         tag: String,
-        spec: TaskSpec,
+        specs: List<TaskSpec>,
         repeatPeriod: Long,
         inputData: Map<String, String>
     )
@@ -84,11 +92,6 @@ interface Scheduler {
      * Cancel deferred task scheduled with tag
      */
     fun cancelDeferred(tag: String)
-
-    /**
-     * Returns true if a deferred task scheduled with tag is currently running
-     */
-    fun isDeferredRunning(tag: String): Boolean
 
     /**
      * Run a task and then repeat in the foreground
