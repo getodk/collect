@@ -21,14 +21,14 @@
         <item name="iconSize">24dp</item>
     </style>
 
-    <style name="Widget.Collect.Button.OutlinedButton" parent="Widget.Material3.Button.OutlinedButton">
+    <style name="Widget.Collect.Button.OutlinedButton" parent="Widget.Collect.Material.Button.OutlinedButton">
         <item name="android:paddingTop">@dimen/margin_small</item>
         <item name="android:paddingBottom">@dimen/margin_small</item>
         <item name="android:textAppearance">?textAppearanceBodyMedium</item>
         <item name="strokeColor">@color/color_on_surface_low_emphasis</item>
     </style>
 
-    <style name="Widget.Collect.Button.OutlinedButton.Icon" parent="Widget.Material3.Button.OutlinedButton.Icon">
+    <style name="Widget.Collect.Button.OutlinedButton.Icon" parent="Widget.Collect.Material.Button.OutlinedButton.Icon">
         <item name="android:paddingTop">@dimen/margin_small</item>
         <item name="android:paddingBottom">@dimen/margin_small</item>
         <item name="android:textAppearance">?textAppearanceBodyMedium</item>
