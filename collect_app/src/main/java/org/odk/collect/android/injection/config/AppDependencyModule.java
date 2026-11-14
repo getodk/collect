@@ -26,6 +26,7 @@ import org.odk.collect.android.application.CollectSettingsChangeHandler;
 import org.odk.collect.android.application.initialization.AnalyticsInitializer;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.application.initialization.CachedFormsCleaner;
+import org.odk.collect.android.application.initialization.EntityListFilesCleaner;
 import org.odk.collect.android.application.initialization.ExistingProjectMigrator;
 import org.odk.collect.android.application.initialization.ExistingSettingsMigrator;
 import org.odk.collect.android.application.initialization.GoogleDriveProjectsDeleter;
@@ -537,7 +538,8 @@ public class AppDependencyModule {
                 scheduledWorkUpgrade,
                 googleDriveProjectsDeleter,
                 new SavepointsImporter(projectsRepository, projectDependencyModuleFactory),
-                new CachedFormsCleaner(projectsRepository, projectDependencyModuleFactory)
+                new CachedFormsCleaner(projectsRepository, projectDependencyModuleFactory),
+                new EntityListFilesCleaner(projectsRepository, projectDependencyModuleFactory)
         );
     }
 
