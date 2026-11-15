@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<h:html xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms"
+    xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://www.w3.org/2002/xforms">
+    <h:head>
+        <h:title>External Csv Pull Data</h:title>
+        <model odk:xforms-version="1.0.0">
+            <instance>
+                <data id="external_csv_pulldata" version="1">
+                    <full_name />
+                    <note />
+                    <meta>
+                        <instanceID />
+                    </meta>
+                </data>
+            </instance>
+            <instance id="people" src="jr://file-csv/people.csv" />
+            <bind nodeset="/data/full_name" type="string"
+                calculate="pulldata('people', 'full_name', 'name', '93a179a0-71b3-42f8-b78e-4c182eaf2ae7')" />
+            <bind nodeset="/data/note" readonly="true()" type="string" />
+            <bind nodeset="/data/meta/instanceID" readonly="true()" type="string"
+                jr:preload="uid" />
+        </model>
+    </h:head>
+    <h:body>
+        <input ref="/data/note">
+            <label>Pulled: <output value=" /data/full_name " /></label>
+        </input>
+    </h:body>
+</h:html>
