@@ -6,10 +6,12 @@ import org.javarosa.xpath.expr.XPathFuncExpr
 import org.odk.collect.entities.javarosa.intance.LocalEntitiesInstanceAdapter
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.QueryException
+import org.odk.collect.forms.FormMediaFileRepository
 import org.odk.collect.shared.Query
 
 class PullDataFunctionHandler(
     entitiesRepository: EntitiesRepository,
+    private val mediaFileRepository: FormMediaFileRepository,
     private val fallback: IFunctionHandler? = null
 ) : IFunctionHandler {
 
@@ -34,7 +36,7 @@ class PullDataFunctionHandler(
     override fun eval(args: Array<Any>, ec: EvaluationContext): Any {
         val instanceId = XPathFuncExpr.toString(args[0])
 
-        return if (instanceAdapter.supportsInstance(instanceId)) {
+        return if (instanceAdapter.supportsInstance(instanceId) && !mediaFileRepository.isAttachedCsv(instanceId)) {
             val child = XPathFuncExpr.toString(args[1])
             val filterChild = XPathFuncExpr.toString(args[2])
             val filterValue = XPathFuncExpr.toString(args[3])

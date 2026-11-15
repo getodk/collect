@@ -41,11 +41,14 @@ class CollectFormEntryControllerFactory(
             Collect.getInstance().externalDataManager = it
         }
 
+        val mediaFileRepository = ReferenceManagerMediaFileRepository(ReferenceManager.instance())
+
         return FormEntryController(FormEntryModel(formDef)).also {
             val externalDataHandlerPull = ExternalDataHandlerPull(externalDataManager)
             it.addFunctionHandler(
                 PullDataFunctionHandler(
                     entitiesRepository,
+                    mediaFileRepository,
                     externalDataHandlerPull
                 )
             )
@@ -62,7 +65,7 @@ class CollectFormEntryControllerFactory(
             it.addFilterStrategy(
                 LocalEntitiesFilterStrategy(
                     entitiesRepository,
-                    ReferenceManagerMediaFileRepository(ReferenceManager.instance())
+                    mediaFileRepository
                 )
             )
         }
