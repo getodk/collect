@@ -10,6 +10,7 @@ import org.odk.collect.entities.javarosa.intance.LocalEntitiesInstanceProvider
 import org.odk.collect.entities.javarosa.parse.XPathExpressionExt.toQuery
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.QueryException
+import org.odk.collect.forms.FormMediaFileRepository
 import org.odk.collect.shared.Query
 import java.util.function.Supplier
 
@@ -20,8 +21,10 @@ import java.util.function.Supplier
  * [LocalEntitiesInstanceProvider] or similar is used to take advantage of JavaRosa's partial
  * parsing).
  */
-class LocalEntitiesFilterStrategy(entitiesRepository: EntitiesRepository) :
-    FilterStrategy {
+class LocalEntitiesFilterStrategy(
+    entitiesRepository: EntitiesRepository,
+    private val mediaFileRepository: FormMediaFileRepository
+) : FilterStrategy {
 
     private val instanceAdapter = LocalEntitiesInstanceAdapter(entitiesRepository)
 
@@ -33,7 +36,10 @@ class LocalEntitiesFilterStrategy(entitiesRepository: EntitiesRepository) :
         evaluationContext: EvaluationContext,
         next: Supplier<MutableList<TreeReference>>
     ): List<TreeReference> {
-        if (sourceInstance.instanceId == null || !instanceAdapter.supportsInstance(sourceInstance.instanceId)) {
+        if (sourceInstance.instanceId == null ||
+            !instanceAdapter.supportsInstance(sourceInstance.instanceId) ||
+            mediaFileRepository.isAttachedCsv(sourceInstance.instanceId)
+        ) {
             return next.get()
         }
 
@@ -60,4 +66,8 @@ class LocalEntitiesFilterStrategy(entitiesRepository: EntitiesRepository) :
             it.ref
         }
     }
+}
+
+internal fun FormMediaFileRepository.isAttachedCsv(instanceId: String): Boolean {
+    return get("jr://file-csv/$instanceId.csv")?.exists() == true
 }

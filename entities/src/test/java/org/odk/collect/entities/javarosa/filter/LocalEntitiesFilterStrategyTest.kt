@@ -47,7 +47,7 @@ class LocalEntitiesFilterStrategyTest {
 
     private val controllerSupplier: (FormDef) -> FormEntryController = { formDef ->
         FormEntryController(FormEntryModel(formDef)).also {
-            it.addFilterStrategy(LocalEntitiesFilterStrategy(entitiesRepository))
+            it.addFilterStrategy(LocalEntitiesFilterStrategy(entitiesRepository) { null })
             it.addFilterStrategy(fallthroughFilterStrategy)
         }
     }
