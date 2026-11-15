@@ -187,7 +187,10 @@ class EntityListSyncTest {
      */
     @Test
     fun attachedCsvIsUsedInsteadOfEntityListOfTheSameName() {
-        testDependencies.server.addForm("one-question-entity-registration.xml")
+        testDependencies.server.addForm(
+            "one-question-entity-registration.xml",
+            listOf(EntityListItem("people.csv"))
+        )
         testDependencies.server.addForm(
             "external-csv-select.xml",
             listOf(MediaFileItem("people.csv"))
