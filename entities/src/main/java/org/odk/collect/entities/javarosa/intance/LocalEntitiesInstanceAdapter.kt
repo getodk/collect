@@ -18,12 +18,16 @@ class LocalEntitiesInstanceAdapter(
 
     /**
      * Entity lists are stored in the database, not as files on disk (their seed CSV is deleted
-     * after import). So if the form has a CSV attached with the same name as an entity list, it
-     * must be a plain attached CSV, which should be used instead of the entity list.
+     * after import). So if the form has a file attached with the same name as an entity list
+     * (CSV, XML or GeoJSON, at the paths pyxform generates for external instances), it must be a
+     * plain attachment, which should be used instead of the entity list.
      */
     fun supportsInstance(instanceId: String): Boolean {
-        return lists.contains(instanceId) &&
-            mediaFileRepository.get("jr://file-csv/$instanceId.csv")?.exists() != true
+        return lists.contains(instanceId) && listOf(
+            "jr://file-csv/$instanceId.csv",
+            "jr://file/$instanceId.xml",
+            "jr://file/$instanceId.geojson"
+        ).none { mediaFileRepository.get(it)?.exists() == true }
     }
 
     fun getAll(instanceId: String, partial: Boolean): List<TreeElement> {
