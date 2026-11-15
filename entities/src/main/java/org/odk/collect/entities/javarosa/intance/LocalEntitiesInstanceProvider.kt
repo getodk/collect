@@ -10,27 +10,21 @@ internal class LocalEntitiesInstanceProvider(
     private val mediaFileRepository: FormMediaFileRepository
 ) : ExternalInstanceParser.InstanceProvider {
 
+    private val instanceAdapter by lazy {
+        LocalEntitiesInstanceAdapter(entitiesRepositoryProvider(), mediaFileRepository)
+    }
+
     override fun get(instanceId: String, instanceSrc: String): TreeElement {
         return get(instanceId, instanceSrc, false)
     }
 
     override fun get(instanceId: String, instanceSrc: String, partial: Boolean): TreeElement {
         val root = TreeElement("root", 0)
-        createDataAdapter().getAll(instanceId, partial).forEach { root.addChild(it) }
+        instanceAdapter.getAll(instanceId, partial).forEach { root.addChild(it) }
         return root
     }
 
     override fun isSupported(instanceId: String, instanceSrc: String): Boolean {
-        // Entity lists are stored in the database, not as files on disk (their seed CSV is
-        // deleted after import). So if a media file referenced by the instance's src exists,
-        // it must be a plain attached CSV, which should be used instead of any same-named
-        // entity list. Returning false lets JavaRosa parse the file directly.
-        return if (mediaFileRepository.get(instanceSrc)?.exists() == true) {
-            false
-        } else {
-            createDataAdapter().supportsInstance(instanceId)
-        }
+        return instanceAdapter.supportsInstance(instanceId)
     }
-
-    private fun createDataAdapter() = LocalEntitiesInstanceAdapter(entitiesRepositoryProvider())
 }

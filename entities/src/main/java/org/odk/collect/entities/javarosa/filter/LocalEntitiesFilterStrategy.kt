@@ -23,10 +23,10 @@ import java.util.function.Supplier
  */
 class LocalEntitiesFilterStrategy(
     entitiesRepository: EntitiesRepository,
-    private val mediaFileRepository: FormMediaFileRepository
+    mediaFileRepository: FormMediaFileRepository
 ) : FilterStrategy {
 
-    private val instanceAdapter = LocalEntitiesInstanceAdapter(entitiesRepository)
+    private val instanceAdapter = LocalEntitiesInstanceAdapter(entitiesRepository, mediaFileRepository)
 
     override fun filter(
         sourceInstance: DataInstance<*>,
@@ -36,10 +36,7 @@ class LocalEntitiesFilterStrategy(
         evaluationContext: EvaluationContext,
         next: Supplier<MutableList<TreeReference>>
     ): List<TreeReference> {
-        if (sourceInstance.instanceId == null ||
-            !instanceAdapter.supportsInstance(sourceInstance.instanceId) ||
-            mediaFileRepository.isAttachedCsv(sourceInstance.instanceId)
-        ) {
+        if (sourceInstance.instanceId == null || !instanceAdapter.supportsInstance(sourceInstance.instanceId)) {
             return next.get()
         }
 
@@ -66,8 +63,4 @@ class LocalEntitiesFilterStrategy(
             it.ref
         }
     }
-}
-
-internal fun FormMediaFileRepository.isAttachedCsv(instanceId: String): Boolean {
-    return get("jr://file-csv/$instanceId.csv")?.exists() == true
 }

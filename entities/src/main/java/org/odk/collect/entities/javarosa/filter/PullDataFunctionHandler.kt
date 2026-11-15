@@ -11,11 +11,11 @@ import org.odk.collect.shared.Query
 
 class PullDataFunctionHandler(
     entitiesRepository: EntitiesRepository,
-    private val mediaFileRepository: FormMediaFileRepository,
+    mediaFileRepository: FormMediaFileRepository,
     private val fallback: IFunctionHandler? = null
 ) : IFunctionHandler {
 
-    private val instanceAdapter = LocalEntitiesInstanceAdapter(entitiesRepository)
+    private val instanceAdapter = LocalEntitiesInstanceAdapter(entitiesRepository, mediaFileRepository)
 
     override fun getName(): String {
         return NAME
@@ -36,7 +36,7 @@ class PullDataFunctionHandler(
     override fun eval(args: Array<Any>, ec: EvaluationContext): Any {
         val instanceId = XPathFuncExpr.toString(args[0])
 
-        return if (instanceAdapter.supportsInstance(instanceId) && !mediaFileRepository.isAttachedCsv(instanceId)) {
+        return if (instanceAdapter.supportsInstance(instanceId)) {
             val child = XPathFuncExpr.toString(args[1])
             val filterChild = XPathFuncExpr.toString(args[2])
             val filterValue = XPathFuncExpr.toString(args[3])
