@@ -187,24 +187,21 @@ class EntityListSyncTest {
      */
     @Test
     fun attachedCsvIsUsedInsteadOfEntityListOfTheSameName() {
+        // Creates a "people" entity list in the project, containing "Ro-Ro Roy".
         testDependencies.server.addForm(
-            "one-question-entity-registration.xml",
-            listOf(EntityListItem("people.csv"))
+            "one-question-entity-update.xml",
+            listOf(EntityListItem("people.csv", "updated-people.csv"))
         )
+        // Attaches a plain people.csv (containing "Roman Roy") that clashes with the "people" entity list by name.
         testDependencies.server.addForm(
             "external-csv-select.xml",
             listOf(MediaFileItem("people.csv"))
         )
 
         rule.withProject(testDependencies.server.url, matchExactly = true)
-            // Creates a "people" entity list in the project, locally containing "Logan Roy".
-            .startBlankForm("One Question Entity Registration")
-            .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
-
-            // Attaches a plain people.csv (containing "Roman Roy") that clashes with the "people" entity list by name.
             .startBlankForm("External Csv Select")
             .assertText("Roman Roy")
-            .assertTextDoesNotExist("Logan Roy")
+            .assertTextDoesNotExist("Ro-Ro Roy")
     }
 
     @Test
