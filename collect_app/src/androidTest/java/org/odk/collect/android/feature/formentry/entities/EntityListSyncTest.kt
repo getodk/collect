@@ -206,4 +206,22 @@ class EntityListSyncTest {
             .assertText("Roman Roy")
             .assertTextDoesNotExist("Logan Roy")
     }
+
+    @Test
+    fun attachedCsvIsUsedInsteadOfEntityListOfTheSameName_whenChoicesAreFiltered() {
+        // Creates a "people" entity list in the project, containing "Ro-Ro Roy".
+        testDependencies.server.addForm(
+            "one-question-entity-update.xml",
+            listOf(EntityListItem("people.csv", "updated-people.csv"))
+        )
+        // Attaches a plain people.csv (containing "Roman Roy") and filters it by label.
+        testDependencies.server.addForm(
+            "external-csv-select-filtered.xml",
+            listOf(MediaFileItem("people.csv"))
+        )
+
+        rule.withProject(testDependencies.server.url, matchExactly = true)
+            .startBlankForm("External Csv Select Filtered")
+            .assertText("Roman Roy")
+    }
 }
