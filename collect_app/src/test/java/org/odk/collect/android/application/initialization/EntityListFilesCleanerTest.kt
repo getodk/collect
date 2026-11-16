@@ -42,12 +42,28 @@ class EntityListFilesCleanerTest {
 
         val project2 = projectDependencyModuleFactory.create("2")
         project2.entitiesRepository.addList("trees")
-        val form2 = createForm(project2, usesEntities = true, "trees.csv", "people.csv")
+        val form2 = createForm(project2, usesEntities = true, "trees.csv", "other.csv")
 
         entityListFilesCleaner.run()
 
         assertThat(getMediaFiles(form1).map { it.name }, containsInAnyOrder("other.csv", "image.png"))
-        assertThat(getMediaFiles(form2).map { it.name }, containsInAnyOrder("people.csv"))
+        assertThat(getMediaFiles(form2).map { it.name }, containsInAnyOrder("other.csv"))
+    }
+
+    @Test
+    fun `files are not removed because of an entity list from another project`() {
+        projectsRepository.save(Project.Saved("1", "Project 1", "1", "#000000"))
+        projectsRepository.save(Project.Saved("2", "Project 2", "2", "#000000"))
+
+        val project1 = projectDependencyModuleFactory.create("1")
+        project1.entitiesRepository.addList("people")
+
+        val project2 = projectDependencyModuleFactory.create("2")
+        val form = createForm(project2, usesEntities = true, "people.csv")
+
+        entityListFilesCleaner.run()
+
+        assertThat(getMediaFiles(form).map { it.name }, containsInAnyOrder("people.csv"))
     }
 
     @Test
