@@ -356,7 +356,7 @@ object ServerFormUseCases {
 
         return newMediaFiles.any {
             val matchingFileHash = localHashesByName[it.filename]
-            !it.filename.endsWith(".zip") && matchingFileHash != it.hash
+            matchingFileHash != it.hash
         }
     }
 }

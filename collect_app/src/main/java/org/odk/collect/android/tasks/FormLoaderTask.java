@@ -54,7 +54,6 @@ import org.odk.collect.android.utilities.ExternalizableFormDefCache;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
-import org.odk.collect.android.utilities.ZipUtils;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.async.SchedulerAsyncTaskMimic;
 import org.odk.collect.entities.javarosa.spec.UnrecognizedEntityVersionException;
@@ -65,12 +64,10 @@ import org.odk.collect.forms.savepoints.SavepointsRepository;
 import org.odk.collect.shared.strings.Md5;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import timber.log.Timber;
 
@@ -193,7 +190,6 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
         final File formXml = new File(form.getFormFilePath());
         final File formMediaDir = FileUtils.getFormMediaDir(formXml);
 
-        unzipMediaFiles(formMediaDir);
         setupReferenceManagerForForm(ReferenceManager.instance(), formMediaDir);
 
         logFormDetails(formXml, formMediaDir);
@@ -308,25 +304,6 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
                     formFileBytesSize,
                     String.join(", ", csvFileBytesSizes)
             );
-        }
-    }
-
-    private static void unzipMediaFiles(File formMediaDir) {
-        File[] zipFiles = formMediaDir.listFiles(new FileFilter() {
-            @Override
-            public boolean accept(File file) {
-                return file.getName().toLowerCase(Locale.US).endsWith(".zip");
-            }
-        });
-
-        if (zipFiles != null) {
-            ZipUtils.unzip(zipFiles);
-            for (File zipFile : zipFiles) {
-                boolean deleted = zipFile.delete();
-                if (!deleted) {
-                    Timber.w("Cannot delete %s. It will be re-unzipped next time. :(", zipFile.toString());
-                }
-            }
         }
     }
 
