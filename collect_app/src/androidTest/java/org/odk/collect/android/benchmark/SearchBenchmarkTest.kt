@@ -65,7 +65,7 @@ class SearchBenchmarkTest {
             }
 
             .answerQuestion("Which value do you want to filter by?", "1024")
-            .benchmark("Filtering select", 2, benchmarker) {
+            .benchmark("Filtering select", 5, benchmarker) {
                 it.swipeToNextQuestion("Filtered select")
             }
 
