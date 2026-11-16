@@ -27,12 +27,12 @@ class EntityListFilesCleanerTest {
     private val entityListFilesCleaner = EntityListFilesCleaner(projectsRepository, projectDependencyModuleFactory)
 
     @Test
-    fun `cleaner should be run only once`() {
+    fun `cleaner runs only once`() {
         assertThat(entityListFilesCleaner.key(), equalTo(MetaKeys.ENTITY_LIST_FILES_CLEANED))
     }
 
     @Test
-    fun `entity list files should be removed from forms that use entities in every project`() {
+    fun `entity list files are removed from forms that use entities in every project`() {
         projectsRepository.save(Project.Saved("1", "Project 1", "1", "#000000"))
         projectsRepository.save(Project.Saved("2", "Project 2", "2", "#000000"))
 
@@ -51,7 +51,7 @@ class EntityListFilesCleanerTest {
     }
 
     @Test
-    fun `files should not be removed from forms that do not use entities`() {
+    fun `files are not removed from forms that do not use entities`() {
         projectsRepository.save(Project.Saved("1", "Project 1", "1", "#000000"))
 
         val project = projectDependencyModuleFactory.create("1")
