@@ -15,6 +15,7 @@ class LocalEntitiesInstanceAdapter(
 ) {
 
     private val lists = entitiesRepository.getListNames()
+    private val attachedFiles = mutableMapOf<String, Boolean>()
 
     /**
      * Entity lists are stored in the database, not as files on disk (their seed CSV is deleted
@@ -23,11 +24,17 @@ class LocalEntitiesInstanceAdapter(
      * plain attachment, which should be used instead of the entity list.
      */
     fun supportsInstance(instanceId: String): Boolean {
-        return lists.contains(instanceId) && listOf(
-            "jr://file-csv/$instanceId.csv",
-            "jr://file/$instanceId.xml",
-            "jr://file/$instanceId.geojson"
-        ).none { mediaFileRepository.get(it)?.exists() == true }
+        return lists.contains(instanceId) && !hasAttachedFile(instanceId)
+    }
+
+    private fun hasAttachedFile(instanceId: String): Boolean {
+        return attachedFiles.getOrPut(instanceId) {
+            listOf(
+                "jr://file-csv/$instanceId.csv",
+                "jr://file/$instanceId.xml",
+                "jr://file/$instanceId.geojson"
+            ).any { mediaFileRepository.get(it)?.exists() == true }
+        }
     }
 
     fun getAll(instanceId: String, partial: Boolean): List<TreeElement> {
