@@ -35,14 +35,15 @@ Maintainers keep a folder with a clean checkout of the code and use [jenv.be](ht
 - [ ] run `./gradlew testLab` (CI doesn't run these tests)
 - [ ] run benchmarks
   - This is documented [here](/docs/BENCHMARKING.md)
-- [ ] run `./gradlew assembleOdkCollectRelease`
+- [ ] Locally tag the commit for the release (`vX.X.0`)
+- [ ] Run `./create-release.sh <last release version code> <release tag>`
 - [ ] verify a basic "happy path": scan a QR code to configure a new project, get a blank form, fill it, open the form map (confirms that the Google Maps key is correct), send form
 - [ ] verify new APK can be installed as update to previous version and that above "happy path" works in that case also- [ ] create and publish scheduled forum post with release description
-- [ ] write Play Store release notes, include link to forum post
-- [ ] Tag the commit for the release (`vX.X.0`)
-- [ ] Run `./create-release.sh <last release version code> <release tag>`
 - [ ] add a release to GitHub [here](https://github.com/getodk/collect/releases), generate release notes and attach the APK
-- [ ] upload APK(s) to Play Store
+- [ ] create and publish scheduled forum post with release description
+- [ ] write Play Store release notes, include link to forum post
+- [ ] upload APK to Play Store
+- [ ] upload `mapping.txt` to Play Store
 - [ ] backup dependencies for the release by downloading the `vX.X.X.tar` artifact from the `create_dependency_backup` job on Circle CI (for the release commit) and then uploading it to [this folder](https://drive.google.com/drive/folders/1_tMKBFLdhzFZF9GKNeob4FbARjdfbtJu?usp=share_link)
 - [ ] delete dependency backups for other major versions older than 2 years (i.e. if this version is v3003.1 then backups for v3001.x and older should be deleted)
 - [ ] backup a self-signed release APK by downloading the `selfSignedRelease.apk` from the `build_release` job on Circle CI (for the release commit) and then upload to [this folder](https://drive.google.com/drive/folders/1pbbeNaMTziFhtZmedOs0If3BeYu3Ex5x?usp=share_link)
