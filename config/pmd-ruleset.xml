@@ -6,9 +6,6 @@
 
     <description>Custom rule-set for Android application</description>
 
-    <exclude-pattern>.*/R.java</exclude-pattern>
-    <exclude-pattern>.*/gen/.*</exclude-pattern>
-
     <rule ref="category/java/bestpractices.xml">
         <exclude name="AbstractClassWithoutAbstractMethod" />
         <exclude name="ArrayIsStoredDirectly" />
@@ -105,8 +102,6 @@
         <exclude name="AvoidAccessibilityAlteration" />
         <exclude name="AvoidBranchingStatementAsLastInLoop" />
         <exclude name="AvoidCatchingGenericException" />
-        <exclude name="AvoidCatchingNPE" />
-        <exclude name="AvoidCatchingThrowable" />
         <exclude name="AvoidDuplicateLiterals" />
         <exclude name="AvoidFieldNameMatchingMethodName" />
         <exclude name="AvoidInstanceofChecksInCatchClause" />

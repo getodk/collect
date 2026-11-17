@@ -9,14 +9,6 @@ android {
 
     defaultConfig {
         minSdk = libs.versions.minSdk.get().toInt()
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-        }
     }
 
     compileOptions {
@@ -37,15 +29,11 @@ dependencies {
     coreLibraryDesugaring(libs.desugar)
 
     implementation(project(":strings"))
-    implementation(project(":androidshared"))
     implementation(project(":icons"))
     implementation(libs.androidxCoreKtx)
-    implementation(libs.androidxFragmentKtx)
     implementation(libs.androidMaterial)
     implementation(libs.karumiDexter)
     implementation(libs.timber)
-
-    debugImplementation(project(":fragments-test"))
 
     testImplementation(project(":androidtest"))
     testImplementation(project(":test-shared"))

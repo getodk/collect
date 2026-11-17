@@ -11,14 +11,6 @@ android {
 
     defaultConfig {
         minSdk = libs.versions.minSdk.get().toInt()
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-        }
     }
 
     compileOptions {
@@ -29,7 +21,11 @@ android {
 
     packaging {
         resources {
-            pickFirsts += "META-INF/FastDoubleParser-LICENSE"
+            pickFirsts += listOf(
+                "META-INF/FastDoubleParser-LICENSE",
+                "META-INF/FastDoubleParser-ThirdParty-LICENSE",
+                "META-INF/Schubfach-LICENSE"
+            )
         }
     }
 }
@@ -37,7 +33,6 @@ android {
 dependencies {
     coreLibraryDesugaring(libs.desugar)
 
-    implementation(project(":permissions"))
     implementation(project(":settings"))
     implementation(project(":shared"))
 
@@ -48,5 +43,4 @@ dependencies {
 
     testImplementation(libs.hamcrest)
     testImplementation(libs.junit)
-    testImplementation(libs.mockitoKotlin)
 }

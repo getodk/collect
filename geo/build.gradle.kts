@@ -11,14 +11,6 @@ android {
 
     defaultConfig {
         minSdk = libs.versions.minSdk.get().toInt()
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-        }
     }
 
     compileOptions {
@@ -29,7 +21,11 @@ android {
 
     packaging {
         resources {
-            pickFirsts += "META-INF/FastDoubleParser-LICENSE"
+            pickFirsts += listOf(
+                "META-INF/FastDoubleParser-LICENSE",
+                "META-INF/FastDoubleParser-ThirdParty-LICENSE",
+                "META-INF/Schubfach-LICENSE"
+            )
         }
     }
 
@@ -55,7 +51,6 @@ dependencies {
     implementation(project(":androidshared"))
     implementation(project(":external-app"))
     implementation(project(":async"))
-    implementation(project(":analytics"))
     implementation(project(":permissions"))
     implementation(project(":settings"))
     implementation(project(":maps"))
@@ -75,8 +70,6 @@ dependencies {
     implementation(composeBom)
     implementation(libs.androidXComposeMaterial)
     implementation(libs.androidXComposeMaterialIconsExtended)
-    implementation(libs.androidXComposePreview)
-    debugImplementation(libs.androidXComposeTooling)
 
     debugImplementation(project(":fragments-test"))
 

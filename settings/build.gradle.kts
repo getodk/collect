@@ -9,15 +9,7 @@ android {
 
     defaultConfig {
         minSdk = libs.versions.minSdk.get().toInt()
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-        }
     }
 
     compileOptions {
@@ -35,6 +27,7 @@ dependencies {
     implementation(project(":shared"))
     implementation(project(":projects"))
 
+    implementation(libs.androidxAnnotation)
     implementation(libs.jsonSchemaValidator)
 
     testImplementation(libs.junit)

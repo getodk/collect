@@ -10,14 +10,6 @@ android {
 
     defaultConfig {
         minSdk = libs.versions.minSdk.get().toInt()
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-        }
     }
 
     compileOptions {
@@ -40,15 +32,12 @@ dependencies {
     implementation(project(":androidshared"))
     implementation(project(":icons"))
     implementation(project(":strings"))
-    implementation(project(":analytics"))
     implementation(libs.androidxCoreKtx)
     implementation(libs.playServicesLocation)
     implementation(libs.timber)
-    implementation(libs.androidxAppcompat)
     implementation(libs.dagger)
     ksp(libs.daggerCompiler)
 
-    testImplementation(project(":androidtest"))
     testImplementation(project(":test-shared"))
     testImplementation(project(":service-test"))
     testImplementation(libs.junit)

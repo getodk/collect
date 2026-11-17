@@ -11,15 +11,6 @@ android {
 
     defaultConfig {
         minSdk = libs.versions.minSdk.get().toInt()
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"))
-        }
     }
 
     compileOptions {
@@ -36,7 +27,6 @@ android {
 
     buildFeatures {
         viewBinding = true
-        buildConfig = true
     }
 }
 
@@ -46,7 +36,6 @@ dependencies {
     implementation(project(":androidshared"))
     implementation(project(":strings"))
 
-    implementation(libs.androidxFragmentKtx)
     implementation(libs.androidMaterial)
     implementation(libs.androidxAppcompat)
     implementation(libs.androidFlexbox)

@@ -42,6 +42,7 @@ import java.net.FileNameMap;
 import java.net.URLConnection;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -227,13 +228,12 @@ public final class FileUtils {
     }
 
     public static byte[] read(File file) {
-        byte[] bytes = new byte[(int) file.length()];
-        try (InputStream is = new FileInputStream(file)) {
-            is.read(bytes);
+        try {
+            return Files.readAllBytes(file.toPath());
         } catch (IOException e) {
             Timber.e(e);
+            return new byte[0];
         }
-        return bytes;
     }
 
     public static void write(File file, byte[] data) {

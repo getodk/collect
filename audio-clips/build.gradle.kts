@@ -9,20 +9,12 @@ android {
 
     defaultConfig {
         minSdk = libs.versions.minSdk.get().toInt()
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-        }
     }
     namespace = "org.odk.collect.audioclips"
 }
@@ -33,7 +25,6 @@ dependencies {
     implementation(project(":androidshared"))
     implementation(project(":async"))
     implementation(libs.androidxActivity)
-    implementation(libs.androidxCoreKtx)
     implementation(libs.androidxLifecycleViewmodelKtx)
     implementation(libs.androidxLifecycleLivedataKtx)
 

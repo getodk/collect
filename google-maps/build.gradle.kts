@@ -12,14 +12,6 @@ android {
 
     defaultConfig {
         minSdk = libs.versions.minSdk.get().toInt()
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-        }
     }
 
     compileOptions {
@@ -33,10 +25,6 @@ android {
             isIncludeAndroidResources = true
         }
     }
-
-    buildFeatures {
-        viewBinding = true
-    }
 }
 
 dependencies {
@@ -47,7 +35,6 @@ dependencies {
     implementation(project(":maps"))
     implementation(project(":settings"))
     implementation(project(":strings"))
-    implementation(project(":icons"))
 
     implementation(libs.androidxPreferenceKtx)
     implementation(libs.playServicesMaps)

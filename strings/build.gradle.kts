@@ -9,14 +9,6 @@ android {
 
     defaultConfig {
         minSdk = libs.versions.minSdk.get().toInt()
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-        }
     }
 
     compileOptions {
@@ -34,7 +26,6 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidxCoreKtx)
 
     /*
      * We need to expose [AppCompatActivity] for classes in separate modules that
