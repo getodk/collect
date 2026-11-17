@@ -157,9 +157,12 @@ def main(argv: list[str] | None = None) -> int:
             "entities_100k",
             1000,
         )
-        entity_form_definition = find_form_definition(directory, "100k Entities Filter")
-        entities_form = publish_form(client, entity_form_definition)
-        entities_app_user = create_app_user(client, entities_form.xmlFormId, "100k Entities Filter")
+        entity_filter_form_definition = find_form_definition(directory, "100k Entities Filter")
+        entities_filter_form = publish_form(client, entity_filter_form_definition)
+        entities_filter_app_user = create_app_user(client, entities_filter_form.xmlFormId, "100k Entities Filter")
+        entity_search_form_definition = find_form_definition(directory, "100k Entities Filter search()")
+        entities_search_form = publish_form(client, entity_search_form_definition)
+        entities_search_app_user = create_app_user(client, entities_search_form.xmlFormId, "100k Entities Filter search()")
 
         create_entity_list(client, "empty_entity_list")
         media_form_definition = find_form_definition(directory, "1000-media-files-entity-list")
@@ -175,8 +178,10 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Central project URL: {project_url}")
         print()
         print("secrets.properties:")
-        entities_app_user_url = f"{base_url}/v1/key/{entities_app_user.token}/projects/{project_id}"
-        print(f"ENTITIES_FILTER_PROJECT_URL={entities_app_user_url}")
+        entities_filter_app_user_url = f"{base_url}/v1/key/{entities_filter_app_user.token}/projects/{project_id}"
+        print(f"ENTITIES_FILTER_PROJECT_URL={entities_filter_app_user_url}")
+        entities_search_app_user_url = f"{base_url}/v1/key/{entities_search_app_user.token}/projects/{project_id}"
+        print(f"ENTITIES_FILTER_SEARCH_PROJECT_URL={entities_search_app_user_url}")
         media_app_user_url = f"{base_url}/v1/key/{media_app_user.token}/projects/{project_id}"
         print(f"THOUSAND_MEDIA_FILE_ENTITY_LIST_PROJECT_URL={media_app_user_url}")
 
