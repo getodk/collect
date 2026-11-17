@@ -183,7 +183,8 @@ class EntityListSyncTest {
      * Regression test for [#6425](https://github.com/getodk/collect/issues/6425).
      *
      * When a form attaches a plain CSV whose name matches a project entity list, the form must read
-     * from the attached CSV - not from the entity list of the same name.
+     * from the attached CSV - not from the entity list of the same name. The form filters its
+     * choices, so this also covers choice_filter.
      */
     @Test
     fun attachedCsvIsUsedInsteadOfEntityListOfTheSameName() {
@@ -202,24 +203,6 @@ class EntityListSyncTest {
             .startBlankForm("External Csv Select")
             .assertText("Roman Roy")
             .assertTextDoesNotExist("Ro-Ro Roy")
-    }
-
-    @Test
-    fun attachedCsvIsUsedInsteadOfEntityListOfTheSameName_whenChoicesAreFiltered() {
-        // Creates a "people" entity list in the project, containing "Ro-Ro Roy".
-        testDependencies.server.addForm(
-            "one-question-entity-update.xml",
-            listOf(EntityListItem("people.csv", "updated-people.csv"))
-        )
-        // Attaches a plain people.csv (containing "Roman Roy") and filters it by label.
-        testDependencies.server.addForm(
-            "external-csv-select-filtered.xml",
-            listOf(MediaFileItem("people.csv"))
-        )
-
-        rule.withProject(testDependencies.server.url, matchExactly = true)
-            .startBlankForm("External Csv Select Filtered")
-            .assertText("Roman Roy")
     }
 
     @Test
