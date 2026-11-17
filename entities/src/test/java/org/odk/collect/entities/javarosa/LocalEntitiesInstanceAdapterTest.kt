@@ -20,7 +20,7 @@ class LocalEntitiesInstanceAdapterTest {
     }
 
     @Test
-    fun `supportsInstance returns true for an existing entity list when no file is attached`() {
+    fun `supportsInstance returns true for an existing entity list when there is no media file with the same name`() {
         entitiesRepository.save("people", Entity.New("1", "Shiv Roy"))
 
         val adapter = LocalEntitiesInstanceAdapter(entitiesRepository) { null }
@@ -28,31 +28,31 @@ class LocalEntitiesInstanceAdapterTest {
     }
 
     @Test
-    fun `supportsInstance returns false when a CSV with the same name is attached`() {
+    fun `supportsInstance returns false when there is a CSV media file with the same name`() {
         entitiesRepository.save("people", Entity.New("1", "Shiv Roy"))
 
-        val adapter = LocalEntitiesInstanceAdapter(entitiesRepository, attached("jr://file-csv/people.csv"))
+        val adapter = LocalEntitiesInstanceAdapter(entitiesRepository, mediaFileRepositoryWithFiles("jr://file-csv/people.csv"))
         assertThat(adapter.supportsInstance("people"), equalTo(false))
     }
 
     @Test
-    fun `supportsInstance returns false when an XML file with the same name is attached`() {
+    fun `supportsInstance returns false when there is an XML media file with the same name`() {
         entitiesRepository.save("people", Entity.New("1", "Shiv Roy"))
 
-        val adapter = LocalEntitiesInstanceAdapter(entitiesRepository, attached("jr://file/people.xml"))
+        val adapter = LocalEntitiesInstanceAdapter(entitiesRepository, mediaFileRepositoryWithFiles("jr://file/people.xml"))
         assertThat(adapter.supportsInstance("people"), equalTo(false))
     }
 
     @Test
-    fun `supportsInstance returns false when a GeoJSON file with the same name is attached`() {
+    fun `supportsInstance returns false when there is a GeoJSON media file with the same name`() {
         entitiesRepository.save("people", Entity.New("1", "Shiv Roy"))
 
-        val adapter = LocalEntitiesInstanceAdapter(entitiesRepository, attached("jr://file/people.geojson"))
+        val adapter = LocalEntitiesInstanceAdapter(entitiesRepository, mediaFileRepositoryWithFiles("jr://file/people.geojson"))
         assertThat(adapter.supportsInstance("people"), equalTo(false))
     }
 
-    private fun attached(attachedUri: String): FormMediaFileRepository {
+    private fun mediaFileRepositoryWithFiles(vararg uris: String): FormMediaFileRepository {
         val file = TempFiles.createTempFile()
-        return FormMediaFileRepository { uri -> if (uri == attachedUri) file else null }
+        return FormMediaFileRepository { uri -> if (uri in uris) file else null }
     }
 }
