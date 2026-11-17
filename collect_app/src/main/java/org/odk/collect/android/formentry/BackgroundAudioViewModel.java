@@ -80,13 +80,13 @@ public class BackgroundAudioViewModel extends ViewModel {
     public void setBackgroundRecordingEnabled(boolean enabled) {
         if (enabled) {
             if (auditEventLogger != null) {
-                auditEventLogger.logEvent(AuditEvent.AuditEventType.BACKGROUND_AUDIO_ENABLED, true, clock.get());
+                auditEventLogger.logEvent(AuditEvent.AuditEventType.BACKGROUND_AUDIO_ENABLED, false, clock.get());
             }
         } else {
             audioRecorder.cleanUp();
 
             if (auditEventLogger != null) {
-                auditEventLogger.logEvent(AuditEvent.AuditEventType.BACKGROUND_AUDIO_DISABLED, true, clock.get());
+                auditEventLogger.logEvent(AuditEvent.AuditEventType.BACKGROUND_AUDIO_DISABLED, false, clock.get());
             }
         }
 
