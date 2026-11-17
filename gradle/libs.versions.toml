@@ -18,7 +18,7 @@ coroutines="1.11.0"
 [libraries]
 firebaseCrashlyticsGradle = { group = "com.google.firebase", name = "firebase-crashlytics-gradle", version = "3.0.8" }
 googleServices = { group = "com.google.gms", name = "google-services", version = "4.5.0" }
-gradle = { group = "com.android.tools.build", name = "gradle", version = "9.4.1" }
+gradle = { group = "com.android.tools.build", name = "gradle", version = "9.3.3" }
 kotlinGradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 ktlintGradle = { group = "org.jlleitschuh.gradle", name = "ktlint-gradle", version = "14.2.0" }
 gradleVersionsPlugin = { group = "com.github.ben-manes", name = "gradle-versions-plugin", version = "0.54.0" }
