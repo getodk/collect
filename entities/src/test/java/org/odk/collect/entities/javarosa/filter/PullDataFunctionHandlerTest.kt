@@ -50,7 +50,7 @@ class PullDataFunctionHandlerTest {
             )
         ) { formDef ->
             FormEntryController(FormEntryModel(formDef)).also {
-                it.addFunctionHandler(PullDataFunctionHandler(entitiesRepository, { null }))
+                it.addFunctionHandler(PullDataFunctionHandler(entitiesRepository, { false }))
             }
         }
 
@@ -93,7 +93,7 @@ class PullDataFunctionHandlerTest {
             )
         ) { formDef ->
             FormEntryController(FormEntryModel(formDef)).also {
-                it.addFunctionHandler(PullDataFunctionHandler(entitiesRepository, { null }))
+                it.addFunctionHandler(PullDataFunctionHandler(entitiesRepository, { false }))
             }
         }
 
@@ -132,7 +132,7 @@ class PullDataFunctionHandlerTest {
             )
         ) { formDef ->
             FormEntryController(FormEntryModel(formDef)).also {
-                it.addFunctionHandler(PullDataFunctionHandler(entitiesRepository, { null }))
+                it.addFunctionHandler(PullDataFunctionHandler(entitiesRepository, { false }))
             }
         }
 
@@ -171,7 +171,7 @@ class PullDataFunctionHandlerTest {
             )
         ) { formDef ->
             FormEntryController(FormEntryModel(formDef)).also {
-                it.addFunctionHandler(PullDataFunctionHandler(entitiesRepository, { null }))
+                it.addFunctionHandler(PullDataFunctionHandler(entitiesRepository, { false }))
             }
         }
 

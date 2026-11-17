@@ -7,7 +7,6 @@ import org.odk.collect.entities.javarosa.intance.LocalEntitiesInstanceAdapter
 import org.odk.collect.entities.storage.Entity
 import org.odk.collect.entities.storage.InMemEntitiesRepository
 import org.odk.collect.forms.FormMediaFileRepository
-import org.odk.collect.shared.TempFiles
 
 class LocalEntitiesInstanceAdapterTest {
 
@@ -15,7 +14,7 @@ class LocalEntitiesInstanceAdapterTest {
 
     @Test
     fun `supportsInstance returns false when there is no entity list with the instance ID`() {
-        val adapter = LocalEntitiesInstanceAdapter(entitiesRepository) { null }
+        val adapter = LocalEntitiesInstanceAdapter(entitiesRepository) { false }
         assertThat(adapter.supportsInstance("people"), equalTo(false))
     }
 
@@ -23,7 +22,7 @@ class LocalEntitiesInstanceAdapterTest {
     fun `supportsInstance returns true for an existing entity list when there is no media file with the same name`() {
         entitiesRepository.save("people", Entity.New("1", "Shiv Roy"))
 
-        val adapter = LocalEntitiesInstanceAdapter(entitiesRepository) { null }
+        val adapter = LocalEntitiesInstanceAdapter(entitiesRepository) { false }
         assertThat(adapter.supportsInstance("people"), equalTo(true))
     }
 
@@ -31,7 +30,7 @@ class LocalEntitiesInstanceAdapterTest {
     fun `supportsInstance returns false when there is a CSV media file with the same name`() {
         entitiesRepository.save("people", Entity.New("1", "Shiv Roy"))
 
-        val adapter = LocalEntitiesInstanceAdapter(entitiesRepository, mediaFileRepositoryWithFiles("jr://file-csv/people.csv"))
+        val adapter = LocalEntitiesInstanceAdapter(entitiesRepository, mediaFileRepositoryWithFiles("people.csv"))
         assertThat(adapter.supportsInstance("people"), equalTo(false))
     }
 
@@ -39,7 +38,7 @@ class LocalEntitiesInstanceAdapterTest {
     fun `supportsInstance returns false when there is an XML media file with the same name`() {
         entitiesRepository.save("people", Entity.New("1", "Shiv Roy"))
 
-        val adapter = LocalEntitiesInstanceAdapter(entitiesRepository, mediaFileRepositoryWithFiles("jr://file/people.xml"))
+        val adapter = LocalEntitiesInstanceAdapter(entitiesRepository, mediaFileRepositoryWithFiles("people.xml"))
         assertThat(adapter.supportsInstance("people"), equalTo(false))
     }
 
@@ -47,12 +46,11 @@ class LocalEntitiesInstanceAdapterTest {
     fun `supportsInstance returns false when there is a GeoJSON media file with the same name`() {
         entitiesRepository.save("people", Entity.New("1", "Shiv Roy"))
 
-        val adapter = LocalEntitiesInstanceAdapter(entitiesRepository, mediaFileRepositoryWithFiles("jr://file/people.geojson"))
+        val adapter = LocalEntitiesInstanceAdapter(entitiesRepository, mediaFileRepositoryWithFiles("people.geojson"))
         assertThat(adapter.supportsInstance("people"), equalTo(false))
     }
 
-    private fun mediaFileRepositoryWithFiles(vararg uris: String): FormMediaFileRepository {
-        val file = TempFiles.createTempFile()
-        return FormMediaFileRepository { uri -> if (uri in uris) file else null }
+    private fun mediaFileRepositoryWithFiles(vararg names: String): FormMediaFileRepository {
+        return FormMediaFileRepository { it in names }
     }
 }

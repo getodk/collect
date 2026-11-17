@@ -8,11 +8,11 @@ import java.io.File
 class ReferenceManagerMediaFileRepository(
     private val referenceManager: ReferenceManager
 ) : FormMediaFileRepository {
-    override fun get(uri: String): File? {
+    override fun hasFileWithName(name: String): Boolean {
         return try {
-            File(referenceManager.deriveReference(uri).localURI)
+            File(referenceManager.deriveReference("jr://file/$name").localURI).exists()
         } catch (_: InvalidReferenceException) {
-            null
+            false
         }
     }
 }

@@ -1,15 +1,12 @@
 package org.odk.collect.forms
 
-import java.io.File
-
 /**
- * Resolves a form-media reference (a `jr://…` URI as used by a form's images, audio, video or
- * CSV external instances) to a local file.
+ * Gives access to the media files (images, audio, video, CSV, XML, GeoJSON…) of the form that is
+ * currently loaded.
  */
 fun interface FormMediaFileRepository {
     /**
-     * @return the local file the [uri] resolves to, or null if the reference can't be resolved.
-     * The returned file is not guaranteed to exist.
+     * @return true if the form has a media file with the given name.
      */
-    fun get(uri: String): File?
+    fun hasFileWithName(name: String): Boolean
 }
