@@ -176,9 +176,9 @@ def main(argv: list[str] | None = None) -> int:
         entities_search_app_user = create_form_with_app_user(client, directory, "100k Entities Filter search()")
 
         create_entity_list(client, "empty_entity_list")
-        media_dir = directory / "1000-media-files-media"
-        media_files = list(media_dir.iterdir()) if media_dir.is_dir() else []
-        media_app_user = create_form_with_app_user(client, directory, "1000-media-files-entity-list", media_files)
+        media_files = list((directory / "1000-media-files-media").iterdir())
+        media_files_app_user = create_form_with_app_user(client, directory, "1000-media-files", media_files)
+        media_files_entity_list_app_user = create_form_with_app_user(client, directory, "1000-media-files-entity-list", media_files)
 
         print()
         print("#####################################")
@@ -191,8 +191,11 @@ def main(argv: list[str] | None = None) -> int:
         print(f"ENTITIES_FILTER_PROJECT_URL={entities_filter_app_user_url}")
         entities_search_app_user_url = f"{base_url}/v1/key/{entities_search_app_user.token}/projects/{project_id}"
         print(f"ENTITIES_FILTER_SEARCH_PROJECT_URL={entities_search_app_user_url}")
-        media_app_user_url = f"{base_url}/v1/key/{media_app_user.token}/projects/{project_id}"
-        print(f"THOUSAND_MEDIA_FILE_ENTITY_LIST_PROJECT_URL={media_app_user_url}")
+        media_files_entity_list_app_user_url = f"{base_url}/v1/key/{media_files_entity_list_app_user.token}/projects/{project_id}"
+        print(f"THOUSAND_MEDIA_FILE_ENTITY_LIST_PROJECT_URL={media_files_entity_list_app_user_url}")
+        media_files_app_user_url = f"{base_url}/v1/key/{media_files_app_user.token}/projects/{project_id}"
+        print(f"THOUSAND_MEDIA_FILE_PROJECT_URL={media_files_app_user_url}")
+
 
     return 0
 
