@@ -53,7 +53,18 @@ def read_entities(csv_path: Path) -> list[dict]:
                 f"Available columns: {reader.fieldnames}"
             )
 
-        return list(reader)
+        rows = list(reader)
+
+        # Central doesn't accept entities with __id as it manages that property itself, but downloaded CSVs will include it
+        for row in rows:
+            row.pop("__id", None)
+            row.pop("__createdAt", None)
+            row.pop("__creatorId", None)
+            row.pop("__creatorName", None)
+            row.pop("__updates", None)
+            row.pop("__updatedAt", None)
+            row.pop("__version", None)
+        return rows
 
 
 def create_project(client: Client, project_name: str) -> int:
