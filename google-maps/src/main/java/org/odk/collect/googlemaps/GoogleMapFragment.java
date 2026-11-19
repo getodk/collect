@@ -61,6 +61,7 @@ import org.odk.collect.maps.MapViewModelMapFragment;
 import org.odk.collect.maps.Zoom;
 import org.odk.collect.maps.ZoomObserver;
 import org.odk.collect.maps.circles.CircleDescription;
+import org.odk.collect.maps.layers.MbtilesFile;
 import org.odk.collect.maps.layers.ReferenceLayerRepository;
 import org.odk.collect.maps.markers.MarkerDescription;
 import org.odk.collect.maps.markers.MarkerIconDescription;
@@ -496,13 +497,15 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
             referenceOverlay = null;
         }
         if (referenceLayerFile != null) {
-            referenceOverlay = this.map.addTileOverlay(new TileOverlayOptions().tileProvider(
-                    new GoogleMapsOfflineTileProvider(referenceLayerFile)
-            ));
-            setLabelsVisibility("off");
-        } else {
-            setLabelsVisibility("on");
+            try {
+                referenceOverlay = this.map.addTileOverlay(new TileOverlayOptions().tileProvider(
+                        new GoogleMapsOfflineTileProvider(new MbtilesFile(referenceLayerFile))
+                ));
+            } catch (MbtilesFile.MbtilesException e) {
+                Timber.w(e);
+            }
         }
+        setLabelsVisibility(referenceOverlay == null ? "on" : "off");
     }
 
     private void setLabelsVisibility(String state) {

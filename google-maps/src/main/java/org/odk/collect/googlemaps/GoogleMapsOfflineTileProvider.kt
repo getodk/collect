@@ -1,70 +1,33 @@
 package org.odk.collect.googlemaps
 
-import android.database.Cursor
-import android.database.sqlite.SQLiteDatabase
 import com.google.android.gms.maps.model.Tile
 import com.google.android.gms.maps.model.TileProvider
+import org.odk.collect.maps.layers.MbtilesFile
 import java.io.Closeable
-import java.io.File
 
-class GoogleMapsOfflineTileProvider(file: File) : TileProvider, Closeable {
-    private var minimumZoom = Int.MIN_VALUE
+class GoogleMapsOfflineTileProvider(private val mbtiles: MbtilesFile) : TileProvider, Closeable {
+    private val minimumZoom = readZoom("minzoom") ?: Int.MIN_VALUE
 
-    private var maximumZoom = Int.MAX_VALUE
-
-    private var database: SQLiteDatabase? = SQLiteDatabase.openDatabase(
-        file.absolutePath,
-        null,
-        SQLiteDatabase.OPEN_READONLY or SQLiteDatabase.NO_LOCALIZED_COLLATORS
-    )
-
-    init {
-        calculateZoomConstraints()
-    }
+    private val maximumZoom = readZoom("maxzoom") ?: Int.MAX_VALUE
 
     override fun getTile(x: Int, y: Int, z: Int): Tile {
-        val database = database
-        if (!isZoomLevelAvailable(z) || database == null || !database.isOpen) {
+        if (z !in minimumZoom..maximumZoom) {
             return TileProvider.NO_TILE
         }
 
-        val row = (1 shl z) - y - 1
-        database.query(
-            "tiles",
-            arrayOf("tile_data"),
-            "tile_row = ? AND tile_column = ? AND zoom_level = ?",
-            arrayOf(row.toString(), x.toString(), z.toString()),
-            null,
-            null,
-            null
-        ).use { cursor ->
-            return if (cursor.moveToFirst()) {
-                Tile(256, 256, cursor.getBlob(0))
-            } else {
-                TileProvider.NO_TILE
-            }
-        }
+        val data = mbtiles.getTileBlob(z, x, y) ?: return TileProvider.NO_TILE
+        return Tile(256, 256, data)
     }
 
     override fun close() {
-        database?.close()
-        database = null
+        mbtiles.close()
     }
 
-    private fun isZoomLevelAvailable(zoom: Int): Boolean {
-        return zoom in minimumZoom..maximumZoom
-    }
-
-    private fun calculateZoomConstraints() {
-        queryMetadata("minzoom") { minimumZoom = it.getInt(0) }
-        queryMetadata("maxzoom") { maximumZoom = it.getInt(0) }
-    }
-
-    private fun queryMetadata(name: String, onFound: (Cursor) -> Unit) {
-        database!!.query("metadata", arrayOf("value"), "name = ?", arrayOf(name), null, null, null).use {
-            if (it.moveToFirst()) {
-                onFound(it)
-            }
+    private fun readZoom(name: String): Int? {
+        return try {
+            mbtiles.getMetadata(name).trim().toDoubleOrNull()?.toInt()
+        } catch (_: MbtilesFile.MbtilesException) {
+            null
         }
     }
 }
