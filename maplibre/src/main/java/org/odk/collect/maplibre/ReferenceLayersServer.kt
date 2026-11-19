@@ -88,12 +88,8 @@ internal class ReferenceLayersServer {
         // Configure the TileSet using the metadata in the .mbtiles file.
         try {
             tileSet.name = mbtiles.getMetadata("name")
-            try {
-                tileSet.minZoom = mbtiles.getMetadata("minzoom").toFloat()
-                tileSet.maxZoom = mbtiles.getMetadata("maxzoom").toFloat()
-            } catch (_: NumberFormatException) {
-                // ignore
-            }
+            mbtiles.minZoom?.let { tileSet.minZoom = it.toFloat() }
+            mbtiles.maxZoom?.let { tileSet.maxZoom = it.toFloat() }
             var parts = mbtiles.getMetadata("center").split(",").toTypedArray()
             if (parts.size == 3) { // latitude, longitude, zoom
                 try {

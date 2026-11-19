@@ -6,9 +6,9 @@ import org.odk.collect.maps.layers.MbtilesFile
 import java.io.Closeable
 
 class GoogleMapsOfflineTileProvider(private val mbtiles: MbtilesFile) : TileProvider, Closeable {
-    private val minimumZoom = readZoom("minzoom") ?: Int.MIN_VALUE
+    private val minimumZoom = mbtiles.minZoom ?: Int.MIN_VALUE
 
-    private val maximumZoom = readZoom("maxzoom") ?: Int.MAX_VALUE
+    private val maximumZoom = mbtiles.maxZoom ?: Int.MAX_VALUE
 
     override fun getTile(x: Int, y: Int, z: Int): Tile {
         if (z !in minimumZoom..maximumZoom) {
@@ -21,13 +21,5 @@ class GoogleMapsOfflineTileProvider(private val mbtiles: MbtilesFile) : TileProv
 
     override fun close() {
         mbtiles.close()
-    }
-
-    private fun readZoom(name: String): Int? {
-        return try {
-            mbtiles.getMetadata(name).trim().toDoubleOrNull()?.toInt()
-        } catch (_: MbtilesFile.MbtilesException) {
-            null
-        }
     }
 }

@@ -4,6 +4,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -75,6 +76,24 @@ public class MbtilesFile implements Closeable, TileSource {
 
     public @NonNull String getMetadata(String key) throws MbtilesException {
         return queryMetadata(db, key);
+    }
+
+    /** Returns the "minzoom" metadata value, or null if it is missing or invalid. */
+    public @Nullable Integer getMinZoom() {
+        return getZoomMetadata("minzoom");
+    }
+
+    /** Returns the "maxzoom" metadata value, or null if it is missing or invalid. */
+    public @Nullable Integer getMaxZoom() {
+        return getZoomMetadata("maxzoom");
+    }
+
+    private @Nullable Integer getZoomMetadata(String key) {
+        try {
+            return (int) Double.parseDouble(getMetadata(key));
+        } catch (MbtilesException | NumberFormatException e) {
+            return null;
+        }
     }
 
     public void close() {
