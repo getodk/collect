@@ -63,7 +63,6 @@ class MapLibreMapConfigurator(private val configuration: Configuration) : MapCon
     }
 
     override fun getDisplayName(file: File): String {
-        val name = MbtilesFile.readName(file)
-        return name ?: file.name
+        return MbtilesFile.readName(file)
     }
 }
