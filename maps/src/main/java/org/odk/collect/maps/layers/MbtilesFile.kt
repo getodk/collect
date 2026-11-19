@@ -131,22 +131,8 @@ class MbtilesFile private constructor(
         val name: String = json.optString("id", "")
     }
 
-    open class MbtilesException : IOException {
-        internal constructor(message: String?) : super(message)
-
-        internal constructor(cause: Throwable) : this(cause.message) {
-            initCause(cause)
-        }
-    }
-
-    class NotFileException internal constructor(file: File) :
-        MbtilesException("Not a file: $file")
-
-    class UnsupportedFilenameException internal constructor(file: File) :
-        MbtilesException("Illegal filename for SQLite file: $file")
-
-    class UnsupportedFormatException internal constructor(format: String, file: File) :
-        MbtilesException("Unrecognized .mbtiles format \"$format\" in $file")
+    class MbtilesException internal constructor(message: String?, cause: Throwable? = null) :
+        IOException(message, cause)
 
     companion object {
         const val FILE_EXTENSION = ".mbtiles"
@@ -174,10 +160,10 @@ class MbtilesFile private constructor(
         /** Reads or guesses the tile data content type in an .mbtiles file. */
         private fun detectContentType(file: File): String {
             if (!file.exists() || !file.isFile) {
-                throw NotFileException(file)
+                throw MbtilesException("Not a file: $file")
             }
             if (!file.name.lowercase(Locale.US).endsWith(FILE_EXTENSION)) {
-                throw UnsupportedFilenameException(file)
+                throw MbtilesException("Illegal filename for SQLite file: $file")
             }
             try {
                 openSqliteReadOnly(file).use { db ->
@@ -202,10 +188,10 @@ class MbtilesFile private constructor(
                     if (startsWithBytes(tileHeader, 0x1f, 0x8b)) { // gzip header
                         return "application/protobuf"
                     }
-                    throw UnsupportedFormatException(format, file)
+                    throw MbtilesException("Unrecognized .mbtiles format \"$format\" in $file")
                 }
             } catch (e: Throwable) {
-                throw MbtilesException(e)
+                throw MbtilesException(e.message, e)
             }
         }
 
@@ -234,7 +220,7 @@ class MbtilesFile private constructor(
                     return if (results.moveToFirst()) results.getString(0) ?: "" else ""
                 }
             } catch (e: Throwable) {
-                throw MbtilesException(e)
+                throw MbtilesException(e.message, e)
             }
         }
 
@@ -245,7 +231,7 @@ class MbtilesFile private constructor(
                     return if (results.moveToFirst()) results.getBlob(0) ?: ByteArray(0) else ByteArray(0)
                 }
             } catch (e: Throwable) {
-                throw MbtilesException(e)
+                throw MbtilesException(e.message, e)
             }
         }
     }
