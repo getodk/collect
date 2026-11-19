@@ -112,6 +112,7 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
     private int mapType;
     private File referenceLayerFile;
     private TileOverlay referenceOverlay;
+    private GoogleMapsOfflineTileProvider referenceTileProvider;
 
     @Override
     public void init(@Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
@@ -246,6 +247,7 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
     @Override
     public void onDestroy() {
         BitmapDescriptorCache.clearCache();
+        closeReferenceTileProvider();
         super.onDestroy();
     }
 
@@ -496,16 +498,23 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
             referenceOverlay.remove();
             referenceOverlay = null;
         }
+        closeReferenceTileProvider();
         if (referenceLayerFile != null) {
             try {
-                referenceOverlay = this.map.addTileOverlay(new TileOverlayOptions().tileProvider(
-                        new GoogleMapsOfflineTileProvider(new MbtilesFile(referenceLayerFile))
-                ));
+                referenceTileProvider = new GoogleMapsOfflineTileProvider(new MbtilesFile(referenceLayerFile));
+                referenceOverlay = this.map.addTileOverlay(new TileOverlayOptions().tileProvider(referenceTileProvider));
             } catch (MbtilesFile.MbtilesException e) {
                 Timber.w(e);
             }
         }
         setLabelsVisibility(referenceOverlay == null ? "on" : "off");
+    }
+
+    private void closeReferenceTileProvider() {
+        if (referenceTileProvider != null) {
+            referenceTileProvider.close();
+            referenceTileProvider = null;
+        }
     }
 
     private void setLabelsVisibility(String state) {

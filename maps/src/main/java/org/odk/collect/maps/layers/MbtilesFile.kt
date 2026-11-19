@@ -155,7 +155,7 @@ class MbtilesFile private constructor(
         @JvmStatic
         fun readName(file: File): String? {
             return try {
-                MbtilesFile(file).getMetadata("name")
+                MbtilesFile(file).use { it.getMetadata("name") }
             } catch (_: MbtilesException) {
                 null
             }
@@ -165,7 +165,7 @@ class MbtilesFile private constructor(
         @JvmStatic
         fun readLayerType(file: File): LayerType? {
             return try {
-                MbtilesFile(file).layerType
+                MbtilesFile(file).use { it.layerType }
             } catch (_: MbtilesException) {
                 null
             }
