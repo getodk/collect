@@ -18,17 +18,10 @@ class GoogleMapsOfflineTileProvider(private val mbtiles: MbtilesFile) : TileProv
 
     private val maximumZoom = mbtiles.maxZoom ?: Int.MAX_VALUE
 
-    override fun getTile(x: Int, y: Int, z: Int): Tile {
-        if (z < minimumZoom) {
-            return TileProvider.NO_TILE
-        }
-
-        if (z > maximumZoom) {
-            return getOverzoomedTile(x, y, z)
-        }
-
-        val data = mbtiles.getTileBlob(z, x, y) ?: return TileProvider.NO_TILE
-        return Tile(256, 256, data)
+    override fun getTile(x: Int, y: Int, z: Int): Tile = when {
+        z < minimumZoom -> TileProvider.NO_TILE
+        z > maximumZoom -> getOverzoomedTile(x, y, z)
+        else -> mbtiles.getTileBlob(z, x, y)?.let { Tile(256, 256, it) } ?: TileProvider.NO_TILE
     }
 
     override fun close() {
