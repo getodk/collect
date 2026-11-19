@@ -87,8 +87,7 @@ public class GoogleMapConfigurator implements MapConfigurator {
     }
 
     @Override public String getDisplayName(File file) {
-        String name = MbtilesFile.readName(file);
-        return name != null ? name : file.getName();
+        return MbtilesFile.readName(file);
     }
 
     public static class GoogleMapTypeOption {

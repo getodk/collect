@@ -56,7 +56,7 @@ class OfflineMapLayersViewModel(
                             ReferenceLayer(
                                 layerFile.absolutePath,
                                 layerFile,
-                                MbtilesFile.readName(layerFile) ?: layerFile.name
+                                MbtilesFile.readName(layerFile)
                             )
                         )
                     }

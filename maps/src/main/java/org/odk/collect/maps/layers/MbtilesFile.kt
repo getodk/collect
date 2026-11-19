@@ -151,13 +151,13 @@ class MbtilesFile private constructor(
     companion object {
         const val FILE_EXTENSION = ".mbtiles"
 
-        /** Reads the internal name from an MBTiles file, or null if the file is invalid. */
+        /** Reads the internal name from an MBTiles file, or returns the file name if it's blank or the file is invalid. */
         @JvmStatic
-        fun readName(file: File): String? {
+        fun readName(file: File): String {
             return try {
-                MbtilesFile(file).use { it.getMetadata("name") }
+                MbtilesFile(file).use { it.getMetadata("name") }.ifBlank { file.name }
             } catch (_: MbtilesException) {
-                null
+                file.name
             }
         }
 
