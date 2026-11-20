@@ -17,6 +17,12 @@ from pyodk.client import Client
 CONFIG_FILE_NAME = ".pyodk_config.toml"
 
 
+def create_form_with_app_user(client, directory, form_name, attachments=None):
+    form_definition = find_form_definition(directory, form_name)
+    form = publish_form(client, form_definition, attachments)
+    return create_app_user(client, form.xmlFormId, form_name)
+
+
 def find_form_definition(directory: Path, form_name: str) -> Path:
     form_file_name = f"{form_name}.xlsx"
     candidate = directory / form_file_name
@@ -47,7 +53,18 @@ def read_entities(csv_path: Path) -> list[dict]:
                 f"Available columns: {reader.fieldnames}"
             )
 
-        return list(reader)
+        rows = list(reader)
+
+        # Central doesn't accept entities with __id as it manages that property itself, but downloaded CSVs will include it
+        for row in rows:
+            row.pop("__id", None)
+            row.pop("__createdAt", None)
+            row.pop("__creatorId", None)
+            row.pop("__creatorName", None)
+            row.pop("__updates", None)
+            row.pop("__updatedAt", None)
+            row.pop("__version", None)
+        return rows
 
 
 def create_project(client: Client, project_name: str) -> int:
@@ -69,10 +86,10 @@ def create_entity_list(client: Client, entity_list_name: str) -> None:
 
 
 def populate_entity_list(
-    client: Client,
-    entities: list[dict],
-    entity_list_name: str,
-    entity_batch_size: int,
+        client: Client,
+        entities: list[dict],
+        entity_list_name: str,
+        entity_batch_size: int,
 ) -> None:
     # Property columns are every CSV column except the label column.
     property_names = [key for key in entities[0] if key != "label"]
@@ -96,7 +113,7 @@ def populate_entity_list(
         )
 
 
-def publish_form(client: Client, form_definition: Path, attachments=None):
+def publish_form(client: Client, form_definition: Path, attachments):
     form = client.forms.create(
         definition=str(form_definition),
         attachments=attachments,
@@ -149,27 +166,19 @@ def main(argv: list[str] | None = None) -> int:
 
     with Client(config_path=str(config_path), project_id=project_id) as client:
         create_entity_list(client, "entities_100k")
-        entity_csv = find_entity_csv(directory, "entities_100k.csv")
-        entities = read_entities(entity_csv)
         populate_entity_list(
             client,
-            entities,
+            read_entities(find_entity_csv(directory, "entities_100k.csv")),
             "entities_100k",
             1000,
         )
-        entity_filter_form_definition = find_form_definition(directory, "100k Entities Filter")
-        entities_filter_form = publish_form(client, entity_filter_form_definition)
-        entities_filter_app_user = create_app_user(client, entities_filter_form.xmlFormId, "100k Entities Filter")
-        entity_search_form_definition = find_form_definition(directory, "100k Entities Filter search()")
-        entities_search_form = publish_form(client, entity_search_form_definition)
-        entities_search_app_user = create_app_user(client, entities_search_form.xmlFormId, "100k Entities Filter search()")
+        entities_filter_app_user = create_form_with_app_user(client, directory, "100k Entities Filter")
+        entities_search_app_user = create_form_with_app_user(client, directory, "100k Entities Filter search()")
 
         create_entity_list(client, "empty_entity_list")
-        media_form_definition = find_form_definition(directory, "1000-media-files-entity-list")
-        media_dir = directory / "1000-media-files-media"
-        media_files = list(media_dir.iterdir()) if media_dir.is_dir() else []
-        media_form = publish_form(client, media_form_definition, media_files)
-        media_app_user = create_app_user(client, media_form.xmlFormId, "1000-media-files-entity-list")
+        media_files = list((directory / "1000-media-files-media").iterdir())
+        media_files_app_user = create_form_with_app_user(client, directory, "1000-media-files", media_files)
+        media_files_entity_list_app_user = create_form_with_app_user(client, directory, "1000-media-files-entity-list", media_files)
 
         print()
         print("#####################################")
@@ -182,8 +191,11 @@ def main(argv: list[str] | None = None) -> int:
         print(f"ENTITIES_FILTER_PROJECT_URL={entities_filter_app_user_url}")
         entities_search_app_user_url = f"{base_url}/v1/key/{entities_search_app_user.token}/projects/{project_id}"
         print(f"ENTITIES_FILTER_SEARCH_PROJECT_URL={entities_search_app_user_url}")
-        media_app_user_url = f"{base_url}/v1/key/{media_app_user.token}/projects/{project_id}"
-        print(f"THOUSAND_MEDIA_FILE_ENTITY_LIST_PROJECT_URL={media_app_user_url}")
+        media_files_entity_list_app_user_url = f"{base_url}/v1/key/{media_files_entity_list_app_user.token}/projects/{project_id}"
+        print(f"THOUSAND_MEDIA_FILE_ENTITY_LIST_PROJECT_URL={media_files_entity_list_app_user_url}")
+        media_files_app_user_url = f"{base_url}/v1/key/{media_files_app_user.token}/projects/{project_id}"
+        print(f"THOUSAND_MEDIA_FILE_PROJECT_URL={media_files_app_user_url}")
+
 
     return 0
 
