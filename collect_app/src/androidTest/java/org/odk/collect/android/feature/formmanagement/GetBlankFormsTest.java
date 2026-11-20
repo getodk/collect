@@ -10,6 +10,7 @@ import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.android.support.pages.GetBlankFormPage;
+import org.odk.collect.android.support.pages.MainMenuPage;
 
 @RunWith(AndroidJUnit4.class)
 public class GetBlankFormsTest {
@@ -21,6 +22,22 @@ public class GetBlankFormsTest {
     @Rule
     public RuleChain copyFormChain = TestRuleChain.chain(testDependencies)
             .around(rule);
+
+    @Test
+    public void whenFormHasVeryLongTitle_canBeDownloadedAndFilled() {
+        String title = "ეს არის ტესტური ფორმა ძალიან გრძელი სათაურით, რომელიც ამოწმებს, რომ აპლიკაცია სწორად ჩამოტვირთავს და ხსნის ასეთ ფორმებს";
+        testDependencies.server.addForm(title, "one_question_long_title", "1", "one-question-long-title.xml");
+
+        rule.withProject(testDependencies.server.getUrl())
+                .clickGetBlankForm()
+                .clickGetSelected()
+                .assertMessage("All downloads succeeded!")
+                .clickOKOnDialog(new MainMenuPage())
+                .startBlankForm(title)
+                .swipeToEndScreen()
+                .clickSaveAsDraft()
+                .assertNumberOfEditableForms(1);
+    }
 
     @Test
     public void whenThereIsAnAuthenticationErrorFetchingFormList_allowsUserToReenterCredentials() {
