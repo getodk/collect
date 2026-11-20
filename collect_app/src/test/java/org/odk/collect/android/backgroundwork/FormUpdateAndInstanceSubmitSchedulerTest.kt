@@ -40,7 +40,7 @@ class FormUpdateAndInstanceSubmitSchedulerTest {
         manager.scheduleUpdates("myProject")
         verify(scheduler).networkDeferredRepeat(
             eq("serverPollingJob:myProject"),
-            any<AutoUpdateTaskSpec>(),
+            any<List<AutoUpdateTaskSpec>>(),
             eq(3600000),
             eq(mapOf(TaskData.DATA_PROJECT_ID to "myProject"))
         )
@@ -77,7 +77,7 @@ class FormUpdateAndInstanceSubmitSchedulerTest {
         manager.scheduleUpdates("myProject")
         verify(scheduler).networkDeferredRepeat(
             eq("match_exactly:myProject"),
-            any<SyncFormsTaskSpec>(),
+            any<List<SyncFormsTaskSpec>>(),
             eq(3600000),
             eq(mapOf(TaskData.DATA_PROJECT_ID to "myProject"))
         )

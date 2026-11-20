@@ -19,6 +19,8 @@ import org.odk.collect.android.audio.AudioRecordingControllerFragment
 import org.odk.collect.android.audio.AudioRecordingErrorDialogFragment
 import org.odk.collect.android.backgroundwork.AutoUpdateTaskSpec
 import org.odk.collect.android.backgroundwork.SendFormsTaskSpec
+import org.odk.collect.android.backgroundwork.SyncFormsDownloadTaskSpec
+import org.odk.collect.android.backgroundwork.SyncFormsProcessTaskSpec
 import org.odk.collect.android.backgroundwork.SyncFormsTaskSpec
 import org.odk.collect.android.configure.qr.QRCodeScannerFragment
 import org.odk.collect.android.configure.qr.QRCodeTabsActivity
@@ -245,6 +247,10 @@ interface AppDependencyComponent {
     fun inject(downloadFormListTask: DownloadFormListTask)
 
     fun inject(formHierarchyFragmentHostActivity: FormHierarchyFragmentHostActivity)
+
+    fun inject(syncFormsDownloadTaskSpec: SyncFormsDownloadTaskSpec)
+
+    fun inject(syncFormsProcessTaskSpec: SyncFormsProcessTaskSpec)
 
     fun referenceManager(): ReferenceManager
 

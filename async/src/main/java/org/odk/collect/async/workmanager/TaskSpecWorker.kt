@@ -1,52 +1,97 @@
 package org.odk.collect.async.workmanager
 
 import android.content.Context
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
+import androidx.work.Constraints
+import androidx.work.Data
+import androidx.work.ExistingWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
+import androidx.work.WorkRequest
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import org.odk.collect.analytics.Analytics
+import org.odk.collect.async.RunResult
 import org.odk.collect.async.Scheduler
 import org.odk.collect.async.TaskSpec
 import org.odk.collect.async.network.ConnectivityProvider
 import org.odk.collect.async.run
+import java.util.concurrent.TimeUnit
 
 class TaskSpecWorker(
-    context: Context,
+    private val context: Context,
     workerParams: WorkerParameters
 ) : Worker(context, workerParams) {
     private var isStopped = false
 
-    private val taskSpec: TaskSpec by lazy {
-        Class
-            .forName(inputData.getString(DATA_TASK_SPEC_CLASS)!!)
-            .getConstructor()
-            .newInstance() as TaskSpec
-    }
-
-    private val stringInputData: Map<String, String> by lazy {
-        inputData.keyValueMap.mapValues { it.value.toString() }
-    }
-
     private val connectivityProvider: ConnectivityProvider = ConnectivityProvider(context)
 
     override fun doWork(): Result {
-        val cellularOnly = inputData.getBoolean(DATA_CELLULAR_ONLY, false)
-        if (cellularOnly && connectivityProvider.currentNetwork != Scheduler.NetworkType.CELLULAR) {
-            Analytics.Companion.setUserProperty("SawMeteredNonCellular", "true")
-            return Result.retry()
+        val tag = inputData.getString(DATA_TAG) ?: throw IllegalArgumentException()
+        val networkConstraint = inputData.getInt(DATA_NETWORK_CONSTRAINT, -1).let {
+            if (it != -1) {
+                Scheduler.NetworkType.entries[it]
+            } else {
+                null
+            }
         }
 
-        val result = taskSpec.run(
-            applicationContext,
-            stringInputData,
-            runAttemptCount,
-            false,
-            { isStopped }
-        )
+        return if (networkConstraint != Scheduler.NetworkType.CELLULAR || connectivityProvider.currentNetwork == Scheduler.NetworkType.CELLULAR) {
+            val taskSpecs = inputData.getStringArray(DATA_TASK_SPEC_CLASSES)!!.map {
+                Class.forName(it).getConstructor().newInstance() as TaskSpec
+            }
 
-        return when (result) {
-            TaskSpec.Result.SUCCESS -> Result.success()
-            TaskSpec.Result.FAILURE -> Result.failure()
-            TaskSpec.Result.RETRY -> Result.retry()
+            val stringInputData = inputData.keyValueMap.mapValues { it.value.toString() }
+            val result = taskSpecs.first().run(
+                applicationContext,
+                stringInputData,
+                runAttemptCount,
+                false,
+                { isStopped }
+            )
+
+            val nextWorkRequest = getNextWorkRequest(
+                result,
+                taskSpecs,
+                tag,
+                networkConstraint
+            )
+
+            if (nextWorkRequest != null) {
+                WorkManager.getInstance(context)
+                    .enqueueUniqueWork(tag, ExistingWorkPolicy.REPLACE, nextWorkRequest)
+            }
+
+            when (result) {
+                is RunResult.Success -> Result.success()
+                is RunResult.Retry -> Result.retry()
+                is RunResult.Failure -> Result.failure()
+                RunResult.Error -> Result.failure()
+            }
+        } else {
+            Analytics.setUserProperty("SawMeteredNonCellular", "true")
+            Result.retry()
+        }
+    }
+
+    private fun getNextWorkRequest(
+        result: RunResult,
+        taskSpecs: List<TaskSpec>,
+        tag: String,
+        networkConstraint: Scheduler.NetworkType?
+    ): OneTimeWorkRequest? {
+        val outputData = result.outputData
+        return if (taskSpecs.size > 1 && outputData != null) {
+            getWorkRequest(
+                taskSpecs.drop(1),
+                tag,
+                outputData,
+                networkConstraint
+            )
+        } else {
+            null
         }
     }
 
@@ -56,7 +101,87 @@ class TaskSpecWorker(
     }
 
     companion object {
-        const val DATA_TASK_SPEC_CLASS = "taskSpecClass"
-        const val DATA_CELLULAR_ONLY = "cellularOnly"
+        const val DATA_TASK_SPEC_CLASSES = "taskSpecClasses"
+        const val DATA_NETWORK_CONSTRAINT = "networkConstraint"
+        const val DATA_TAG = "tag"
+
+        fun getWorkRequest(
+            specs: List<TaskSpec>,
+            tag: String,
+            inputData: Map<String, String>,
+            networkConstraint: Scheduler.NetworkType?
+        ): OneTimeWorkRequest {
+            val builder = OneTimeWorkRequest.Builder(TaskSpecWorker::class.java)
+            return builder.setup(tag, specs, inputData, networkConstraint).build()
+        }
+
+        fun <T : WorkRequest.Builder<T, *>, U : WorkRequest> WorkRequest.Builder<T, U>.setup(
+            tag: String,
+            specs: List<TaskSpec>,
+            inputData: Map<String, String>,
+            networkConstraint: Scheduler.NetworkType?,
+        ): WorkRequest.Builder<T, U> {
+            this.addTag(tag)
+                .setInputData(getInputData(tag, specs, inputData, networkConstraint))
+                .setConstraints(getConstraints(networkConstraint))
+
+            val firstSpec = specs.first()
+            firstSpec.backoffPolicy?.let { backoffPolicy ->
+                firstSpec.backoffDelay?.let { backoffDelay ->
+                    this.setBackoffCriteria(
+                        backoffPolicy,
+                        backoffDelay,
+                        TimeUnit.MILLISECONDS
+                    )
+                }
+            }
+
+            return this
+        }
+
+        private fun getConstraints(networkConstraint: Scheduler.NetworkType? = null): Constraints {
+            val networkRequest = NetworkRequest.Builder().apply {
+                addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+
+                when (networkConstraint) {
+                    Scheduler.NetworkType.WIFI -> addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+                    Scheduler.NetworkType.CELLULAR -> addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
+                    else -> Unit
+                }
+            }.build()
+
+            val networkType = when (networkConstraint) {
+                Scheduler.NetworkType.WIFI -> NetworkType.UNMETERED
+                Scheduler.NetworkType.CELLULAR -> NetworkType.METERED
+                else -> NetworkType.CONNECTED
+            }
+
+            val constraints = Constraints
+                .Builder()
+                .setRequiredNetworkRequest(networkRequest, networkType)
+                .build()
+            return constraints
+        }
+
+        private fun getInputData(
+            tag: String,
+            specs: List<TaskSpec>,
+            inputData: Map<String, String>,
+            networkConstraint: Scheduler.NetworkType?
+        ): Data {
+            return Data.Builder()
+                .putAll(inputData)
+                .putStringArray(
+                    DATA_TASK_SPEC_CLASSES,
+                    specs.map { it.javaClass.name }.toTypedArray()
+                )
+                .also {
+                    if (networkConstraint != null) {
+                        it.putInt(DATA_NETWORK_CONSTRAINT, networkConstraint.ordinal)
+                    }
+                }
+                .putString(DATA_TAG, tag)
+                .build()
+        }
     }
 }

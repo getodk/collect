@@ -12,6 +12,14 @@ import org.odk.collect.shared.result.Result.Success
 sealed class Result<out S, out E> {
     data class Success<S, E>(val value: S) : Result<S, E>()
     data class Error<S, E>(val value: E) : Result<S, E>()
+
+    fun isSuccess(): Boolean {
+        return this is Success
+    }
+
+    fun isError(): Boolean {
+        return this is Error
+    }
 }
 
 fun <S, E> S.toSuccess(): Success<S, E> {

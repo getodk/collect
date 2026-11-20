@@ -80,6 +80,7 @@ import org.odk.collect.android.utilities.ChangeLockProvider;
 import org.odk.collect.android.utilities.ContentUriProvider;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.FileProvider;
+import org.odk.collect.android.utilities.FormProcessingQueueFactory;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.ImageCompressionController;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
@@ -355,6 +356,12 @@ public class AppDependencyModule {
     @Singleton
     public ChangeLockProvider providesChangeLockProvider() {
         return new ChangeLockProvider();
+    }
+
+    @Provides
+    @Singleton
+    public FormProcessingQueueFactory providesFormProcessQueueFactory() {
+        return new FormProcessingQueueFactory();
     }
 
     @Provides
