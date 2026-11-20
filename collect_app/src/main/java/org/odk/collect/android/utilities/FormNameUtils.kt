@@ -3,13 +3,17 @@ package org.odk.collect.android.utilities
 import java.util.regex.Pattern
 
 object FormNameUtils {
+    private val CONTROL_CHAR_PATTERN = Pattern.compile("\\p{Cntrl}")
+    private val NON_ALPHANUMERIC_REGEX = "[^\\p{L}\\d]".toRegex()
+    private val WHITESPACE_REGEX = "\\p{javaWhitespace}+".toRegex()
+
     @JvmStatic
     fun normalizeFormName(formName: String?, returnNullIfNothingChanged: Boolean): String? {
         if (formName == null) {
             return null
         }
 
-        val matcher = Pattern.compile("\\p{Cntrl}").matcher(formName)
+        val matcher = CONTROL_CHAR_PATTERN.matcher(formName)
         return if (matcher.find()) {
             matcher.replaceAll(" ")
         } else if (returnNullIfNothingChanged) {
@@ -26,9 +30,9 @@ object FormNameUtils {
             return null
         }
         // Keep alphanumerics, replace others with a space
-        var fileName = formName.replace("[^\\p{L}\\d]".toRegex(), " ")
+        var fileName = formName.replace(NON_ALPHANUMERIC_REGEX, " ")
         // Replace consecutive whitespace characters with single space
-        fileName = fileName.replace("\\p{javaWhitespace}+".toRegex(), " ")
+        fileName = fileName.replace(WHITESPACE_REGEX, " ")
         return truncateToMaxFilenameBytes(fileName.trim()).trim()
     }
 
