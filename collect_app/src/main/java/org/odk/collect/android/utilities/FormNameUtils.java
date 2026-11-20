@@ -16,6 +16,7 @@
 
 package org.odk.collect.android.utilities;
 
+import java.nio.charset.StandardCharsets;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -47,6 +48,24 @@ public final class FormNameUtils {
         String fileName = formName.replaceAll("[^\\p{L}\\p{Digit}]", " ");
         // Replace consecutive whitespace characters with single space
         fileName = fileName.replaceAll("\\p{javaWhitespace}+", " ");
-        return fileName.trim();
+        return truncateToMaxFilenameBytes(fileName.trim()).trim();
+    }
+
+    // Truncate so the UTF-8 encoded text fits in maxFilenameBytes. File name limits are in bytes, not
+    // characters, and many scripts use more than one byte per character.
+    private static String truncateToMaxFilenameBytes(String text) {
+        // File names are limited to 255 bytes, so leave room for the suffixes we add to form and instance files
+        int maxFilenameBytes = 200;
+        int end = 0;
+        int bytes = 0;
+        while (end < text.length()) {
+            int codePoint = text.codePointAt(end);
+            bytes += new String(Character.toChars(codePoint)).getBytes(StandardCharsets.UTF_8).length;
+            if (bytes > maxFilenameBytes) {
+                break;
+            }
+            end += Character.charCount(codePoint);
+        }
+        return text.substring(0, end);
     }
 }
