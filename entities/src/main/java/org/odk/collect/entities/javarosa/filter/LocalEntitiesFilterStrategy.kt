@@ -10,6 +10,7 @@ import org.odk.collect.entities.javarosa.intance.LocalEntitiesInstanceProvider
 import org.odk.collect.entities.javarosa.parse.XPathExpressionExt.toQuery
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.QueryException
+import org.odk.collect.forms.FormMediaFileRepository
 import org.odk.collect.shared.Query
 import java.util.function.Supplier
 
@@ -20,10 +21,12 @@ import java.util.function.Supplier
  * [LocalEntitiesInstanceProvider] or similar is used to take advantage of JavaRosa's partial
  * parsing).
  */
-class LocalEntitiesFilterStrategy(entitiesRepository: EntitiesRepository) :
-    FilterStrategy {
+class LocalEntitiesFilterStrategy(
+    entitiesRepository: EntitiesRepository,
+    mediaFileRepository: FormMediaFileRepository
+) : FilterStrategy {
 
-    private val instanceAdapter = LocalEntitiesInstanceAdapter(entitiesRepository)
+    private val instanceAdapter = LocalEntitiesInstanceAdapter(entitiesRepository, mediaFileRepository)
 
     override fun filter(
         sourceInstance: DataInstance<*>,

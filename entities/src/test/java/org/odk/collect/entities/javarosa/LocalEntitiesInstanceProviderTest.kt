@@ -7,8 +7,6 @@ import org.odk.collect.entities.javarosa.intance.LocalEntitiesInstanceProvider
 import org.odk.collect.entities.javarosa.parse.EntitySchema
 import org.odk.collect.entities.storage.Entity
 import org.odk.collect.entities.storage.InMemEntitiesRepository
-import org.odk.collect.shared.TempFiles
-import java.io.File
 
 class LocalEntitiesInstanceProviderTest {
 
@@ -24,7 +22,7 @@ class LocalEntitiesInstanceProviderTest {
             )
         entitiesRepository.save("people", entity)
 
-        val parser = LocalEntitiesInstanceProvider({ entitiesRepository }) { null }
+        val parser = LocalEntitiesInstanceProvider({ entitiesRepository }) { false }
         val instance = parser.get("people", "people.csv")
         assertThat(instance.numChildren, equalTo(1))
 
@@ -44,7 +42,7 @@ class LocalEntitiesInstanceProviderTest {
             )
         entitiesRepository.save("people", entity)
 
-        val parser = LocalEntitiesInstanceProvider({ entitiesRepository }) { null }
+        val parser = LocalEntitiesInstanceProvider({ entitiesRepository }) { false }
         val instance = parser.get("people", "people.csv")
         assertThat(instance.numChildren, equalTo(1))
 
@@ -63,7 +61,7 @@ class LocalEntitiesInstanceProviderTest {
             )
         entitiesRepository.save("people", entity)
 
-        val parser = LocalEntitiesInstanceProvider({ entitiesRepository }) { null }
+        val parser = LocalEntitiesInstanceProvider({ entitiesRepository }) { false }
         val instance = parser.get("people", "people.csv")
         assertThat(instance.numChildren, equalTo(1))
 
@@ -82,7 +80,7 @@ class LocalEntitiesInstanceProviderTest {
             )
         entitiesRepository.save("people", entity)
 
-        val parser = LocalEntitiesInstanceProvider({ entitiesRepository }) { null }
+        val parser = LocalEntitiesInstanceProvider({ entitiesRepository }) { false }
         val instance = parser.get("people", "people.csv")
         assertThat(instance.numChildren, equalTo(1))
 
@@ -104,7 +102,7 @@ class LocalEntitiesInstanceProviderTest {
             )
         entitiesRepository.save("people", entity)
 
-        val parser = LocalEntitiesInstanceProvider({ entitiesRepository }) { null }
+        val parser = LocalEntitiesInstanceProvider({ entitiesRepository }) { false }
         val instance = parser.get("people", "people.csv")
         assertThat(instance.numChildren, equalTo(1))
 
@@ -130,7 +128,7 @@ class LocalEntitiesInstanceProviderTest {
         )
         entitiesRepository.save("people", *entity)
 
-        val parser = LocalEntitiesInstanceProvider({ entitiesRepository }) { null }
+        val parser = LocalEntitiesInstanceProvider({ entitiesRepository }) { false }
         val instance = parser.get("people", "people.csv", true)
         assertThat(instance.numChildren, equalTo(2))
 
@@ -160,7 +158,7 @@ class LocalEntitiesInstanceProviderTest {
         val repository = InMemEntitiesRepository()
         repository.save("people", *entities)
 
-        val parser = LocalEntitiesInstanceProvider({ repository }) { null }
+        val parser = LocalEntitiesInstanceProvider({ repository }) { false }
         val instance = parser.get("people", "people.csv", false)
 
         val first = instance.getChildAt(0)!!
@@ -173,29 +171,19 @@ class LocalEntitiesInstanceProviderTest {
     }
 
     @Test
-    fun `isSupported returns true for an existing entity list when no media file is attached`() {
+    fun `isSupported returns true for an existing entity list when there is no media file with the same name`() {
         entitiesRepository.save("people", Entity.New("1", "Shiv Roy"))
 
-        val parser = LocalEntitiesInstanceProvider({ entitiesRepository }) { null }
+        val parser = LocalEntitiesInstanceProvider({ entitiesRepository }) { false }
         assertThat(parser.isSupported("people", "jr://file-csv/people.csv"), equalTo(true))
     }
 
     @Test
-    fun `isSupported returns false when a media file with the same name is attached`() {
+    fun `isSupported returns false when there is a media file with the same name`() {
         entitiesRepository.save("people", Entity.New("1", "Shiv Roy"))
-        val attachedFile = TempFiles.createTempFile()
 
-        val parser = LocalEntitiesInstanceProvider({ entitiesRepository }) { attachedFile }
+        val parser = LocalEntitiesInstanceProvider({ entitiesRepository }) { it == "people.csv" }
         assertThat(parser.isSupported("people", "jr://file-csv/people.csv"), equalTo(false))
-    }
-
-    @Test
-    fun `isSupported returns true when the resolved media file does not exist`() {
-        entitiesRepository.save("people", Entity.New("1", "Shiv Roy"))
-        val missingFile = File(TempFiles.getPathInTempDir("missing", ".csv"))
-
-        val parser = LocalEntitiesInstanceProvider({ entitiesRepository }) { missingFile }
-        assertThat(parser.isSupported("people", "jr://file-csv/people.csv"), equalTo(true))
     }
 
     @Test
@@ -207,7 +195,7 @@ class LocalEntitiesInstanceProviderTest {
             )
         entitiesRepository.save("people", entity)
 
-        val parser = LocalEntitiesInstanceProvider({ entitiesRepository }) { null }
+        val parser = LocalEntitiesInstanceProvider({ entitiesRepository }) { false }
         val instance = parser.get("people", "people.csv")
         assertThat(instance.numChildren, equalTo(1))
 
