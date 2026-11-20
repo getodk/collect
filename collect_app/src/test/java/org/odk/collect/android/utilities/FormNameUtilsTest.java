@@ -59,4 +59,17 @@ public class FormNameUtilsTest {
         assertThat(formatFilenameFromFormName("registered symbol ® stripped"), is("registered symbol stripped"));
         assertThat(formatFilenameFromFormName("unicode fragment \ud800 stripped"), is("unicode fragment stripped"));
     }
+
+    @Test
+    public void formatFilenameFromFormName_truncatesToMaxFilenameBytes() {
+        // ASCII characters are 1 byte
+        assertThat(formatFilenameFromFormName("a".repeat(200)), is("a".repeat(200)));
+        assertThat(formatFilenameFromFormName("a".repeat(201)), is("a".repeat(200)));
+
+        // Georgian characters are 3 bytes, so only 66 of them fit
+        assertThat(formatFilenameFromFormName("ა".repeat(100)), is("ა".repeat(66)));
+
+        // Trailing space left after truncating is trimmed
+        assertThat(formatFilenameFromFormName("a".repeat(199) + " b"), is("a".repeat(199)));
+    }
 }
