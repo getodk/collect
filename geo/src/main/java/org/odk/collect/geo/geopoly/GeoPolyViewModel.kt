@@ -12,12 +12,10 @@ import org.odk.collect.androidshared.livedata.LiveDataExt.withLast
 import org.odk.collect.androidshared.ui.DisplayString
 import org.odk.collect.async.Cancellable
 import org.odk.collect.async.Scheduler
-import org.odk.collect.geo.geopoly.GeoPolyFragment.OutputMode
 import org.odk.collect.location.tracker.LocationTracker
 import org.odk.collect.maps.MapPoint
 
 class GeoPolyViewModel(
-    outputMode: OutputMode,
     points: List<MapPoint>,
     retainMockAccuracy: Boolean,
     private val locationTracker: LocationTracker,
@@ -36,17 +34,8 @@ class GeoPolyViewModel(
     var inputActive: StateFlow<Boolean> = _inputActive
         private set
 
-    private val _points = MutableStateFlow(
-        if (points.isNotEmpty()) {
-            if (outputMode == OutputMode.GEOSHAPE) {
-                points.subList(0, points.size - 1)
-            } else {
-                points
-            }
-        } else {
-            points
-        }
-    )
+    val originalPoints = points
+    private val _points = MutableStateFlow(points)
     val points: StateFlow<List<MapPoint>> = _points
 
     val fixedAlerts = invalidMessage.withLast().map {
@@ -127,6 +116,10 @@ class GeoPolyViewModel(
     public override fun onCleared() {
         stopRecording()
         locationTracker.stop()
+    }
+
+    fun hasBeenModified(): Boolean {
+        return points.value != originalPoints
     }
 
     data class GeoPoly(val points: List<MapPoint>, val isValid: Boolean)
