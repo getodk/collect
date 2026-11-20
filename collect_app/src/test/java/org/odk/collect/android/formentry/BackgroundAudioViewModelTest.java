@@ -168,14 +168,14 @@ public class BackgroundAudioViewModelTest {
     public void setBackgroundRecordingEnabled_whenFalse_logsEventToAuditLog() {
         when(clock.get()).thenReturn(1234L);
         viewModel.setBackgroundRecordingEnabled(false);
-        verify(auditEventLogger).logEvent(AuditEvent.AuditEventType.BACKGROUND_AUDIO_DISABLED, true, 1234L);
+        verify(auditEventLogger).logEvent(AuditEvent.AuditEventType.BACKGROUND_AUDIO_DISABLED, false, 1234L);
     }
 
     @Test
     public void setBackgroundRecordingEnabled_whenTrue_logsEventToAuditLog() {
         when(clock.get()).thenReturn(1234L);
         viewModel.setBackgroundRecordingEnabled(true);
-        verify(auditEventLogger).logEvent(AuditEvent.AuditEventType.BACKGROUND_AUDIO_ENABLED, true, 1234L);
+        verify(auditEventLogger).logEvent(AuditEvent.AuditEventType.BACKGROUND_AUDIO_ENABLED, false, 1234L);
     }
 
     @Test
@@ -187,7 +187,7 @@ public class BackgroundAudioViewModelTest {
         formSession.setValue(new FormSession(formController, form));
 
         viewModel.setBackgroundRecordingEnabled(false);
-        verify(auditEventLogger).logEvent(AuditEvent.AuditEventType.BACKGROUND_AUDIO_DISABLED, true, 1234L);
+        verify(auditEventLogger).logEvent(AuditEvent.AuditEventType.BACKGROUND_AUDIO_DISABLED, false, 1234L);
     }
 
     private static class FakeRecordAudioActionRegistry implements BackgroundAudioViewModel.RecordAudioActionRegistry {
