@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms"
+        xmlns:h="http://www.w3.org/1999/xhtml">
+    <h:head>
+        <h:title>Geotrace with answer</h:title>
+        <model>
+            <instance>
+                <data id="geotrace-with-answer">
+                    <trace>52.2297 21.0122 0 0;52.2387 21.0262 0 0</trace>
+                </data>
+            </instance>
+            <bind nodeset="/data/trace" type="geotrace" />
+        </model>
+    </h:head>
+    <h:body>
+        <input ref="/data/trace">
+            <label>Trace</label>
+        </input>
+    </h:body>
+</h:html>
