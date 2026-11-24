@@ -7,6 +7,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
+import org.odk.collect.android.R
 import org.odk.collect.android.support.StorageUtils
 import org.odk.collect.android.support.pages.ChangesReasonPromptPage
 import org.odk.collect.android.support.pages.FormEntryPage
@@ -80,6 +81,23 @@ class TrackChangesReasonTest {
             .clickSaveAndExitWithChangesReasonPrompt()
             .closeSoftKeyboard()
             .pressClose(FormEntryPage("Track Changes Reason"))
+    }
+
+    @Test
+    fun openingAFormToEdit_andClickingSaveAndExit_showsReasonFieldAboveKeyboard() {
+        rule.startAtMainMenu()
+            .copyForm("track-changes-reason-on-edit.xml")
+            .startBlankForm("Track Changes Reason")
+            .inputText("Nothing much...")
+            .swipeToEndScreen()
+            .clickSaveAsDraft()
+
+            .clickDrafts()
+            .clickOnForm("Track Changes Reason")
+            .clickGoToEnd()
+            .clickSaveAndExitWithChangesReasonPrompt()
+            .clickOnId(R.id.reason)
+            .assertAboveKeyboard(R.id.scroll_view)
     }
 
     @Test

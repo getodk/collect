@@ -4,10 +4,13 @@ import android.app.Activity
 import android.app.Application
 import android.content.pm.ActivityInfo
 import android.view.View
+import androidx.annotation.IdRes
 import androidx.annotation.StringRes
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.ComposeTestRule
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
@@ -40,8 +43,11 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import org.hamcrest.CoreMatchers.not
 import org.hamcrest.Matcher
+import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers
 import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.greaterThan
+import org.hamcrest.Matchers.lessThanOrEqualTo
 import org.hamcrest.core.StringContains.containsString
 import org.hamcrest.core.StringEndsWith.endsWith
 import org.junit.Assert
@@ -414,6 +420,20 @@ abstract class Page<T : Page<T>> {
     fun inputText(hint: Int, text: String): T {
         onView(withHint(getTranslatedString(hint))).perform(replaceText(text))
         closeSoftKeyboard()
+        return this as T
+    }
+
+    fun assertAboveKeyboard(@IdRes container: Int): T {
+        waitFor {
+            onView(withId(container)).check { view, _ ->
+                val keyboard = ViewCompat.getRootWindowInsets(view)!!.getInsets(WindowInsetsCompat.Type.ime())
+                assertThat("Keyboard isn't shown", keyboard.bottom, greaterThan(0))
+
+                val contentBottom = IntArray(2).also { view.getLocationInWindow(it) }[1] + view.height - view.paddingBottom
+                assertThat(contentBottom, lessThanOrEqualTo(view.rootView.height - keyboard.bottom))
+            }
+        }
+
         return this as T
     }
 
