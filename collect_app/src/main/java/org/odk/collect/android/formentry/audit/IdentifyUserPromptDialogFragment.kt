@@ -12,6 +12,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.android.R
+import org.odk.collect.androidshared.ui.EdgeToEdge.applyBottomInsets
 import org.odk.collect.material.MaterialFullScreenDialogFragment
 
 class IdentifyUserPromptDialogFragment : MaterialFullScreenDialogFragment() {
@@ -35,6 +36,7 @@ class IdentifyUserPromptDialogFragment : MaterialFullScreenDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        view.applyBottomInsets()
 
         (requireDialog() as ComponentDialog).onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             dismiss()
