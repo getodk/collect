@@ -12,6 +12,10 @@ import org.odk.collect.androidshared.livedata.LiveDataExt.withLast
 import org.odk.collect.androidshared.ui.DisplayString
 import org.odk.collect.async.Cancellable
 import org.odk.collect.async.Scheduler
+import org.odk.collect.geo.geopoly.GeoPolyFragment.Companion.ACCURACY_THRESHOLD_OPTIONS
+import org.odk.collect.geo.geopoly.GeoPolyFragment.Companion.DEFAULT_ACCURACY_THRESHOLD_INDEX
+import org.odk.collect.geo.geopoly.GeoPolyFragment.Companion.DEFAULT_INTERVAL_INDEX
+import org.odk.collect.geo.geopoly.GeoPolyFragment.Companion.INTERVAL_OPTIONS
 import org.odk.collect.geo.geopoly.GeoPolyFragment.OutputMode
 import org.odk.collect.location.tracker.LocationTracker
 import org.odk.collect.maps.MapPoint
@@ -35,6 +39,16 @@ class GeoPolyViewModel(
     var recordingMode: RecordingMode = metaSettings.getString(MetaKeys.LAST_USED_GEOPOLY_RECORDING_MODE)
         ?.let { saved -> RecordingMode.entries.find { it.name == saved } }
         ?: RecordingMode.PLACEMENT
+        private set
+
+    var intervalIndex: Int = getLastUsedIndex(
+        MetaKeys.LAST_USED_GEOPOLY_INTERVAL, INTERVAL_OPTIONS, DEFAULT_INTERVAL_INDEX
+    )
+        private set
+
+    var accuracyThresholdIndex: Int = getLastUsedIndex(
+        MetaKeys.LAST_USED_GEOPOLY_ACCURACY_THRESHOLD, ACCURACY_THRESHOLD_OPTIONS, DEFAULT_ACCURACY_THRESHOLD_INDEX
+    )
         private set
 
     private val _inputActive = MutableStateFlow(false)
@@ -122,6 +136,16 @@ class GeoPolyViewModel(
         metaSettings.save(MetaKeys.LAST_USED_GEOPOLY_RECORDING_MODE, mode.name)
     }
 
+    fun setIntervalIndex(intervalIndex: Int) {
+        this.intervalIndex = intervalIndex
+        metaSettings.save(MetaKeys.LAST_USED_GEOPOLY_INTERVAL, INTERVAL_OPTIONS[intervalIndex])
+    }
+
+    fun setAccuracyThresholdIndex(accuracyThresholdIndex: Int) {
+        this.accuracyThresholdIndex = accuracyThresholdIndex
+        metaSettings.save(MetaKeys.LAST_USED_GEOPOLY_ACCURACY_THRESHOLD, ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex])
+    }
+
     fun enableInput() {
         _inputActive.value = true
     }
@@ -133,6 +157,15 @@ class GeoPolyViewModel(
     public override fun onCleared() {
         stopRecording()
         locationTracker.stop()
+    }
+
+    private fun getLastUsedIndex(key: String, options: IntArray, defaultIndex: Int): Int {
+        if (!metaSettings.contains(key)) {
+            return defaultIndex
+        }
+
+        val index = options.indexOf(metaSettings.getInt(key))
+        return if (index != -1) index else defaultIndex
     }
 
     data class GeoPoly(val points: List<MapPoint>, val isValid: Boolean)
