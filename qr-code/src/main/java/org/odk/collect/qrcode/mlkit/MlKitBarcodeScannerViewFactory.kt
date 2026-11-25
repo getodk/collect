@@ -11,8 +11,10 @@ import androidx.camera.core.ImageAnalysis.COORDINATE_SYSTEM_VIEW_REFERENCED
 import androidx.camera.core.TorchState
 import androidx.camera.mlkit.vision.MlKitAnalyzer
 import androidx.camera.view.LifecycleCameraController
+import androidx.camera.view.PreviewView
 import androidx.compose.runtime.mutableStateOf
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.gms.common.moduleinstall.ModuleInstall
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
@@ -83,13 +85,28 @@ private class MlKitBarcodeScannerView(
     private val cameraController = LifecycleCameraController(context)
     private val viewFinderRect = Rect()
 
+    /**
+     * Works around a CameraX memory leak (https://issuetracker.google.com/issues/590216043).
+     * CameraX keeps the last camera session in memory after unbinding, and that session
+     * references the [PreviewView]. To stop it from keeping the Activity alive, the [PreviewView]
+     * uses the application context and is removed from its parent when the scanner is destroyed.
+     */
+    private val previewView = PreviewView(context.applicationContext)
+
     private val detectedState = mutableStateOf<DetectedState>(DetectedState.None)
     private val fullScreenViewFinderState = mutableStateOf(false)
 
     init {
+        binding.previewContainer.addView(previewView)
         binding.composeView.setContextThemedContent {
             ScannerOverlay(detectedState.value, fullScreenViewFinderState.value)
         }
+
+        lifecycleOwner.lifecycle.addObserver(object : DefaultLifecycleObserver {
+            override fun onDestroy(owner: LifecycleOwner) {
+                binding.previewContainer.removeView(previewView)
+            }
+        })
     }
 
     override fun onLayout(
@@ -109,7 +126,7 @@ private class MlKitBarcodeScannerView(
         }
 
         cameraController.bindToLifecycle(lifecycleOwner)
-        binding.preview.setController(cameraController)
+        previewView.controller = cameraController
 
         val format = if (qrOnly) {
             Barcode.FORMAT_QR_CODE
@@ -137,6 +154,8 @@ private class MlKitBarcodeScannerView(
                     detectedState.value = it
 
                     if (it is DetectedState.Full) {
+                        // Clear the analyzer before unbinding so CameraX doesn't keep a reference to it
+                        cameraController.clearImageAnalysisAnalyzer()
                         cameraController.unbind()
                         callback(it.contents)
                     }
