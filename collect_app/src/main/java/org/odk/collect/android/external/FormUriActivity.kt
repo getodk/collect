@@ -15,6 +15,8 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
+import org.odk.collect.android.activities.ActivityUtils
+import org.odk.collect.android.activities.CrashHandlerActivity
 import org.odk.collect.android.activities.FormFillingActivity
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.analytics.AnalyticsUtils
@@ -31,6 +33,8 @@ import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.utilities.SavepointsRepositoryProvider
 import org.odk.collect.androidshared.ui.EdgeToEdge.setView
 import org.odk.collect.async.Scheduler
+import org.odk.collect.crashhandler.CrashHandler
+import org.odk.collect.crashhandler.hasCrashed
 import org.odk.collect.forms.savepoints.Savepoint
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
@@ -102,6 +106,14 @@ class FormUriActivity : LocalizedActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        CrashHandler.getInstance(this)?.also {
+            if (it.hasCrashed(this)) {
+                super.onCreate(null)
+                ActivityUtils.startActivityAndCloseAllOthers(this, CrashHandlerActivity::class.java)
+                return
+            }
+        }
+
         super.onCreate(savedInstanceState)
         DaggerUtils.getComponent(this).inject(this)
         setView(R.layout.circular_progress_indicator, false)

@@ -26,6 +26,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import org.odk.collect.android.activities.ActivityUtils;
+import org.odk.collect.android.activities.CrashHandlerActivity;
 import org.odk.collect.android.activities.FormFillingActivity;
 import org.odk.collect.android.fragments.dialogs.SimpleDialog;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -39,6 +41,7 @@ import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.views.DayNightProgressDialog;
 import org.odk.collect.async.DefaultDispatcherProvider;
+import org.odk.collect.crashhandler.CrashHandler;
 import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.openrosa.http.OpenRosaConstants;
 import org.odk.collect.settings.SettingsProvider;
@@ -92,6 +95,13 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        CrashHandler crashHandler = CrashHandler.getInstance(this);
+        if (crashHandler != null && crashHandler.getCrash(this) != null) {
+            super.onCreate(null);
+            ActivityUtils.startActivityAndCloseAllOthers(this, CrashHandlerActivity.class);
+            return;
+        }
+
         super.onCreate(savedInstanceState);
         DaggerUtils.getComponent(this).inject(this);
         instancesRepository = instancesRepositoryProvider.create();

@@ -54,6 +54,7 @@ import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 import org.odk.collect.async.Scheduler;
+import org.odk.collect.crashhandler.CrashHandler;
 import org.odk.collect.db.sqlite.DatabaseConnection;
 import org.odk.collect.lists.EmptyListView;
 import org.odk.collect.material.MaterialProgressDialogFragment;
@@ -106,6 +107,13 @@ public class InstanceChooserList extends AppListActivity implements InstanceList
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        CrashHandler crashHandler = CrashHandler.getInstance(this);
+        if (crashHandler != null && crashHandler.getCrash(this) != null) {
+            super.onCreate(null);
+            ActivityUtils.startActivityAndCloseAllOthers(this, CrashHandlerActivity.class);
+            return;
+        }
+
         super.onCreate(savedInstanceState);
         setView(this, R.layout.form_chooser_list, false);
         DaggerUtils.getComponent(this).inject(this);

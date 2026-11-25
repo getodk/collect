@@ -38,6 +38,7 @@ import org.odk.collect.android.formlists.sorting.FormListSortingBottomSheetDialo
 import org.odk.collect.android.formlists.sorting.FormListSortingOption;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.androidshared.ui.ObviousProgressBar;
+import org.odk.collect.crashhandler.CrashHandler;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.strings.localization.LocalizedActivity;
@@ -75,6 +76,13 @@ public abstract class AppListActivity extends LocalizedActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        CrashHandler crashHandler = CrashHandler.getInstance(this);
+        if (crashHandler != null && crashHandler.getCrash(this) != null) {
+            super.onCreate(null);
+            ActivityUtils.startActivityAndCloseAllOthers(this, CrashHandlerActivity.class);
+            return;
+        }
+
         super.onCreate(savedInstanceState);
         DaggerUtils.getComponent(this).inject(this);
     }
