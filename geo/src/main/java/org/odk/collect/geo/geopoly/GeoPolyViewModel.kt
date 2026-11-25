@@ -167,11 +167,13 @@ class GeoPolyViewModel(
     data class GeoPoly(val points: List<MapPoint>, val isValid: Boolean)
 
     companion object {
+        @JvmField
         val INTERVAL_OPTIONS = intArrayOf(
             1, 5, 10, 20, 30, 60, 300, 600, 1200, 1800
         )
         const val DEFAULT_INTERVAL_INDEX = 3 // default is 20 seconds
 
+        @JvmField
         val ACCURACY_THRESHOLD_OPTIONS = intArrayOf(
             0, 3, 5, 10, 15, 20
         )
