@@ -221,6 +221,22 @@ class GeoPolyFragmentTest {
     }
 
     @Test
+    fun beforeStartingInput_accuracyIsNotCheckedAgainstLastSavedThreshold() {
+        settingsProvider.getMetaSettings().apply {
+            save(MetaKeys.LAST_USED_GEOPOLY_RECORDING_MODE, "AUTOMATIC")
+            save(MetaKeys.LAST_USED_GEOPOLY_ACCURACY_THRESHOLD, 3)
+        }
+
+        launcherRule.launchInContainer {
+            GeoPolyFragment({ OnBackPressedDispatcher() })
+        }
+
+        val improving = LocationAccuracy.Improving(8.0f)
+        locationTracker.currentLocation = Location(1.0, 1.0, accuracy = improving.value)
+        onView(isAssignableFrom(AccuracyStatusView::class.java)).check(matches(hasAccuracy(improving)))
+    }
+
+    @Test
     fun recordingPointsAutomatically_doesNotRecordFasterThanInterval() {
         launcherRule.launchInContainer {
             GeoPolyFragment({ OnBackPressedDispatcher() })

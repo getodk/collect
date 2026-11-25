@@ -434,7 +434,9 @@ class GeoPolyFragment @JvmOverloads constructor(
         get() {
             val meters: Int =
                 ACCURACY_THRESHOLD_OPTIONS[viewModel.accuracyThresholdIndex]
-            return viewModel.recordingMode == GeoPolyViewModel.RecordingMode.AUTOMATIC && meters > 0
+            return viewModel.inputActive.value &&
+                viewModel.recordingMode == GeoPolyViewModel.RecordingMode.AUTOMATIC &&
+                meters > 0
         }
 
     private fun removeLastPoint() {
