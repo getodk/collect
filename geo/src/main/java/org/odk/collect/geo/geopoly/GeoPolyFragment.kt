@@ -107,6 +107,7 @@ class GeoPolyFragment @JvmOverloads constructor(
                     retainMockAccuracy,
                     locationTracker,
                     scheduler,
+                    settingsProvider.getMetaSettings(),
                     invalidMessage
                 )
             }

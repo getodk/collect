@@ -10,6 +10,7 @@ import org.mockito.Mockito.mock
 import org.odk.collect.androidshared.ui.DisplayString
 import org.odk.collect.androidtest.MainDispatcherRule
 import org.odk.collect.geo.support.FakeLocationTracker
+import org.odk.collect.shared.settings.InMemSettings
 import org.odk.collect.testshared.getOrAwaitValue
 
 class GeoPolyViewModelTest {
@@ -29,6 +30,7 @@ class GeoPolyViewModelTest {
             false,
             FakeLocationTracker(),
             mock(),
+            InMemSettings(),
             invalidMessage
         )
 
@@ -50,6 +52,7 @@ class GeoPolyViewModelTest {
             false,
             FakeLocationTracker(),
             mock(),
+            InMemSettings(),
             invalidMessage
         )
 
@@ -68,6 +71,7 @@ class GeoPolyViewModelTest {
             false,
             locationTracker,
             mock(),
+            InMemSettings(),
             MutableLiveData(null)
         )
 

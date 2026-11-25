@@ -15,6 +15,8 @@ import org.odk.collect.async.Scheduler
 import org.odk.collect.geo.geopoly.GeoPolyFragment.OutputMode
 import org.odk.collect.location.tracker.LocationTracker
 import org.odk.collect.maps.MapPoint
+import org.odk.collect.settings.keys.MetaKeys
+import org.odk.collect.shared.settings.Settings
 
 class GeoPolyViewModel(
     outputMode: OutputMode,
@@ -22,6 +24,7 @@ class GeoPolyViewModel(
     retainMockAccuracy: Boolean,
     private val locationTracker: LocationTracker,
     private val scheduler: Scheduler,
+    private val metaSettings: Settings,
     val invalidMessage: LiveData<DisplayString?>
 ) : ViewModel() {
 
@@ -29,7 +32,9 @@ class GeoPolyViewModel(
         PLACEMENT, MANUAL, AUTOMATIC
     }
 
-    var recordingMode: RecordingMode = RecordingMode.PLACEMENT
+    var recordingMode: RecordingMode = metaSettings.getString(MetaKeys.LAST_USED_GEOPOLY_RECORDING_MODE)
+        ?.let { saved -> RecordingMode.entries.find { it.name == saved } }
+        ?: RecordingMode.PLACEMENT
         private set
 
     private val _inputActive = MutableStateFlow(false)
@@ -114,6 +119,7 @@ class GeoPolyViewModel(
 
     fun setRecordingMode(mode: RecordingMode) {
         recordingMode = mode
+        metaSettings.save(MetaKeys.LAST_USED_GEOPOLY_RECORDING_MODE, mode.name)
     }
 
     fun enableInput() {

@@ -13,4 +13,5 @@ object MetaKeys {
     const val LAST_USED_PEN_COLOR = "last_used_pen_color"
     const val PERMISSIONS_REQUESTED = "permissions_requested"
     const val LAST_KNOWN_ZOOM_LEVEL = "last_known_zoom_level"
+    const val LAST_USED_GEOPOLY_RECORDING_MODE = "last_used_geopoly_recording_mode"
 }
