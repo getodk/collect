@@ -39,7 +39,6 @@ import org.odk.collect.geo.R
 import org.odk.collect.geo.geopoint.AccuracyStatusView
 import org.odk.collect.geo.geopoint.LocationAccuracy
 import org.odk.collect.geo.geopoly.GeoPolyFragment.OutputMode
-import org.odk.collect.geo.geopoly.GeoPolyViewModel.Companion.INTERVAL_OPTIONS
 import org.odk.collect.geo.support.AccuracyStatusViewMatcher.Companion.hasAccuracy
 import org.odk.collect.geo.support.FakeLocationTracker
 import org.odk.collect.geo.support.FakeMapFragment
@@ -1241,5 +1240,4 @@ class GeoPolyFragmentTest {
     }
 }
 
-private val DEFAULT_RECORDING_INTERVAL =
-    INTERVAL_OPTIONS[GeoPolyViewModel.DEFAULT_INTERVAL_INDEX].toLong() * 1000
+private const val DEFAULT_RECORDING_INTERVAL = 20_000L

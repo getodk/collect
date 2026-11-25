@@ -171,7 +171,7 @@ class GeoPolyViewModel(
         val INTERVAL_OPTIONS = intArrayOf(
             1, 5, 10, 20, 30, 60, 300, 600, 1200, 1800
         )
-        const val DEFAULT_INTERVAL_INDEX = 3 // default is 20 seconds
+        private const val DEFAULT_INTERVAL_INDEX = 3 // default is 20 seconds
 
         @JvmField
         val ACCURACY_THRESHOLD_OPTIONS = intArrayOf(
