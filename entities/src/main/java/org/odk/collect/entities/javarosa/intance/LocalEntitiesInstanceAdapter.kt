@@ -6,14 +6,25 @@ import org.odk.collect.entities.javarosa.parse.EntitySchema
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
 import org.odk.collect.entities.storage.getListNames
+import org.odk.collect.forms.FormMediaFileRepository
 import org.odk.collect.shared.Query
 
-class LocalEntitiesInstanceAdapter(private val entitiesRepository: EntitiesRepository) {
+class LocalEntitiesInstanceAdapter(
+    private val entitiesRepository: EntitiesRepository,
+    private val mediaFileRepository: FormMediaFileRepository
+) {
 
     private val lists = entitiesRepository.getListNames()
 
+    /**
+     * Entity lists are stored in the database, not as files on disk (their seed CSV is deleted
+     * after import). So if the form has a CSV, XML or GeoJSON media file with the same name as an
+     * entity list, it must be a plain attachment, which should be used instead of the entity list.
+     */
     fun supportsInstance(instanceId: String): Boolean {
-        return lists.contains(instanceId)
+        return lists.contains(instanceId) && listOf("csv", "xml", "geojson").none {
+            mediaFileRepository.hasFileWithName("$instanceId.$it")
+        }
     }
 
     fun getAll(instanceId: String, partial: Boolean): List<TreeElement> {

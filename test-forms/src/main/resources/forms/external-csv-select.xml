@@ -21,7 +21,7 @@
 	<h:body>
 		<select1 ref="/data/person">
 			<label>Select person</label>
-			<itemset nodeset="instance('people')/root/item">
+			<itemset nodeset="instance('people')/root/item[label = 'Roman Roy']">
 				<value ref="name"/>
 				<label ref="label"/>
 			</itemset>

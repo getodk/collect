@@ -7,6 +7,7 @@ import org.javarosa.core.model.condition.EvaluationContext
 import org.javarosa.core.model.condition.FilterStrategy
 import org.javarosa.core.model.instance.DataInstance
 import org.javarosa.core.model.instance.TreeReference
+import org.javarosa.core.reference.ReferenceManager
 import org.javarosa.form.api.FormEntryController
 import org.javarosa.form.api.FormEntryModel
 import org.javarosa.xpath.expr.XPathExpression
@@ -14,6 +15,7 @@ import org.odk.collect.android.application.Collect
 import org.odk.collect.android.dynamicpreload.ExternalDataManagerImpl
 import org.odk.collect.android.dynamicpreload.handler.ExternalDataHandlerPull
 import org.odk.collect.android.formmanagement.finalization.EditedFormFinalizationProcessor
+import org.odk.collect.android.javarosawrapper.ReferenceManagerMediaFileRepository
 import org.odk.collect.android.preferences.SettingsExt.getExperimentalOptIn
 import org.odk.collect.android.tasks.FormLoaderTask.FormEntryControllerFactory
 import org.odk.collect.androidshared.ui.ToastUtils
@@ -39,11 +41,14 @@ class CollectFormEntryControllerFactory(
             Collect.getInstance().externalDataManager = it
         }
 
+        val mediaFileRepository = ReferenceManagerMediaFileRepository(ReferenceManager.instance())
+
         return FormEntryController(FormEntryModel(formDef)).also {
             val externalDataHandlerPull = ExternalDataHandlerPull(externalDataManager)
             it.addFunctionHandler(
                 PullDataFunctionHandler(
                     entitiesRepository,
+                    mediaFileRepository,
                     externalDataHandlerPull
                 )
             )
@@ -57,7 +62,12 @@ class CollectFormEntryControllerFactory(
                 it.addFilterStrategy(LoggingFilterStrategy())
             }
 
-            it.addFilterStrategy(LocalEntitiesFilterStrategy(entitiesRepository))
+            it.addFilterStrategy(
+                LocalEntitiesFilterStrategy(
+                    entitiesRepository,
+                    mediaFileRepository
+                )
+            )
         }
     }
 }
