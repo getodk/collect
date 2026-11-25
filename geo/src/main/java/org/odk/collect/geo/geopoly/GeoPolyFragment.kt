@@ -48,6 +48,7 @@ import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.maps.traces.LineDescription
 import org.odk.collect.maps.traces.PolygonDescription
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.keys.MetaKeys
 import org.odk.collect.strings.R.string
 import org.odk.collect.webpage.WebPageService
 import javax.inject.Inject
@@ -157,7 +158,24 @@ class GeoPolyFragment @JvmOverloads constructor(
             accuracyThresholdIndex = savedInstanceState.getInt(
                 ACCURACY_THRESHOLD_INDEX_KEY, DEFAULT_ACCURACY_THRESHOLD_INDEX
             )
+        } else {
+            intervalIndex = getLastUsedIndex(
+                MetaKeys.LAST_USED_GEOPOLY_INTERVAL, INTERVAL_OPTIONS, DEFAULT_INTERVAL_INDEX
+            )
+            accuracyThresholdIndex = getLastUsedIndex(
+                MetaKeys.LAST_USED_GEOPOLY_ACCURACY_THRESHOLD, ACCURACY_THRESHOLD_OPTIONS, DEFAULT_ACCURACY_THRESHOLD_INDEX
+            )
         }
+    }
+
+    private fun getLastUsedIndex(key: String, options: IntArray, defaultIndex: Int): Int {
+        val metaSettings = settingsProvider.getMetaSettings()
+        if (!metaSettings.contains(key)) {
+            return defaultIndex
+        }
+
+        val index = options.indexOf(metaSettings.getInt(key))
+        return if (index != -1) index else defaultIndex
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -428,10 +446,15 @@ class GeoPolyFragment @JvmOverloads constructor(
 
     override fun setIntervalIndex(intervalIndex: Int) {
         this.intervalIndex = intervalIndex
+        settingsProvider.getMetaSettings().save(MetaKeys.LAST_USED_GEOPOLY_INTERVAL, INTERVAL_OPTIONS[intervalIndex])
     }
 
     override fun setAccuracyThresholdIndex(accuracyThresholdIndex: Int) {
         this.accuracyThresholdIndex = accuracyThresholdIndex
+        settingsProvider.getMetaSettings().save(
+            MetaKeys.LAST_USED_GEOPOLY_ACCURACY_THRESHOLD,
+            ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex]
+        )
     }
 
     private fun cancel() {
