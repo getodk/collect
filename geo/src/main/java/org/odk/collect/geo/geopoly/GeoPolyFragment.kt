@@ -34,6 +34,8 @@ import org.odk.collect.geo.databinding.GeopolyLayoutBinding
 import org.odk.collect.geo.geopoint.LocationAccuracy.Improving
 import org.odk.collect.geo.geopoint.LocationAccuracy.Unacceptable
 import org.odk.collect.geo.geopoly.GeoPolySettingsDialogFragment.SettingsDialogCallback
+import org.odk.collect.geo.geopoly.GeoPolyViewModel.Companion.ACCURACY_THRESHOLD_OPTIONS
+import org.odk.collect.geo.geopoly.GeoPolyViewModel.Companion.INTERVAL_OPTIONS
 import org.odk.collect.geo.items.MappableData
 import org.odk.collect.geo.items.MappableItemsDelegate
 import org.odk.collect.location.Location
@@ -554,14 +556,5 @@ class GeoPolyFragment @JvmOverloads constructor(
         const val REQUEST_GEOPOLY: String = "geopoly"
         const val RESULT_GEOPOLY: String = "geopoly"
         const val RESULT_GEOPOLY_CHANGE: String = "geopoly_change"
-        val INTERVAL_OPTIONS = intArrayOf(
-            1, 5, 10, 20, 30, 60, 300, 600, 1200, 1800
-        )
-        const val DEFAULT_INTERVAL_INDEX = 3 // default is 20 seconds
-
-        val ACCURACY_THRESHOLD_OPTIONS = intArrayOf(
-            0, 3, 5, 10, 15, 20
-        )
-        const val DEFAULT_ACCURACY_THRESHOLD_INDEX = 3 // default is 10 meters
     }
 }

@@ -12,10 +12,6 @@ import org.odk.collect.androidshared.livedata.LiveDataExt.withLast
 import org.odk.collect.androidshared.ui.DisplayString
 import org.odk.collect.async.Cancellable
 import org.odk.collect.async.Scheduler
-import org.odk.collect.geo.geopoly.GeoPolyFragment.Companion.ACCURACY_THRESHOLD_OPTIONS
-import org.odk.collect.geo.geopoly.GeoPolyFragment.Companion.DEFAULT_ACCURACY_THRESHOLD_INDEX
-import org.odk.collect.geo.geopoly.GeoPolyFragment.Companion.DEFAULT_INTERVAL_INDEX
-import org.odk.collect.geo.geopoly.GeoPolyFragment.Companion.INTERVAL_OPTIONS
 import org.odk.collect.geo.geopoly.GeoPolyFragment.OutputMode
 import org.odk.collect.location.tracker.LocationTracker
 import org.odk.collect.maps.MapPoint
@@ -169,4 +165,16 @@ class GeoPolyViewModel(
     }
 
     data class GeoPoly(val points: List<MapPoint>, val isValid: Boolean)
+
+    companion object {
+        val INTERVAL_OPTIONS = intArrayOf(
+            1, 5, 10, 20, 30, 60, 300, 600, 1200, 1800
+        )
+        const val DEFAULT_INTERVAL_INDEX = 3 // default is 20 seconds
+
+        val ACCURACY_THRESHOLD_OPTIONS = intArrayOf(
+            0, 3, 5, 10, 15, 20
+        )
+        private const val DEFAULT_ACCURACY_THRESHOLD_INDEX = 3 // default is 10 meters
+    }
 }

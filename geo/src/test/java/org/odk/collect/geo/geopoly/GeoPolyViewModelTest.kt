@@ -9,8 +9,8 @@ import org.junit.Test
 import org.mockito.Mockito.mock
 import org.odk.collect.androidshared.ui.DisplayString
 import org.odk.collect.androidtest.MainDispatcherRule
-import org.odk.collect.geo.geopoly.GeoPolyFragment.Companion.ACCURACY_THRESHOLD_OPTIONS
-import org.odk.collect.geo.geopoly.GeoPolyFragment.Companion.INTERVAL_OPTIONS
+import org.odk.collect.geo.geopoly.GeoPolyViewModel.Companion.ACCURACY_THRESHOLD_OPTIONS
+import org.odk.collect.geo.geopoly.GeoPolyViewModel.Companion.INTERVAL_OPTIONS
 import org.odk.collect.geo.support.FakeLocationTracker
 import org.odk.collect.settings.keys.MetaKeys
 import org.odk.collect.shared.settings.InMemSettings
