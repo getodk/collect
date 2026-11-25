@@ -10,6 +10,7 @@ import org.mockito.Mockito.mock
 import org.odk.collect.androidshared.ui.DisplayString
 import org.odk.collect.androidtest.MainDispatcherRule
 import org.odk.collect.geo.support.FakeLocationTracker
+import org.odk.collect.settings.keys.MetaKeys
 import org.odk.collect.shared.settings.InMemSettings
 import org.odk.collect.testshared.getOrAwaitValue
 
@@ -79,5 +80,43 @@ class GeoPolyViewModelTest {
 
         viewModel.onCleared()
         assertThat(locationTracker.isStarted, equalTo(false))
+    }
+
+    @Test
+    fun `#recordingMode is PLACEMENT when nothing is saved`() {
+        val viewModel = createViewModel(InMemSettings())
+        assertThat(viewModel.recordingMode, equalTo(GeoPolyViewModel.RecordingMode.PLACEMENT))
+    }
+
+    @Test
+    fun `#recordingMode is the last saved recording mode`() {
+        val metaSettings = InMemSettings().apply {
+            save(MetaKeys.LAST_USED_GEOPOLY_RECORDING_MODE, GeoPolyViewModel.RecordingMode.AUTOMATIC.name)
+        }
+
+        val viewModel = createViewModel(metaSettings)
+        assertThat(viewModel.recordingMode, equalTo(GeoPolyViewModel.RecordingMode.AUTOMATIC))
+    }
+
+    @Test
+    fun `#recordingMode is PLACEMENT when the saved recording mode is unknown`() {
+        val metaSettings = InMemSettings().apply {
+            save(MetaKeys.LAST_USED_GEOPOLY_RECORDING_MODE, "UNKNOWN")
+        }
+
+        val viewModel = createViewModel(metaSettings)
+        assertThat(viewModel.recordingMode, equalTo(GeoPolyViewModel.RecordingMode.PLACEMENT))
+    }
+
+    private fun createViewModel(metaSettings: InMemSettings): GeoPolyViewModel {
+        return GeoPolyViewModel(
+            GeoPolyFragment.OutputMode.GEOTRACE,
+            emptyList(),
+            false,
+            FakeLocationTracker(),
+            mock(),
+            metaSettings,
+            MutableLiveData(null)
+        )
     }
 }
