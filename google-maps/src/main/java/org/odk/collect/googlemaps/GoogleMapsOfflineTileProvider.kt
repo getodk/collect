@@ -28,10 +28,6 @@ class GoogleMapsOfflineTileProvider(private val mbtiles: MbtilesFile) : TileProv
         mbtiles.close()
     }
 
-    /**
-     * Google Maps doesn't scale up tiles beyond the layer's max zoom like MapLibre does, so
-     * build them by scaling up the matching part of the parent tile at the max zoom.
-     */
     private fun getOverzoomedTile(x: Int, y: Int, z: Int): Tile {
         val tilesPerSide = 2.0.pow(z - maximumZoom).toInt()
         val parentData = mbtiles.getTileBlob(maximumZoom, x / tilesPerSide, y / tilesPerSide)

@@ -50,11 +50,9 @@ class MbtilesFile private constructor(
     @Throws(MbtilesException::class)
     fun getMetadata(key: String): String = queryMetadata(db, key)
 
-    /** Returns the "minzoom" metadata value, or null if it is missing or invalid. */
     val minZoom: Int?
         get() = getZoomMetadata("minzoom")
 
-    /** Returns the "maxzoom" metadata value, or null if it is missing or invalid. */
     val maxZoom: Int?
         get() = getZoomMetadata("maxzoom")
 
