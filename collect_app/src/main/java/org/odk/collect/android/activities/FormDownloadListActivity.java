@@ -14,8 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import static org.odk.collect.androidshared.ui.EdgeToEdge.setView;
-
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -28,14 +26,11 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProvider;
-
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.FormDownloadListViewModel;
 import org.odk.collect.android.adapters.FormDownloadListAdapter;
@@ -57,13 +52,14 @@ import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.views.DayNightProgressDialog;
-import org.odk.collect.crashhandler.CrashHandler;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.async.network.NetworkStateProvider;
 import org.odk.collect.forms.FormSourceException;
 import org.odk.collect.openrosa.http.HttpCredentialsInterface;
+import timber.log.Timber;
 
+import javax.inject.Inject;
 import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
@@ -73,9 +69,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.inject.Inject;
-
-import timber.log.Timber;
+import static org.odk.collect.androidshared.ui.EdgeToEdge.setView;
 
 /**
  * Responsible for displaying, adding and deleting all the valid forms in the forms directory. One
@@ -135,10 +129,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
     @SuppressWarnings("unchecked")
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        CrashHandler crashHandler = CrashHandler.getInstance(this);
-        if (crashHandler != null && crashHandler.getCrash(this) != null) {
-            super.onCreate(null);
-            ActivityUtils.startActivityAndCloseAllOthers(this, CrashHandlerActivity.class);
+        if (detectCrash()) {
             return;
         }
 
