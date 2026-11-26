@@ -29,12 +29,18 @@ class GoogleMapsOfflineTileProvider(private val mbtiles: MbtilesFile) : TileProv
     }
 
     private fun getOverzoomedTile(x: Int, y: Int, z: Int): Tile {
+        // Each zoom level splits a tile into 2x2 smaller ones, so a tile at max zoom (the parent)
+        // is split into tilesPerSide x tilesPerSide tiles at zoom z (e.g. 4x4 two levels deeper).
+        // x / tilesPerSide and y / tilesPerSide give the parent.
         val tilesPerSide = 2.0.pow(z - maximumZoom).toInt()
         val parentData = mbtiles.getTileBlob(maximumZoom, x / tilesPerSide, y / tilesPerSide)
             ?: return TileProvider.NO_TILE
         val parent = BitmapFactory.decodeByteArray(parentData, 0, parentData.size)
             ?: return TileProvider.NO_TILE
 
+        // x % tilesPerSide and y % tilesPerSide give the position of this tile inside the parent.
+        // Stretch the parent to tilesPerSide times its size and shift it left and up by that many
+        // tiles so that only this tile's part lands on the bitmap.
         val child = createBitmap(parent.width, parent.height).applyCanvas {
             val left = -(x % tilesPerSide) * parent.width.toFloat()
             val top = -(y % tilesPerSide) * parent.height.toFloat()
