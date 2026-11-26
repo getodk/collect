@@ -497,8 +497,8 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
         if (referenceOverlay != null) {
             referenceOverlay.remove();
             referenceOverlay = null;
+            closeReferenceTileProvider();
         }
-        closeReferenceTileProvider();
         if (referenceLayerFile != null) {
             try {
                 referenceTileProvider = new GoogleMapsOfflineTileProvider(new MbtilesFile(referenceLayerFile));
