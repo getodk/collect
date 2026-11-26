@@ -34,7 +34,7 @@ class GeoPolyViewModel(
     var inputActive: StateFlow<Boolean> = _inputActive
         private set
 
-    val originalPoints = points
+    private val originalPoints = points
     private val _points = MutableStateFlow(points)
     val points: StateFlow<List<MapPoint>> = _points
 
