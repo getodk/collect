@@ -139,17 +139,12 @@ class GeoPolyFragment @JvmOverloads constructor(
                 )
             }
             .forClass(GeoPolySettingsDialogFragment::class.java) {
-                GeoPolySettingsDialogFragment(
-                    this
-                )
+                GeoPolySettingsDialogFragment(this)
             }
             .build()
 
         requireLocationPermissions(requireActivity())
-
-        viewModel.geoPoly.map { it.points }.observe(this) {
-            setChangeResult(it)
-        }
+        viewModel.points.asLiveData().observe(this) { setChangeResult(it) }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
