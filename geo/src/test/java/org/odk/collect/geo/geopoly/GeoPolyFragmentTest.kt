@@ -8,10 +8,17 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.RootMatchers.isDialog
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.*
+import org.hamcrest.Matchers.equalTo
+import org.hamcrest.Matchers.not
+import org.hamcrest.Matchers.notNullValue
+import org.hamcrest.Matchers.nullValue
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -32,11 +39,15 @@ import org.odk.collect.geo.geopoint.AccuracyStatusView
 import org.odk.collect.geo.geopoint.LocationAccuracy
 import org.odk.collect.geo.geopoly.GeoPolyFragment.Companion.INTERVAL_OPTIONS
 import org.odk.collect.geo.geopoly.GeoPolyFragment.OutputMode
-import org.odk.collect.geo.support.*
 import org.odk.collect.geo.support.AccuracyStatusViewMatcher.Companion.hasAccuracy
+import org.odk.collect.geo.support.FakeLocationTracker
+import org.odk.collect.geo.support.FakeMapFragment
+import org.odk.collect.geo.support.FakeMappableData
 import org.odk.collect.geo.support.MapFragmentAssertions.hasZoomedToCurrentLocation
 import org.odk.collect.geo.support.MapFragmentAssertions.showsCurrentLocation
 import org.odk.collect.geo.support.MapFragmentAssertions.showsMappableData
+import org.odk.collect.geo.support.MappableItemsFixtures
+import org.odk.collect.geo.support.RobolectricApplication
 import org.odk.collect.location.Location
 import org.odk.collect.location.tracker.LocationTracker
 import org.odk.collect.maps.MapConsts
@@ -152,6 +163,32 @@ class GeoPolyFragmentTest {
         startInput(R.id.placement_mode)
         map.click(MapPoint(1.0, 1.0))
         assertVisible(withText(application.getString(string.collection_status_placement, 1)))
+    }
+
+    @Test
+    fun `placing point updates polygon in GEOSHAPE output mode`() {
+        launcherRule.launchInContainer {
+            GeoPolyFragment({ OnBackPressedDispatcher() }, outputMode = OutputMode.GEOSHAPE)
+        }
+
+        startInput(R.id.placement_mode)
+        map.click(MapPoint(1.0, 1.0))
+        assertThat(
+            map.getPolygons()[0].points,
+            equalTo(listOf(MapPoint(1.0, 1.0)))
+        )
+
+        map.click(MapPoint(2.0, 2.0))
+        assertThat(
+            map.getPolygons()[0].points,
+            equalTo(listOf(MapPoint(1.0, 1.0), MapPoint(2.0, 2.0)))
+        )
+
+        map.click(MapPoint(0.0, 0.0))
+        assertThat(
+            map.getPolygons()[0].points,
+            equalTo(listOf(MapPoint(1.0, 1.0), MapPoint(2.0, 2.0), MapPoint(0.0, 0.0)))
+        )
     }
 
     @Test

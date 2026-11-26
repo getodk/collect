@@ -102,8 +102,14 @@ class GeoPolyFragment @JvmOverloads constructor(
     private val viewModel: GeoPolyViewModel by viewModels {
         viewModelFactory {
             addInitializer(GeoPolyViewModel::class) {
+                val polyPoints = if (outputMode == OutputMode.GEOSHAPE) {
+                    if (inputPolygon.isNotEmpty()) inputPolygon.subList(0, inputPolygon.size - 1) else inputPolygon
+                } else {
+                    inputPolygon
+                }
+
                 GeoPolyViewModel(
-                    inputPolygon,
+                    polyPoints,
                     retainMockAccuracy,
                     locationTracker,
                     scheduler,
@@ -301,7 +307,7 @@ class GeoPolyFragment @JvmOverloads constructor(
 
             if (outputMode == OutputMode.GEOSHAPE) {
                 val polygonDescription = PolygonDescription(
-                    if (points.isNotEmpty()) points.subList(0, points.size - 1) else points,
+                    points,
                     draggable = !readOnly,
                     strokeColor = color,
                     fillColor = color,
