@@ -8,17 +8,10 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.RootMatchers.isDialog
-import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.equalTo
-import org.hamcrest.Matchers.not
-import org.hamcrest.Matchers.notNullValue
-import org.hamcrest.Matchers.nullValue
+import org.hamcrest.Matchers.*
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -39,15 +32,11 @@ import org.odk.collect.geo.geopoint.AccuracyStatusView
 import org.odk.collect.geo.geopoint.LocationAccuracy
 import org.odk.collect.geo.geopoly.GeoPolyFragment.Companion.INTERVAL_OPTIONS
 import org.odk.collect.geo.geopoly.GeoPolyFragment.OutputMode
+import org.odk.collect.geo.support.*
 import org.odk.collect.geo.support.AccuracyStatusViewMatcher.Companion.hasAccuracy
-import org.odk.collect.geo.support.FakeLocationTracker
-import org.odk.collect.geo.support.FakeMapFragment
-import org.odk.collect.geo.support.FakeMappableData
 import org.odk.collect.geo.support.MapFragmentAssertions.hasZoomedToCurrentLocation
 import org.odk.collect.geo.support.MapFragmentAssertions.showsCurrentLocation
 import org.odk.collect.geo.support.MapFragmentAssertions.showsMappableData
-import org.odk.collect.geo.support.MappableItemsFixtures
-import org.odk.collect.geo.support.RobolectricApplication
 import org.odk.collect.location.Location
 import org.odk.collect.location.tracker.LocationTracker
 import org.odk.collect.maps.MapConsts
@@ -386,7 +375,7 @@ class GeoPolyFragmentTest {
 
         val result = resultListener.getAll().last()
         assertThat(result.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
-        assertThat(result.second.getString(GeoPolyFragment.RESULT_GEOPOLY), equalTo(null))
+        assertThat(result.second.isEmpty, equalTo(true))
     }
 
     @Test
