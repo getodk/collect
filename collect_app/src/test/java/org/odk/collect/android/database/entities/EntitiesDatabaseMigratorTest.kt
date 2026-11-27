@@ -18,7 +18,7 @@ class EntitiesDatabaseMigratorTest {
      * Version 1 was only available in beta and upgrading from 1 to 2 originally just cleared
      * all data. If there are any version 1s left in the wild, they will get a crash on launch.
      */
-    @Test(expected = IllegalStateException::class)
+    @Test(expected = UnsupportedEntitiesDatabaseVersionException::class)
     fun `#onUpdate from version 1`() {
         val db = SQLiteDatabase.create(null)
         val migrator = EntitiesDatabaseMigrator(DATABASE_VERSION)

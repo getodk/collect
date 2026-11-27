@@ -465,10 +465,13 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String, private val c
     }
 }
 
+class UnsupportedEntitiesDatabaseVersionException :
+    IllegalStateException("Cannot upgrade from this beta version. Please reinstall Collect!")
+
 class EntitiesDatabaseMigrator(databaseVersion: Int) : MigrationListDatabaseMigrator(
     databaseVersion,
     {
-        throw IllegalStateException("Cannot upgrade from this beta version. Please reinstall Collect!")
+        throw UnsupportedEntitiesDatabaseVersionException()
     },
     {
         it.addColumn(

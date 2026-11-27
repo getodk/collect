@@ -1,5 +1,6 @@
 package org.odk.collect.android.application.initialization
 
+import org.odk.collect.android.database.entities.UnsupportedEntitiesDatabaseVersionException
 import org.odk.collect.android.projects.ProjectDependencyModule
 import org.odk.collect.entities.storage.getListNames
 import org.odk.collect.projects.ProjectDependencyFactory
@@ -26,7 +27,7 @@ class EntityListFilesCleaner(
             val projectDependencyModule = projectDependencyModuleFactory.create(project.uuid)
             val lists = try {
                 projectDependencyModule.entitiesRepository.getListNames()
-            } catch (_: IllegalStateException) {
+            } catch (_: UnsupportedEntitiesDatabaseVersionException) {
                 return@forEach
             }
 
