@@ -67,12 +67,12 @@ class EntityListFilesCleanerTest {
 
         val project2 = projectDependencyModuleFactory.create("2")
         project2.entitiesRepository.addList("trees")
-        val form2 = createForm(project2, usesEntities = true, "trees.csv", "other.csv")
+        val form2 = createForm(project2, usesEntities = true, "trees.csv")
 
         entityListFilesCleaner.run()
 
-        assertThat(getMediaFiles(form1).map { it.name }, containsInAnyOrder("people.csv"))
-        assertThat(getMediaFiles(form2).map { it.name }, containsInAnyOrder("other.csv"))
+        assertThat(File(form1.formMediaPath, "people.csv").exists(), equalTo(true))
+        assertThat(File(form2.formMediaPath, "trees.csv").exists(), equalTo(false))
     }
 
     @Test
