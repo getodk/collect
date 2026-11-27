@@ -3,8 +3,6 @@ package org.odk.collect.android.backgroundwork
 import android.app.Application
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.hamcrest.CoreMatchers.`is`
-import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -12,7 +10,6 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.whenever
 import org.odk.collect.android.formmanagement.FormsDataService
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.injection.config.ProjectDependencyModuleFactory
@@ -75,25 +72,6 @@ class SyncFormsTaskSpecTest {
         val isStopped = { false }
         SyncFormsTaskSpec().getTask(ApplicationProvider.getApplicationContext(), inputData, false, isStopped).get()
         verify(formsDataService).matchFormsWithServer("projectId", false, isStopped)
-    }
-
-    @Test
-    fun `#getTask returns result from FormUpdater`() {
-        val inputData = HashMap<String, String>().also {
-            it[TaskData.DATA_PROJECT_ID] = "projectId"
-        }
-        whenever(formsDataService.matchFormsWithServer(eq("projectId"), any(), any())).thenReturn(true)
-        var result = SyncFormsTaskSpec().getTask(ApplicationProvider.getApplicationContext(), inputData, true) { false }.get()
-        assertThat(result, `is`(true))
-
-        whenever(formsDataService.matchFormsWithServer(eq("projectId"), any(), any())).thenReturn(false)
-        result = SyncFormsTaskSpec().getTask(ApplicationProvider.getApplicationContext(), inputData, false) { false }.get()
-        assertThat(result, `is`(false))
-    }
-
-    @Test
-    fun `maxRetries should be limited`() {
-        assertThat(SyncFormsTaskSpec().maxRetries, `is`(3))
     }
 
     @Test(expected = IllegalArgumentException::class)

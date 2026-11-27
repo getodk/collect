@@ -18,6 +18,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.analytics.Analytics
+import org.odk.collect.android.formmanagement.FormsDataService.DownloadFormListResult
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.injection.config.ProjectDependencyModuleFactory
 import org.odk.collect.android.notifications.Notifier
@@ -75,6 +76,7 @@ class FormsDataServiceTest {
             storagePathProvider,
             changeLockProvider,
             { formSource },
+            { mock() },
             { mock() },
             { mock() },
             { mock() },
@@ -262,6 +264,28 @@ class FormsDataServiceTest {
         formsDataService.matchFormsWithServer(project.uuid, false) { true }
         verify(notifier).onSyncStopped(project.uuid)
         verifyNoMoreInteractions(notifier)
+    }
+
+    @Test
+    fun `processFormList() notifies on success`() {
+        formsDataService.processFormList(project.uuid, DownloadFormListResult.SUCCESS)
+        verify(notifier).onSync(null, project.uuid)
+        verifyNoMoreInteractions(notifier)
+    }
+
+    @Test
+    fun `processFormList() updates project sync state`() {
+        val projectState = formsDataService.isSyncing(project.uuid)
+        val otherProjectState = formsDataService.isSyncing("other")
+
+        projectState.recordValues { projectValues ->
+            otherProjectState.recordValues { otherProjectValues ->
+                formsDataService.processFormList(project.uuid, DownloadFormListResult.SUCCESS)
+
+                assertThat(projectValues, equalTo(listOf(false, true, false)))
+                assertThat(otherProjectValues, equalTo(listOf(false)))
+            }
+        }
     }
 
     @Test
