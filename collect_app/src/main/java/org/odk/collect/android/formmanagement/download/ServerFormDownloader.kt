@@ -289,7 +289,8 @@ class ServerFormDownloader(
 }
 
 private fun getFormFileName(formName: String, formsDirPath: String): String {
-    val formattedFormName = FormNameUtils.formatFilenameFromFormName(formName)
+    // File names are limited to 255 bytes, so 200 leaves enough room for any suffixes added to the form name
+    val formattedFormName = FormNameUtils.formatFilenameFromFormName(formName, 200)
     var fileName = "$formattedFormName.xml"
     val existingForms = (File(formsDirPath).listFiles() ?: emptyArray()).map { it.name }
 
