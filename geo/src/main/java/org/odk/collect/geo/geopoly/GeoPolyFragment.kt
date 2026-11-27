@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.map
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -90,7 +91,7 @@ class GeoPolyFragment @JvmOverloads constructor(
     private val onBackPressedCallback: OnBackPressedCallback =
         object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (!readOnly && inputPolygon != viewModel.points.value) {
+                if (!readOnly && viewModel.hasBeenModified()) {
                     showBackDialog()
                 } else {
                     cancel()
@@ -101,9 +102,14 @@ class GeoPolyFragment @JvmOverloads constructor(
     private val viewModel: GeoPolyViewModel by viewModels {
         viewModelFactory {
             addInitializer(GeoPolyViewModel::class) {
+                val polyPoints = if (outputMode == OutputMode.GEOSHAPE) {
+                    if (inputPolygon.isNotEmpty()) inputPolygon.subList(0, inputPolygon.size - 1) else inputPolygon
+                } else {
+                    inputPolygon
+                }
+
                 GeoPolyViewModel(
-                    outputMode,
-                    inputPolygon,
+                    polyPoints,
                     retainMockAccuracy,
                     locationTracker,
                     scheduler,
@@ -133,17 +139,12 @@ class GeoPolyFragment @JvmOverloads constructor(
                 )
             }
             .forClass(GeoPolySettingsDialogFragment::class.java) {
-                GeoPolySettingsDialogFragment(
-                    this
-                )
+                GeoPolySettingsDialogFragment(this)
             }
             .build()
 
         requireLocationPermissions(requireActivity())
-
-        viewModel.points.asLiveData().observe(this) {
-            setChangeResult(it)
-        }
+        viewModel.points.asLiveData().observe(this) { setChangeResult(it) }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
