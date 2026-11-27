@@ -27,10 +27,14 @@ import androidx.core.graphics.drawable.IconCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
+import org.odk.collect.android.activities.ActivityUtils
+import org.odk.collect.android.activities.CrashHandlerActivity
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.formlists.blankformlist.BlankFormListItem
 import org.odk.collect.android.formlists.blankformlist.BlankFormListViewModel
 import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.crashhandler.CrashHandler
+import org.odk.collect.crashhandler.hasCrashed
 import org.odk.collect.settings.SettingsProvider
 import java.util.UUID
 import javax.inject.Inject
@@ -50,6 +54,14 @@ class AndroidShortcutsActivity : AppCompatActivity() {
     private var dialog: AlertDialog? = null
 
     public override fun onCreate(bundle: Bundle?) {
+        CrashHandler.getInstance(this)?.also {
+            if (it.hasCrashed(this)) {
+                super.onCreate(null)
+                ActivityUtils.startActivityAndCloseAllOthers(this, CrashHandlerActivity::class.java)
+                return
+            }
+        }
+
         super.onCreate(bundle)
         DaggerUtils.getComponent(this).inject(this)
 

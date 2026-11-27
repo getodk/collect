@@ -9,6 +9,8 @@ import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.odk.collect.android.R
+import org.odk.collect.android.activities.ActivityUtils
+import org.odk.collect.android.activities.CrashHandlerActivity
 import org.odk.collect.android.activities.FormMapActivity
 import org.odk.collect.android.formmanagement.FormFillingIntentFactory
 import org.odk.collect.android.injection.DaggerUtils
@@ -19,6 +21,8 @@ import org.odk.collect.androidshared.ui.ObviousProgressBar
 import org.odk.collect.androidshared.ui.SnackbarUtils
 import org.odk.collect.androidshared.ui.SnackbarUtils.DURATION_SHORT
 import org.odk.collect.async.network.NetworkStateProvider
+import org.odk.collect.crashhandler.CrashHandler
+import org.odk.collect.crashhandler.hasCrashed
 import org.odk.collect.lists.EmptyListView
 import org.odk.collect.lists.RecyclerViewUtils
 import org.odk.collect.permissions.PermissionListener
@@ -48,6 +52,14 @@ class BlankFormListActivity : LocalizedActivity(), OnFormItemClickListener {
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        CrashHandler.getInstance(this)?.also {
+            if (it.hasCrashed(this)) {
+                super.onCreate(null)
+                ActivityUtils.startActivityAndCloseAllOthers(this, CrashHandlerActivity::class.java)
+                return
+            }
+        }
+
         super.onCreate(savedInstanceState)
         DaggerUtils.getComponent(this).inject(this)
         setView(R.layout.activity_blank_form_list, false)

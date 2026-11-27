@@ -49,6 +49,8 @@ import androidx.work.WorkManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.ActivityUtils;
+import org.odk.collect.android.activities.CrashHandlerActivity;
 import org.odk.collect.android.activities.FormFillingActivity;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.backgroundwork.FormUpdateAndInstanceSubmitScheduler;
@@ -68,6 +70,7 @@ import org.odk.collect.androidshared.ui.ObviousProgressBar;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 import org.odk.collect.async.network.NetworkStateProvider;
+import org.odk.collect.crashhandler.CrashHandler;
 import org.odk.collect.lists.selects.MultiSelectViewModel;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.ProjectKeys;
@@ -140,6 +143,13 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        CrashHandler crashHandler = CrashHandler.getInstance(this);
+        if (crashHandler != null && crashHandler.getCrash(this) != null) {
+            super.onCreate(null);
+            ActivityUtils.startActivityAndCloseAllOthers(this, CrashHandlerActivity.class);
+            return;
+        }
+
         super.onCreate(savedInstanceState);
         Timber.i("onCreate");
 

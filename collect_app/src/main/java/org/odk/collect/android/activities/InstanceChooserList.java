@@ -14,12 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_ASC;
-import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_DESC;
-import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
-import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_DESC;
-import static org.odk.collect.androidshared.ui.EdgeToEdge.setView;
-
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -27,13 +21,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.InstanceListCursorAdapter;
 import org.odk.collect.android.application.CollectComposeThemeProvider;
@@ -59,9 +51,14 @@ import org.odk.collect.lists.EmptyListView;
 import org.odk.collect.material.MaterialProgressDialogFragment;
 import org.odk.collect.settings.SettingsProvider;
 
+import javax.inject.Inject;
 import java.util.Arrays;
 
-import javax.inject.Inject;
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_ASC;
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_DESC;
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_DESC;
+import static org.odk.collect.androidshared.ui.EdgeToEdge.setView;
 
 /**
  * Responsible for displaying all the valid instances in the instance directory.
@@ -106,6 +103,10 @@ public class InstanceChooserList extends AppListActivity implements InstanceList
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        if (detectCrash()) {
+            return;
+        }
+
         super.onCreate(savedInstanceState);
         setView(this, R.layout.form_chooser_list, false);
         DaggerUtils.getComponent(this).inject(this);

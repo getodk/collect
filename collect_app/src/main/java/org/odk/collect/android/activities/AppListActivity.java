@@ -25,13 +25,11 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
-
 import androidx.annotation.LayoutRes;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.MenuItemCompat;
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.formlists.sorting.FormListSortingBottomSheetDialog;
@@ -39,16 +37,15 @@ import org.odk.collect.android.formlists.sorting.FormListSortingOption;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.androidshared.ui.ObviousProgressBar;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
+import org.odk.collect.crashhandler.CrashHandler;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.strings.localization.LocalizedActivity;
+import timber.log.Timber;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
-
-import javax.inject.Inject;
-
-import timber.log.Timber;
 
 public abstract class AppListActivity extends LocalizedActivity {
 
@@ -308,5 +305,16 @@ public abstract class AppListActivity extends LocalizedActivity {
 
     protected void showProgressBar() {
         progressBar.show();
+    }
+
+    protected boolean detectCrash() {
+        CrashHandler crashHandler = CrashHandler.getInstance(this);
+        if (crashHandler != null && crashHandler.getCrash(this) != null) {
+            super.onCreate(null);
+            ActivityUtils.startActivityAndCloseAllOthers(this, CrashHandlerActivity.class);
+            return true;
+        } else {
+            return false;
+        }
     }
 }
