@@ -23,7 +23,8 @@ object LocalInstancesUseCases {
         timezone: TimeZone = TimeZone.getDefault(),
         clock: () -> Long = { System.currentTimeMillis() }
     ): File? {
-        val sanitizedFormName = FormNameUtils.formatFilenameFromFormName(formName)
+        // File names are limited to 255 bytes, so 200 leaves enough room for any suffixes added to the form name
+        val sanitizedFormName = FormNameUtils.formatFilenameFromFormName(formName, 200)
 
         val timestamp = SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.ENGLISH).also {
             it.timeZone = timezone

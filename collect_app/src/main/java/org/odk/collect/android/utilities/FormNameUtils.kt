@@ -25,7 +25,7 @@ object FormNameUtils {
 
     // Create a sanitized filename prefix from the given form name. No extension is added.
     @JvmStatic
-    fun formatFilenameFromFormName(formName: String?): String? {
+    fun formatFilenameFromFormName(formName: String?, maxBytes: Int): String? {
         if (formName == null) {
             return null
         }
@@ -33,20 +33,18 @@ object FormNameUtils {
         var fileName = formName.replace(NON_ALPHANUMERIC_REGEX, " ")
         // Replace consecutive whitespace characters with single space
         fileName = fileName.replace(WHITESPACE_REGEX, " ")
-        return truncateToMaxFilenameBytes(fileName.trim()).trim()
+        return truncateToMaxBytes(fileName.trim(), maxBytes).trim()
     }
 
-    // Truncate so the UTF-8 encoded text fits in maxFilenameBytes. File name limits are in bytes, not
+    // Truncate so the UTF-8 encoded text fits in maxBytes. File name limits are in bytes, not
     // characters, and many scripts use more than one byte per character.
-    private fun truncateToMaxFilenameBytes(text: String): String {
-        // File names are limited to 255 bytes, so leave room for the suffixes we add to form and instance files
-        val maxFilenameBytes = 200
+    private fun truncateToMaxBytes(text: String, maxBytes: Int): String {
         var end = 0
         var bytes = 0
         while (end < text.length) {
             val codePoint = text.codePointAt(end)
             bytes += String(Character.toChars(codePoint)).toByteArray().size
-            if (bytes > maxFilenameBytes) {
+            if (bytes > maxBytes) {
                 break
             }
             end += Character.charCount(codePoint)
