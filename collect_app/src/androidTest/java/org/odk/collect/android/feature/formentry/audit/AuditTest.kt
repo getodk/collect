@@ -2,7 +2,9 @@ package org.odk.collect.android.feature.formentry.audit
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.emptyString
 import org.hamcrest.Matchers.equalTo
+import org.hamcrest.Matchers.not
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
@@ -134,6 +136,24 @@ class AuditTest {
         assertThat(auditLog[1].get("event"), equalTo("question"))
         assertThat(auditLog[2].get("event"), equalTo("form save"))
         assertThat(auditLog[3].get("event"), equalTo("form exit"))
+    }
+
+    @Test // https://github.com/getodk/collect/issues/7419
+    fun disablingBackgroundRecording_doesNotRemoveEndTimeFromCurrentQuestionEvent() {
+        rule.startAtMainMenu()
+            .copyForm("one-question-background-audio-audit.xml")
+            .startBlankForm("One Question Background Audio And Audit")
+            .clickOptionsIcon()
+            .clickRecordAudio()
+            .clickOk()
+            .fillOutAndSave(
+                MainMenuPage(),
+                FormEntryPage.QuestionAndAnswer("what is your age", "31")
+            )
+
+        val auditLog = StorageUtils.getAuditLogForFirstInstance()
+        assertThat(auditLog[1].get("event"), equalTo("question"))
+        assertThat(auditLog[1].get("end"), not(emptyString()))
     }
 
     @Test // https://github.com/getodk/collect/issues/5262
