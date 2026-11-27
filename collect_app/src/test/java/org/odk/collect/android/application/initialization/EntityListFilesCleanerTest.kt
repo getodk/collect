@@ -2,6 +2,7 @@ package org.odk.collect.android.application.initialization
 
 import android.app.Application
 import android.content.Context
+import android.database.sqlite.SQLiteDatabase
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
@@ -48,6 +49,20 @@ class EntityListFilesCleanerTest {
 
         assertThat(getMediaFiles(form1).map { it.name }, containsInAnyOrder("other.csv", "image.png"))
         assertThat(getMediaFiles(form2).map { it.name }, containsInAnyOrder("other.csv"))
+    }
+
+    @Test
+    fun `does not crash when a project has an entities database from the old beta`() {
+        projectsRepository.save(Project.Saved("1", "Project 1", "1", "#000000"))
+
+        val project1 = projectDependencyModuleFactory.create("1")
+        project1.entitiesRepository.addList("people")
+
+        val metaDir = component.storagePathProvider().create("1").metaDir
+        // Version 1 was the first version of the entities database and upgrading from it isn't supported
+        SQLiteDatabase.openDatabase(File(metaDir, "entities.db").path, null, SQLiteDatabase.OPEN_READWRITE).use { it.version = 1 }
+
+        entityListFilesCleaner.run()
     }
 
     @Test
