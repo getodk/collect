@@ -54,6 +54,7 @@ class EntityListFilesCleanerTest {
     @Test
     fun `does not crash when a project has an entities database from the old beta`() {
         projectsRepository.save(Project.Saved("1", "Project 1", "1", "#000000"))
+        projectsRepository.save(Project.Saved("2", "Project 2", "2", "#000000"))
 
         val project1 = projectDependencyModuleFactory.create("1")
         project1.entitiesRepository.addList("people")
@@ -61,8 +62,16 @@ class EntityListFilesCleanerTest {
         val metaDir = component.storagePathProvider().create("1").metaDir
         // Version 1 was the first version of the entities database and upgrading from it isn't supported
         SQLiteDatabase.openDatabase(File(metaDir, "entities.db").path, null, SQLiteDatabase.OPEN_READWRITE).use { it.version = 1 }
+        val form1 = createForm(project1, usesEntities = true, "people.csv")
+
+        val project2 = projectDependencyModuleFactory.create("2")
+        project2.entitiesRepository.addList("trees")
+        val form2 = createForm(project2, usesEntities = true, "trees.csv", "other.csv")
 
         entityListFilesCleaner.run()
+
+        assertThat(getMediaFiles(form1).map { it.name }, containsInAnyOrder("people.csv"))
+        assertThat(getMediaFiles(form2).map { it.name }, containsInAnyOrder("other.csv"))
     }
 
     @Test
