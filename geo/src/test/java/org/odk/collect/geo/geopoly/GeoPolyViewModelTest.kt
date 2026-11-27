@@ -9,7 +9,11 @@ import org.junit.Test
 import org.mockito.Mockito.mock
 import org.odk.collect.androidshared.ui.DisplayString
 import org.odk.collect.androidtest.MainDispatcherRule
+import org.odk.collect.geo.geopoly.GeoPolyViewModel.Companion.ACCURACY_THRESHOLD_OPTIONS
+import org.odk.collect.geo.geopoly.GeoPolyViewModel.Companion.INTERVAL_OPTIONS
 import org.odk.collect.geo.support.FakeLocationTracker
+import org.odk.collect.settings.keys.MetaKeys
+import org.odk.collect.shared.settings.InMemSettings
 import org.odk.collect.testshared.getOrAwaitValue
 
 class GeoPolyViewModelTest {
@@ -29,6 +33,7 @@ class GeoPolyViewModelTest {
             false,
             FakeLocationTracker(),
             mock(),
+            InMemSettings(),
             invalidMessage
         )
 
@@ -50,6 +55,7 @@ class GeoPolyViewModelTest {
             false,
             FakeLocationTracker(),
             mock(),
+            InMemSettings(),
             invalidMessage
         )
 
@@ -68,6 +74,7 @@ class GeoPolyViewModelTest {
             false,
             locationTracker,
             mock(),
+            InMemSettings(),
             MutableLiveData(null)
         )
 
@@ -75,5 +82,102 @@ class GeoPolyViewModelTest {
 
         viewModel.onCleared()
         assertThat(locationTracker.isStarted, equalTo(false))
+    }
+
+    @Test
+    fun `#recordingMode is PLACEMENT when nothing is saved`() {
+        val viewModel = createViewModel(InMemSettings())
+        assertThat(viewModel.recordingMode, equalTo(GeoPolyViewModel.RecordingMode.PLACEMENT))
+    }
+
+    @Test
+    fun `#recordingMode is the last saved recording mode`() {
+        val metaSettings = InMemSettings().apply {
+            save(MetaKeys.LAST_USED_GEOPOLY_RECORDING_MODE, "AUTOMATIC")
+        }
+
+        val viewModel = createViewModel(metaSettings)
+        assertThat(viewModel.recordingMode, equalTo(GeoPolyViewModel.RecordingMode.AUTOMATIC))
+    }
+
+    @Test
+    fun `#recordingMode is PLACEMENT when the saved recording mode is unknown`() {
+        val metaSettings = InMemSettings().apply {
+            save(MetaKeys.LAST_USED_GEOPOLY_RECORDING_MODE, "UNKNOWN")
+        }
+
+        val viewModel = createViewModel(metaSettings)
+        assertThat(viewModel.recordingMode, equalTo(GeoPolyViewModel.RecordingMode.PLACEMENT))
+    }
+
+    @Test
+    fun `#setRecordingMode saves recording mode`() {
+        val metaSettings = InMemSettings()
+        val viewModel = createViewModel(metaSettings)
+
+        viewModel.setRecordingMode(GeoPolyViewModel.RecordingMode.MANUAL)
+        assertThat(metaSettings.getString(MetaKeys.LAST_USED_GEOPOLY_RECORDING_MODE), equalTo("MANUAL"))
+    }
+
+    @Test
+    fun `#intervalIndex and #accuracyThresholdIndex are defaults when nothing is saved`() {
+        val viewModel = createViewModel(InMemSettings())
+
+        assertThat(INTERVAL_OPTIONS[viewModel.intervalIndex], equalTo(20))
+        assertThat(ACCURACY_THRESHOLD_OPTIONS[viewModel.accuracyThresholdIndex], equalTo(10))
+    }
+
+    @Test
+    fun `#intervalIndex and #accuracyThresholdIndex are the last saved values`() {
+        val metaSettings = InMemSettings().apply {
+            save(MetaKeys.LAST_USED_GEOPOLY_INTERVAL, 5)
+            save(MetaKeys.LAST_USED_GEOPOLY_ACCURACY_THRESHOLD, 0)
+        }
+
+        val viewModel = createViewModel(metaSettings)
+        assertThat(INTERVAL_OPTIONS[viewModel.intervalIndex], equalTo(5))
+        assertThat(ACCURACY_THRESHOLD_OPTIONS[viewModel.accuracyThresholdIndex], equalTo(0))
+    }
+
+    @Test
+    fun `#intervalIndex and #accuracyThresholdIndex are defaults when saved values are not available options`() {
+        val metaSettings = InMemSettings().apply {
+            save(MetaKeys.LAST_USED_GEOPOLY_INTERVAL, 7)
+            save(MetaKeys.LAST_USED_GEOPOLY_ACCURACY_THRESHOLD, 7)
+        }
+
+        val viewModel = createViewModel(metaSettings)
+        assertThat(INTERVAL_OPTIONS[viewModel.intervalIndex], equalTo(20))
+        assertThat(ACCURACY_THRESHOLD_OPTIONS[viewModel.accuracyThresholdIndex], equalTo(10))
+    }
+
+    @Test
+    fun `#setIntervalIndex saves interval`() {
+        val metaSettings = InMemSettings()
+        val viewModel = createViewModel(metaSettings)
+
+        viewModel.setIntervalIndex(INTERVAL_OPTIONS.indexOf(60))
+        assertThat(metaSettings.getInt(MetaKeys.LAST_USED_GEOPOLY_INTERVAL), equalTo(60))
+    }
+
+    @Test
+    fun `#setAccuracyThresholdIndex saves accuracy threshold`() {
+        val metaSettings = InMemSettings()
+        val viewModel = createViewModel(metaSettings)
+
+        viewModel.setAccuracyThresholdIndex(ACCURACY_THRESHOLD_OPTIONS.indexOf(15))
+        assertThat(metaSettings.getInt(MetaKeys.LAST_USED_GEOPOLY_ACCURACY_THRESHOLD), equalTo(15))
+    }
+
+    private fun createViewModel(metaSettings: InMemSettings): GeoPolyViewModel {
+        return GeoPolyViewModel(
+            GeoPolyFragment.OutputMode.GEOTRACE,
+            emptyList(),
+            false,
+            FakeLocationTracker(),
+            mock(),
+            metaSettings,
+            MutableLiveData(null)
+        )
     }
 }

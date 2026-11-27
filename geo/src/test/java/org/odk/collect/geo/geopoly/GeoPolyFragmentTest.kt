@@ -1,6 +1,7 @@
 package org.odk.collect.geo.geopoly
 
 import android.app.Application
+import android.widget.Spinner
 import androidx.activity.OnBackPressedDispatcher
 import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ApplicationProvider
@@ -37,7 +38,6 @@ import org.odk.collect.geo.GeoUtils.toMapPoint
 import org.odk.collect.geo.R
 import org.odk.collect.geo.geopoint.AccuracyStatusView
 import org.odk.collect.geo.geopoint.LocationAccuracy
-import org.odk.collect.geo.geopoly.GeoPolyFragment.Companion.INTERVAL_OPTIONS
 import org.odk.collect.geo.geopoly.GeoPolyFragment.OutputMode
 import org.odk.collect.geo.support.AccuracyStatusViewMatcher.Companion.hasAccuracy
 import org.odk.collect.geo.support.FakeLocationTracker
@@ -58,6 +58,7 @@ import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.material.MaterialProgressDialogFragment
 import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.keys.MetaKeys
 import org.odk.collect.strings.R.string
 import org.odk.collect.testshared.EspressoAssertions
 import org.odk.collect.testshared.EspressoAssertions.assertNotVisible
@@ -80,6 +81,7 @@ class GeoPolyFragmentTest {
 
     private val application = ApplicationProvider.getApplicationContext<Application>()
     private val scheduler = FakeScheduler()
+    private val settingsProvider = InMemSettingsProvider()
 
     @Before
     fun setUp() {
@@ -213,6 +215,22 @@ class GeoPolyFragmentTest {
         )
 
         val improving = LocationAccuracy.Improving(9.0f)
+        locationTracker.currentLocation = Location(1.0, 1.0, accuracy = improving.value)
+        onView(isAssignableFrom(AccuracyStatusView::class.java)).check(matches(hasAccuracy(improving)))
+    }
+
+    @Test
+    fun beforeStartingInput_accuracyIsNotCheckedAgainstLastSavedThreshold() {
+        settingsProvider.getMetaSettings().apply {
+            save(MetaKeys.LAST_USED_GEOPOLY_RECORDING_MODE, "AUTOMATIC")
+            save(MetaKeys.LAST_USED_GEOPOLY_ACCURACY_THRESHOLD, 3)
+        }
+
+        launcherRule.launchInContainer {
+            GeoPolyFragment({ OnBackPressedDispatcher() })
+        }
+
+        val improving = LocationAccuracy.Improving(8.0f)
         locationTracker.currentLocation = Location(1.0, 1.0, accuracy = improving.value)
         onView(isAssignableFrom(AccuracyStatusView::class.java)).check(matches(hasAccuracy(improving)))
     }
@@ -1095,6 +1113,87 @@ class GeoPolyFragmentTest {
         assertThat(map.getPolygons()[0].clickable, equalTo(false))
     }
 
+    @Test
+    fun startingInput_savesSelectedInputMethod() {
+        val scenario = launcherRule.launchInContainer {
+            GeoPolyFragment({ OnBackPressedDispatcher() })
+        }
+
+        onView(withId(R.id.play)).perform(click())
+        onView(withId(R.id.automatic_mode)).inRoot(isDialog()).perform(click())
+        scenario.onFragment {
+            val dialog = getFragmentByClass(it.childFragmentManager, GeoPolySettingsDialogFragment::class.java)!!.dialog!!
+            dialog.findViewById<Spinner>(R.id.auto_interval).setSelection(1)
+            dialog.findViewById<Spinner>(R.id.accuracy_threshold).setSelection(1)
+        }
+        EspressoInteractions.clickOn(withText(string.start), root = isDialog())
+
+        val metaSettings = settingsProvider.getMetaSettings()
+        assertThat(metaSettings.getString(MetaKeys.LAST_USED_GEOPOLY_RECORDING_MODE), equalTo("AUTOMATIC"))
+        assertThat(metaSettings.getInt(MetaKeys.LAST_USED_GEOPOLY_INTERVAL), equalTo(5))
+        assertThat(metaSettings.getInt(MetaKeys.LAST_USED_GEOPOLY_ACCURACY_THRESHOLD), equalTo(3))
+    }
+
+    @Test
+    fun cancellingInputMethodDialog_doesNotSaveInputMethod() {
+        launcherRule.launchInContainer {
+            GeoPolyFragment({ OnBackPressedDispatcher() })
+        }
+
+        onView(withId(R.id.play)).perform(click())
+        onView(withId(R.id.automatic_mode)).inRoot(isDialog()).perform(click())
+        EspressoInteractions.clickOn(withText(string.cancel), root = isDialog())
+
+        val metaSettings = settingsProvider.getMetaSettings()
+        assertThat(metaSettings.contains(MetaKeys.LAST_USED_GEOPOLY_RECORDING_MODE), equalTo(false))
+        assertThat(metaSettings.contains(MetaKeys.LAST_USED_GEOPOLY_INTERVAL), equalTo(false))
+        assertThat(metaSettings.contains(MetaKeys.LAST_USED_GEOPOLY_ACCURACY_THRESHOLD), equalTo(false))
+    }
+
+    @Test
+    fun startingInput_usesLastSavedInputMethod() {
+        settingsProvider.getMetaSettings().apply {
+            save(MetaKeys.LAST_USED_GEOPOLY_RECORDING_MODE, "AUTOMATIC")
+            save(MetaKeys.LAST_USED_GEOPOLY_INTERVAL, 5)
+            save(MetaKeys.LAST_USED_GEOPOLY_ACCURACY_THRESHOLD, 3)
+        }
+
+        launcherRule.launchInContainer {
+            GeoPolyFragment({ OnBackPressedDispatcher() })
+        }
+
+        onView(withId(R.id.play)).perform(click())
+        EspressoInteractions.clickOn(withText(string.start), root = isDialog())
+
+        assertVisible(
+            withText(
+                application.getString(string.collection_status_auto_seconds_accuracy, 0, 5, 3)
+            )
+        )
+    }
+
+    @Test
+    fun startingInput_usesDefaultIntervalAndAccuracyThreshold_whenSavedValuesAreNotAvailableOptions() {
+        settingsProvider.getMetaSettings().apply {
+            save(MetaKeys.LAST_USED_GEOPOLY_RECORDING_MODE, "AUTOMATIC")
+            save(MetaKeys.LAST_USED_GEOPOLY_INTERVAL, 7)
+            save(MetaKeys.LAST_USED_GEOPOLY_ACCURACY_THRESHOLD, 7)
+        }
+
+        launcherRule.launchInContainer {
+            GeoPolyFragment({ OnBackPressedDispatcher() })
+        }
+
+        onView(withId(R.id.play)).perform(click())
+        EspressoInteractions.clickOn(withText(string.start), root = isDialog())
+
+        assertVisible(
+            withText(
+                application.getString(string.collection_status_auto_seconds_accuracy, 0, 20, 10)
+            )
+        )
+    }
+
     private fun overrideDependencies(mapFragment: MapFragment) {
         val application = ApplicationProvider.getApplicationContext<RobolectricApplication>()
         application.geoDependencyComponent = DaggerGeoDependencyComponent.builder()
@@ -1121,7 +1220,7 @@ class GeoPolyFragmentTest {
                 }
 
                 override fun providesSettingsProvider(): SettingsProvider {
-                    return InMemSettingsProvider()
+                    return settingsProvider
                 }
 
                 override fun providesWebPageService(): WebPageService {
@@ -1141,5 +1240,4 @@ class GeoPolyFragmentTest {
     }
 }
 
-private val DEFAULT_RECORDING_INTERVAL =
-    INTERVAL_OPTIONS[GeoPolyFragment.DEFAULT_INTERVAL_INDEX].toLong() * 1000
+private const val DEFAULT_RECORDING_INTERVAL = 20_000L

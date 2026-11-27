@@ -15,6 +15,8 @@ import org.odk.collect.async.Scheduler
 import org.odk.collect.geo.geopoly.GeoPolyFragment.OutputMode
 import org.odk.collect.location.tracker.LocationTracker
 import org.odk.collect.maps.MapPoint
+import org.odk.collect.settings.keys.MetaKeys
+import org.odk.collect.shared.settings.Settings
 
 class GeoPolyViewModel(
     outputMode: OutputMode,
@@ -22,6 +24,7 @@ class GeoPolyViewModel(
     retainMockAccuracy: Boolean,
     private val locationTracker: LocationTracker,
     private val scheduler: Scheduler,
+    private val metaSettings: Settings,
     val invalidMessage: LiveData<DisplayString?>
 ) : ViewModel() {
 
@@ -29,7 +32,19 @@ class GeoPolyViewModel(
         PLACEMENT, MANUAL, AUTOMATIC
     }
 
-    var recordingMode: RecordingMode = RecordingMode.PLACEMENT
+    var recordingMode: RecordingMode = metaSettings.getString(MetaKeys.LAST_USED_GEOPOLY_RECORDING_MODE)
+        ?.let { saved -> RecordingMode.entries.find { it.name == saved } }
+        ?: RecordingMode.PLACEMENT
+        private set
+
+    var intervalIndex: Int = getLastUsedIndex(
+        MetaKeys.LAST_USED_GEOPOLY_INTERVAL, INTERVAL_OPTIONS, DEFAULT_INTERVAL_INDEX
+    )
+        private set
+
+    var accuracyThresholdIndex: Int = getLastUsedIndex(
+        MetaKeys.LAST_USED_GEOPOLY_ACCURACY_THRESHOLD, ACCURACY_THRESHOLD_OPTIONS, DEFAULT_ACCURACY_THRESHOLD_INDEX
+    )
         private set
 
     private val _inputActive = MutableStateFlow(false)
@@ -114,6 +129,17 @@ class GeoPolyViewModel(
 
     fun setRecordingMode(mode: RecordingMode) {
         recordingMode = mode
+        metaSettings.save(MetaKeys.LAST_USED_GEOPOLY_RECORDING_MODE, mode.name)
+    }
+
+    fun setIntervalIndex(intervalIndex: Int) {
+        this.intervalIndex = intervalIndex
+        metaSettings.save(MetaKeys.LAST_USED_GEOPOLY_INTERVAL, INTERVAL_OPTIONS[intervalIndex])
+    }
+
+    fun setAccuracyThresholdIndex(accuracyThresholdIndex: Int) {
+        this.accuracyThresholdIndex = accuracyThresholdIndex
+        metaSettings.save(MetaKeys.LAST_USED_GEOPOLY_ACCURACY_THRESHOLD, ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex])
     }
 
     fun enableInput() {
@@ -129,5 +155,28 @@ class GeoPolyViewModel(
         locationTracker.stop()
     }
 
+    private fun getLastUsedIndex(key: String, options: IntArray, defaultIndex: Int): Int {
+        if (!metaSettings.contains(key)) {
+            return defaultIndex
+        }
+
+        val index = options.indexOf(metaSettings.getInt(key))
+        return if (index != -1) index else defaultIndex
+    }
+
     data class GeoPoly(val points: List<MapPoint>, val isValid: Boolean)
+
+    companion object {
+        @JvmField
+        val INTERVAL_OPTIONS = intArrayOf(
+            1, 5, 10, 20, 30, 60, 300, 600, 1200, 1800
+        )
+        private const val DEFAULT_INTERVAL_INDEX = 3 // default is 20 seconds
+
+        @JvmField
+        val ACCURACY_THRESHOLD_OPTIONS = intArrayOf(
+            0, 3, 5, 10, 15, 20
+        )
+        private const val DEFAULT_ACCURACY_THRESHOLD_INDEX = 3 // default is 10 meters
+    }
 }

@@ -34,6 +34,8 @@ import org.odk.collect.geo.databinding.GeopolyLayoutBinding
 import org.odk.collect.geo.geopoint.LocationAccuracy.Improving
 import org.odk.collect.geo.geopoint.LocationAccuracy.Unacceptable
 import org.odk.collect.geo.geopoly.GeoPolySettingsDialogFragment.SettingsDialogCallback
+import org.odk.collect.geo.geopoly.GeoPolyViewModel.Companion.ACCURACY_THRESHOLD_OPTIONS
+import org.odk.collect.geo.geopoly.GeoPolyViewModel.Companion.INTERVAL_OPTIONS
 import org.odk.collect.geo.items.MappableData
 import org.odk.collect.geo.items.MappableItemsDelegate
 import org.odk.collect.location.Location
@@ -80,12 +82,7 @@ class GeoPolyFragment @JvmOverloads constructor(
     @Inject
     lateinit var webPageService: WebPageService
 
-    private var previousState: Bundle? = null
-
     private var featureId = -1 // will be a positive featureId once map is ready
-    private var intervalIndex: Int = DEFAULT_INTERVAL_INDEX
-    private var accuracyThresholdIndex: Int = DEFAULT_ACCURACY_THRESHOLD_INDEX
-    private var mapInitialized = false
 
     private val onBackPressedCallback: OnBackPressedCallback =
         object : OnBackPressedCallback(true) {
@@ -107,6 +104,7 @@ class GeoPolyFragment @JvmOverloads constructor(
                     retainMockAccuracy,
                     locationTracker,
                     scheduler,
+                    settingsProvider.getMetaSettings(),
                     invalidMessage
                 )
             }
@@ -146,19 +144,6 @@ class GeoPolyFragment @JvmOverloads constructor(
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        previousState = savedInstanceState
-
-        if (savedInstanceState != null) {
-            intervalIndex = savedInstanceState.getInt(INTERVAL_INDEX_KEY, DEFAULT_INTERVAL_INDEX)
-            accuracyThresholdIndex = savedInstanceState.getInt(
-                ACCURACY_THRESHOLD_INDEX_KEY, DEFAULT_ACCURACY_THRESHOLD_INDEX
-            )
-        }
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val binding = GeopolyLayoutBinding.bind(view)
         val mapFragment: MapFragment = binding.mapContainer.getFragment()
@@ -175,24 +160,7 @@ class GeoPolyFragment @JvmOverloads constructor(
         }
     }
 
-    override fun onSaveInstanceState(state: Bundle) {
-        super.onSaveInstanceState(state)
-        if (!mapInitialized) {
-            // initMap() is called asynchronously, so map can be null if the activity
-            // is stopped (e.g. by screen rotation) before initMap() gets to run.
-            // In this case, preserve any provided instance state.
-            if (previousState != null) {
-                state.putAll(previousState)
-            }
-            return
-        }
-        state.putInt(INTERVAL_INDEX_KEY, intervalIndex)
-        state.putInt(ACCURACY_THRESHOLD_INDEX_KEY, accuracyThresholdIndex)
-    }
-
     fun initMap(map: MapFragment, binding: GeopolyLayoutBinding) {
-        mapInitialized = true
-
         binding.info.setOnClickListener { showInfoDialog(false) }
         binding.clear.setOnClickListener { showClearDialog() }
         binding.pause.setOnClickListener {
@@ -394,8 +362,8 @@ class GeoPolyFragment @JvmOverloads constructor(
         viewModel.enableInput()
         if (viewModel.recordingMode == GeoPolyViewModel.RecordingMode.AUTOMATIC) {
             viewModel.startRecording(
-                ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex],
-                INTERVAL_OPTIONS[intervalIndex].toLong() * 1000
+                ACCURACY_THRESHOLD_OPTIONS[viewModel.accuracyThresholdIndex],
+                INTERVAL_OPTIONS[viewModel.intervalIndex].toLong() * 1000
             )
         }
         updateUi()
@@ -418,19 +386,19 @@ class GeoPolyFragment @JvmOverloads constructor(
     }
 
     override fun getIntervalIndex(): Int {
-        return intervalIndex
+        return viewModel.intervalIndex
     }
 
     override fun getAccuracyThresholdIndex(): Int {
-        return accuracyThresholdIndex
+        return viewModel.accuracyThresholdIndex
     }
 
     override fun setIntervalIndex(intervalIndex: Int) {
-        this.intervalIndex = intervalIndex
+        viewModel.setIntervalIndex(intervalIndex)
     }
 
     override fun setAccuracyThresholdIndex(accuracyThresholdIndex: Int) {
-        this.accuracyThresholdIndex = accuracyThresholdIndex
+        viewModel.setAccuracyThresholdIndex(accuracyThresholdIndex)
     }
 
     private fun cancel() {
@@ -459,14 +427,16 @@ class GeoPolyFragment @JvmOverloads constructor(
             return true
         }
 
-        return location.accuracy <= ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex]
+        return location.accuracy <= ACCURACY_THRESHOLD_OPTIONS[viewModel.accuracyThresholdIndex]
     }
 
     private val isAccuracyThresholdActive: Boolean
         get() {
             val meters: Int =
-                ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex]
-            return viewModel.recordingMode == GeoPolyViewModel.RecordingMode.AUTOMATIC && meters > 0
+                ACCURACY_THRESHOLD_OPTIONS[viewModel.accuracyThresholdIndex]
+            return viewModel.inputActive.value &&
+                viewModel.recordingMode == GeoPolyViewModel.RecordingMode.AUTOMATIC &&
+                meters > 0
         }
 
     private fun removeLastPoint() {
@@ -503,9 +473,9 @@ class GeoPolyFragment @JvmOverloads constructor(
 
         // GPS status
         val usingThreshold = this.isAccuracyThresholdActive
-        val seconds: Int = INTERVAL_OPTIONS[intervalIndex]
+        val seconds: Int = INTERVAL_OPTIONS[viewModel.intervalIndex]
         val minutes = seconds / 60
-        val meters: Int = ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex]
+        val meters: Int = ACCURACY_THRESHOLD_OPTIONS[viewModel.accuracyThresholdIndex]
 
         binding.collectionStatus.text = if (!viewModel.inputActive.value) {
             getString(org.odk.collect.strings.R.string.collection_status_paused, numPoints)
@@ -588,16 +558,5 @@ class GeoPolyFragment @JvmOverloads constructor(
         const val REQUEST_GEOPOLY: String = "geopoly"
         const val RESULT_GEOPOLY: String = "geopoly"
         const val RESULT_GEOPOLY_CHANGE: String = "geopoly_change"
-        const val INTERVAL_INDEX_KEY: String = "interval_index"
-        const val ACCURACY_THRESHOLD_INDEX_KEY: String = "accuracy_threshold_index"
-        val INTERVAL_OPTIONS = intArrayOf(
-            1, 5, 10, 20, 30, 60, 300, 600, 1200, 1800
-        )
-        const val DEFAULT_INTERVAL_INDEX = 3 // default is 20 seconds
-
-        private val ACCURACY_THRESHOLD_OPTIONS = intArrayOf(
-            0, 3, 5, 10, 15, 20
-        )
-        private const val DEFAULT_ACCURACY_THRESHOLD_INDEX = 3 // default is 10 meters
     }
 }
