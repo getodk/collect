@@ -1,5 +1,6 @@
 package org.odk.collect.android.application.initialization
 
+import org.odk.collect.android.database.entities.UnsupportedEntitiesDatabaseVersionException
 import org.odk.collect.android.projects.ProjectDependencyModule
 import org.odk.collect.entities.storage.getListNames
 import org.odk.collect.projects.ProjectDependencyFactory
@@ -24,7 +25,11 @@ class EntityListFilesCleaner(
     override fun run() {
         projectsRepository.getAll().forEach { project ->
             val projectDependencyModule = projectDependencyModuleFactory.create(project.uuid)
-            val lists = projectDependencyModule.entitiesRepository.getListNames()
+            val lists = try {
+                projectDependencyModule.entitiesRepository.getListNames()
+            } catch (_: UnsupportedEntitiesDatabaseVersionException) {
+                return@forEach
+            }
 
             projectDependencyModule.formsRepository.getAll()
                 .filter { it.usesEntities() }

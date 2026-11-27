@@ -61,7 +61,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String, private val c
     private val databaseConnection = SynchronizedDatabaseConnection(
         context,
         dbPath,
-        "entities.db",
+        DATABASE_NAME,
         EntitiesDatabaseMigrator(DATABASE_VERSION),
         DATABASE_VERSION
     )
@@ -461,14 +461,18 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String, private val c
     private fun quote(text: String) = "\"$text\""
 
     companion object {
+        const val DATABASE_NAME = "entities.db"
         const val DATABASE_VERSION = 4
     }
 }
 
+class UnsupportedEntitiesDatabaseVersionException :
+    IllegalStateException("Cannot upgrade from this beta version. Please reinstall Collect!")
+
 class EntitiesDatabaseMigrator(databaseVersion: Int) : MigrationListDatabaseMigrator(
     databaseVersion,
     {
-        throw IllegalStateException("Cannot upgrade from this beta version. Please reinstall Collect!")
+        throw UnsupportedEntitiesDatabaseVersionException()
     },
     {
         it.addColumn(
