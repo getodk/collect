@@ -41,18 +41,26 @@ fun FormDownloader.downloadAndProcessForms(
     progressReporter: ((Int, Int) -> Unit)? = null,
     isCancelled: (() -> Boolean)? = null,
 ): Map<ServerFormDetails, FormDownloadException?> {
-    val downloadResults = downloadForms(forms, progressReporter, isCancelled)
     val results = mutableMapOf<ServerFormDetails, FormDownloadException?>()
-    forms.zip(downloadResults).forEach { (formDetails, result) ->
-        when (result) {
-            is Result.Success -> {
-                processForm(result.value)
-                results[formDetails] = null
-            }
+    for (index in forms.indices) {
+        val form = forms[index]
 
-            is Result.Error -> {
-                results[formDetails] = result.value
-            }
+        try {
+            downloadAndProcessForm(
+                form = form,
+                progressReporter = object : FormDownloader.ProgressReporter {
+                    override fun onDownloadingMediaFile(count: Int) {
+                        progressReporter?.invoke(index, count)
+                    }
+                },
+                isCancelled = { isCancelled?.invoke() ?: false }
+            )
+
+            results[form] = null
+        } catch (e: FormDownloadException.DownloadingInterrupted) {
+            break
+        } catch (e: FormDownloadException) {
+            results[form] = e
         }
     }
 
