@@ -50,8 +50,10 @@ class FormNameUtilsTest {
 
         // Georgian characters are 3 bytes, so only 66 of them fit
         assertThat(formatFilenameFromFormName("ა".repeat(100), 200), equalTo("ა".repeat(66)))
+    }
 
-        // Trailing space left after truncating is trimmed
-        assertThat(formatFilenameFromFormName("a".repeat(199) + " b", 200), equalTo("a".repeat(199)))
+    @Test
+    fun `#formatFilenameFromFormName trims trailing space left after truncating`() {
+        assertThat(formatFilenameFromFormName("abc d", 4), equalTo("abc"))
     }
 }
