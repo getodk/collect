@@ -61,6 +61,7 @@ import org.odk.collect.maps.MapViewModelMapFragment;
 import org.odk.collect.maps.Zoom;
 import org.odk.collect.maps.ZoomObserver;
 import org.odk.collect.maps.circles.CircleDescription;
+import org.odk.collect.maps.layers.MbtilesFile;
 import org.odk.collect.maps.layers.ReferenceLayerRepository;
 import org.odk.collect.maps.markers.MarkerDescription;
 import org.odk.collect.maps.markers.MarkerIconDescription;
@@ -111,6 +112,7 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
     private int mapType;
     private File referenceLayerFile;
     private TileOverlay referenceOverlay;
+    private GoogleMapsOfflineTileProvider referenceTileProvider;
 
     @Override
     public void init(@Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
@@ -245,6 +247,7 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
     @Override
     public void onDestroy() {
         BitmapDescriptorCache.clearCache();
+        closeReferenceTileProvider();
         super.onDestroy();
     }
 
@@ -494,14 +497,23 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
         if (referenceOverlay != null) {
             referenceOverlay.remove();
             referenceOverlay = null;
+            closeReferenceTileProvider();
         }
         if (referenceLayerFile != null) {
-            referenceOverlay = this.map.addTileOverlay(new TileOverlayOptions().tileProvider(
-                    new GoogleMapsOfflineTileProvider(referenceLayerFile)
-            ));
-            setLabelsVisibility("off");
-        } else {
-            setLabelsVisibility("on");
+            try {
+                referenceTileProvider = new GoogleMapsOfflineTileProvider(new MbtilesFile(referenceLayerFile));
+                referenceOverlay = this.map.addTileOverlay(new TileOverlayOptions().tileProvider(referenceTileProvider));
+            } catch (MbtilesFile.MbtilesException ignored) {
+                // ignored
+            }
+        }
+        setLabelsVisibility(referenceOverlay == null ? "on" : "off");
+    }
+
+    private void closeReferenceTileProvider() {
+        if (referenceTileProvider != null) {
+            referenceTileProvider.close();
+            referenceTileProvider = null;
         }
     }
 
