@@ -503,8 +503,8 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
             try {
                 referenceTileProvider = new GoogleMapsOfflineTileProvider(new MbtilesFile(referenceLayerFile));
                 referenceOverlay = this.map.addTileOverlay(new TileOverlayOptions().tileProvider(referenceTileProvider));
-            } catch (MbtilesFile.MbtilesException e) {
-                Timber.e(e);
+            } catch (MbtilesFile.MbtilesException ignored) {
+                // ignored
             }
         }
         setLabelsVisibility(referenceOverlay == null ? "on" : "off");
