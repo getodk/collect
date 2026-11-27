@@ -24,7 +24,11 @@ class EntityListFilesCleaner(
     override fun run() {
         projectsRepository.getAll().forEach { project ->
             val projectDependencyModule = projectDependencyModuleFactory.create(project.uuid)
-            val lists = projectDependencyModule.entitiesRepository.getListNames()
+            val lists = try {
+                projectDependencyModule.entitiesRepository.getListNames()
+            } catch (_: IllegalStateException) {
+                return@forEach
+            }
 
             projectDependencyModule.formsRepository.getAll()
                 .filter { it.usesEntities() }
