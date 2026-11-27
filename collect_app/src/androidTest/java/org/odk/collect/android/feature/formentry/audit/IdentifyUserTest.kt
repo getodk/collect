@@ -7,6 +7,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
+import org.odk.collect.android.R
 import org.odk.collect.android.support.StorageUtils.getAuditLogForFirstInstance
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.FormHierarchyPage
@@ -85,6 +86,15 @@ class IdentifyUserTest {
             .clickOnFormWithIdentityPrompt("Identify User")
             .closeSoftKeyboard()
             .pressBack(MainMenuPage())
+    }
+
+    @Test
+    fun openingForm_showsIdentityFieldAboveKeyboard() {
+        rule.startAtMainMenu()
+            .copyForm(IDENTIFY_USER_AUDIT_FORM)
+            .clickFillBlankForm()
+            .clickOnFormWithIdentityPrompt("Identify User")
+            .assertAboveKeyboard(R.id.scroll_view)
     }
 
     @Test
